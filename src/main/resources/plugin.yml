@@ -1,0 +1,6 @@
+name: ${plugin.name}
+description: ${project.description}
+main: ${plugin.mainClass}
+version: ${project.version}
+authors: [twiz_mwazin]
+prefix: CardinalPGM

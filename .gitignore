@@ -1,0 +1,5 @@
+# Created by .gitignore support plugin (hsz.mobi)
+dependency-reduced-pom.xml
+build
+.idea
+*.iml

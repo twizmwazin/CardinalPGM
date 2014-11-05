@@ -1,0 +1,6 @@
+name: Cardinal
+description: ${project.description}
+main: in.twizmwaz.cardinal.Cardinal
+version: 1.0-DEV
+authors: [twiz_mwazin]
+prefix: CardinalPGM
