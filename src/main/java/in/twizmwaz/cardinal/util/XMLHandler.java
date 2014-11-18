@@ -12,6 +12,7 @@ import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -45,7 +46,7 @@ public class XMLHandler {
     }
 
     public static List<Node> nodeListToList(NodeList nodeList) {
-        List<Node> results = null;
+        List<Node> results = new ArrayList<Node>();
         for ( int i = 0; i < nodeList.getLength(); i++) {
             results.add(nodeList.item(i));
         }

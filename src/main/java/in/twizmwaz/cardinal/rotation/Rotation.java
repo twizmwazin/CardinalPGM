@@ -1,13 +1,16 @@
 package in.twizmwaz.cardinal.rotation;
 
+import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import net.minecraft.util.org.apache.commons.codec.Charsets;
+import org.bukkit.Bukkit;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.logging.Level;
 
-/* In this rotation class,rotation will be an array containing the maps and their order.
+/* In this rotation class, rotation will be an array containing the maps and their order.
  Position will be the position of the currently playing map. */
 
 public class Rotation {
@@ -19,22 +22,37 @@ public class Rotation {
     private boolean override;
 
     public Rotation(File file) {
-        this.file = file;
-        this.position = 0;
-        this.refresh();
-        this.next = rotation[position + 1];
+        try {
+            setRotationFile(file);
+            this.position = 0;
+            this.refresh();
+            this.next = rotation[position + 1];
+        } catch (Exception ex) {
+            Bukkit.getLogger().log(Level.WARNING, ex.getMessage());
+        }
+
 
     }
 
-    public void refresh() {
+    public void refresh() throws RotationLoadException {
         try {
             List<String> lines = Files.readAllLines(file.toPath(), Charsets.UTF_8);
             this.rotation = lines.toArray(new String[lines.size()]);
         } catch (IOException ex) {
             ex.printStackTrace();
+        } catch (NullPointerException ex) {
+            throw new RotationLoadException("An error occurred in loading the rotation file.");
         }
         position = 0;
         override = false;
+    }
+
+    public void setRotationFile(File file) throws RotationLoadException {
+        try {
+            this.file = file;
+        } catch (NullPointerException ex) {
+            throw new RotationLoadException("An error occurred in loading the rotation file. Is it missing?");
+        }
     }
 
     public String move() {
@@ -49,22 +67,21 @@ public class Rotation {
     }
 
     public String getNext() {
-        if (override){
-        return next;}
-        else return rotation[position];
+        if (override) {
+            return next;
+        } else return rotation[position];
     }
 
     public String getCurrent() {
         return rotation[position];
     }
 
-    public String getEntry(int pos) {
-        return rotation[pos];
-    }
-
-    public void setNext(String map) {
-        next = map;
-        override = true;
+    public String getEntry(int pos) throws RotationLoadException {
+        try {
+            return rotation[pos];
+        } catch (NullPointerException ex) {
+            throw new RotationLoadException("Could not load map. Is there an issue with the rotation?");
+        }
     }
 
 }

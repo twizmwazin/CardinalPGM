@@ -14,10 +14,4 @@ public class EntityListener implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler
-    public void onItemSpawn(ItemSpawnEvent event) {
-        if (false /* check if item should be removed */) {
-            event.setCancelled(true);
-        }
-    }
 }

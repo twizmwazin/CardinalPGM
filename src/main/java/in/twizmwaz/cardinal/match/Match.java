@@ -2,7 +2,9 @@ package in.twizmwaz.cardinal.match;
 
 
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.data.MapInfo;
 import in.twizmwaz.cardinal.module.ModuleContainer;
+import in.twizmwaz.cardinal.util.Timer;
 import in.twizmwaz.cardinal.util.XMLHandler;
 import org.w3c.dom.Document;
 
@@ -16,12 +18,19 @@ public class Match {
     private MatchState state;
     private ModuleContainer modules;
     private Document document;
+    private Thread timer;
+    private MapInfo mapInfo;
 
     public Match() {
         this.uuid = handler.getMatchUUID();
         this.state = MatchState.WAITING;
         this.document = new XMLHandler(new File("matches/" + this.uuid.toString() + "/map.xml")).getDocument();
         this.modules = new ModuleContainer(this);
+        this.mapInfo = new MapInfo(document);
+        timer = new Thread(new Timer());
+        //set timer value
+
+
 
     }
 
@@ -51,6 +60,14 @@ public class Match {
 
     public void end() {
         state = MatchState.ENDED;
+    }
+
+    public ModuleContainer getModules() {
+        return modules;
+    }
+
+    public MapInfo getMapInfo() {
+        return mapInfo;
     }
 
 }
