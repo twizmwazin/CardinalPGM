@@ -1,19 +1,16 @@
 package in.twizmwaz.cardinal.regions.parsers;
 
-import org.w3c.dom.Node;
+
+import org.jdom2.Element;
 
 /**
  * Created by kevin on 10/26/14.
  */
 public class EmptyParser {
 
-    private String name;
 
-    public EmptyParser(Node node) {
-        this.name = node.getAttributes().getNamedItem("name").getNodeValue();
+    public EmptyParser(Element element) {
+
     }
 
-    public String getName() {
-        return name;
-    }
 }

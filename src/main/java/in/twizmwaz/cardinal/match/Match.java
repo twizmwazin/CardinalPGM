@@ -4,11 +4,18 @@ package in.twizmwaz.cardinal.match;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.data.MapInfo;
 import in.twizmwaz.cardinal.module.ModuleContainer;
+import in.twizmwaz.cardinal.teams.PgmTeam;
+import in.twizmwaz.cardinal.teams.PgmTeamBuilder;
+import in.twizmwaz.cardinal.util.DomUtil;
 import in.twizmwaz.cardinal.util.Timer;
-import in.twizmwaz.cardinal.util.XMLHandler;
-import org.w3c.dom.Document;
+import org.bukkit.Bukkit;
+import org.bukkit.scoreboard.Scoreboard;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 public class Match {
@@ -20,16 +27,28 @@ public class Match {
     private Document document;
     private Thread timer;
     private MapInfo mapInfo;
+    private Scoreboard scoreboard;
+    private List<PgmTeam> teams;
 
     public Match() {
         this.uuid = handler.getMatchUUID();
         this.state = MatchState.WAITING;
-        this.document = new XMLHandler(new File("matches/" + this.uuid.toString() + "/map.xml")).getDocument();
+        try {
+            this.document = DomUtil.parse(new File("matches/" + this.uuid.toString() + "/map.xml"));
+        } catch (JDOMException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.modules = new ModuleContainer(this);
         this.mapInfo = new MapInfo(document);
         timer = new Thread(new Timer());
         //set timer value
 
+        this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+        PgmTeamBuilder teamBuilder = new PgmTeamBuilder(this, scoreboard);
+        teamBuilder.run();
+        teams = teamBuilder.getTeams();
 
 
     }
@@ -70,4 +89,19 @@ public class Match {
         return mapInfo;
     }
 
+    public Scoreboard getScoreboard() {
+        return scoreboard;
+    }
+
+    public Document getDocument() {
+        return document;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public Thread getTimer() {
+        return timer;
+    }
 }

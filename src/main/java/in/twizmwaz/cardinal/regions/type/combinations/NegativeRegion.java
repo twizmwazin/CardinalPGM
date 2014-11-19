@@ -14,14 +14,11 @@ public class NegativeRegion extends Region {
     List<Region> regions;
 
     public NegativeRegion(String name, List<Region> regions) {
-        super(name);
         this.regions.addAll(regions);
     }
 
     public NegativeRegion(CombinationParser parser) {
-        super(parser.getName());
         this.regions.addAll(parser.getRegions());
-
     }
 
     public List<Region> getRegions() {

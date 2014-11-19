@@ -14,15 +14,12 @@ public class IntersectRegion extends Region {
 
     List<Region> regions;
 
-    public IntersectRegion(String name, List<Region> regions) {
-        super(name);
+    public IntersectRegion(List<Region> regions) {
         this.regions.addAll(regions);
     }
 
     public IntersectRegion(CombinationParser parser) {
-        super(parser.getName());
         this.regions.addAll(parser.getRegions());
-
     }
 
     public List<Region> getRegions() {

@@ -8,16 +8,7 @@ import in.twizmwaz.cardinal.regions.parsers.EmptyParser;
  */
 public class EmptyRegion extends Region {
 
-    public EmptyRegion(String name) {
-        super(name);
-    }
-
     public EmptyRegion(EmptyParser parser) {
-        super(parser.getName());
-    }
-
-    public String getName() {
-        return super.getName();
     }
 
     @Override

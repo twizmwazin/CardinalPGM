@@ -18,7 +18,7 @@ public class Timelock extends Module {
     }
 
     public boolean getEnabled() {
-            return this.timelock;
+        return this.timelock;
 
     }
 

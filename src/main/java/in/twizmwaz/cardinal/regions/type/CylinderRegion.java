@@ -7,16 +7,14 @@ import in.twizmwaz.cardinal.util.NumUtils;
 
 public class CylinderRegion extends Region {
 
-    private String name;
     private double baseX;
     private double baseY;
     private double baseZ;
     private double radius;
     private double height;
 
-    public CylinderRegion(String name, double baseX, double baseY, double baseZ, double radius, double height) {
-        super(name);
-        this.name = name;
+    public CylinderRegion(double baseX, double baseY, double baseZ, double radius, double height) {
+        super();
         this.baseX = baseX;
         this.baseY = baseY;
         this.baseZ = baseZ;
@@ -25,15 +23,9 @@ public class CylinderRegion extends Region {
     }
 
     public CylinderRegion(CylinderParser parser) {
-        super(parser.getName());
-        this.name = parser.getName();
         this.baseX = parser.getBaseX();
         this.baseY = parser.getBaseY();
         this.baseZ = parser.getBaseZ();
-    }
-
-    public String getName() {
-        return super.getName();
     }
 
     public double getBaseX() {

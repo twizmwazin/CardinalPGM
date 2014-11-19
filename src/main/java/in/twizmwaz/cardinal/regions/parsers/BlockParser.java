@@ -1,41 +1,30 @@
 package in.twizmwaz.cardinal.regions.parsers;
 
-import org.w3c.dom.Node;
+
+import org.jdom2.Element;
 
 /**
  * Created by kevin on 10/26/14.
  */
 public class BlockParser {
 
-    private String name;
     private double x;
     private double y;
     private double z;
 
-    public BlockParser(Node node) {
-        if (node.getAttributes().getNamedItem("locaton") != null) {
-            if (node.getAttributes().getNamedItem("name").getNodeValue() != null ) {
-                this.name = node.getAttributes().getNamedItem("name").getNodeValue();
-            }
-            String[] coords = node.getAttributes().getNamedItem("location").toString().split(",");
+    public BlockParser(Element element) {
+        try {
+            String[] coords = element.getAttribute("location").getValue().split(",");
+            this.x = Double.parseDouble(coords[0]);
+            this.y = Double.parseDouble(coords[1]);
+            this.z = Double.parseDouble(coords[2]);
+        } catch (NullPointerException ex) {
+            String[] coords = element.getText().split(",");
             this.x = Double.parseDouble(coords[0]);
             this.y = Double.parseDouble(coords[1]);
             this.z = Double.parseDouble(coords[2]);
 
-        } else {
-
-            if (node.getAttributes().getNamedItem("name").getNodeValue() != null ) {
-                this.name = node.getAttributes().getNamedItem("name").getNodeValue();
-            }
-            String[] coords = node.getNodeValue().split(",");
-            this.x = Double.parseDouble(coords[0]);
-            this.y = Double.parseDouble(coords[1]);
-            this.z = Double.parseDouble(coords[2]);
         }
-    }
-
-    public String getName() {
-        return name;
     }
 
     public double getX() {

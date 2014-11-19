@@ -9,15 +9,11 @@ public class RectangleRegion extends CuboidRegion {
 
 
     public RectangleRegion(String name, double xMin, double zMin, double xMax, double zMax) {
-        super(name, xMin, Double.NEGATIVE_INFINITY, zMin, xMax, Double.POSITIVE_INFINITY, zMax);
+        super(xMin, Double.NEGATIVE_INFINITY, zMin, xMax, Double.POSITIVE_INFINITY, zMax);
     }
 
     public RectangleRegion(RectangleParser parser) {
-        super(parser.getName(), parser.getXMin(), Double.NEGATIVE_INFINITY, parser.getZMin(), parser.getXMax(), Double.POSITIVE_INFINITY, parser.getZMax());
-    }
-
-    public String getName() {
-        return super.getName();
+        super(parser.getXMin(), Double.NEGATIVE_INFINITY, parser.getZMin(), parser.getXMax(), Double.POSITIVE_INFINITY, parser.getZMax());
     }
 
     public double getXMin() {

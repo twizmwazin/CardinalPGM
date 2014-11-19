@@ -1,8 +1,7 @@
 package in.twizmwaz.cardinal.data;
 
-import in.twizmwaz.cardinal.util.XMLHandler;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
+import org.jdom2.Document;
+import org.jdom2.Element;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,30 +19,36 @@ public class MapInfo {
     private List<String> rules;
 
     public MapInfo(Document doc) {
-        name = doc.getDocumentElement().getElementsByTagName("name").item(0).getTextContent();
-        version = doc.getDocumentElement().getElementsByTagName("version").item(0).getTextContent();
-        objective = doc.getDocumentElement().getElementsByTagName("objective").item(0).getTextContent();
+        Element root = doc.getRootElement();
+        name = root.getChild("name").getText();
+        version = root.getChild("version").getText();
+        objective = root.getChild("objective").getText();
         authors = new ArrayList<>();
-        for (Node node : XMLHandler.nodeListToList(doc.getDocumentElement().getElementsByTagName("authors").item(0).getChildNodes())) {
-            if (node.hasAttributes()) {
-                authors.add(new Contributor(node.getTextContent(), node.getAttributes().getNamedItem("contribution").getTextContent()));
+        for (Element author : root.getChild("authors").getChildren()) {
+            if (author.hasAttributes()) {
+                authors.add(new Contributor(author.getText(), author.getAttribute("contribution").getValue()));
             } else {
-                authors.add(new Contributor(node.getTextContent()));
+                authors.add(new Contributor(author.getText()));
             }
         }
         contributors = new ArrayList<>();
-        for (Node node : XMLHandler.nodeListToList(doc.getDocumentElement().getElementsByTagName("contributors").item(0).getChildNodes())) {
-            if (node.hasAttributes()) {
-                authors.add(new Contributor(node.getTextContent(), node.getAttributes().getNamedItem("contribution").getTextContent()));
-            } else {
-                authors.add(new Contributor(node.getTextContent()));
+        try {
+            for (Element author : root.getChild("contributors").getChildren()) {
+                if (author.hasAttributes()) {
+                    contributors.add(new Contributor(author.getText(), author.getAttribute("contribution").getValue()));
+                } else {
+                    contributors.add(new Contributor(author.getText()));
+                }
             }
+        } catch (NullPointerException ex) {
+
         }
         rules = new ArrayList<>();
-        if (doc.getDocumentElement().getElementsByTagName("rules").item(0) != null) {
-            for (Node node : XMLHandler.nodeListToList(doc.getDocumentElement().getElementsByTagName("rules").item(0).getChildNodes())) {
-                rules.add(node.getTextContent());
+        try {
+            for (Element rule : root.getChild("rules").getChildren()) {
+                rules.add(rule.getValue());
             }
+        } catch (NullPointerException ex) {
 
         }
     }

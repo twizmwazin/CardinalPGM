@@ -17,22 +17,17 @@ public class BlockRegion extends Region {
     private double z;
 
     public BlockRegion(String name, int x, int y, int z) {
-        super(name);
+        super();
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
     public BlockRegion(BlockParser parser) {
-        super(parser.getName());
         this.x = parser.getX();
         this.y = parser.getY();
         this.z = parser.getZ();
 
-    }
-
-    public String getName() {
-        return super.getName();
     }
 
     public double getX() {

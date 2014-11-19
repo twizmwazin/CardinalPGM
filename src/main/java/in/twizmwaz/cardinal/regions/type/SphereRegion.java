@@ -10,15 +10,12 @@ import in.twizmwaz.cardinal.util.NumUtils;
  */
 public class SphereRegion extends Region {
 
-    private String name;
     private double originX;
     private double originY;
     private double originZ;
     private double radius;
 
     public SphereRegion(String name, double originX, double originY, double originZ, double radius) {
-        super(name);
-        this.name = name;
         this.originX = originX;
         this.originY = originY;
         this.originZ = originZ;
@@ -26,16 +23,10 @@ public class SphereRegion extends Region {
     }
 
     public SphereRegion(SphereParser parser) {
-        super(parser.getName());
-        this.name = parser.getName();
         this.originX = parser.getOriginx();
         this.originY = parser.getOriginy();
         this.originZ = parser.getOriginz();
         this.radius = parser.getRadius();
-    }
-
-    public String getName() {
-        return name;
     }
 
     public double getOriginx() {

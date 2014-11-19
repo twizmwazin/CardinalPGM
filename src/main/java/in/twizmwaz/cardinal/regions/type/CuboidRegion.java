@@ -9,7 +9,6 @@ import in.twizmwaz.cardinal.util.NumUtils;
  */
 public class CuboidRegion extends Region {
 
-    private String name;
     private double xMin;
     private double yMin;
     private double zMin;
@@ -17,8 +16,7 @@ public class CuboidRegion extends Region {
     private double yMax;
     private double zMax;
 
-    public CuboidRegion(String name, double xMin, double yMin, double zMin, double xMax, double yMax, double zMax) {
-        super(name);
+    public CuboidRegion(double xMin, double yMin, double zMin, double xMax, double yMax, double zMax) {
         this.xMin = xMin;
         this.yMin = yMin;
         this.zMin = zMin;
@@ -28,7 +26,6 @@ public class CuboidRegion extends Region {
     }
 
     public CuboidRegion(CuboidParser parser) {
-        super(parser.getName());
         this.xMin = parser.getXMin();
         this.yMin = parser.getYMin();
         this.zMin = parser.getZMin();
@@ -36,10 +33,6 @@ public class CuboidRegion extends Region {
         this.yMax = parser.getYMax();
         this.zMax = parser.getZMax();
 
-    }
-
-    public String getName() {
-        return super.getName();
     }
 
     public double getXMin() {

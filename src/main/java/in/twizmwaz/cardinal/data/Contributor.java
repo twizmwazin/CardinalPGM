@@ -29,4 +29,8 @@ public class Contributor {
         }
 
     }
+
+    public boolean hasContribution() {
+        return (contribution != null);
+    }
 }

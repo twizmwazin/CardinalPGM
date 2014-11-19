@@ -12,11 +12,13 @@ public class StringUtils {
             String[] strip = input.split("h");
             return Integer.getInteger(strip[0]) * 60 * 60;
 
-        } if (input.endsWith("m")) {
+        }
+        if (input.endsWith("m")) {
             String[] strip = input.split("m");
             return Integer.getInteger(strip[0]) * 60;
 
-        }if (input.endsWith("s")) {
+        }
+        if (input.endsWith("s")) {
             String[] strip = input.split("s");
             return Integer.getInteger(strip[0]);
 

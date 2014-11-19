@@ -25,14 +25,26 @@ public class MapCommands {
         refreshMapInfo();
         sender.sendMessage(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "----------" + ChatColor.DARK_AQUA + " " + mapInfo.getName() + " " + ChatColor.GRAY + mapInfo.getVersion() + ChatColor.RED + " " + ChatColor.STRIKETHROUGH + "----------");
         sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Objective: " + ChatColor.RESET + "" + ChatColor.GOLD + mapInfo.getObjective());
-        sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Authors:");
-        for (Contributor contributor : mapInfo.getAuthors()) {
-            sender.sendMessage("* " + ChatColor.GOLD + contributor.getName());
+        if (mapInfo.getAuthors().size() > 1) {
+            sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Authors:");
+            for (Contributor contributor : mapInfo.getAuthors()) {
+                if (contributor.hasContribution()) {
+                    sender.sendMessage("* " + ChatColor.GOLD + contributor.getName() + ChatColor.RESET + " " + ChatColor.GREEN + "" + ChatColor.ITALIC + "(" + contributor.getContribution() + ")");
+                } else {
+                    sender.sendMessage("* " + ChatColor.GOLD + contributor.getName());
+                }
+            }
+        } else {
+            sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Author: " + ChatColor.RESET + ChatColor.GOLD + mapInfo.getAuthors().get(0).getName());
         }
         if (mapInfo.getContributors().size() > 0) {
             sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Contributors:");
             for (Contributor contributor : mapInfo.getContributors()) {
-                sender.sendMessage("* " + ChatColor.GOLD + contributor.getName());
+                if (contributor.hasContribution()) {
+                    sender.sendMessage("* " + ChatColor.GOLD + contributor.getName() + ChatColor.RESET + ChatColor.GREEN + "" + ChatColor.ITALIC + " (" + contributor.getContribution() + ")");
+                } else {
+                    sender.sendMessage("* " + ChatColor.GOLD + contributor.getName());
+                }
             }
         }
 

@@ -15,14 +15,11 @@ public class ComplementRegion extends Region {
     private List<Region> regions;
 
     public ComplementRegion(String name, List<Region> regions) {
-        super(name);
         this.regions.addAll(regions);
     }
 
     public ComplementRegion(CombinationParser parser) {
-        super(parser.getName());
         this.regions.addAll(parser.getRegions());
-
     }
 
     public List<Region> getRegions() {

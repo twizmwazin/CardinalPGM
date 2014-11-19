@@ -2,9 +2,9 @@ package in.twizmwaz.cardinal;
 
 import com.sk89q.bukkit.util.CommandsManagerRegistration;
 import com.sk89q.minecraft.util.commands.*;
+import in.twizmwaz.cardinal.command.CycleCommand;
 import in.twizmwaz.cardinal.command.MapCommands;
 import in.twizmwaz.cardinal.command.MatchCommand;
-import in.twizmwaz.cardinal.command.CycleCommand;
 import in.twizmwaz.cardinal.cycle.RespawnListener;
 import in.twizmwaz.cardinal.listeners.BlockListener;
 import in.twizmwaz.cardinal.listeners.ConnectionListener;

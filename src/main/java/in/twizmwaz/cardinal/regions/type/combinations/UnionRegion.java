@@ -14,12 +14,10 @@ public class UnionRegion extends Region {
     List<Region> regions;
 
     public UnionRegion(String name, List<Region> regions) {
-        super(name);
         this.regions.addAll(regions);
     }
 
     public UnionRegion(CombinationParser parser) {
-        super(parser.getName());
         this.regions.addAll(parser.getRegions());
     }
 

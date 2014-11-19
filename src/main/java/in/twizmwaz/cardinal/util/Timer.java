@@ -1,22 +1,25 @@
 package in.twizmwaz.cardinal.util;
 
+import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitRunnable;
+
 /**
  * Created by kevin on 11/17/14.
  */
-public class Timer implements Runnable {
+public class Timer extends BukkitRunnable {
 
     private int time;
 
-    public Timer() {}
-
-    public void setTime(int seconds) {
-        this.time = seconds;
+    public Timer() {
     }
 
     public int getTime() {
         return time;
     }
 
+    public void setTime(int seconds) {
+        this.time = seconds;
+    }
 
     @Override
     public void run() {
@@ -27,6 +30,7 @@ public class Timer implements Runnable {
                 e.printStackTrace();
             }
             time--;
+            Bukkit.broadcastMessage("Cycling in " + this.time + " seconds.");
             run();
 
         }

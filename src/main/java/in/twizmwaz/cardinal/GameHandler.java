@@ -31,6 +31,10 @@ public class GameHandler {
         initialCycle();
     }
 
+    public static GameHandler getGameHandler() {
+        return handler;
+    }
+
     private void initialCycle() {
         try {
             this.cycle = new Cycle(rotation.getEntry(0), UUID.randomUUID(), this);
@@ -50,12 +54,8 @@ public class GameHandler {
         World oldMatchWorld = matchWorld;
         cycle.run();
         this.match = new Match();
-        cycle = new Cycle(rotation.getNext(), UUID.randomUUID(), this);
         Bukkit.unloadWorld(oldMatchWorld, true);
-    }
-
-    public static GameHandler getGameHandler() {
-        return handler;
+        cycle = new Cycle(rotation.getNext(), UUID.randomUUID(), this);
     }
 
     public Rotation getRotation() {
@@ -66,6 +66,10 @@ public class GameHandler {
         return matchUUID;
     }
 
+    public void setMatchUUID(UUID uuid) {
+        this.matchUUID = uuid;
+    }
+
     public World getMatchWorld() {
         return matchWorld;
     }
@@ -74,15 +78,15 @@ public class GameHandler {
         this.matchWorld = world;
     }
 
-    public void setMatchUUID(UUID uuid) {
-        this.matchUUID = uuid;
-    }
-
     public Match getMatch() {
         return match;
     }
 
     public File getXML() {
         return new File("matches/" + getMatchUUID().toString() + "/map.xml");
+    }
+
+    public Cycle getCycle() {
+        return cycle;
     }
 }

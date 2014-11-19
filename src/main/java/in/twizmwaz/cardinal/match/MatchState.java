@@ -12,7 +12,7 @@ public enum MatchState {
     CYCLING();
 
     public String toString() {
-        switch(this) {
+        switch (this) {
             case WAITING:
                 return "Waiting";
             case STARTING:
@@ -27,7 +27,6 @@ public enum MatchState {
                 return "";
         }
     }
-
 
 
 }

@@ -8,15 +8,11 @@ import in.twizmwaz.cardinal.regions.parsers.CircleParser;
 public class CircleRegion extends CylinderRegion {
 
     public CircleRegion(String name, double centerx, double centerz, double radius) {
-        super(name, centerx, Double.NEGATIVE_INFINITY, centerz, radius, Double.POSITIVE_INFINITY);
+        super(centerx, Double.NEGATIVE_INFINITY, centerz, radius, Double.POSITIVE_INFINITY);
     }
 
     public CircleRegion(CircleParser parser) {
-        super(parser.getName(), parser.getCenterX(), Double.NEGATIVE_INFINITY, parser.getCenterZ(), parser.getRadius(), Double.POSITIVE_INFINITY);
-    }
-
-    public String getName() {
-        return super.getName();
+        super(parser.getCenterX(), Double.NEGATIVE_INFINITY, parser.getCenterZ(), parser.getRadius(), Double.POSITIVE_INFINITY);
     }
 
     public double getCenterX() {
