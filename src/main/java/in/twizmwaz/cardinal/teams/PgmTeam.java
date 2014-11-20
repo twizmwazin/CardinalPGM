@@ -18,10 +18,12 @@ public class PgmTeam {
     private int maxOverfill;
     private int respawnLimit;
     private ChatColor color;
+    private boolean observer;
     private List<PgmPlayer> pgmPlayers;
 
     PgmTeam(String name, String id, int max, int maxOverfill, int respawnLimit, ChatColor color) {
         //scoreboard team
+        this.observer = true;
         this.name = name;
         this.id = id;
         this.max = max;
@@ -31,9 +33,20 @@ public class PgmTeam {
 
     }
 
-    public void add() {
+    public void add(PgmPlayer player) {
+        pgmPlayers.add(player);
+    }
 
+    public void remove(PgmPlayer player) {
+        pgmPlayers.remove(player);
+    }
+
+    public boolean hasPlayer(PgmPlayer player) {
+        return pgmPlayers.contains(player);
     }
 
 
+    public ChatColor getColor() {
+        return color;
+    }
 }

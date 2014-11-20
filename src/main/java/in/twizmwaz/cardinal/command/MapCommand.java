@@ -12,7 +12,7 @@ import org.bukkit.command.CommandSender;
 /**
  * Created by kevin on 11/16/14.
  */
-public class MapCommands {
+public class MapCommand {
 
     private static MapInfo mapInfo;
 

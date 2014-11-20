@@ -27,25 +27,6 @@ public class Cycle extends BukkitRunnable {
         this.handler = handler;
     }
 
-    @Deprecated
-    public static World cycleWorld(String map, UUID uuid) {
-        GenerateMap.copyWorldFromRepository(map, uuid);
-        WorldCreator wc = new WorldCreator("matches/" + uuid.toString()).generator(new ChunkGenerator() {
-            public byte[] generate(World world, Random random, int x, int z) {
-                return new byte[65536];
-            }
-        });
-        World world = Bukkit.createWorld(wc);
-        world.setSpawnFlags(false, false);
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            player.teleport(new Location(world, 0, 64, 0));
-            player.getInventory().clear();
-            player.getInventory().setArmorContents(null);
-        }
-
-        return world;
-    }
-
     public String getMap() {
         return map;
     }

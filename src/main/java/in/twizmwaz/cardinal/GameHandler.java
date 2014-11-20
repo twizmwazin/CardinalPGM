@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.rotation.Rotation;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.UUID;
@@ -17,6 +18,7 @@ import java.util.logging.Level;
  */
 public class GameHandler {
 
+    private final JavaPlugin plugin;
     private static GameHandler handler;
 
     private Rotation rotation;
@@ -25,7 +27,8 @@ public class GameHandler {
     private Match match;
     private Cycle cycle;
 
-    public GameHandler() {
+    public GameHandler(JavaPlugin plugin) {
+        this.plugin = plugin;
         handler = this;
         rotation = new Rotation(new File("rotation.txt"));
         initialCycle();
@@ -88,5 +91,9 @@ public class GameHandler {
 
     public Cycle getCycle() {
         return cycle;
+    }
+
+    public JavaPlugin getPlugin() {
+        return plugin;
     }
 }

@@ -3,12 +3,14 @@ package in.twizmwaz.cardinal;
 import com.sk89q.bukkit.util.CommandsManagerRegistration;
 import com.sk89q.minecraft.util.commands.*;
 import in.twizmwaz.cardinal.command.CycleCommand;
-import in.twizmwaz.cardinal.command.MapCommands;
+import in.twizmwaz.cardinal.command.MapCommand;
 import in.twizmwaz.cardinal.command.MatchCommand;
+import in.twizmwaz.cardinal.command.match.StartAndEndCommand;
 import in.twizmwaz.cardinal.cycle.RespawnListener;
 import in.twizmwaz.cardinal.listeners.BlockListener;
 import in.twizmwaz.cardinal.listeners.ConnectionListener;
 import in.twizmwaz.cardinal.listeners.EntityListener;
+import in.twizmwaz.cardinal.match.MatchListener;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -20,6 +22,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Cardinal extends JavaPlugin {
 
     private static GameHandler gameHandler;
+    private static JavaPlugin plugin;
     private CommandsManager<CommandSender> commands;
 
     @Override
@@ -55,8 +58,9 @@ public class Cardinal extends JavaPlugin {
         };
         CommandsManagerRegistration cmdRegister = new CommandsManagerRegistration(this, this.commands);
         cmdRegister.register(CycleCommand.class);
-        cmdRegister.register(MapCommands.class);
+        cmdRegister.register(MapCommand.class);
         cmdRegister.register(MatchCommand.class);
+        cmdRegister.register(StartAndEndCommand.class);
     }
 
     public void registerListeners() {
@@ -65,17 +69,23 @@ public class Cardinal extends JavaPlugin {
         new EntityListener(this);
         new ConnectionListener(this);
         new RespawnListener(this);
+        new MatchListener(this);
     }
 
 
     public void onEnable() {
         setupCommands();
         registerListeners();
-        gameHandler = new GameHandler();
+        gameHandler = new GameHandler(this);
+        plugin = this;
     }
 
     public GameHandler getGameHandler() {
         return gameHandler;
+    }
+
+    public JavaPlugin getPlugin() {
+        return plugin;
     }
 
 }

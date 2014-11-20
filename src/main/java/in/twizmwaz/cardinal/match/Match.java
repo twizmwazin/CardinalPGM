@@ -1,13 +1,13 @@
 package in.twizmwaz.cardinal.match;
 
-
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.match.util.StartTimer;
 import in.twizmwaz.cardinal.data.MapInfo;
 import in.twizmwaz.cardinal.module.ModuleContainer;
+import in.twizmwaz.cardinal.player.PgmPlayer;
 import in.twizmwaz.cardinal.teams.PgmTeam;
 import in.twizmwaz.cardinal.teams.PgmTeamBuilder;
 import in.twizmwaz.cardinal.util.DomUtil;
-import in.twizmwaz.cardinal.util.Timer;
 import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.Scoreboard;
 import org.jdom2.Document;
@@ -25,7 +25,6 @@ public class Match {
     private MatchState state;
     private ModuleContainer modules;
     private Document document;
-    private Thread timer;
     private MapInfo mapInfo;
     private Scoreboard scoreboard;
     private List<PgmTeam> teams;
@@ -42,8 +41,6 @@ public class Match {
         }
         this.modules = new ModuleContainer(this);
         this.mapInfo = new MapInfo(document);
-        timer = new Thread(new Timer());
-        //set timer value
 
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         PgmTeamBuilder teamBuilder = new PgmTeamBuilder(this, scoreboard);
@@ -73,14 +70,6 @@ public class Match {
         this.state = state;
     }
 
-    public void start() {
-        state = MatchState.PLAYING;
-    }
-
-    public void end() {
-        state = MatchState.ENDED;
-    }
-
     public ModuleContainer getModules() {
         return modules;
     }
@@ -101,7 +90,21 @@ public class Match {
         return uuid;
     }
 
-    public Thread getTimer() {
-        return timer;
+    public void start(int time) {
+        if (state == MatchState.WAITING) {
+            Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(GameHandler.getGameHandler().getPlugin(), new StartTimer(GameHandler.getGameHandler(), time), 0L, 20L);
+            state = MatchState.STARTING;
+        }
+    }
+
+    public void end()  {
+        state = MatchState.ENDED;
+    }
+
+    public PgmTeam getTeam(PgmPlayer player) {
+        for (PgmTeam team : teams) {
+            if (team.hasPlayer(player)) return team;
+        }
+        return null;
     }
 }

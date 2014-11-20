@@ -1,6 +1,5 @@
 package in.twizmwaz.cardinal.util;
 
-import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -30,7 +29,6 @@ public class Timer extends BukkitRunnable {
                 e.printStackTrace();
             }
             time--;
-            Bukkit.broadcastMessage("Cycling in " + this.time + " seconds.");
             run();
 
         }
