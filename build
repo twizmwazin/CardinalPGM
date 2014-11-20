@@ -1,3 +1,0 @@
-mvn clean install
-rm /home/kevin/Documents/cardinal-test/Cardinal*
-cp target/Cardinal* /home/kevin/Documents/cardinal-test/plugins/.
