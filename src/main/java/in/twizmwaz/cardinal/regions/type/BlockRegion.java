@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.regions.type;
 
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.BlockParser;
+import in.twizmwaz.cardinal.util.WorldPoint;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
@@ -11,12 +12,11 @@ import org.bukkit.Location;
  */
 public class BlockRegion extends Region {
 
-    private String name;
     private double x;
     private double y;
     private double z;
 
-    public BlockRegion(String name, int x, int y, int z) {
+    public BlockRegion(int x, int y, int z) {
         super();
         this.x = x;
         this.y = y;
@@ -47,6 +47,15 @@ public class BlockRegion extends Region {
         return region.getX() == getX() && region.getY() == getY() && region.getZ() == getZ();
     }
 
+    @Override
+    public boolean contains(WorldPoint region) {
+        return region.getX() == getX() && region.getY() == getY() && region.getZ() == getZ();
+    }
+
+    @Override
+    public WorldPoint getRandomPoint() {
+        return new WorldPoint(x, y, z);
+    }
     public Location getLocation() {
         return new Location(Bukkit.getWorlds().get(0), x, y, z);
     }

@@ -10,11 +10,11 @@ public class MatchStartEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
 
-    public HandlerList getHandlers() {
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 
-    public static HandlerList getHandlerList() {
+    public HandlerList getHandlers() {
         return handlers;
     }
 

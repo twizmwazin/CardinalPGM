@@ -30,7 +30,7 @@ public class ConnectionListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         //temp
-        event.getPlayer().teleport(new Location(plugin.getGameHandler().getMatchWorld(), 0, 64, 0));
+        //event.getPlayer().teleport(new Location(plugin.getGameHandler().getMatchWorld(), 0, 64, 0));
         PgmPlayer player = new PgmPlayer(event.getPlayer());
         event.setJoinMessage(player.getCompleteName() + ChatColor.YELLOW + " joined the game");
     }

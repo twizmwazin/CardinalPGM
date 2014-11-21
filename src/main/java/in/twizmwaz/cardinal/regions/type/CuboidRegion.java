@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.regions.type;
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.CuboidParser;
 import in.twizmwaz.cardinal.util.NumUtils;
+import in.twizmwaz.cardinal.util.WorldPoint;
 
 /**
  * Created by kevin on 10/26/14.
@@ -65,4 +66,17 @@ public class CuboidRegion extends Region {
         return NumUtils.checkInterval(region.getX(), xMin, xMax) && NumUtils.checkInterval(region.getY(), yMin, yMax) && NumUtils.checkInterval(region.getZ(), zMin, zMax);
 
     }
+
+    @Override
+    public boolean contains(WorldPoint region) {
+        return NumUtils.checkInterval(region.getX(), xMin, xMax) && NumUtils.checkInterval(region.getY(), yMin, yMax) && NumUtils.checkInterval(region.getZ(), zMin, zMax);
+
+    }
+
+    @Override
+    public WorldPoint getRandomPoint() {
+        return new WorldPoint(NumUtils.randomInterval(xMin, xMax), NumUtils.randomInterval(yMin, yMax), NumUtils.randomInterval(zMin, zMax));
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.regions.type;
 
 import in.twizmwaz.cardinal.regions.parsers.RectangleParser;
+import in.twizmwaz.cardinal.util.WorldPoint;
 
 /**
  * Created by kevin on 10/26/14.
@@ -9,7 +10,7 @@ public class RectangleRegion extends CuboidRegion {
 
 
     public RectangleRegion(String name, double xMin, double zMin, double xMax, double zMax) {
-        super(xMin, Double.NEGATIVE_INFINITY, zMin, xMax, Double.POSITIVE_INFINITY, zMax);
+        super(xMin, 0, zMin, xMax, 256, zMax);
     }
 
     public RectangleRegion(RectangleParser parser) {
@@ -35,6 +36,11 @@ public class RectangleRegion extends CuboidRegion {
     @Override
     public boolean contains(BlockRegion region) {
         return super.contains(region);
+    }
+
+    @Override
+    public WorldPoint getRandomPoint() {
+        return super.getRandomPoint();
     }
 
 

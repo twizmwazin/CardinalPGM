@@ -29,7 +29,7 @@ public class StartTimer implements Runnable {
         time--;
         if (time == 0) {
 
-            if (match.getState() != MatchState.STARTING){
+            if (match.getState() != MatchState.STARTING) {
                 return;
             } else {
                 match.setState(MatchState.PLAYING);

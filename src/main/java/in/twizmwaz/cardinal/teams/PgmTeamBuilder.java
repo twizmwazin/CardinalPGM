@@ -20,9 +20,9 @@ public class PgmTeamBuilder implements Runnable {
     private Scoreboard scoreboard;
     private List<PgmTeam> teams;
 
-    public PgmTeamBuilder(Match match, Scoreboard scoreboard) {
+    public PgmTeamBuilder(Match match) {
         this.match = match;
-        this.scoreboard = scoreboard;
+        this.scoreboard = match.getScoreboard();
         teams = new ArrayList<PgmTeam>();
     }
 
@@ -53,10 +53,10 @@ public class PgmTeamBuilder implements Runnable {
                 respawnLimit = -1;
             }
             ChatColor color = StringUtils.convertStringToChatColor(teamNode.getAttribute("color").getValue());
-            this.teams.add(new PgmTeam(name, id, max, maxOverfill, respawnLimit, color));
+            this.teams.add(new PgmTeam(name, id, max, maxOverfill, respawnLimit, color, false, scoreboard));
 
         }
-        this.teams.add(new PgmObservers(this.match));
+        this.teams.add(new PgmTeam("Observers", "observers", Integer.MAX_VALUE, Integer.MAX_VALUE, -1, ChatColor.AQUA, true, scoreboard));
 
     }
 

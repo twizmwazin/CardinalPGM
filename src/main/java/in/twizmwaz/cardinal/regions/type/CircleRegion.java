@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.regions.type;
 
 import in.twizmwaz.cardinal.regions.parsers.CircleParser;
+import in.twizmwaz.cardinal.util.WorldPoint;
 
 /**
  * Created by kevin on 10/26/14.
@@ -8,11 +9,11 @@ import in.twizmwaz.cardinal.regions.parsers.CircleParser;
 public class CircleRegion extends CylinderRegion {
 
     public CircleRegion(String name, double centerx, double centerz, double radius) {
-        super(centerx, Double.NEGATIVE_INFINITY, centerz, radius, Double.POSITIVE_INFINITY);
+        super(centerx, 0, centerz, radius, 256);
     }
 
     public CircleRegion(CircleParser parser) {
-        super(parser.getCenterX(), Double.NEGATIVE_INFINITY, parser.getCenterZ(), parser.getRadius(), Double.POSITIVE_INFINITY);
+        super(parser.getCenterX(), 0, parser.getCenterZ(), parser.getRadius(), 256);
     }
 
     public double getCenterX() {
@@ -30,5 +31,15 @@ public class CircleRegion extends CylinderRegion {
     @Override
     public boolean contains(BlockRegion region) {
         return super.contains(region);
+    }
+
+    @Override
+    public boolean contains(WorldPoint region) {
+        return super.contains(region);
+    }
+
+    @Override
+    public WorldPoint getRandomPoint() {
+        return super.getRandomPoint();
     }
 }

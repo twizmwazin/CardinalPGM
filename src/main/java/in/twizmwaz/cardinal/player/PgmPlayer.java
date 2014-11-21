@@ -21,6 +21,13 @@ public class PgmPlayer {
         players.add(this);
     }
 
+    public static PgmPlayer getPgmPlayer(Player player) {
+        for (PgmPlayer play : players) {
+            if (play.getPlayer().equals(player)) return play;
+        }
+        return null;
+    }
+
     public void remove() {
         players.remove(this);
     }
@@ -29,22 +36,13 @@ public class PgmPlayer {
         return player;
     }
 
-
     public String getCompleteName() {
         try {
-            return (GameHandler.getGameHandler().getMatch().getTeam(this).getColor() + player.getName());
+            return (GameHandler.getGameHandler().getMatch().getTeam(this.getPlayer()).getColor() + player.getName());
         } catch (NullPointerException ex) {
             return ChatColor.DARK_AQUA + player.getName();
         }
     }
-
-    public static PgmPlayer getPgmPlayer(Player player) {
-        for (PgmPlayer play : players) {
-            if (play.getPlayer().equals(player)) return play;
-        }
-        return null;
-    }
-
 
 
 }

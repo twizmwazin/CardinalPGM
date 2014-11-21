@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.regions.type.combinations;
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.modifiers.CombinationParser;
 import in.twizmwaz.cardinal.regions.type.BlockRegion;
+import in.twizmwaz.cardinal.util.WorldPoint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,5 +43,43 @@ public class IntersectRegion extends Region {
 
         }
         return false;
+    }
+
+    @Override
+    public boolean contains(WorldPoint region) {
+        for (Region reg : getRegions()) {
+            List<Region> working = new ArrayList<Region>();
+            working.addAll(getRegions());
+            if (reg.contains(region)) {
+                working.remove(region);
+                for (Region work : working) {
+                    if (work.contains(region)) return true;
+
+                }
+
+            }
+
+        }
+        return false;
+    }
+
+    @Override
+    public WorldPoint getRandomPoint() {
+        while (true) {
+            WorldPoint point = regions.get(0).getRandomPoint();
+            for (Region reg : getRegions()) {
+                List<Region> working = new ArrayList<Region>();
+                working.addAll(getRegions());
+                if (reg.contains(point)) {
+                    working.remove(point);
+                    for (Region work : working) {
+                        if (work.contains(point)) return point;
+
+                    }
+
+                }
+
+            }
+        }
     }
 }

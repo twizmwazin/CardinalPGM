@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.regions.type;
 
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.EmptyParser;
+import in.twizmwaz.cardinal.util.WorldPoint;
 
 /**
  * Created by kevin on 10/26/14.
@@ -14,5 +15,15 @@ public class EmptyRegion extends Region {
     @Override
     public boolean contains(BlockRegion region) {
         return false;
+    }
+
+    @Override
+    public boolean contains(WorldPoint region) {
+        return false;
+    }
+
+    @Override
+    public WorldPoint getRandomPoint() {
+        return null;
     }
 }

@@ -16,16 +16,21 @@ public class MatchEndEvent extends Event {
         this.team = team;
     }
 
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
     public static HandlerList getHandlerList() {
         return handlers;
     }
 
-    public PgmTeam getTeam() {
-        return team;
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public PgmTeam getTeam() throws NullPointerException {
+        try {
+            return team;
+        } catch (NullPointerException ex) {
+            throw new NullPointerException("No valid winning team");
+        }
+
     }
 
 }

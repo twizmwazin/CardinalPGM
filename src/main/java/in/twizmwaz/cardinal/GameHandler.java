@@ -18,9 +18,8 @@ import java.util.logging.Level;
  */
 public class GameHandler {
 
-    private final JavaPlugin plugin;
     private static GameHandler handler;
-
+    private final JavaPlugin plugin;
     private Rotation rotation;
     private UUID matchUUID;
     private World matchWorld;
@@ -43,11 +42,13 @@ public class GameHandler {
             this.cycle = new Cycle(rotation.getEntry(0), UUID.randomUUID(), this);
             this.cycle.run();
             rotation.move();
-            this.match = new Match();
         } catch (RotationLoadException ex) {
             Bukkit.getLogger().log(Level.WARNING, ex.getMessage());
         }
+        this.matchUUID = cycle.getUuid();
+        this.match = new Match(this, matchUUID);
         cycle = new Cycle(rotation.getNext(), UUID.randomUUID(), this);
+
 
     }
 
@@ -56,8 +57,10 @@ public class GameHandler {
         rotation.move();
         World oldMatchWorld = matchWorld;
         cycle.run();
-        this.match = new Match();
         Bukkit.unloadWorld(oldMatchWorld, true);
+        this.matchUUID = cycle.getUuid();
+        match.unregister();
+        this.match = new Match(this, matchUUID);
         cycle = new Cycle(rotation.getNext(), UUID.randomUUID(), this);
     }
 
@@ -83,6 +86,10 @@ public class GameHandler {
 
     public Match getMatch() {
         return match;
+    }
+
+    public void setMatch(Match match) {
+        this.match = match;
     }
 
     public File getXML() {

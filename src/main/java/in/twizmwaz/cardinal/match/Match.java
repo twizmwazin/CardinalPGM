@@ -1,14 +1,19 @@
 package in.twizmwaz.cardinal.match;
 
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.match.util.StartTimer;
 import in.twizmwaz.cardinal.data.MapInfo;
-import in.twizmwaz.cardinal.module.ModuleContainer;
-import in.twizmwaz.cardinal.player.PgmPlayer;
+import in.twizmwaz.cardinal.event.MatchEndEvent;
+import in.twizmwaz.cardinal.event.MatchStartEvent;
+import in.twizmwaz.cardinal.match.listeners.ConnectionListener;
+import in.twizmwaz.cardinal.match.util.StartTimer;
 import in.twizmwaz.cardinal.teams.PgmTeam;
 import in.twizmwaz.cardinal.teams.PgmTeamBuilder;
 import in.twizmwaz.cardinal.util.DomUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
@@ -20,18 +25,19 @@ import java.util.UUID;
 
 public class Match {
 
-    private GameHandler handler = GameHandler.getGameHandler();
+    private GameHandler handler;
     private UUID uuid;
     private MatchState state;
-    private ModuleContainer modules;
     private Document document;
     private MapInfo mapInfo;
     private Scoreboard scoreboard;
     private List<PgmTeam> teams;
 
-    public Match() {
-        this.uuid = handler.getMatchUUID();
-        this.state = MatchState.WAITING;
+    private ConnectionListener connectionListener;
+
+    public Match(GameHandler handler, UUID id) {
+        this.uuid = id;
+        this.handler = handler;
         try {
             this.document = DomUtil.parse(new File("matches/" + this.uuid.toString() + "/map.xml"));
         } catch (JDOMException e) {
@@ -39,15 +45,21 @@ public class Match {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.modules = new ModuleContainer(this);
         this.mapInfo = new MapInfo(document);
 
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        PgmTeamBuilder teamBuilder = new PgmTeamBuilder(this, scoreboard);
+        PgmTeamBuilder teamBuilder = new PgmTeamBuilder(this);
         teamBuilder.run();
         teams = teamBuilder.getTeams();
 
+        mapInfo = new MapInfo(document);
+        this.state = MatchState.WAITING;
+        this.connectionListener = new ConnectionListener(JavaPlugin.getPlugin(Cardinal.class), this);
 
+    }
+
+    public void unregister() {
+        HandlerList.unregisterAll(connectionListener);
     }
 
     public Match getMatch() {
@@ -68,10 +80,6 @@ public class Match {
 
     public void setState(MatchState state) {
         this.state = state;
-    }
-
-    public ModuleContainer getModules() {
-        return modules;
     }
 
     public MapInfo getMapInfo() {
@@ -97,13 +105,30 @@ public class Match {
         }
     }
 
-    public void end()  {
-        state = MatchState.ENDED;
+    public void end(PgmTeam team) {
+        if (getState() == MatchState.PLAYING) {
+            state = MatchState.ENDED;
+            Bukkit.getServer().getPluginManager().callEvent(new MatchEndEvent(team));
+        }
     }
 
-    public PgmTeam getTeam(PgmPlayer player) {
+    public PgmTeam getTeam(Player player) {
         for (PgmTeam team : teams) {
             if (team.hasPlayer(player)) return team;
+        }
+        return null;
+    }
+
+    public PgmTeam getTeamByName(String string) {
+        for (PgmTeam team : this.teams) {
+            if (team.getName().toLowerCase().startsWith(string.toLowerCase())) return team;
+        }
+        return null;
+    }
+
+    public PgmTeam getTeamById(String string) {
+        for (PgmTeam team : this.teams) {
+            if (team.getId().toLowerCase().startsWith(string.toLowerCase())) return team;
         }
         return null;
     }

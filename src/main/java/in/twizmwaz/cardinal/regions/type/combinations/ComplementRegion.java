@@ -4,6 +4,7 @@ package in.twizmwaz.cardinal.regions.type.combinations;
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.modifiers.CombinationParser;
 import in.twizmwaz.cardinal.regions.type.BlockRegion;
+import in.twizmwaz.cardinal.util.WorldPoint;
 
 import java.util.List;
 
@@ -36,5 +37,29 @@ public class ComplementRegion extends Region {
         }
         if (working.size() == 1) return true;
         else return false;
+    }
+
+    @Override
+    public boolean contains(WorldPoint region) {
+        List<Region> working = getRegions();
+        for (Region work : working) {
+            if (work.contains(region)) {
+                working.remove(work);
+            }
+        }
+        if (working.size() == 1) return true;
+        else return false;
+    }
+
+    //kinda need to finish this
+    @Override
+    public WorldPoint getRandomPoint() {
+        return null;
+        /*while (true) {
+            WorldPoint point = regions.get(0).getRandomPoint();
+            for (Region region : regions) {
+
+            }
+        }*/
     }
 }

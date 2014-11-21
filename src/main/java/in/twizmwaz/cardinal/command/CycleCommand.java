@@ -11,7 +11,7 @@ import org.bukkit.command.CommandSender;
 public class CycleCommand {
 
     @Command(aliases = {"cycle"}, desc = "Cycles the world and loads a new world.", usage = "[time]")
-    public static void cycle(CommandContext cmd, CommandSender sender) {
+    public static void cycle(final CommandContext cmd, CommandSender sender) {
         if (!sender.isOp()) {
             return;
         }

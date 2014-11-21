@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.cycle;
 
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.match.Match;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -56,7 +57,8 @@ public class Cycle extends BukkitRunnable {
         }
 
         handler.setMatchWorld(world);
-        handler.setMatchUUID(uuid);
+        //handler.setMatchUUID(uuid);
+        //handler.setMatch(new Match());
 
     }
 }

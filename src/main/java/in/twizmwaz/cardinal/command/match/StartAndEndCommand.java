@@ -11,13 +11,13 @@ import org.bukkit.command.CommandSender;
  * Created by kevin on 11/19/14.
  */
 public class StartAndEndCommand {
-
-    static int timer;
-    static boolean waiting = false;
+    private static int timer;
+    private static boolean waiting = false;
 
     @Command(aliases = {"start"}, desc = "Starts the match.", usage = "[time]")
     public static void start(CommandContext cmd, CommandSender sender) throws CommandException {
-        if (GameHandler.getGameHandler().getMatch().getState() != MatchState.WAITING) throw new CommandException("Cannot start a match right now!");
+        if (GameHandler.getGameHandler().getMatch().getState() != MatchState.WAITING)
+            throw new CommandException("Cannot start a match right now!");
         int time = 30;
         try {
             time = cmd.getInteger(0);
@@ -32,7 +32,14 @@ public class StartAndEndCommand {
     @Command(aliases = {"end"}, desc = "Ends the match.", usage = "[time]")
     public static void end(CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().getState() == MatchState.PLAYING) {
-            GameHandler.getGameHandler().getMatch().end();
+            try {
+                GameHandler.getGameHandler().getMatch().getTeamByName(cmd.getString(0));
+            } catch (IndexOutOfBoundsException ex) {
+                GameHandler.getGameHandler().getMatch().end(null);
+            }
+
+
+            //GameHandler.getGameHandler().getMatch().end(cmd.getString(0));
         } else throw new CommandException("Cannot end a game that is not currently playing!");
     }
 
