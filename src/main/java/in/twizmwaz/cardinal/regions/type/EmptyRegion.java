@@ -2,7 +2,7 @@ package in.twizmwaz.cardinal.regions.type;
 
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.EmptyParser;
-import in.twizmwaz.cardinal.util.WorldPoint;
+import in.twizmwaz.cardinal.regions.point.PointRegion;
 
 /**
  * Created by kevin on 10/26/14.
@@ -18,12 +18,12 @@ public class EmptyRegion extends Region {
     }
 
     @Override
-    public boolean contains(WorldPoint region) {
+    public boolean contains(PointRegion region) {
         return false;
     }
 
     @Override
-    public WorldPoint getRandomPoint() {
+    public PointRegion getRandomPoint() {
         return null;
     }
 }

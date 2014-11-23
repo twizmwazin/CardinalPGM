@@ -1,13 +1,21 @@
 package in.twizmwaz.cardinal.teams;
 
+import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.event.PlayerJoinTeamEvent;
 import in.twizmwaz.cardinal.regions.Region;
+import in.twizmwaz.cardinal.regions.point.PointRegion;
+import in.twizmwaz.cardinal.teams.spawns.Spawn;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -23,8 +31,9 @@ public class PgmTeam {
     private int respawnLimit;
     private ChatColor color;
     private boolean observer;
+    private List<Spawn> spawns;
 
-    PgmTeam(String name, String id, int max, int maxOverfill, int respawnLimit, ChatColor color, boolean obs, Scoreboard scoreboard) {
+    PgmTeam(String name, String id, int max, int maxOverfill, int respawnLimit, ChatColor color, boolean obs, Scoreboard scoreboard, List<Spawn> spawns) {
         this.observer = obs;
         this.name = name;
         this.id = id;
@@ -34,11 +43,13 @@ public class PgmTeam {
         this.color = color;
         this.scoreboardTeam = scoreboard.registerNewTeam(id);
         scoreboardTeam.setDisplayName(color + name);
+        this.spawns = spawns;
 
     }
 
     public void add(Player player) {
         scoreboardTeam.addPlayer(player.getPlayer());
+        Bukkit.getServer().getPluginManager().callEvent(new PlayerJoinTeamEvent(player, this));
     }
 
     public void remove(Player player) {
@@ -72,5 +83,12 @@ public class PgmTeam {
 
     public ChatColor getColor() {
         return color;
+    }
+
+    public Location getSpawnPoint() {
+        Random random = new Random();
+        int index = random.nextInt(spawns.size() + 1);
+        PointRegion point = spawns.get(index - 1).getPoint();
+        return point.toLocation(GameHandler.getGameHandler().getMatchWorld());
     }
 }

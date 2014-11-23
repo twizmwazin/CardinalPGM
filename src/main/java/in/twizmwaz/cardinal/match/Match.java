@@ -3,9 +3,11 @@ package in.twizmwaz.cardinal.match;
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.data.MapInfo;
+import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.match.listeners.ConnectionListener;
+import in.twizmwaz.cardinal.match.listeners.MatchListener;
 import in.twizmwaz.cardinal.match.util.StartTimer;
 import in.twizmwaz.cardinal.teams.PgmTeam;
 import in.twizmwaz.cardinal.teams.PgmTeamBuilder;
@@ -34,6 +36,7 @@ public class Match {
     private List<PgmTeam> teams;
 
     private ConnectionListener connectionListener;
+    private MatchListener matchListener;
 
     public Match(GameHandler handler, UUID id) {
         this.uuid = id;
@@ -55,11 +58,15 @@ public class Match {
         mapInfo = new MapInfo(document);
         this.state = MatchState.WAITING;
         this.connectionListener = new ConnectionListener(JavaPlugin.getPlugin(Cardinal.class), this);
+        this.matchListener = new MatchListener(JavaPlugin.getPlugin(Cardinal.class), this);
+        
+        Bukkit.getServer().getPluginManager().callEvent(new CycleCompleteEvent(this));
 
     }
 
     public void unregister() {
         HandlerList.unregisterAll(connectionListener);
+        HandlerList.unregisterAll(matchListener);
     }
 
     public Match getMatch() {

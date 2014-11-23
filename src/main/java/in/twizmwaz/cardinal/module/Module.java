@@ -2,8 +2,13 @@ package in.twizmwaz.cardinal.module;
 
 public abstract class Module {
 
-    protected Module() {
+    public Module() {
+        this.onEnable();
 
     }
+
+    protected abstract void onEnable();
+
+
 
 }

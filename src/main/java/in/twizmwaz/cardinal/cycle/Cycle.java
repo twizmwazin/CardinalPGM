@@ -50,11 +50,11 @@ public class Cycle extends BukkitRunnable {
         });
         World world = Bukkit.createWorld(wc);
         world.setSpawnFlags(false, false);
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        /*for (Player player : Bukkit.getOnlinePlayers()) {
             player.teleport(new Location(world, 0, 64, 0));
             player.getInventory().clear();
             player.getInventory().setArmorContents(null);
-        }
+        }*/
 
         handler.setMatchWorld(world);
         //handler.setMatchUUID(uuid);

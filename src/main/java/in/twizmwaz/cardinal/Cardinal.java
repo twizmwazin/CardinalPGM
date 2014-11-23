@@ -71,7 +71,6 @@ public class Cardinal extends JavaPlugin {
         new EntityListener(this);
         new ConnectionListener(this);
         new RespawnListener(this);
-        new MatchListener(this);
     }
 
 

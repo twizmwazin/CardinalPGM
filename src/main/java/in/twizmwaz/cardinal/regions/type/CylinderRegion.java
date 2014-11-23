@@ -3,8 +3,8 @@ package in.twizmwaz.cardinal.regions.type;
 
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.CylinderParser;
+import in.twizmwaz.cardinal.regions.point.PointRegion;
 import in.twizmwaz.cardinal.util.NumUtils;
-import in.twizmwaz.cardinal.util.WorldPoint;
 
 public class CylinderRegion extends Region {
 
@@ -56,17 +56,17 @@ public class CylinderRegion extends Region {
     }
 
     @Override
-    public boolean contains(WorldPoint region) {
+    public boolean contains(PointRegion region) {
         return (Math.hypot(Math.abs(region.getX() - getBaseX()), Math.abs(region.getZ() - getBaseZ())) <= getRadius()) && NumUtils.checkInterval(region.getY(), getBaseY(), getBaseY() + getHeight());
 
     }
 
     @Override
-    public WorldPoint getRandomPoint() {
+    public PointRegion getRandomPoint() {
         double a = NumUtils.randomInterval(0, radius);
         double b = NumUtils.randomInterval(0, 360);
         double c = NumUtils.randomInterval(0, height);
 
-        return new WorldPoint(a * Math.cos(b), c, a * Math.sin(b));
+        return new PointRegion(a * Math.cos(b), c, a * Math.sin(b));
     }
 }

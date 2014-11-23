@@ -3,8 +3,8 @@ package in.twizmwaz.cardinal.regions.type;
 
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.SphereParser;
+import in.twizmwaz.cardinal.regions.point.PointRegion;
 import in.twizmwaz.cardinal.util.NumUtils;
-import in.twizmwaz.cardinal.util.WorldPoint;
 
 /**
  * Created by kevin on 10/26/14.
@@ -53,12 +53,12 @@ public class SphereRegion extends Region {
     }
 
     @Override
-    public boolean contains(WorldPoint region) {
+    public boolean contains(PointRegion region) {
         return NumUtils.hypotSphere(region.getX(), region.getY(), region.getZ()) <= getRadius();
     }
 
     @Override
-    public WorldPoint getRandomPoint() {
+    public PointRegion getRandomPoint() {
         double a = NumUtils.randomInterval(0, radius);
         double b = NumUtils.randomInterval(0, 360);
 
@@ -68,6 +68,6 @@ public class SphereRegion extends Region {
         double e = NumUtils.randomInterval(0, radius);
         double f = NumUtils.randomInterval(0, 360);
 
-        return new WorldPoint(a * Math.sin(b), c * Math.sin(d), e * Math.sin(d));
+        return new PointRegion(a * Math.sin(b), c * Math.sin(d), e * Math.sin(d));
     }
 }

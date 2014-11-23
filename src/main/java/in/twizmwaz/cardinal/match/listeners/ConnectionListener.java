@@ -5,13 +5,13 @@ import in.twizmwaz.cardinal.match.Match;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Created by kevin on 11/20/14.
  */
-public class ConnectionListener implements Listener{
+public class ConnectionListener implements Listener {
 
     private final JavaPlugin plugin;
     private final Match match;
@@ -22,8 +22,8 @@ public class ConnectionListener implements Listener{
     }
 
     @EventHandler
-    public void onPlayerLogin(PlayerLoginEvent event) {
-        event.getPlayer().teleport(new Location(GameHandler.getGameHandler().getMatchWorld(), 0, 64, 0));
+    public void onPlayerLogin(PlayerJoinEvent event) {
+        GameHandler.getGameHandler().getMatch().getTeamById("observers").add(event.getPlayer());
     }
 
 }

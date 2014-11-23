@@ -1,7 +1,7 @@
 package in.twizmwaz.cardinal.regions.type;
 
 import in.twizmwaz.cardinal.regions.parsers.CircleParser;
-import in.twizmwaz.cardinal.util.WorldPoint;
+import in.twizmwaz.cardinal.regions.point.PointRegion;
 
 /**
  * Created by kevin on 10/26/14.
@@ -34,12 +34,12 @@ public class CircleRegion extends CylinderRegion {
     }
 
     @Override
-    public boolean contains(WorldPoint region) {
+    public boolean contains(PointRegion region) {
         return super.contains(region);
     }
 
     @Override
-    public WorldPoint getRandomPoint() {
+    public PointRegion getRandomPoint() {
         return super.getRandomPoint();
     }
 }

@@ -3,7 +3,7 @@ package in.twizmwaz.cardinal.regions.type.combinations;
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.modifiers.CombinationParser;
 import in.twizmwaz.cardinal.regions.type.BlockRegion;
-import in.twizmwaz.cardinal.util.WorldPoint;
+import in.twizmwaz.cardinal.regions.point.PointRegion;
 
 import java.util.List;
 
@@ -35,16 +35,20 @@ public class NegativeRegion extends Region {
     }
 
     @Override
-    public boolean contains(WorldPoint region) {
+    public boolean contains(PointRegion region) {
         for (Region reg : getRegions()) {
             if (reg.contains(region)) return false;
         }
         return true;
     }
 
-    //kinda need to write this
     @Override
-    public WorldPoint getRandomPoint() {
-        return null;
+    public PointRegion getRandomPoint() {
+        while (true) {
+            PointRegion point = regions.get(0).getRandomPoint();
+            if (this.contains(point)) {
+                return point;
+            }
+        }
     }
 }
