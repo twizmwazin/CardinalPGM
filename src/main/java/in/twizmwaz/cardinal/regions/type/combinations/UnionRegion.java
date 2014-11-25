@@ -2,10 +2,11 @@ package in.twizmwaz.cardinal.regions.type.combinations;
 
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.modifiers.CombinationParser;
-import in.twizmwaz.cardinal.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.regions.point.PointRegion;
+import in.twizmwaz.cardinal.regions.type.BlockRegion;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by kevin on 10/26/14.
@@ -45,7 +46,8 @@ public class UnionRegion extends Region {
     @Override
     public PointRegion getRandomPoint() {
         while (true) {
-            PointRegion point = regions.get(0).getRandomPoint();
+            Random random = new Random();
+            PointRegion point = regions.get(random.nextInt(regions.size())).getRandomPoint();
             if (this.contains(point)) {
                 return point;
             }

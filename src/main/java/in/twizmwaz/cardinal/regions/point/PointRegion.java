@@ -50,7 +50,7 @@ public class PointRegion extends BlockRegion {
     }
 
     public Location toLocation(World world) {
-        return new Location(world, x, y,z, yaw, pitch);
+        return new Location(world, x, y, z, yaw, pitch);
     }
 
 }

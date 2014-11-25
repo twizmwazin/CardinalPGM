@@ -1,12 +1,7 @@
 package in.twizmwaz.cardinal.cycle;
 
 import in.twizmwaz.cardinal.Cardinal;
-import in.twizmwaz.cardinal.GameHandler;
-import org.bukkit.Location;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerRespawnEvent;
 
 /**
  * Created by kevin on 11/2/14.
@@ -21,10 +16,10 @@ public class RespawnListener implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    /*@EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         event.setRespawnLocation(new Location(GameHandler.getGameHandler().getMatchWorld(), 0, 64, 0));
 
-    }
+    }*/
 
 }

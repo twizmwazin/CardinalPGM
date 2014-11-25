@@ -2,7 +2,6 @@ package in.twizmwaz.cardinal.teams;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.PlayerJoinTeamEvent;
-import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.point.PointRegion;
 import in.twizmwaz.cardinal.teams.spawns.Spawn;
 import org.bukkit.Bukkit;
@@ -10,7 +9,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
@@ -87,8 +85,8 @@ public class PgmTeam {
 
     public Location getSpawnPoint() {
         Random random = new Random();
-        int index = random.nextInt(spawns.size() + 1);
-        PointRegion point = spawns.get(index - 1).getPoint();
+        int index = random.nextInt(spawns.size());
+        PointRegion point = spawns.get(index).getPoint();
         return point.toLocation(GameHandler.getGameHandler().getMatchWorld());
     }
 }

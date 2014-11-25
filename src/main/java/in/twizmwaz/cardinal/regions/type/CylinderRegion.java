@@ -67,6 +67,6 @@ public class CylinderRegion extends Region {
         double b = NumUtils.randomInterval(0, 360);
         double c = NumUtils.randomInterval(0, height);
 
-        return new PointRegion(a * Math.cos(b), c, a * Math.sin(b));
+        return new PointRegion(this.baseX + a * Math.cos(b), this.baseY + c, this.baseZ + a * Math.sin(b));
     }
 }

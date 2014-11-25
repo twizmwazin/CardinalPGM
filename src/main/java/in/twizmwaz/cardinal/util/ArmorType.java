@@ -10,21 +10,6 @@ public enum ArmorType {
     LEGGINGS(),
     BOOTS();
 
-    public String toString() {
-        switch (this) {
-            case HELMET:
-                return "helmet";
-            case CHESTPLATE:
-                return "chestplate";
-            case LEGGINGS:
-                return "leggings";
-            case BOOTS:
-                return "boots";
-            default:
-                return "";
-        }
-    }
-
     public static ArmorType getArmorType(String string) {
         switch (string.toLowerCase()) {
             case "helmet":
@@ -37,6 +22,21 @@ public enum ArmorType {
                 return BOOTS;
             default:
                 return null;
+        }
+    }
+
+    public String toString() {
+        switch (this) {
+            case HELMET:
+                return "helmet";
+            case CHESTPLATE:
+                return "chestplate";
+            case LEGGINGS:
+                return "leggings";
+            case BOOTS:
+                return "boots";
+            default:
+                return "";
         }
     }
 

@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.teams.PgmTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  * Created by kevin on 11/20/14.
@@ -22,8 +23,8 @@ public class JoinCommand {
             team = GameHandler.getGameHandler().getMatch().getTeamById(cmd.getString(0));
 
         } else throw new CommandException("No team named" + cmd.getString(0));
-        team.add(Bukkit.getPlayer(sender.getName()));
-        Bukkit.getPlayer(sender.getName()).setPlayerListName(team.getColor() + Bukkit.getPlayer(sender.getName()).getDisplayName());
+        team.add((Player) sender);
+        ((Player) sender).setPlayerListName(team.getColor() + Bukkit.getPlayer(sender.getName()).getDisplayName());
 
     }
 

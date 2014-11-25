@@ -54,6 +54,7 @@ public class BlockRegion extends Region {
     public PointRegion getRandomPoint() {
         return new PointRegion(x, y, z);
     }
+
     public Location getLocation() {
         return new Location(Bukkit.getWorlds().get(0), x, y, z);
     }

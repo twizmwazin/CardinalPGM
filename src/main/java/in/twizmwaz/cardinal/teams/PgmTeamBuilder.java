@@ -3,8 +3,8 @@ package in.twizmwaz.cardinal.teams;
 import in.parapengu.commons.utils.StringUtils;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.teams.spawns.Spawn;
+import in.twizmwaz.cardinal.teams.spawns.SpawnParser;
 import org.apache.logging.log4j.core.helpers.Integers;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Scoreboard;
 import org.jdom2.Document;
@@ -56,19 +56,12 @@ public class PgmTeamBuilder implements Runnable {
             }
             ChatColor color = StringUtils.convertStringToChatColor(teamNode.getAttribute("color").getValue());
             Element spawnElement = doc.getRootElement().getChild("spawns");
-            List<Spawn> spawns = new ArrayList<Spawn>();
-            for (Element element : spawnElement.getChildren("spawn")) {
-                if (element.getAttribute("team").getValue().equalsIgnoreCase(id)) {
-                    spawns.add(new Spawn(element));
-                    Bukkit.broadcastMessage("spawn");
-                }
-            }
+            List<Spawn> spawns = SpawnParser.parseSpawns(spawnElement, id);
             this.teams.add(new PgmTeam(name, id, max, maxOverfill, respawnLimit, color, false, scoreboard, spawns));
 
         }
-        List<Spawn> spawns = new ArrayList<Spawn>();
-        spawns.add(new Spawn(doc.getRootElement().getChild("spawns").getChild("default")));
-        this.teams.add(new PgmTeam("Observers", "observers", Integer.MAX_VALUE, Integer.MAX_VALUE, -1, ChatColor.AQUA, true, scoreboard, new ArrayList<Spawn>()));
+        List<Spawn> spawns = SpawnParser.parseDefault(doc.getRootElement().getChild("spawns"));
+        this.teams.add(new PgmTeam("Observers", "observers", Integer.MAX_VALUE, Integer.MAX_VALUE, -1, ChatColor.AQUA, true, scoreboard, spawns));
 
     }
 

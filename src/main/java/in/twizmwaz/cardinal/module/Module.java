@@ -10,5 +10,4 @@ public abstract class Module {
     protected abstract void onEnable();
 
 
-
 }

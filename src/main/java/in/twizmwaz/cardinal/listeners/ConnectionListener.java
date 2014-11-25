@@ -6,7 +6,6 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.player.PgmPlayer;
-import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -27,10 +26,8 @@ public class ConnectionListener implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        //temp
-        //event.getPlayer().teleport(new Location(plugin.getGameHandler().getMatchWorld(), 0, 64, 0));
         PgmPlayer player = new PgmPlayer(event.getPlayer());
         event.setJoinMessage(player.getCompleteName() + ChatColor.YELLOW + " joined the game");
     }

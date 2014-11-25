@@ -11,7 +11,6 @@ import in.twizmwaz.cardinal.cycle.RespawnListener;
 import in.twizmwaz.cardinal.listeners.BlockListener;
 import in.twizmwaz.cardinal.listeners.ConnectionListener;
 import in.twizmwaz.cardinal.listeners.EntityListener;
-import in.twizmwaz.cardinal.match.listeners.MatchListener;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -69,7 +68,6 @@ public class Cardinal extends JavaPlugin {
         new BlockListener(this);
         new ConnectionListener(this);
         new EntityListener(this);
-        new ConnectionListener(this);
         new RespawnListener(this);
     }
 

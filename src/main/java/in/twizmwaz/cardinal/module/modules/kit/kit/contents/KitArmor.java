@@ -6,5 +6,4 @@ package in.twizmwaz.cardinal.module.modules.kit.kit.contents;
 public class KitArmor {
 
 
-
 }

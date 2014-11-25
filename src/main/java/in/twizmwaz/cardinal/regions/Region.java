@@ -3,12 +3,12 @@ package in.twizmwaz.cardinal.regions;
 import in.twizmwaz.cardinal.regions.parsers.*;
 import in.twizmwaz.cardinal.regions.parsers.modifiers.CombinationParser;
 import in.twizmwaz.cardinal.regions.point.PointParser;
+import in.twizmwaz.cardinal.regions.point.PointRegion;
 import in.twizmwaz.cardinal.regions.type.*;
 import in.twizmwaz.cardinal.regions.type.combinations.ComplementRegion;
 import in.twizmwaz.cardinal.regions.type.combinations.IntersectRegion;
 import in.twizmwaz.cardinal.regions.type.combinations.NegativeRegion;
 import in.twizmwaz.cardinal.regions.type.combinations.UnionRegion;
-import in.twizmwaz.cardinal.regions.point.PointRegion;
 import org.jdom2.Element;
 
 /**
@@ -18,12 +18,6 @@ public abstract class Region {
 
     public Region() {
     }
-
-    public abstract boolean contains(BlockRegion region);
-
-    public abstract boolean contains(PointRegion point);
-
-    public abstract PointRegion getRandomPoint();
 
     public static Region newRegion(Element element) {
         switch (element.getName()) {
@@ -52,9 +46,15 @@ public abstract class Region {
             case "union":
                 return new UnionRegion((new CombinationParser(element)));
             default:
-                return  null;
+                return null;
         }
     }
+
+    public abstract boolean contains(BlockRegion region);
+
+    public abstract boolean contains(PointRegion point);
+
+    public abstract PointRegion getRandomPoint();
 
 
 }
