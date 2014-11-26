@@ -48,6 +48,7 @@ public class MatchListener implements Listener {
     @EventHandler
     public void onCycle(CycleCompleteEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
+            player.setScoreboard(match.getScoreboard());
             match.getTeamById("observers").add(player);
             player.teleport(match.getTeamById("observers").getSpawnPoint());
         }

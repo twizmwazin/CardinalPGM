@@ -24,6 +24,7 @@ public class ConnectionListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
+        event.getPlayer().setScoreboard(match.getScoreboard());
         GameHandler.getGameHandler().getMatch().getTeamById("observers").add(event.getPlayer());
         event.getPlayer().teleport(match.getTeamById("observers").getSpawnPoint());
     }

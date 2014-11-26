@@ -24,7 +24,7 @@ public class TeamListener implements Listener {
 
     @EventHandler
     public void onTeamJoin(PlayerJoinTeamEvent event) {
-        event.getPlayer().setPlayerListName(event.getTeam().getColor() + event.getPlayer().getDisplayName());
+        //event.getPlayer().setPlayerListName(event.getTeam().getColor() + event.getPlayer().getDisplayName());
         if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING)) {
             event.getPlayer().setHealth(0);
         }

@@ -20,13 +20,12 @@ public class NumUtils {
         if (min < max) {
             low = min;
             high = max;
-        } else {
+        } if (max < min) {
             low = max;
             high = min;
         }
         Random random = new Random();
-        double modifier = random.nextGaussian();
-        return min + (modifier * (max - min));
+        return min + (random.nextGaussian() * (max - min));
     }
 
 }

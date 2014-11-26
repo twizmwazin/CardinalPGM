@@ -24,7 +24,6 @@ public class JoinCommand {
 
         } else throw new CommandException("No team named" + cmd.getString(0));
         team.add((Player) sender);
-        ((Player) sender).setPlayerListName(team.getColor() + Bukkit.getPlayer(sender.getName()).getDisplayName());
 
     }
 

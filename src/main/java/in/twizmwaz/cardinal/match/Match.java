@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.match.listeners.ConnectionListener;
 import in.twizmwaz.cardinal.match.listeners.MatchListener;
+import in.twizmwaz.cardinal.match.listeners.ObserverListener;
 import in.twizmwaz.cardinal.match.listeners.TeamListener;
 import in.twizmwaz.cardinal.match.util.StartTimer;
 import in.twizmwaz.cardinal.teams.PgmTeam;
@@ -38,6 +39,7 @@ public class Match {
     private ConnectionListener connectionListener;
     private MatchListener matchListener;
     private TeamListener teamListener;
+    private ObserverListener observerListener;
 
     public Match(GameHandler handler, UUID id) {
         this.uuid = id;
@@ -61,6 +63,7 @@ public class Match {
         this.connectionListener = new ConnectionListener(JavaPlugin.getPlugin(Cardinal.class), this);
         this.matchListener = new MatchListener(JavaPlugin.getPlugin(Cardinal.class), this);
         this.teamListener = new TeamListener(JavaPlugin.getPlugin(Cardinal.class), this);
+        this.observerListener = new ObserverListener(JavaPlugin.getPlugin(Cardinal.class), this);
 
 
         Bukkit.getServer().getPluginManager().callEvent(new CycleCompleteEvent(this));
@@ -71,6 +74,7 @@ public class Match {
         HandlerList.unregisterAll(connectionListener);
         HandlerList.unregisterAll(matchListener);
         HandlerList.unregisterAll(teamListener);
+        HandlerList.unregisterAll(observerListener);
     }
 
     public Match getMatch() {
@@ -142,5 +146,16 @@ public class Match {
             if (team.getId().toLowerCase().startsWith(string.toLowerCase())) return team;
         }
         return null;
+    }
+
+    public PgmTeam getTeamWithFewestPlayers() {
+        PgmTeam result = null;
+        int most = Integer.MAX_VALUE;
+        for (PgmTeam team : this.teams) {
+            if (team.getPlayers().size() < most && (!team.getName().equalsIgnoreCase("observers"))) {
+                result = team;
+            }
+        }
+        return result;
     }
 }

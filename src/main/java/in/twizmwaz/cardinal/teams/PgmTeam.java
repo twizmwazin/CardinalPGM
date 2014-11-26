@@ -41,18 +41,22 @@ public class PgmTeam {
         this.color = color;
         this.scoreboardTeam = scoreboard.registerNewTeam(id);
         scoreboardTeam.setDisplayName(color + name);
+        scoreboardTeam.setPrefix(color + "");
         this.spawns = spawns;
 
     }
 
     public void add(Player player) {
-        scoreboardTeam.addPlayer(player.getPlayer());
-        Bukkit.getServer().getPluginManager().callEvent(new PlayerJoinTeamEvent(player, this));
+        PlayerJoinTeamEvent event = new PlayerJoinTeamEvent(player, this);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (!event.isCancelled()) {
+            scoreboardTeam.addPlayer(player);
+        }
+
     }
 
     public void remove(Player player) {
-        scoreboardTeam.remove(player.getName());
-        scoreboardTeam.removePlayer(player.getPlayer());
+        scoreboardTeam.removePlayer(player);
     }
 
     public boolean hasPlayer(Player player) {

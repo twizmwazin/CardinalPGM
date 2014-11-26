@@ -14,6 +14,7 @@ public class PlayerJoinTeamEvent extends Event {
 
     private final Player player;
     private final PgmTeam team;
+    private boolean cancelled;
 
     public PlayerJoinTeamEvent(Player player, PgmTeam team) {
         this.player = player;
@@ -34,6 +35,14 @@ public class PlayerJoinTeamEvent extends Event {
 
     public PgmTeam getTeam() {
         return team;
+    }
+
+    public void setCancelled(boolean isCancelled) {
+        this.cancelled = isCancelled;
+    }
+
+    public boolean isCancelled() {
+        return cancelled;
     }
 
 }
