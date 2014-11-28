@@ -23,6 +23,8 @@ import org.jdom2.JDOMException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -64,7 +66,6 @@ public class Match {
         this.matchListener = new MatchListener(JavaPlugin.getPlugin(Cardinal.class), this);
         this.teamListener = new TeamListener(JavaPlugin.getPlugin(Cardinal.class), this);
         this.observerListener = new ObserverListener(JavaPlugin.getPlugin(Cardinal.class), this);
-
 
         Bukkit.getServer().getPluginManager().callEvent(new CycleCompleteEvent(this));
 
@@ -150,12 +151,22 @@ public class Match {
 
     public PgmTeam getTeamWithFewestPlayers() {
         PgmTeam result = null;
-        int most = Integer.MAX_VALUE;
+        List<Integer> teamValues = new ArrayList<>();
         for (PgmTeam team : this.teams) {
-            if (team.getPlayers().size() < most && (!team.getName().equalsIgnoreCase("observers"))) {
+            if (!team.isObserver()) {
+                teamValues.add(team.getPlayerNames().size());
+            }
+        }
+        Collections.sort(teamValues);
+        for (PgmTeam team : this.teams) {
+            if (team.getPlayerNames().size() == teamValues.get(0)) {
                 result = team;
             }
         }
         return result;
+    }
+
+    public List<PgmTeam> getTeams() {
+        return teams;
     }
 }

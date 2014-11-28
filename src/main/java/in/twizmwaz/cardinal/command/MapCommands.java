@@ -7,12 +7,18 @@ import com.sk89q.minecraft.util.commands.CommandException;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.data.Contributor;
 import in.twizmwaz.cardinal.data.MapInfo;
+import in.twizmwaz.cardinal.util.DomUtil;
 import org.bukkit.command.CommandSender;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by kevin on 11/16/14.
  */
-public class MapCommand {
+public class MapCommands {
 
     private static MapInfo mapInfo;
 
@@ -48,6 +54,38 @@ public class MapCommand {
             }
         }
 
+    }
+
+    @Command(aliases = {"next", "nextmap"}, desc = "Shows next map.", usage = "")
+    public static void next(final CommandContext cmd, CommandSender sender) {
+        String nextMap = GameHandler.getGameHandler().getRotation().getNext();
+        try {
+            Document doc = DomUtil.parse(new File("maps/" + nextMap + "/map.xml"));
+            MapInfo mapInfo = new MapInfo(doc);
+            if (mapInfo.getAuthors().size() == 1) {
+                sender.sendMessage(ChatColor.DARK_PURPLE + "Next map: " + ChatColor.GOLD + mapInfo.getName() + ChatColor.DARK_PURPLE + " by " + ChatColor.RED + mapInfo.getAuthors().get(0).getName());
+            } else if (mapInfo.getAuthors().size() > 1) {
+                int size = mapInfo.getAuthors().size();
+                String result = ChatColor.DARK_PURPLE + "Next map: " + ChatColor.GOLD + mapInfo.getName() + ChatColor.DARK_PURPLE + " by ";
+                for (Contributor author : mapInfo.getAuthors()) {
+                    if (mapInfo.getAuthors().indexOf(author) < mapInfo.getAuthors().size() - 2) {
+                        result = result + ChatColor.RED + author.getName() + ChatColor.DARK_PURPLE + ", ";
+                    } else if (mapInfo.getAuthors().indexOf(author) == mapInfo.getAuthors().size() - 2) {
+                        result = result + ChatColor.RED + author.getName() + ChatColor.DARK_PURPLE + " and ";
+                    } else if (mapInfo.getAuthors().indexOf(author) == mapInfo.getAuthors().size() - 1) {
+                        result = result + ChatColor.RED + author.getName();
+                    }
+
+                }
+
+                sender.sendMessage(result);
+            }
+
+        } catch (JDOMException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

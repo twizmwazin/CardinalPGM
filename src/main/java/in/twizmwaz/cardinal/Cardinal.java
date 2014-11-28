@@ -2,12 +2,8 @@ package in.twizmwaz.cardinal;
 
 import com.sk89q.bukkit.util.CommandsManagerRegistration;
 import com.sk89q.minecraft.util.commands.*;
-import in.twizmwaz.cardinal.command.CycleCommand;
-import in.twizmwaz.cardinal.command.JoinCommand;
-import in.twizmwaz.cardinal.command.MapCommand;
-import in.twizmwaz.cardinal.command.MatchCommand;
+import in.twizmwaz.cardinal.command.*;
 import in.twizmwaz.cardinal.command.match.StartAndEndCommand;
-import in.twizmwaz.cardinal.cycle.RespawnListener;
 import in.twizmwaz.cardinal.listeners.BlockListener;
 import in.twizmwaz.cardinal.listeners.ConnectionListener;
 import in.twizmwaz.cardinal.listeners.EntityListener;
@@ -58,17 +54,17 @@ public class Cardinal extends JavaPlugin {
         };
         CommandsManagerRegistration cmdRegister = new CommandsManagerRegistration(this, this.commands);
         cmdRegister.register(CycleCommand.class);
-        cmdRegister.register(MapCommand.class);
+        cmdRegister.register(MapCommands.class);
         cmdRegister.register(MatchCommand.class);
         cmdRegister.register(StartAndEndCommand.class);
         cmdRegister.register(JoinCommand.class);
+        cmdRegister.register(RotationCommands.class);
     }
 
     public void registerListeners() {
         new BlockListener(this);
         new ConnectionListener(this);
         new EntityListener(this);
-        new RespawnListener(this);
     }
 
 

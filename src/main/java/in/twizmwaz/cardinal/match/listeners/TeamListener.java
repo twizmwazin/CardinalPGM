@@ -1,7 +1,7 @@
 package in.twizmwaz.cardinal.match.listeners;
 
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.event.PlayerJoinTeamEvent;
+import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import org.bukkit.event.EventHandler;
@@ -23,10 +23,16 @@ public class TeamListener implements Listener {
     }
 
     @EventHandler
-    public void onTeamJoin(PlayerJoinTeamEvent event) {
-        //event.getPlayer().setPlayerListName(event.getTeam().getColor() + event.getPlayer().getDisplayName());
+    public void onTeamChange(PlayerChangeTeamEvent event) {
         if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING)) {
-            event.getPlayer().setHealth(0);
+            if (event.getOldTeam().isObserver()) {
+                event.getPlayer().teleport(event.getNewTeam().getSpawnPoint());
+            } else {
+                event.getPlayer().setHealth(0);
+            }
+        }
+        if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) || GameHandler.getGameHandler().getMatch().getState().equals(MatchState.CYCLING)) {
+            event.setCancelled(true);
         }
     }
 

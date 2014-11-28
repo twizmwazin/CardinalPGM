@@ -1,13 +1,12 @@
 package in.twizmwaz.cardinal.teams;
 
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.event.PlayerJoinTeamEvent;
+import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.regions.point.PointRegion;
 import in.twizmwaz.cardinal.teams.spawns.Spawn;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
@@ -47,12 +46,18 @@ public class PgmTeam {
     }
 
     public void add(Player player) {
-        PlayerJoinTeamEvent event = new PlayerJoinTeamEvent(player, this);
+        PlayerChangeTeamEvent event = new PlayerChangeTeamEvent(player, this);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
             scoreboardTeam.addPlayer(player);
         }
 
+    }
+
+    public void force(Player player) {
+        PlayerChangeTeamEvent event = new PlayerChangeTeamEvent(player, this);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        scoreboardTeam.addPlayer(player);
     }
 
     public void remove(Player player) {
@@ -63,8 +68,8 @@ public class PgmTeam {
         return scoreboardTeam.hasPlayer(player);
     }
 
-    public Set<OfflinePlayer> getPlayers() {
-        return scoreboardTeam.getPlayers();
+    public Set<String> getPlayerNames() {
+        return scoreboardTeam.getEntries();
     }
 
     public int getMax() {
@@ -92,5 +97,9 @@ public class PgmTeam {
         int index = random.nextInt(spawns.size());
         PointRegion point = spawns.get(index).getPoint();
         return point.toLocation(GameHandler.getGameHandler().getMatchWorld());
+    }
+
+    public boolean isObserver() {
+        return observer;
     }
 }

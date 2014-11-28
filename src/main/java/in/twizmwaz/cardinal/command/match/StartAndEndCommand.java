@@ -40,8 +40,6 @@ public class StartAndEndCommand {
                 GameHandler.getGameHandler().getMatch().end(null);
             }
 
-
-            //GameHandler.getGameHandler().getMatch().end(cmd.getString(0));
         } else throw new CommandException("Cannot end a game that is not currently playing!");
     }
 

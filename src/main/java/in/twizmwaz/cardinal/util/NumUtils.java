@@ -20,7 +20,8 @@ public class NumUtils {
         if (min < max) {
             low = min;
             high = max;
-        } if (max < min) {
+        }
+        if (max < min) {
             low = max;
             high = min;
         }

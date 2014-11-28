@@ -5,7 +5,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
 import java.util.UUID;
@@ -13,7 +12,7 @@ import java.util.UUID;
 /**
  * Created by kevin on 10/31/14.
  */
-public class Cycle extends BukkitRunnable {
+public class Cycle implements Runnable {
 
     private final UUID uuid;
     private final GameHandler handler;
@@ -35,6 +34,10 @@ public class Cycle extends BukkitRunnable {
 
     public UUID getUuid() {
         return uuid;
+    }
+
+    public GameHandler getGameHandler() {
+        return handler;
     }
 
     @Override

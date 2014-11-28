@@ -2,7 +2,9 @@ package in.twizmwaz.cardinal;
 
 
 import in.twizmwaz.cardinal.cycle.Cycle;
+import in.twizmwaz.cardinal.cycle.CycleTimer;
 import in.twizmwaz.cardinal.match.Match;
+import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.rotation.Rotation;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import org.bukkit.Bukkit;
@@ -25,6 +27,7 @@ public class GameHandler {
     private World matchWorld;
     private Match match;
     private Cycle cycle;
+    private CycleTimer cycleTimer;
 
     public GameHandler(JavaPlugin plugin) {
         this.plugin = plugin;
@@ -102,5 +105,14 @@ public class GameHandler {
 
     public JavaPlugin getPlugin() {
         return plugin;
+    }
+
+    public boolean startCycleTimer(int seconds) {
+        if (this.getMatch().getState() != MatchState.PLAYING) {
+            this.cycleTimer = new CycleTimer(this.getCycle(), seconds);
+            this.getMatch().setState(MatchState.CYCLING);
+            Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this.getPlugin(), cycleTimer, 0L, 20L);
+            return true;
+        } else return false;
     }
 }

@@ -13,8 +13,8 @@ import org.bukkit.Bukkit;
  */
 public class StartTimer implements Runnable {
 
-    int time;
-    Match match;
+    private int time;
+    private Match match;
 
     public StartTimer(GameHandler gameHandler, int seconds) {
         this.time = seconds;

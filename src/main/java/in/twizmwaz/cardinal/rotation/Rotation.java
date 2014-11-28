@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -16,6 +17,7 @@ import java.util.logging.Level;
 public class Rotation {
 
     private String[] rotation;
+    private List<String> loaded = new ArrayList<String>();
     private int position;
     private String next;
     private File file;
@@ -45,6 +47,11 @@ public class Rotation {
         }
         position = 0;
         override = false;
+
+        File mapFolder = new File("maps");
+        for (File map : mapFolder.listFiles()) {
+            loaded.add(map.getName());
+        }
     }
 
     public void setRotationFile(File file) throws RotationLoadException {
@@ -72,6 +79,10 @@ public class Rotation {
         } else return rotation[position];
     }
 
+    public int getNextIndex() {
+        return position;
+    }
+
     public String getCurrent() {
         return rotation[position];
     }
@@ -82,6 +93,14 @@ public class Rotation {
         } catch (NullPointerException ex) {
             throw new RotationLoadException("Could not load map. Is there an issue with the rotation?");
         }
+    }
+
+    public List<String> getLoaded() {
+        return loaded;
+    }
+
+    public String[] getRotation() {
+        return rotation;
     }
 
 }
