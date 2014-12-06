@@ -4,6 +4,7 @@ import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.match.JoinType;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.teams.PgmTeam;
 import org.bukkit.ChatColor;
@@ -24,10 +25,10 @@ public class JoinCommand {
         }
         try {
             team = GameHandler.getGameHandler().getMatch().getTeamByName(cmd.getString(0));
-            team.add((Player) sender);
+            team.add((Player) sender, JoinType.VOLUNTARY);
         } catch (IndexOutOfBoundsException ex) {
             team = GameHandler.getGameHandler().getMatch().getTeamWithFewestPlayers();
-            team.add((Player) sender);
+            team.add((Player) sender, JoinType.VOLUNTARY);
         } catch (NullPointerException ex) {
             throw new CommandException("No team named " + cmd.getString(0));
         }

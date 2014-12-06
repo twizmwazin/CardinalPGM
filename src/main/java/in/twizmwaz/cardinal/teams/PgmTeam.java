@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.teams;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
+import in.twizmwaz.cardinal.match.JoinType;
 import in.twizmwaz.cardinal.regions.point.PointRegion;
 import in.twizmwaz.cardinal.teams.spawns.Spawn;
 import org.bukkit.Bukkit;
@@ -45,19 +46,27 @@ public class PgmTeam {
 
     }
 
-    public void add(Player player) {
-        PlayerChangeTeamEvent event = new PlayerChangeTeamEvent(player, this);
+    public void add(Player player, JoinType joinType) {
+        PlayerChangeTeamEvent event = new PlayerChangeTeamEvent(player, this, joinType);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
-            scoreboardTeam.addPlayer(player);
+            this.set(event);
         }
 
     }
 
-    public void force(Player player) {
-        PlayerChangeTeamEvent event = new PlayerChangeTeamEvent(player, this);
+    public void force(Player player, JoinType joinType) {
+        PlayerChangeTeamEvent event = new PlayerChangeTeamEvent(player, this, joinType);
         Bukkit.getServer().getPluginManager().callEvent(event);
-        scoreboardTeam.addPlayer(player);
+        this.set(event);
+    }
+
+    private void set(PlayerChangeTeamEvent event) {
+        scoreboardTeam.addPlayer(event.getPlayer());
+        event.getPlayer().setScoreboard(scoreboardTeam.getScoreboard());
+        if (!event.getJoinType().equals(JoinType.JOIN)){
+            event.getPlayer().sendMessage(ChatColor.GRAY + "You have joined " + event.getNewTeam().getColor() + event.getNewTeam().getName());
+        }
     }
 
     public void remove(Player player) {

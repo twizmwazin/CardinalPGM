@@ -1,12 +1,15 @@
 package in.twizmwaz.cardinal.match.listeners;
 
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.match.JoinType;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.teams.PgmTeam;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInitialSpawnEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -29,8 +32,14 @@ public class ConnectionListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         event.getPlayer().setScoreboard(match.getScoreboard());
-        GameHandler.getGameHandler().getMatch().getTeamById("observers").add(event.getPlayer());
-        event.getPlayer().teleport(match.getTeamById("observers").getSpawnPoint());
+        GameHandler.getGameHandler().getMatch().getTeamById("observers").add(event.getPlayer(), JoinType.JOIN);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerInitLogin(PlayerInitialSpawnEvent event) {
+        event.setSpawnLocation(match.getTeamById("observers").getSpawnPoint());
+        event.getPlayer().setGameMode(GameMode.CREATIVE);
+        //event.getPlayer().setFlying(false);
     }
 
     @EventHandler

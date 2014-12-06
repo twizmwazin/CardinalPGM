@@ -4,6 +4,7 @@ import com.sk89q.minecraft.util.commands.ChatColor;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
+import in.twizmwaz.cardinal.match.JoinType;
 import in.twizmwaz.cardinal.match.Match;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -48,7 +49,7 @@ public class MatchListener implements Listener {
     @EventHandler
     public void onCycle(CycleCompleteEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            match.getTeamById("observers").force(player);
+            match.getTeamById("observers").force(player, JoinType.JOIN);
             player.setScoreboard(match.getScoreboard());
             player.teleport(match.getTeamById("observers").getSpawnPoint());
         }

@@ -1,9 +1,6 @@
 package in.twizmwaz.cardinal.command;
 
-import com.sk89q.minecraft.util.commands.ChatColor;
-import com.sk89q.minecraft.util.commands.Command;
-import com.sk89q.minecraft.util.commands.CommandContext;
-import com.sk89q.minecraft.util.commands.CommandException;
+import com.sk89q.minecraft.util.commands.*;
 import in.twizmwaz.cardinal.GameHandler;
 import org.bukkit.command.CommandSender;
 
@@ -13,6 +10,7 @@ import org.bukkit.command.CommandSender;
 public class CycleCommand {
 
     @Command(aliases = {"cycle"}, desc = "Cycles the world and loads a new world.", usage = "[time]")
+    @CommandPermissions("cardinal.match.cycle")
     public static void cycle(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
             throw new CommandException("Cannot cycle while the match is running!");
@@ -27,6 +25,7 @@ public class CycleCommand {
     }
 
     @Command(aliases = {"setnext", "sn"}, desc = "Sets the next map.", usage = "[map]", min = 0)
+    @CommandPermissions("cardinal.match.setnext")
     public static void setNext(final CommandContext cmd, CommandSender sender) throws CommandException {
         String input;
         try {

@@ -1,9 +1,11 @@
 package in.twizmwaz.cardinal.match.listeners;
 
 import com.sk89q.minecraft.util.commands.ChatColor;
+import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.*;
 import org.bukkit.entity.Player;
@@ -190,6 +192,16 @@ public class ObserverListener implements Listener {
             ItemStack dropped = event.getItemDrop().getItemStack();
             event.getPlayer().getItemInHand().setAmount(event.getPlayer().getItemInHand().getAmount() - dropped.getAmount());
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onTeamChange(PlayerChangeTeamEvent event) {
+        if (event.getNewTeam().isObserver() || match.getState() != MatchState.PLAYING) {
+            event.getPlayer().setGameMode(GameMode.CREATIVE);
+            event.getPlayer().setAffectsSpawning(false);
+        } else {
+            event.getPlayer().setAffectsSpawning(true);
         }
     }
 

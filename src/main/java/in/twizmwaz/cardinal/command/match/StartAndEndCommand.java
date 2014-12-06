@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.command.match;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
+import com.sk89q.minecraft.util.commands.CommandPermissions;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.teams.PgmTeam;
@@ -16,6 +17,7 @@ public class StartAndEndCommand {
     private static boolean waiting = false;
 
     @Command(aliases = {"start"}, desc = "Starts the match.", usage = "[time]")
+    @CommandPermissions("cardinal.match.start")
     public static void start(CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().getState() != MatchState.WAITING)
             throw new CommandException("Cannot start a match right now!");
@@ -31,6 +33,7 @@ public class StartAndEndCommand {
     }
 
     @Command(aliases = {"end"}, desc = "Ends the match.", usage = "[time]")
+    @CommandPermissions("cardinal.match.end")
     public static void end(CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().getState() == MatchState.PLAYING) {
             try {

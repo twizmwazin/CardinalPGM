@@ -16,6 +16,7 @@ import in.twizmwaz.cardinal.util.DomUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 import org.jdom2.Document;
@@ -37,11 +38,9 @@ public class Match {
     private MapInfo mapInfo;
     private Scoreboard scoreboard;
     private List<PgmTeam> teams;
+    private StartTimer startTimer;
 
-    private ConnectionListener connectionListener;
-    private MatchListener matchListener;
-    private TeamListener teamListener;
-    private ObserverListener observerListener;
+    private List<Listener> listeners = new ArrayList<Listener>();
 
     public Match(GameHandler handler, UUID id) {
         this.uuid = id;
@@ -62,20 +61,18 @@ public class Match {
 
         mapInfo = new MapInfo(document);
         this.state = MatchState.WAITING;
-        this.connectionListener = new ConnectionListener(JavaPlugin.getPlugin(Cardinal.class), this);
-        this.matchListener = new MatchListener(JavaPlugin.getPlugin(Cardinal.class), this);
-        this.teamListener = new TeamListener(JavaPlugin.getPlugin(Cardinal.class), this);
-        this.observerListener = new ObserverListener(JavaPlugin.getPlugin(Cardinal.class), this);
+        listeners.add(new ConnectionListener(JavaPlugin.getPlugin(Cardinal.class), this));
+        listeners.add(new MatchListener(JavaPlugin.getPlugin(Cardinal.class), this));
+        listeners.add(new TeamListener(JavaPlugin.getPlugin(Cardinal.class), this));
+        listeners.add(new ObserverListener(JavaPlugin.getPlugin(Cardinal.class), this));
 
         Bukkit.getServer().getPluginManager().callEvent(new CycleCompleteEvent(this));
 
     }
 
     public void unregister() {
-        HandlerList.unregisterAll(connectionListener);
-        HandlerList.unregisterAll(matchListener);
-        HandlerList.unregisterAll(teamListener);
-        HandlerList.unregisterAll(observerListener);
+        for (Listener listener : listeners)
+        HandlerList.unregisterAll(listener);
     }
 
     public Match getMatch() {
@@ -114,9 +111,14 @@ public class Match {
         return uuid;
     }
 
+    public StartTimer getStartTimer() {
+        return startTimer;
+    }
+
     public void start(int time) {
         if (state == MatchState.WAITING) {
-            Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(GameHandler.getGameHandler().getPlugin(), new StartTimer(GameHandler.getGameHandler(), time), 0L, 20L);
+            this.startTimer = new StartTimer(GameHandler.getGameHandler(), time);
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameHandler.getGameHandler().getPlugin(), startTimer);
             state = MatchState.STARTING;
         }
     }
@@ -169,4 +171,5 @@ public class Match {
     public List<PgmTeam> getTeams() {
         return teams;
     }
+
 }

@@ -103,6 +103,10 @@ public class GameHandler {
         return cycle;
     }
 
+    public CycleTimer getCycleTimer() {
+        return cycleTimer;
+    }
+
     public JavaPlugin getPlugin() {
         return plugin;
     }
@@ -110,8 +114,7 @@ public class GameHandler {
     public boolean startCycleTimer(int seconds) {
         if (this.getMatch().getState() != MatchState.PLAYING) {
             this.cycleTimer = new CycleTimer(this.getCycle(), seconds);
-            this.getMatch().setState(MatchState.CYCLING);
-            Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this.getPlugin(), cycleTimer, 0L, 20L);
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), cycleTimer);
             return true;
         } else return false;
     }

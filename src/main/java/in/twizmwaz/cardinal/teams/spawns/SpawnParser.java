@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.teams.spawns;
 
 import in.twizmwaz.cardinal.regions.Region;
+import org.bukkit.Bukkit;
 import org.jdom2.Element;
 
 import java.util.ArrayList;
@@ -18,7 +19,13 @@ public class SpawnParser {
             for (Element child : element.getChildren("spawn")) {
                 List<Region> reg = new ArrayList<Region>();
                 int yaw = 0;
-                if (teamId.toLowerCase().startsWith(child.getAttributeValue("team"))) {
+                String teamValue;
+                try {
+                    teamValue = child.getAttributeValue("team");
+                } catch (NullPointerException ex) {
+                    teamValue = element.getAttributeValue("team");
+                }
+                if (teamId.toLowerCase().startsWith(teamValue)) {
                     yaw = Integer.parseInt(child.getAttributeValue("yaw"));
                     for (Element rege : child.getChildren()) {
                         reg.add(Region.newRegion(rege));
@@ -30,7 +37,13 @@ public class SpawnParser {
         if (element.getChildren("spawns").size() > 0) {
             for (Element child : element.getChildren("spawns")) {
                 for (Element subChild : child.getChildren("spawn")) {
-                    if (teamId.toLowerCase().startsWith(subChild.getAttributeValue("team"))) {
+                    String teamValue;
+                    try {
+                        teamValue = subChild.getAttributeValue("team");
+                    } catch (NullPointerException ex) {
+                        teamValue = child.getAttributeValue("team");
+                    }
+                    if (teamId.toLowerCase().startsWith(teamValue)) {
                         int yaw = Integer.parseInt(subChild.getAttributeValue("yaw"));
                         List<Region> reg = new ArrayList<Region>();
                         for (Element rege : subChild.getChildren()) {
