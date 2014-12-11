@@ -3,7 +3,6 @@ package in.twizmwaz.cardinal.regions.type;
 
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.SphereParser;
-import in.twizmwaz.cardinal.regions.point.PointRegion;
 import in.twizmwaz.cardinal.util.NumUtils;
 
 /**

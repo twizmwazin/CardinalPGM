@@ -31,20 +31,24 @@ public class TeamListener implements Listener {
     @EventHandler
     public void onTeamChange(PlayerChangeTeamEvent event) {
         if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING)) {
-            if (event.getOldTeam().isObserver()) {
-                PgmSpawnEvent spawnEvent = new PgmSpawnEvent(event.getPlayer());
-                Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
-                if (!spawnEvent.isCancelled()) {
-                    event.getPlayer().teleport(event.getNewTeam().getSpawnPoint());
+            try {
+                if (event.getOldTeam().isObserver()) {
+                    PgmSpawnEvent spawnEvent = new PgmSpawnEvent(event.getPlayer());
+                    Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
+                    if (!spawnEvent.isCancelled()) {
+                        event.getPlayer().teleport(event.getNewTeam().getSpawnPoint());
+                    }
+                } else if (event.getNewTeam().isObserver()) {
+                    PgmSpawnEvent spawnEvent = new PgmSpawnEvent(event.getPlayer());
+                    Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
+                    if (!spawnEvent.isCancelled()) {
+                        event.getPlayer().setGameMode(GameMode.CREATIVE);
+                    }
+                } else {
+                    event.getPlayer().setHealth(0);
                 }
-            } else if (event.getNewTeam().isObserver()) {
-                PgmSpawnEvent spawnEvent = new PgmSpawnEvent(event.getPlayer());
-                Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
-                if (!spawnEvent.isCancelled()) {
-                    event.getPlayer().setGameMode(GameMode.CREATIVE);
-                }
-            } else {
-                event.getPlayer().setHealth(0);
+            } catch (NullPointerException ex) {
+
             }
         }
         if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
@@ -79,7 +83,6 @@ public class TeamListener implements Listener {
         event.getPlayer().setFoodLevel(20);
         event.getPlayer().setSaturation(20);
     }
-
 
 
 }

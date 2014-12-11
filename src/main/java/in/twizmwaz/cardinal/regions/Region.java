@@ -2,8 +2,6 @@ package in.twizmwaz.cardinal.regions;
 
 import in.twizmwaz.cardinal.regions.parsers.*;
 import in.twizmwaz.cardinal.regions.parsers.modifiers.CombinationParser;
-import in.twizmwaz.cardinal.regions.point.PointParser;
-import in.twizmwaz.cardinal.regions.point.PointRegion;
 import in.twizmwaz.cardinal.regions.type.*;
 import in.twizmwaz.cardinal.regions.type.combinations.ComplementRegion;
 import in.twizmwaz.cardinal.regions.type.combinations.IntersectRegion;

@@ -1,7 +1,6 @@
 package in.twizmwaz.cardinal.teams.spawns;
 
 import in.twizmwaz.cardinal.regions.Region;
-import org.bukkit.Bukkit;
 import org.jdom2.Element;
 
 import java.util.ArrayList;
@@ -20,18 +19,14 @@ public class SpawnParser {
                 List<Region> reg = new ArrayList<Region>();
                 int yaw = 0;
                 String teamValue;
-                try {
-                    teamValue = child.getAttributeValue("team");
-                } catch (NullPointerException ex) {
-                    teamValue = element.getAttributeValue("team");
-                }
+                yaw = Integer.parseInt(child.getAttributeValue("yaw"));
+                teamValue = child.getAttributeValue("team");
                 if (teamId.toLowerCase().startsWith(teamValue)) {
-                    yaw = Integer.parseInt(child.getAttributeValue("yaw"));
-                    for (Element rege : child.getChildren()) {
-                        reg.add(Region.newRegion(rege));
+                    for (Element regionChild : child.getChildren()) {
+                        reg.add(Region.newRegion(regionChild));
                     }
+                    result.add(new Spawn(reg, yaw));
                 }
-                result.add(new Spawn(reg, yaw));
             }
         }
         if (element.getChildren("spawns").size() > 0) {

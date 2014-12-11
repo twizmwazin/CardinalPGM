@@ -3,8 +3,8 @@ package in.twizmwaz.cardinal.regions.type.combinations;
 
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.modifiers.CombinationParser;
-import in.twizmwaz.cardinal.regions.point.PointRegion;
 import in.twizmwaz.cardinal.regions.type.BlockRegion;
+import in.twizmwaz.cardinal.regions.type.PointRegion;
 
 import java.util.List;
 import java.util.Random;

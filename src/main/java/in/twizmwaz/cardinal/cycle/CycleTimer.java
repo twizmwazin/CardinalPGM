@@ -34,12 +34,12 @@ public class CycleTimer implements Runnable, Cancellable {
             GameHandler.getGameHandler().getMatch().setState(MatchState.CYCLING);
             if ((this.time % 5 == 0 && time > 0) || (time < 5 && time > 0)) {
                 Bukkit.broadcastMessage(ChatColor.DARK_AQUA + "Cycling to " + ChatColor.AQUA + cycle.getMap() + ChatColor.DARK_AQUA + " in " + ChatColor.DARK_RED + time + ChatColor.DARK_AQUA + " seconds");
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, this, 20);
             }
             if (this.time == 0) {
                 GameHandler.getGameHandler().cycleAndMakeMatch();
             }
             this.time--;
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, this, 20);
         } else {
             this.setCancelled(false);
         }

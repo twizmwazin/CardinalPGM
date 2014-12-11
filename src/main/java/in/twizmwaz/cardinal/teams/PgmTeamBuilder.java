@@ -5,7 +5,6 @@ import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.teams.spawns.Spawn;
 import in.twizmwaz.cardinal.teams.spawns.SpawnParser;
 import org.apache.logging.log4j.core.helpers.Integers;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Scoreboard;
 import org.jdom2.Document;

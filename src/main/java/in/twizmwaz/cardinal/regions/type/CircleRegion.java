@@ -1,7 +1,6 @@
 package in.twizmwaz.cardinal.regions.type;
 
 import in.twizmwaz.cardinal.regions.parsers.CircleParser;
-import in.twizmwaz.cardinal.regions.point.PointRegion;
 
 /**
  * Created by kevin on 10/26/14.

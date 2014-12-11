@@ -1,6 +1,6 @@
-package in.twizmwaz.cardinal.regions.point;
+package in.twizmwaz.cardinal.regions.type;
 
-import in.twizmwaz.cardinal.regions.type.BlockRegion;
+import in.twizmwaz.cardinal.regions.parsers.PointParser;
 import org.bukkit.Location;
 import org.bukkit.World;
 

@@ -10,6 +10,8 @@ import in.twizmwaz.cardinal.match.listeners.MatchListener;
 import in.twizmwaz.cardinal.match.listeners.ObserverListener;
 import in.twizmwaz.cardinal.match.listeners.TeamListener;
 import in.twizmwaz.cardinal.match.util.StartTimer;
+import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.ModuleHandler;
 import in.twizmwaz.cardinal.teams.PgmTeam;
 import in.twizmwaz.cardinal.teams.PgmTeamBuilder;
 import in.twizmwaz.cardinal.util.DomUtil;
@@ -31,8 +33,11 @@ import java.util.UUID;
 
 public class Match {
 
-    private GameHandler handler;
-    private UUID uuid;
+    private final GameHandler handler;
+    private final ModuleHandler moduleHandler;
+    private final UUID uuid;
+    private final List<Module> modules;
+
     private MatchState state;
     private Document document;
     private MapInfo mapInfo;
@@ -40,11 +45,13 @@ public class Match {
     private List<PgmTeam> teams;
     private StartTimer startTimer;
 
+
     private List<Listener> listeners = new ArrayList<Listener>();
 
     public Match(GameHandler handler, UUID id) {
         this.uuid = id;
         this.handler = handler;
+        this.moduleHandler = handler.getModuleHandler();
         try {
             this.document = DomUtil.parse(new File("matches/" + this.uuid.toString() + "/map.xml"));
         } catch (JDOMException e) {
@@ -59,6 +66,8 @@ public class Match {
         teamBuilder.run();
         teams = teamBuilder.getTeams();
 
+        this.modules = moduleHandler.invokeModules(document);
+
         mapInfo = new MapInfo(document);
         this.state = MatchState.WAITING;
         listeners.add(new ConnectionListener(JavaPlugin.getPlugin(Cardinal.class), this));
@@ -71,8 +80,10 @@ public class Match {
     }
 
     public void unregister() {
-        for (Listener listener : listeners)
-        HandlerList.unregisterAll(listener);
+        for (Listener listener : listeners) {
+            HandlerList.unregisterAll(listener);
+        }
+        moduleHandler.unregisterModules();
     }
 
     public Match getMatch() {

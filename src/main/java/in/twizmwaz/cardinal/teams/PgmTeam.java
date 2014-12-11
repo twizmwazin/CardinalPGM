@@ -3,7 +3,7 @@ package in.twizmwaz.cardinal.teams;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.JoinType;
-import in.twizmwaz.cardinal.regions.point.PointRegion;
+import in.twizmwaz.cardinal.regions.type.PointRegion;
 import in.twizmwaz.cardinal.teams.spawns.Spawn;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -64,7 +64,7 @@ public class PgmTeam {
     private void set(PlayerChangeTeamEvent event) {
         scoreboardTeam.addPlayer(event.getPlayer());
         event.getPlayer().setScoreboard(scoreboardTeam.getScoreboard());
-        if (!event.getJoinType().equals(JoinType.JOIN)){
+        if (!event.getJoinType().equals(JoinType.JOIN)) {
             event.getPlayer().sendMessage(ChatColor.GRAY + "You have joined " + event.getNewTeam().getColor() + event.getNewTeam().getName());
         }
     }

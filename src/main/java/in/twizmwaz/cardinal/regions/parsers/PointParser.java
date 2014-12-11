@@ -1,4 +1,4 @@
-package in.twizmwaz.cardinal.regions.point;
+package in.twizmwaz.cardinal.regions.parsers;
 
 import org.jdom2.Element;
 

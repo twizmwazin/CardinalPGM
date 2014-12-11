@@ -10,6 +10,7 @@ import org.bukkit.event.HandlerList;
  */
 public class PgmSpawnEvent extends Event implements Cancellable {
 
+    private static final HandlerList handlers = new HandlerList();
     private final Player player;
     private boolean cancelled;
 
@@ -17,22 +18,20 @@ public class PgmSpawnEvent extends Event implements Cancellable {
         this.player = player;
     }
 
-    public Player getPlayer() {
-        return player;
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
-    public void setCancelled(boolean isCancelled) {
-        this.cancelled = isCancelled;
+    public Player getPlayer() {
+        return player;
     }
 
     public boolean isCancelled() {
         return cancelled;
     }
 
-    private static final HandlerList handlers = new HandlerList();
-
-    public static HandlerList getHandlerList() {
-        return handlers;
+    public void setCancelled(boolean isCancelled) {
+        this.cancelled = isCancelled;
     }
 
     public HandlerList getHandlers() {

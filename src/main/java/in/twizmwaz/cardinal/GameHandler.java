@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.cycle.Cycle;
 import in.twizmwaz.cardinal.cycle.CycleTimer;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
+import in.twizmwaz.cardinal.module.ModuleHandler;
 import in.twizmwaz.cardinal.rotation.Rotation;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import org.bukkit.Bukkit;
@@ -28,10 +29,12 @@ public class GameHandler {
     private Match match;
     private Cycle cycle;
     private CycleTimer cycleTimer;
+    private ModuleHandler moduleHandler;
 
     public GameHandler(JavaPlugin plugin) {
         this.plugin = plugin;
         handler = this;
+        moduleHandler = new ModuleHandler(plugin, this);
         rotation = new Rotation(new File("rotation.txt"));
         initialCycle();
     }
@@ -109,6 +112,10 @@ public class GameHandler {
 
     public JavaPlugin getPlugin() {
         return plugin;
+    }
+
+    public ModuleHandler getModuleHandler() {
+        return moduleHandler;
     }
 
     public boolean startCycleTimer(int seconds) {

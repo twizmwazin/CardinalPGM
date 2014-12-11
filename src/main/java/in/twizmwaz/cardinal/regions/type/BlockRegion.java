@@ -2,7 +2,6 @@ package in.twizmwaz.cardinal.regions.type;
 
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.BlockParser;
-import in.twizmwaz.cardinal.regions.point.PointRegion;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 

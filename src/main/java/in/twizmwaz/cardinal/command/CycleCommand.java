@@ -27,15 +27,17 @@ public class CycleCommand {
     @Command(aliases = {"setnext", "sn"}, desc = "Sets the next map.", usage = "[map]", min = 0)
     @CommandPermissions("cardinal.match.setnext")
     public static void setNext(final CommandContext cmd, CommandSender sender) throws CommandException {
-        String input;
+        String input = "";
         try {
-            input = cmd.getString(0);
+            for (int i = 0; i < cmd.argsLength(); i++) {
+                input = input + cmd.getString(i);
+            }
         } catch (IndexOutOfBoundsException ex) {
             throw new CommandException("Please specify a map!");
         }
         String nextMap = null;
         for (String loadedMap : GameHandler.getGameHandler().getRotation().getLoaded()) {
-            if (loadedMap.toLowerCase().startsWith(input.toLowerCase())) {
+            if (loadedMap.toLowerCase().replaceAll(" ", "").startsWith(input.toLowerCase())) {
                 nextMap = loadedMap;
             }
         }
