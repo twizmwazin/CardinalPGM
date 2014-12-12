@@ -8,10 +8,12 @@ import in.twizmwaz.cardinal.teams.spawns.Spawn;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -75,6 +77,14 @@ public class PgmTeam {
 
     public boolean hasPlayer(Player player) {
         return scoreboardTeam.hasPlayer(player);
+    }
+
+    public Set<Player> getPlayers() {
+        Set<Player> result = new HashSet<>(maxOverfill);
+        for (OfflinePlayer offlinePlayer : scoreboardTeam.getPlayers()) {
+            if (offlinePlayer instanceof Player) result.add((Player) offlinePlayer);
+        }
+        return result;
     }
 
     public Set<String> getPlayerNames() {

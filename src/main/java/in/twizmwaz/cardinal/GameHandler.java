@@ -74,14 +74,6 @@ public class GameHandler {
         return rotation;
     }
 
-    public UUID getMatchUUID() {
-        return matchUUID;
-    }
-
-    public void setMatchUUID(UUID uuid) {
-        this.matchUUID = uuid;
-    }
-
     public World getMatchWorld() {
         return matchWorld;
     }
@@ -96,10 +88,6 @@ public class GameHandler {
 
     public void setMatch(Match match) {
         this.match = match;
-    }
-
-    public File getXML() {
-        return new File("matches/" + getMatchUUID().toString() + "/map.xml");
     }
 
     public Cycle getCycle() {

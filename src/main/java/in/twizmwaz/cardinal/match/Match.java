@@ -66,7 +66,7 @@ public class Match {
         teamBuilder.run();
         teams = teamBuilder.getTeams();
 
-        this.modules = moduleHandler.invokeModules(document);
+        this.modules = moduleHandler.invokeModules(this);
 
         mapInfo = new MapInfo(document);
         this.state = MatchState.WAITING;
