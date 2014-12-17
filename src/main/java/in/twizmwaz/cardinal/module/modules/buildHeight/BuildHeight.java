@@ -57,7 +57,7 @@ public class BuildHeight implements Module {
         Block toEmpty = event.getBlockClicked().getRelative(event.getBlockFace());
         if (toEmpty.getY() >= height) {
             event.setCancelled(true);
-            event.getPlayer().sendMessage(ChatColor.YELLOW + "⚠ " + ChatColor.RED + "You have reached the maximum build height! " + ChatColor.GRAY + "(" + height + " blocks)");
+            event.getPlayer().sendMessage(ChatColor.YELLOW + "\u26A0" + ChatColor.RED + " You have reached the maximum build height! " + ChatColor.GRAY + "(" + height + " blocks)");
         }
     }
 

@@ -1,7 +1,8 @@
 package in.twizmwaz.cardinal.module.modules.wools;
 
 import in.parapengu.commons.utils.StringUtils;
-import in.twizmwaz.cardinal.module.GameCondition;
+import in.twizmwaz.cardinal.event.ObjectiveCompleteEvent;
+import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.teams.PgmTeam;
 import org.bukkit.Bukkit;
@@ -16,7 +17,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.material.Wool;
 
-public class WoolObjective implements GameCondition {
+public class WoolObjective implements GameObjective {
 
     private final PgmTeam team;
     private final DyeColor color;
@@ -60,11 +61,13 @@ public class WoolObjective implements GameCondition {
     public void onBlockPlace(BlockPlaceEvent event) {
         if (event.getBlock().getX() == place.getX() && event.getBlock().getY() == place.getY() && event.getBlock().getZ() == place.getZ()) {
             if (event.getBlock().getType().equals(Material.WOOL)) {
-                 if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
+                if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
                     this.complete = true;
-                     Bukkit.broadcastMessage(team.getColor() + event.getPlayer().getDisplayName() + ChatColor.WHITE + " placed "  + StringUtils.convertDyeColorToChatColor(color) + color.toString().toUpperCase() + " WOOL" + ChatColor.WHITE + " for the " + team.getColor() + team.getName());
-                     event.setCancelled(false);
-                 } else event.setCancelled(true);
+                    Bukkit.broadcastMessage(team.getColor() + event.getPlayer().getDisplayName() + ChatColor.WHITE + " placed " + StringUtils.convertDyeColorToChatColor(color) + color.toString().toUpperCase() + " WOOL" + ChatColor.WHITE + " for the " + team.getColor() + team.getName());
+                    ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this);
+                    Bukkit.getServer().getPluginManager().callEvent(compEvent);
+                    event.setCancelled(false);
+                } else event.setCancelled(true);
             } else event.setCancelled(true);
         }
     }

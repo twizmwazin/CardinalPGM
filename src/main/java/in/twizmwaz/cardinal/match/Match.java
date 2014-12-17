@@ -1,14 +1,10 @@
 package in.twizmwaz.cardinal.match;
 
-import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.data.MapInfo;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
-import in.twizmwaz.cardinal.match.listeners.ConnectionListener;
-import in.twizmwaz.cardinal.match.listeners.MatchListener;
-import in.twizmwaz.cardinal.match.listeners.ObserverListener;
-import in.twizmwaz.cardinal.match.listeners.TeamListener;
+import in.twizmwaz.cardinal.match.listeners.*;
 import in.twizmwaz.cardinal.match.util.StartTimer;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleHandler;
@@ -26,17 +22,15 @@ import org.jdom2.JDOMException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Match {
 
+    private final JavaPlugin plugin;
     private final GameHandler handler;
     private final ModuleHandler moduleHandler;
     private final UUID uuid;
-    private final List<Module> modules;
+    private final Set<Module> modules;
 
     private MatchState state;
     private Document document;
@@ -45,10 +39,10 @@ public class Match {
     private List<PgmTeam> teams;
     private StartTimer startTimer;
 
-
-    private List<Listener> listeners = new ArrayList<Listener>();
+    private Set<Listener> listeners = new HashSet<Listener>();
 
     public Match(GameHandler handler, UUID id) {
+        this.plugin = handler.getPlugin();
         this.uuid = id;
         this.handler = handler;
         this.moduleHandler = handler.getModuleHandler();
@@ -70,10 +64,11 @@ public class Match {
 
         mapInfo = new MapInfo(document);
         this.state = MatchState.WAITING;
-        listeners.add(new ConnectionListener(JavaPlugin.getPlugin(Cardinal.class), this));
-        listeners.add(new MatchListener(JavaPlugin.getPlugin(Cardinal.class), this));
-        listeners.add(new TeamListener(JavaPlugin.getPlugin(Cardinal.class), this));
-        listeners.add(new ObserverListener(JavaPlugin.getPlugin(Cardinal.class), this));
+        listeners.add(new ConnectionListener(plugin, this));
+        listeners.add(new MatchListener(plugin, this));
+        listeners.add(new TeamListener(plugin, this));
+        listeners.add(new ObserverListener(plugin, this));
+        listeners.add(new ObjectiveListener(plugin, this));
 
         Bukkit.getServer().getPluginManager().callEvent(new CycleCompleteEvent(this));
 
@@ -88,10 +83,6 @@ public class Match {
 
     public Match getMatch() {
         return this;
-    }
-
-    public UUID getUUID() {
-        return uuid;
     }
 
     public boolean isRunning() {
@@ -116,10 +107,6 @@ public class Match {
 
     public Document getDocument() {
         return document;
-    }
-
-    public UUID getUuid() {
-        return uuid;
     }
 
     public StartTimer getStartTimer() {

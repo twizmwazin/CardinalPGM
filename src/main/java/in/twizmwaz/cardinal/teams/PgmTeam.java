@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.teams;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.JoinType;
+import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.regions.type.PointRegion;
 import in.twizmwaz.cardinal.teams.spawns.Spawn;
 import org.bukkit.Bukkit;
@@ -32,6 +33,7 @@ public class PgmTeam {
     private ChatColor color;
     private boolean observer;
     private List<Spawn> spawns;
+    private Set<GameObjective> objectives;
 
     PgmTeam(String name, String id, int max, int maxOverfill, int respawnLimit, ChatColor color, boolean obs, Scoreboard scoreboard, List<Spawn> spawns) {
         this.observer = obs;
@@ -120,5 +122,13 @@ public class PgmTeam {
 
     public boolean isObserver() {
         return observer;
+    }
+
+    public Set<GameObjective> getObjectives() {
+        return objectives;
+    }
+
+    public void setObjectives(Set<GameObjective> objectives) {
+        this.objectives = objectives;
     }
 }

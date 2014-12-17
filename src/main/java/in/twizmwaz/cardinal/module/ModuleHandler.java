@@ -4,12 +4,15 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.modules.buildHeight.BuildHeightBuilder;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjectiveBuilder;
+import in.twizmwaz.cardinal.teams.PgmTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jdom2.Document;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 
 public class ModuleHandler {
@@ -17,8 +20,8 @@ public class ModuleHandler {
     private final JavaPlugin plugin;
     private final GameHandler gameHandler;
 
-    private List<Module> loaded;
-    private List<GameCondition> conditions;
+    private Set<Module> loaded;
+    private Set<GameObjective> objectives;
 
     public ModuleHandler(JavaPlugin plugin, GameHandler gameHandler) {
         this.plugin = plugin;
@@ -26,9 +29,9 @@ public class ModuleHandler {
         this.loaded = null;
     }
 
-    public List<Module> invokeModules(Match match) {
+    public Set<Module> invokeModules(Match match) {
         Document document = match.getDocument();
-        List<Module> loaded = new ArrayList<Module>();
+        Set<Module> loaded = new HashSet<Module>();
         if (document.getRootElement().getChildren("maxbuildheight").size() != 0) {
             loaded.addAll(new BuildHeightBuilder().load(match));
         }
@@ -37,22 +40,23 @@ public class ModuleHandler {
         }
 
         this.loaded = loaded;
-        Bukkit.getLogger().log(Level.INFO, loaded.size() + "modules loaded.");
+        Bukkit.getLogger().log(Level.INFO, loaded.size() + " modules loaded.");
 
-        conditions = new ArrayList<GameCondition>();
+        objectives = new HashSet<GameObjective>();
         for (Module loadedModule : loaded) {
-            if (loadedModule instanceof GameCondition){
-                conditions.add((GameCondition) loadedModule);
+            if (loadedModule instanceof GameObjective) {
+                objectives.add((GameObjective) loadedModule);
             }
         }
         for (Module module : loaded) {
             plugin.getServer().getPluginManager().registerEvents(module, plugin);
         }
+        assignObjectives(match.getTeams());
         return loaded;
     }
 
-    public List<GameCondition> getConditions() {
-        return conditions;
+    public Set<GameObjective> getConditions() {
+        return objectives;
     }
 
     public void unregisterModules() {
@@ -60,7 +64,19 @@ public class ModuleHandler {
             module.unload();
         }
         this.loaded = null;
-        this.conditions = null;
+        this.objectives = null;
+    }
+
+    private void assignObjectives(List<PgmTeam> teams) {
+        for (PgmTeam team : teams) {
+            Set<GameObjective> objectives = new HashSet<GameObjective>();
+            for (GameObjective objective : this.objectives) {
+                if (objective.getTeam().equals(team)) {
+                    objectives.add(objective);
+                }
+            }
+            team.setObjectives(objectives);
+        }
     }
 
 

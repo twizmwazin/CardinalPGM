@@ -41,11 +41,11 @@ public class CycleCommand {
                 nextMap = loadedMap;
             }
         }
-        try {
+        if (nextMap == null) {
+            throw new CommandException("No map named " + input);
+        } else {
             GameHandler.getGameHandler().getCycle().setMap(nextMap);
             sender.sendMessage(ChatColor.DARK_PURPLE + "Set the next map to " + ChatColor.GOLD + nextMap);
-        } catch (NullPointerException ex) {
-            throw new CommandException("No map named " + input);
         }
     }
 

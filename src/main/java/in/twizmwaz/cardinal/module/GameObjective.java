@@ -2,7 +2,7 @@ package in.twizmwaz.cardinal.module;
 
 import in.twizmwaz.cardinal.teams.PgmTeam;
 
-public interface GameCondition extends Module {
+public interface GameObjective extends Module {
 
     public PgmTeam getTeam();
 
