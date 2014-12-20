@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.module;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.modules.buildHeight.BuildHeightBuilder;
+import in.twizmwaz.cardinal.module.modules.friendlyFire.FriendlyFireBuilder;
 import in.twizmwaz.cardinal.module.modules.itemRemove.ItemRemoveBuilder;
 import in.twizmwaz.cardinal.module.modules.kit.KitBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLock.TimeLockBuilder;
@@ -39,6 +40,7 @@ public class ModuleHandler {
         loaded.addAll(new ItemRemoveBuilder().load(match));
         loaded.addAll(new KitBuilder().load(match));
         loaded.addAll(new TimeLockBuilder().load(match));
+        loaded.addAll(new FriendlyFireBuilder().load(match));
         this.loaded = loaded;
         Bukkit.getLogger().log(Level.INFO, loaded.size() + " modules loaded.");
 

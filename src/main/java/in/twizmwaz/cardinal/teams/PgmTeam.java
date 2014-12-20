@@ -137,4 +137,8 @@ public class PgmTeam {
     public void setObjectives(Set<GameObjective> objectives) {
         this.objectives = objectives;
     }
+
+    public Team getScoreboardTeam() {
+        return scoreboardTeam;
+    }
 }
