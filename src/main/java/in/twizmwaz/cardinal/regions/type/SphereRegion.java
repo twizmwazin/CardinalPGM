@@ -67,6 +67,6 @@ public class SphereRegion extends Region {
         double e = NumUtils.randomInterval(0, radius);
         double f = NumUtils.randomInterval(0, 360);
 
-        return new PointRegion(a * Math.sin(b), c * Math.sin(d), e * Math.sin(d));
+        return new PointRegion(originX + a * Math.sin(b), originY + c * Math.sin(d), originZ + e * Math.sin(d));
     }
 }
