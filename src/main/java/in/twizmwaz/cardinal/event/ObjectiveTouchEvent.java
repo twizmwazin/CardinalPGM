@@ -9,9 +9,8 @@ import org.bukkit.event.HandlerList;
  */
 public class ObjectiveTouchEvent extends Event implements Cancellable {
 
-    private boolean cancelled;
-
     private static final HandlerList handlers = new HandlerList();
+    private boolean cancelled;
 
     public static HandlerList getHandlerList() {
         return handlers;

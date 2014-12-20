@@ -55,12 +55,11 @@ public class PgmTeamBuilder implements Runnable {
                 respawnLimit = -1;
             }
             ChatColor color = StringUtils.convertStringToChatColor(teamNode.getAttribute("color").getValue());
-            Element spawnElement = doc.getRootElement().getChild("spawns");
-            List<Spawn> spawns = SpawnParser.parseSpawns(spawnElement, id);
+            List<Spawn> spawns = SpawnParser.parseSpawns(doc, id);
             this.teams.add(new PgmTeam(name, id, max, maxOverfill, respawnLimit, color, false, scoreboard, spawns));
 
         }
-        List<Spawn> spawns = SpawnParser.parseDefault(doc.getRootElement().getChild("spawns"));
+        List<Spawn> spawns = SpawnParser.parseDefault(doc);
         this.teams.add(new PgmTeam("Observers", "observers", Integer.MAX_VALUE, Integer.MAX_VALUE, -1, ChatColor.AQUA, true, scoreboard, spawns));
 
     }

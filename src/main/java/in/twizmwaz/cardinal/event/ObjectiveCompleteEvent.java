@@ -11,14 +11,13 @@ import org.bukkit.event.HandlerList;
  */
 public class ObjectiveCompleteEvent extends Event implements Cancellable {
 
+    private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
     private GameObjective objective;
 
     public ObjectiveCompleteEvent(GameObjective objective) {
         this.objective = objective;
     }
-
-    private static final HandlerList handlers = new HandlerList();
 
     public static HandlerList getHandlerList() {
         return handlers;

@@ -15,12 +15,17 @@ public class Spawn {
 
     private int yaw;
     private List<Region> regions;
+    private String kit;
 
-
-    public Spawn(List<Region> regions, int yaw) {
+    public Spawn(List<Region> regions, int yaw, String kit) {
         if (regions.size() == 0) Bukkit.getLogger().log(Level.SEVERE, "Failed to load spawns");
         this.regions = regions;
         this.yaw = yaw;
+        this.kit = kit;
+    }
+
+    public Spawn(List<Region> regions, int yaw) {
+        this(regions, yaw, null);
     }
 
     public PointRegion getPoint() {
@@ -30,5 +35,7 @@ public class Spawn {
 
     }
 
-
+    public String getKit() {
+        return kit;
+    }
 }

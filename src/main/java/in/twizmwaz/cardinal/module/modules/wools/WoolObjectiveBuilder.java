@@ -19,8 +19,14 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
     public List<Module> load(Match match) {
         List<Module> result = new ArrayList<>();
         for (Element element : match.getDocument().getRootElement().getChildren("wools")) {
-            PgmTeam team = match.getTeamById(element.getAttributeValue("team"));
+
             for (Element subElement : element.getChildren()) {
+                PgmTeam team;
+                try {
+                    team = match.getTeamById(element.getAttributeValue("team"));
+                } catch (NullPointerException e) {
+                    team = match.getTeamById(subElement.getAttributeValue("team"));
+                }
                 DyeColor color = StringUtils.convertStringToDyeColor(subElement.getAttributeValue("color"));
                 BlockRegion place = new BlockRegion(new BlockParser(subElement.getChild("block")));
                 result.add(new WoolObjective(team, color, place));
