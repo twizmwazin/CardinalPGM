@@ -113,11 +113,17 @@ public class PgmTeam {
         return color;
     }
 
+    @Deprecated
     public Location getSpawnPoint() {
         Random random = new Random();
         int index = random.nextInt(spawns.size());
         PointRegion point = spawns.get(index).getPoint();
         return point.toLocation(GameHandler.getGameHandler().getMatchWorld());
+    }
+
+    public Spawn getSpawn() {
+        Random random = new Random();
+        return spawns.get(random.nextInt(spawns.size()));
     }
 
     public boolean isObserver() {

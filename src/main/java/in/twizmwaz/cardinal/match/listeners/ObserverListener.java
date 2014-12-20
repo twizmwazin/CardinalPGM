@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.match.listeners;
 
 import com.sk89q.minecraft.util.commands.ChatColor;
+import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
@@ -20,6 +21,7 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 
@@ -202,6 +204,21 @@ public class ObserverListener implements Listener {
             event.getPlayer().setAffectsSpawning(false);
         } else {
             event.getPlayer().setAffectsSpawning(true);
+        }
+    }
+
+    @EventHandler
+    public void onCycleComplete(CycleCompleteEvent event) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.getInventory().clear();
+            for (ItemStack armor : player.getInventory().getArmorContents()) {
+                armor.setAmount(0);
+            }
+            for (PotionEffect effect : player.getActivePotionEffects()) {
+                player.removePotionEffect(effect.getType());
+            }
+            player.clearIgnorantEffects();
+            player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
         }
     }
 

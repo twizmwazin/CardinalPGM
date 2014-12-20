@@ -4,6 +4,7 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.modules.buildHeight.BuildHeightBuilder;
 import in.twizmwaz.cardinal.module.modules.itemRemove.ItemRemoveBuilder;
+import in.twizmwaz.cardinal.module.modules.kit.KitBuilder;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjectiveBuilder;
 import in.twizmwaz.cardinal.teams.PgmTeam;
 import org.bukkit.Bukkit;
@@ -35,6 +36,7 @@ public class ModuleHandler {
         loaded.addAll(new BuildHeightBuilder().load(match));
         loaded.addAll(new WoolObjectiveBuilder().load(match));
         loaded.addAll(new ItemRemoveBuilder().load(match));
+        loaded.addAll(new KitBuilder().load(match));
         this.loaded = loaded;
         Bukkit.getLogger().log(Level.INFO, loaded.size() + " modules loaded.");
 

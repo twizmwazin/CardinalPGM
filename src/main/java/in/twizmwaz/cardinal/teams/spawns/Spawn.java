@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.teams.spawns;
 
+import in.twizmwaz.cardinal.module.modules.kit.Kit;
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.type.PointRegion;
 import in.twizmwaz.cardinal.util.NumUtils;
@@ -8,9 +9,6 @@ import org.bukkit.Bukkit;
 import java.util.List;
 import java.util.logging.Level;
 
-/**
- * Created by kevin on 11/21/14.
- */
 public class Spawn {
 
     private int yaw;
@@ -24,18 +22,17 @@ public class Spawn {
         this.kit = kit;
     }
 
-    public Spawn(List<Region> regions, int yaw) {
+    /*public Spawn(List<Region> regions, int yaw) {
         this(regions, yaw, null);
-    }
+    }*/
 
     public PointRegion getPoint() {
-
         PointRegion point = regions.get((int) NumUtils.randomInterval(0, regions.size() - 1)).getRandomPoint();
         return new PointRegion(point.getX(), point.getY(), point.getZ(), this.yaw, 0);
 
     }
 
-    public String getKit() {
-        return kit;
+    public Kit getKit() {
+        return Kit.getKitByName(kit);
     }
 }

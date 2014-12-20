@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.match.JoinType;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.teams.PgmTeam;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -13,11 +14,10 @@ import org.bukkit.event.player.PlayerInitialSpawnEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
 
-/**
- * Created by kevin on 11/20/14.
- */
 public class ConnectionListener implements Listener {
 
     private final JavaPlugin plugin;
@@ -33,6 +33,16 @@ public class ConnectionListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         event.getPlayer().setScoreboard(match.getScoreboard());
         GameHandler.getGameHandler().getMatch().getTeamById("observers").add(event.getPlayer(), JoinType.JOIN);
+        event.getPlayer().getInventory().clear();
+        for (ItemStack armor : event.getPlayer().getInventory().getArmorContents()) {
+            armor.setAmount(0);
+        }
+        for (PotionEffect effect : event.getPlayer().getActivePotionEffects()) {
+            event.getPlayer().removePotionEffect(effect.getType());
+        }
+        event.getPlayer().clearIgnorantEffects();
+        event.getPlayer().getInventory().setItem(0, new ItemStack(Material.COMPASS));
+
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

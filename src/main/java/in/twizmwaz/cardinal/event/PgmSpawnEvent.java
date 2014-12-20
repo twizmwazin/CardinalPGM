@@ -1,21 +1,21 @@
 package in.twizmwaz.cardinal.event;
 
+import in.twizmwaz.cardinal.teams.spawns.Spawn;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-/**
- * Created by kevin on 11/22/14.
- */
 public class PgmSpawnEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
     private final Player player;
+    private final Spawn spawn;
     private boolean cancelled;
 
-    public PgmSpawnEvent(Player player) {
+    public PgmSpawnEvent(final Player player, final Spawn spawn) {
         this.player = player;
+        this.spawn = spawn;
     }
 
     public static HandlerList getHandlerList() {
@@ -24,6 +24,10 @@ public class PgmSpawnEvent extends Event implements Cancellable {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public Spawn getSpawn() {
+        return spawn;
     }
 
     public boolean isCancelled() {

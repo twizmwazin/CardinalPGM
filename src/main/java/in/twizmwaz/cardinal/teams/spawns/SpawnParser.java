@@ -74,7 +74,7 @@ public class SpawnParser {
                 int yaw = Integer.parseInt(working.getAttributeValue("yaw"));
                 List<Region> regions = new ArrayList<Region>();
                 regions.add(Region.newRegion(working.getChildren().get(0)));
-                result.add(new Spawn(regions, yaw));
+                result.add(new Spawn(regions, yaw, null));
             } catch (NullPointerException e) {
 
             }

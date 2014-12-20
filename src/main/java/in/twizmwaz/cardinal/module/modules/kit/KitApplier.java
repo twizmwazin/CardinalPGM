@@ -1,0 +1,24 @@
+package in.twizmwaz.cardinal.module.modules.kit;
+
+import in.twizmwaz.cardinal.event.PgmSpawnEvent;
+import in.twizmwaz.cardinal.module.Module;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
+
+public class KitApplier implements Module {
+
+    @Override
+    public void unload() {
+        HandlerList.unregisterAll(this);
+    }
+
+    @EventHandler
+    public void onPgmSpawn(PgmSpawnEvent event) {
+        try {
+            event.getSpawn().getKit().apply(event.getPlayer());
+        } catch (NullPointerException e) {
+
+        }
+    }
+
+}
