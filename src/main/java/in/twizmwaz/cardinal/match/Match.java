@@ -159,7 +159,7 @@ public class Match {
         }
         Collections.sort(teamValues);
         for (PgmTeam team : this.teams) {
-            if (team.getPlayerNames().size() == teamValues.get(0)) {
+            if (team.getPlayerNames().size() == teamValues.get(0) && !team.isObserver()) {
                 result = team;
             }
         }

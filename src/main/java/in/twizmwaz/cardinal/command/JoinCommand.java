@@ -7,13 +7,11 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.JoinType;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.teams.PgmTeam;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-/**
- * Created by kevin on 11/20/14.
- */
 public class JoinCommand {
 
     @Command(aliases = {"join", "j"}, desc = "Join a team", usage = "[team]")
@@ -33,6 +31,11 @@ public class JoinCommand {
             throw new CommandException("No team named " + cmd.getString(0));
         }
 
+    }
+
+    @Command(aliases =  {"leave"}, desc = "Leave the game")
+    public static void leave(final CommandContext cmd, CommandSender sender) {
+        Bukkit.getServer().dispatchCommand(sender, "join observers");
     }
 
 }

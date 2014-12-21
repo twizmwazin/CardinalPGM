@@ -5,7 +5,9 @@ import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.util.ArmorType;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -34,57 +36,56 @@ public class KitBuilder implements ModuleBuilder {
                     if (item.getAttributeValue("damage") != null) {
                         itemStack.setDurability(Short.parseShort(item.getAttributeValue("damage")));
                     }
+                    try {
+                        for (String raw : item.getAttributeValue("enchantment").split(";")) {
+                            String[] enchant = raw.split(":");
+                            itemStack.addUnsafeEnchantment(StringUtils.convertStringToEnchantment(enchant[0]), Integer.parseInt(enchant[1]));
+                        }
+                    } catch (NullPointerException e) {
+
+                    }
+                    ItemMeta meta = itemStack.getItemMeta();
+                    if (item.getAttributeValue("name") != null) {
+                        meta.setDisplayName(ChatColor.translateAlternateColorCodes('`', item.getAttributeValue("name")));
+                    }
+                    if (item.getAttributeValue("lore") != null) {
+                        ArrayList<String> lore = new ArrayList<>();
+                        for (String raw : item.getAttributeValue("lore").split("\\|")) {
+                            String colored = ChatColor.translateAlternateColorCodes('`', raw);
+                            lore.add(colored);
+                        }
+                        meta.setLore(lore);
+                    }
                     int slot = Integer.parseInt(item.getAttributeValue("slot"));
+                    itemStack.setItemMeta(meta);
                     items.add(new KitItem(slot, itemStack));
                 }
                 List<KitArmor> armor = new ArrayList<>(4);
-                for (Element helmet : element.getChildren("helmet")) {
-                    ItemStack itemStack = new ItemStack(StringUtils.convertStringToMaterial(helmet.getText()), 1);
-                    if (helmet.getAttributeValue("damage") != null) {
-                        itemStack.setDurability(Short.parseShort(helmet.getAttributeValue("damage")));
+                List<Element> armors = new ArrayList<>();
+                armors.addAll(element.getChildren("helmet"));
+                armors.addAll(element.getChildren("chestplate"));
+                armors.addAll(element.getChildren("leggings"));
+                armors.addAll(element.getChildren("boots"));
+                for (Element piece : armors) {
+                    ItemStack itemStack = new ItemStack(StringUtils.convertStringToMaterial(piece.getText()), 1);
+                    if (piece.getAttributeValue("damage") != null) {
+                        itemStack.setDurability(Short.parseShort(piece.getAttributeValue("damage")));
                     }
-                    if (itemStack.getItemMeta() instanceof LeatherArmorMeta && helmet.getAttributeValue("color") != null) {
+                    if (itemStack.getItemMeta() instanceof LeatherArmorMeta && piece.getAttributeValue("color") != null) {
                         LeatherArmorMeta meta = (LeatherArmorMeta) itemStack.getItemMeta();
-                        meta.setColor(StringUtils.convertHexStringToColor(helmet.getAttributeValue("color")));
+                        meta.setColor(StringUtils.convertHexStringToColor(piece.getAttributeValue("color")));
                         itemStack.setItemMeta(meta);
                     }
-                    armor.add(new KitArmor(itemStack, ArmorType.HELMET));
-                }
-                for (Element chestplate : element.getChildren("chestplate")) {
-                    ItemStack itemStack = new ItemStack(StringUtils.convertStringToMaterial(chestplate.getText()), 1);
-                    if (chestplate.getAttributeValue("damage") != null) {
-                        itemStack.setDurability(Short.parseShort(chestplate.getAttributeValue("damage")));
+                    try {
+                        for (String raw : piece.getAttributeValue("enchantment").split(";")) {
+                            String[] enchant = raw.split(":");
+                            itemStack.addUnsafeEnchantment(StringUtils.convertStringToEnchantment(enchant[0]), Integer.parseInt(enchant[1]));
+                        }
+                    } catch (NullPointerException e) {
+
                     }
-                    if (itemStack.getItemMeta() instanceof LeatherArmorMeta && chestplate.getAttributeValue("color") != null) {
-                        LeatherArmorMeta meta = (LeatherArmorMeta) itemStack.getItemMeta();
-                        meta.setColor(StringUtils.convertHexStringToColor(chestplate.getAttributeValue("color")));
-                        itemStack.setItemMeta(meta);
-                    }
-                    armor.add(new KitArmor(itemStack, ArmorType.CHESTPLATE));
-                }
-                for (Element leggings : element.getChildren("leggings")) {
-                    ItemStack itemStack = new ItemStack(StringUtils.convertStringToMaterial(leggings.getText()), 1);
-                    if (leggings.getAttributeValue("damage") != null) {
-                        itemStack.setDurability(Short.parseShort(leggings.getAttributeValue("damage")));
-                    }
-                    if (itemStack.getItemMeta() instanceof LeatherArmorMeta && leggings.getAttributeValue("color") != null) {
-                        LeatherArmorMeta meta = (LeatherArmorMeta) itemStack.getItemMeta();
-                        meta.setColor(StringUtils.convertHexStringToColor(leggings.getAttributeValue("color")));
-                        itemStack.setItemMeta(meta);
-                    }
-                    armor.add(new KitArmor(itemStack, ArmorType.LEGGINGS));
-                }
-                for (Element boots : element.getChildren("boots")) {
-                    ItemStack itemStack = new ItemStack(StringUtils.convertStringToMaterial(boots.getText()), 1);
-                    if (boots.getAttributeValue("damage") != null) {
-                        itemStack.setDurability(Short.parseShort(boots.getAttributeValue("damage")));
-                    }
-                    if (itemStack.getItemMeta() instanceof LeatherArmorMeta && boots.getAttributeValue("color") != null) {
-                        LeatherArmorMeta meta = (LeatherArmorMeta) itemStack.getItemMeta();
-                        meta.setColor(StringUtils.convertHexStringToColor(boots.getAttributeValue("color")));
-                        itemStack.setItemMeta(meta);
-                    }
-                    armor.add(new KitArmor(itemStack, ArmorType.BOOTS));
+                    ArmorType type = ArmorType.getArmorType(piece.getName());
+                    armor.add(new KitArmor(itemStack, type));
                 }
                 List<PotionEffect> potions = new ArrayList<>();
                 for (Element potion : element.getChildren("potion")) {
@@ -147,7 +148,7 @@ public class KitBuilder implements ModuleBuilder {
                 } catch (NullPointerException e) {
 
                 }
-                float knockback = 1;
+                float knockback = 0F;
                 try {
                     knockback = Float.parseFloat(element.getChild("knockback-reduction").getText());
                 } catch (NullPointerException e) {

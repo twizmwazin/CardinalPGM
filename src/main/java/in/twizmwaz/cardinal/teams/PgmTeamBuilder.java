@@ -39,7 +39,7 @@ public class PgmTeamBuilder implements Runnable {
             try {
                 id = teamNode.getAttribute("id").getValue();
             } catch (NullPointerException ex) {
-                id = name;
+                id = name.toLowerCase().split(" ")[0];
             }
             int max = Integers.parseInt(teamNode.getAttribute("max").getValue());
             int maxOverfill;

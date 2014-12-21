@@ -43,6 +43,8 @@ public abstract class Region {
                 return new NegativeRegion(new CombinationParser(element));
             case "union":
                 return new UnionRegion((new CombinationParser(element)));
+            case "region":
+                return newRegion(element.getChildren().get(0));
             default:
                 return null;
         }

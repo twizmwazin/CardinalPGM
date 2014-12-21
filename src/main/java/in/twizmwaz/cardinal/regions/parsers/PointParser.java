@@ -1,5 +1,7 @@
 package in.twizmwaz.cardinal.regions.parsers;
 
+import in.twizmwaz.cardinal.regions.Region;
+import in.twizmwaz.cardinal.regions.type.PointRegion;
 import org.jdom2.Element;
 
 /**
@@ -11,9 +13,16 @@ public class PointParser {
     private float yaw, pitch;
 
     public PointParser(Element element) {
-        this.x = Double.parseDouble(element.getText().split(",")[0]);
-        this.y = Double.parseDouble(element.getText().split(",")[1]);
-        this.z = Double.parseDouble(element.getText().split(",")[2]);
+        if (element.getChildren().size() > 0) {
+            PointRegion subPoint = Region.newRegion(element.getChildren().get(0)).getRandomPoint();
+            this.x = subPoint.getX();
+            this.y = subPoint.getY();
+            this.z = subPoint.getZ();
+        } else {
+            this.x = Double.parseDouble(element.getText().split(",")[0]);
+            this.y = Double.parseDouble(element.getText().split(",")[1]);
+            this.z = Double.parseDouble(element.getText().split(",")[2]);
+        }
         try {
             this.yaw = Float.parseFloat(element.getAttributeValue("yaw"));
         } catch (Exception ex) {

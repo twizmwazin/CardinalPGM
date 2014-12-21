@@ -15,6 +15,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
@@ -26,6 +28,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 /**
  * Created by kevin on 11/25/14.
@@ -219,6 +222,39 @@ public class ObserverListener implements Listener {
             }
             player.clearIgnorantEffects();
             player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
+        }
+    }
+
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        if (match.getTeam(event.getEntity()).isObserver() || match.isRunning()) {
+            event.getDrops().clear();
+            event.setDroppedExp(0);
+        }
+    }
+
+    @EventHandler
+    public void onEntityAttack(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player) {
+            if (match.getTeam((Player) event.getDamager()).isObserver()) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        if (match.getTeamById("observers").hasPlayer(event.getPlayer()) || match.getState() != MatchState.PLAYING) {
+            if (event.getTo().getY() <= -64) {
+                event.getPlayer().teleport(match.getMatch().getTeamById("observers").getSpawnPoint());
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        if (match.getTeamById("observers").hasPlayer(event.getPlayer()) || match.getState() != MatchState.PLAYING) {
+            event.getPlayer().getInventory().setItem(0, new ItemStack(Material.COMPASS));
         }
     }
 

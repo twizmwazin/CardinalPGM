@@ -10,6 +10,7 @@ import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.teams.spawns.Spawn;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -36,7 +37,7 @@ public class TeamListener implements Listener {
                 if (event.getOldTeam().isObserver()) {
                     event.getPlayer().getInventory().clear();
                     for (ItemStack armor : event.getPlayer().getInventory().getArmorContents()) {
-                        armor.setAmount(0);
+                        armor.setType(Material.AIR);
                     }
                     for (PotionEffect effect : event.getPlayer().getActivePotionEffects()) {
                         event.getPlayer().removePotionEffect(effect.getType());
@@ -53,6 +54,7 @@ public class TeamListener implements Listener {
                     PgmSpawnEvent spawnEvent = new PgmSpawnEvent(event.getPlayer(), spawn);
                     Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
                     if (!spawnEvent.isCancelled()) {
+                        event.getPlayer().setHealth(0);
                         event.getPlayer().setGameMode(GameMode.CREATIVE);
                     }
                 } else {
@@ -85,7 +87,7 @@ public class TeamListener implements Listener {
             if (!match.getTeam(player).isObserver()) {
                 player.getInventory().clear();
                 for (ItemStack armor : player.getInventory().getArmorContents()) {
-                    armor.setAmount(0);
+                    armor.setType(Material.AIR);
                 }
                 for (PotionEffect effect : player.getActivePotionEffects()) {
                     player.removePotionEffect(effect.getType());
@@ -97,6 +99,7 @@ public class TeamListener implements Listener {
                 if (!spawnEvent.isCancelled()) {
                     player.teleport(spawn.getPoint().toLocation(GameHandler.getGameHandler().getMatchWorld()));
                 }
+                player.updateInventory();
             }
         }
     }
@@ -111,9 +114,6 @@ public class TeamListener implements Listener {
     @EventHandler
     public void onPlayerSpawn(PgmSpawnEvent event) {
         event.getPlayer().setGameMode(GameMode.SURVIVAL);
-        event.getPlayer().setHealth(20);
-        event.getPlayer().setFoodLevel(20);
-        event.getPlayer().setSaturation(20);
     }
 
 
