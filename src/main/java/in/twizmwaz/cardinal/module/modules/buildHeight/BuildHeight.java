@@ -31,7 +31,7 @@ public class BuildHeight implements Module {
     public void onBlockPlace(BlockPlaceEvent event) {
         if (event.getBlock().getY() >= height) {
             event.setCancelled(true);
-            event.getPlayer().sendMessage(ChatColor.YELLOW + "⚠ " + ChatColor.RED + "You have reached the maximum build height! " + ChatColor.GRAY + "(" + height + " blocks)");
+            event.getPlayer().sendMessage(ChatColor.YELLOW + "⚠ " + ChatColor.RED + " You have reached the maximum build height! " + ChatColor.GRAY + "(" + height + " blocks)");
         }
     }
 
@@ -39,7 +39,7 @@ public class BuildHeight implements Module {
     public void onBlockBreak(BlockBreakEvent event) {
         if (event.getBlock().getY() >= height) {
             event.setCancelled(true);
-            event.getPlayer().sendMessage(ChatColor.YELLOW + "⚠ " + ChatColor.RED + "You have reached the maximum build height! " + ChatColor.GRAY + "(" + height + " blocks)");
+            event.getPlayer().sendMessage(ChatColor.YELLOW + "⚠ " + ChatColor.RED + " You have reached the maximum build height! " + ChatColor.GRAY + "(" + height + " blocks)");
         }
     }
 
@@ -48,7 +48,7 @@ public class BuildHeight implements Module {
         Block toFill = event.getBlockClicked().getRelative(event.getBlockFace());
         if (toFill.getY() >= height) {
             event.setCancelled(true);
-            event.getPlayer().sendMessage(ChatColor.YELLOW + "⚠ " + ChatColor.RED + "You have reached the maximum build height! " + ChatColor.GRAY + "(" + height + " blocks)");
+            event.getPlayer().sendMessage(ChatColor.YELLOW + "⚠ " + ChatColor.RED + " You have reached the maximum build height! " + ChatColor.GRAY + "(" + height + " blocks)");
         }
     }
 

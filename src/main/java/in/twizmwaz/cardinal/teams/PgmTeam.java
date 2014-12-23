@@ -34,6 +34,7 @@ public class PgmTeam {
     private boolean observer;
     private List<Spawn> spawns;
     private Set<GameObjective> objectives;
+    private Scoreboard scoreboard;
 
     PgmTeam(String name, String id, int max, int maxOverfill, int respawnLimit, ChatColor color, boolean obs, Scoreboard scoreboard, List<Spawn> spawns) {
         this.observer = obs;
@@ -43,11 +44,11 @@ public class PgmTeam {
         this.maxOverfill = maxOverfill;
         this.respawnLimit = respawnLimit;
         this.color = color;
+        this.scoreboard = scoreboard;
         this.scoreboardTeam = scoreboard.registerNewTeam(id);
         scoreboardTeam.setDisplayName(color + name);
         scoreboardTeam.setPrefix(color + "");
         this.spawns = spawns;
-
     }
 
     public void add(Player player, JoinType joinType) {
@@ -115,6 +116,10 @@ public class PgmTeam {
 
     public String getCompleteName() {
         return getColor() + getName();
+    }
+
+    public Scoreboard getScoreboard() {
+        return scoreboard;
     }
 
     @Deprecated

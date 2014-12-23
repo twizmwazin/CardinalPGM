@@ -4,6 +4,7 @@ import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.teams.PgmTeam;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.entity.ProjectileHitEvent;
 
 public class FriendlyFire implements Module {
 
@@ -25,5 +26,4 @@ public class FriendlyFire implements Module {
     public void unload() {
         HandlerList.unregisterAll(this);
     }
-
 }
