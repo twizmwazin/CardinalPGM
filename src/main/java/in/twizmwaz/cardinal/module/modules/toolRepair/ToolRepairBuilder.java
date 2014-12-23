@@ -23,7 +23,7 @@ public class ToolRepairBuilder implements ModuleBuilder {
                 materials.add(StringUtils.convertStringToMaterial(item.getText()));
             }
         }
-        results.add(new ItemRepair(materials));
+        results.add(new ToolRepair(materials));
         return results;
     }
 

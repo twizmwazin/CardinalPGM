@@ -23,12 +23,14 @@ public class JoinCommand {
         }
         try {
             team = GameHandler.getGameHandler().getMatch().getTeamByName(cmd.getString(0));
+            PgmTeam playerTeam = GameHandler.getGameHandler().getMatch().getTeam((Player) sender);
+            if (team == playerTeam) throw new CommandException(ChatColor.RED + "You have already joined " + playerTeam.getCompleteName());
             team.add((Player) sender, JoinType.VOLUNTARY);
         } catch (IndexOutOfBoundsException ex) {
             team = GameHandler.getGameHandler().getMatch().getTeamWithFewestPlayers();
             team.add((Player) sender, JoinType.VOLUNTARY);
         } catch (NullPointerException ex) {
-            throw new CommandException("No team named " + cmd.getString(0));
+            throw new CommandException("No teams matched query.");
         }
 
     }
