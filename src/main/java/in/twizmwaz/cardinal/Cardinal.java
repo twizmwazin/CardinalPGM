@@ -6,15 +6,11 @@ import in.twizmwaz.cardinal.command.*;
 import in.twizmwaz.cardinal.command.match.StartAndEndCommand;
 import in.twizmwaz.cardinal.listeners.BlockListener;
 import in.twizmwaz.cardinal.listeners.ConnectionListener;
-import in.twizmwaz.cardinal.listeners.EntityListener;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
-/**
- * Created by kevin on 11/1/14.
- */
 public class Cardinal extends JavaPlugin {
 
     private static GameHandler gameHandler;
@@ -65,7 +61,6 @@ public class Cardinal extends JavaPlugin {
     public void registerListeners() {
         new BlockListener(this);
         new ConnectionListener(this);
-        new EntityListener(this);
     }
 
 

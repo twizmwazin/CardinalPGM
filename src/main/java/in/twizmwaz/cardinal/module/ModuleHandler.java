@@ -3,9 +3,11 @@ package in.twizmwaz.cardinal.module;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.modules.buildHeight.BuildHeightBuilder;
+import in.twizmwaz.cardinal.module.modules.difficulty.MapDifficultyBuilder;
 import in.twizmwaz.cardinal.module.modules.disableDamage.DisableDamageBuilder;
 import in.twizmwaz.cardinal.module.modules.friendlyFire.FriendlyFireBuilder;
 import in.twizmwaz.cardinal.module.modules.gamerules.GamerulesBuilder;
+import in.twizmwaz.cardinal.module.modules.hunger.HungerBuilder;
 import in.twizmwaz.cardinal.module.modules.itemRemove.ItemRemoveBuilder;
 import in.twizmwaz.cardinal.module.modules.kit.KitBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLock.TimeLockBuilder;
@@ -37,16 +39,23 @@ public class ModuleHandler {
 
     public Set<Module> invokeModules(Match match) {
         Document document = match.getDocument();
+        Set<ModuleBuilder> builders = new HashSet<>();
+        builders.add(new BuildHeightBuilder());
+        builders.add(new WoolObjectiveBuilder());
+        builders.add(new ItemRemoveBuilder());
+        builders.add(new ToolRepairBuilder());
+        builders.add(new DisableDamageBuilder());
+        builders.add(new GamerulesBuilder());
+        builders.add(new KitBuilder());
+        builders.add(new TimeLockBuilder());
+        builders.add(new FriendlyFireBuilder());
+        builders.add(new HungerBuilder());
+        builders.add(new MapDifficultyBuilder());
+        builders.add(new HungerBuilder());
         Set<Module> loaded = new HashSet<Module>();
-        loaded.addAll(new BuildHeightBuilder().load(match));
-        loaded.addAll(new WoolObjectiveBuilder().load(match));
-        loaded.addAll(new ItemRemoveBuilder().load(match));
-        loaded.addAll(new ToolRepairBuilder().load(match));
-        loaded.addAll(new DisableDamageBuilder().load(match));
-        loaded.addAll(new GamerulesBuilder().load(match));
-        loaded.addAll(new KitBuilder().load(match));
-        loaded.addAll(new TimeLockBuilder().load(match));
-        loaded.addAll(new FriendlyFireBuilder().load(match));
+        for (ModuleBuilder builder : builders) {
+            loaded.addAll(builder.load(match));
+        }
         this.loaded = loaded;
         Bukkit.getLogger().log(Level.INFO, loaded.size() + " modules loaded.");
 
