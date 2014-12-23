@@ -44,11 +44,11 @@ public class PgmTeam {
         this.maxOverfill = maxOverfill;
         this.respawnLimit = respawnLimit;
         this.color = color;
+        this.scoreboard = scoreboard;
         this.scoreboardTeam = scoreboard.registerNewTeam(id);
         scoreboardTeam.setDisplayName(color + name);
         scoreboardTeam.setPrefix(color + "");
         this.spawns = spawns;
-        this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
     }
 
     public void add(Player player, JoinType joinType) {
