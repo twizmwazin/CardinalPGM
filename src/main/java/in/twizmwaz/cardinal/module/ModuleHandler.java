@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.modules.buildHeight.BuildHeightBuilder;
 import in.twizmwaz.cardinal.module.modules.friendlyFire.FriendlyFireBuilder;
 import in.twizmwaz.cardinal.module.modules.itemRemove.ItemRemoveBuilder;
+import in.twizmwaz.cardinal.module.modules.itemRepair.ItemRepairBuilder;
 import in.twizmwaz.cardinal.module.modules.kit.KitBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLock.TimeLockBuilder;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjectiveBuilder;
@@ -38,6 +39,7 @@ public class ModuleHandler {
         loaded.addAll(new BuildHeightBuilder().load(match));
         loaded.addAll(new WoolObjectiveBuilder().load(match));
         loaded.addAll(new ItemRemoveBuilder().load(match));
+        loaded.addAll(new ItemRepairBuilder().load(match));
         loaded.addAll(new KitBuilder().load(match));
         loaded.addAll(new TimeLockBuilder().load(match));
         loaded.addAll(new FriendlyFireBuilder().load(match));
