@@ -1,20 +1,19 @@
-package in.twizmwaz.cardinal.module.modules.itemRepair;
+package in.twizmwaz.cardinal.module.modules.toolRepair;
 
 import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Set;
 
-public class ItemRepair implements Module {
+public class ToolRepair implements Module {
 
     private final Set<Material> materials;
 
-    protected ItemRepair(final Set<Material> materials) {
+    protected ToolRepair(final Set<Material> materials) {
         this.materials = materials;
     }
 

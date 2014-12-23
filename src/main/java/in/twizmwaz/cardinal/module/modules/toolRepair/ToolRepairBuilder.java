@@ -1,4 +1,4 @@
-package in.twizmwaz.cardinal.module.modules.itemRepair;
+package in.twizmwaz.cardinal.module.modules.toolRepair;
 
 import in.parapengu.commons.utils.StringUtils;
 import in.twizmwaz.cardinal.match.Match;
@@ -12,14 +12,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ItemRepairBuilder implements ModuleBuilder {
+public class ToolRepairBuilder implements ModuleBuilder {
 
     @Override
     public List<Module> load(Match match) {
         List<Module> results = new ArrayList<>();
         Set<Material> materials = new HashSet<>(128);
-        for (Element itemRemove : match.getDocument().getRootElement().getChildren("itemrepair")) {
-            for (Element item : itemRemove.getChildren("item")) {
+        for (Element itemRemove : match.getDocument().getRootElement().getChildren("toolrepair")) {
+            for (Element item : itemRemove.getChildren("tool")) {
                 materials.add(StringUtils.convertStringToMaterial(item.getText()));
             }
         }
