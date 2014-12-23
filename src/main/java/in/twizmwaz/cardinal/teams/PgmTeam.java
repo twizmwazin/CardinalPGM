@@ -48,7 +48,7 @@ public class PgmTeam {
         scoreboardTeam.setDisplayName(color + name);
         scoreboardTeam.setPrefix(color + "");
         this.spawns = spawns;
-        scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+        this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
     }
 
     public void add(Player player, JoinType joinType) {
