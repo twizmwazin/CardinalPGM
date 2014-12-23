@@ -56,6 +56,7 @@ public class TeamListener implements Listener {
                     if (!spawnEvent.isCancelled()) {
                         event.getPlayer().setHealth(0);
                         event.getPlayer().setGameMode(GameMode.CREATIVE);
+                        event.getPlayer().setAffectsSpawning(false);
                     }
                 } else {
                     event.getPlayer().setHealth(0);
@@ -114,6 +115,7 @@ public class TeamListener implements Listener {
     @EventHandler
     public void onPlayerSpawn(PgmSpawnEvent event) {
         event.getPlayer().setGameMode(GameMode.SURVIVAL);
+        event.getPlayer().setAffectsSpawning(true);
     }
 
 

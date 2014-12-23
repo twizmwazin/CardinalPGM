@@ -113,6 +113,10 @@ public class PgmTeam {
         return color;
     }
 
+    public String getCompleteName() {
+        return getColor() + getName();
+    }
+
     @Deprecated
     public Location getSpawnPoint() {
         Random random = new Random();
