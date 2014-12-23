@@ -11,6 +11,7 @@ import in.twizmwaz.cardinal.module.modules.hunger.HungerBuilder;
 import in.twizmwaz.cardinal.module.modules.itemRemove.ItemRemoveBuilder;
 import in.twizmwaz.cardinal.module.modules.kit.KitBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLock.TimeLockBuilder;
+import in.twizmwaz.cardinal.module.modules.tntTracker.TntTrackerBuilder;
 import in.twizmwaz.cardinal.module.modules.toolRepair.ToolRepairBuilder;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjectiveBuilder;
 import in.twizmwaz.cardinal.teams.PgmTeam;
@@ -52,6 +53,7 @@ public class ModuleHandler {
         builders.add(new HungerBuilder());
         builders.add(new MapDifficultyBuilder());
         builders.add(new HungerBuilder());
+        builders.add(new TntTrackerBuilder());
         Set<Module> loaded = new HashSet<Module>();
         for (ModuleBuilder builder : builders) {
             loaded.addAll(builder.load(match));
