@@ -10,6 +10,7 @@ import in.twizmwaz.cardinal.module.modules.gamerules.GamerulesBuilder;
 import in.twizmwaz.cardinal.module.modules.hunger.HungerBuilder;
 import in.twizmwaz.cardinal.module.modules.itemRemove.ItemRemoveBuilder;
 import in.twizmwaz.cardinal.module.modules.kit.KitBuilder;
+import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLock.TimeLockBuilder;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTrackerBuilder;
 import in.twizmwaz.cardinal.module.modules.toolRepair.ToolRepairBuilder;
@@ -41,6 +42,7 @@ public class ModuleHandler {
     public Set<Module> invokeModules(Match match) {
         Document document = match.getDocument();
         Set<ModuleBuilder> builders = new HashSet<>();
+        builders.add(new RegionModuleBuilder());
         builders.add(new BuildHeightBuilder());
         builders.add(new WoolObjectiveBuilder());
         builders.add(new ItemRemoveBuilder());
@@ -71,6 +73,10 @@ public class ModuleHandler {
             plugin.getServer().getPluginManager().registerEvents(module, plugin);
         }
         assignObjectives(match.getTeams());
+        return loaded;
+    }
+
+    public Set<Module> getModules() {
         return loaded;
     }
 
