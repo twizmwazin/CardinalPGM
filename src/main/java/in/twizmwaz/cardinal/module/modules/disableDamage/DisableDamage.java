@@ -51,28 +51,28 @@ public class DisableDamage implements Module {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
-        if (damageTypes.contains(event.getCause()) && event.getCause() != DamageCause.BLOCK_EXPLOSION) {
+        if (damageTypes.contains(event.getCause()) && (event.getCause() != DamageCause.BLOCK_EXPLOSION || event.getCause() != DamageCause.ENTITY_EXPLOSION)) {
             event.setCancelled(true);
-        } else if (event.getCause() == DamageCause.BLOCK_EXPLOSION) {
+        } else if (event.getCause() == DamageCause.BLOCK_EXPLOSION || event.getCause() == DamageCause.ENTITY_EXPLOSION) {
             if (event instanceof EntityDamageByEntityEvent) {
                 if (event.getEntity() instanceof Player) {
                     Player player = (Player) event.getEntity();
                     String source = TntTracker.getWhoPlaced(((EntityDamageByEntityEvent) event).getDamager());
                     Match match = GameHandler.getGameHandler().getMatch();
                     if (Bukkit.getOfflinePlayer(source).isOnline()) {
-                        if (!blockExplosionEnemy && match.getTeam(player) != match.getTeam(Bukkit.getPlayer(source))) {
+                        if (blockExplosionSelf && source.equals(player.getName())) {
                             event.setCancelled(true);
                             return;
                         }
-                        if (!blockExplosionAlly && match.getTeam(player) == match.getTeam(Bukkit.getPlayer(source)) && !source.equals(player.getName())) {
+                        if (blockExplosionAlly && match.getTeam(player) == match.getTeam(Bukkit.getPlayer(source)) && !source.equals(player.getName())) {
                             event.setCancelled(true);
                             return;
                         }
-                        if (!blockExplosionSelf && source.equals(player.getName())) {
+                        if (blockExplosionEnemy && match.getTeam(player) != match.getTeam(Bukkit.getPlayer(source))) {
                             event.setCancelled(true);
                             return;
                         }
-                        if (!blockExplosionOther) event.setCancelled(true);
+                        if (blockExplosionOther) event.setCancelled(true);
                     }
                 }
             } else if (damageTypes.contains(DamageCause.BLOCK_EXPLOSION)) event.setCancelled(true);

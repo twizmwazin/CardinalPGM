@@ -47,10 +47,10 @@ public class DisableDamageBuilder implements ModuleBuilder {
             }
         }
         DisableDamage disableDamage = new DisableDamage(damageTypes);
-        disableDamage.setBlockExplosionAlly(disableAlly);
-        disableDamage.setBlockExplosionSelf(disableSelf);
-        disableDamage.setBlockExplosionEnemy(disableEnemy);
-        disableDamage.setBlockExplosionOther(disableOther);
+        disableDamage.setBlockExplosionAlly(!disableAlly);
+        disableDamage.setBlockExplosionSelf(!disableSelf);
+        disableDamage.setBlockExplosionEnemy(!disableEnemy);
+        disableDamage.setBlockExplosionOther(!disableOther);
         results.add(disableDamage);
         return results;
     }
