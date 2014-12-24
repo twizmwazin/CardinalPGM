@@ -32,6 +32,11 @@ public class TeamListener implements Listener {
 
     @EventHandler
     public void onTeamChange(PlayerChangeTeamEvent event) {
+        if (event.getNewTeam().isObserver()) {
+            for (ItemStack armor : event.getPlayer().getInventory().getArmorContents()) {
+                armor.setType(Material.AIR);
+            }
+        }
         if (match.getState().equals(MatchState.PLAYING)) {
             try {
                 if (event.getOldTeam().isObserver()) {
@@ -57,6 +62,7 @@ public class TeamListener implements Listener {
                         event.getPlayer().setHealth(0);
                         event.getPlayer().setGameMode(GameMode.CREATIVE);
                         event.getPlayer().setAffectsSpawning(false);
+                        event.getPlayer().setCollidesWithEntities(false);
                     }
                 } else {
                     event.getPlayer().setHealth(0);
@@ -109,6 +115,8 @@ public class TeamListener implements Listener {
     public void onMatchEnd(MatchEndEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.setGameMode(GameMode.CREATIVE);
+            player.setAffectsSpawning(false);
+            player.setCollidesWithEntities(false);
         }
     }
 
@@ -116,6 +124,7 @@ public class TeamListener implements Listener {
     public void onPlayerSpawn(PgmSpawnEvent event) {
         event.getPlayer().setGameMode(GameMode.SURVIVAL);
         event.getPlayer().setAffectsSpawning(true);
+        event.getPlayer().setCollidesWithEntities(true);
     }
 
 

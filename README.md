@@ -4,7 +4,7 @@ CardinalPGM
 This is the next PGM clone.
 
 ##In Development
-This plugin is in early alpha. I make no guarantees as to what will and what will not work. Features are in development, and many are unfinished or broken. At this point in time, this plugin is not ready for general use.
+This plugin is in early alpha. I make no guarantees as to what will and what will not work. Features are in development, and many are unfinished or broken. At this point in time, this plugin is not ready for general use. However, if you are a developer or you just want to try to help find bugs, please feel free to try this out at your own risk.
 
 Feel free to submit pull requests and/or issues to help further development. If you find an issue, please submit an issue so a developer can resolve it as soon as possible. If an issue is found with a dependency, submit your issue to the dependency's repository.
 

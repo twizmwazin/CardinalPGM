@@ -15,6 +15,7 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLock.TimeLockBuilder;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTrackerBuilder;
 import in.twizmwaz.cardinal.module.modules.toolRepair.ToolRepairBuilder;
+import in.twizmwaz.cardinal.module.modules.visibility.VisibilityBuilder;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjectiveBuilder;
 import in.twizmwaz.cardinal.teams.PgmTeam;
 import org.bukkit.Bukkit;
@@ -55,6 +56,7 @@ public class ModuleHandler {
         builders.add(new HungerBuilder());
         builders.add(new ProjectilesBuilder());
         builders.add(new TntTrackerBuilder());
+        builders.add(new VisibilityBuilder());
     }
 
     public Set<Module> invokeModules(Match match) {
