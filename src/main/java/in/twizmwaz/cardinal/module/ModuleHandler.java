@@ -10,6 +10,7 @@ import in.twizmwaz.cardinal.module.modules.gamerules.GamerulesBuilder;
 import in.twizmwaz.cardinal.module.modules.hunger.HungerBuilder;
 import in.twizmwaz.cardinal.module.modules.itemRemove.ItemRemoveBuilder;
 import in.twizmwaz.cardinal.module.modules.kit.KitBuilder;
+import in.twizmwaz.cardinal.module.modules.motd.MOTDBuilder;
 import in.twizmwaz.cardinal.module.modules.projectiles.ProjectilesBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLock.TimeLockBuilder;
@@ -17,6 +18,7 @@ import in.twizmwaz.cardinal.module.modules.tntTracker.TntTrackerBuilder;
 import in.twizmwaz.cardinal.module.modules.toolRepair.ToolRepairBuilder;
 import in.twizmwaz.cardinal.module.modules.visibility.VisibilityBuilder;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjectiveBuilder;
+import in.twizmwaz.cardinal.module.modules.worldFreeze.WorldFreezeBuilder;
 import in.twizmwaz.cardinal.teams.PgmTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -57,6 +59,8 @@ public class ModuleHandler {
         builders.add(new ProjectilesBuilder());
         builders.add(new TntTrackerBuilder());
         builders.add(new VisibilityBuilder());
+        builders.add(new MOTDBuilder());
+        builders.add(new WorldFreezeBuilder());
     }
 
     public Set<Module> invokeModules(Match match) {

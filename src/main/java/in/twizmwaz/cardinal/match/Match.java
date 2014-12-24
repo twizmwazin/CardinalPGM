@@ -69,7 +69,6 @@ public class Match {
         listeners.add(new TeamListener(plugin, this));
         listeners.add(new ObserverListener(plugin, this));
         listeners.add(new ObjectiveListener(plugin, this));
-        listeners.add(new EntityListener(plugin, this));
 
         Bukkit.getServer().getPluginManager().callEvent(new CycleCompleteEvent(this));
 

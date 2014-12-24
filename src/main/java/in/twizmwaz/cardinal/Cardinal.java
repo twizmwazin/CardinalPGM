@@ -4,8 +4,6 @@ import com.sk89q.bukkit.util.CommandsManagerRegistration;
 import com.sk89q.minecraft.util.commands.*;
 import in.twizmwaz.cardinal.command.*;
 import in.twizmwaz.cardinal.command.match.StartAndEndCommand;
-import in.twizmwaz.cardinal.listeners.BlockListener;
-import in.twizmwaz.cardinal.listeners.ConnectionListener;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -58,15 +56,8 @@ public class Cardinal extends JavaPlugin {
         cmdRegister.register(CancelCommand.class);
     }
 
-    public void registerListeners() {
-        new BlockListener(this);
-        new ConnectionListener(this);
-    }
-
-
     public void onEnable() {
         setupCommands();
-        registerListeners();
         gameHandler = new GameHandler(this);
         plugin = this;
     }
