@@ -10,6 +10,7 @@ import in.twizmwaz.cardinal.module.modules.gamerules.GamerulesBuilder;
 import in.twizmwaz.cardinal.module.modules.hunger.HungerBuilder;
 import in.twizmwaz.cardinal.module.modules.itemRemove.ItemRemoveBuilder;
 import in.twizmwaz.cardinal.module.modules.kit.KitBuilder;
+import in.twizmwaz.cardinal.module.modules.projectiles.ProjectilesBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLock.TimeLockBuilder;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTrackerBuilder;
@@ -52,6 +53,7 @@ public class ModuleHandler {
         builders.add(new HungerBuilder());
         builders.add(new MapDifficultyBuilder());
         builders.add(new HungerBuilder());
+        builders.add(new ProjectilesBuilder());
         builders.add(new TntTrackerBuilder());
     }
 

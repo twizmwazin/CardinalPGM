@@ -60,19 +60,19 @@ public class DisableDamage implements Module {
                     String source = TntTracker.getWhoPlaced(((EntityDamageByEntityEvent) event).getDamager());
                     Match match = GameHandler.getGameHandler().getMatch();
                     if (Bukkit.getOfflinePlayer(source).isOnline()) {
-                        if (blockExplosionSelf && source.equals(player.getName())) {
+                        if (!blockExplosionSelf && source.equals(player.getName())) {
                             event.setCancelled(true);
                             return;
                         }
-                        if (blockExplosionAlly && match.getTeam(player) == match.getTeam(Bukkit.getPlayer(source)) && !source.equals(player.getName())) {
+                        if (!blockExplosionAlly && match.getTeam(player) == match.getTeam(Bukkit.getPlayer(source)) && !source.equals(player.getName())) {
                             event.setCancelled(true);
                             return;
                         }
-                        if (blockExplosionEnemy && match.getTeam(player) != match.getTeam(Bukkit.getPlayer(source))) {
+                        if (!blockExplosionEnemy && match.getTeam(player) != match.getTeam(Bukkit.getPlayer(source))) {
                             event.setCancelled(true);
                             return;
                         }
-                        if (blockExplosionOther) event.setCancelled(true);
+                        if (!blockExplosionOther) event.setCancelled(true);
                     }
                 }
             } else if (damageTypes.contains(DamageCause.BLOCK_EXPLOSION)) event.setCancelled(true);
