@@ -88,6 +88,16 @@ public class ModuleHandler {
     public Set<Module> getModules() {
         return loaded;
     }
+    
+    public Set<Module> getModule(String name) {
+        Set<Module> results = new HashSet<>();
+        for (Module module : this.getModules()) {
+            if (module.getClass().getName().equalsIgnoreCase(name)) {
+                results.add(module);
+            }
+        }
+        return results;
+    }
 
     public Set<GameObjective> getConditions() {
         return objectives;
