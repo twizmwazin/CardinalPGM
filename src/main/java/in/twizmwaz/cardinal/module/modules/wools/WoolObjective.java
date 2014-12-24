@@ -59,7 +59,7 @@ public class WoolObjective implements GameObjective {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (event.getBlock().getX() == place.getX() && event.getBlock().getY() == place.getY() && event.getBlock().getZ() == place.getZ()) {
+        if (event.getBlock().getLocation().equals(place.getLocation())) {
             if (event.getBlock().getType().equals(Material.WOOL)) {
                 if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
                     this.complete = true;
@@ -74,7 +74,7 @@ public class WoolObjective implements GameObjective {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (event.getBlock().getX() == place.getX() && event.getBlock().getY() == place.getY() && event.getBlock().getZ() == place.getZ()) {
+        if (event.getBlock().getLocation().equals(place.getLocation())) {
             event.setCancelled(true);
         }
     }
