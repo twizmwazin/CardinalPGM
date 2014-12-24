@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.regions.parsers;
 
 
+import in.twizmwaz.cardinal.util.NumUtils;
 import org.jdom2.Element;
 
 /**
@@ -13,16 +14,17 @@ public class BlockParser {
     private double z;
 
     public BlockParser(Element element) {
+
         try {
             String[] coords = element.getAttribute("location").getValue().split(",");
-            this.x = Double.parseDouble(coords[0]);
-            this.y = Double.parseDouble(coords[1]);
-            this.z = Double.parseDouble(coords[2]);
+            this.x = NumUtils.parseDouble(coords[0]);
+            this.y = NumUtils.parseDouble(coords[1]);
+            this.z = NumUtils.parseDouble(coords[2]);
         } catch (NullPointerException ex) {
             String[] coords = element.getText().split(",");
-            this.x = Double.parseDouble(coords[0]);
-            this.y = Double.parseDouble(coords[1]);
-            this.z = Double.parseDouble(coords[2]);
+            this.x = NumUtils.parseDouble(coords[0]);
+            this.y = NumUtils.parseDouble(coords[1]);
+            this.z = NumUtils.parseDouble(coords[2]);
 
         }
     }

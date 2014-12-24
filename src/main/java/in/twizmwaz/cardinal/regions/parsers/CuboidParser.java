@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.regions.parsers;
 
+import in.twizmwaz.cardinal.util.NumUtils;
 import org.jdom2.Element;
 
 /**
@@ -15,17 +16,16 @@ public class CuboidParser {
     private double zMax;
 
     public CuboidParser(Element element) {
-
         String[] mins = element.getAttribute("min").getValue().split(",");
-        this.xMin = Double.parseDouble(mins[0]);
-        this.yMin = Double.parseDouble(mins[1]);
-        this.zMin = Double.parseDouble(mins[2]);
-
+        this.xMin = NumUtils.parseDouble(mins[0]);
+        this.yMin = NumUtils.parseDouble(mins[1]);
+        this.zMin = NumUtils.parseDouble(mins[2]);
         String[] maxs = element.getAttribute("max").getValue().split(",");
-        this.xMax = Double.parseDouble(maxs[0]);
-        this.yMax = Double.parseDouble(maxs[1]);
-        this.zMax = Double.parseDouble(maxs[2]);
+        this.xMax = NumUtils.parseDouble(maxs[0]);
+        this.yMax = NumUtils.parseDouble(maxs[1]);
+        this.zMax = NumUtils.parseDouble(maxs[2]);
     }
+
 
     public double getXMin() {
         return xMin;

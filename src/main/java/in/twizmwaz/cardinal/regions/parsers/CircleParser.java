@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.regions.parsers;
 
+import in.twizmwaz.cardinal.util.NumUtils;
 import org.jdom2.Element;
 
 /**
@@ -13,9 +14,10 @@ public class CircleParser {
 
     public CircleParser(Element element) {
         String[] centArray = element.getAttribute("center").getValue().split(",");
-        this.centerX = Double.parseDouble(centArray[0]);
-        this.centerZ = Double.parseDouble(centArray[1]);
-        this.radius = Double.parseDouble(element.getAttribute("radius").getValue());
+        this.centerX = NumUtils.parseDouble(centArray[0]);
+        this.centerZ = NumUtils.parseDouble(centArray[1]);
+        this.radius = NumUtils.parseDouble(element.getAttribute("radius").getValue());
+
     }
 
     public double getCenterX() {

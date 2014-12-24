@@ -30,6 +30,7 @@ public class ModuleHandler {
     private final JavaPlugin plugin;
     private final GameHandler gameHandler;
 
+    Set<ModuleBuilder> builders = new HashSet<>();
     private Set<Module> loaded;
     private Set<GameObjective> objectives;
 
@@ -37,11 +38,7 @@ public class ModuleHandler {
         this.plugin = plugin;
         this.gameHandler = gameHandler;
         this.loaded = null;
-    }
-
-    public Set<Module> invokeModules(Match match) {
-        Document document = match.getDocument();
-        Set<ModuleBuilder> builders = new HashSet<>();
+        builders = new HashSet<>();
         builders.add(new RegionModuleBuilder());
         builders.add(new BuildHeightBuilder());
         builders.add(new WoolObjectiveBuilder());
@@ -56,6 +53,10 @@ public class ModuleHandler {
         builders.add(new MapDifficultyBuilder());
         builders.add(new HungerBuilder());
         builders.add(new TntTrackerBuilder());
+    }
+
+    public Set<Module> invokeModules(Match match) {
+        Document document = match.getDocument();
         Set<Module> loaded = new HashSet<Module>();
         for (ModuleBuilder builder : builders) {
             loaded.addAll(builder.load(match));

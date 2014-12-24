@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.regions.parsers;
 
+import in.twizmwaz.cardinal.util.NumUtils;
 import org.jdom2.Element;
 
 /**
@@ -17,10 +18,10 @@ public class RectangleParser {
         String max = element.getAttribute("max").getValue();
         String[] mins = min.split(",");
         String[] maxs = max.split(",");
-        xMin = Double.parseDouble(mins[0]);
-        zMin = Double.parseDouble(mins[1]);
-        xMax = Double.parseDouble(maxs[0]);
-        zMax = Double.parseDouble(maxs[1]);
+        xMin = NumUtils.parseDouble(mins[0]);
+        zMin = NumUtils.parseDouble(mins[1]);
+        xMax = NumUtils.parseDouble(maxs[0]);
+        zMax = NumUtils.parseDouble(maxs[1]);
     }
 
     public double getXMin() {

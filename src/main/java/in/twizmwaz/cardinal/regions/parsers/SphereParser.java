@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.regions.parsers;
 
+import in.twizmwaz.cardinal.util.NumUtils;
 import org.jdom2.Element;
 
 /**
@@ -18,11 +19,10 @@ public class SphereParser {
         this.origin = element.getAttribute("origin").getValue();
         this.rad = element.getAttribute("radius").getValue();
         String[] origina = this.origin.split(",");
-        this.originx = Double.parseDouble(origina[0]);
-        this.originy = Double.parseDouble(origina[1]);
-        this.originz = Double.parseDouble(origina[2]);
-
-        this.radius = Double.parseDouble(rad);
+        this.originx = NumUtils.parseDouble(origina[0]);
+        this.originy = NumUtils.parseDouble(origina[1]);
+        this.originz = NumUtils.parseDouble(origina[2]);
+        this.radius = NumUtils.parseDouble(rad);
     }
 
     public double getOriginx() {

@@ -31,7 +31,7 @@ public class SpawnParser {
                     if (kit == null) kit = child.getAttributeValue("kit");
                     List<Region> regions = new ArrayList<>();
                     for (Element regionElement : spawnElement.getChildren()) {
-                        regions.add(Region.newRegion(regionElement));
+                        regions.add(Region.getRegion(regionElement));
                     }
                     if (teamId.toLowerCase().startsWith(teamValue)) {
                         result.add(new Spawn(regions, yaw, kit));
@@ -74,7 +74,7 @@ public class SpawnParser {
 
                 List<Region> regions = new ArrayList<Region>();
                 for (Element regionElement : subChild.getChildren()) {
-                    regions.add(Region.newRegion(regionElement));
+                    regions.add(Region.getRegion(regionElement));
                 }
                 if (teamId.toLowerCase().startsWith(teamValue)) {
                     result.add(new Spawn(regions, yaw, kit));
@@ -94,18 +94,18 @@ public class SpawnParser {
         for (Element spawns : document.getRootElement().getChildren("spawns")) {
             try {
                 Element working = spawns.getChild("default");
-                int yaw;
+                int yaw = 0;
+                try {
+                    yaw = Integer.parseInt(spawns.getAttributeValue("yaw"));
+                } catch (Exception e) {}
                 try {
                     yaw = Integer.parseInt(working.getAttributeValue("yaw"));
-                } catch (NumberFormatException e) {
-                    try {
-                        yaw = Integer.parseInt(spawns.getAttributeValue("yaw"));
-                    } catch (NumberFormatException ex) {
-                        yaw = Integer.parseInt(working.getChild("point").getAttributeValue("yaw"));
-                    }
-                }
+                } catch (Exception e) {}
+                try {
+                    yaw = Integer.parseInt(working.getChild("point").getAttributeValue("yaw"));
+                } catch (Exception e) {}
                 List<Region> regions = new ArrayList<Region>();
-                regions.add(Region.newRegion(working.getChildren().get(0)));
+                regions.add(Region.getRegion(working.getChildren().get(0)));
                 result.add(new Spawn(regions, yaw, null));
             } catch (NullPointerException e) {
 

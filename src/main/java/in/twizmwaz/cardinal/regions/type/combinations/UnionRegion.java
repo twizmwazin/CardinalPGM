@@ -53,4 +53,15 @@ public class UnionRegion extends Region {
             }
         }
     }
+
+    @Override
+    public BlockRegion getCenterBlock() {
+        double xTotal = 0, yTotal = 0, zTotal = 0;
+        for (Region child : regions) {
+            xTotal = xTotal + child.getCenterBlock().getX();
+            yTotal = yTotal + child.getCenterBlock().getY();
+            zTotal = zTotal + child.getCenterBlock().getZ();
+        }
+        return new BlockRegion(xTotal / regions.size(), yTotal / regions.size(), zTotal / regions.size());
+    }
 }

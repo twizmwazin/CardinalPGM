@@ -8,6 +8,9 @@ import in.twizmwaz.cardinal.regions.parsers.EmptyParser;
  */
 public class EmptyRegion extends Region {
 
+    public EmptyRegion(){
+    }
+
     public EmptyRegion(EmptyParser parser) {
     }
 
@@ -23,6 +26,11 @@ public class EmptyRegion extends Region {
 
     @Override
     public PointRegion getRandomPoint() {
+        return null;
+    }
+
+    @Override
+    public BlockRegion getCenterBlock() {
         return null;
     }
 }

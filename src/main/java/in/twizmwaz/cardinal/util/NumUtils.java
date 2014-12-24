@@ -29,4 +29,10 @@ public class NumUtils {
         return min + (random.nextGaussian() * (max - min));
     }
 
+    public static double parseDouble(String string) {
+        if (string.equalsIgnoreCase("oo")) return Double.POSITIVE_INFINITY;
+        if (string.equalsIgnoreCase("-oo")) return Double.NEGATIVE_INFINITY;
+        return Double.parseDouble(string);
+    }
+
 }

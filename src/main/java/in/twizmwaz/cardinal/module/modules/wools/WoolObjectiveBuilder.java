@@ -19,7 +19,7 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
     public List<Module> load(Match match) {
         List<Module> result = new ArrayList<>();
         for (Element element : match.getDocument().getRootElement().getChildren("wools")) {
-            for (Element subElement : element.getChildren()) {
+            for (Element subElement : element.getChildren("wool")) {
                 PgmTeam team;
                 try {
                     team = match.getTeamById(element.getAttributeValue("team"));

@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.match.listeners;
 
 import com.sk89q.minecraft.util.commands.ChatColor;
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
@@ -51,7 +52,7 @@ public class MatchListener implements Listener {
         for (Player player : Bukkit.getOnlinePlayers()) {
             match.getTeamById("observers").force(player, JoinType.JOIN);
             player.setScoreboard(match.getScoreboard());
-            player.teleport(match.getTeamById("observers").getSpawnPoint());
+            player.teleport(match.getTeamById("observers").getSpawn().getPoint().toLocation(GameHandler.getGameHandler().getMatchWorld()));
         }
     }
 

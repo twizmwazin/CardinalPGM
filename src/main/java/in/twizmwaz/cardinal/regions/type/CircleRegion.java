@@ -27,18 +27,4 @@ public class CircleRegion extends CylinderRegion {
         return super.getRadius();
     }
 
-    @Override
-    public boolean contains(BlockRegion region) {
-        return super.contains(region);
-    }
-
-    @Override
-    public boolean contains(PointRegion region) {
-        return super.contains(region);
-    }
-
-    @Override
-    public PointRegion getRandomPoint() {
-        return super.getRandomPoint();
-    }
 }

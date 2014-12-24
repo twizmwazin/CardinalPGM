@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.regions.parsers;
 
+import in.twizmwaz.cardinal.util.NumUtils;
 import org.jdom2.Element;
 
 /**
@@ -14,13 +15,12 @@ public class CylinderParser {
     private double height;
 
     public CylinderParser(Element element) {
-        this.radius = Double.parseDouble(element.getAttribute("radius").getValue());
-        this.height = Double.parseDouble(element.getAttribute("height").getValue());
-
+        this.radius = NumUtils.parseDouble(element.getAttribute("radius").getValue());
+        this.height = NumUtils.parseDouble(element.getAttribute("height").getValue());
         String[] split = element.getAttribute("base").getValue().split(",");
-        this.baseX = Double.parseDouble(split[0]);
-        this.baseY = Double.parseDouble(split[1]);
-        this.baseZ = Double.parseDouble(split[2]);
+        this.baseX = NumUtils.parseDouble(split[0]);
+        this.baseY = NumUtils.parseDouble(split[1]);
+        this.baseZ = NumUtils.parseDouble(split[2]);
     }
 
     public double getBaseX() {

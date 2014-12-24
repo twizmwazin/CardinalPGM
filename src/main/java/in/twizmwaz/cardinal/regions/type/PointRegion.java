@@ -53,4 +53,8 @@ public class PointRegion extends BlockRegion {
         return new Location(world, x, y, z, yaw, pitch);
     }
 
+    @Override
+    public BlockRegion getCenterBlock() {
+        return new BlockRegion(this.x, this.y, this.z);
+    }
 }

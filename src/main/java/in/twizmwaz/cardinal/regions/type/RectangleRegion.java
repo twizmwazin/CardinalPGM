@@ -9,7 +9,7 @@ public class RectangleRegion extends CuboidRegion {
 
 
     public RectangleRegion(String name, double xMin, double zMin, double xMax, double zMax) {
-        super(xMin, 0, zMin, xMax, 256, zMax);
+        super(xMin, Double.POSITIVE_INFINITY, zMin, xMax, Double.NEGATIVE_INFINITY, zMax);
     }
 
     public RectangleRegion(RectangleParser parser) {
@@ -31,16 +31,5 @@ public class RectangleRegion extends CuboidRegion {
     public double getZMax() {
         return super.getZMax();
     }
-
-    @Override
-    public boolean contains(BlockRegion region) {
-        return super.contains(region);
-    }
-
-    @Override
-    public PointRegion getRandomPoint() {
-        return super.getRandomPoint();
-    }
-
 
 }

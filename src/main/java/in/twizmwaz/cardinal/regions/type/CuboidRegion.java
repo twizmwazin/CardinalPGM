@@ -77,5 +77,10 @@ public class CuboidRegion extends Region {
         return new PointRegion(NumUtils.randomInterval(xMin, xMax), NumUtils.randomInterval(yMin, yMax), NumUtils.randomInterval(zMin, zMax));
     }
 
+    @Override
+    public BlockRegion getCenterBlock() {
+        return new BlockRegion(this.xMax - this.xMin, this.yMax - yMin, this.zMax - this.zMin);
+    }
+
 
 }

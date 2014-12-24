@@ -68,4 +68,9 @@ public class CylinderRegion extends Region {
 
         return new PointRegion(this.baseX + a * Math.cos(b), this.baseY + c, this.baseZ + a * Math.sin(b));
     }
+
+    @Override
+    public BlockRegion getCenterBlock() {
+        return (new BlockRegion(this.baseX, this.baseY + .5 * height, this.baseZ));
+    }
 }

@@ -69,4 +69,10 @@ public class SphereRegion extends Region {
 
         return new PointRegion(originX + a * Math.sin(b), originY + c * Math.sin(d), originZ + e * Math.sin(d));
     }
+
+    @Override
+    public BlockRegion getCenterBlock() {
+        return new BlockRegion(this.getOriginx(), this.getOriginy(), this.originZ);
+    }
+
 }
