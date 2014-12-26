@@ -1,7 +1,5 @@
 package in.twizmwaz.cardinal.teams.spawns;
 
-import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.regions.Region;
 import org.bukkit.Bukkit;
 import org.jdom2.Document;
@@ -107,11 +105,7 @@ public class SpawnParser {
                     yaw = Integer.parseInt(working.getChild("point").getAttributeValue("yaw"));
                 } catch (Exception e) {}
                 List<Region> regions = new ArrayList<Region>();
-                try {
-                    regions.add(Region.getRegion(working.getChildren().get(0)));
-                } catch (NullPointerException e) {
-                    regions.add(Region.getRegion(working));
-                }
+                regions.add(Region.getRegion(working.getChildren().get(0)));
                 result.add(new Spawn(regions, yaw, null));
             } catch (NullPointerException e) {
 

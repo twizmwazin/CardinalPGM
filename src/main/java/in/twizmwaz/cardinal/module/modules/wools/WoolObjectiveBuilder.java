@@ -4,7 +4,6 @@ import in.parapengu.commons.utils.StringUtils;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
-import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.BlockParser;
 import in.twizmwaz.cardinal.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.teams.PgmTeam;
@@ -28,7 +27,7 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
                     team = match.getTeamById(subElement.getAttributeValue("team"));
                 }
                 DyeColor color = StringUtils.convertStringToDyeColor(subElement.getAttributeValue("color"));
-                BlockRegion place = (BlockRegion) Region.getRegion(subElement);
+                BlockRegion place = new BlockRegion(new BlockParser(subElement.getChild("block")));
                 result.add(new WoolObjective(team, color, place));
             }
             for (Element child : element.getChildren("wools")) {
@@ -44,7 +43,7 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
                         }
                     }
                     DyeColor color = StringUtils.convertStringToDyeColor(subChild.getAttributeValue("color"));
-                    BlockRegion place = (BlockRegion) Region.getRegion(subChild.getChild("block"));
+                    BlockRegion place = new BlockRegion(new BlockParser(subChild.getChild("block")));
                 }
             }
 

@@ -37,15 +37,8 @@ public class CycleCommand {
         }
         String nextMap = null;
         for (String loadedMap : GameHandler.getGameHandler().getRotation().getLoaded()) {
-            if (loadedMap.toLowerCase().replaceAll(" ", "").equalsIgnoreCase(input.toLowerCase())) {
+            if (loadedMap.toLowerCase().replaceAll(" ", "").startsWith(input.toLowerCase())) {
                 nextMap = loadedMap;
-            }
-        }
-        if (nextMap == null) {
-            for (String loadedMap : GameHandler.getGameHandler().getRotation().getLoaded()) {
-                if (loadedMap.toLowerCase().replaceAll(" ", "").startsWith(input.toLowerCase())) {
-                    nextMap = loadedMap;
-                }
             }
         }
         if (nextMap == null) {
