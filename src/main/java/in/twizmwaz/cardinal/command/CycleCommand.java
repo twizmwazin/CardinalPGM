@@ -42,6 +42,13 @@ public class CycleCommand {
             }
         }
         if (nextMap == null) {
+            for (String loadedMap : GameHandler.getGameHandler().getRotation().getLoaded()) {
+                if (loadedMap.toLowerCase().replaceAll(" ", "").startsWith(input.toLowerCase())) {
+                    nextMap = loadedMap;
+                }
+            }
+        }
+        if (nextMap == null) {
             throw new CommandException("No map named " + input);
         } else {
             GameHandler.getGameHandler().getCycle().setMap(nextMap);

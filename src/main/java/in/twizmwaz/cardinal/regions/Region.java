@@ -1,8 +1,6 @@
 package in.twizmwaz.cardinal.regions;
 
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.regions.parsers.*;
 import in.twizmwaz.cardinal.regions.parsers.modifiers.CombinationParser;
 import in.twizmwaz.cardinal.regions.parsers.modifiers.MirrorParser;
@@ -53,9 +51,10 @@ public abstract class Region {
                 return new MirroredRegion(new MirrorParser(element));
             case "region":
                 if (element.getAttributeValue("name") != null) {
-                    for (Module module : GameHandler.getGameHandler().getModuleHandler().getModules()) {
-                        if (module instanceof RegionModule) {
-                            return ((RegionModule) module).getNamedRegion(element.getAttributeValue("name"));
+                    for (Element regionElement : GameHandler.getGameHandler().getMatch().getDocument().getRootElement().getChildren("regions")) {
+                        for (Element givenRegion : element.getChildren()) {
+                            if (givenRegion.getName().equalsIgnoreCase("apply")) break;
+                            return Region.getRegion(regionElement);
                         }
                     }
                 } else return getRegion(element.getChildren().get(0));

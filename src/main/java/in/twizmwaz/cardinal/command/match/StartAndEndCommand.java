@@ -19,16 +19,23 @@ public class StartAndEndCommand {
     @Command(aliases = {"start"}, desc = "Starts the match.", usage = "[time]")
     @CommandPermissions("cardinal.match.start")
     public static void start(CommandContext cmd, CommandSender sender) throws CommandException {
-        if (GameHandler.getGameHandler().getMatch().getState() != MatchState.WAITING)
-            throw new CommandException("Cannot start a match right now!");
-        int time = 30;
-        try {
-            time = cmd.getInteger(0);
-        } catch (IndexOutOfBoundsException ex) {
+        if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.WAITING)) {
+            int time = 30;
+            try {
+                time = cmd.getInteger(0);
+            } catch (IndexOutOfBoundsException ex) {
 
-        }
-        GameHandler.getGameHandler().getMatch().start(time);
+            }
+            GameHandler.getGameHandler().getMatch().start(time);
+        } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
+            try {
+                GameHandler.getGameHandler().getMatch().getStartTimer().setCancelled(true);
+                GameHandler.getGameHandler().getMatch().getStartTimer().setTime(cmd.getInteger(0));
+                GameHandler.getGameHandler().getMatch().getStartTimer().run();
+            } catch (NullPointerException e) {
 
+            }
+        } else throw new CommandException("Cannot start a match right now!");
 
     }
 

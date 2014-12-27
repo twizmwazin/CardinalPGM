@@ -12,7 +12,6 @@ import in.twizmwaz.cardinal.module.modules.itemRemove.ItemRemoveBuilder;
 import in.twizmwaz.cardinal.module.modules.kit.KitBuilder;
 import in.twizmwaz.cardinal.module.modules.motd.MOTDBuilder;
 import in.twizmwaz.cardinal.module.modules.projectiles.ProjectilesBuilder;
-import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLock.TimeLockBuilder;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTrackerBuilder;
 import in.twizmwaz.cardinal.module.modules.toolRepair.ToolRepairBuilder;
@@ -43,7 +42,6 @@ public class ModuleHandler {
         this.gameHandler = gameHandler;
         this.loaded = null;
         builders = new HashSet<>();
-        builders.add(new RegionModuleBuilder());
         builders.add(new BuildHeightBuilder());
         builders.add(new WoolObjectiveBuilder());
         builders.add(new ItemRemoveBuilder());

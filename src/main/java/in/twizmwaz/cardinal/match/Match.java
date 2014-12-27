@@ -59,6 +59,7 @@ public class Match {
         PgmTeamBuilder teamBuilder = new PgmTeamBuilder(this);
         teamBuilder.run();
         teams = teamBuilder.getTeams();
+        this.startTimer = new StartTimer(this, 30);
 
         this.modules = moduleHandler.invokeModules(this);
 
@@ -115,7 +116,7 @@ public class Match {
 
     public void start(int time) {
         if (state == MatchState.WAITING) {
-            this.startTimer = new StartTimer(GameHandler.getGameHandler(), time);
+            startTimer.setTime(time);
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameHandler.getGameHandler().getPlugin(), startTimer);
             state = MatchState.STARTING;
         }

@@ -20,9 +20,9 @@ public class StartTimer implements Runnable, Cancellable {
     private boolean cancelled;
     private JavaPlugin plugin;
 
-    public StartTimer(GameHandler gameHandler, int seconds) {
+    public StartTimer(Match match, int seconds) {
         this.time = seconds;
-        this.match = gameHandler.getMatch();
+        this.match = match;
         this.plugin = GameHandler.getGameHandler().getPlugin();
     }
 
@@ -53,7 +53,6 @@ public class StartTimer implements Runnable, Cancellable {
             match.setState(MatchState.WAITING);
         }
 
-
     }
 
     @Override
@@ -64,5 +63,9 @@ public class StartTimer implements Runnable, Cancellable {
     @Override
     public void setCancelled(boolean isCancelled) {
         this.cancelled = isCancelled;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
     }
 }
