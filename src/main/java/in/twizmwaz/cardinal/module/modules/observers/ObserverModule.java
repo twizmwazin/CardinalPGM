@@ -1,17 +1,19 @@
-package in.twizmwaz.cardinal.match.listeners;
+package in.twizmwaz.cardinal.module.modules.observers;
 
 import com.sk89q.minecraft.util.commands.ChatColor;
-import in.twizmwaz.cardinal.event.CycleCompleteEvent;
+import in.twizmwaz.cardinal.event.MatchEndEvent;
+import in.twizmwaz.cardinal.event.PgmSpawnEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
+import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -23,45 +25,62 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.permissions.PermissionAttachment;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
 
-/**
- * Created by kevin on 11/25/14.
- * Thanks to Elly for reference.
- */
-public class ObserverListener implements Listener {
+public class ObserverModule implements Module {
 
-    private final JavaPlugin plugin;
     private final Match match;
 
-    public ObserverListener(JavaPlugin plugin, Match match) {
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        this.plugin = plugin;
+    protected ObserverModule(Match match) {
         this.match = match;
+    }
+
+    @Override
+    public void unload() {
+        HandlerList.unregisterAll(this);
+    }
+
+    @EventHandler
+    public void onMatchEnd(MatchEndEvent event) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.setGameMode(GameMode.CREATIVE);
+            player.setAffectsSpawning(false);
+            player.setCollidesWithEntities(false);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerSpawn(PgmSpawnEvent event) {
+        if (!event.getTeam().isObserver()) {
+            event.getPlayer().setGameMode(GameMode.SURVIVAL);
+            event.getPlayer().setAffectsSpawning(true);
+            event.getPlayer().setCollidesWithEntities(true);
+        } else {
+            event.getPlayer().setGameMode(GameMode.CREATIVE);
+            event.getPlayer().setAffectsSpawning(false);
+            event.getPlayer().setCollidesWithEntities(false);
+        }
     }
 
     @EventHandler
     public void onBlockChange(BlockPlaceEvent event) {
-        if (match.getTeamById("observers").hasPlayer(event.getPlayer()) || match.getState() != MatchState.PLAYING) {
+        if (match.getTeam(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockChange(BlockBreakEvent event) {
-        if (match.getTeamById("observers").hasPlayer(event.getPlayer()) || match.getState() != MatchState.PLAYING) {
+        if (match.getTeam(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onInteraction(PlayerInteractEvent event) {
-        if (match.getTeamById("observers").hasPlayer(event.getPlayer()) || match.getState() != MatchState.PLAYING) {
+        if (match.getTeam(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             event.setCancelled(true);
             if (event.getClickedBlock() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 if (event.getClickedBlock().getType().equals(Material.CHEST) || event.getClickedBlock().getType().equals(Material.TRAPPED_CHEST)) {
@@ -106,14 +125,13 @@ public class ObserverListener implements Listener {
                     }
                     event.getPlayer().openInventory(brewingStand);
                 }
-
             }
         }
     }
 
     @EventHandler
     public void onPlayerClick(PlayerInteractEntityEvent event) {
-        if (match.getTeamById("observers").hasPlayer((Player) event.getPlayer()) || match.getState() != MatchState.PLAYING) {
+        if (match.getTeam(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             if (event.getRightClicked() instanceof Player) {
                 Player viewing = (Player) event.getRightClicked();
                 Inventory toView = Bukkit.createInventory(null, 45, match.getTeam(viewing).getColor() + ((Player) event.getRightClicked()).getName());
@@ -170,30 +188,32 @@ public class ObserverListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (match.getTeamById("observers").hasPlayer((Player) event.getWhoClicked()) || match.getState() != MatchState.PLAYING) {
-            if (event.getInventory().getType() != InventoryType.PLAYER) {
-                event.setCancelled(true);
+        if (event.getWhoClicked() instanceof Player) {
+            if (match.getTeam((Player) event.getWhoClicked()).isObserver() || match.getState() != MatchState.PLAYING) {
+                if (event.getInventory().getType() != InventoryType.PLAYER) {
+                    event.setCancelled(true);
+                }
             }
         }
     }
 
     @EventHandler
     public void onPickupItem(PlayerPickupItemEvent event) {
-        if (match.getTeamById("observers").hasPlayer(event.getPlayer()) || match.getState() != MatchState.PLAYING) {
+        if (match.getTeam(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onPickupXP(PlayerPickupExperienceEvent event) {
-        if (match.getTeamById("observers").hasPlayer(event.getPlayer()) || match.getState() != MatchState.PLAYING) {
+        if (match.getTeam(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onDropItem(PlayerDropItemEvent event) {
-        if (match.getTeamById("observers").hasPlayer(event.getPlayer()) || match.getState() != MatchState.PLAYING) {
+        if (match.getTeam(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             ItemStack dropped = event.getItemDrop().getItemStack();
             event.getPlayer().getItemInHand().setAmount(event.getPlayer().getItemInHand().getAmount() - dropped.getAmount());
             event.setCancelled(true);
@@ -211,17 +231,9 @@ public class ObserverListener implements Listener {
     }
 
     @EventHandler
-    public void onCycleComplete(CycleCompleteEvent event) {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            player.getInventory().clear();
-            for (ItemStack armor : player.getInventory().getArmorContents()) {
-                armor.setAmount(0);
-            }
-            for (PotionEffect effect : player.getActivePotionEffects()) {
-                player.removePotionEffect(effect.getType());
-            }
-            player.clearIgnorantEffects();
-            player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        if (match.getTeamById("observers").hasPlayer(event.getPlayer()) || match.getState() != MatchState.PLAYING) {
+            event.getPlayer().getInventory().setItem(0, new ItemStack(Material.COMPASS));
         }
     }
 
@@ -248,13 +260,6 @@ public class ObserverListener implements Listener {
             if (event.getTo().getY() <= -64) {
                 event.getPlayer().teleport(match.getMatch().getTeamById("observers").getSpawnPoint());
             }
-        }
-    }
-
-    @EventHandler
-    public void onPlayerRespawn(PlayerRespawnEvent event) {
-        if (match.getTeamById("observers").hasPlayer(event.getPlayer()) || match.getState() != MatchState.PLAYING) {
-            event.getPlayer().getInventory().setItem(0, new ItemStack(Material.COMPASS));
         }
     }
 

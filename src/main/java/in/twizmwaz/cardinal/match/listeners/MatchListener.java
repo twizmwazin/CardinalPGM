@@ -52,14 +52,7 @@ public class MatchListener implements Listener {
         for (Player player : Bukkit.getOnlinePlayers()) {
             match.getTeamById("observers").force(player, JoinType.JOIN);
             player.setScoreboard(match.getScoreboard());
-            player.teleport(match.getTeamById("observers").getSpawn().getPoint().toLocation(GameHandler.getGameHandler().getMatchWorld()));
         }
     }
-
-    @EventHandler
-    public void onRespawn(PlayerRespawnEvent event) {
-        event.setRespawnLocation(match.getTeam(event.getPlayer()).getSpawnPoint());
-    }
-
 
 }

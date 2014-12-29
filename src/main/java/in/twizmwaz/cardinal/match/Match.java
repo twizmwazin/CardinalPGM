@@ -65,10 +65,7 @@ public class Match {
 
         mapInfo = new MapInfo(document);
         this.state = MatchState.WAITING;
-        listeners.add(new ConnectionListener(plugin, this));
         listeners.add(new MatchListener(plugin, this));
-        listeners.add(new TeamListener(plugin, this));
-        listeners.add(new ObserverListener(plugin, this));
         listeners.add(new ObjectiveListener(plugin, this));
 
         Bukkit.getServer().getPluginManager().callEvent(new CycleCompleteEvent(this));
