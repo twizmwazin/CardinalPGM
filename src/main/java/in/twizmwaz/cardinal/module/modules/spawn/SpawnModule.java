@@ -12,12 +12,14 @@ import in.twizmwaz.cardinal.teams.spawns.Spawn;
 import in.twizmwaz.cardinal.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerInitialSpawnEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SpawnModule implements Module {
@@ -90,6 +92,8 @@ public class SpawnModule implements Module {
             PgmSpawnEvent spawnEvent = new PgmSpawnEvent(player, spawn, match.getTeamById("observers"));
             Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
             if (!spawnEvent.isCancelled()) {
+                PlayerUtil.resetPlayer(player);
+                player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
                 player.teleport(spawn.getPoint().toLocation());
             }
         }

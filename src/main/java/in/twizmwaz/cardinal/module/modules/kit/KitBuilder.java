@@ -39,7 +39,11 @@ public class KitBuilder implements ModuleBuilder {
                     try {
                         for (String raw : item.getAttributeValue("enchantment").split(";")) {
                             String[] enchant = raw.split(":");
-                            itemStack.addUnsafeEnchantment(StringUtils.convertStringToEnchantment(enchant[0]), Integer.parseInt(enchant[1]));
+                            try {
+                                itemStack.addUnsafeEnchantment(StringUtils.convertStringToEnchantment(enchant[0]), Integer.parseInt(enchant[1]));
+                            } catch (ArrayIndexOutOfBoundsException e) {
+                                itemStack.addUnsafeEnchantment(StringUtils.convertStringToEnchantment(enchant[0]), 1);
+                            }
                         }
                     } catch (NullPointerException e) {
 

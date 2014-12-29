@@ -65,6 +65,7 @@ public class Visibility implements Module {
     public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
         Player switched = event.getPlayer();
         for (Player other : Bukkit.getOnlinePlayers()) {
+            if (other.equals(event.getPlayer())) break;
             if (match.getState().equals(MatchState.PLAYING)) {
                 if (match.getTeam(other).isObserver() && !event.getNewTeam().isObserver()) {
                     switched.hidePlayer(other);

@@ -59,8 +59,6 @@ public class WoolObjective implements GameObjective {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockPlace(BlockPlaceEvent event) {
-        Bukkit.broadcastMessage(event.getBlock().getX() + " " + event.getBlock().getY() + " " + event.getBlock().getZ());
-        Bukkit.broadcastMessage(place.getBlock().getX() + " " + place.getBlock().getY() + " " + place.getBlock().getZ());
         if (event.getBlock().equals(place.getBlock())) {
             if (event.getBlock().getType().equals(Material.WOOL)) {
                     if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {

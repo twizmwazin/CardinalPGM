@@ -48,6 +48,7 @@ public class ObserverModule implements Module {
             player.setGameMode(GameMode.CREATIVE);
             player.setAffectsSpawning(false);
             player.setCollidesWithEntities(false);
+            player.setCanPickupItems(false);
         }
     }
 
@@ -57,10 +58,12 @@ public class ObserverModule implements Module {
             event.getPlayer().setGameMode(GameMode.SURVIVAL);
             event.getPlayer().setAffectsSpawning(true);
             event.getPlayer().setCollidesWithEntities(true);
+            event.getPlayer().setCanPickupItems(true);
         } else {
             event.getPlayer().setGameMode(GameMode.CREATIVE);
             event.getPlayer().setAffectsSpawning(false);
             event.getPlayer().setCollidesWithEntities(false);
+            event.getPlayer().setCanPickupItems(false);
         }
     }
 
@@ -198,13 +201,6 @@ public class ObserverModule implements Module {
     }
 
     @EventHandler
-    public void onPickupItem(PlayerPickupItemEvent event) {
-        if (match.getTeam(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler
     public void onPickupXP(PlayerPickupExperienceEvent event) {
         if (match.getTeam(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             event.setCancelled(true);
@@ -239,9 +235,13 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        if (match.getTeam(event.getEntity()).isObserver() || match.isRunning()) {
-            event.getDrops().clear();
-            event.setDroppedExp(0);
+        try {
+            if (match.getTeam(event.getEntity()).isObserver() || match.isRunning()) {
+                event.getDrops().clear();
+                event.setDroppedExp(0);
+            }
+        } catch (NullPointerException e) {
+
         }
     }
 

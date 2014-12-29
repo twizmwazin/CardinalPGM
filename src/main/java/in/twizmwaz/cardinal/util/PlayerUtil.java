@@ -8,6 +8,9 @@ import org.bukkit.potion.PotionEffect;
 public class PlayerUtil {
 
     public static void resetPlayer(Player player)  {
+        player.setHealth(20);
+        player.setFoodLevel(20);
+        player.setSaturation(20);
         player.getInventory().clear();
         player.getInventory().setArmorContents(new ItemStack[]{new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR)});
         for (PotionEffect effect : player.getActivePotionEffects()) {

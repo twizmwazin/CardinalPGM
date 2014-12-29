@@ -106,7 +106,8 @@ public class SpawnParser {
                 } catch (Exception e) {}
                 List<Region> regions = new ArrayList<Region>();
                 regions.add(Region.getRegion(working.getChildren().get(0)));
-                result.add(new Spawn(regions, yaw, null));
+                String kit = working.getAttributeValue("kit");
+                result.add(new Spawn(regions, yaw, kit));
             } catch (NullPointerException e) {
 
             }
