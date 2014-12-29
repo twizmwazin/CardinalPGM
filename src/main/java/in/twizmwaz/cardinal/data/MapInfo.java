@@ -24,32 +24,31 @@ public class MapInfo {
         version = root.getChild("version").getText();
         objective = root.getChild("objective").getText();
         authors = new ArrayList<>();
-        for (Element author : root.getChild("authors").getChildren()) {
-            if (author.hasAttributes()) {
-                authors.add(new Contributor(author.getText(), author.getAttribute("contribution").getValue()));
-            } else {
-                authors.add(new Contributor(author.getText()));
+        for (Element element : root.getChildren("authors")) {
+            for (Element author : element.getChildren()) {
+                if (author.hasAttributes()) {
+                    authors.add(new Contributor(author.getText(), author.getAttribute("contribution").getValue()));
+                } else {
+                    authors.add(new Contributor(author.getText()));
+                }
             }
         }
         contributors = new ArrayList<>();
-        try {
-            for (Element author : root.getChild("contributors").getChildren()) {
+        for (Element element : root.getChildren("contributors")) {
+            for (Element author : element.getChildren()) {
                 if (author.hasAttributes()) {
                     contributors.add(new Contributor(author.getText(), author.getAttribute("contribution").getValue()));
                 } else {
                     contributors.add(new Contributor(author.getText()));
                 }
             }
-        } catch (NullPointerException ex) {
 
         }
         rules = new ArrayList<>();
-        try {
-            for (Element rule : root.getChild("rules").getChildren()) {
+        for (Element element : root.getChildren("rules")) {
+            for (Element rule : element.getChildren()) {
                 rules.add(rule.getValue());
             }
-        } catch (NullPointerException ex) {
-
         }
     }
 
