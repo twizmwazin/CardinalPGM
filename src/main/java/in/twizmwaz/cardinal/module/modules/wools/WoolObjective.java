@@ -59,9 +59,11 @@ public class WoolObjective implements GameObjective {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (event.getBlock().getLocation().equals(place.getLocation())) {
+        Bukkit.broadcastMessage(event.getBlock().getX() + " " + event.getBlock().getY() + " " + event.getBlock().getZ());
+        Bukkit.broadcastMessage(place.getBlock().getX() + " " + place.getBlock().getY() + " " + place.getBlock().getZ());
+        if (event.getBlock().equals(place.getBlock())) {
             if (event.getBlock().getType().equals(Material.WOOL)) {
-                if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
+                    if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
                     this.complete = true;
                     Bukkit.broadcastMessage(team.getColor() + event.getPlayer().getDisplayName() + ChatColor.WHITE + " placed " + StringUtils.convertDyeColorToChatColor(color) + color.toString().toUpperCase() + " WOOL" + ChatColor.WHITE + " for the " + team.getColor() + team.getName());
                     ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this);

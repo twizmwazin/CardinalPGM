@@ -3,8 +3,8 @@ package in.twizmwaz.cardinal.regions.type;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.BlockParser;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 
 
 /**
@@ -62,6 +62,10 @@ public class BlockRegion extends Region {
 
     public Location getLocation() {
         return new Location(GameHandler.getGameHandler().getMatchWorld(), x, y, z);
+    }
+
+    public Block getBlock() {
+        return this.getLocation().getBlock();
     }
 
 }

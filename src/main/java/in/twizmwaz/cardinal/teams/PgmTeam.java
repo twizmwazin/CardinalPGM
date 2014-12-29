@@ -128,7 +128,7 @@ public class PgmTeam {
         Random random = new Random();
         int index = random.nextInt(spawns.size());
         PointRegion point = spawns.get(index).getPoint();
-        return point.toLocation(GameHandler.getGameHandler().getMatchWorld());
+        return point.toLocation();
     }
 
     public Spawn getSpawn() {
