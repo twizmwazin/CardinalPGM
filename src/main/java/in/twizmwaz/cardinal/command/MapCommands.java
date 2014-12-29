@@ -1,13 +1,14 @@
 package in.twizmwaz.cardinal.command;
 
-import com.sk89q.minecraft.util.commands.ChatColor;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.data.Contributor;
 import in.twizmwaz.cardinal.data.MapInfo;
+import in.twizmwaz.cardinal.teams.PgmTeam;
 import in.twizmwaz.cardinal.util.DomUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
@@ -53,6 +54,18 @@ public class MapCommands {
                 }
             }
         }
+        if (mapInfo.getRules().size() > 0) {
+            sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Rules:");
+            for (int i = 1; i<= mapInfo.getRules().size(); i++) {
+                sender.sendMessage(ChatColor.WHITE + "" + i + ") " + ChatColor.GOLD + mapInfo.getRules().get(i - 1));
+            }
+        }
+        int total = 0;
+        for (PgmTeam team : GameHandler.getGameHandler().getMatch().getTeams()) {
+            if (team.isObserver()) break;
+            total = total + team.getMax();
+        }
+        sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Max players: " + ChatColor.RESET + "" + ChatColor.GOLD + total);
 
     }
 
