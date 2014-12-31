@@ -1,4 +1,4 @@
-package in.twizmwaz.cardinal.filter.type;
+package in.twizmwaz.cardinal.filter.type.logic;
 
 import in.twizmwaz.cardinal.filter.Filter;
 import in.twizmwaz.cardinal.filter.FilterState;
