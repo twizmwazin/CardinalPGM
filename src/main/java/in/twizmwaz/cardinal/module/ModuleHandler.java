@@ -9,6 +9,7 @@ import in.twizmwaz.cardinal.module.modules.friendlyFire.FriendlyFireBuilder;
 import in.twizmwaz.cardinal.module.modules.gamerules.GamerulesBuilder;
 import in.twizmwaz.cardinal.module.modules.hunger.HungerBuilder;
 import in.twizmwaz.cardinal.module.modules.itemRemove.ItemRemoveBuilder;
+import in.twizmwaz.cardinal.module.modules.killStreakCount.KillStreakBuilder;
 import in.twizmwaz.cardinal.module.modules.kit.KitBuilder;
 import in.twizmwaz.cardinal.module.modules.motd.MOTDBuilder;
 import in.twizmwaz.cardinal.module.modules.observers.ObserverModuleBuilder;
@@ -65,6 +66,7 @@ public class ModuleHandler {
         builders.add(new TeamModuleBuilder());
         builders.add(new SpawnModuleBuilder());
         builders.add(new ObserverModuleBuilder());
+        builders.add(new KillStreakBuilder());
     }
 
     public Set<Module> invokeModules(Match match) {
