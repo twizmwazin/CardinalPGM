@@ -52,7 +52,7 @@ public class CycleCommand {
             throw new CommandException("No map named " + input);
         } else {
             GameHandler.getGameHandler().getCycle().setMap(nextMap);
-            sender.sendMessage(ChatColor.DARK_PURPLE + "Set the next map to " + ChatColor.GOLD + nextMap);
+            sender.sendMessage(ChatColor.DARK_PURPLE + "Next map set to " + ChatColor.GOLD + nextMap);
         }
     }
 
