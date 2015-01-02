@@ -36,9 +36,9 @@ public class MapCommands {
             sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Authors:");
             for (Contributor contributor : mapInfo.getAuthors()) {
                 if (contributor.hasContribution()) {
-                    sender.sendMessage("* " + ChatColor.GOLD + contributor.getName() + ChatColor.RESET + " " + ChatColor.GREEN + "" + ChatColor.ITALIC + "(" + contributor.getContribution() + ")");
+                    sender.sendMessage("* " + ChatColor.RED + contributor.getName() + ChatColor.RESET + " " + ChatColor.GREEN + "" + ChatColor.ITALIC + "(" + contributor.getContribution() + ")");
                 } else {
-                    sender.sendMessage("* " + ChatColor.GOLD + contributor.getName());
+                    sender.sendMessage("* " + ChatColor.RED + contributor.getName());
                 }
             }
         } else {
@@ -48,9 +48,9 @@ public class MapCommands {
             sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Contributors:");
             for (Contributor contributor : mapInfo.getContributors()) {
                 if (contributor.hasContribution()) {
-                    sender.sendMessage("* " + ChatColor.GOLD + contributor.getName() + ChatColor.RESET + ChatColor.GREEN + "" + ChatColor.ITALIC + " (" + contributor.getContribution() + ")");
+                    sender.sendMessage("* " + ChatColor.RED + contributor.getName() + ChatColor.RESET + ChatColor.GREEN + "" + ChatColor.ITALIC + " (" + contributor.getContribution() + ")");
                 } else {
-                    sender.sendMessage("* " + ChatColor.GOLD + contributor.getName());
+                    sender.sendMessage("* " + ChatColor.RED + contributor.getName());
                 }
             }
         }
