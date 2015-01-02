@@ -1,6 +1,8 @@
 package in.twizmwaz.cardinal.teams.spawns;
 
 import in.twizmwaz.cardinal.regions.Region;
+import in.twizmwaz.cardinal.regions.parsers.BlockParser;
+import in.twizmwaz.cardinal.regions.type.BlockRegion;
 import org.bukkit.Bukkit;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -69,9 +71,7 @@ public class SpawnParser {
                             yaw = Integer.parseInt(subChild.getChild("point").getAttributeValue("yaw"));
                         }
                     }
-
                 }
-
                 List<Region> regions = new ArrayList<Region>();
                 for (Element regionElement : subChild.getChildren()) {
                     regions.add(Region.getRegion(regionElement));
@@ -81,11 +81,6 @@ public class SpawnParser {
                 }
             }
         }
-
-        if (result.size() < 1) {
-            Bukkit.getLogger().log(Level.SEVERE, "Failed to parse team Spawns!");
-        }
-
         return result;
     }
 
@@ -105,7 +100,11 @@ public class SpawnParser {
                     yaw = Integer.parseInt(working.getChild("point").getAttributeValue("yaw"));
                 } catch (Exception e) {}
                 List<Region> regions = new ArrayList<Region>();
-                regions.add(Region.getRegion(working.getChildren().get(0)));
+                try {
+                    regions.add(Region.getRegion(working.getChildren().get(0)));
+                } catch (IndexOutOfBoundsException e) {
+                    regions.add(new BlockRegion(new BlockParser(working)));
+                }
                 String kit = working.getAttributeValue("kit");
                 result.add(new Spawn(regions, yaw, kit));
             } catch (NullPointerException e) {

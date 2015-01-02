@@ -148,7 +148,7 @@ public class KitBuilder implements ModuleBuilder {
                 }
                 float walkSpeed = 0.2F;
                 try {
-                    walkSpeed = Float.parseFloat(element.getChild("walk-speed").getText());
+                    walkSpeed = Float.parseFloat(element.getChild("walk-speed").getText()) / 5;
                 } catch (NullPointerException e) {
 
                 }

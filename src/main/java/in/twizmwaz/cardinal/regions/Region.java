@@ -12,7 +12,10 @@ import in.twizmwaz.cardinal.regions.type.combinations.NegativeRegion;
 import in.twizmwaz.cardinal.regions.type.combinations.UnionRegion;
 import in.twizmwaz.cardinal.regions.type.modifications.MirroredRegion;
 import in.twizmwaz.cardinal.regions.type.modifications.TranslatedRegion;
+import org.bukkit.Bukkit;
 import org.jdom2.Element;
+
+import java.util.logging.Level;
 
 /**
  * Created by kevin on 10/26/14.
@@ -20,7 +23,7 @@ import org.jdom2.Element;
 public abstract class Region {
 
     public static Region getRegion(Element element) {
-        switch (element.getName()) {
+        switch (element.getName().toLowerCase()) {
             case "block":
                 return new BlockRegion(new BlockParser(element));
             case "point":
@@ -52,12 +55,17 @@ public abstract class Region {
             case "region":
                 if (element.getAttributeValue("name") != null) {
                     for (Element regionElement : GameHandler.getGameHandler().getMatch().getDocument().getRootElement().getChildren("regions")) {
-                        for (Element givenRegion : element.getChildren()) {
-                            if (givenRegion.getName().equalsIgnoreCase("apply")) break;
-                            return Region.getRegion(regionElement);
+                        for (Element givenRegion : regionElement.getChildren()) {
+                            if (!givenRegion.getName().equalsIgnoreCase("apply")) {
+                                if (givenRegion.getAttributeValue("name").equalsIgnoreCase(element.getAttributeValue("name")))
+                                    return getRegion(regionElement);
+                                Bukkit.broadcastMessage("skipped bc it is " + givenRegion.getAttributeValue("name") + ", I'm looking for " + element.getAttributeValue("name"));
+                            }
                         }
                     }
-                } else return getRegion(element.getChildren().get(0));
+                } else {
+                    return getRegion(element.getChildren().get(0));
+                }
             default:
                 return null;
         }

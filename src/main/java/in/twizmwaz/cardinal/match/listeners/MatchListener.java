@@ -39,7 +39,7 @@ public class MatchListener implements Listener {
     public void onMatchEnd(MatchEndEvent event) {
         Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # #");
         try {
-            Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# #     " + event.getTeam().getColor() + event.getTeam().getId() + " wins!" + ChatColor.DARK_PURPLE + "     # #");
+            Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# #     " + event.getTeam().getColor() + event.getTeam().getName() + " wins!" + ChatColor.DARK_PURPLE + "     # #");
         } catch (NullPointerException ex) {
 
         }

@@ -58,7 +58,7 @@ public class ModuleHandler {
         builders.add(new HungerBuilder());
         builders.add(new MapDifficultyBuilder());
         builders.add(new HungerBuilder());
-        builders.add(new ProjectilesBuilder());
+        //builders.add(new ProjectilesBuilder());
         builders.add(new TntTrackerBuilder());
         builders.add(new VisibilityBuilder());
         builders.add(new MOTDBuilder());
