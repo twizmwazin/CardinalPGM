@@ -71,7 +71,7 @@ public class PgmTeam {
         scoreboardTeam.addPlayer(event.getPlayer());
         event.getPlayer().setScoreboard(scoreboardTeam.getScoreboard());
         if (!event.getJoinType().equals(JoinType.JOIN)) {
-            event.getPlayer().sendMessage(ChatColor.GRAY + "You have joined " + event.getNewTeam().getColor() + event.getNewTeam().getName());
+            event.getPlayer().sendMessage(ChatColor.GRAY + "You joined the " + event.getNewTeam().getColor() + event.getNewTeam().getName());
         }
     }
 
