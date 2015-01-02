@@ -6,6 +6,8 @@ public interface GameObjective extends Module {
 
     public PgmTeam getTeam();
 
+    public String getName();
+
     public boolean isTouched();
 
     public boolean isComplete();

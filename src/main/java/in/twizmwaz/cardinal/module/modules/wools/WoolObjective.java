@@ -20,14 +20,16 @@ import org.bukkit.material.Wool;
 public class WoolObjective implements GameObjective {
 
     private final PgmTeam team;
+    private final String name;
     private final DyeColor color;
     private final BlockRegion place;
 
     private boolean touched;
     private boolean complete;
 
-    protected WoolObjective(final PgmTeam team, final DyeColor color, final BlockRegion place) {
+    protected WoolObjective(final PgmTeam team, final String name, final DyeColor color, final BlockRegion place) {
         this.team = team;
+        this.name  = name;
         this.color = color;
         this.place = place;
     }
@@ -40,6 +42,11 @@ public class WoolObjective implements GameObjective {
     @Override
     public PgmTeam getTeam() {
         return team;
+    }
+
+    @Override
+    public String getName() {
+        return this.name;
     }
 
     @Override
@@ -63,7 +70,7 @@ public class WoolObjective implements GameObjective {
             if (event.getBlock().getType().equals(Material.WOOL)) {
                     if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
                     this.complete = true;
-                    Bukkit.broadcastMessage(team.getColor() + event.getPlayer().getDisplayName() + ChatColor.WHITE + " placed " + StringUtils.convertDyeColorToChatColor(color) + color.toString().toUpperCase() + " WOOL" + ChatColor.WHITE + " for the " + team.getColor() + team.getName());
+                    Bukkit.broadcastMessage(team.getColor() + event.getPlayer().getDisplayName() + ChatColor.WHITE + " placed " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase() + ChatColor.WHITE + " for the " + team.getColor() + team.getName());
                     ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this);
                     Bukkit.getServer().getPluginManager().callEvent(compEvent);
                     event.setCancelled(false);
