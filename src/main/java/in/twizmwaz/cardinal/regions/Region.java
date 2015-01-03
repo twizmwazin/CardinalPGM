@@ -12,17 +12,15 @@ import in.twizmwaz.cardinal.regions.type.combinations.NegativeRegion;
 import in.twizmwaz.cardinal.regions.type.combinations.UnionRegion;
 import in.twizmwaz.cardinal.regions.type.modifications.MirroredRegion;
 import in.twizmwaz.cardinal.regions.type.modifications.TranslatedRegion;
-import org.bukkit.Bukkit;
+import org.jdom2.Document;
 import org.jdom2.Element;
-
-import java.util.logging.Level;
 
 /**
  * Created by kevin on 10/26/14.
  */
 public abstract class Region {
 
-    public static Region getRegion(Element element) {
+    public static Region getRegion(Element element, Document document) {
         switch (element.getName().toLowerCase()) {
             case "block":
                 return new BlockRegion(new BlockParser(element));
@@ -54,12 +52,11 @@ public abstract class Region {
                 return new MirroredRegion(new MirrorParser(element));
             case "region":
                 if (element.getAttributeValue("name") != null) {
-                    for (Element regionElement : GameHandler.getGameHandler().getMatch().getDocument().getRootElement().getChildren("regions")) {
+                    for (Element regionElement : document.getRootElement().getChildren("regions")) {
                         for (Element givenRegion : regionElement.getChildren()) {
-                            if (!givenRegion.getName().equalsIgnoreCase("apply")) {
-                                if (givenRegion.getAttributeValue("name").equalsIgnoreCase(element.getAttributeValue("name")))
-                                    return getRegion(regionElement);
-                                Bukkit.broadcastMessage("skipped bc it is " + givenRegion.getAttributeValue("name") + ", I'm looking for " + element.getAttributeValue("name"));
+                            if (givenRegion.getName().equalsIgnoreCase("apply")) continue;
+                            if (givenRegion.getAttributeValue("name").equalsIgnoreCase(element.getAttributeValue("name"))) {
+                                return getRegion(givenRegion);
                             }
                         }
                     }
@@ -69,6 +66,10 @@ public abstract class Region {
             default:
                 return null;
         }
+    }
+
+    public static Region getRegion(Element element) {
+        return getRegion(element, GameHandler.getGameHandler().getMatch().getDocument());
     }
 
     public abstract boolean contains(BlockRegion region);

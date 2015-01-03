@@ -3,13 +3,11 @@ package in.twizmwaz.cardinal.teams.spawns;
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.BlockParser;
 import in.twizmwaz.cardinal.regions.type.BlockRegion;
-import org.bukkit.Bukkit;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 public class SpawnParser {
 
@@ -26,14 +24,26 @@ public class SpawnParser {
                     if (teamValue == null) {
                         teamValue = subChild.getAttributeValue("team");
                     }
-                    int yaw = Integer.parseInt(spawnElement.getAttributeValue("yaw"));
+                    int yaw = 0;
+                    try {
+                        yaw = Integer.parseInt(child.getAttributeValue("yaw"));
+                    } catch (NumberFormatException e) {
+                    }
+                    try {
+                        yaw = Integer.parseInt(subChild.getAttributeValue("yaw"));
+                    } catch (NumberFormatException e) {
+                    }
+                    try {
+                        yaw = Integer.parseInt(spawnElement.getAttributeValue("yaw"));
+                    } catch (NumberFormatException e) {
+                    }
                     String kit;
                     kit = spawnElement.getAttributeValue("kit");
                     if (kit == null) kit = subChild.getAttributeValue("kit");
                     if (kit == null) kit = child.getAttributeValue("kit");
                     List<Region> regions = new ArrayList<>();
                     for (Element regionElement : spawnElement.getChildren()) {
-                        regions.add(Region.getRegion(regionElement));
+                        regions.add(Region.getRegion(regionElement, document));
                     }
                     if (teamId.toLowerCase().startsWith(teamValue)) {
                         result.add(new Spawn(regions, yaw, kit));
@@ -74,7 +84,7 @@ public class SpawnParser {
                 }
                 List<Region> regions = new ArrayList<Region>();
                 for (Element regionElement : subChild.getChildren()) {
-                    regions.add(Region.getRegion(regionElement));
+                    regions.add(Region.getRegion(regionElement, document));
                 }
                 if (teamId.toLowerCase().startsWith(teamValue)) {
                     result.add(new Spawn(regions, yaw, kit));
@@ -101,7 +111,7 @@ public class SpawnParser {
                 } catch (Exception e) {}
                 List<Region> regions = new ArrayList<Region>();
                 try {
-                    regions.add(Region.getRegion(working.getChildren().get(0)));
+                    regions.add(Region.getRegion(working.getChildren().get(0), document));
                 } catch (IndexOutOfBoundsException e) {
                     regions.add(new BlockRegion(new BlockParser(working)));
                 }
