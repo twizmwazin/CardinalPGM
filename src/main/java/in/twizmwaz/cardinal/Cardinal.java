@@ -3,7 +3,7 @@ package in.twizmwaz.cardinal;
 import com.sk89q.bukkit.util.CommandsManagerRegistration;
 import com.sk89q.minecraft.util.commands.*;
 import in.twizmwaz.cardinal.command.*;
-import in.twizmwaz.cardinal.command.match.StartAndEndCommand;
+import in.twizmwaz.cardinal.command.StartAndEndCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;

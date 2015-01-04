@@ -10,7 +10,7 @@ public class MirrorParser {
 
     public MirrorParser(Element element) {
         this.base = Region.getRegion(element.getChildren().get(0));
-        String[] origin = element.getAttributeValue("offset").split(",");
+        String[] origin = element.getAttributeValue("normal").split(",");
         this.xOrigin = Double.parseDouble(origin[0]);
         this.yOrigin = Double.parseDouble(origin[1]);
         this.zOrigin = Double.parseDouble(origin[2]);

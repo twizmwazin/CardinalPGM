@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.regions.parsers.modifiers.CombinationParser;
 import in.twizmwaz.cardinal.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.regions.type.PointRegion;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -13,13 +14,15 @@ import java.util.Random;
  */
 public class UnionRegion extends Region {
 
-    List<Region> regions;
+    private List<Region> regions;
 
     public UnionRegion(String name, List<Region> regions) {
+        regions = new ArrayList<>();
         this.regions.addAll(regions);
     }
 
     public UnionRegion(CombinationParser parser) {
+        regions = new ArrayList<>();
         this.regions.addAll(parser.getRegions());
     }
 

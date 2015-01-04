@@ -130,7 +130,7 @@ public class KitBuilder implements ModuleBuilder {
                 }
                 int health = -1;
                 try {
-                    health = Integer.parseInt(element.getChild("health").getText());
+                    health = Integer.parseInt(element.getChild("health").getText()) / 2;
                 } catch (NullPointerException e) {
 
                 }

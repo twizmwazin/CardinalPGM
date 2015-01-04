@@ -71,12 +71,13 @@ public class Kit implements Module {
 
         }
         if (health > -1) {
-            if (force) player.setHealth(health);
-            else player.setHealth(player.getHealth() + health);
+            if (force) player.setMaxHealth(health);
+            else player.setMaxHealth(player.getMaxHealth() + health);
         }
-        if (saturation > -1) {
+        try {
             if (force) player.setSaturation(saturation);
             else player.setSaturation(player.getSaturation() + saturation);
+        } catch (IllegalArgumentException e) {
         }
         if (foodLevel > -1) {
             if (force) player.setFoodLevel(foodLevel);

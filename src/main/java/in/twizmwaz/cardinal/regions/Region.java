@@ -39,13 +39,14 @@ public abstract class Region {
             case "sphere":
                 return new SphereRegion(new SphereParser(element));
             case "complement":
-                return new ComplementRegion(new CombinationParser(element));
+                return new ComplementRegion(new CombinationParser(element, document));
             case "intersect":
-                return new IntersectRegion(new CombinationParser(element));
+                return new IntersectRegion(new CombinationParser(element, document));
             case "negative":
-                return new NegativeRegion(new CombinationParser(element));
+                return new NegativeRegion(new CombinationParser(element, document));
             case "union":
-                return new UnionRegion((new CombinationParser(element)));
+            case "regions":
+                return new UnionRegion((new CombinationParser(element, document)));
             case "translate":
                 return new TranslatedRegion(new TranslateParser(element));
             case "mirror":

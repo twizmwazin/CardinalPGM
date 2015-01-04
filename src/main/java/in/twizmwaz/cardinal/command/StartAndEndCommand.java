@@ -1,4 +1,4 @@
-package in.twizmwaz.cardinal.command.match;
+package in.twizmwaz.cardinal.command;
 
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
@@ -29,9 +29,7 @@ public class StartAndEndCommand {
             GameHandler.getGameHandler().getMatch().start(time);
         } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
             try {
-                GameHandler.getGameHandler().getMatch().getStartTimer().setCancelled(true);
                 GameHandler.getGameHandler().getMatch().getStartTimer().setTime(cmd.getInteger(0));
-                GameHandler.getGameHandler().getMatch().getStartTimer().run();
             } catch (NullPointerException e) {
 
             }

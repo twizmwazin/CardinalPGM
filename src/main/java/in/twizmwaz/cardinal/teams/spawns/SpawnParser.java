@@ -78,7 +78,7 @@ public class SpawnParser {
                         try {
                             yaw = Integer.parseInt(child.getAttributeValue("yaw"));
                         } catch (NumberFormatException ex) {
-                            yaw = Integer.parseInt(subChild.getChild("point").getAttributeValue("yaw"));
+                            yaw = Integer.parseInt(subChild.getChildren().get(0).getAttributeValue("yaw"));
                         }
                     }
                 }
