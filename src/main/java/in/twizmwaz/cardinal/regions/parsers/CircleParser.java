@@ -13,7 +13,7 @@ public class CircleParser {
     private double radius;
 
     public CircleParser(Element element) {
-        String[] centArray = element.getAttribute("center").getValue().split(",");
+        String[] centArray = element.getAttribute("center").getValue().replaceAll(" ", "").split(",");
         this.centerX = NumUtils.parseDouble(centArray[0]);
         this.centerZ = NumUtils.parseDouble(centArray[1]);
         this.radius = NumUtils.parseDouble(element.getAttribute("radius").getValue());

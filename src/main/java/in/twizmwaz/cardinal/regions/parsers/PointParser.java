@@ -20,17 +20,17 @@ public class PointParser {
             this.y = subPoint.getY();
             this.z = subPoint.getZ();
         } else {
-            this.x = NumUtils.parseDouble(element.getText().split(",")[0]);
-            this.y = NumUtils.parseDouble(element.getText().split(",")[1]);
-            this.z = NumUtils.parseDouble(element.getText().split(",")[2]);
+            this.x = NumUtils.parseDouble(element.getText().replaceAll(" ", "").split(",")[0]);
+            this.y = NumUtils.parseDouble(element.getText().replaceAll(" ", "").split(",")[1]);
+            this.z = NumUtils.parseDouble(element.getText().replaceAll(" ", "").split(",")[2]);
         }
         try {
-            this.yaw = Float.parseFloat(element.getAttributeValue("yaw"));
+            this.yaw = Float.parseFloat(element.getAttributeValue("yaw").replaceAll(" ", ""));
         } catch (Exception ex) {
             this.yaw = 0F;
         }
         try {
-            this.pitch = Float.parseFloat(element.getAttributeValue("pitch"));
+            this.pitch = Float.parseFloat(element.getAttributeValue("pitch").replaceAll(" ", ""));
         } catch (Exception ex) {
             this.pitch = 0F;
         }

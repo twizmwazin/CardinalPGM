@@ -15,9 +15,9 @@ public class CylinderParser {
     private double height;
 
     public CylinderParser(Element element) {
-        this.radius = NumUtils.parseDouble(element.getAttribute("radius").getValue());
-        this.height = NumUtils.parseDouble(element.getAttribute("height").getValue());
-        String[] split = element.getAttribute("base").getValue().split(",");
+        this.radius = NumUtils.parseDouble(element.getAttribute("radius").getValue().replaceAll(" ", ""));
+        this.height = NumUtils.parseDouble(element.getAttribute("height").getValue().replaceAll(" ", ""));
+        String[] split = element.getAttribute("base").getValue().replaceAll(" ", "").split(",");
         this.baseX = NumUtils.parseDouble(split[0]);
         this.baseY = NumUtils.parseDouble(split[1]);
         this.baseZ = NumUtils.parseDouble(split[2]);

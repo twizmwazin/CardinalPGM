@@ -24,17 +24,22 @@ public class SpawnParser {
                     if (teamValue == null) {
                         teamValue = subChild.getAttributeValue("team");
                     }
+                    String yaws = null;
+                    try {
+                        yaws = child.getAttributeValue("yaw").replaceAll(" ", "");
+                    } catch (NullPointerException e) {
+                    }
+                    try {
+                        yaws = subChild.getAttributeValue("yaw").replaceAll(" ", "");
+                    } catch (NullPointerException e) {
+                    }
+                    try {
+                        yaws = spawnElement.getAttributeValue("yaw").replaceAll(" ", "");
+                    } catch (NullPointerException e) {
+                    }
                     int yaw = 0;
                     try {
-                        yaw = Integer.parseInt(child.getAttributeValue("yaw"));
-                    } catch (NumberFormatException e) {
-                    }
-                    try {
-                        yaw = Integer.parseInt(subChild.getAttributeValue("yaw"));
-                    } catch (NumberFormatException e) {
-                    }
-                    try {
-                        yaw = Integer.parseInt(spawnElement.getAttributeValue("yaw"));
+                        yaw = Integer.parseInt(yaws);
                     } catch (NumberFormatException e) {
                     }
                     String kit;
@@ -66,19 +71,19 @@ public class SpawnParser {
                 try {
                     String[] angle;
                     try {
-                        angle = subChild.getAttributeValue("angle").split(",");
+                        angle = subChild.getAttributeValue("angle").replaceAll(" ", "").split(",");
                     } catch (NullPointerException e) {
-                        angle = child.getAttributeValue("angle").split(",");
+                        angle = child.getAttributeValue("angle").replaceAll(" ", "").split(",");
                     }
                     yaw = 0;
                 } catch (NullPointerException exc) {
                     try {
-                        yaw = Integer.parseInt(subChild.getAttributeValue("yaw"));
-                    } catch (NumberFormatException e) {
+                        yaw = Integer.parseInt(subChild.getAttributeValue("yaw").replaceAll(" ", ""));
+                    } catch (Exception e) {
                         try {
-                            yaw = Integer.parseInt(child.getAttributeValue("yaw"));
-                        } catch (NumberFormatException ex) {
-                            yaw = Integer.parseInt(subChild.getChildren().get(0).getAttributeValue("yaw"));
+                            yaw = Integer.parseInt(child.getAttributeValue("yaw").replaceAll(" ", ""));
+                        } catch (Exception ex) {
+                            yaw = Integer.parseInt(subChild.getChildren().get(0).getAttributeValue("yaw").replaceAll(" ", ""));
                         }
                     }
                 }
@@ -101,13 +106,13 @@ public class SpawnParser {
                 Element working = spawns.getChild("default");
                 int yaw = 0;
                 try {
-                    yaw = Integer.parseInt(spawns.getAttributeValue("yaw"));
+                    yaw = Integer.parseInt(spawns.getAttributeValue("yaw").replaceAll(" ", ""));
                 } catch (Exception e) {}
                 try {
-                    yaw = Integer.parseInt(working.getAttributeValue("yaw"));
+                    yaw = Integer.parseInt(working.getAttributeValue("yaw").replaceAll(" ", ""));
                 } catch (Exception e) {}
                 try {
-                    yaw = Integer.parseInt(working.getChild("point").getAttributeValue("yaw"));
+                    yaw = Integer.parseInt(working.getChild("point").getAttributeValue("yaw").replaceAll(" ", ""));
                 } catch (Exception e) {}
                 List<Region> regions = new ArrayList<Region>();
                 try {

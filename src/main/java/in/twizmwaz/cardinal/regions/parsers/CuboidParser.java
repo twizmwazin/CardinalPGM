@@ -16,11 +16,11 @@ public class CuboidParser {
     private double zMax;
 
     public CuboidParser(Element element) {
-        String[] mins = element.getAttribute("min").getValue().split(",");
+        String[] mins = element.getAttribute("min").getValue().replaceAll(" ", "").split(",");
         this.xMin = NumUtils.parseDouble(mins[0]);
         this.yMin = NumUtils.parseDouble(mins[1]);
         this.zMin = NumUtils.parseDouble(mins[2]);
-        String[] maxs = element.getAttribute("max").getValue().split(",");
+        String[] maxs = element.getAttribute("max").getValue().replaceAll(" ", "").split(",");
         this.xMax = NumUtils.parseDouble(maxs[0]);
         this.yMax = NumUtils.parseDouble(maxs[1]);
         this.zMax = NumUtils.parseDouble(maxs[2]);

@@ -16,8 +16,8 @@ public class RectangleParser {
     public RectangleParser(Element element) {
         String min = element.getAttribute("min").getValue();
         String max = element.getAttribute("max").getValue();
-        String[] mins = min.split(",");
-        String[] maxs = max.split(",");
+        String[] mins = min.replaceAll(" ", "").split(",");
+        String[] maxs = max.replaceAll(" ", "").split(",");
         xMin = NumUtils.parseDouble(mins[0]);
         zMin = NumUtils.parseDouble(mins[1]);
         xMax = NumUtils.parseDouble(maxs[0]);

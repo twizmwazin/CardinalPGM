@@ -36,10 +36,9 @@ public class MapInfo {
         contributors = new ArrayList<>();
         for (Element element : root.getChildren("contributors")) {
             for (Element author : element.getChildren()) {
-                if (author.hasAttributes()) {
-                    contributors.add(new Contributor(author.getText(), author.getAttribute("contribution").getValue()));
-                } else {
-                    contributors.add(new Contributor(author.getText()));
+                try {
+                    contributors.add(new Contributor(author.getText(), author.getAttributeValue("contribution")));
+                } catch (NullPointerException e) {
                 }
             }
 

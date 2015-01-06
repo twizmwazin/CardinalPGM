@@ -18,11 +18,11 @@ public class SphereParser {
     public SphereParser(Element element) {
         this.origin = element.getAttribute("origin").getValue();
         this.rad = element.getAttribute("radius").getValue();
-        String[] origina = this.origin.split(",");
+        String[] origina = this.origin.replaceAll(" ", "").split(",");
         this.originx = NumUtils.parseDouble(origina[0]);
         this.originy = NumUtils.parseDouble(origina[1]);
         this.originz = NumUtils.parseDouble(origina[2]);
-        this.radius = NumUtils.parseDouble(rad);
+        this.radius = NumUtils.parseDouble(rad.replaceAll(" ", ""));
     }
 
     public double getOriginx() {

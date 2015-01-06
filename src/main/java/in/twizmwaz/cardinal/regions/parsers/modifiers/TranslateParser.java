@@ -10,7 +10,7 @@ public class TranslateParser {
 
     public TranslateParser(Element element) {
         this.base = Region.getRegion(element.getChildren().get(0));
-        String[] offset = element.getAttributeValue("offset").split(",");
+        String[] offset = element.getAttributeValue("offset").replaceAll(" ", "").split(",");
         this.xOffset = Double.parseDouble(offset[0]);
         this.yOffset = Double.parseDouble(offset[1]);
         this.zOffset = Double.parseDouble(offset[2]);
