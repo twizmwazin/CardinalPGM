@@ -1,8 +1,14 @@
 package in.twizmwaz.cardinal.regions.type;
 
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.CuboidParser;
 import in.twizmwaz.cardinal.util.NumUtils;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kevin on 10/26/14.
@@ -80,6 +86,19 @@ public class CuboidRegion extends Region {
     @Override
     public BlockRegion getCenterBlock() {
         return new BlockRegion(this.xMax - this.xMin, this.yMax - yMin, this.zMax - this.zMin);
+    }
+
+    @Override
+    public List<Block> getBlocks() {
+        List<Block> results = new ArrayList<>();
+        for (int x = (int) getXMin(); x <= getXMax(); x++) {
+            for (int z = (int) getZMin(); z <= getZMax(); z++) {
+                for (int y = (int) getYMin(); y <= yMax; y++) {
+                    results.add((new Location(GameHandler.getGameHandler().getMatchWorld(), x, y, z).getBlock()));
+                }
+            }
+        }
+        return results;
     }
 
 

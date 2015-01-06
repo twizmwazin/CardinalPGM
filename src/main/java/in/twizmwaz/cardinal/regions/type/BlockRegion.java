@@ -6,6 +6,9 @@ import in.twizmwaz.cardinal.regions.parsers.BlockParser;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Created by kevin on 10/26/14.
@@ -58,6 +61,13 @@ public class BlockRegion extends Region {
     @Override
     public BlockRegion getCenterBlock() {
         return this;
+    }
+
+    @Override
+    public List<Block> getBlocks() {
+        List<Block> results = new ArrayList<>();
+        results.add(getBlock());
+        return results;
     }
 
     public Location getLocation() {

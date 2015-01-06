@@ -6,6 +6,9 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by kevin on 11/20/14.
  */
@@ -58,6 +61,13 @@ public class PointRegion extends BlockRegion {
     @Override
     public BlockRegion getCenterBlock() {
         return new BlockRegion(this.x, this.y, this.z);
+    }
+
+    @Override
+    public List<Block> getBlocks() {
+        List<Block> results = new ArrayList<>();
+        results.add(toLocation().getBlock());
+        return results;
     }
 
     public Block getBlock() {

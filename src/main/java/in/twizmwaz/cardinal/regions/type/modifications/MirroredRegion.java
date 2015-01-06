@@ -4,6 +4,10 @@ import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.modifiers.MirrorParser;
 import in.twizmwaz.cardinal.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.regions.type.PointRegion;
+import org.bukkit.block.Block;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MirroredRegion extends Region {
 
@@ -59,5 +63,14 @@ public class MirroredRegion extends Region {
     @Override
     public BlockRegion getCenterBlock() {
         return new BlockRegion(2 * base.getCenterBlock().getX() - base.getCenterBlock().getX(), 2 * base.getCenterBlock().getY() - base.getCenterBlock().getY(), 2 * base.getCenterBlock().getZ() - base.getCenterBlock().getZ());
+    }
+
+    @Override
+    public List<Block> getBlocks() {
+        List<Block> results = new ArrayList<>();
+        for (Block block : getBase().getBlocks()) {
+            results.add(new BlockRegion(block.getX() - 2 * getXOrigin(), block.getY() - 2 * getYOrigin(), block.getZ() - 2 * getZOrigin()).getBlock());
+        }
+        return results;
     }
 }

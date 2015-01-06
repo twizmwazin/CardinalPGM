@@ -4,6 +4,7 @@ import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.modifiers.CombinationParser;
 import in.twizmwaz.cardinal.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.regions.type.PointRegion;
+import org.bukkit.block.Block;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,5 +67,14 @@ public class UnionRegion extends Region {
             zTotal = zTotal + child.getCenterBlock().getZ();
         }
         return new BlockRegion(xTotal / regions.size(), yTotal / regions.size(), zTotal / regions.size());
+    }
+
+    @Override
+    public List<Block> getBlocks() {
+        List<Block> results = new ArrayList<>();
+        for (Region region : regions) {
+            results.addAll(region.getBlocks());
+        }
+        return results;
     }
 }

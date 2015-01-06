@@ -5,7 +5,9 @@ import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.modifiers.CombinationParser;
 import in.twizmwaz.cardinal.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.regions.type.PointRegion;
+import org.bukkit.block.Block;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -72,5 +74,18 @@ public class ComplementRegion extends Region {
             zTotal = zTotal + child.getCenterBlock().getZ();
         }
         return new BlockRegion(xTotal / regions.size(), yTotal / regions.size(), zTotal / regions.size());
+    }
+
+    @Override
+    public List<Block> getBlocks() {
+        List<Block> results = new ArrayList<>();
+        try {
+            results.addAll(regions.get(0).getBlocks()); 
+            for (int i = 1; i < regions.size(); i++) {
+                results.removeAll(regions.get(i).getBlocks());
+            }
+        } catch (IndexOutOfBoundsException e) {
+        }
+        return results;
     }
 }

@@ -4,6 +4,7 @@ import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.modifiers.CombinationParser;
 import in.twizmwaz.cardinal.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.regions.type.PointRegion;
+import org.bukkit.block.Block;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,11 +38,8 @@ public class IntersectRegion extends Region {
                 working.remove(region);
                 for (Region work : working) {
                     if (work.contains(region)) return true;
-
                 }
-
             }
-
         }
         return false;
     }
@@ -81,5 +79,17 @@ public class IntersectRegion extends Region {
             zTotal = zTotal + child.getCenterBlock().getZ();
         }
         return new BlockRegion(xTotal / regions.size(), yTotal / regions.size(), zTotal / regions.size());
+    }
+
+    @Override
+    public List<Block> getBlocks() {
+        List<Block> results = new ArrayList<>();
+        try {
+            for (Block block : regions.get(0).getBlocks()) {
+                if (contains(new BlockRegion(block.getX(), block.getY(), block.getZ()))) results.add(block);
+            }
+        } catch (IndexOutOfBoundsException e) {
+        }
+        return results;
     }
 }

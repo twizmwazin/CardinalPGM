@@ -4,7 +4,9 @@ import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.modifiers.CombinationParser;
 import in.twizmwaz.cardinal.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.regions.type.PointRegion;
+import org.bukkit.block.Block;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -63,5 +65,11 @@ public class NegativeRegion extends Region {
             zTotal = zTotal + child.getCenterBlock().getZ();
         }
         return new BlockRegion(xTotal / regions.size(), yTotal / regions.size(), zTotal / regions.size());
+    }
+
+    @Override
+    public List<Block> getBlocks() {
+        //I'm aware this is pretty much awful. Anyone feel free to make a pull request if they have any good way of going about this.
+        return new ArrayList<Block>();
     }
 }

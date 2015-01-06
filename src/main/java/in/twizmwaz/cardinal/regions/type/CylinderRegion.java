@@ -4,6 +4,10 @@ package in.twizmwaz.cardinal.regions.type;
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.CylinderParser;
 import in.twizmwaz.cardinal.util.NumUtils;
+import org.bukkit.block.Block;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CylinderRegion extends Region {
 
@@ -72,5 +76,15 @@ public class CylinderRegion extends Region {
     @Override
     public BlockRegion getCenterBlock() {
         return (new BlockRegion(this.baseX, this.baseY + .5 * height, this.baseZ));
+    }
+
+    @Override
+    public List<Block> getBlocks() {
+        List<Block> results = new ArrayList<>();
+        CuboidRegion bound = new CuboidRegion(baseX - radius, baseY, baseZ - radius, baseX + radius, baseY + height, baseZ + radius);
+        for (Block block : bound.getBlocks()) {
+            if (contains(new BlockRegion(block.getX(), block.getY(), block.getZ()))) results.add(block);
+        }
+        return results;
     }
 }

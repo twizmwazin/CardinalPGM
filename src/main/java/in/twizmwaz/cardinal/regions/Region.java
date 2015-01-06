@@ -12,8 +12,11 @@ import in.twizmwaz.cardinal.regions.type.combinations.NegativeRegion;
 import in.twizmwaz.cardinal.regions.type.combinations.UnionRegion;
 import in.twizmwaz.cardinal.regions.type.modifications.MirroredRegion;
 import in.twizmwaz.cardinal.regions.type.modifications.TranslatedRegion;
+import org.bukkit.block.Block;
 import org.jdom2.Document;
 import org.jdom2.Element;
+
+import java.util.List;
 
 /**
  * Created by kevin on 10/26/14.
@@ -80,6 +83,7 @@ public abstract class Region {
     public abstract PointRegion getRandomPoint();
 
     public abstract BlockRegion getCenterBlock();
-
+    
+    public abstract List<Block> getBlocks();
 
 }

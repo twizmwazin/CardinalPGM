@@ -2,6 +2,10 @@ package in.twizmwaz.cardinal.regions.type;
 
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.EmptyParser;
+import org.bukkit.block.Block;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kevin on 10/26/14.
@@ -33,4 +37,11 @@ public class EmptyRegion extends Region {
     public BlockRegion getCenterBlock() {
         return null;
     }
+
+    @Override
+    public List<Block> getBlocks() {
+        return new ArrayList<Block>();
+    }
+
+
 }

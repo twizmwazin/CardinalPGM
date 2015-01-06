@@ -4,6 +4,10 @@ import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.modifiers.TranslateParser;
 import in.twizmwaz.cardinal.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.regions.type.PointRegion;
+import org.bukkit.block.Block;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TranslatedRegion extends Region {
 
@@ -60,5 +64,14 @@ public class TranslatedRegion extends Region {
     public BlockRegion getCenterBlock() {
         BlockRegion baseCenter = base.getCenterBlock();
         return new BlockRegion(baseCenter.getX() + xOffset, baseCenter.getY() + yOffset, baseCenter.getZ() + zOffset);
+    }
+
+    @Override
+    public List<Block> getBlocks() {
+        List<Block> results = new ArrayList<>();
+        for (Block block : getBase().getBlocks()) {
+            results.add(new BlockRegion(block.getX() - 2 * getXOffset(), block.getY() - 2 * getYOffset(), block.getZ() - 2 * getZOffset()).getBlock());
+        }
+        return results;
     }
 }

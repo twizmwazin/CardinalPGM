@@ -4,6 +4,10 @@ package in.twizmwaz.cardinal.regions.type;
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.SphereParser;
 import in.twizmwaz.cardinal.util.NumUtils;
+import org.bukkit.block.Block;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kevin on 10/26/14.
@@ -67,12 +71,22 @@ public class SphereRegion extends Region {
         double e = NumUtils.randomInterval(0, radius);
         double f = NumUtils.randomInterval(0, 360);
 
-        return new PointRegion(originX + a * Math.sin(b), originY + c * Math.sin(d), originZ + e * Math.sin(d));
+        return new PointRegion(originX + a * Math.sin(b), originY + c * Math.sin(d), originZ + e * Math.sin(f));
     }
 
     @Override
     public BlockRegion getCenterBlock() {
         return new BlockRegion(this.getOriginx(), this.getOriginy(), this.originZ);
+    }
+
+    @Override
+    public List<Block> getBlocks() {
+        List<Block> results = new ArrayList<>();
+        CuboidRegion bound = new CuboidRegion(originX - radius, originY - radius, originZ - radius, originX + radius, originY + radius, originZ + radius);
+        for (Block block : bound.getBlocks()) {
+            if (contains(new BlockRegion(block.getX(), block.getY(), block.getZ()))) results.add(block);
+        }
+        return results;
     }
 
 }
