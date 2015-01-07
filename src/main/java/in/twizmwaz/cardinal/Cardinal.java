@@ -4,15 +4,18 @@ import com.sk89q.bukkit.util.CommandsManagerRegistration;
 import com.sk89q.minecraft.util.commands.*;
 import in.twizmwaz.cardinal.command.*;
 import in.twizmwaz.cardinal.command.StartAndEndCommand;
+import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.logging.Level;
+
 public class Cardinal extends JavaPlugin {
 
     private static GameHandler gameHandler;
-    private static JavaPlugin plugin;
     private CommandsManager<CommandSender> commands;
 
     @Override
@@ -57,9 +60,15 @@ public class Cardinal extends JavaPlugin {
     }
 
     public void onEnable() {
+        saveDefaultConfig();
         setupCommands();
-        gameHandler = new GameHandler(this);
-        plugin = this;
+        try {
+            gameHandler = new GameHandler(this);
+        } catch (RotationLoadException e) {
+            Bukkit.getLogger().log(Level.SEVERE, "CardinalPGM failed to initialize because of an invalid rotation configuration.");
+            setEnabled(false);
+        }
+
     }
 
     public GameHandler getGameHandler() {
@@ -67,7 +76,7 @@ public class Cardinal extends JavaPlugin {
     }
 
     public JavaPlugin getPlugin() {
-        return plugin;
+        return this;
     }
 
 }

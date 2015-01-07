@@ -71,7 +71,7 @@ public class MapCommands {
 
     @Command(aliases = {"next", "nextmap"}, desc = "Shows next map.", usage = "")
     public static void next(final CommandContext cmd, CommandSender sender) {
-        String nextMap = GameHandler.getGameHandler().getRotation().getNext();
+        String nextMap = GameHandler.getGameHandler().getRotation().getNext().getName();
         try {
             Document doc = DomUtil.parse(new File("maps/" + nextMap + "/map.xml"));
             MapInfo mapInfo = new MapInfo(doc);

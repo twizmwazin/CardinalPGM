@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.command;
 
 import com.sk89q.minecraft.util.commands.*;
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.rotation.LoadedMap;
 import org.bukkit.command.CommandSender;
 
 /**
@@ -17,7 +18,7 @@ public class CycleCommand {
         }
         try {
             GameHandler.getGameHandler().startCycleTimer(cmd.getInteger(0));
-        } catch (IndexOutOfBoundsException ex) {
+        } catch (IndexOutOfBoundsException e) {
             GameHandler.getGameHandler().startCycleTimer(30);
         }
 
@@ -35,15 +36,15 @@ public class CycleCommand {
         } catch (IndexOutOfBoundsException ex) {
             throw new CommandException("Please specify a map!");
         }
-        String nextMap = null;
-        for (String loadedMap : GameHandler.getGameHandler().getRotation().getLoaded()) {
-            if (loadedMap.toLowerCase().replaceAll(" ", "").equalsIgnoreCase(input.toLowerCase())) {
+        LoadedMap nextMap = null;
+        for (LoadedMap loadedMap : GameHandler.getGameHandler().getRotation().getLoaded()) {
+            if (loadedMap.getName().toLowerCase().replaceAll(" ", "").equalsIgnoreCase(input.toLowerCase())) {
                 nextMap = loadedMap;
             }
         }
         if (nextMap == null) {
-            for (String loadedMap : GameHandler.getGameHandler().getRotation().getLoaded()) {
-                if (loadedMap.toLowerCase().replaceAll(" ", "").startsWith(input.toLowerCase())) {
+            for (LoadedMap loadedMap : GameHandler.getGameHandler().getRotation().getLoaded()) {
+                if (loadedMap.getName().toLowerCase().replaceAll(" ", "").startsWith(input.toLowerCase())) {
                     nextMap = loadedMap;
                 }
             }
@@ -52,7 +53,7 @@ public class CycleCommand {
             throw new CommandException("No map named " + input);
         } else {
             GameHandler.getGameHandler().getCycle().setMap(nextMap);
-            sender.sendMessage(ChatColor.DARK_PURPLE + "Next map set to " + ChatColor.GOLD + nextMap);
+            sender.sendMessage(ChatColor.DARK_PURPLE + "Next map set to " + ChatColor.GOLD + nextMap.getName());
         }
     }
 

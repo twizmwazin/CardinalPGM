@@ -30,7 +30,7 @@ public class Match {
     private final GameHandler handler;
     private final ModuleHandler moduleHandler;
     private final UUID uuid;
-    private final Set<Module> modules;
+    private Set<Module> modules;
 
     private MatchState state;
     private Document document;
@@ -61,15 +61,10 @@ public class Match {
         teams = teamBuilder.getTeams();
         this.startTimer = new StartTimer(this, 30);
 
-        this.modules = moduleHandler.invokeModules(this);
-
         mapInfo = new MapInfo(document);
         this.state = MatchState.WAITING;
         listeners.add(new MatchListener(plugin, this));
         listeners.add(new ObjectiveListener(plugin, this));
-
-        Bukkit.getServer().getPluginManager().callEvent(new CycleCompleteEvent(this));
-
     }
 
     public void unregister() {
@@ -168,4 +163,7 @@ public class Match {
         return teams;
     }
 
+    public void setModules(Set<Module> modules) {
+        this.modules = modules;
+    }
 }

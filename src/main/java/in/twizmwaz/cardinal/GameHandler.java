@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal;
 
 import in.twizmwaz.cardinal.cycle.Cycle;
 import in.twizmwaz.cardinal.cycle.CycleTimer;
+import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.ModuleHandler;
@@ -31,31 +32,18 @@ public class GameHandler {
     private CycleTimer cycleTimer;
     private ModuleHandler moduleHandler;
 
-    public GameHandler(JavaPlugin plugin) {
+    public GameHandler(JavaPlugin plugin) throws RotationLoadException {
         this.plugin = plugin;
         handler = this;
         moduleHandler = new ModuleHandler(plugin, this);
-        rotation = new Rotation(new File("rotation.txt"));
-        initialCycle();
+        rotation = new Rotation(plugin);
+        cycle = new Cycle(rotation.getNext(), UUID.randomUUID(), this);
+        cycleAndMakeMatch();
+        //initialCycle();
     }
 
     public static GameHandler getGameHandler() {
         return handler;
-    }
-
-    private void initialCycle() {
-        try {
-            this.cycle = new Cycle(rotation.getEntry(0), UUID.randomUUID(), this);
-            this.cycle.run();
-            rotation.move();
-        } catch (RotationLoadException ex) {
-            Bukkit.getLogger().log(Level.WARNING, ex.getMessage());
-        }
-        this.matchUUID = cycle.getUuid();
-        this.match = new Match(this, matchUUID);
-        cycle = new Cycle(rotation.getNext(), UUID.randomUUID(), this);
-
-
     }
 
     public void cycleAndMakeMatch() {
@@ -63,11 +51,17 @@ public class GameHandler {
         rotation.move();
         World oldMatchWorld = matchWorld;
         cycle.run();
-        Bukkit.unloadWorld(oldMatchWorld, true);
         this.matchUUID = cycle.getUuid();
-        match.unregister();
+        try {
+            match.unregister();
+        } catch (NullPointerException e) {
+        }
         this.match = new Match(this, matchUUID);
+        match.setModules(moduleHandler.invokeModules(match));
+        Bukkit.getServer().getPluginManager().callEvent(new CycleCompleteEvent(match));
+        rotation.move();
         cycle = new Cycle(rotation.getNext(), UUID.randomUUID(), this);
+        Bukkit.unloadWorld(oldMatchWorld, true);
     }
 
     public Rotation getRotation() {
