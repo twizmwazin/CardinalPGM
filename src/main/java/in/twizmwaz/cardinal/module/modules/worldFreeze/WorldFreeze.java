@@ -5,7 +5,7 @@ import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
 public class WorldFreeze implements Module {
@@ -23,6 +23,62 @@ public class WorldFreeze implements Module {
 
     @EventHandler
     public void onLiquidFlow(BlockFromToEvent event) {
+        if (match.getState() != MatchState.PLAYING) {
+            event.setCancelled(true);
+        }
+    }
+    
+    @EventHandler
+    public void onBlockBurn(BlockBurnEvent event) {
+        if (match.getState() != MatchState.PLAYING) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onBlockDispense(BlockDispenseEvent event) {
+        if (match.getState() != MatchState.PLAYING) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onBlockDispense(BlockDispenseEntityEvent event) {
+        if (match.getState() != MatchState.PLAYING) {
+            event.setCancelled(true);
+        }
+    }
+    
+    @EventHandler
+    public void onBlockFade(BlockFadeEvent event) {
+        if (match.getState() != MatchState.PLAYING) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onBlockForm(BlockFormEvent event) {
+        if (match.getState() != MatchState.PLAYING) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onBlockGrow(BlockGrowEvent event) {
+        if (match.getState() != MatchState.PLAYING) {
+            event.setCancelled(true);
+        }
+    }
+    
+    @EventHandler
+    public void onBlockIgnite(BlockIgniteEvent event) {
+        if (match.getState() != MatchState.PLAYING) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onBlockPysics(BlockPhysicsEvent event) {
         if (match.getState() != MatchState.PLAYING) {
             event.setCancelled(true);
         }
