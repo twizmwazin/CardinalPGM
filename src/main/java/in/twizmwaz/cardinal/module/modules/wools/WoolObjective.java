@@ -21,15 +21,17 @@ public class WoolObjective implements GameObjective {
 
     private final PgmTeam team;
     private final String name;
+    private final String id;
     private final DyeColor color;
     private final BlockRegion place;
 
     private boolean touched;
     private boolean complete;
 
-    protected WoolObjective(final PgmTeam team, final String name, final DyeColor color, final BlockRegion place) {
+    protected WoolObjective(final PgmTeam team, final String name, final String id, final DyeColor color, final BlockRegion place) {
         this.team = team;
         this.name  = name;
+        this.id = id;
         this.color = color;
         this.place = place;
     }
@@ -47,6 +49,11 @@ public class WoolObjective implements GameObjective {
     @Override
     public String getName() {
         return this.name;
+    }
+
+    @Override
+    public String getId() {
+        return id;
     }
 
     @Override
