@@ -236,7 +236,7 @@ public class ObserverModule implements Module {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         try {
-            if (match.getTeam(event.getEntity()).isObserver() || match.isRunning()) {
+            if (match.getTeam(event.getEntity()).isObserver() || !match.isRunning()) {
                 event.getDrops().clear();
                 event.setDroppedExp(0);
             }
