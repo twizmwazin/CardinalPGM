@@ -13,7 +13,7 @@ public class TeamFilter extends Filter {
 
     private final PgmTeam team;
 
-    protected TeamFilter(final PgmTeam team) {
+    public TeamFilter(final PgmTeam team) {
         this.team = team;
     }
 
