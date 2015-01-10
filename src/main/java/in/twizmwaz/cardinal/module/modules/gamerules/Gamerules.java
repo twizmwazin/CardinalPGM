@@ -2,11 +2,8 @@ package in.twizmwaz.cardinal.module.modules.gamerules;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.Module;
-import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.entity.ItemSpawnEvent;
 
 import java.util.Set;
 

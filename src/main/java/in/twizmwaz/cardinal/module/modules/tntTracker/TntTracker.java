@@ -12,17 +12,24 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
-import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Set;
 
 public class TntTracker implements Module {
     private HashMap<String, String> tntPlaced = new HashMap<>();
 
-    protected TntTracker() { }
+    protected TntTracker() {
+    }
+
+    public static String getWhoPlaced(Entity tnt) {
+        if (tnt.getType() == EntityType.PRIMED_TNT) {
+            if (tnt.hasMetadata("source")) {
+                return tnt.getMetadata("source").get(0).asString();
+            }
+        }
+        return null;
+    }
 
     @Override
     public void unload() {
@@ -59,14 +66,5 @@ public class TntTracker implements Module {
                 }
             }
         }
-    }
-
-    public static String getWhoPlaced(Entity tnt) {
-        if (tnt.getType() == EntityType.PRIMED_TNT) {
-            if (tnt.hasMetadata("source")) {
-                return tnt.getMetadata("source").get(0).asString();
-            }
-        }
-        return null;
     }
 }

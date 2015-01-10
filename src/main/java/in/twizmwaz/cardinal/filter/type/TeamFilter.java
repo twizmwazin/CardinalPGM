@@ -4,7 +4,8 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.filter.Filter;
 import in.twizmwaz.cardinal.filter.FilterState;
 import in.twizmwaz.cardinal.teams.PgmTeam;
-import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.player.PlayerEvent;
 
 import static in.twizmwaz.cardinal.filter.FilterState.*;
 
@@ -17,12 +18,9 @@ public class TeamFilter extends Filter {
     }
 
     @Override
-    public FilterState getState(final Object o) {
-        if (o instanceof PgmTeam) {
-            if (o.equals(team)) return ALLOW;
-            else return DENY;
-        } else if (o instanceof Player) {
-            if (GameHandler.getGameHandler().getMatch().getTeam((Player) o).equals(team)) return ALLOW;
+    public FilterState evaluate(final Event event) {
+        if (event instanceof PlayerEvent) {
+            if (GameHandler.getGameHandler().getMatch().getTeam(((PlayerEvent) event).getPlayer()).equals(team)) return ALLOW;
             else return DENY;
         } else return ABSTAIN;
     }

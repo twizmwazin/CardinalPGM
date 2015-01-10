@@ -10,13 +10,13 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.server.ServerListPingEvent;
 
 public class MOTD implements Module {
-    
+
     private final Match match;
-    
+
     protected MOTD(Match match) {
         this.match = match;
     }
-    
+
     @Override
     public void unload() {
         HandlerList.unregisterAll(this);

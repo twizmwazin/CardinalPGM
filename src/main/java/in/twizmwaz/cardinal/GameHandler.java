@@ -13,9 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.util.UUID;
-import java.util.logging.Level;
 
 /**
  * Created by kevin on 10/31/14.

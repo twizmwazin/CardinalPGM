@@ -1,13 +1,10 @@
 package in.twizmwaz.cardinal.module.modules.itemRemove;
 
 import in.twizmwaz.cardinal.module.Module;
-import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Set;
 
 public class ItemRemove implements Module {
 
@@ -25,7 +22,8 @@ public class ItemRemove implements Module {
     @EventHandler
     public void onItemSpawn(ItemSpawnEvent event) {
         ItemStack itemStack = event.getEntity().getItemStack();
-        if (itemStack.getType().equals(item.getMaterial()) && (itemStack.getDurability() == item.getData() || item.getData() < 0)) event.setCancelled(true);
+        if (itemStack.getType().equals(item.getMaterial()) && (itemStack.getDurability() == item.getData() || item.getData() < 0))
+            event.setCancelled(true);
     }
 
 }

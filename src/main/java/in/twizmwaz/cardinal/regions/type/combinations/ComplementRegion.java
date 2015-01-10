@@ -80,7 +80,7 @@ public class ComplementRegion extends Region {
     public List<Block> getBlocks() {
         List<Block> results = new ArrayList<>();
         try {
-            results.addAll(regions.get(0).getBlocks()); 
+            results.addAll(regions.get(0).getBlocks());
             for (int i = 1; i < regions.size(); i++) {
                 results.removeAll(regions.get(i).getBlocks());
             }

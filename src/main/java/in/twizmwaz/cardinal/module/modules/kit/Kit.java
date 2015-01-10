@@ -1,7 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.kit;
 
 import in.twizmwaz.cardinal.module.Module;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -32,7 +31,7 @@ public class Kit implements Module {
     //unimplemented
     private boolean jump;
 
-    protected Kit(String name, List<KitItem> items, List<KitArmor> armor, List<PotionEffect> effects, String parent, boolean force, boolean potionParticles, boolean resetPearls, boolean clear, boolean clearItems, int health, float saturation, int foodLevel, float walkSpeed, float knockback ,boolean jump) {
+    protected Kit(String name, List<KitItem> items, List<KitArmor> armor, List<PotionEffect> effects, String parent, boolean force, boolean potionParticles, boolean resetPearls, boolean clear, boolean clearItems, int health, float saturation, int foodLevel, float walkSpeed, float knockback, boolean jump) {
         kits.add(this);
         this.name = name;
         this.items = items;
@@ -51,6 +50,13 @@ public class Kit implements Module {
         this.knockback = knockback;
         this.jump = jump;
 
+    }
+
+    public static Kit getKitByName(String name) {
+        for (Kit kit : kits) {
+            if (kit.getName().equalsIgnoreCase(name)) return kit;
+        }
+        return null;
     }
 
     @Override
@@ -94,13 +100,17 @@ public class Kit implements Module {
         }
         for (KitArmor armor : this.armor) {
             switch (armor.getType()) {
-                case HELMET: player.getInventory().setHelmet(armor.getItem());
+                case HELMET:
+                    player.getInventory().setHelmet(armor.getItem());
                     break;
-                case CHESTPLATE: player.getInventory().setChestplate(armor.getItem());
+                case CHESTPLATE:
+                    player.getInventory().setChestplate(armor.getItem());
                     break;
-                case LEGGINGS: player.getInventory().setLeggings(armor.getItem());
+                case LEGGINGS:
+                    player.getInventory().setLeggings(armor.getItem());
                     break;
-                case BOOTS: player.getInventory().setBoots(armor.getItem());
+                case BOOTS:
+                    player.getInventory().setBoots(armor.getItem());
                     break;
             }
         }
@@ -113,13 +123,6 @@ public class Kit implements Module {
 
     public String getName() {
         return name;
-    }
-
-    public static Kit getKitByName(String name) {
-        for (Kit kit : kits) {
-            if (kit.getName().equalsIgnoreCase(name)) return kit;
-        }
-        return null;
     }
 
 }

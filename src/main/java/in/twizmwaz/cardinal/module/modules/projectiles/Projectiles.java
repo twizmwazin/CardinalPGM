@@ -1,14 +1,14 @@
 package in.twizmwaz.cardinal.module.modules.projectiles;
 
 import in.twizmwaz.cardinal.GameHandler;
-import org.bukkit.entity.*;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;

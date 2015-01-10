@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.filter.type.logic;
 
 import in.twizmwaz.cardinal.filter.Filter;
 import in.twizmwaz.cardinal.filter.FilterState;
+import org.bukkit.event.Event;
 
 import java.util.Set;
 
@@ -17,10 +18,10 @@ public class OneFilter extends Filter {
     }
 
     @Override
-    public FilterState getState(final Object o) {
+    public FilterState evaluate(final Event event) {
         boolean found = false;
         for (Filter child : children) {
-            if (child.getState(o).equals(ALLOW)) {
+            if (child.evaluate(event).equals(ALLOW)) {
                 if (!found) found = true;
                 else return DENY;
             }

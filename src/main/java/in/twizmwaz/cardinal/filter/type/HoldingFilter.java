@@ -3,7 +3,8 @@ package in.twizmwaz.cardinal.filter.type;
 import in.twizmwaz.cardinal.filter.Filter;
 import in.twizmwaz.cardinal.filter.FilterState;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.player.PlayerEvent;
 
 import static in.twizmwaz.cardinal.filter.FilterState.*;
 
@@ -16,11 +17,12 @@ public class HoldingFilter extends Filter {
     }
 
     @Override
-    public FilterState getState(Object o) {
-        if (o instanceof Player) {
-            if (((Player) o).getItemInHand().getType().equals(material)) return ALLOW;
+    public FilterState evaluate(Event event) {
+        if (event instanceof PlayerEvent) {
+            if (((PlayerEvent) event).getPlayer().getItemInHand().getType().equals(material)) return ALLOW;
             else return DENY;
-        } return ABSTAIN;
+        }
+        return ABSTAIN;
     }
 
 }

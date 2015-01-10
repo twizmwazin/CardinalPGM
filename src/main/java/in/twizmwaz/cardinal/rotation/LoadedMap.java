@@ -4,15 +4,15 @@ import java.io.File;
 import java.util.List;
 
 public final class LoadedMap {
-    
+
     private final String name;
     private final List<String> authors;
     private final File folder;
 
     /**
-     * @param name The name of the map
+     * @param name    The name of the map
      * @param authors The authors of the map
-     * @param folder The folder where the map can be found
+     * @param folder  The folder where the map can be found
      */
     public LoadedMap(String name, List<String> authors, File folder) {
         this.name = name;

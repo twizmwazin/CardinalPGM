@@ -3,7 +3,6 @@ package in.twizmwaz.cardinal.regions.type;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.regions.parsers.PointParser;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 
 import java.util.ArrayList;

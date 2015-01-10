@@ -1,6 +1,5 @@
 package in.twizmwaz.cardinal.teams;
 
-import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.JoinType;
 import in.twizmwaz.cardinal.module.GameObjective;
@@ -18,7 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.logging.Level;
 
 /**
  * Created by kevin on 11/17/14.

@@ -3,7 +3,8 @@ package in.twizmwaz.cardinal.filter.type;
 import in.twizmwaz.cardinal.filter.Filter;
 import in.twizmwaz.cardinal.filter.FilterState;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
 
 import static in.twizmwaz.cardinal.filter.FilterState.*;
@@ -17,9 +18,9 @@ public class WearingFilter extends Filter {
     }
 
     @Override
-    public FilterState getState(final Object o) {
-        if (o instanceof Player) {
-            for (ItemStack armor : ((Player) o).getInventory().getArmorContents()) {
+    public FilterState evaluate(final Event event) {
+        if (event instanceof PlayerEvent) {
+            for (ItemStack armor : ((PlayerEvent) event).getPlayer().getInventory().getArmorContents()) {
                 if (armor.getType().equals(material)) return ALLOW;
             }
             return DENY;

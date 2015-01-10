@@ -7,7 +7,7 @@ import org.bukkit.potion.PotionEffect;
 
 public class PlayerUtil {
 
-    public static void resetPlayer(Player player)  {
+    public static void resetPlayer(Player player) {
         player.setMaxHealth(20);
         player.setFoodLevel(20);
         player.setSaturation(20);

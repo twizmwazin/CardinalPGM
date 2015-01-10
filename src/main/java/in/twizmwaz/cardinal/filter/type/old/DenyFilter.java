@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.filter.type.old;
 
 import in.twizmwaz.cardinal.filter.Filter;
 import in.twizmwaz.cardinal.filter.FilterState;
+import org.bukkit.event.Event;
 
 import java.util.Set;
 
@@ -17,9 +18,9 @@ public class DenyFilter extends Filter {
     }
 
     @Override
-    public FilterState getState(final Object o) {
+    public FilterState evaluate(final Event event) {
         for (Filter child : children) {
-            if (child.getState(o).equals(ALLOW)) return DENY;
+            if (child.evaluate(event).equals(ALLOW)) return DENY;
         }
         return ALLOW;
     }

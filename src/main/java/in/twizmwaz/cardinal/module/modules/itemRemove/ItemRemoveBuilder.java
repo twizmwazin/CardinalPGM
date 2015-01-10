@@ -7,9 +7,7 @@ import org.bukkit.Material;
 import org.jdom2.Element;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ItemRemoveBuilder implements ModuleBuilder {
 

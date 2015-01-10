@@ -3,7 +3,7 @@ package in.twizmwaz.cardinal.module.modules.itemRemove;
 import org.bukkit.Material;
 
 public class RemovedItem {
-    
+
     private final Material material;
     private final short data;
 

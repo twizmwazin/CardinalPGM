@@ -24,7 +24,7 @@ public class Rotation {
     private List<LoadedMap> loaded;
     private int position;
     private File repo;
-    
+
     public Rotation(JavaPlugin plugin) throws RotationLoadException {
         this.plugin = plugin;
         this.rotationFile = new File(plugin.getConfig().getString("rotation"));
@@ -34,7 +34,8 @@ public class Rotation {
 
     /**
      * Refreshes the maps in the repository and the data associated with them
-     * @throws RotationLoadException 
+     *
+     * @throws RotationLoadException
      */
     public void refreshRepo() throws RotationLoadException {
         loaded = new ArrayList<>();
@@ -63,6 +64,7 @@ public class Rotation {
 
     /**
      * Refreshes the plugin's default rotation
+     *
      * @throws RotationLoadException
      */
     public void refreshRotation() throws RotationLoadException {
@@ -81,7 +83,7 @@ public class Rotation {
             throw new RotationLoadException("An error occurred in loading the rotation file.");
         }
         position = 0;
-        
+
     }
 
     /**
@@ -115,7 +117,7 @@ public class Rotation {
     public List<LoadedMap> getLoaded() {
         return loaded;
     }
-    
+
     public int getNextIndex() {
         if (position + 1 >= rotation.size()) {
             return position + 1;

@@ -9,13 +9,13 @@ import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
 public class WorldFreeze implements Module {
-    
+
     private final Match match;
-    
+
     protected WorldFreeze(Match match) {
         this.match = match;
     }
-    
+
     @Override
     public void unload() {
         HandlerList.unregisterAll(this);
@@ -27,7 +27,7 @@ public class WorldFreeze implements Module {
             event.setCancelled(true);
         }
     }
-    
+
     @EventHandler
     public void onBlockBurn(BlockBurnEvent event) {
         if (match.getState() != MatchState.PLAYING) {
@@ -48,7 +48,7 @@ public class WorldFreeze implements Module {
             event.setCancelled(true);
         }
     }
-    
+
     @EventHandler
     public void onBlockFade(BlockFadeEvent event) {
         if (match.getState() != MatchState.PLAYING) {
@@ -69,7 +69,7 @@ public class WorldFreeze implements Module {
             event.setCancelled(true);
         }
     }
-    
+
     @EventHandler
     public void onBlockIgnite(BlockIgniteEvent event) {
         if (match.getState() != MatchState.PLAYING) {
@@ -90,5 +90,5 @@ public class WorldFreeze implements Module {
             event.setCancelled(true);
         }
     }
-    
+
 }

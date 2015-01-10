@@ -2,10 +2,12 @@ package in.twizmwaz.cardinal.filter.type;
 
 import in.twizmwaz.cardinal.filter.Filter;
 import in.twizmwaz.cardinal.filter.FilterState;
+import org.bukkit.event.Event;
 
 import java.util.Random;
 
-import static in.twizmwaz.cardinal.filter.FilterState.*;
+import static in.twizmwaz.cardinal.filter.FilterState.ALLOW;
+import static in.twizmwaz.cardinal.filter.FilterState.DENY;
 
 public class RandomFilter extends Filter {
 
@@ -16,7 +18,7 @@ public class RandomFilter extends Filter {
     }
 
     @Override
-    public FilterState getState(final Object o) {
+    public FilterState evaluate(final Event event) {
         Random random = new Random();
         double working = random.nextGaussian();
         if (working <= chance) return ALLOW;

@@ -6,11 +6,11 @@ import in.twizmwaz.cardinal.teams.PgmTeam;
 import org.jdom2.Element;
 
 public class ObjectiveFilterParser {
-    
+
     private GameObjective objective;
     private PgmTeam team;
     private boolean any;
-    
+
     public ObjectiveFilterParser(final Element element) {
         String name = element.getText();
         for (GameObjective objective : GameHandler.getGameHandler().getModuleHandler().getConditions()) {
@@ -26,7 +26,7 @@ public class ObjectiveFilterParser {
         } catch (NullPointerException e) {
             any = false;
         }
-        
+
     }
 
     public GameObjective getObjective() {

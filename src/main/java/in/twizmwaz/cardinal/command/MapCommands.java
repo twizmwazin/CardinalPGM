@@ -56,7 +56,7 @@ public class MapCommands {
         }
         if (mapInfo.getRules().size() > 0) {
             sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Rules:");
-            for (int i = 1; i<= mapInfo.getRules().size(); i++) {
+            for (int i = 1; i <= mapInfo.getRules().size(); i++) {
                 sender.sendMessage(ChatColor.WHITE + "" + i + ") " + ChatColor.GOLD + mapInfo.getRules().get(i - 1));
             }
         }

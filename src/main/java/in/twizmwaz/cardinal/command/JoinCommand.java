@@ -24,7 +24,8 @@ public class JoinCommand {
         try {
             team = GameHandler.getGameHandler().getMatch().getTeamByName(cmd.getString(0));
             PgmTeam playerTeam = GameHandler.getGameHandler().getMatch().getTeam((Player) sender);
-            if (team == playerTeam) throw new CommandException(ChatColor.RED + "You have already joined " + playerTeam.getCompleteName());
+            if (team == playerTeam)
+                throw new CommandException(ChatColor.RED + "You have already joined " + playerTeam.getCompleteName());
             team.add((Player) sender, JoinType.VOLUNTARY);
         } catch (IndexOutOfBoundsException ex) {
             team = GameHandler.getGameHandler().getMatch().getTeamWithFewestPlayers();
@@ -35,7 +36,7 @@ public class JoinCommand {
 
     }
 
-    @Command(aliases =  {"leave"}, desc = "Leave the game")
+    @Command(aliases = {"leave"}, desc = "Leave the game")
     public static void leave(final CommandContext cmd, CommandSender sender) {
         Bukkit.getServer().dispatchCommand(sender, "join observers");
     }

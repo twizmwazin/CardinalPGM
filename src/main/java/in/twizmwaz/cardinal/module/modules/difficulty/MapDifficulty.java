@@ -17,5 +17,4 @@ public class MapDifficulty implements Module {
     }
 
 
-
 }

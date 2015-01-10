@@ -9,7 +9,7 @@ public class RandomFilterParser {
     private RandomFilterParser(final Element element) {
         try {
             chance = Double.parseDouble(element.getText());
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             String[] numbers = element.getText().replace("(", "").replace(")", "").replace("[", "").replace("]", "").split(",");
             chance = Double.parseDouble(numbers[1]) - Double.parseDouble(numbers[0]);
         }

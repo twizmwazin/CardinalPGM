@@ -10,18 +10,18 @@ import org.bukkit.event.block.BlockBreakEvent;
 import java.util.List;
 
 public class Destroyable implements GameObjective {
-    
+
     private final PgmTeam team;
     private final String name;
     private final String id;
-    
+
     private List<Block> blocks;
     private double complete;
     private double required;
     private boolean completed;
     private boolean showPercent;
     private boolean repairable;
-    
+
     protected Destroyable(final PgmTeam team, final String name, final String id, final List<Block> blocks, double required, boolean showPercent, boolean repairable) {
         this.team = team;
         this.name = name;
@@ -33,7 +33,7 @@ public class Destroyable implements GameObjective {
         this.required = required;
         this.completed = false;
     }
-    
+
     @Override
     public PgmTeam getTeam() {
         return this.team;
@@ -63,7 +63,7 @@ public class Destroyable implements GameObjective {
     public void unload() {
         HandlerList.unregisterAll(this);
     }
-    
+
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         if (this.blocks.contains(event.getBlock())) this.complete = this.complete + (1 / this.blocks.size());

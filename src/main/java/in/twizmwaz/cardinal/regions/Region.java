@@ -83,7 +83,7 @@ public abstract class Region {
     public abstract PointRegion getRandomPoint();
 
     public abstract BlockRegion getCenterBlock();
-    
+
     public abstract List<Block> getBlocks();
 
 }

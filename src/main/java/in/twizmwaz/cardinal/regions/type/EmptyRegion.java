@@ -9,7 +9,7 @@ import java.util.List;
 
 public class EmptyRegion extends Region {
 
-    public EmptyRegion(){
+    public EmptyRegion() {
     }
 
     public EmptyRegion(EmptyParser parser) {

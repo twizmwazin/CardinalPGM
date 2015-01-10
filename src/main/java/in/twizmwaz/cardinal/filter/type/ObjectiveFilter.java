@@ -3,11 +3,10 @@ package in.twizmwaz.cardinal.filter.type;
 import in.twizmwaz.cardinal.filter.Filter;
 import in.twizmwaz.cardinal.filter.FilterState;
 import in.twizmwaz.cardinal.module.GameObjective;
-import org.bukkit.Bukkit;
+import org.bukkit.event.Event;
 
-import java.util.logging.Level;
-
-import static in.twizmwaz.cardinal.filter.FilterState.*;
+import static in.twizmwaz.cardinal.filter.FilterState.ALLOW;
+import static in.twizmwaz.cardinal.filter.FilterState.DENY;
 
 public class ObjectiveFilter extends Filter {
 
@@ -18,7 +17,7 @@ public class ObjectiveFilter extends Filter {
     }
 
     @Override
-    public FilterState getState(final Object o) {
+    public FilterState evaluate(final Event event) {
         if (objective.isComplete()) return ALLOW;
         else return DENY;
     }

@@ -107,13 +107,16 @@ public class SpawnParser {
                 int yaw = 0;
                 try {
                     yaw = Integer.parseInt(spawns.getAttributeValue("yaw").replaceAll(" ", ""));
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
                 try {
                     yaw = Integer.parseInt(working.getAttributeValue("yaw").replaceAll(" ", ""));
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
                 try {
                     yaw = Integer.parseInt(working.getChild("point").getAttributeValue("yaw").replaceAll(" ", ""));
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
                 List<Region> regions = new ArrayList<Region>();
                 try {
                     regions.add(Region.getRegion(working.getChildren().get(0), document));
