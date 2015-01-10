@@ -9,9 +9,6 @@ import org.bukkit.block.Block;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by kevin on 11/20/14.
- */
 public class PointRegion extends BlockRegion {
 
     private final double x, y, z;

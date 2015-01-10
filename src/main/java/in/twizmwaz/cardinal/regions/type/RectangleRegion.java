@@ -8,9 +8,6 @@ import org.bukkit.block.Block;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by kevin on 10/26/14.
- */
 public class RectangleRegion extends CuboidRegion {
 
 

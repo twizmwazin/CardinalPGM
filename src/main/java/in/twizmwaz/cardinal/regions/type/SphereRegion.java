@@ -1,6 +1,6 @@
 package in.twizmwaz.cardinal.regions.type;
 
-
+import in.parapengu.commons.utils.OtherUtil;
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.SphereParser;
 import in.twizmwaz.cardinal.util.NumUtils;
@@ -9,9 +9,6 @@ import org.bukkit.block.Block;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by kevin on 10/26/14.
- */
 public class SphereRegion extends Region {
 
     private double originX;
@@ -62,14 +59,14 @@ public class SphereRegion extends Region {
 
     @Override
     public PointRegion getRandomPoint() {
-        double a = NumUtils.randomInterval(0, radius);
-        double b = NumUtils.randomInterval(0, 360);
+        double a = OtherUtil.getRandom(0, radius);
+        double b = OtherUtil.getRandom(0, 360);
 
-        double c = NumUtils.randomInterval(0, radius);
-        double d = NumUtils.randomInterval(0, 360);
+        double c = OtherUtil.getRandom(0, radius);
+        double d = OtherUtil.getRandom(0, 360);
 
-        double e = NumUtils.randomInterval(0, radius);
-        double f = NumUtils.randomInterval(0, 360);
+        double e = OtherUtil.getRandom(0, radius);
+        double f = OtherUtil.getRandom(0, 360);
 
         return new PointRegion(originX + a * Math.sin(b), originY + c * Math.sin(d), originZ + e * Math.sin(f));
     }

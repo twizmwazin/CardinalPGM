@@ -6,9 +6,6 @@ import org.bukkit.block.Block;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by kevin on 10/26/14.
- */
 public class CircleRegion extends CylinderRegion {
 
     public CircleRegion(String name, double centerx, double centerz, double radius) {

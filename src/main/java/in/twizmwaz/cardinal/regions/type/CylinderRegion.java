@@ -1,6 +1,6 @@
 package in.twizmwaz.cardinal.regions.type;
 
-
+import in.parapengu.commons.utils.OtherUtil;
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.CylinderParser;
 import in.twizmwaz.cardinal.util.NumUtils;
@@ -66,9 +66,9 @@ public class CylinderRegion extends Region {
 
     @Override
     public PointRegion getRandomPoint() {
-        double a = NumUtils.randomInterval(0, radius);
-        double b = NumUtils.randomInterval(0, 360);
-        double c = NumUtils.randomInterval(0, height);
+        double a = OtherUtil.getRandom(0, radius);
+        double b = OtherUtil.getRandom(0, 360);
+        double c = OtherUtil.getRandom(0, height);
 
         return new PointRegion(this.baseX + a * Math.cos(b), this.baseY + c, this.baseZ + a * Math.sin(b));
     }

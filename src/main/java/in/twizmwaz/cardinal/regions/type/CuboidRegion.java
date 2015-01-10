@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.regions.type;
 
+import in.parapengu.commons.utils.OtherUtil;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.CuboidParser;
@@ -10,9 +11,6 @@ import org.bukkit.block.Block;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by kevin on 10/26/14.
- */
 public class CuboidRegion extends Region {
 
     private double xMin;
@@ -80,7 +78,7 @@ public class CuboidRegion extends Region {
 
     @Override
     public PointRegion getRandomPoint() {
-        return new PointRegion(NumUtils.randomInterval(xMin, xMax), NumUtils.randomInterval(yMin, yMax), NumUtils.randomInterval(zMin, zMax));
+        return new PointRegion(OtherUtil.getRandom(xMin, xMax), OtherUtil.getRandom(yMin, yMax), OtherUtil.getRandom(zMin, zMax));
     }
 
     @Override
