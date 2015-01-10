@@ -16,7 +16,6 @@ public class ItemRemoveBuilder implements ModuleBuilder {
     @Override
     public List<Module> load(Match match) {
         List<Module> results = new ArrayList<>();
-        Set<Material> materials = new HashSet<>(128);
         for (Element itemRemove : match.getDocument().getRootElement().getChildren("itemremove")) {
             for (Element item : itemRemove.getChildren("item")) {
                 String[] broken = item.getText().split(":");
@@ -26,17 +25,15 @@ public class ItemRemoveBuilder implements ModuleBuilder {
                 } catch (NumberFormatException e) {
                     material = Material.matchMaterial(broken[0]);
                 }
-                int damage = 1;
+                short damage = -1;
                 try {
-                    damage = Integer.parseInt(broken[1]);
+                    damage = Short.parseShort(broken[1]);
                 } catch (ArrayIndexOutOfBoundsException e) {
                 } catch (NumberFormatException e) {
                 }
-                //should account for the damage value
-                materials.add(material);
+                results.add(new ItemRemove(new RemovedItem(material, damage)));
             }
         }
-        results.add(new ItemRemove(materials));
         return results;
     }
 

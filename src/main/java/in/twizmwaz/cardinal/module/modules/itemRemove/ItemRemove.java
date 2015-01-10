@@ -5,15 +5,16 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.ItemSpawnEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Set;
 
 public class ItemRemove implements Module {
 
-    private final Set<Material> materials;
+    private final RemovedItem item;
 
-    protected ItemRemove(final Set<Material> materials) {
-        this.materials = materials;
+    protected ItemRemove(RemovedItem item) {
+        this.item = item;
     }
 
     @Override
@@ -23,7 +24,8 @@ public class ItemRemove implements Module {
 
     @EventHandler
     public void onItemSpawn(ItemSpawnEvent event) {
-        if (materials.contains(event.getEntity().getItemStack().getType())) event.setCancelled(true);
+        ItemStack itemStack = event.getEntity().getItemStack();
+        if (itemStack.getType().equals(item.getMaterial()) && (itemStack.getDurability() == item.getData() || item.getData() < 0)) event.setCancelled(true);
     }
 
 }
