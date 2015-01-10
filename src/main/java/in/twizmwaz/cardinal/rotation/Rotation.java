@@ -41,6 +41,7 @@ public class Rotation {
         this.repo = new File(plugin.getConfig().getString("repo"));
         List<String> requirements = Arrays.asList("map.xml", "region", "level.dat");
         for (File map : repo.listFiles()) {
+            if (map.isFile()) continue;
             if (Arrays.asList(map.list()).containsAll(requirements)) {
                 try {
                     Document xml = DomUtil.parse(new File(map.getPath() + "/map.xml"));
