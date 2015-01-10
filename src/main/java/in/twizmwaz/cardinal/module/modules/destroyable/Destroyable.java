@@ -19,12 +19,16 @@ public class Destroyable implements GameObjective {
     private double complete;
     private double required;
     private boolean completed;
+    private boolean showPercent;
+    private boolean repairable;
     
-    protected Destroyable(final PgmTeam team, final String name, final String id, final List<Block> blocks, double required) {
+    protected Destroyable(final PgmTeam team, final String name, final String id, final List<Block> blocks, double required, boolean showPercent, boolean repairable) {
         this.team = team;
         this.name = name;
         this.id = id;
         this.blocks = blocks;
+        this.showPercent = showPercent;
+        this.repairable = repairable;
         this.complete = 0;
         this.required = required;
         this.completed = false;
@@ -65,5 +69,12 @@ public class Destroyable implements GameObjective {
         if (this.blocks.contains(event.getBlock())) this.complete = this.complete + (1 / this.blocks.size());
         if (this.complete >= this.required) this.completed = true;
     }
-    
+
+    public boolean showPercent() {
+        return showPercent;
+    }
+
+    public boolean isRepairable() {
+        return repairable;
+    }
 }
