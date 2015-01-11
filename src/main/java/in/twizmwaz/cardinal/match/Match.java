@@ -1,13 +1,13 @@
 package in.twizmwaz.cardinal.match;
 
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.data.MapInfo;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.match.listeners.MatchListener;
 import in.twizmwaz.cardinal.match.listeners.ObjectiveListener;
 import in.twizmwaz.cardinal.match.util.StartTimer;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleHandler;
+import in.twizmwaz.cardinal.module.modules.mapInfo.Info;
 import in.twizmwaz.cardinal.teams.PgmTeam;
 import in.twizmwaz.cardinal.teams.PgmTeamBuilder;
 import in.twizmwaz.cardinal.util.DomUtil;
@@ -34,7 +34,6 @@ public class Match {
 
     private MatchState state;
     private Document document;
-    private MapInfo mapInfo;
     private Scoreboard scoreboard;
     private List<PgmTeam> teams;
     private StartTimer startTimer;
@@ -53,7 +52,6 @@ public class Match {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.mapInfo = new MapInfo(document);
 
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         PgmTeamBuilder teamBuilder = new PgmTeamBuilder(this);
@@ -61,7 +59,6 @@ public class Match {
         teams = teamBuilder.getTeams();
         this.startTimer = new StartTimer(this, 30);
 
-        mapInfo = new MapInfo(document);
         this.state = MatchState.WAITING;
         listeners.add(new MatchListener(plugin, this));
         listeners.add(new ObjectiveListener(plugin, this));
@@ -90,8 +87,8 @@ public class Match {
         this.state = state;
     }
 
-    public MapInfo getMapInfo() {
-        return mapInfo;
+    public Info getMapInfo() {
+        return Info.mapInfo;
     }
 
     public Scoreboard getScoreboard() {

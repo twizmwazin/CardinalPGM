@@ -12,9 +12,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by kevin on 11/27/14.
- */
 public class RotationCommands {
 
     @Command(aliases = {"rotation", "rot"}, desc = "Shows the current rotation.", usage = "[page]")

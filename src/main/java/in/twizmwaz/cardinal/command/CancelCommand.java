@@ -7,9 +7,6 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.MatchState;
 import org.bukkit.command.CommandSender;
 
-/**
- * Created by kevin on 12/4/14.
- */
 public class CancelCommand {
 
     @Command(aliases = {"cancel"}, desc = "Cancels the current countdown.")

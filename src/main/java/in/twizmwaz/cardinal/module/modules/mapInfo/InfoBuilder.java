@@ -1,28 +1,26 @@
-package in.twizmwaz.cardinal.data;
+package in.twizmwaz.cardinal.module.modules.mapInfo;
 
-import org.jdom2.Document;
+import in.twizmwaz.cardinal.module.modules.mapInfo.contributor.Contributor;
+import in.twizmwaz.cardinal.match.Match;
+import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.ModuleBuilder;
 import org.jdom2.Element;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by kevin on 11/17/14.
- */
-public class MapInfo {
+public class InfoBuilder implements ModuleBuilder {
 
-    private String name;
-    private String version;
-    private String objective;
-    private List<Contributor> authors;
-    private List<Contributor> contributors;
-    private List<String> rules;
-
-    public MapInfo(Document doc) {
-        Element root = doc.getRootElement();
-        name = root.getChild("name").getText();
-        version = root.getChild("version").getText();
-        objective = root.getChild("objective").getText();
+    @Override
+    public List<Module> load(Match match) {
+        List<Module> results = new ArrayList<>();
+        Element root = match.getDocument().getRootElement();
+        List<Contributor> authors;
+        List<Contributor> contributors;
+        List<String> rules;
+        String name = root.getChild("name").getText();
+        String version = root.getChild("version").getText();
+        String objective = root.getChild("objective").getText();
         authors = new ArrayList<>();
         for (Element element : root.getChildren("authors")) {
             for (Element author : element.getChildren()) {
@@ -49,29 +47,8 @@ public class MapInfo {
                 rules.add(rule.getValue());
             }
         }
+        results.add(new Info(name, version, objective, authors, contributors, rules));
+        return results;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public String getObjective() {
-        return objective;
-    }
-
-    public List<Contributor> getAuthors() {
-        return authors;
-    }
-
-    public List<Contributor> getContributors() {
-        return contributors;
-    }
-
-    public List<String> getRules() {
-        return rules;
-    }
 }

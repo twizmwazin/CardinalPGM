@@ -1,4 +1,4 @@
-package in.twizmwaz.cardinal.data;
+package in.twizmwaz.cardinal.module.modules.mapInfo.contributor;
 
 /**
  * Created by kevin on 11/17/14.
