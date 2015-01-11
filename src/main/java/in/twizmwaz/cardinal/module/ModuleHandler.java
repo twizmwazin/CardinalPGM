@@ -13,6 +13,7 @@ import in.twizmwaz.cardinal.module.modules.killStreakCount.KillStreakBuilder;
 import in.twizmwaz.cardinal.module.modules.kit.KitBuilder;
 import in.twizmwaz.cardinal.module.modules.motd.MOTDBuilder;
 import in.twizmwaz.cardinal.module.modules.observers.ObserverModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.projectiles.ProjectilesBuilder;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.team.TeamModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLock.TimeLockBuilder;
@@ -57,7 +58,7 @@ public class ModuleHandler {
         builders.add(new HungerBuilder());
         builders.add(new MapDifficultyBuilder());
         builders.add(new HungerBuilder());
-        //builders.add(new ProjectilesBuilder());
+        builders.add(new ProjectilesBuilder());
         builders.add(new TntTrackerBuilder());
         builders.add(new VisibilityBuilder());
         builders.add(new MOTDBuilder());

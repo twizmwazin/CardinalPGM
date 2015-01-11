@@ -2,16 +2,17 @@ package in.twizmwaz.cardinal.module.modules.projectiles;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.Module;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -35,50 +36,39 @@ public class Projectiles implements Module {
     }
 
     @EventHandler
-    public void onProjectileLaunch(ProjectileLaunchEvent event) {
-        if (event.getEntity().getType() == EntityType.ARROW) {
-            Vector velocity = event.getEntity().getVelocity();
-            velocity = velocity.multiply(velocityMod);
-            Location location = event.getEntity().getLocation();
-            location = location.add(velocity);
-            World world = event.getEntity().getWorld();
-            event.setCancelled(true);
-            Entity spawned = world.spawnEntity(location, projectile);
-            if (spawned.getType().equals(EntityType.PRIMED_TNT)) {
-                ((TNTPrimed) spawned).setFuseTicks(80);
-            }
-            spawned.setVelocity(velocity);
-            spawned.setMetadata("source", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), event.getEntity().getShooter() != null ? (event.getEntity().getShooter() instanceof Player ? ((Player) event.getEntity().getShooter()).getName() : "null") : "null"));
+    public void onEntityShootBowEvent(EntityShootBowEvent event) {
+        if (!projectile.equals(EntityType.ARROW) || velocityMod != 1.0) {
+            Vector vector = event.getProjectile().getVelocity();
+            event.setProjectile(GameHandler.getGameHandler().getMatchWorld().spawnEntity(event.getProjectile().getLocation(), projectile));
+            ((Projectile) event.getProjectile()).setShooter(event.getEntity());
+            event.getProjectile().setVelocity(vector.multiply(velocityMod));
+            event.getProjectile().setMetadata("custom", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), true));
         }
     }
 
     @EventHandler
-    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if (event.getCause().equals(DamageCause.PROJECTILE) && event.getDamager().getType().equals(projectile) && event.getEntity() instanceof Player) {
-            if (event.getDamager().hasMetadata("source")) {
-                if (event.getDamager().getMetadata("source").get(0).asString().equals(((Player) event.getEntity()).getName())) {
-                    Vector velocity = event.getDamager().getVelocity();
-                    Location location = event.getDamager().getLocation();
-                    location = location.add(velocity);
-                    World world = event.getDamager().getWorld();
-                    int fuse = 80;
-                    if (event.getDamager().getType().equals(EntityType.PRIMED_TNT)) {
-                        fuse = ((TNTPrimed) event.getDamager()).getFuseTicks();
-                    }
-                    event.setCancelled(true);
-                    Entity spawned = world.spawnEntity(location, projectile);
-                    if (spawned.getType().equals(EntityType.PRIMED_TNT)) {
-                        ((TNTPrimed) spawned).setFuseTicks(fuse);
-                    }
-                    spawned.setVelocity(velocity);
-                    spawned.setMetadata("source", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), ((Player) event.getEntity()).getName()));
-                }
+    public void onEntityHitByProjectile(EntityDamageByEntityEvent event) {
+        if (event.getCause().equals(DamageCause.PROJECTILE)) {
+            ProjectileSource source = ((Projectile) event.getDamager()).getShooter();
+            if (source instanceof Player) {
+                ((Player) source).playSound(((Player) source).getLocation(), Sound.SUCCESSFUL_HIT, 10, 0.5F);
             }
-        }
-        if (!event.isCancelled()) {
-            if (event.getCause() == DamageCause.PROJECTILE && event.getEntity() instanceof LivingEntity) {
-                for (PotionEffect potionEffect : this.potionEffects) {
-                    ((LivingEntity) event.getEntity()).addPotionEffect(potionEffect);
+            if (event.getDamager().getType().equals(projectile) && event.getDamager().hasMetadata("custom")) {
+                Entity arrow = event.getEntity().getWorld().spawnEntity(event.getDamager().getLocation(), EntityType.ARROW);
+                ((Projectile) arrow).setShooter(source);
+                arrow.setVelocity(event.getDamager().getVelocity());
+                event.getDamager().remove();
+                if (event.getEntity() instanceof LivingEntity) {
+                    for (PotionEffect effect : potionEffects) {
+                        ((LivingEntity) event.getEntity()).addPotionEffect(effect);
+                    }
+                    final Entity entity = event.getEntity();
+                    Bukkit.getServer().getScheduler().runTaskLater(GameHandler.getGameHandler().getPlugin(), new Runnable() {
+                        @Override
+                        public void run() {
+                            ((LivingEntity) entity).setArrowsStuck(((LivingEntity) entity).getArrowsStuck() - 1);
+                        }
+                    }, 0);
                 }
             }
         }

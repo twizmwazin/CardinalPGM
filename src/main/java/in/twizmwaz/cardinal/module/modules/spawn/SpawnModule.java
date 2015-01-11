@@ -40,6 +40,15 @@ public class SpawnModule implements Module {
     @EventHandler
     public void onPgmSpawn(PgmSpawnEvent event) {
         try {
+            final PgmSpawnEvent event1 = event;
+            Bukkit.getServer().getScheduler().runTaskLater(GameHandler.getGameHandler().getPlugin(), new Runnable() {
+                @Override
+                public void run() {
+                    if (event1.getSpawn().hasDirection()) {
+                        event1.getPlayer().getLocation().setDirection(event1.getSpawn().getDirection());
+                    }
+                }
+            }, 0);
             if (!match.getTeam(event.getPlayer()).isObserver()) {
                 event.getPlayer().setGameMode(GameMode.SURVIVAL);
             }

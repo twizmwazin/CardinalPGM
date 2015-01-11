@@ -35,14 +35,14 @@ public class MatchListener implements Listener {
 
     @EventHandler
     public void onMatchEnd(MatchEndEvent event) {
-        Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # #");
+        Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # #");
+        Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# #    " + ChatColor.GOLD + "Game over!" + ChatColor.DARK_PURPLE + "    # #");
         try {
-            Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# #     " + event.getTeam().getColor() + event.getTeam().getName() + " wins!" + ChatColor.DARK_PURPLE + "     # #");
+            Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# #    " + event.getTeam().getColor() + event.getTeam().getName() + " wins!" + ChatColor.DARK_PURPLE + "    # #");
         } catch (NullPointerException ex) {
 
         }
-        Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# #         " + ChatColor.GOLD + "Game Over!" + ChatColor.DARK_PURPLE + "         # #");
-        Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # #");
+        Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # #");
     }
 
     @EventHandler
