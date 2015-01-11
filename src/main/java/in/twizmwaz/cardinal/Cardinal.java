@@ -60,13 +60,14 @@ public class Cardinal extends JavaPlugin {
 
     public void onEnable() {
         saveDefaultConfig();
-        setupCommands();
         try {
             gameHandler = new GameHandler(this);
         } catch (RotationLoadException e) {
             Bukkit.getLogger().log(Level.SEVERE, "CardinalPGM failed to initialize because of an invalid rotation configuration.");
             setEnabled(false);
+            return;
         }
+        setupCommands();
 
     }
 
