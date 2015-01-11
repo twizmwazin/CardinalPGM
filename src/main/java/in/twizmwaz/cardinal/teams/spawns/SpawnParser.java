@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.teams.spawns;
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.parsers.BlockParser;
 import in.twizmwaz.cardinal.regions.type.BlockRegion;
+import org.bukkit.util.Vector;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
@@ -67,7 +68,7 @@ public class SpawnParser {
                 if (kit == null) {
                     kit = child.getAttributeValue("kit");
                 }
-                int yaw;
+                int yaw = 0;
                 try {
                     String[] angle;
                     try {
@@ -75,8 +76,20 @@ public class SpawnParser {
                     } catch (NullPointerException e) {
                         angle = child.getAttributeValue("angle").replaceAll(" ", "").split(",");
                     }
-                    yaw = 0;
+                    for (Spawn spawn : result) {
+                        spawn.setDirection(new Vector(Double.parseDouble(angle[0]), Double.parseDouble(angle[1]), Double.parseDouble(angle[2])));
+                    }
                 } catch (NullPointerException exc) {
+                    try {
+                        yaw = Integer.parseInt(subChild.getAttributeValue("yaw").replaceAll(" ", ""));
+                    } catch (Exception e) {
+                        try {
+                            yaw = Integer.parseInt(child.getAttributeValue("yaw").replaceAll(" ", ""));
+                        } catch (Exception ex) {
+                            yaw = Integer.parseInt(subChild.getChildren().get(0).getAttributeValue("yaw").replaceAll(" ", ""));
+                        }
+                    }
+                } catch (NumberFormatException exc) {
                     try {
                         yaw = Integer.parseInt(subChild.getAttributeValue("yaw").replaceAll(" ", ""));
                     } catch (Exception e) {
