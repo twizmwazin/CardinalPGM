@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.filter.type;
 
 import in.twizmwaz.cardinal.filter.Filter;
 import in.twizmwaz.cardinal.filter.FilterState;
+import in.twizmwaz.cardinal.filter.parsers.ItemFilterParser;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerEvent;
@@ -15,6 +16,10 @@ public class CarryingFilter extends Filter {
 
     public CarryingFilter(final Material material) {
         this.material = material;
+    }
+    
+    public CarryingFilter(final ItemFilterParser parser) {
+        this.material = parser.getMaterial();
     }
 
     @Override

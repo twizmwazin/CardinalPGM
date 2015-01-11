@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.filter.type;
 
 import in.twizmwaz.cardinal.filter.Filter;
 import in.twizmwaz.cardinal.filter.FilterState;
+import in.twizmwaz.cardinal.filter.parsers.KillstreakFilterParser;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerEvent;
 
@@ -19,6 +20,13 @@ public class KillStreakFilter extends Filter {
         this.max = max;
         this.count = count;
         this.repeat = repeat;
+    }
+    
+    public KillStreakFilter(final KillstreakFilterParser parser) {
+        this.min = parser.getMin();
+        this.max = parser.getMax();
+        this.count = parser.getCount();
+        this.repeat = parser.isRepeat();
     }
 
     public KillStreakFilter(final int min, final int max) {

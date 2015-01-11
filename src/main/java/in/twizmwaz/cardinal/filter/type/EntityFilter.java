@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.filter.type;
 
 import in.twizmwaz.cardinal.filter.Filter;
 import in.twizmwaz.cardinal.filter.FilterState;
+import in.twizmwaz.cardinal.filter.parsers.EntityFilterParser;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityEvent;
@@ -14,6 +15,10 @@ public class EntityFilter extends Filter {
 
     public EntityFilter(final EntityType mob) {
         this.entity = mob;
+    }
+    
+    public EntityFilter(final EntityFilterParser parser) {
+        this.entity = parser.getMobType();
     }
 
     @Override

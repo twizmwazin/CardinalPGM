@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.filter.type;
 
 import in.twizmwaz.cardinal.filter.Filter;
 import in.twizmwaz.cardinal.filter.FilterState;
+import in.twizmwaz.cardinal.filter.parsers.CauseFilterParser;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityEvent;
@@ -15,6 +16,10 @@ public class CauseFilter extends Filter {
 
     public CauseFilter(final EventCause cause) {
         this.cause = cause;
+    }
+    
+    public CauseFilter(final CauseFilterParser parser) {
+        this.cause = parser.getCause();
     }
 
     @Override

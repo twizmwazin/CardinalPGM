@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.filter.type;
 
 import in.twizmwaz.cardinal.filter.Filter;
 import in.twizmwaz.cardinal.filter.FilterState;
+import in.twizmwaz.cardinal.filter.parsers.RandomFilterParser;
 import org.bukkit.event.Event;
 
 import java.util.Random;
@@ -15,6 +16,10 @@ public class RandomFilter extends Filter {
 
     public RandomFilter(final double chance) {
         this.chance = chance;
+    }
+    
+    public RandomFilter(final RandomFilterParser parser) {
+        this.chance = parser.getChance();
     }
 
     @Override

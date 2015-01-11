@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.filter.type;
 
 import in.twizmwaz.cardinal.filter.Filter;
 import in.twizmwaz.cardinal.filter.FilterState;
+import in.twizmwaz.cardinal.filter.parsers.BlockFilterParser;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockEvent;
@@ -12,8 +13,12 @@ public class BlockFilter extends Filter {
 
     private final Material material;
 
-    public BlockFilter(Material material) {
+    public BlockFilter(final Material material) {
         this.material = material;
+    }
+    
+    public BlockFilter(final BlockFilterParser parser) {
+        this.material = parser.getMaterial();
     }
 
     @Override

@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.filter.type;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.filter.Filter;
 import in.twizmwaz.cardinal.filter.FilterState;
+import in.twizmwaz.cardinal.filter.parsers.TeamFilterParser;
 import in.twizmwaz.cardinal.teams.PgmTeam;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerEvent;
@@ -15,6 +16,11 @@ public class TeamFilter extends Filter {
 
     public TeamFilter(final PgmTeam team) {
         this.team = team;
+    }
+    
+    public TeamFilter(final TeamFilterParser parser) {
+        this.team = parser.getTeam();
+        
     }
 
     @Override

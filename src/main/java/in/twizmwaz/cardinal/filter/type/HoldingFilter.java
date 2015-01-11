@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.filter.type;
 
 import in.twizmwaz.cardinal.filter.Filter;
 import in.twizmwaz.cardinal.filter.FilterState;
+import in.twizmwaz.cardinal.filter.parsers.ItemFilterParser;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerEvent;
@@ -14,6 +15,10 @@ public class HoldingFilter extends Filter {
 
     public HoldingFilter(final Material material) {
         this.material = material;
+    }
+    
+    public HoldingFilter(final ItemFilterParser parser) {
+        this.material = parser.getMaterial();
     }
 
     @Override

@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.filter.type;
 
 import in.twizmwaz.cardinal.filter.Filter;
 import in.twizmwaz.cardinal.filter.FilterState;
+import in.twizmwaz.cardinal.filter.parsers.ObjectiveFilterParser;
 import in.twizmwaz.cardinal.module.GameObjective;
 import org.bukkit.event.Event;
 
@@ -14,6 +15,10 @@ public class ObjectiveFilter extends Filter {
 
     public ObjectiveFilter(final GameObjective objective) {
         this.objective = objective;
+    }
+    
+    public ObjectiveFilter(final ObjectiveFilterParser parser) {
+        this.objective = parser.getObjective();
     }
 
     @Override

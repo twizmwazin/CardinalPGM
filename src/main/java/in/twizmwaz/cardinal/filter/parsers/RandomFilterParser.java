@@ -6,7 +6,7 @@ public class RandomFilterParser {
 
     private double chance;
 
-    private RandomFilterParser(final Element element) {
+    public RandomFilterParser(final Element element) {
         try {
             chance = Double.parseDouble(element.getText());
         } catch (NumberFormatException e) {
