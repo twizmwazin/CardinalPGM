@@ -31,9 +31,13 @@ public class Visibility implements Module {
     }
 
     private void resetVisibility(Player viewer, Player toSee) {
-        if (match.getState().equals(MatchState.PLAYING)) {
-            if (match.getTeam(toSee).isObserver() && !match.getTeam(viewer).isObserver()) viewer.hidePlayer(toSee);
-        } else viewer.showPlayer(toSee);
+        try {
+            if (match.getState().equals(MatchState.PLAYING)) {
+                if (match.getTeam(toSee).isObserver() && !match.getTeam(viewer).isObserver()) viewer.hidePlayer(toSee);
+            } else viewer.showPlayer(toSee);
+        } catch (NullPointerException e) {
+            viewer.showPlayer(toSee);
+        }
     }
 
     @EventHandler
