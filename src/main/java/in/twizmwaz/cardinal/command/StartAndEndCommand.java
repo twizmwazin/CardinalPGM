@@ -9,9 +9,6 @@ import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.teams.PgmTeam;
 import org.bukkit.command.CommandSender;
 
-/**
- * Created by kevin on 11/19/14.
- */
 public class StartAndEndCommand {
     private static int timer;
     private static boolean waiting = false;
@@ -37,7 +34,7 @@ public class StartAndEndCommand {
 
     }
 
-    @Command(aliases = {"end"}, desc = "Ends the match.", usage = "[time]")
+    @Command(aliases = {"end", "finish"}, desc = "Ends the match.", usage = "[time]")
     @CommandPermissions("cardinal.match.end")
     public static void end(CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().getState() == MatchState.PLAYING) {

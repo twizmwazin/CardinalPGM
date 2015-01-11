@@ -11,6 +11,7 @@ import in.twizmwaz.cardinal.module.modules.hunger.HungerBuilder;
 import in.twizmwaz.cardinal.module.modules.itemRemove.ItemRemoveBuilder;
 import in.twizmwaz.cardinal.module.modules.killStreakCount.KillStreakBuilder;
 import in.twizmwaz.cardinal.module.modules.kit.KitBuilder;
+import in.twizmwaz.cardinal.module.modules.mapInfo.InfoBuilder;
 import in.twizmwaz.cardinal.module.modules.motd.MOTDBuilder;
 import in.twizmwaz.cardinal.module.modules.observers.ObserverModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.projectiles.ProjectilesBuilder;
@@ -67,6 +68,7 @@ public class ModuleHandler {
         builders.add(new SpawnModuleBuilder());
         builders.add(new ObserverModuleBuilder());
         builders.add(new KillStreakBuilder());
+        builders.add(new InfoBuilder());
     }
 
     public Set<Module> invokeModules(Match match) {

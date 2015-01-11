@@ -4,24 +4,24 @@ import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.data.Contributor;
-import in.twizmwaz.cardinal.data.MapInfo;
+import in.twizmwaz.cardinal.module.modules.mapInfo.contributor.Contributor;
+import in.twizmwaz.cardinal.module.modules.mapInfo.Info;
 import in.twizmwaz.cardinal.teams.PgmTeam;
 import in.twizmwaz.cardinal.util.DomUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.jdom2.Document;
+import org.jdom2.Element;
 import org.jdom2.JDOMException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Created by kevin on 11/16/14.
- */
 public class MapCommands {
 
-    private static MapInfo mapInfo;
+    private static Info mapInfo;
 
     public static void refreshMapInfo() {
         mapInfo = GameHandler.getGameHandler().getMatch().getMapInfo();
@@ -69,28 +69,38 @@ public class MapCommands {
 
     }
 
-    @Command(aliases = {"next", "nextmap"}, desc = "Shows next map.", usage = "")
+    @Command(aliases = {"next", "nextmap", "nm", "mn"}, desc = "Shows next map.", usage = "")
     public static void next(final CommandContext cmd, CommandSender sender) {
         String nextMap = GameHandler.getGameHandler().getRotation().getNext().getName();
         try {
             Document doc = DomUtil.parse(new File("maps/" + nextMap + "/map.xml"));
-            MapInfo mapInfo = new MapInfo(doc);
-            if (mapInfo.getAuthors().size() == 1) {
-                sender.sendMessage(ChatColor.DARK_PURPLE + "Next map: " + ChatColor.GOLD + mapInfo.getName() + ChatColor.DARK_PURPLE + " by " + ChatColor.RED + mapInfo.getAuthors().get(0).getName());
-            } else if (mapInfo.getAuthors().size() > 1) {
-                int size = mapInfo.getAuthors().size();
-                String result = ChatColor.DARK_PURPLE + "Next map: " + ChatColor.GOLD + mapInfo.getName() + ChatColor.DARK_PURPLE + " by ";
-                for (Contributor author : mapInfo.getAuthors()) {
-                    if (mapInfo.getAuthors().indexOf(author) < mapInfo.getAuthors().size() - 2) {
+            List<Contributor> authors;
+            String name = doc.getRootElement().getChild("name").getText();
+            authors = new ArrayList<>();
+            for (Element element : doc.getRootElement().getChildren("authors")) {
+                for (Element author : element.getChildren()) {
+                    if (author.hasAttributes()) {
+                        authors.add(new Contributor(author.getText(), author.getAttribute("contribution").getValue()));
+                    } else {
+                        authors.add(new Contributor(author.getText()));
+                    }
+                }
+            }
+            if (authors.size() == 1) {
+                sender.sendMessage(ChatColor.DARK_PURPLE + "Next map: " + ChatColor.GOLD + name + ChatColor.DARK_PURPLE + " by " + ChatColor.RED + authors.get(0).getName());
+            } else if (authors.size() > 1) {
+                int size = authors.size();
+                String result = ChatColor.DARK_PURPLE + "Next map: " + ChatColor.GOLD + name + ChatColor.DARK_PURPLE + " by ";
+                for (Contributor author : authors) {
+                    if (authors.indexOf(author) < authors.size() - 2) {
                         result = result + ChatColor.RED + author.getName() + ChatColor.DARK_PURPLE + ", ";
-                    } else if (mapInfo.getAuthors().indexOf(author) == mapInfo.getAuthors().size() - 2) {
+                    } else if (authors.indexOf(author) == authors.size() - 2) {
                         result = result + ChatColor.RED + author.getName() + ChatColor.DARK_PURPLE + " and ";
-                    } else if (mapInfo.getAuthors().indexOf(author) == mapInfo.getAuthors().size() - 1) {
+                    } else if (authors.indexOf(author) == authors.size() - 1) {
                         result = result + ChatColor.RED + author.getName();
                     }
 
                 }
-
                 sender.sendMessage(result);
             }
 

@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.ModuleHandler;
+import in.twizmwaz.cardinal.module.modules.mapInfo.Info;
 import in.twizmwaz.cardinal.rotation.Rotation;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import org.bukkit.Bukkit;

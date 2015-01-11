@@ -5,9 +5,6 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
 import org.bukkit.command.CommandSender;
 
-/**
- * Created by kevin on 10/31/14.
- */
 public class CycleCommand {
 
     @Command(aliases = {"cycle"}, desc = "Cycles the world and loads a new world.", usage = "[time]")

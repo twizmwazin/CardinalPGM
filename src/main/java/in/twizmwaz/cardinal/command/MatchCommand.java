@@ -6,9 +6,6 @@ import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import org.bukkit.command.CommandSender;
 
-/**
- * Created by kevin on 11/17/14.
- */
 public class MatchCommand {
 
     @Command(aliases = {"matchinfo", "match"}, desc = "Shows information about the currently playing match", usage = "", min = 0, max = 0)
