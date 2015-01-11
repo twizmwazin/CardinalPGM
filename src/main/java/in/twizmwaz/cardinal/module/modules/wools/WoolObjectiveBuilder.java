@@ -36,7 +36,14 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
                 if (id == null) {
                     id = subElement.getAttributeValue("color");
                 }
-                result.add(new WoolObjective(team, name, id, color, place));
+                boolean craftable = true;
+                try {
+                    if (subElement.getAttribute("craftable").getValue().equalsIgnoreCase("false")) {
+                        craftable = false;
+                    }
+                } catch (NullPointerException exc) {
+                }
+                result.add(new WoolObjective(team, name, id, color, place, craftable));
             }
             for (Element child : element.getChildren("wools")) {
                 for (Element subChild : child.getChildren("wool")) {
@@ -60,7 +67,14 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
                     if (id == null) {
                         id = subChild.getAttributeValue("color");
                     }
-                    result.add(new WoolObjective(team, name, id, color, place));
+                    boolean craftable = true;
+                    try {
+                        if (subChild.getAttribute("craftable").getValue().equalsIgnoreCase("false")) {
+                            craftable = false;
+                        }
+                    } catch (NullPointerException exc) {
+                    }
+                    result.add(new WoolObjective(team, name, id, color, place, craftable));
                 }
             }
 
