@@ -21,6 +21,7 @@ import org.bukkit.event.player.PlayerInitialSpawnEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
 public class SpawnModule implements Module {
 
@@ -40,15 +41,6 @@ public class SpawnModule implements Module {
     @EventHandler
     public void onPgmSpawn(PgmSpawnEvent event) {
         try {
-            final PgmSpawnEvent event1 = event;
-            Bukkit.getServer().getScheduler().runTaskLater(GameHandler.getGameHandler().getPlugin(), new Runnable() {
-                @Override
-                public void run() {
-                    if (event1.getSpawn().hasDirection()) {
-                        event1.getPlayer().getLocation().setDirection(event1.getSpawn().getDirection());
-                    }
-                }
-            }, 0);
             if (!match.getTeam(event.getPlayer()).isObserver()) {
                 event.getPlayer().setGameMode(GameMode.SURVIVAL);
             }
@@ -63,7 +55,7 @@ public class SpawnModule implements Module {
         PgmSpawnEvent spawnEvent = new PgmSpawnEvent(event.getPlayer(), spawn, match.getTeamById("observers"));
         Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
         if (!spawnEvent.isCancelled()) {
-            event.setSpawnLocation(spawn.getPoint().toLocation());
+            event.setSpawnLocation(spawn.getLocation());
             PlayerUtil.resetPlayer(event.getPlayer());
         }
     }
@@ -74,7 +66,7 @@ public class SpawnModule implements Module {
         PgmSpawnEvent spawnEvent = new PgmSpawnEvent(event.getPlayer(), spawn, match.getTeam(event.getPlayer()));
         Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
         if (!spawnEvent.isCancelled()) {
-            event.setRespawnLocation(spawn.getPoint().toLocation());
+            event.setRespawnLocation(spawn.getLocation());
         }
     }
 
@@ -88,7 +80,7 @@ public class SpawnModule implements Module {
                 PgmSpawnEvent spawnEvent = new PgmSpawnEvent(player, spawn, match.getTeam(player));
                 Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
                 if (!spawnEvent.isCancelled()) {
-                    player.teleport(spawn.getPoint().toLocation());
+                    player.teleport(spawn.getLocation());
                 }
             }
         }
@@ -103,7 +95,7 @@ public class SpawnModule implements Module {
             if (!spawnEvent.isCancelled()) {
                 PlayerUtil.resetPlayer(player);
                 player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
-                player.teleport(spawn.getPoint().toLocation());
+                player.teleport(spawn.getLocation());
             }
         }
     }
@@ -122,7 +114,7 @@ public class SpawnModule implements Module {
                         PgmSpawnEvent spawnEvent = new PgmSpawnEvent(event.getPlayer(), spawn, event.getNewTeam());
                         Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
                         if (!spawnEvent.isCancelled()) {
-                            event.getPlayer().teleport(spawn.getPoint().toLocation());
+                            event.getPlayer().teleport(spawn.getLocation());
                         }
                     } else {
                         event.getPlayer().setHealth(0);
