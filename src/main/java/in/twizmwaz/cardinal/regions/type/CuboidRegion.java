@@ -78,7 +78,10 @@ public class CuboidRegion extends Region {
 
     @Override
     public PointRegion getRandomPoint() {
-        return new PointRegion(OtherUtil.getRandom(xMin, xMax), OtherUtil.getRandom(yMin, yMax), OtherUtil.getRandom(zMin, zMax));
+        double x = (xMin > xMax) ? OtherUtil.getRandom(xMax, xMin) : OtherUtil.getRandom(xMin, xMax);
+        double y = (yMin > yMax) ? OtherUtil.getRandom(yMax, yMin) : OtherUtil.getRandom(yMin, yMax);
+        double z = (zMin > zMax) ? OtherUtil.getRandom(zMax, zMin) : OtherUtil.getRandom(zMin, zMax);
+        return new PointRegion(x, y, z);
     }
 
     @Override
@@ -91,7 +94,7 @@ public class CuboidRegion extends Region {
         List<Block> results = new ArrayList<>();
         for (int x = (int) getXMin(); x <= getXMax(); x++) {
             for (int z = (int) getZMin(); z <= getZMax(); z++) {
-                for (int y = (int) getYMin(); y <= yMax; y++) {
+                for (int y = (int) getYMin(); y <= getXMax(); y++) {
                     results.add((new Location(GameHandler.getGameHandler().getMatchWorld(), x, y, z).getBlock()));
                 }
             }

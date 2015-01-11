@@ -68,16 +68,22 @@ public class SpawnParser {
                 if (kit == null) {
                     kit = child.getAttributeValue("kit");
                 }
+                List<Region> regions = new ArrayList<Region>();
+                for (Element regionElement : subChild.getChildren()) {
+                    regions.add(Region.getRegion(regionElement, document));
+                }
                 int yaw = 0;
+                String[] angle = null;
                 try {
-                    String[] angle;
+                    
                     try {
                         angle = subChild.getAttributeValue("angle").replaceAll(" ", "").split(",");
                     } catch (NullPointerException e) {
                         angle = child.getAttributeValue("angle").replaceAll(" ", "").split(",");
                     }
-                    for (Spawn spawn : result) {
-                        spawn.setDirection(new Vector(Double.parseDouble(angle[0]), Double.parseDouble(angle[1]), Double.parseDouble(angle[2])));
+                    Vector direction = new Vector(Double.parseDouble(angle[0]), Double.parseDouble(angle[1]), Double.parseDouble(angle[2]));
+                    if (teamId.toLowerCase().startsWith(teamValue)) {
+                        result.add(new Spawn(regions, direction, kit));
                     }
                 } catch (NullPointerException exc) {
                     try {
@@ -89,24 +95,11 @@ public class SpawnParser {
                             yaw = Integer.parseInt(subChild.getChildren().get(0).getAttributeValue("yaw").replaceAll(" ", ""));
                         }
                     }
-                } catch (NumberFormatException exc) {
-                    try {
-                        yaw = Integer.parseInt(subChild.getAttributeValue("yaw").replaceAll(" ", ""));
-                    } catch (Exception e) {
-                        try {
-                            yaw = Integer.parseInt(child.getAttributeValue("yaw").replaceAll(" ", ""));
-                        } catch (Exception ex) {
-                            yaw = Integer.parseInt(subChild.getChildren().get(0).getAttributeValue("yaw").replaceAll(" ", ""));
-                        }
+                    if (teamId.toLowerCase().startsWith(teamValue)) {
+                        result.add(new Spawn(regions, yaw, kit));
                     }
                 }
-                List<Region> regions = new ArrayList<Region>();
-                for (Element regionElement : subChild.getChildren()) {
-                    regions.add(Region.getRegion(regionElement, document));
-                }
-                if (teamId.toLowerCase().startsWith(teamValue)) {
-                    result.add(new Spawn(regions, yaw, kit));
-                }
+                
             }
         }
         return result;
