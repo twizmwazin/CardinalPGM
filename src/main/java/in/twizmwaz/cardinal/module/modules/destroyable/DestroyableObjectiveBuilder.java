@@ -8,7 +8,7 @@ import org.jdom2.Element;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DestroyableBuilder implements ModuleBuilder {
+public class DestroyableObjectiveBuilder implements ModuleBuilder {
 
     @Override
     public List<Module> load(Match match) {
