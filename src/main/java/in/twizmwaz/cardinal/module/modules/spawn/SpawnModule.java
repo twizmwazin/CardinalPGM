@@ -107,12 +107,16 @@ public class SpawnModule implements Module {
         if (match.getState().equals(MatchState.PLAYING)) {
             try {
                 if (!event.getNewTeam().isObserver()) {
-                    PlayerUtil.resetPlayer(event.getPlayer());
-                    Spawn spawn = event.getNewTeam().getSpawn();
-                    PgmSpawnEvent spawnEvent = new PgmSpawnEvent(event.getPlayer(), spawn, event.getNewTeam());
-                    Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
-                    if (!spawnEvent.isCancelled()) {
-                        event.getPlayer().teleport(spawn.getPoint().toLocation());
+                    if (event.getOldTeam().isObserver()) {
+                        PlayerUtil.resetPlayer(event.getPlayer());
+                        Spawn spawn = event.getNewTeam().getSpawn();
+                        PgmSpawnEvent spawnEvent = new PgmSpawnEvent(event.getPlayer(), spawn, event.getNewTeam());
+                        Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
+                        if (!spawnEvent.isCancelled()) {
+                            event.getPlayer().teleport(spawn.getPoint().toLocation());
+                        }
+                    } else {
+                        event.getPlayer().setHealth(0);
                     }
                 } else if (event.getNewTeam().isObserver()) {
                     Spawn spawn = event.getNewTeam().getSpawn();
