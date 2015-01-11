@@ -88,7 +88,7 @@ public class Match {
     }
 
     public Info getMapInfo() {
-        return Info.mapInfo;
+        return Info.getMapInfo();
     }
 
     public Scoreboard getScoreboard() {

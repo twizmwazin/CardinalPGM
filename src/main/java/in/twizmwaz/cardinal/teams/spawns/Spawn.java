@@ -60,7 +60,7 @@ public class Spawn {
         Random random = new Random();
         PointRegion pointRegion = regions.get(random.nextInt(regions.size())).getRandomPoint();
         Location location = new Location(GameHandler.getGameHandler().getMatchWorld(), pointRegion.getX(), pointRegion.getY(), pointRegion.getZ(), yaw, 0);
-        if (!(direction == null)) {
+        if (direction != null) {
             location.setDirection(direction);
             return location;
         }

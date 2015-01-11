@@ -7,7 +7,7 @@ import org.bukkit.event.HandlerList;
 import java.util.List;
 
 public class Info implements Module {
-    public static Info mapInfo;
+    private static Info mapInfo;
 
     private String name;
     private String version;
@@ -24,6 +24,10 @@ public class Info implements Module {
         this.contributors = contributors;
         this.rules = rules;
         mapInfo = this;
+    }
+
+    public static Info getMapInfo() {
+        return mapInfo;
     }
 
     @Override
