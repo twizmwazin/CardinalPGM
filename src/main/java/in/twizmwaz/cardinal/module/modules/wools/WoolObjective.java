@@ -111,7 +111,7 @@ public class WoolObjective implements GameObjective {
                 if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
                     if (GameHandler.getGameHandler().getMatch().getTeam(event.getPlayer()).equals(team)) {
                         this.complete = true;
-                        Bukkit.broadcastMessage(team.getColor() + event.getPlayer().getDisplayName() + ChatColor.WHITE + " placed " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase() + ChatColor.WHITE + " for the " + team.getColor() + team.getName());
+                        Bukkit.broadcastMessage(team.getColor() + event.getPlayer().getDisplayName() + ChatColor.WHITE + " placed " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase() + ChatColor.WHITE + " for the " + team.getCompleteName());
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this);
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
                         event.setCancelled(false);
