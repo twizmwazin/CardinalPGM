@@ -69,7 +69,7 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
                     }
                     boolean craftable = true;
                     try {
-                        if (subChild.getAttribute("craftable").getValue().equalsIgnoreCase("false")) {
+                        if (subChild.getAttributeValue("craftable").equalsIgnoreCase("false")) {
                             craftable = false;
                         }
                     } catch (NullPointerException exc) {
@@ -79,7 +79,6 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
             }
 
         }
-
         return result;
     }
 
