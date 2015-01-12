@@ -30,21 +30,22 @@ public class CoreObjective implements GameObjective {
     private final PgmTeam team;
     private final String name;
     private final String id;
+    private final UnionRegion region;
 
-    private UnionRegion region;
     private Set<String> playersTouched;
     private Material currentType;
 
     private boolean touched;
     private boolean complete;
 
-    protected CoreObjective(final PgmTeam team, final String name, final String id, UnionRegion region) {
+    protected CoreObjective(final PgmTeam team, final String name, final String id, final UnionRegion region, Material type) {
         this.team = team;
         this.name = name;
         this.id = id;
         this.region = region;
 
         this.playersTouched = new HashSet<>();
+        this.currentType = type;
     }
 
     @Override
@@ -79,10 +80,19 @@ public class CoreObjective implements GameObjective {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event) {
-        if (GameHandler.getGameHandler().getMatch().getTeam(event.getPlayer()).equals(team)) {
-            if (this.region.getBlocks().contains(event.getBlock())) {
-
+        if (this.region.getBlocks().contains(event.getBlock())) {
+            if (event.getBlock().getType().equals(currentType)) {
+                if (GameHandler.getGameHandler().getMatch().getTeam(event.getPlayer()).equals(team)) {
+                    if (!playersTouched.contains(event.getPlayer().getName())) {
+                        playersTouched.add(event.getPlayer().getName());
+                    }
+                    this.touched = true;
+                } else event.setCancelled(true);
             }
-        } else event.setCancelled(true);
+        }
+    }
+
+    public Material getCurrentType() {
+        return currentType;
     }
 }
