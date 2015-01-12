@@ -1,20 +1,15 @@
 package in.twizmwaz.cardinal.module.modules.cores;
 
-import in.parapengu.commons.utils.StringUtils;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
-import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
 import in.twizmwaz.cardinal.regions.Region;
-import in.twizmwaz.cardinal.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.regions.type.combinations.UnionRegion;
 import in.twizmwaz.cardinal.teams.PgmTeam;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.jdom2.Element;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CoreObjectiveBuilder implements ModuleBuilder {
@@ -43,34 +38,12 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                     id = subElement.getAttributeValue("id");
                 } catch (NullPointerException e) {
                 }
-                UnionRegion region = null;
+                List<Region> regions = new ArrayList<>();
                 if (subElement.getAttributeValue("region") != null) {
-                    region = new UnionRegion(null, Arrays.asList(Region.getRegion(subElement)));
+                    regions.add(Region.getRegion(subElement));
                 } else {
-                    List<Region> regions = new ArrayList<>();
-                    try {
-                        for (Element regionChild : subElement.getChild("regions").getChildren()) {
-                            regions.add(Region.getRegion(regionChild));
-                        }
-                    } catch (NullPointerException e) {
-                    }
-                    if (subElement.getChild("region") != null) {
-                        try {
-                            regions.add(Region.getRegion(subElement.getChild("region")));
-                        } catch (NullPointerException e) {
-                        }
-                        try {
-                            for (Element subRegion : subElement.getChild("region").getChildren()) {
-                                regions.add(Region.getRegion(subRegion));
-                            }
-                        } catch (NullPointerException e) {
-                        }
-                    }
-                    if (regions.size() == 0) {
-                        try {
-                            regions.add(Region.getRegion(subElement.getChildren().get(0)));
-                        } catch (NullPointerException e) {
-                        }
+                    for (Element region : subElement.getChildren()) {
+                        regions.add(Region.getRegion(region));
                     }
                 }
                 int leak = 5;
@@ -86,7 +59,7 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                 } catch (NullPointerException e) {
                     type = Material.matchMaterial(subElement.getAttributeValue("material"));
                 }
-                result.add(new CoreObjective(team, name, id, region, leak, type));
+                result.add(new CoreObjective(team, name, id, new UnionRegion(regions), leak, type));
             }
             for (Element child : element.getChildren("cores")) {
                 for (Element subChild : child.getChildren("core")) {
@@ -113,34 +86,12 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                         id = subChild.getAttributeValue("id");
                     } catch (NullPointerException e) {
                     }
-                    UnionRegion region = null;
+                    List<Region> regions = new ArrayList<>();
                     if (subChild.getAttributeValue("region") != null) {
-                        region = new UnionRegion(null, Arrays.asList(Region.getRegion(subChild)));
+                        regions.add(Region.getRegion(subChild));
                     } else {
-                        List<Region> regions = new ArrayList<>();
-                        try {
-                            for (Element regionChild : subChild.getChild("regions").getChildren()) {
-                                regions.add(Region.getRegion(regionChild));
-                            }
-                        } catch (NullPointerException e) {
-                        }
-                        if (subChild.getChild("region") != null) {
-                            try {
-                                regions.add(Region.getRegion(subChild.getChild("region")));
-                            } catch (NullPointerException e) {
-                            }
-                            try {
-                                for (Element subRegion : subChild.getChild("region").getChildren()) {
-                                    regions.add(Region.getRegion(subRegion));
-                                }
-                            } catch (NullPointerException e) {
-                            }
-                        }
-                        if (regions.size() == 0) {
-                            try {
-                                regions.add(Region.getRegion(subChild.getChildren().get(0)));
-                            } catch (NullPointerException e) {
-                            }
+                        for (Element region : subChild.getChildren()) {
+                            regions.add(Region.getRegion(element));
                         }
                     }
                     int leak = 5;
@@ -156,7 +107,7 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                     } catch (NullPointerException e) {
                         type = Material.matchMaterial(subChild.getAttributeValue("material"));
                     }
-                    result.add(new CoreObjective(team, name, id, region, leak, type));
+                    result.add(new CoreObjective(team, name, id, new UnionRegion(regions), leak, type));
                 }
             }
         }

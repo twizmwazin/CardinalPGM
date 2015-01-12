@@ -1,31 +1,23 @@
 package in.twizmwaz.cardinal.module.modules.cores;
 
-import in.parapengu.commons.utils.StringUtils;
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.event.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.type.BlockRegion;
-import in.twizmwaz.cardinal.regions.type.combinations.UnionRegion;
 import in.twizmwaz.cardinal.teams.PgmTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFromToEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
-import org.bukkit.material.Wool;
 import org.bukkit.util.Vector;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class CoreObjective implements GameObjective {
@@ -33,7 +25,7 @@ public class CoreObjective implements GameObjective {
     private final PgmTeam team;
     private final String name;
     private final String id;
-    private final UnionRegion region;
+    private final Region region;
     private final int leak;
 
     private Set<String> playersTouched;
@@ -42,7 +34,7 @@ public class CoreObjective implements GameObjective {
     private boolean touched;
     private boolean complete;
 
-    protected CoreObjective(final PgmTeam team, final String name, final String id, final UnionRegion region, final int leak, Material type) {
+    protected CoreObjective(final PgmTeam team, final String name, final String id, final Region region, final int leak, final Material type) {
         this.team = team;
         this.name = name;
         this.id = id;
@@ -100,8 +92,9 @@ public class CoreObjective implements GameObjective {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockFromTo(BlockFromToEvent event) {
         Block to = event.getToBlock();
+        Block from = event.getBlock();
         if (CoreObjective.getClosestCore(to.getX(), to.getY(), to.getZ()).equals(this)) {
-            if (to.getType().equals(Material.LAVA) || to.getType().equals(Material.STATIONARY_LAVA)) {
+            if ((from.getType().equals(Material.LAVA) || from.getType().equals(Material.STATIONARY_LAVA)) && to.getType().equals(Material.AIR)) {
                 double minY = -1;
                 for (Block block : region.getBlocks()) {
                     if (minY == -1 || block.getY() < minY) {
@@ -117,7 +110,7 @@ public class CoreObjective implements GameObjective {
         }
     }
 
-    public UnionRegion getRegion() {
+    public Region getRegion() {
         return region;
     }
 
