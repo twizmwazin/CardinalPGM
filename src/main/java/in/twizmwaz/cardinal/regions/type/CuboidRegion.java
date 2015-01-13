@@ -86,7 +86,7 @@ public class CuboidRegion extends Region {
 
     @Override
     public BlockRegion getCenterBlock() {
-        return new BlockRegion(this.xMax - this.xMin, this.yMax - yMin, this.zMax - this.zMin);
+        return new BlockRegion(xMin + Math.abs(this.xMax - this.xMin), yMin + Math.abs(this.yMax - yMin), zMax + Math.abs(this.zMax - this.zMin));
     }
 
     @Override
@@ -94,7 +94,7 @@ public class CuboidRegion extends Region {
         List<Block> results = new ArrayList<>();
         for (int x = (int) getXMin(); x <= getXMax(); x++) {
             for (int z = (int) getZMin(); z <= getZMax(); z++) {
-                for (int y = (int) getYMin(); y <= getXMax(); y++) {
+                for (int y = (int) getYMin(); y <= getYMax(); y++) {
                     results.add((new Location(GameHandler.getGameHandler().getMatchWorld(), x, y, z).getBlock()));
                 }
             }

@@ -84,7 +84,10 @@ public class CoreObjective implements GameObjective {
                         playersTouched.add(event.getPlayer().getName());
                     }
                     this.touched = true;
-                } else event.setCancelled(true);
+                } else {
+                    event.setCancelled(true);
+                    event.getPlayer().sendMessage(ChatColor.RED + "You cannot leak your own core!");
+                }
             }
         }
     }
@@ -95,15 +98,12 @@ public class CoreObjective implements GameObjective {
         Block from = event.getBlock();
         if (CoreObjective.getClosestCore(to.getX(), to.getY(), to.getZ()).equals(this)) {
             if ((from.getType().equals(Material.LAVA) || from.getType().equals(Material.STATIONARY_LAVA)) && to.getType().equals(Material.AIR)) {
-                double minY = -1;
+                double minY = region.getCenterBlock().getY() - 4;
                 for (Block block : region.getBlocks()) {
-                    if (minY == -1 || block.getY() < minY) {
-                        minY = block.getY();
-                    }
+                    if (block.getY() < minY) minY = block.getY();
                 }
-                if (minY - to.getY() >= leak) {
+                if (minY - to.getY() >= leak && !this.complete) {
                     this.complete = true;
-                    event.getToBlock().setType(Material.LAVA);
                     Bukkit.broadcastMessage(team.getCompleteName() + "'s " + ChatColor.DARK_AQUA + name + ChatColor.RED + " has leaked!");
                 }
             }

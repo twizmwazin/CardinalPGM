@@ -26,9 +26,8 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                     team = match.getTeamById(subElement.getAttributeValue("team"));
                 }
                 String name = "Core";
-                try {
+                if (subElement.getAttributeValue("name") != null) {
                     name = subElement.getAttributeValue("name");
-                } catch (NullPointerException e) {
                 }
                 if (element.getAttributeValue("name") != null) {
                     name = subElement.getAttributeValue("name");
