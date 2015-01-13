@@ -32,9 +32,10 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                     name = element.getAttributeValue("name");
                 }
                 String id = null;
-                try {
+                if (subElement.getAttributeValue("id") != null) {
                     id = subElement.getAttributeValue("id");
-                } catch (NullPointerException e) {
+                } else if (element.getAttributeValue("id") != null) {
+                    id = element.getAttributeValue("id");
                 }
                 List<Region> regions = new ArrayList<>();
                 if (subElement.getAttributeValue("region") != null) {
@@ -92,9 +93,12 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                         name = element.getAttributeValue("name");
                     }
                     String id = null;
-                    try {
+                    if (subChild.getAttributeValue("id") != null) {
                         id = subChild.getAttributeValue("id");
-                    } catch (NullPointerException e) {
+                    } else if (child.getAttributeValue("id") != null) {
+                        id = child.getAttributeValue("id");
+                    } else if (element.getAttributeValue("id") != null) {
+                        id = element.getAttributeValue("id");
                     }
                     List<Region> regions = new ArrayList<>();
                     if (subChild.getAttributeValue("region") != null) {
