@@ -28,9 +28,8 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                 String name = "Core";
                 if (subElement.getAttributeValue("name") != null) {
                     name = subElement.getAttributeValue("name");
-                }
-                if (element.getAttributeValue("name") != null) {
-                    name = subElement.getAttributeValue("name");
+                } else if (element.getAttributeValue("name") != null) {
+                    name = element.getAttributeValue("name");
                 }
                 String id = null;
                 try {
@@ -50,12 +49,10 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                     leak = Integer.parseInt(subElement.getAttributeValue("leak").replaceAll(" ", ""));
                 } catch (NullPointerException e) {
                 }
-                Material type;
-                try {
+                Material type = Material.OBSIDIAN;
+                if (element.getAttributeValue("material") != null) {
                     type = Material.matchMaterial(element.getAttributeValue("material"));
-                } catch (IllegalArgumentException e) {
-                    type = Material.matchMaterial(subElement.getAttributeValue("material"));
-                } catch (NullPointerException e) {
+                } else if (subElement.getAttributeValue("material") != null) {
                     type = Material.matchMaterial(subElement.getAttributeValue("material"));
                 }
                 result.add(new CoreObjective(team, name, id, new UnionRegion(regions), leak, type));
@@ -73,12 +70,10 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                         }
                     }
                     String name = "Core";
-                    try {
+                    if (subChild.getAttributeValue("name") != null) {
                         name = subChild.getAttributeValue("name");
-                    } catch (NullPointerException e) {
-                    }
-                    if (element.getAttributeValue("name") != null) {
-                        name = subChild.getAttributeValue("name");
+                    } else if (element.getAttributeValue("name") != null) {
+                        name = element.getAttributeValue("name");
                     }
                     String id = null;
                     try {
@@ -98,12 +93,10 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                         leak = Integer.parseInt(subChild.getAttributeValue("leak").replaceAll(" ", ""));
                     } catch (NullPointerException e) {
                     }
-                    Material type;
-                    try {
-                        type = Material.matchMaterial(child.getAttributeValue("material"));
-                    } catch (IllegalArgumentException e) {
-                        type = Material.matchMaterial(subChild.getAttributeValue("material"));
-                    } catch (NullPointerException e) {
+                    Material type = Material.OBSIDIAN;
+                    if (element.getAttributeValue("material") != null) {
+                        type = Material.matchMaterial(element.getAttributeValue("material"));
+                    } else if (subChild.getAttributeValue("material") != null) {
                         type = Material.matchMaterial(subChild.getAttributeValue("material"));
                     }
                     result.add(new CoreObjective(team, name, id, new UnionRegion(regions), leak, type));

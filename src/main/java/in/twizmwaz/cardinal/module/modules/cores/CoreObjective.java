@@ -108,6 +108,7 @@ public class CoreObjective implements GameObjective {
                     Bukkit.broadcastMessage(team.getCompleteName() + "'s " + ChatColor.DARK_AQUA + name + ChatColor.RED + " has leaked!");
                     ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this);
                     Bukkit.getServer().getPluginManager().callEvent(compEvent);
+                    event.setCancelled(false);
                 }
             }
         }
