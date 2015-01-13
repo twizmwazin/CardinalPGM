@@ -105,7 +105,7 @@ public class CoreObjective implements GameObjective {
                 }
                 if (minY - to.getY() >= leak && !this.complete) {
                     this.complete = true;
-                    Bukkit.broadcastMessage(team.getCompleteName() + "'s " + ChatColor.DARK_AQUA + name + ChatColor.RED + " has leaked!");
+                    Bukkit.broadcastMessage(team.getCompleteName() + ChatColor.RED + "'s " + ChatColor.DARK_AQUA + name + ChatColor.RED + " has leaked!");
                     ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this);
                     Bukkit.getServer().getPluginManager().callEvent(compEvent);
                     event.setCancelled(false);
