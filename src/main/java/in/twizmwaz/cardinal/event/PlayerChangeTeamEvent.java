@@ -8,9 +8,6 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-/**
- * Created by kevin on 11/22/14.
- */
 public class PlayerChangeTeamEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
@@ -19,7 +16,6 @@ public class PlayerChangeTeamEvent extends Event implements Cancellable {
     private PgmTeam newTeam;
     private PgmTeam oldTeam;
     private JoinType joinType;
-
     private boolean cancelled;
 
     public PlayerChangeTeamEvent(Player player, PgmTeam team, JoinType joinType) {
@@ -64,5 +60,4 @@ public class PlayerChangeTeamEvent extends Event implements Cancellable {
     public void setCancelled(boolean isCancelled) {
         this.cancelled = isCancelled;
     }
-
 }

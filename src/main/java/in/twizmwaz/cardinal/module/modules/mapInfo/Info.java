@@ -1,7 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.mapInfo;
 
-import in.twizmwaz.cardinal.module.modules.mapInfo.contributor.Contributor;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.mapInfo.contributor.Contributor;
 import org.bukkit.event.HandlerList;
 
 import java.util.List;

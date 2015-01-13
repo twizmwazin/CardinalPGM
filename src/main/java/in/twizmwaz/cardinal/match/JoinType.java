@@ -1,8 +1,5 @@
 package in.twizmwaz.cardinal.match;
 
-/**
- * Created by kevin on 12/5/14.
- */
 public enum JoinType {
 
     VOLUNTARY,

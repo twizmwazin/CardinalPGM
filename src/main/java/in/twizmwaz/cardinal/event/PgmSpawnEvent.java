@@ -48,5 +48,4 @@ public class PgmSpawnEvent extends Event implements Cancellable {
     public HandlerList getHandlers() {
         return handlers;
     }
-
 }

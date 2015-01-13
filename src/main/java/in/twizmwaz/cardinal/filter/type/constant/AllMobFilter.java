@@ -15,7 +15,7 @@ public class AllMobFilter extends AllEventFilter {
     @Override
     public FilterState evaluate(Event event) {
         if (event instanceof EntityEvent) {
-            if (((EntityEvent) event).getEntity() instanceof LivingEntity && !(((EntityEvent) event).getEntity() instanceof Player)) 
+            if (((EntityEvent) event).getEntity() instanceof LivingEntity && !(((EntityEvent) event).getEntity() instanceof Player))
                 return allow ? FilterState.ALLOW : FilterState.DENY;
             else return FilterState.ABSTAIN;
         } else return FilterState.ABSTAIN;

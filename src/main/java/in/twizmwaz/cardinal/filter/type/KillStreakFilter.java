@@ -21,7 +21,7 @@ public class KillStreakFilter extends Filter {
         this.count = count;
         this.repeat = repeat;
     }
-    
+
     public KillStreakFilter(final KillstreakFilterParser parser) {
         this.min = parser.getMin();
         this.max = parser.getMax();

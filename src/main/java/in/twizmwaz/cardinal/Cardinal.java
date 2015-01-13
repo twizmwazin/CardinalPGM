@@ -78,5 +78,4 @@ public class Cardinal extends JavaPlugin {
     public JavaPlugin getPlugin() {
         return this;
     }
-
 }

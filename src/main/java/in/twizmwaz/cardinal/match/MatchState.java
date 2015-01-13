@@ -1,8 +1,5 @@
 package in.twizmwaz.cardinal.match;
 
-/**
- * Created by kevin on 10/29/14.
- */
 public enum MatchState {
 
     WAITING(),
@@ -27,6 +24,4 @@ public enum MatchState {
                 return "";
         }
     }
-
-
 }

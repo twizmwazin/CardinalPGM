@@ -17,16 +17,17 @@ public class TeamFilter extends Filter {
     public TeamFilter(final PgmTeam team) {
         this.team = team;
     }
-    
+
     public TeamFilter(final TeamFilterParser parser) {
         this.team = parser.getTeam();
-        
+
     }
 
     @Override
     public FilterState evaluate(final Event event) {
         if (event instanceof PlayerEvent) {
-            if (GameHandler.getGameHandler().getMatch().getTeam(((PlayerEvent) event).getPlayer()).equals(team)) return ALLOW;
+            if (GameHandler.getGameHandler().getMatch().getTeam(((PlayerEvent) event).getPlayer()).equals(team))
+                return ALLOW;
             else return DENY;
         } else return ABSTAIN;
     }

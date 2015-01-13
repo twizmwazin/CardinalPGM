@@ -2,9 +2,6 @@ package in.twizmwaz.cardinal.util;
 
 import java.util.Random;
 
-/**
- * Created by kevin on 10/26/14.
- */
 public class NumUtils {
 
     public static boolean checkInterval(double test, double bound1, double bound2) {
@@ -35,5 +32,4 @@ public class NumUtils {
         if (string.equalsIgnoreCase("-oo")) return Double.NEGATIVE_INFINITY;
         return Double.parseDouble(string);
     }
-
 }

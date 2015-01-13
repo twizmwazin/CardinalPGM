@@ -17,7 +17,7 @@ public class CarryingFilter extends Filter {
     public CarryingFilter(final Material material) {
         this.material = material;
     }
-    
+
     public CarryingFilter(final ItemFilterParser parser) {
         this.material = parser.getMaterial();
     }

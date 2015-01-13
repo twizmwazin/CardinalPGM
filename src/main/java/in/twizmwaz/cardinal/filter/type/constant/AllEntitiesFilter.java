@@ -15,5 +15,5 @@ public class AllEntitiesFilter extends AllEventFilter {
         if (event instanceof EntityEvent) return allow ? FilterState.ALLOW : FilterState.DENY;
         else return FilterState.ABSTAIN;
     }
-    
+
 }

@@ -17,13 +17,13 @@ public abstract class Filter {
     public abstract FilterState evaluate(final Event event);
 
     /**
-     * @param element Element to parse
+     * @param element  Element to parse
      * @param document Document to find filter in case the given filter is a reference
      * @return The filter based upon the given element
      */
     public static Filter getFilter(Element element, Document document) {
         switch (element.getName().toLowerCase()) {
-            case "team": 
+            case "team":
                 return new TeamFilter((new TeamFilterParser(element)));
             case "block":
                 return new BlockFilter(new BlockFilterParser(element));
@@ -104,6 +104,7 @@ public abstract class Filter {
 
     /**
      * This method will default the document to the document of the current match (possibly buggy)
+     *
      * @param element Element to parse
      * @return The filter based upon the given element
      */

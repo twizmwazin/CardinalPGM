@@ -1,8 +1,5 @@
 package in.twizmwaz.cardinal.util;
 
-/**
- * Created by kevin on 11/21/14.
- */
 public enum ArmorType {
 
     HELMET(),
@@ -39,5 +36,4 @@ public enum ArmorType {
                 return "";
         }
     }
-
 }

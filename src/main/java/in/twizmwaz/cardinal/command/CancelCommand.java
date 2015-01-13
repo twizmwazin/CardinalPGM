@@ -15,15 +15,12 @@ public class CancelCommand {
         try {
             GameHandler.getGameHandler().getCycleTimer().setCancelled(true);
         } catch (NullPointerException ex) {
-
         }
         try {
             GameHandler.getGameHandler().getMatch().getStartTimer().setCancelled(true);
             GameHandler.getGameHandler().getMatch().setState(MatchState.WAITING);
         } catch (NullPointerException ex) {
-
         }
         sender.sendMessage("Canceled all countdowns");
     }
-
 }

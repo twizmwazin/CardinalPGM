@@ -9,9 +9,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
 
-/**
- * Created by kevin on 11/27/14.
- */
 public class CycleTimer implements Runnable, Cancellable {
 
     private Cycle cycle;
@@ -43,7 +40,6 @@ public class CycleTimer implements Runnable, Cancellable {
         } else {
             this.setCancelled(false);
         }
-
     }
 
     @Override

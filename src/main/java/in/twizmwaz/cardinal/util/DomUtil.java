@@ -7,9 +7,6 @@ import org.jdom2.input.SAXBuilder;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * Created by kevin on 11/18/14.
- */
 public class DomUtil {
 
     public static Document parse(File file) throws JDOMException, IOException {
@@ -17,6 +14,4 @@ public class DomUtil {
         return saxBuilder.build(file);
 
     }
-
-
 }

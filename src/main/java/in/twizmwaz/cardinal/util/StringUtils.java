@@ -2,9 +2,6 @@ package in.twizmwaz.cardinal.util;
 
 import java.text.ParseException;
 
-/**
- * Created by kevin on 11/17/14.
- */
 public class StringUtils {
 
     public static int timeStringToSeconds(String input) throws ParseException {
@@ -24,5 +21,4 @@ public class StringUtils {
 
         } else throw new ParseException("Could not parse value " + input + " correctly.", 0);
     }
-
 }

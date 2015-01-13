@@ -5,10 +5,6 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-/**
- * Created by kevin on 12/12/14.
- * To be called for wools, cores, monuments.
- */
 public class ObjectiveCompleteEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();

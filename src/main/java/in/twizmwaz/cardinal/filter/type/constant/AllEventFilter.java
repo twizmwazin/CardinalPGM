@@ -16,5 +16,5 @@ public class AllEventFilter extends Filter {
     public FilterState evaluate(Event event) {
         return allow ? FilterState.ALLOW : FilterState.DENY;
     }
-    
+
 }

@@ -54,14 +54,12 @@ public class RotationCommands {
 
             } catch (IndexOutOfBoundsException e) {
             }
-
         }
         for (String map : maps) {
             if (!map.equalsIgnoreCase("")) {
                 sender.sendMessage(map);
             }
         }
-
     }
 
     @Command(aliases = {"maps"}, desc = "Shows all currently loaded maps.", usage = "[page]")
@@ -114,7 +112,6 @@ public class RotationCommands {
             } catch (ArrayIndexOutOfBoundsException e) {
             }
         }
-
         for (String map : maps) {
             if (!map.equalsIgnoreCase("")) {
                 sender.sendMessage(map);

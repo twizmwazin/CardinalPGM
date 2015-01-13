@@ -33,12 +33,10 @@ public class JoinCommand {
         } catch (NullPointerException ex) {
             throw new CommandException("No teams matched query.");
         }
-
     }
 
     @Command(aliases = {"leave"}, desc = "Leave the game")
     public static void leave(final CommandContext cmd, CommandSender sender) {
         Bukkit.getServer().dispatchCommand(sender, "join observers");
     }
-
 }

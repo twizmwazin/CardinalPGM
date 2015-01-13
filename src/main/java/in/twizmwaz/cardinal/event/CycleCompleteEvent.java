@@ -4,9 +4,6 @@ import in.twizmwaz.cardinal.match.Match;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-/**
- * Created by kevin on 11/19/14.
- */
 public class CycleCompleteEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();

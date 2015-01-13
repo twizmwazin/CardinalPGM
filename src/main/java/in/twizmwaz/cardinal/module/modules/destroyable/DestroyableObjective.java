@@ -4,7 +4,6 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.regions.Region;
-import in.twizmwaz.cardinal.regions.type.combinations.UnionRegion;
 import in.twizmwaz.cardinal.teams.PgmTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -56,9 +55,9 @@ public class DestroyableObjective implements GameObjective {
 
         size = 0.0;
         for (Block block : region.getBlocks()) {
-            for (int i = 0; i < types.size(); i ++) {
+            for (int i = 0; i < types.size(); i++) {
                 if (types.get(i).equals(block.getType()) && damageValues.get(i) == (int) block.getState().getData().getData()) {
-                    size ++;
+                    size++;
                     break;
                 }
             }

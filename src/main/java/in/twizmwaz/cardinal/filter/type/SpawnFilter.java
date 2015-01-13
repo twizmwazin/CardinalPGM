@@ -15,7 +15,7 @@ public class SpawnFilter extends Filter {
     public SpawnFilter(final CreatureSpawnEvent.SpawnReason reason) {
         this.reason = reason;
     }
-    
+
     public SpawnFilter(final SpawnFilterParser parser) {
         this.reason = parser.getReason();
     }

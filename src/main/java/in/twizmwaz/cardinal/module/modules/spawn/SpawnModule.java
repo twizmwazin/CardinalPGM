@@ -21,7 +21,6 @@ import org.bukkit.event.player.PlayerInitialSpawnEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
 
 public class SpawnModule implements Module {
 

@@ -21,8 +21,8 @@ public class Spawn {
 
     /**
      * @param regions Regions for the spawn
-     * @param yaw Yaw for a player when spawned
-     * @param kit Kit to be given to the player when spawned
+     * @param yaw     Yaw for a player when spawned
+     * @param kit     Kit to be given to the player when spawned
      */
     public Spawn(List<Region> regions, int yaw, String kit) {
         if (regions.size() == 0) Bukkit.getLogger().log(Level.SEVERE, "Failed to load spawns");
@@ -32,9 +32,9 @@ public class Spawn {
     }
 
     /**
-     * @param regions Regions for the spawn
+     * @param regions   Regions for the spawn
      * @param direction Direction the player should face when spawned
-     * @param kit Kit to be given to the player when spawned
+     * @param kit       Kit to be given to the player when spawned
      */
     public Spawn(List<Region> regions, Vector direction, String kit) {
         if (regions.size() == 0) Bukkit.getLogger().log(Level.SEVERE, "Failed to load spawns");

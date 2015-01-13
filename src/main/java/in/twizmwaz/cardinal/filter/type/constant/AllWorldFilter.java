@@ -17,7 +17,6 @@ public class AllWorldFilter extends AllEventFilter {
         if (event instanceof BlockEvent) {
             if (event instanceof BlockPlaceEvent || event instanceof BlockBreakEvent) return FilterState.ABSTAIN;
             else return allow ? FilterState.ALLOW : FilterState.DENY;
-        }
-        else return FilterState.ABSTAIN;
+        } else return FilterState.ABSTAIN;
     }
 }

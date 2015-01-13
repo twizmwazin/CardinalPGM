@@ -16,7 +16,7 @@ public class ObjectiveFilter extends Filter {
     public ObjectiveFilter(final GameObjective objective) {
         this.objective = objective;
     }
-    
+
     public ObjectiveFilter(final ObjectiveFilterParser parser) {
         this.objective = parser.getObjective();
     }

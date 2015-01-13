@@ -16,5 +16,4 @@ public class GenerateMap {
             e.printStackTrace();
         }
     }
-
 }

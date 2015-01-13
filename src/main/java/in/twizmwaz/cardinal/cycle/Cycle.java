@@ -50,6 +50,5 @@ public class Cycle implements Runnable {
         world.setSpawnFlags(false, false);
 
         handler.setMatchWorld(world);
-
     }
 }

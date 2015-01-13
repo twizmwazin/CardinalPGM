@@ -1,13 +1,11 @@
 package in.twizmwaz.cardinal;
 
-
 import in.twizmwaz.cardinal.cycle.Cycle;
 import in.twizmwaz.cardinal.cycle.CycleTimer;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.ModuleHandler;
-import in.twizmwaz.cardinal.module.modules.mapInfo.Info;
 import in.twizmwaz.cardinal.rotation.Rotation;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import org.bukkit.Bukkit;
@@ -16,9 +14,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
 
-/**
- * Created by kevin on 10/31/14.
- */
 public class GameHandler {
 
     private static GameHandler handler;
@@ -38,7 +33,6 @@ public class GameHandler {
         rotation = new Rotation(plugin);
         cycle = new Cycle(rotation.getNext(), UUID.randomUUID(), this);
         cycleAndMakeMatch();
-        //initialCycle();
     }
 
     public static GameHandler getGameHandler() {

@@ -17,7 +17,7 @@ public class RandomFilter extends Filter {
     public RandomFilter(final double chance) {
         this.chance = chance;
     }
-    
+
     public RandomFilter(final RandomFilterParser parser) {
         this.chance = parser.getChance();
     }

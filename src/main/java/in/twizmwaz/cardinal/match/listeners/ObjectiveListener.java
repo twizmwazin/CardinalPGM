@@ -11,9 +11,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by kevin on 12/12/14.
- */
 public class ObjectiveListener implements Listener {
 
     private final Match match;
@@ -35,5 +32,4 @@ public class ObjectiveListener implements Listener {
         }
         match.end(workingTeam);
     }
-
 }

@@ -12,9 +12,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-/**
- * Created by kevin on 11/19/14.
- */
 public class MatchListener implements Listener {
 
     private final JavaPlugin plugin;
@@ -52,5 +49,4 @@ public class MatchListener implements Listener {
             player.setScoreboard(match.getScoreboard());
         }
     }
-
 }

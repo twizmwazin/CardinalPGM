@@ -9,7 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 
 public class AppliedRegion implements Module {
-    
+
     private final Region region;
     private final Filter filter;
 

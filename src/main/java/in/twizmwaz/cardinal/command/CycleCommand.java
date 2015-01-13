@@ -18,8 +18,6 @@ public class CycleCommand {
         } catch (IndexOutOfBoundsException e) {
             GameHandler.getGameHandler().startCycleTimer(30);
         }
-
-
     }
 
     @Command(aliases = {"setnext", "sn"}, desc = "Sets the next map.", usage = "[map]", min = 0)

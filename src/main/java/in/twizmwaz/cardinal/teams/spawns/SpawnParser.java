@@ -75,7 +75,6 @@ public class SpawnParser {
                 int yaw = 0;
                 String[] angle = null;
                 try {
-                    
                     try {
                         angle = subChild.getAttributeValue("angle").replaceAll(" ", "").split(",");
                     } catch (NullPointerException e) {
@@ -99,7 +98,6 @@ public class SpawnParser {
                         result.add(new Spawn(regions, yaw, kit));
                     }
                 }
-                
             }
         }
         return result;

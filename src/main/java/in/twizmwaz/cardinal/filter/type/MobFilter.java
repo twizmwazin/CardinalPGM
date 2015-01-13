@@ -8,7 +8,7 @@ public class MobFilter extends EntityFilter {
     public MobFilter(final EntityType mob) {
         super(mob);
     }
-    
+
     public MobFilter(final MobFilterParser parser) {
         super(parser.getMobType());
     }

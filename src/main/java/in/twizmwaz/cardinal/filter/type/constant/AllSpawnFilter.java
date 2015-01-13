@@ -4,7 +4,7 @@ import in.twizmwaz.cardinal.event.PgmSpawnEvent;
 import in.twizmwaz.cardinal.filter.FilterState;
 import org.bukkit.event.Event;
 
-public class AllSpawnFilter extends AllEventFilter{
+public class AllSpawnFilter extends AllEventFilter {
 
     public AllSpawnFilter(boolean allow) {
         super(allow);
@@ -15,5 +15,5 @@ public class AllSpawnFilter extends AllEventFilter{
         if (event instanceof PgmSpawnEvent) return allow ? FilterState.ALLOW : FilterState.DENY;
         else return FilterState.ABSTAIN;
     }
-    
+
 }

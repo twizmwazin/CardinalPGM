@@ -17,7 +17,7 @@ public class WearingFilter extends Filter {
     public WearingFilter(final Material material) {
         this.material = material;
     }
-    
+
     public WearingFilter(final ItemFilterParser parser) {
         this.material = parser.getMaterial();
     }

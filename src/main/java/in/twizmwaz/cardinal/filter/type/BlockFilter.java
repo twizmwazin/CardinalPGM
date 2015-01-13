@@ -16,7 +16,7 @@ public class BlockFilter extends Filter {
     public BlockFilter(final Material material) {
         this.material = material;
     }
-    
+
     public BlockFilter(final BlockFilterParser parser) {
         this.material = parser.getMaterial();
     }

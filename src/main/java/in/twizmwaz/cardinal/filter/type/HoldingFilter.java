@@ -16,7 +16,7 @@ public class HoldingFilter extends Filter {
     public HoldingFilter(final Material material) {
         this.material = material;
     }
-    
+
     public HoldingFilter(final ItemFilterParser parser) {
         this.material = parser.getMaterial();
     }

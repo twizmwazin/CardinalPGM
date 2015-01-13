@@ -2,9 +2,6 @@ package in.twizmwaz.cardinal.util;
 
 import org.bukkit.scheduler.BukkitRunnable;
 
-/**
- * Created by kevin on 11/17/14.
- */
 public class Timer extends BukkitRunnable {
 
     private int time;

@@ -22,5 +22,4 @@ public class PlayerUtil {
         player.clearIgnorantEffects();
         player.setWalkSpeed(0.2F);
     }
-
 }

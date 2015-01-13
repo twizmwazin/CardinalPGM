@@ -1,8 +1,5 @@
 package in.twizmwaz.cardinal.match.exception;
 
-/**
- * Created by kevin on 11/19/14.
- */
 public class MatchStateException extends Exception {
 
     private String message;
@@ -14,5 +11,4 @@ public class MatchStateException extends Exception {
     public String getMessage() {
         return message;
     }
-
 }

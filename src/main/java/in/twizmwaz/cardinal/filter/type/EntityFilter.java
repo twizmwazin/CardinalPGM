@@ -16,7 +16,7 @@ public class EntityFilter extends Filter {
     public EntityFilter(final EntityType mob) {
         this.entity = mob;
     }
-    
+
     public EntityFilter(final EntityFilterParser parser) {
         this.entity = parser.getMobType();
     }

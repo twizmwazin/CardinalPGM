@@ -4,8 +4,8 @@ import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.module.modules.mapInfo.contributor.Contributor;
 import in.twizmwaz.cardinal.module.modules.mapInfo.Info;
+import in.twizmwaz.cardinal.module.modules.mapInfo.contributor.Contributor;
 import in.twizmwaz.cardinal.teams.PgmTeam;
 import in.twizmwaz.cardinal.util.DomUtil;
 import org.bukkit.ChatColor;
@@ -66,7 +66,6 @@ public class MapCommands {
             total = total + team.getMax();
         }
         sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Max players: " + ChatColor.RESET + "" + ChatColor.GOLD + total);
-
     }
 
     @Command(aliases = {"next", "nextmap", "nm", "mn"}, desc = "Shows next map.", usage = "")
@@ -99,7 +98,6 @@ public class MapCommands {
                     } else if (authors.indexOf(author) == authors.size() - 1) {
                         result = result + ChatColor.RED + author.getName();
                     }
-
                 }
                 sender.sendMessage(result);
             }
@@ -109,7 +107,5 @@ public class MapCommands {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
-
 }
