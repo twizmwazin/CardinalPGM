@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.command;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
+import com.sk89q.minecraft.util.commands.CommandPermissions;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.JoinType;
 import in.twizmwaz.cardinal.match.MatchState;
@@ -15,6 +16,7 @@ import org.bukkit.entity.Player;
 public class JoinCommand {
 
     @Command(aliases = {"join", "j"}, desc = "Join a team", usage = "[team]")
+    @CommandPermissions("cardinal.match.join")
     public static void join(final CommandContext cmd, CommandSender sender) throws CommandException {
         PgmTeam team;
         if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) || GameHandler.getGameHandler().getMatch().getState().equals(MatchState.CYCLING)) {
@@ -36,7 +38,8 @@ public class JoinCommand {
 
     }
 
-    @Command(aliases = {"leave"}, desc = "Leave the game")
+    @Command(aliases = {"leave", "l"}, desc = "Leave the game")
+    @CommandPermissions("cardinal.match.leave")
     public static void leave(final CommandContext cmd, CommandSender sender) {
         Bukkit.getServer().dispatchCommand(sender, "join observers");
     }

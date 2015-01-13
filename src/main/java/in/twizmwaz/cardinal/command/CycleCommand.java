@@ -10,16 +10,14 @@ public class CycleCommand {
     @Command(aliases = {"cycle"}, desc = "Cycles the world and loads a new world.", usage = "[time]")
     @CommandPermissions("cardinal.match.cycle")
     public static void cycle(final CommandContext cmd, CommandSender sender) throws CommandException {
-        if (GameHandler.getGameHandler().getMatch().isRunning()) {
+        if (GameHandler.getGameHandler().getMatch().isRunning())
             throw new CommandException("Cannot cycle while the match is running!");
-        }
+
         try {
             GameHandler.getGameHandler().startCycleTimer(cmd.getInteger(0));
         } catch (IndexOutOfBoundsException e) {
             GameHandler.getGameHandler().startCycleTimer(30);
         }
-
-
     }
 
     @Command(aliases = {"setnext", "sn"}, desc = "Sets the next map.", usage = "[map]", min = 0)

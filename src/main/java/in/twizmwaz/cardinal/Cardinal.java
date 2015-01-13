@@ -20,7 +20,9 @@ public class Cardinal extends JavaPlugin {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         try {
-            this.commands.execute(cmd.getName(), args, sender, sender);
+            if(!(sender instanceof ConsoleCommandSender)) {
+                this.commands.execute(cmd.getName(), args, sender, sender);
+            } else { sender.sendMessage(ChatColor.RED + "You must be a player to use CardinalPGM."); }
         } catch (CommandPermissionsException e) {
             sender.sendMessage(ChatColor.RED + "You don't have permission.");
         } catch (MissingNestedCommandException e) {
@@ -56,6 +58,7 @@ public class Cardinal extends JavaPlugin {
         cmdRegister.register(JoinCommand.class);
         cmdRegister.register(RotationCommands.class);
         cmdRegister.register(CancelCommand.class);
+        cmdRegister.register(CardinalCommand.class);
     }
 
     public void onEnable() {

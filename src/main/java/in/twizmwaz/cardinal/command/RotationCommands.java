@@ -1,9 +1,6 @@
 package in.twizmwaz.cardinal.command;
 
-import com.sk89q.minecraft.util.commands.ChatColor;
-import com.sk89q.minecraft.util.commands.Command;
-import com.sk89q.minecraft.util.commands.CommandContext;
-import com.sk89q.minecraft.util.commands.CommandException;
+import com.sk89q.minecraft.util.commands.*;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
 import org.bukkit.command.CommandSender;
@@ -15,6 +12,7 @@ import java.util.List;
 public class RotationCommands {
 
     @Command(aliases = {"rotation", "rot"}, desc = "Shows the current rotation.", usage = "[page]")
+    @CommandPermissions("cardinal.rotation")
     public static void rotation(final CommandContext cmd, CommandSender sender) throws CommandException {
         int index;
         try {
@@ -65,6 +63,7 @@ public class RotationCommands {
     }
 
     @Command(aliases = {"maps"}, desc = "Shows all currently loaded maps.", usage = "[page]")
+    @CommandPermissions("cardinal.map.list")
     public static void maps(final CommandContext cmd, CommandSender sender) throws CommandException {
         int index;
         try {

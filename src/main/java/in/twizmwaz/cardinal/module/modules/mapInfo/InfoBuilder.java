@@ -1,9 +1,9 @@
 package in.twizmwaz.cardinal.module.modules.mapInfo;
 
-import in.twizmwaz.cardinal.module.modules.mapInfo.contributor.Contributor;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.mapInfo.contributor.Contributor;
 import org.jdom2.Element;
 
 import java.util.ArrayList;

@@ -5,25 +5,22 @@ import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.MatchState;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 public class CancelCommand {
 
     @Command(aliases = {"cancel"}, desc = "Cancels the current countdown.")
-    @CommandPermissions("cardinal.cancel")
+    @CommandPermissions("cardinal.match.cancel")
     public static void cancel(final CommandContext cmd, CommandSender sender) {
         try {
             GameHandler.getGameHandler().getCycleTimer().setCancelled(true);
-        } catch (NullPointerException ex) {
-
-        }
-        try {
             GameHandler.getGameHandler().getMatch().getStartTimer().setCancelled(true);
             GameHandler.getGameHandler().getMatch().setState(MatchState.WAITING);
-        } catch (NullPointerException ex) {
-
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
-        sender.sendMessage("Canceled all countdowns");
+        sender.sendMessage(ChatColor.RED + "Canceled the match start!");
     }
 
 }
