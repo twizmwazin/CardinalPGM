@@ -1,9 +1,13 @@
 package in.twizmwaz.cardinal.module.modules.destroyable;
 
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.event.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
+import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.type.combinations.UnionRegion;
 import in.twizmwaz.cardinal.teams.PgmTeam;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -17,17 +21,17 @@ public class DestroyableObjective implements GameObjective {
     private final PgmTeam team;
     private final String name;
     private final String id;
+    private final Region region;
+    private final Material type;
+    private final int damageValue;
+    private final double required;
 
-    private UnionRegion region;
-    private Material type;
-    private int damageValue;
     private double complete;
-    private double required;
     private boolean completed;
     private boolean showPercent;
     private boolean repairable;
 
-    protected DestroyableObjective(final PgmTeam team, final String name, final String id, UnionRegion region, Material type, int damageValue, double required, boolean showPercent, boolean repairable) {
+    protected DestroyableObjective(final PgmTeam team, final String name, final String id, final Region region, final Material type, final int damageValue, final double required, boolean showPercent, boolean repairable) {
         this.team = team;
         this.name = name;
         this.id = id;
@@ -76,8 +80,13 @@ public class DestroyableObjective implements GameObjective {
         if (!GameHandler.getGameHandler().getMatch().getTeam(event.getPlayer()).equals(team)) {
             if (this.region.getBlocks().contains(event.getBlock()))
                 this.complete = this.complete + (1 / this.getMonumentSize());
-            if (this.complete >= this.required)
+            if (this.complete >= this.required) {
                 this.completed = true;
+                Bukkit.broadcastMessage(team.getCompleteName() + "'s " + ChatColor.AQUA + name + ChatColor.GRAY + " destroyed by " + ChatColor.DARK_AQUA + "the enemy");
+                ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this);
+                Bukkit.getServer().getPluginManager().callEvent(compEvent);
+                event.setCancelled(false);
+            }
         } else event.setCancelled(true);
     }
 
@@ -97,5 +106,11 @@ public class DestroyableObjective implements GameObjective {
 
     public boolean isRepairable() {
         return repairable;
+    }
+
+    public int getPercent() {
+        double blocksRequired = required * getMonumentSize();
+        double blocksBroken = complete * getMonumentSize();
+        return (int) Math.round((blocksRequired / blocksBroken) * 100);
     }
 }
