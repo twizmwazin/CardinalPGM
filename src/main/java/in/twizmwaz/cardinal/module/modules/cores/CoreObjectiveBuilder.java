@@ -51,12 +51,25 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                     leak = Integer.parseInt(element.getAttributeValue("leak").replaceAll(" ", ""));
                 }
                 Material type = Material.OBSIDIAN;
-                if (element.getAttributeValue("material") != null) {
-                    type = Material.matchMaterial(element.getAttributeValue("material"));
-                } else if (subElement.getAttributeValue("material") != null) {
-                    type = Material.matchMaterial(subElement.getAttributeValue("material"));
+                int damageValue = 0;
+                if (subElement.getAttributeValue("material") != null) {
+                    String material = subElement.getAttributeValue("material");
+                    if (material.contains(":")) {
+                        type = Material.matchMaterial(material.split(":")[0].trim());
+                        damageValue = Integer.parseInt(material.split(":")[1].trim());
+                    } else {
+                        type = Material.matchMaterial(material.trim());
+                    }
+                } else if (element.getAttributeValue("material") != null) {
+                    String material = element.getAttributeValue("material");
+                    if (material.contains(":")) {
+                        type = Material.matchMaterial(material.split(":")[0].trim());
+                        damageValue = Integer.parseInt(material.split(":")[1].trim());
+                    } else {
+                        type = Material.matchMaterial(material.trim());
+                    }
                 }
-                result.add(new CoreObjective(team, name, id, new UnionRegion(regions), leak, type));
+                result.add(new CoreObjective(team, name, id, new UnionRegion(regions), leak, type, damageValue));
             }
             for (Element child : element.getChildren("cores")) {
                 for (Element subChild : child.getChildren("core")) {
@@ -100,14 +113,33 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                         leak = Integer.parseInt(element.getAttributeValue("leak").replaceAll(" ", ""));
                     }
                     Material type = Material.OBSIDIAN;
+                    int damageValue = 0;
                     if (subChild.getAttributeValue("material") != null) {
-                        type = Material.matchMaterial(subChild.getAttributeValue("material"));
+                        String material = subChild.getAttributeValue("material");
+                        if (material.contains(":")) {
+                            type = Material.matchMaterial(material.split(":")[0].trim());
+                            damageValue = Integer.parseInt(material.split(":")[1].trim());
+                        } else {
+                            type = Material.matchMaterial(material.trim());
+                        }
                     } else if (child.getAttributeValue("material") != null) {
-                        type = Material.matchMaterial(child.getAttributeValue("material"));
+                        String material = child.getAttributeValue("material");
+                        if (material.contains(":")) {
+                            type = Material.matchMaterial(material.split(":")[0].trim());
+                            damageValue = Integer.parseInt(material.split(":")[1].trim());
+                        } else {
+                            type = Material.matchMaterial(material.trim());
+                        }
                     } else if (element.getAttributeValue("material") != null) {
-                        type = Material.matchMaterial(element.getAttributeValue("material"));
+                        String material = element.getAttributeValue("material");
+                        if (material.contains(":")) {
+                            type = Material.matchMaterial(material.split(":")[0].trim());
+                            damageValue = Integer.parseInt(material.split(":")[1].trim());
+                        } else {
+                            type = Material.matchMaterial(material.trim());
+                        }
                     }
-                    result.add(new CoreObjective(team, name, id, new UnionRegion(regions), leak, type));
+                    result.add(new CoreObjective(team, name, id, new UnionRegion(regions), leak, type, damageValue));
                 }
             }
         }
