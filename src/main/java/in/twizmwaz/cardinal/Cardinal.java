@@ -58,6 +58,7 @@ public class Cardinal extends JavaPlugin {
         cmdRegister.register(JoinCommand.class);
         cmdRegister.register(RotationCommands.class);
         cmdRegister.register(CancelCommand.class);
+        cmdRegister.register(CardinalCommand.class);
     }
 
     public void onEnable() {
