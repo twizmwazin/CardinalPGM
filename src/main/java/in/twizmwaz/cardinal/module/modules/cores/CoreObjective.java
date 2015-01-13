@@ -16,9 +16,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.util.Vector;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class CoreObjective implements GameObjective {
@@ -94,6 +96,30 @@ public class CoreObjective implements GameObjective {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
+    public void onEntityExplode(EntityExplodeEvent event) {
+        for (Block block : event.blockList()) {
+            if (this.region.getBlocks().contains(block)) {
+                if (block.getType().equals(currentType)) {
+                    if (event.getEntity().hasMetadata("source")) {
+                        String player = event.getEntity().getMetadata("source").get(0).asString();
+                        if (Bukkit.getOfflinePlayer(player).isOnline()) {
+                            if (GameHandler.getGameHandler().getMatch().getTeam(Bukkit.getPlayer(player)).equals(team)) {
+                                event.setCancelled(true);
+                            } else {
+                                if (!playersTouched.contains(player)) {
+                                    playersTouched.add(player);
+                                }
+                            }
+                        }
+                    }
+                    this.touched = true;
+
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockFromTo(BlockFromToEvent event) {
         Block to = event.getToBlock();
         Block from = event.getBlock();
@@ -116,10 +142,6 @@ public class CoreObjective implements GameObjective {
 
     public Region getRegion() {
         return region;
-    }
-
-    public Material getCurrentType() {
-        return currentType;
     }
 
     public static CoreObjective getClosestCore(double x, double y, double z) {
