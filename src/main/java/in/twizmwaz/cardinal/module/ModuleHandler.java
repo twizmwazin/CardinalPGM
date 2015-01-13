@@ -4,6 +4,7 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.modules.buildHeight.BuildHeightBuilder;
 import in.twizmwaz.cardinal.module.modules.cores.CoreObjectiveBuilder;
+import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.difficulty.MapDifficultyBuilder;
 import in.twizmwaz.cardinal.module.modules.disableDamage.DisableDamageBuilder;
 import in.twizmwaz.cardinal.module.modules.friendlyFire.FriendlyFireBuilder;
@@ -51,6 +52,7 @@ public class ModuleHandler {
         builders.add(new BuildHeightBuilder());
         builders.add(new WoolObjectiveBuilder());
         builders.add(new CoreObjectiveBuilder());
+        builders.add(new DestroyableObjectiveBuilder());
         builders.add(new ItemRemoveBuilder());
         builders.add(new ToolRepairBuilder());
         builders.add(new DisableDamageBuilder());

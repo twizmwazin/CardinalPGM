@@ -19,6 +19,7 @@ import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,6 +31,7 @@ public class CoreObjective implements GameObjective {
     private final String id;
     private final Region region;
     private final int leak;
+    private final int damageValue;
 
     private Set<String> playersTouched;
     private Material currentType;
@@ -37,12 +39,13 @@ public class CoreObjective implements GameObjective {
     private boolean touched;
     private boolean complete;
 
-    protected CoreObjective(final PgmTeam team, final String name, final String id, final Region region, final int leak, final Material type) {
+    protected CoreObjective(final PgmTeam team, final String name, final String id, final Region region, final int leak, final Material type, final int damageValue) {
         this.team = team;
         this.name = name;
         this.id = id;
         this.region = region;
         this.leak = leak;
+        this.damageValue = damageValue;
 
         this.playersTouched = new HashSet<>();
         this.currentType = type;
@@ -80,41 +83,47 @@ public class CoreObjective implements GameObjective {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event) {
-        if (this.region.getBlocks().contains(event.getBlock())) {
-            if (event.getBlock().getType().equals(currentType)) {
-                if (!GameHandler.getGameHandler().getMatch().getTeam(event.getPlayer()).equals(team)) {
-                    if (!playersTouched.contains(event.getPlayer().getName())) {
-                        playersTouched.add(event.getPlayer().getName());
-                    }
-                    this.touched = true;
-                } else {
-                    event.setCancelled(true);
-                    event.getPlayer().sendMessage(ChatColor.RED + "You cannot leak your own core!");
+        if (getBlocks().contains(event.getBlock())) {
+            if (!GameHandler.getGameHandler().getMatch().getTeam(event.getPlayer()).equals(team)) {
+                if (!playersTouched.contains(event.getPlayer().getName())) {
+                    playersTouched.add(event.getPlayer().getName());
                 }
+                this.touched = true;
+            } else {
+                event.setCancelled(true);
+                event.getPlayer().sendMessage(ChatColor.RED + "You cannot leak your own core!");
             }
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityExplode(EntityExplodeEvent event) {
+        List<Block> objectiveBlownUp = new ArrayList<>();
         for (Block block : event.blockList()) {
-            if (this.region.getBlocks().contains(block)) {
-                if (block.getType().equals(currentType)) {
-                    if (event.getEntity().hasMetadata("source")) {
-                        String player = event.getEntity().getMetadata("source").get(0).asString();
-                        if (Bukkit.getOfflinePlayer(player).isOnline()) {
-                            if (GameHandler.getGameHandler().getMatch().getTeam(Bukkit.getPlayer(player)).equals(team)) {
-                                event.setCancelled(true);
-                            } else {
-                                if (!playersTouched.contains(player)) {
-                                    playersTouched.add(player);
-                                }
-                            }
+            if (getBlocks().contains(block)) {
+                objectiveBlownUp.add(block);
+            }
+        }
+        for (Block block : objectiveBlownUp) {
+            if (event.getEntity().hasMetadata("source")) {
+                String player = event.getEntity().getMetadata("source").get(0).asString();
+                if (Bukkit.getOfflinePlayer(player).isOnline()) {
+                    if (GameHandler.getGameHandler().getMatch().getTeam(Bukkit.getPlayer(player)).equals(team)) {
+                        event.blockList().remove(block);
+                    } else {
+                        if (!playersTouched.contains(player)) {
+                            playersTouched.add(player);
                         }
+                        this.touched = true;
+                    }
+                } else {
+                    if (!playersTouched.contains(player)) {
+                        playersTouched.add(player);
                     }
                     this.touched = true;
-
                 }
+            } else {
+                this.touched = true;
             }
         }
     }
@@ -126,7 +135,7 @@ public class CoreObjective implements GameObjective {
         if (CoreObjective.getClosestCore(to.getX(), to.getY(), to.getZ()).equals(this)) {
             if ((from.getType().equals(Material.LAVA) || from.getType().equals(Material.STATIONARY_LAVA)) && to.getType().equals(Material.AIR)) {
                 double minY = 256;
-                for (Block block : region.getBlocks()) {
+                for (Block block : getBlocks()) {
                     if (block.getY() < minY) minY = block.getY();
                 }
                 if (minY - to.getY() >= leak && !this.complete) {
@@ -142,6 +151,20 @@ public class CoreObjective implements GameObjective {
 
     public Region getRegion() {
         return region;
+    }
+
+    public boolean partOfObjective(Block block) {
+        return currentType.equals(block.getType()) && damageValue == (int) block.getState().getData().getData();
+    }
+
+    public List<Block> getBlocks() {
+        List<Block> blocks = new ArrayList<>();
+        for (Block block : region.getBlocks()) {
+            if (partOfObjective(block)) {
+                blocks.add(block);
+            }
+        }
+        return blocks;
     }
 
     public static CoreObjective getClosestCore(double x, double y, double z) {
