@@ -99,7 +99,7 @@ public class CoreObjective implements GameObjective {
         Block from = event.getBlock();
         if (CoreObjective.getClosestCore(to.getX(), to.getY(), to.getZ()).equals(this)) {
             if ((from.getType().equals(Material.LAVA) || from.getType().equals(Material.STATIONARY_LAVA)) && to.getType().equals(Material.AIR)) {
-                double minY = region.getCenterBlock().getY() - 4;
+                double minY = 256;
                 for (Block block : region.getBlocks()) {
                     if (block.getY() < minY) minY = block.getY();
                 }
