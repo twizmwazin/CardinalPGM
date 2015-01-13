@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.command;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
+import com.sk89q.minecraft.util.commands.CommandPermissions;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.mapInfo.contributor.Contributor;
 import in.twizmwaz.cardinal.module.modules.mapInfo.Info;
@@ -28,6 +29,7 @@ public class MapCommands {
     }
 
     @Command(aliases = {"map"}, desc = "Shows information about the currently playing map.", usage = "", min = 0, max = 0)
+    @CommandPermissions("cardinal.map")
     public static void map(final CommandContext args, CommandSender sender) throws CommandException {
         refreshMapInfo();
         sender.sendMessage(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "----------" + ChatColor.DARK_AQUA + " " + mapInfo.getName() + " " + ChatColor.GRAY + mapInfo.getVersion() + ChatColor.RED + " " + ChatColor.STRIKETHROUGH + "----------");
@@ -70,6 +72,7 @@ public class MapCommands {
     }
 
     @Command(aliases = {"next", "nextmap", "nm", "mn"}, desc = "Shows next map.", usage = "")
+    @CommandPermissions("cardinal.next")
     public static void next(final CommandContext cmd, CommandSender sender) {
         String nextMap = GameHandler.getGameHandler().getRotation().getNext().getName();
         try {

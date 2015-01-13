@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 public class CancelCommand {
 
     @Command(aliases = {"cancel"}, desc = "Cancels the current countdown.")
-    @CommandPermissions("cardinal.cancel")
+    @CommandPermissions("cardinal.match.cancel")
     public static void cancel(final CommandContext cmd, CommandSender sender) {
         try {
             GameHandler.getGameHandler().getCycleTimer().setCancelled(true);
