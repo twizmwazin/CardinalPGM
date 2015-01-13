@@ -11,10 +11,15 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class DestroyableObjective implements GameObjective {
 
@@ -22,27 +27,42 @@ public class DestroyableObjective implements GameObjective {
     private final String name;
     private final String id;
     private final Region region;
-    private final Material type;
-    private final int damageValue;
+    private final List<Material> types;
+    private final List<Integer> damageValues;
     private final double required;
+
+    private Set<String> playersTouched;
+    private double size;
 
     private double complete;
     private boolean completed;
     private boolean showPercent;
     private boolean repairable;
 
-    protected DestroyableObjective(final PgmTeam team, final String name, final String id, final Region region, final Material type, final int damageValue, final double required, boolean showPercent, boolean repairable) {
+    protected DestroyableObjective(final PgmTeam team, final String name, final String id, final Region region, final List<Material> types, final List<Integer> damageValues, final double required, boolean showPercent, boolean repairable) {
         this.team = team;
         this.name = name;
         this.id = id;
         this.region = region;
-        this.type = type;
-        this.damageValue = damageValue;
+        this.types = types;
+        this.damageValues = damageValues;
         this.showPercent = showPercent;
         this.repairable = repairable;
         this.complete = 0;
         this.required = required;
         this.completed = false;
+
+        this.playersTouched = new HashSet<>();
+
+        size = 0.0;
+        for (Block block : region.getBlocks()) {
+            for (int i = 0; i < types.size(); i ++) {
+                if (types.get(i).equals(block.getType()) && damageValues.get(i) == (int) block.getState().getData().getData()) {
+                    size ++;
+                    break;
+                }
+            }
+        }
     }
 
     @Override
@@ -77,26 +97,66 @@ public class DestroyableObjective implements GameObjective {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (!GameHandler.getGameHandler().getMatch().getTeam(event.getPlayer()).equals(team)) {
-            if (this.region.getBlocks().contains(event.getBlock()))
-                this.complete = this.complete + (1 / this.getMonumentSize());
-            if (this.complete >= this.required) {
-                this.completed = true;
-                Bukkit.broadcastMessage(team.getCompleteName() + "'s " + ChatColor.AQUA + name + ChatColor.GRAY + " destroyed by " + ChatColor.DARK_AQUA + "the enemy");
-                ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this);
-                Bukkit.getServer().getPluginManager().callEvent(compEvent);
-                event.setCancelled(false);
+        if (getBlocks().contains(event.getBlock())) {
+            if (!GameHandler.getGameHandler().getMatch().getTeam(event.getPlayer()).equals(team)) {
+                this.complete += (1 / size);
+                if (this.complete >= this.required && !this.completed) {
+                    this.completed = true;
+                    Bukkit.broadcastMessage(team.getCompleteName() + "'s " + ChatColor.AQUA + name + ChatColor.GRAY + " destroyed by " + ChatColor.DARK_AQUA + "the enemy");
+                    ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this);
+                    Bukkit.getServer().getPluginManager().callEvent(compEvent);
+                    event.setCancelled(false);
+                }
+            } else {
+                event.setCancelled(true);
+                event.getPlayer().sendMessage(ChatColor.RED + "You cannot damage your own monument!");
             }
-        } else event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onEntityExplode(EntityExplodeEvent event) {
+        List<Block> objectiveBlownUp = new ArrayList<>();
+        for (Block block : event.blockList()) {
+            if (getBlocks().contains(block)) {
+                objectiveBlownUp.add(block);
+            }
+        }
+        for (Block block : objectiveBlownUp) {
+            boolean blockDestroyed = false;
+            if (event.getEntity().hasMetadata("source")) {
+                String player = event.getEntity().getMetadata("source").get(0).asString();
+                if (Bukkit.getOfflinePlayer(player).isOnline()) {
+                    if (GameHandler.getGameHandler().getMatch().getTeam(Bukkit.getPlayer(player)).equals(team)) {
+                        event.blockList().remove(block);
+                    } else {
+                        if (!playersTouched.contains(player)) {
+                            playersTouched.add(player);
+                        }
+                        blockDestroyed = true;
+                    }
+                } else {
+                    if (!playersTouched.contains(player)) {
+                        playersTouched.add(player);
+                    }
+                    blockDestroyed = true;
+                }
+            } else {
+                blockDestroyed = true;
+            }
+            if (blockDestroyed) {
+                this.complete += (1 / size);
+                if (this.complete >= this.required && !this.completed) {
+                    this.completed = true;
+                    Bukkit.broadcastMessage(team.getCompleteName() + ChatColor.RED + "'s " + ChatColor.AQUA + name + ChatColor.GRAY + " destroyed by " + ChatColor.DARK_AQUA + "the enemy");
+                    ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this);
+                    Bukkit.getServer().getPluginManager().callEvent(compEvent);
+                }
+            }
+        }
     }
 
     public double getMonumentSize() {
-        double size = 0.0;
-        for (Block block : region.getBlocks()) {
-            if (block.getType().equals(type) && block.getData() == damageValue) {
-                size ++;
-            }
-        }
         return size;
     }
 
@@ -112,5 +172,24 @@ public class DestroyableObjective implements GameObjective {
         double blocksRequired = required * getMonumentSize();
         double blocksBroken = complete * getMonumentSize();
         return (int) Math.round((blocksRequired / blocksBroken) * 100);
+    }
+
+    public boolean partOfObjective(Block block) {
+        for (int i = 0; i < types.size(); i++) {
+            if (types.get(i).equals(block.getType()) && damageValues.get(i) == (int) block.getState().getData().getData()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<Block> getBlocks() {
+        List<Block> blocks = new ArrayList<>();
+        for (Block block : region.getBlocks()) {
+            if (partOfObjective(block)) {
+                blocks.add(block);
+            }
+        }
+        return blocks;
     }
 }

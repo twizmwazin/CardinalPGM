@@ -21,9 +21,9 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
             for (Element subElement : element.getChildren("core")) {
                 PgmTeam team;
                 try {
-                    team = match.getTeamById(element.getAttributeValue("team"));
-                } catch (NullPointerException e) {
                     team = match.getTeamById(subElement.getAttributeValue("team"));
+                } catch (NullPointerException e) {
+                    team = match.getTeamById(element.getAttributeValue("team"));
                 }
                 String name = "Core";
                 if (subElement.getAttributeValue("name") != null) {
@@ -62,10 +62,10 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                 for (Element subChild : child.getChildren("core")) {
                     PgmTeam team;
                     try {
-                        team = match.getTeamById(child.getAttributeValue("team"));
+                        team = match.getTeamById(subChild.getAttributeValue("team"));
                     } catch (NullPointerException e) {
                         try {
-                            team = match.getTeamById(subChild.getAttributeValue("team"));
+                            team = match.getTeamById(child.getAttributeValue("team"));
                         } catch (NullPointerException ex) {
                             team = match.getTeamById(element.getAttributeValue("team"));
                         }
