@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.cores;
 
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.event.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.regions.Region;
@@ -105,6 +106,8 @@ public class CoreObjective implements GameObjective {
                 if (minY - to.getY() >= leak && !this.complete) {
                     this.complete = true;
                     Bukkit.broadcastMessage(team.getCompleteName() + "'s " + ChatColor.DARK_AQUA + name + ChatColor.RED + " has leaked!");
+                    ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this);
+                    Bukkit.getServer().getPluginManager().callEvent(compEvent);
                 }
             }
         }
