@@ -89,6 +89,7 @@ public class CoreObjective implements GameObjective {
                     playersTouched.add(event.getPlayer().getName());
                 }
                 this.touched = true;
+                event.setCancelled(false);
             } else {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage(ChatColor.RED + "You cannot leak your own core!");
@@ -140,10 +141,10 @@ public class CoreObjective implements GameObjective {
                 }
                 if (minY - to.getY() >= leak && !this.complete) {
                     this.complete = true;
+                    event.setCancelled(false);
                     Bukkit.broadcastMessage(team.getCompleteName() + ChatColor.RED + "'s " + ChatColor.DARK_AQUA + name + ChatColor.RED + " has leaked!");
                     ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this);
                     Bukkit.getServer().getPluginManager().callEvent(compEvent);
-                    event.setCancelled(false);
                 }
             }
         }
