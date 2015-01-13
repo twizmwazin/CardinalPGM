@@ -52,7 +52,7 @@ public class ToolRepair implements Module {
                     if (itemsMatch) {
                         event.setCancelled(true);
                         event.getItem().remove();
-                        event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ITEM_PICKUP, 10, 1);
+                        event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ITEM_PICKUP, 0.1F, 1);
                         toRepair.setDurability((short) (toRepair.getDurability() - (item1.getType().getMaxDurability() - item1.getDurability()) < 0 ? 0 : toRepair.getDurability() - (item1.getType().getMaxDurability() - item1.getDurability())));
                     }
                 }
