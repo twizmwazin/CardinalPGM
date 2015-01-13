@@ -95,17 +95,17 @@ public class DestroyableObjective implements GameObjective {
         HandlerList.unregisterAll(this);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event) {
         if (getBlocks().contains(event.getBlock())) {
             if (!GameHandler.getGameHandler().getMatch().getTeam(event.getPlayer()).equals(team)) {
                 this.complete += (1 / size);
                 if (this.complete >= this.required && !this.completed) {
                     this.completed = true;
+                    event.setCancelled(false);
                     Bukkit.broadcastMessage(team.getCompleteName() + "'s " + ChatColor.AQUA + name + ChatColor.GRAY + " destroyed by " + ChatColor.DARK_AQUA + "the enemy");
                     ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this);
                     Bukkit.getServer().getPluginManager().callEvent(compEvent);
-                    event.setCancelled(false);
                 }
             } else {
                 event.setCancelled(true);
