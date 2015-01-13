@@ -58,7 +58,8 @@ public abstract class Region {
                 if (element.getAttributeValue("name") != null) {
                     for (Element regionElement : document.getRootElement().getChildren("regions")) {
                         for (Element givenRegion : regionElement.getChildren()) {
-                            if (givenRegion.getName().equalsIgnoreCase("apply")) continue;
+                            if (givenRegion.getName().equalsIgnoreCase("apply"))
+                                continue;
                             if (givenRegion.getAttributeValue("name").equalsIgnoreCase(element.getAttributeValue("name"))) {
                                 return getRegion(givenRegion);
                             }
@@ -68,6 +69,17 @@ public abstract class Region {
                     return getRegion(element.getChildren().get(0));
                 }
             default:
+                if (element.getAttributeValue("region") != null) {
+                    for (Element regionElement : document.getRootElement().getChildren("regions")) {
+                        for (Element givenRegion : regionElement.getChildren()) {
+                            if (givenRegion.getName().equalsIgnoreCase("apply"))
+                                continue;
+                            if (givenRegion.getAttributeValue("region").equalsIgnoreCase(element.getAttributeValue("region"))) {
+                                return getRegion(givenRegion);
+                            }
+                        }
+                    }
+                }
                 return null;
         }
     }

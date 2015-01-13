@@ -73,7 +73,7 @@ public class DestroyableObjective implements GameObjective {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (GameHandler.getGameHandler().getMatch().getTeam(event.getPlayer()).equals(team)) {
+        if (!GameHandler.getGameHandler().getMatch().getTeam(event.getPlayer()).equals(team)) {
             if (this.region.getBlocks().contains(event.getBlock()))
                 this.complete = this.complete + (1 / this.getMonumentSize());
             if (this.complete >= this.required)

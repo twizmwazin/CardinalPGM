@@ -21,6 +21,10 @@ public class UnionRegion extends Region {
         regions = new ArrayList<>();
         this.regions.addAll(regions);
     }
+    
+    public UnionRegion(List<Region> regions) {
+        this.regions = regions;
+    }
 
     public UnionRegion(CombinationParser parser) {
         regions = new ArrayList<>();
