@@ -38,7 +38,7 @@ public class JoinCommand {
 
     }
 
-    @Command(aliases = {"leave"}, desc = "Leave the game")
+    @Command(aliases = {"leave", "l"}, desc = "Leave the game")
     @CommandPermissions("cardinal.match.leave")
     public static void leave(final CommandContext cmd, CommandSender sender) {
         Bukkit.getServer().dispatchCommand(sender, "join observers");

@@ -4,7 +4,6 @@ import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.regions.Region;
-import in.twizmwaz.cardinal.regions.type.combinations.UnionRegion;
 import in.twizmwaz.cardinal.teams.PgmTeam;
 import org.bukkit.Material;
 import org.jdom2.Element;
