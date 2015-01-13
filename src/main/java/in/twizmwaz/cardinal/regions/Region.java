@@ -58,10 +58,16 @@ public abstract class Region {
                 if (element.getAttributeValue("name") != null) {
                     for (Element regionElement : document.getRootElement().getChildren("regions")) {
                         for (Element givenRegion : regionElement.getChildren()) {
-                            if (givenRegion.getName().equalsIgnoreCase("apply"))
-                                continue;
-                            if (givenRegion.getAttributeValue("name").equalsIgnoreCase(element.getAttributeValue("name"))) {
-                                return getRegion(givenRegion);
+                            try {
+                                if (givenRegion.getAttributeValue("name").equalsIgnoreCase(element.getAttributeValue("name"))) {
+                                    return getRegion(givenRegion);
+                                }
+                            } catch (NullPointerException e) {
+                            }
+                            for (Element givenChild : givenRegion.getChildren()) {
+                                if (givenChild.getAttributeValue("name").equalsIgnoreCase(element.getAttributeValue("name"))) {
+                                    return getRegion(givenChild);
+                                }
                             }
                         }
                     }
