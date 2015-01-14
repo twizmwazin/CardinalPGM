@@ -93,7 +93,6 @@ public class SpawnModule implements Module {
             Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
             if (!spawnEvent.isCancelled()) {
                 PlayerUtil.resetPlayer(player);
-                player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
                 player.teleport(spawn.getLocation());
             }
         }

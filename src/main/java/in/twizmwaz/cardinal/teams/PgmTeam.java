@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.teams;
 
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.JoinType;
 import in.twizmwaz.cardinal.module.GameObjective;
@@ -82,9 +83,13 @@ public class PgmTeam {
     }
 
     public Set<Player> getPlayers() {
-        Set<Player> result = new HashSet<>(maxOverfill);
-        for (OfflinePlayer offlinePlayer : scoreboardTeam.getPlayers()) {
-            if (offlinePlayer instanceof Player) result.add((Player) offlinePlayer);
+        Set<Player> result = new HashSet<>();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (GameHandler.getGameHandler().getMatch().getTeam(player) != null) {
+                if (this.equals(GameHandler.getGameHandler().getMatch().getTeam(player))) {
+                    result.add(player);
+                }
+            }
         }
         return result;
     }
