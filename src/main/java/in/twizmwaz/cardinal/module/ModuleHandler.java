@@ -127,5 +127,20 @@ public class ModuleHandler {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public <M extends Module> M getModule(Class<M> clazz) {
+        for (Module module : getModules()) {
+            if (clazz.isInstance(module)) return ((M) module);
+        }
+        return null;
+    }
 
+    @SuppressWarnings("unchecked")
+    public <M extends Module> Set<M> getModules(Class<M> clazz) {
+        Set<M> results = new HashSet<>();
+        for (Module module : getModules()) {
+            if (clazz.isInstance(module)) results.add((M) module);
+        }
+        return results;
+    }
 }
