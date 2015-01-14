@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.util.MiscUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -81,6 +82,7 @@ public class TeamPicker implements Module {
                                 if (item.getItemMeta().getDisplayName().equals(ChatColor.GRAY + "" + ChatColor.BOLD + "Auto Join")) {
                                     event.setCancelled(true);
                                     player.closeInventory();
+                                    player.playSound(player.getLocation(), Sound.CLICK, 1, 2);
                                     Bukkit.dispatchCommand(player, "join");
                                 }
                             }
@@ -91,6 +93,7 @@ public class TeamPicker implements Module {
                                 if (GameHandler.getGameHandler().getMatch().getTeamByName(ChatColor.stripColor(item.getItemMeta().getDisplayName())) != null) {
                                     event.setCancelled(true);
                                     player.closeInventory();
+                                    player.playSound(player.getLocation(), Sound.CLICK, 1, 2);
                                     Bukkit.dispatchCommand(player, "join " + ChatColor.stripColor(item.getItemMeta().getDisplayName()));
                                 }
                             }
