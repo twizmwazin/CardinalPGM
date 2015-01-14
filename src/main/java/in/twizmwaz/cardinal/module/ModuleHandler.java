@@ -19,6 +19,7 @@ import in.twizmwaz.cardinal.module.modules.observers.ObserverModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.projectiles.ProjectilesBuilder;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.team.TeamModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.teamPicker.TeamPickerBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLock.TimeLockBuilder;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTrackerBuilder;
 import in.twizmwaz.cardinal.module.modules.toolRepair.ToolRepairBuilder;
@@ -72,6 +73,7 @@ public class ModuleHandler {
         builders.add(new SpawnModuleBuilder());
         builders.add(new ObserverModuleBuilder());
         builders.add(new KillStreakBuilder());
+        builders.add(new TeamPickerBuilder());
         builders.add(new InfoBuilder());
     }
 

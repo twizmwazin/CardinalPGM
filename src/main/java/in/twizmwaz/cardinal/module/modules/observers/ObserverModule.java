@@ -1,12 +1,14 @@
 package in.twizmwaz.cardinal.module.modules.observers;
 
 import com.sk89q.minecraft.util.commands.ChatColor;
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.PgmSpawnEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.teamPicker.TeamPicker;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -24,10 +26,12 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ObserverModule implements Module {
 
@@ -49,6 +53,16 @@ public class ObserverModule implements Module {
             player.setAffectsSpawning(false);
             player.setCollidesWithEntities(false);
             player.setCanPickupItems(false);
+
+            player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
+            ItemStack howTo = new ItemStack(Material.WRITTEN_BOOK);
+            ItemMeta howToMeta = howTo.getItemMeta();
+            howToMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "Coming Soon");
+            howTo.setItemMeta(howToMeta);
+            BookMeta howToBookMeta = (BookMeta) howTo;
+            howToBookMeta.setAuthor(ChatColor.GOLD + "CardinalPGM");
+            howTo.setItemMeta(howToBookMeta);
+            player.getInventory().setItem(1, howTo);
         }
     }
 
@@ -64,6 +78,24 @@ public class ObserverModule implements Module {
             event.getPlayer().setAffectsSpawning(false);
             event.getPlayer().setCollidesWithEntities(false);
             event.getPlayer().setCanPickupItems(false);
+
+            event.getPlayer().getInventory().setItem(0, new ItemStack(Material.COMPASS));
+            ItemStack howTo = new ItemStack(Material.WRITTEN_BOOK);
+            ItemMeta howToMeta = howTo.getItemMeta();
+            howToMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "Coming Soon");
+            howTo.setItemMeta(howToMeta);
+            BookMeta howToBookMeta = (BookMeta) howTo.getItemMeta();
+            howToBookMeta.setAuthor(ChatColor.GOLD + "CardinalPGM");
+            howTo.setItemMeta(howToBookMeta);
+            event.getPlayer().getInventory().setItem(1, howTo);
+            if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
+                ItemStack picker = new ItemStack(Material.LEATHER_HELMET);
+                ItemMeta pickerMeta = picker.getItemMeta();
+                pickerMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "Team Selection");
+                pickerMeta.setLore(Arrays.asList(ChatColor.DARK_PURPLE + "Join the game!"));
+                picker.setItemMeta(pickerMeta);
+                event.getPlayer().getInventory().setItem(2, picker);
+            }
         }
     }
 
@@ -226,12 +258,12 @@ public class ObserverModule implements Module {
         }
     }
 
-    @EventHandler
+ /* @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         if (match.getTeamById("observers").hasPlayer(event.getPlayer()) || match.getState() != MatchState.PLAYING) {
             event.getPlayer().getInventory().setItem(0, new ItemStack(Material.COMPASS));
         }
-    }
+    } Put this in the PGM spawn event */
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
