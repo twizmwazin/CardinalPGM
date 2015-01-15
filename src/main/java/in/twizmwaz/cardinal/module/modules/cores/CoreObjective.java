@@ -1,7 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.cores;
 
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.event.ObjectiveCompleteEvent;
+import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.regions.Region;
@@ -32,6 +32,7 @@ public class CoreObjective implements GameObjective {
     private final Region region;
     private final int leak;
     private final int damageValue;
+    private boolean show;
 
     private Set<String> playersTouched;
     private Material currentType;
@@ -39,13 +40,14 @@ public class CoreObjective implements GameObjective {
     private boolean touched;
     private boolean complete;
 
-    protected CoreObjective(final PgmTeam team, final String name, final String id, final Region region, final int leak, final Material type, final int damageValue) {
+    protected CoreObjective(final PgmTeam team, final String name, final String id, final Region region, final int leak, final Material type, final int damageValue, final boolean show) {
         this.team = team;
         this.name = name;
         this.id = id;
         this.region = region;
         this.leak = leak;
         this.damageValue = damageValue;
+        this.show = show;
 
         this.playersTouched = new HashSet<>();
         this.currentType = type;
@@ -79,6 +81,11 @@ public class CoreObjective implements GameObjective {
     @Override
     public boolean isComplete() {
         return complete;
+    }
+
+    @Override
+    public boolean showOnScoreboard() {
+        return show;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -143,7 +150,7 @@ public class CoreObjective implements GameObjective {
                     this.complete = true;
                     event.setCancelled(false);
                     Bukkit.broadcastMessage(team.getCompleteName() + ChatColor.RED + "'s " + ChatColor.DARK_AQUA + name + ChatColor.RED + " has leaked!");
-                    ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this);
+                    ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, null);
                     Bukkit.getServer().getPluginManager().callEvent(compEvent);
                 }
             }

@@ -1,6 +1,6 @@
 package in.twizmwaz.cardinal.match.listeners;
 
-import in.twizmwaz.cardinal.event.ObjectiveCompleteEvent;
+import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.teams.PgmTeam;

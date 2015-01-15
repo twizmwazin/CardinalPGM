@@ -70,7 +70,13 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                         type = Material.matchMaterial(material.trim());
                     }
                 }
-                result.add(new CoreObjective(team, name, id, new UnionRegion(regions), leak, type, damageValue));
+                boolean show = true;
+                if (subElement.getAttributeValue("show") != null) {
+                    show = !subElement.getAttributeValue("show").equalsIgnoreCase("false");
+                } else if (element.getAttributeValue("show") != null) {
+                    show = !element.getAttributeValue("show").equalsIgnoreCase("false");
+                }
+                result.add(new CoreObjective(team, name, id, new UnionRegion(regions), leak, type, damageValue, show));
             }
             for (Element child : element.getChildren("cores")) {
                 for (Element subChild : child.getChildren("core")) {
@@ -143,7 +149,15 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                             type = Material.matchMaterial(material.trim());
                         }
                     }
-                    result.add(new CoreObjective(team, name, id, new UnionRegion(regions), leak, type, damageValue));
+                    boolean show = true;
+                    if (subChild.getAttributeValue("show") != null) {
+                        show = !subChild.getAttributeValue("show").equalsIgnoreCase("false");
+                    } else if (child.getAttributeValue("show") != null) {
+                        show = !child.getAttributeValue("show").equalsIgnoreCase("false");
+                    } else if (element.getAttributeValue("show") != null) {
+                        show = !element.getAttributeValue("show").equalsIgnoreCase("false");
+                    }
+                    result.add(new CoreObjective(team, name, id, new UnionRegion(regions), leak, type, damageValue, show));
                 }
             }
         }

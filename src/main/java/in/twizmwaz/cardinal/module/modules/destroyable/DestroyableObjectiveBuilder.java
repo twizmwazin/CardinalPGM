@@ -108,7 +108,13 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                 } else if (element.getAttributeValue("repairable") != null) {
                     repairable = element.getAttributeValue("repairable").equalsIgnoreCase("true");
                 }
-                result.add(new DestroyableObjective(owner, name, id, new UnionRegion(regions), types, damageValues, required, showProgress, repairable));
+                boolean show = true;
+                if (subElement.getAttributeValue("show") != null) {
+                    show = !subElement.getAttributeValue("show").equalsIgnoreCase("false");
+                } else if (element.getAttributeValue("show") != null) {
+                    show = !element.getAttributeValue("show").equalsIgnoreCase("false");
+                }
+                result.add(new DestroyableObjective(owner, name, id, new UnionRegion(regions), types, damageValues, required, show, showProgress, repairable));
             }
             for (Element child : element.getChildren("destroyables")) {
                 for (Element subChild : child.getChildren("destroyable")) {
@@ -236,7 +242,15 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                     } else if (element.getAttributeValue("repairable") != null) {
                         repairable = element.getAttributeValue("repairable").equalsIgnoreCase("true");
                     }
-                    result.add(new DestroyableObjective(owner, name, id, new UnionRegion(regions), types, damageValues, required, showProgress, repairable));
+                    boolean show = true;
+                    if (subChild.getAttributeValue("show") != null) {
+                        show = !subChild.getAttributeValue("show").equalsIgnoreCase("false");
+                    } else if (child.getAttributeValue("show") != null) {
+                        show = !child.getAttributeValue("show").equalsIgnoreCase("false");
+                    } else if (element.getAttributeValue("show") != null) {
+                        show = !element.getAttributeValue("show").equalsIgnoreCase("false");
+                    }
+                    result.add(new DestroyableObjective(owner, name, id, new UnionRegion(regions), types, damageValues, required, show, showProgress, repairable));
                 }
             }
         }

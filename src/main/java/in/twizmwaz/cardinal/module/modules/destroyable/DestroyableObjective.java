@@ -1,7 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.destroyable;
 
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.event.ObjectiveCompleteEvent;
+import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.teams.PgmTeam;
@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
@@ -29,16 +30,17 @@ public class DestroyableObjective implements GameObjective {
     private final List<Material> types;
     private final List<Integer> damageValues;
     private final double required;
+    private final boolean showPercent;
+    private final boolean repairable;
+    private final boolean show;
 
     private Set<String> playersTouched;
     private double size;
 
     private double complete;
     private boolean completed;
-    private boolean showPercent;
-    private boolean repairable;
 
-    protected DestroyableObjective(final PgmTeam team, final String name, final String id, final Region region, final List<Material> types, final List<Integer> damageValues, final double required, boolean showPercent, boolean repairable) {
+    protected DestroyableObjective(final PgmTeam team, final String name, final String id, final Region region, final List<Material> types, final List<Integer> damageValues, final double required, final boolean show, boolean showPercent, boolean repairable) {
         this.team = team;
         this.name = name;
         this.id = id;
@@ -49,6 +51,7 @@ public class DestroyableObjective implements GameObjective {
         this.repairable = repairable;
         this.complete = 0;
         this.required = required;
+        this.show = show;
         this.completed = false;
 
         this.playersTouched = new HashSet<>();
@@ -90,6 +93,11 @@ public class DestroyableObjective implements GameObjective {
     }
 
     @Override
+    public boolean showOnScoreboard() {
+        return show;
+    }
+
+    @Override
     public void unload() {
         HandlerList.unregisterAll(this);
     }
@@ -103,7 +111,7 @@ public class DestroyableObjective implements GameObjective {
                     this.completed = true;
                     event.setCancelled(false);
                     Bukkit.broadcastMessage(team.getCompleteName() + "'s " + ChatColor.AQUA + name + ChatColor.GRAY + " destroyed by " + ChatColor.DARK_AQUA + "the enemy");
-                    ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this);
+                    ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
                     Bukkit.getServer().getPluginManager().callEvent(compEvent);
                 }
             } else {
@@ -123,6 +131,7 @@ public class DestroyableObjective implements GameObjective {
         }
         for (Block block : objectiveBlownUp) {
             boolean blockDestroyed = false;
+            Player eventPlayer = null;
             if (event.getEntity().hasMetadata("source")) {
                 String player = event.getEntity().getMetadata("source").get(0).asString();
                 if (Bukkit.getOfflinePlayer(player).isOnline()) {
@@ -133,6 +142,7 @@ public class DestroyableObjective implements GameObjective {
                             playersTouched.add(player);
                         }
                         blockDestroyed = true;
+                        eventPlayer = Bukkit.getPlayer(player);
                     }
                 } else {
                     if (!playersTouched.contains(player)) {
@@ -148,7 +158,7 @@ public class DestroyableObjective implements GameObjective {
                 if (this.complete >= this.required && !this.completed) {
                     this.completed = true;
                     Bukkit.broadcastMessage(team.getCompleteName() + ChatColor.GRAY + "'s " + ChatColor.AQUA + name + ChatColor.GRAY + " destroyed by " + ChatColor.DARK_AQUA + "the enemy");
-                    ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this);
+                    ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, eventPlayer);
                     Bukkit.getServer().getPluginManager().callEvent(compEvent);
                 }
             }

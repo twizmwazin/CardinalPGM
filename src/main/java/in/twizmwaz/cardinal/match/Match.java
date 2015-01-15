@@ -35,7 +35,6 @@ public class Match {
 
     private MatchState state;
     private Document document;
-    private Scoreboard scoreboard;
     private List<PgmTeam> teams;
     private StartTimer startTimer;
 
@@ -54,10 +53,12 @@ public class Match {
             e.printStackTrace();
         }
 
-        this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         PgmTeamBuilder teamBuilder = new PgmTeamBuilder(this);
         teamBuilder.run();
         teams = teamBuilder.getTeams();
+        for (PgmTeam team : teams) {
+            team.getScoreboard().registerNewTeam(team.getId());
+        }
         this.startTimer = new StartTimer(this, 30);
 
         this.state = MatchState.WAITING;
@@ -91,10 +92,6 @@ public class Match {
 
     public Info getMapInfo() {
         return Info.getMapInfo();
-    }
-
-    public Scoreboard getScoreboard() {
-        return scoreboard;
     }
 
     public Document getDocument() {

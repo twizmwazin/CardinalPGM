@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.spawn;
 
+import com.sk89q.minecraft.util.commands.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
@@ -20,7 +21,11 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerInitialSpawnEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Arrays;
 
 public class SpawnModule implements Module {
 
@@ -93,6 +98,23 @@ public class SpawnModule implements Module {
             Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
             if (!spawnEvent.isCancelled()) {
                 PlayerUtil.resetPlayer(player);
+                player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
+                ItemStack howTo = new ItemStack(Material.WRITTEN_BOOK);
+                ItemMeta howToMeta = howTo.getItemMeta();
+                howToMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "Coming Soon");
+                howTo.setItemMeta(howToMeta);
+                BookMeta howToBookMeta = (BookMeta) howTo.getItemMeta();
+                howToBookMeta.setAuthor(ChatColor.GOLD + "CardinalPGM");
+                howTo.setItemMeta(howToBookMeta);
+                player.getInventory().setItem(1, howTo);
+                if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
+                    ItemStack picker = new ItemStack(Material.LEATHER_HELMET);
+                    ItemMeta pickerMeta = picker.getItemMeta();
+                    pickerMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "Team Selection");
+                    pickerMeta.setLore(Arrays.asList(ChatColor.DARK_PURPLE + "Join the game!"));
+                    picker.setItemMeta(pickerMeta);
+                    player.getInventory().setItem(2, picker);
+                }
                 player.teleport(spawn.getLocation());
             }
         }
