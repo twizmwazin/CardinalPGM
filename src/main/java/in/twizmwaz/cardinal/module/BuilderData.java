@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ModuleData {
+public @interface BuilderData {
 
     /**
      * @return The position of when the module should be loaded

@@ -41,7 +41,7 @@ public class TeamModule implements Module {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        event.getPlayer().setScoreboard(match.getScoreboard());
+        //event.getPlayer().setScoreboard(match.getScoreboard());
         GameHandler.getGameHandler().getMatch().getTeamById("observers").add(player, JoinType.FORCED);
         PlayerUtil.resetPlayer(player);
 
