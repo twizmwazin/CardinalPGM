@@ -8,6 +8,7 @@ import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjectiveBuild
 import in.twizmwaz.cardinal.module.modules.difficulty.MapDifficultyBuilder;
 import in.twizmwaz.cardinal.module.modules.disableDamage.DisableDamageBuilder;
 import in.twizmwaz.cardinal.module.modules.friendlyFire.FriendlyFireBuilder;
+import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameScoreboardBuilder;
 import in.twizmwaz.cardinal.module.modules.gamerules.GamerulesBuilder;
 import in.twizmwaz.cardinal.module.modules.hunger.HungerBuilder;
 import in.twizmwaz.cardinal.module.modules.itemRemove.ItemRemoveBuilder;
@@ -75,6 +76,7 @@ public class ModuleHandler {
         builders.add(new KillStreakBuilder());
         builders.add(new TeamPickerBuilder());
         builders.add(new InfoBuilder());
+        builders.add(new GameScoreboardBuilder());
     }
 
     public Set<Module> invokeModules(Match match) {

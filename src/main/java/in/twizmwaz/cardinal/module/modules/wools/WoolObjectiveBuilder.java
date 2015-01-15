@@ -37,13 +37,18 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
                     id = subElement.getAttributeValue("color");
                 }
                 boolean craftable = true;
-                try {
-                    if (subElement.getAttribute("craftable").getValue().equalsIgnoreCase("false")) {
-                        craftable = false;
-                    }
-                } catch (NullPointerException exc) {
+                if (subElement.getAttributeValue("craftable") != null) {
+                    craftable = !subElement.getAttributeValue("craftable").equalsIgnoreCase("false");
+                } else if (element.getAttributeValue("craftable") != null) {
+                    craftable = !element.getAttributeValue("craftable").equalsIgnoreCase("false");
                 }
-                result.add(new WoolObjective(team, name, id, color, place, craftable));
+                boolean show = true;
+                if (subElement.getAttributeValue("show") != null) {
+                    show = !subElement.getAttributeValue("show").equalsIgnoreCase("false");
+                } else if (element.getAttributeValue("show") != null) {
+                    show = !element.getAttributeValue("show").equalsIgnoreCase("false");
+                }
+                result.add(new WoolObjective(team, name, id, color, place, craftable, show));
             }
             for (Element child : element.getChildren("wools")) {
                 for (Element subChild : child.getChildren("wool")) {
@@ -68,13 +73,22 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
                         id = subChild.getAttributeValue("color");
                     }
                     boolean craftable = true;
-                    try {
-                        if (subChild.getAttributeValue("craftable").equalsIgnoreCase("false")) {
-                            craftable = false;
-                        }
-                    } catch (NullPointerException exc) {
+                    if (subChild.getAttributeValue("craftable") != null) {
+                        craftable = !subChild.getAttributeValue("craftable").equalsIgnoreCase("false");
+                    } else if (child.getAttributeValue("craftable") != null) {
+                        craftable = !child.getAttributeValue("craftable").equalsIgnoreCase("false");
+                    } else if (element.getAttributeValue("craftable") != null) {
+                        craftable = !element.getAttributeValue("craftable").equalsIgnoreCase("false");
                     }
-                    result.add(new WoolObjective(team, name, id, color, place, craftable));
+                    boolean show = true;
+                    if (subChild.getAttributeValue("show") != null) {
+                        show = !subChild.getAttributeValue("show").equalsIgnoreCase("false");
+                    } else if (child.getAttributeValue("show") != null) {
+                        show = !child.getAttributeValue("show").equalsIgnoreCase("false");
+                    } else if (element.getAttributeValue("show") != null) {
+                        show = !element.getAttributeValue("show").equalsIgnoreCase("false");
+                    }
+                    result.add(new WoolObjective(team, name, id, color, place, craftable, show));
                 }
             }
 

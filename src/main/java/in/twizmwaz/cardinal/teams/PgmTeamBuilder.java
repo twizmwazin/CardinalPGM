@@ -19,12 +19,10 @@ import java.util.List;
 public class PgmTeamBuilder implements Runnable {
 
     private Match match;
-    private Scoreboard scoreboard;
     private List<PgmTeam> teams;
 
     public PgmTeamBuilder(Match match) {
         this.match = match;
-        this.scoreboard = match.getScoreboard();
         teams = new ArrayList<PgmTeam>();
     }
 
@@ -56,11 +54,11 @@ public class PgmTeamBuilder implements Runnable {
             }
             ChatColor color = StringUtils.convertStringToChatColor(teamNode.getAttribute("color").getValue());
             List<Spawn> spawns = SpawnParser.parseSpawns(doc, id);
-            this.teams.add(new PgmTeam(name, id, max, maxOverfill, respawnLimit, color, false, scoreboard, spawns));
+            this.teams.add(new PgmTeam(name, id, max, maxOverfill, respawnLimit, color, false, spawns));
 
         }
         List<Spawn> spawns = SpawnParser.parseDefault(doc);
-        this.teams.add(new PgmTeam("Observers", "observers", Integer.MAX_VALUE, Integer.MAX_VALUE, -1, ChatColor.AQUA, true, scoreboard, spawns));
+        this.teams.add(new PgmTeam("Observers", "observers", Integer.MAX_VALUE, Integer.MAX_VALUE, -1, ChatColor.AQUA, true, spawns));
 
     }
 

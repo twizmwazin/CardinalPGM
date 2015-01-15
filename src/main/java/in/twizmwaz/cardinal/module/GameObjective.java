@@ -14,4 +14,6 @@ public interface GameObjective extends Module {
 
     public boolean isComplete();
 
+    public boolean showOnScoreboard();
+
 }

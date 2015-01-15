@@ -24,7 +24,6 @@ import java.util.Set;
  */
 public class PgmTeam {
 
-    private Team scoreboardTeam;
     private String name;
     private String id;
     private int max;
@@ -36,7 +35,7 @@ public class PgmTeam {
     private Set<GameObjective> objectives;
     private Scoreboard scoreboard;
 
-    PgmTeam(String name, String id, int max, int maxOverfill, int respawnLimit, ChatColor color, boolean obs, Scoreboard scoreboard, List<Spawn> spawns) {
+    PgmTeam(String name, String id, int max, int maxOverfill, int respawnLimit, ChatColor color, boolean obs, List<Spawn> spawns) {
         this.observer = obs;
         this.name = name;
         this.id = id;
@@ -44,11 +43,12 @@ public class PgmTeam {
         this.maxOverfill = maxOverfill;
         this.respawnLimit = respawnLimit;
         this.color = color;
-        this.scoreboard = scoreboard;
-        this.scoreboardTeam = scoreboard.registerNewTeam(id);
-        scoreboardTeam.setDisplayName(color + name);
-        scoreboardTeam.setPrefix(color + "");
+        this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.spawns = spawns;
+    }
+
+    public Team getScoreboardTeam() {
+        return GameHandler.getGameHandler().getMatch().getTeamById("observers").getScoreboard().getTeam(id);
     }
 
     public void add(Player player, JoinType joinType) {
@@ -67,19 +67,23 @@ public class PgmTeam {
     }
 
     private void set(PlayerChangeTeamEvent event) {
-        scoreboardTeam.addPlayer(event.getPlayer());
-        event.getPlayer().setScoreboard(scoreboardTeam.getScoreboard());
+        for (PgmTeam team : GameHandler.getGameHandler().getMatch().getTeams()) {
+            team.getScoreboard().getTeam(id).addPlayer(event.getPlayer());
+        }
+        event.getPlayer().setScoreboard(getScoreboardTeam().getScoreboard());
         if (!event.getJoinType().equals(JoinType.JOIN)) {
             event.getPlayer().sendMessage(ChatColor.GRAY + "You joined the " + event.getNewTeam().getColor() + event.getNewTeam().getName());
         }
     }
 
     public void remove(Player player) {
-        scoreboardTeam.removePlayer(player);
+        for (PgmTeam team : GameHandler.getGameHandler().getMatch().getTeams()) {
+            team.getScoreboard().getTeam(id).removePlayer(player);
+        }
     }
 
     public boolean hasPlayer(Player player) {
-        return scoreboardTeam.hasPlayer(player);
+        return getScoreboardTeam().hasPlayer(player);
     }
 
     public Set<Player> getPlayers() {
@@ -95,7 +99,7 @@ public class PgmTeam {
     }
 
     public Set<String> getPlayerNames() {
-        return scoreboardTeam.getEntries();
+        return getScoreboardTeam().getEntries();
     }
 
     public int getMax() {
@@ -149,9 +153,5 @@ public class PgmTeam {
 
     public void setObjectives(Set<GameObjective> objectives) {
         this.objectives = objectives;
-    }
-
-    public Team getScoreboardTeam() {
-        return scoreboardTeam;
     }
 }

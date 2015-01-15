@@ -2,7 +2,8 @@ package in.twizmwaz.cardinal.module.modules.wools;
 
 import in.parapengu.commons.utils.StringUtils;
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.event.ObjectiveCompleteEvent;
+import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
+import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.teams.PgmTeam;
@@ -33,18 +34,20 @@ public class WoolObjective implements GameObjective {
     private final DyeColor color;
     private final BlockRegion place;
     private final boolean craftable;
+    private final boolean show;
 
     private Set<String> playersTouched;
     private boolean touched;
     private boolean complete;
 
-    protected WoolObjective(final PgmTeam team, final String name, final String id, final DyeColor color, final BlockRegion place, final boolean craftable) {
+    protected WoolObjective(final PgmTeam team, final String name, final String id, final DyeColor color, final BlockRegion place, final boolean craftable, final boolean show) {
         this.team = team;
         this.name = name;
         this.id = id;
         this.color = color;
         this.place = place;
         this.craftable = craftable;
+        this.show = show;
 
         this.playersTouched = new HashSet<>();
     }
@@ -79,6 +82,11 @@ public class WoolObjective implements GameObjective {
         return complete;
     }
 
+    @Override
+    public boolean showOnScoreboard() {
+        return show;
+    }
+
     @EventHandler
     public void onWoolPickup(PlayerPickupItemEvent event) {
         Player player = event.getPlayer();
@@ -89,7 +97,10 @@ public class WoolObjective implements GameObjective {
                         if (!this.playersTouched.contains(player.getName())) {
                             this.playersTouched.add(player.getName());
                         }
+                        boolean oldState = this.touched;
                         this.touched = true;
+                        ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !oldState);
+                        Bukkit.getServer().getPluginManager().callEvent(touchEvent);
                     }
                 }
             } catch (NullPointerException e) {
@@ -112,7 +123,7 @@ public class WoolObjective implements GameObjective {
                     if (GameHandler.getGameHandler().getMatch().getTeam(event.getPlayer()).equals(team)) {
                         this.complete = true;
                         Bukkit.broadcastMessage(team.getColor() + event.getPlayer().getDisplayName() + ChatColor.WHITE + " placed " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase() + ChatColor.WHITE + " for the " + team.getCompleteName());
-                        ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this);
+                        ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
                         event.setCancelled(false);
                     } else event.setCancelled(true);
