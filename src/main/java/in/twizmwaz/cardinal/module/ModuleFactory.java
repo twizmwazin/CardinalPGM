@@ -57,6 +57,7 @@ public class ModuleFactory {
         }
     }
     
+    @SuppressWarnings("unchecked")
     public ModuleCollection<Module> build(ModuleLoadTime time) {
         ModuleCollection results = new ModuleCollection();
         for (ModuleBuilder builder : builders) {
@@ -65,7 +66,7 @@ public class ModuleFactory {
                     results.addAll(builder.load(match));
                 }
             } catch (NullPointerException e) {
-                if (time != ModuleLoadTime.NORMAL) continue;
+                if (time != ModuleLoadTime.NORMAL);
                 else results.addAll(builder.load(match));
             }
         }

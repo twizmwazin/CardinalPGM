@@ -28,9 +28,7 @@ public class Match {
 
     private final JavaPlugin plugin;
     private final GameHandler handler;
-    //private final ModuleHandler moduleHandler;
     private final UUID uuid;
-    //private Set<Module> modules;
     private final ModuleFactory factory;
     private final ModuleCollection<Module> modules;
 
@@ -47,7 +45,6 @@ public class Match {
         this.handler = handler;
         this.modules = new ModuleCollection<>();
         this.factory = new ModuleFactory(this);
-        //this.moduleHandler = handler.getModuleHandler();
         try {
             this.document = DomUtil.parse(new File("matches/" + this.uuid.toString() + "/map.xml"));
         } catch (JDOMException | IOException e) {
@@ -65,7 +62,10 @@ public class Match {
 
     public void registerModules() {
         for (ModuleLoadTime time : ModuleLoadTime.getOrdered()) {
-            factory.build(time);
+            for (Module module : factory.build(time)) {
+                modules.add(module);
+                plugin.getServer().getPluginManager().registerEvents(module, plugin);
+            }
         }
     }
     
@@ -74,7 +74,6 @@ public class Match {
             HandlerList.unregisterAll(listener);
         }
         modules.unregisterAll();
-        //moduleHandler.unregisterModules();
     }
 
     public Match getMatch() {
@@ -165,8 +164,4 @@ public class Match {
     public ModuleCollection<Module> getModules() {
         return modules;
     }
-
-    /*public void setModules(Set<Module> modules) {
-        this.modules = modules;
-    }*/
 }

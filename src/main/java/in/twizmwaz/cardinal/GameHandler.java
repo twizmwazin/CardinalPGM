@@ -23,12 +23,10 @@ public class GameHandler {
     private Match match;
     private Cycle cycle;
     private CycleTimer cycleTimer;
-    //private ModuleHandler moduleHandler;
 
     public GameHandler(JavaPlugin plugin) throws RotationLoadException {
         this.plugin = plugin;
         handler = this;
-        //moduleHandler = new ModuleHandler(plugin, this);
         rotation = new Rotation(plugin);
         cycle = new Cycle(rotation.getNext(), UUID.randomUUID(), this);
         cycleAndMakeMatch();
@@ -49,7 +47,6 @@ public class GameHandler {
         } catch (NullPointerException e) {
         }
         this.match = new Match(this, matchUUID);
-        //match.setModules(moduleHandler.invokeModules(match));
         this.match.registerModules();
         Bukkit.getServer().getPluginManager().callEvent(new CycleCompleteEvent(match));
         rotation.move();
@@ -88,10 +85,6 @@ public class GameHandler {
     public JavaPlugin getPlugin() {
         return plugin;
     }
-
-    /*public ModuleHandler getModuleHandler() {
-        return moduleHandler;
-    }*/
 
     public boolean startCycleTimer(int seconds) {
         if (this.getMatch().getState() != MatchState.PLAYING) {
