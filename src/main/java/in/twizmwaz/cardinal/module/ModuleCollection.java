@@ -1,5 +1,7 @@
 package in.twizmwaz.cardinal.module;
 
+import org.bukkit.event.HandlerList;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -45,5 +47,12 @@ public class ModuleCollection<M extends Module> extends ArrayList<M> {
             if (clazz.isInstance(module)) results.add((T) module);
         }
         return results;
+    }
+    
+    public void unregisterAll(){
+        for (M m : this) {
+            HandlerList.unregisterAll(m);
+        }
+        
     }
 }

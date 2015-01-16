@@ -6,8 +6,7 @@ import in.twizmwaz.cardinal.match.listeners.MatchListener;
 import in.twizmwaz.cardinal.match.listeners.ObjectiveListener;
 import in.twizmwaz.cardinal.match.listeners.WorldListener;
 import in.twizmwaz.cardinal.match.util.StartTimer;
-import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.module.ModuleHandler;
+import in.twizmwaz.cardinal.module.*;
 import in.twizmwaz.cardinal.module.modules.mapInfo.Info;
 import in.twizmwaz.cardinal.teams.PgmTeam;
 import in.twizmwaz.cardinal.teams.PgmTeamBuilder;
@@ -29,46 +28,53 @@ public class Match {
 
     private final JavaPlugin plugin;
     private final GameHandler handler;
-    private final ModuleHandler moduleHandler;
+    //private final ModuleHandler moduleHandler;
     private final UUID uuid;
-    private Set<Module> modules;
+    //private Set<Module> modules;
+    private final ModuleFactory factory;
+    private final ModuleCollection<Module> modules;
 
     private MatchState state;
     private Document document;
-    private List<PgmTeam> teams;
+    private List<PgmTeam> teams; //TO DO:convert to module
     private StartTimer startTimer;
 
-    private Set<Listener> listeners = new HashSet<Listener>();
+    private Set<Listener> listeners = new HashSet<Listener>(); //TO DO:these need to go
 
     public Match(GameHandler handler, UUID id) {
         this.plugin = handler.getPlugin();
         this.uuid = id;
         this.handler = handler;
-        this.moduleHandler = handler.getModuleHandler();
+        this.modules = new ModuleCollection<>();
+        this.factory = new ModuleFactory(this);
+        //this.moduleHandler = handler.getModuleHandler();
         try {
             this.document = DomUtil.parse(new File("matches/" + this.uuid.toString() + "/map.xml"));
-        } catch (JDOMException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (JDOMException | IOException e) {
             e.printStackTrace();
         }
-
         PgmTeamBuilder teamBuilder = new PgmTeamBuilder(this);
         teamBuilder.run();
         teams = teamBuilder.getTeams();
         this.startTimer = new StartTimer(this, 30);
-
         this.state = MatchState.WAITING;
         listeners.add(new MatchListener(plugin, this));
         listeners.add(new ObjectiveListener(plugin, this));
         listeners.add(new WorldListener(plugin, this));
     }
 
-    public void unregister() {
+    public void registerModules() {
+        for (ModuleLoadTime time : ModuleLoadTime.getOrdered()) {
+            factory.build(time);
+        }
+    }
+    
+    public void unregisterModules() {
         for (Listener listener : listeners) {
             HandlerList.unregisterAll(listener);
         }
-        moduleHandler.unregisterModules();
+        modules.unregisterAll();
+        //moduleHandler.unregisterModules();
     }
 
     public Match getMatch() {
@@ -156,7 +162,11 @@ public class Match {
         return teams;
     }
 
-    public void setModules(Set<Module> modules) {
-        this.modules = modules;
+    public ModuleCollection<Module> getModules() {
+        return modules;
     }
+
+    /*public void setModules(Set<Module> modules) {
+        this.modules = modules;
+    }*/
 }
