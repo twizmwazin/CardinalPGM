@@ -16,7 +16,9 @@ public class FriendlyFire implements Module {
         this.arrowReturn = arrowReturn;
         if (enabled) {
             for (PgmTeam team : match.getTeams()) {
-                team.getScoreboardTeam().setAllowFriendlyFire(false);
+                for (PgmTeam team1 : match.getTeams()) {
+                    team.getScoreboard().getTeam(team1.getId()).setAllowFriendlyFire(false);
+                }
             }
         }
     }
