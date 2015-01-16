@@ -59,7 +59,7 @@ public class ObserverModule implements Module {
             ItemMeta howToMeta = howTo.getItemMeta();
             howToMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "Coming Soon");
             howTo.setItemMeta(howToMeta);
-            BookMeta howToBookMeta = (BookMeta) howTo;
+            BookMeta howToBookMeta = (BookMeta) howTo.getItemMeta();
             howToBookMeta.setAuthor(ChatColor.GOLD + "CardinalPGM");
             howTo.setItemMeta(howToBookMeta);
             player.getInventory().setItem(1, howTo);
