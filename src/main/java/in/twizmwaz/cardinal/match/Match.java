@@ -56,9 +56,6 @@ public class Match {
         PgmTeamBuilder teamBuilder = new PgmTeamBuilder(this);
         teamBuilder.run();
         teams = teamBuilder.getTeams();
-        for (PgmTeam team : teams) {
-            team.getScoreboard().registerNewTeam(team.getId());
-        }
         this.startTimer = new StartTimer(this, 30);
 
         this.state = MatchState.WAITING;

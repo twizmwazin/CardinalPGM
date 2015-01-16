@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.teams.spawns.SpawnParser;
 import org.apache.logging.log4j.core.helpers.Integers;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
@@ -59,7 +60,12 @@ public class PgmTeamBuilder implements Runnable {
         }
         List<Spawn> spawns = SpawnParser.parseDefault(doc);
         this.teams.add(new PgmTeam("Observers", "observers", Integer.MAX_VALUE, Integer.MAX_VALUE, -1, ChatColor.AQUA, true, spawns));
-
+        for (PgmTeam team : this.teams) {
+            for (PgmTeam team1 : this.teams) {
+                Team team2 = team.getScoreboard().registerNewTeam(team1.getId());
+                team2.setPrefix(team1.getColor() + "");
+            }
+        }
     }
 
     public List<PgmTeam> getTeams() {
