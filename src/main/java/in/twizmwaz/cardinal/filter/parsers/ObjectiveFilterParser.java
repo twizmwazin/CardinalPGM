@@ -13,7 +13,7 @@ public class ObjectiveFilterParser {
 
     public ObjectiveFilterParser(final Element element) {
         String name = element.getText();
-        for (GameObjective objective : GameHandler.getGameHandler().getModuleHandler().getConditions()) {
+        for (GameObjective objective : GameHandler.getGameHandler().getMatch().getModules().getModules(GameObjective.class)) {
             if (objective.getName().equalsIgnoreCase(name)) this.objective = objective;
         }
         try {
