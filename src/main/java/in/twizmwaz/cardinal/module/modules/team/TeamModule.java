@@ -11,7 +11,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 
 import java.util.HashSet;
-import java.util.logging.Level;
 
 public class TeamModule<P extends Player> extends HashSet<Player> implements Module {
 
@@ -25,7 +24,6 @@ public class TeamModule<P extends Player> extends HashSet<Player> implements Mod
     private final boolean observer;
 
     protected TeamModule(Match match, String name, String id, int max, int maxOverfill, int respawnLimit, ChatColor color, boolean observer) {
-        Bukkit.getLogger().log(Level.INFO, name);
         this.match = match;
         this.name = name;
         this.id = id;

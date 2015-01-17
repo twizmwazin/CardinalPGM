@@ -28,7 +28,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
-import java.util.logging.Level;
 
 public class RespawnModule implements Module {
 
@@ -58,14 +57,10 @@ public class RespawnModule implements Module {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInitLogin(PlayerInitialSpawnEvent event) {
-        Bukkit.getLogger().log(Level.INFO, TeamUtil.getTeamById("observers").getName());
         TeamModule teamModule = TeamUtil.getTeamById("observers");
         SpawnModule spawn = null;
         for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
-            if (spawnModule.getTeam().equals(teamModule)) {
-                spawn = spawnModule;
-                Bukkit.getLogger().log(Level.INFO, "yep");
-            } else Bukkit.getLogger().log(Level.INFO, "nop");
+            if (spawnModule.getTeam().equals(teamModule)) spawn = spawnModule;
         }
         PgmSpawnEvent spawnEvent = new PgmSpawnEvent(event.getPlayer(), spawn, TeamUtil.getTeamById("observers"));
         Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
