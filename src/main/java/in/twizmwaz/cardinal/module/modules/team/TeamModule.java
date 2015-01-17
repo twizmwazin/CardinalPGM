@@ -48,6 +48,7 @@ public class TeamModule<P extends Player> extends HashSet<Player> implements Mod
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
             this.add(player);
+            event.getPlayer().sendMessage(ChatColor.GRAY + "You have joined " + this.getCompleteName());
             return true;
         } else return false;
     }
@@ -56,7 +57,6 @@ public class TeamModule<P extends Player> extends HashSet<Player> implements Mod
     public void onTeamSwitch(PlayerChangeTeamEvent event) {
         if (!event.isCancelled()) {
             remove(event.getPlayer());
-            if (!event.getOldTeam().equals(event.getNewTeam())) event.getPlayer().sendMessage(ChatColor.GRAY + "You have joined " + event.getNewTeam().getColor() + event.getNewTeam().getName());
             GameScoreboard scoreboard = null;
             for (GameScoreboard gameScoreboard : GameHandler.getGameHandler().getMatch().getModules().getModules(GameScoreboard.class)) {
                 if (gameScoreboard.getTeam().equals(event.getNewTeam())) {
