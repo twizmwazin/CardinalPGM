@@ -58,7 +58,7 @@ public class RespawnModule implements Module {
         TeamModule teamModule = TeamUtils.getTeamById("observers");
         ModuleCollection<SpawnModule> modules = new ModuleCollection<SpawnModule>();
         for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
-            if (spawnModule.getTeam().equals(teamModule)) modules.add(spawnModule);
+            if (spawnModule.getTeam() == teamModule) modules.add(spawnModule);
         }
         SpawnModule chosen = modules.getRandom();
         PgmSpawnEvent spawnEvent = new PgmSpawnEvent(event.getPlayer(), chosen, TeamUtils.getTeamById("observers"));
@@ -74,7 +74,7 @@ public class RespawnModule implements Module {
         TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
         ModuleCollection<SpawnModule> modules = new ModuleCollection<SpawnModule>();
         for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
-            if (spawnModule.getTeam().equals(teamModule)) modules.add(spawnModule);
+            if (spawnModule.getTeam() == teamModule) modules.add(spawnModule);
         }
         SpawnModule chosen = modules.getRandom();
         PgmSpawnEvent spawnEvent = new PgmSpawnEvent(event.getPlayer(), chosen, TeamUtils.getTeamByPlayer(event.getPlayer()));
@@ -93,7 +93,7 @@ public class RespawnModule implements Module {
                 TeamModule teamModule = TeamUtils.getTeamByPlayer(player);
                 ModuleCollection<SpawnModule> modules = new ModuleCollection<SpawnModule>();
                 for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
-                    if (spawnModule.getTeam().equals(teamModule)) modules.add(spawnModule);
+                    if (spawnModule.getTeam() == teamModule) modules.add(spawnModule);
                 }
                 SpawnModule chosen = modules.getRandom();
                 PgmSpawnEvent spawnEvent = new PgmSpawnEvent(player, chosen, TeamUtils.getTeamByPlayer(player));
@@ -111,7 +111,7 @@ public class RespawnModule implements Module {
             TeamModule teamModule = TeamUtils.getTeamByPlayer(player);
             ModuleCollection<SpawnModule> modules = new ModuleCollection<SpawnModule>();
             for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
-                if (spawnModule.getTeam().equals(teamModule)) modules.add(spawnModule);
+                if (spawnModule.getTeam() == teamModule) modules.add(spawnModule);
             }
             SpawnModule chosen = modules.getRandom();
             PgmSpawnEvent spawnEvent = new PgmSpawnEvent(player, chosen, TeamUtils.getTeamById("observers"));
@@ -153,7 +153,7 @@ public class RespawnModule implements Module {
                         TeamModule teamModule = event.getNewTeam();
                         ModuleCollection<SpawnModule> modules = new ModuleCollection<SpawnModule>();
                         for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
-                            if (spawnModule.getTeam().equals(teamModule)) modules.add(spawnModule);
+                            if (spawnModule.getTeam() == teamModule) modules.add(spawnModule);
                         }
                         SpawnModule chosen = modules.getRandom();
                         PgmSpawnEvent spawnEvent = new PgmSpawnEvent(event.getPlayer(), chosen, event.getNewTeam());
@@ -168,7 +168,7 @@ public class RespawnModule implements Module {
                     TeamModule teamModule = event.getNewTeam();
                     SpawnModule spawn = null;
                     for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
-                        if (spawnModule.getTeam().equals(teamModule)) spawn = spawnModule;
+                        if (spawnModule.getTeam() == teamModule) spawn = spawnModule;
                     }
                     PgmSpawnEvent spawnEvent = new PgmSpawnEvent(event.getPlayer(), spawn, event.getNewTeam());
                     Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
