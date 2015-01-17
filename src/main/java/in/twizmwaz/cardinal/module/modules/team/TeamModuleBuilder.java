@@ -15,7 +15,7 @@ import java.util.List;
 
 @BuilderData(load = ModuleLoadTime.EARLIEST)
 public class TeamModuleBuilder implements ModuleBuilder {
-    
+
     @Override
     public ModuleCollection load(Match match) {
         ModuleCollection<TeamModule> results = new ModuleCollection<>();

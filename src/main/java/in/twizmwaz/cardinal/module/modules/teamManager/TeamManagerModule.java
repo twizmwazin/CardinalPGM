@@ -38,7 +38,7 @@ public class TeamManagerModule implements Module {
         HandlerList.unregisterAll(this);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         TeamUtil.getTeamById("observers").add(player, true);

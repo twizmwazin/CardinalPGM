@@ -1,13 +1,9 @@
 package in.twizmwaz.cardinal.module.modules.difficulty;
 
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import org.bukkit.Difficulty;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MapDifficultyBuilder implements ModuleBuilder {
 

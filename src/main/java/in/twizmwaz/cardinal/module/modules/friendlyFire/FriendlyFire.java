@@ -16,7 +16,7 @@ public class FriendlyFire implements Module {
         this.arrowReturn = arrowReturn;
         if (enabled) {
             for (TeamModule team : match.getModules().getModules(TeamModule.class)) {
-            //        setAllowFriendlyFire(false);
+                //        setAllowFriendlyFire(false);
             }
         }
     }

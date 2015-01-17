@@ -1,31 +1,33 @@
 package in.twizmwaz.cardinal.module.modules.spawn;
 
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.module.modules.kit.Kit;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.regions.Region;
 import org.apache.commons.lang3.tuple.Pair;
+import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 import java.util.List;
 
 public class SpawnModule implements Module {
-    
+
     private final TeamModule team;
-    private final List<Pair<Region, Vector>> region;
-    private final Kit kit;
+    private final List<Pair<Region, Vector>> regions;
+    private final String kit;
     private final boolean safe;
     private final boolean sequential;
     //private final Filter filter;
+    private int position;
 
-    public SpawnModule(TeamModule team, List<Pair<Region, Vector>> region, Kit kit, boolean safe, boolean sequential) {
+    public SpawnModule(TeamModule team, List<Pair<Region, Vector>> regions, String kit, boolean safe, boolean sequential) {
         this.team = team;
-        this.region = region;
+        this.regions = regions;
         this.kit = kit;
         this.safe = safe;
         this.sequential = sequential;
+        this.position = 0;
     }
-    
+
     @Override
     public void unload() {
     }
@@ -34,11 +36,11 @@ public class SpawnModule implements Module {
         return team;
     }
 
-    public List<Pair<Region, Vector>> getRegion() {
-        return region;
+    public List<Pair<Region, Vector>> getRegions() {
+        return regions;
     }
 
-    public Kit getKit() {
+    public String getKit() {
         return kit;
     }
 
@@ -48,5 +50,11 @@ public class SpawnModule implements Module {
 
     public boolean isSequential() {
         return sequential;
+    }
+
+    public Location getLocation() {
+        Location location = regions.get(position).getLeft().getRandomPoint().getLocation();
+        location.setDirection(regions.get(position).getRight());
+        return location;
     }
 }

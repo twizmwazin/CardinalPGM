@@ -17,7 +17,8 @@ import in.twizmwaz.cardinal.module.modules.mapInfo.InfoBuilder;
 import in.twizmwaz.cardinal.module.modules.motd.MOTDBuilder;
 import in.twizmwaz.cardinal.module.modules.observers.ObserverModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.projectiles.ProjectilesBuilder;
-import in.twizmwaz.cardinal.module.modules.spawnPlayer.RespawnModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.respawn.RespawnModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.spawn.SpawnModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.team.TeamModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.teamManager.TeamManagerModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.teamPicker.TeamPickerBuilder;
@@ -39,7 +40,7 @@ public class ModuleFactory {
     private final Match match;
     private final List<Class<? extends ModuleBuilder>> builderClasses;
     private final List<ModuleBuilder> builders;
-    
+
     @SuppressWarnings("unchecked")
     public ModuleFactory(Match match) {
         this.match = match;
@@ -57,7 +58,7 @@ public class ModuleFactory {
             }
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public ModuleCollection<Module> build(ModuleLoadTime time) {
         ModuleCollection results = new ModuleCollection();
@@ -67,14 +68,14 @@ public class ModuleFactory {
                     results.addAll(builder.load(match));
                 }
             } catch (NullPointerException e) {
-                if (time != ModuleLoadTime.NORMAL);
+                if (time != ModuleLoadTime.NORMAL) ;
                 else results.addAll(builder.load(match));
             }
         }
         return results;
     }
-    
-    private void registerBuilders(){
+
+    private void registerBuilders() {
         builderClasses.add(BuildHeightBuilder.class);
         builderClasses.add(WoolObjectiveBuilder.class);
         builderClasses.add(CoreObjectiveBuilder.class);
@@ -102,5 +103,6 @@ public class ModuleFactory {
         builderClasses.add(InfoBuilder.class);
         builderClasses.add(GameScoreboardBuilder.class);
         builderClasses.add(TeamModuleBuilder.class);
+        builderClasses.add(SpawnModuleBuilder.class);
     }
 }

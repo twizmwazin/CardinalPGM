@@ -5,7 +5,10 @@ import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.match.listeners.MatchListener;
 import in.twizmwaz.cardinal.match.listeners.ObjectiveListener;
 import in.twizmwaz.cardinal.match.util.StartTimer;
-import in.twizmwaz.cardinal.module.*;
+import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.module.ModuleFactory;
+import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.mapInfo.Info;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.DomUtil;
@@ -18,7 +21,9 @@ import org.jdom2.JDOMException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class Match {
 
@@ -58,7 +63,7 @@ public class Match {
             }
         }
     }
-    
+
     public void unregisterModules() {
         for (Listener listener : listeners) {
             HandlerList.unregisterAll(listener);

@@ -2,7 +2,6 @@ package in.twizmwaz.cardinal.module.modules.projectiles;
 
 import in.parapengu.commons.utils.StringUtils;
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import org.bukkit.entity.EntityType;

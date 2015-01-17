@@ -91,6 +91,7 @@
                                     <include>com.sk89q:command-framework-bukkit</include>
                                     <include>in.parapengu:commons</include>
                                     <include>org.jdom:jdom2</include>
+                                    <include>org.apache.commons:commons-lang3</include>
                                 </includes>
                             </artifactSet>
                         </configuration>

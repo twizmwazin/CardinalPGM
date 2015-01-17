@@ -1,4 +1,4 @@
-package in.twizmwaz.cardinal.module.modules.spawnPlayer;
+package in.twizmwaz.cardinal.module.modules.respawn;
 
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;

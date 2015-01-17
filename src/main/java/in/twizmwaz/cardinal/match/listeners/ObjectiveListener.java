@@ -31,7 +31,7 @@ public class ObjectiveListener implements Listener {
         ModuleCollection<GameObjective> teamObjectives = new ModuleCollection<>();
         for (Module module : match.getModules()) {
             if (module instanceof GameObjective) {
-                if (((GameObjective) module).getTeam().equals(event.getObjective().getTeam())) 
+                if (((GameObjective) module).getTeam().equals(event.getObjective().getTeam()))
                     teamObjectives.add((GameObjective) module);
             }
         }

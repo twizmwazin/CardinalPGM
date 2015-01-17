@@ -32,9 +32,9 @@ public class ScoreboardUtils {
         int max3 = 48 - (insertColor.length() * 2);
         if (string.length() > max1) {
             if (string.substring(max1 - 1, max1).equals("§") && doNotInterruptColorCodes && !insertColor.equals("")) {
-                max1 --;
-                max2 --;
-                max3 --;
+                max1--;
+                max2--;
+                max3--;
             }
         }
         string = insertColor + string;

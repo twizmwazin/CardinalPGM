@@ -6,9 +6,12 @@ import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 
-import java.util.Collection;
 import java.util.HashSet;
+import java.util.logging.Level;
 
 public class TeamModule<P extends Player> extends HashSet<Player> implements Module {
 
@@ -20,8 +23,9 @@ public class TeamModule<P extends Player> extends HashSet<Player> implements Mod
     private int respawnLimit;
     private ChatColor color;
     private final boolean observer;
-    
+
     protected TeamModule(Match match, String name, String id, int max, int maxOverfill, int respawnLimit, ChatColor color, boolean observer) {
+        Bukkit.getLogger().log(Level.INFO, name);
         this.match = match;
         this.name = name;
         this.id = id;
@@ -48,15 +52,16 @@ public class TeamModule<P extends Player> extends HashSet<Player> implements Mod
         } else return false;
     }
     
-    @Override
-    public boolean add(Player player) {
-        return this.add(player, false);
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onTeamSwitch(PlayerChangeTeamEvent event) {
+        if (!event.isCancelled()) remove(event.getPlayer());
     }
-    
+
     @Override
     public void unload() {
+        HandlerList.unregisterAll(this);
     }
-    
+
     public String getCompleteName() {
         return this.color + this.name;
     }

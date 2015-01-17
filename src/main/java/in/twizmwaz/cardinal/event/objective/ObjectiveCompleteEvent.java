@@ -3,7 +3,6 @@ package in.twizmwaz.cardinal.event.objective;
 import in.twizmwaz.cardinal.module.GameObjective;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class ObjectiveCompleteEvent extends ObjectiveEvent implements Cancellable {

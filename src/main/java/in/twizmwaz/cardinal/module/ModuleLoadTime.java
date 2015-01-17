@@ -33,13 +33,13 @@ public enum ModuleLoadTime {
      * Last module to be loaded
      */
     LATEST(6);
-    
+
     private final int slot;
-    
+
     private ModuleLoadTime(int slot) {
         this.slot = slot;
     }
-    
+
     public static List<ModuleLoadTime> getOrdered() {
         List<ModuleLoadTime> results = new ArrayList<>(7);
         results.add(0, EARLIEST);
@@ -51,5 +51,5 @@ public enum ModuleLoadTime {
         results.add(6, LATEST);
         return results;
     }
-    
+
 }

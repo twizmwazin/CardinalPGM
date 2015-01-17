@@ -1,14 +1,10 @@
 package in.twizmwaz.cardinal.module.modules.itemRemove;
 
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import org.bukkit.Material;
 import org.jdom2.Element;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ItemRemoveBuilder implements ModuleBuilder {
 

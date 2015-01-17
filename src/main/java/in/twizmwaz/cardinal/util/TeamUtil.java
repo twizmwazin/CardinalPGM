@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class TeamUtil {
-    
+
     public static TeamModule getTeamWithFewestPlayers(Match match) {
         TeamModule result = null;
         List<Integer> teamValues = new ArrayList<>();
@@ -27,7 +27,7 @@ public class TeamUtil {
         }
         return result;
     }
-    
+
     public static TeamModule getTeamByName(String name) {
         for (TeamModule team : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
             if (team.getName().replaceAll(" ", "").equalsIgnoreCase(name.replaceAll(" ", ""))) {
@@ -45,7 +45,7 @@ public class TeamUtil {
         }
         return null;
     }
-    
+
     public static TeamModule getTeamByPlayer(Player player) {
         for (TeamModule team : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
             if (team.contains(player)) {

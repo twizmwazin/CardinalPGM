@@ -1,4 +1,4 @@
-package in.twizmwaz.cardinal.module.modules.spawnPlayer;
+package in.twizmwaz.cardinal.module.modules.respawn;
 
 import com.sk89q.minecraft.util.commands.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
@@ -9,8 +9,8 @@ import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.teams.spawns.Spawn;
 import in.twizmwaz.cardinal.util.PlayerUtil;
 import in.twizmwaz.cardinal.util.TeamUtil;
 import org.bukkit.Bukkit;
@@ -28,6 +28,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
+import java.util.logging.Level;
 
 public class RespawnModule implements Module {
 
@@ -44,7 +45,7 @@ public class RespawnModule implements Module {
         HandlerList.unregisterAll(this);
     }
 
-    /*@EventHandler
+    @EventHandler
     public void onPgmSpawn(PgmSpawnEvent event) {
         try {
             if (!TeamUtil.getTeamByPlayer(event.getPlayer()).isObserver()) {
@@ -57,9 +58,16 @@ public class RespawnModule implements Module {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInitLogin(PlayerInitialSpawnEvent event) {
+        Bukkit.getLogger().log(Level.INFO, TeamUtil.getTeamById("observers").getName());
         TeamModule teamModule = TeamUtil.getTeamById("observers");
-        Spawn spawn = .getSpawn();
-        PgmSpawnEvent spawnEvent = new PgmSpawnEvent(event.getPlayer(), spawn, match.getTeamById("observers"));
+        SpawnModule spawn = null;
+        for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
+            if (spawnModule.getTeam().equals(teamModule)) {
+                spawn = spawnModule;
+                Bukkit.getLogger().log(Level.INFO, "yep");
+            } else Bukkit.getLogger().log(Level.INFO, "nop");
+        }
+        PgmSpawnEvent spawnEvent = new PgmSpawnEvent(event.getPlayer(), spawn, TeamUtil.getTeamById("observers"));
         Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
         if (!spawnEvent.isCancelled()) {
             event.setSpawnLocation(spawn.getLocation());
@@ -69,8 +77,12 @@ public class RespawnModule implements Module {
 
     @EventHandler
     public void onMinecraftRespawn(PlayerRespawnEvent event) {
-        Spawn spawn = match.getTeam(event.getPlayer()).getSpawn();
-        PgmSpawnEvent spawnEvent = new PgmSpawnEvent(event.getPlayer(), spawn, match.getTeam(event.getPlayer()));
+        TeamModule teamModule = TeamUtil.getTeamByPlayer(event.getPlayer());
+        SpawnModule spawn = null;
+        for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
+            if (spawnModule.getTeam().equals(teamModule)) spawn = spawnModule;
+        }
+        PgmSpawnEvent spawnEvent = new PgmSpawnEvent(event.getPlayer(), spawn, TeamUtil.getTeamByPlayer(event.getPlayer()));
         Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
         if (!spawnEvent.isCancelled()) {
             event.setRespawnLocation(spawn.getLocation());
@@ -81,10 +93,14 @@ public class RespawnModule implements Module {
     @EventHandler
     public void onMatchStart(MatchStartEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (!match.getTeam(player).isObserver()) {
+            if (!TeamUtil.getTeamByPlayer(player).isObserver()) {
                 PlayerUtil.resetPlayer(player);
-                Spawn spawn = match.getTeam(player).getSpawn();
-                PgmSpawnEvent spawnEvent = new PgmSpawnEvent(player, spawn, match.getTeam(player));
+                TeamModule teamModule = TeamUtil.getTeamByPlayer(player);
+                SpawnModule spawn = null;
+                for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
+                    if (spawnModule.getTeam().equals(teamModule)) spawn = spawnModule;
+                }
+                PgmSpawnEvent spawnEvent = new PgmSpawnEvent(player, spawn, TeamUtil.getTeamByPlayer(player));
                 Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
                 if (!spawnEvent.isCancelled()) {
                     player.teleport(spawn.getLocation());
@@ -96,8 +112,12 @@ public class RespawnModule implements Module {
     @EventHandler
     public void onCycleComplete(CycleCompleteEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            Spawn spawn = match.getTeamById("observers").getSpawn();
-            PgmSpawnEvent spawnEvent = new PgmSpawnEvent(player, spawn, match.getTeamById("observers"));
+            TeamModule teamModule = TeamUtil.getTeamByPlayer(player);
+            SpawnModule spawn = null;
+            for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
+                if (spawnModule.getTeam().equals(teamModule)) spawn = spawnModule;
+            }
+            PgmSpawnEvent spawnEvent = new PgmSpawnEvent(player, spawn, TeamUtil.getTeamById("observers"));
             Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
             if (!spawnEvent.isCancelled()) {
                 PlayerUtil.resetPlayer(player);
@@ -133,7 +153,11 @@ public class RespawnModule implements Module {
                 if (!event.getNewTeam().isObserver()) {
                     if (event.getOldTeam().isObserver()) {
                         PlayerUtil.resetPlayer(event.getPlayer());
-                        Spawn spawn = event.getNewTeam().getSpawn();
+                        TeamModule teamModule = event.getNewTeam();
+                        SpawnModule spawn = null;
+                        for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
+                            if (spawnModule.getTeam().equals(teamModule)) spawn = spawnModule;
+                        }
                         PgmSpawnEvent spawnEvent = new PgmSpawnEvent(event.getPlayer(), spawn, event.getNewTeam());
                         Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
                         if (!spawnEvent.isCancelled()) {
@@ -143,7 +167,11 @@ public class RespawnModule implements Module {
                         event.getPlayer().setHealth(0);
                     }
                 } else if (event.getNewTeam().isObserver()) {
-                    Spawn spawn = event.getNewTeam().getSpawn();
+                    TeamModule teamModule = event.getNewTeam();
+                    SpawnModule spawn = null;
+                    for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
+                        if (spawnModule.getTeam().equals(teamModule)) spawn = spawnModule;
+                    }
                     PgmSpawnEvent spawnEvent = new PgmSpawnEvent(event.getPlayer(), spawn, event.getNewTeam());
                     Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
                     if (!spawnEvent.isCancelled()) {
@@ -157,6 +185,6 @@ public class RespawnModule implements Module {
             }
         }
 
-    }*/
+    }
 
 }

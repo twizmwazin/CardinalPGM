@@ -1,7 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.mapInfo;
 
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.mapInfo.contributor.Contributor;

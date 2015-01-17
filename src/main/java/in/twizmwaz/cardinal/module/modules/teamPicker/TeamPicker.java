@@ -51,7 +51,7 @@ public class TeamPicker implements Module {
         autoJoinMeta.setLore(Arrays.asList((totalPlayers >= maxPlayers ? ChatColor.RED + "" : ChatColor.GREEN + "") + totalPlayers + ChatColor.GOLD + " / " + ChatColor.RED + "" + maxPlayers, ChatColor.AQUA + "Puts you on the team with the fewest players"));
         autoJoin.setItemMeta(autoJoinMeta);
         picker.setItem(item, autoJoin);
-        item ++;
+        item++;
         for (TeamModule team : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
             if (!team.isObserver()) {
                 ItemStack teamStack = new ItemStack(Material.LEATHER_HELMET);
