@@ -8,6 +8,9 @@ import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -283,7 +286,12 @@ public class ObserverModule implements Module {
     public void onPlayerMove(PlayerMoveEvent event) {
         if (TeamUtils.getTeamById("observers").contains(event.getPlayer()) || match.getState() != MatchState.PLAYING) {
             if (event.getTo().getY() <= -64) {
-                //event.getPlayer().teleport(TeamUtil.getTeamById(("observers").getSpawnPoint());
+                TeamModule teamModule = TeamUtils.getTeamById("observers");
+                ModuleCollection<SpawnModule> modules = new ModuleCollection<SpawnModule>();
+                for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
+                    if (spawnModule.getTeam() == teamModule) modules.add(spawnModule);
+                }
+                event.getPlayer().teleport(modules.getRandom().getLocation());
             }
         }
     }
