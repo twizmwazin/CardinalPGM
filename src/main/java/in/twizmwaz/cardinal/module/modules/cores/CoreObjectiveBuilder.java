@@ -6,7 +6,7 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.type.combinations.UnionRegion;
-import in.twizmwaz.cardinal.util.TeamUtil;
+import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Material;
 import org.jdom2.Element;
 
@@ -22,9 +22,9 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
             for (Element subElement : element.getChildren("core")) {
                 TeamModule team;
                 try {
-                    team = TeamUtil.getTeamById(subElement.getAttributeValue("team"));
+                    team = TeamUtils.getTeamById(subElement.getAttributeValue("team"));
                 } catch (NullPointerException e) {
-                    team = TeamUtil.getTeamById(element.getAttributeValue("team"));
+                    team = TeamUtils.getTeamById(element.getAttributeValue("team"));
                 }
                 String name = "Core";
                 if (subElement.getAttributeValue("name") != null) {
@@ -83,12 +83,12 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                 for (Element subChild : child.getChildren("core")) {
                     TeamModule team;
                     try {
-                        team = TeamUtil.getTeamById(subChild.getAttributeValue("team"));
+                        team = TeamUtils.getTeamById(subChild.getAttributeValue("team"));
                     } catch (NullPointerException e) {
                         try {
-                            team = TeamUtil.getTeamById(child.getAttributeValue("team"));
+                            team = TeamUtils.getTeamById(child.getAttributeValue("team"));
                         } catch (NullPointerException ex) {
-                            team = TeamUtil.getTeamById(element.getAttributeValue("team"));
+                            team = TeamUtils.getTeamById(element.getAttributeValue("team"));
                         }
                     }
                     String name = "Core";

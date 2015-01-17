@@ -6,7 +6,7 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.type.combinations.UnionRegion;
-import in.twizmwaz.cardinal.util.TeamUtil;
+import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Material;
 import org.jdom2.Element;
 
@@ -22,9 +22,9 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
             for (Element subElement : element.getChildren("destroyable")) {
                 TeamModule owner;
                 try {
-                    owner = TeamUtil.getTeamById(subElement.getAttributeValue("owner"));
+                    owner = TeamUtils.getTeamById(subElement.getAttributeValue("owner"));
                 } catch (NullPointerException e) {
-                    owner = TeamUtil.getTeamById(element.getAttributeValue("owner"));
+                    owner = TeamUtils.getTeamById(element.getAttributeValue("owner"));
                 }
                 String name = "Monument";
                 if (subElement.getAttributeValue("name") != null) {
@@ -121,12 +121,12 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                 for (Element subChild : child.getChildren("destroyable")) {
                     TeamModule owner;
                     try {
-                        owner = TeamUtil.getTeamById(subChild.getAttributeValue("owner"));
+                        owner = TeamUtils.getTeamById(subChild.getAttributeValue("owner"));
                     } catch (NullPointerException e) {
                         try {
-                            owner = TeamUtil.getTeamById(child.getAttributeValue("owner"));
+                            owner = TeamUtils.getTeamById(child.getAttributeValue("owner"));
                         } catch (NullPointerException exc) {
-                            owner = TeamUtil.getTeamById(element.getAttributeValue("owner"));
+                            owner = TeamUtils.getTeamById(element.getAttributeValue("owner"));
                         }
                     }
                     String name = "Monument";

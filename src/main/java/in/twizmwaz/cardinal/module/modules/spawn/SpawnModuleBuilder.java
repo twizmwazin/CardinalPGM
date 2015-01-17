@@ -8,7 +8,7 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.regions.Region;
-import in.twizmwaz.cardinal.util.TeamUtil;
+import in.twizmwaz.cardinal.util.TeamUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Location;
@@ -27,7 +27,7 @@ public class SpawnModuleBuilder implements ModuleBuilder {
         ModuleCollection results = new ModuleCollection();
         for (Element spawns : match.getDocument().getRootElement().getChildren("spawns")) {
             for (Element spawn : spawns.getChildren("spawn")) {
-                TeamModule team = TeamUtil.getTeamById(spawns.getAttributeValue("team") != null ? spawns.getAttributeValue("team") : spawn.getAttributeValue("team"));
+                TeamModule team = TeamUtils.getTeamById(spawns.getAttributeValue("team") != null ? spawns.getAttributeValue("team") : spawn.getAttributeValue("team"));
                 List<Pair<Region, Vector>> regions = new ArrayList<>();
                 for (Element region : spawn.getChildren()) {
                     Location location = new Location(GameHandler.getGameHandler().getMatchWorld(), 0, 0, 0);
@@ -45,7 +45,7 @@ public class SpawnModuleBuilder implements ModuleBuilder {
                 results.add(new SpawnModule(team, regions, kit, true, true));
             }
             for (Element spawn : spawns.getChildren("default")) {
-                TeamModule team = TeamUtil.getTeamById("observers");
+                TeamModule team = TeamUtils.getTeamById("observers");
                 List<Pair<Region, Vector>> regions = new ArrayList<>();
                 for (Element region : spawn.getChildren()) {
                     Location location = new Location(GameHandler.getGameHandler().getMatchWorld(), 0, 0, 0);
@@ -64,7 +64,7 @@ public class SpawnModuleBuilder implements ModuleBuilder {
             }
             for (Element element : spawns.getChildren("spawns")) {
                 for (Element spawn : element.getChildren("spawn")) {
-                    TeamModule team = TeamUtil.getTeamById(spawns.getAttribute("team").isSpecified() ? spawn.getAttributeValue("team") : element.getAttribute("team").isSpecified() ? element.getAttributeValue("team") : spawns.getAttributeValue("team"));
+                    TeamModule team = TeamUtils.getTeamById(spawns.getAttribute("team").isSpecified() ? spawn.getAttributeValue("team") : element.getAttribute("team").isSpecified() ? element.getAttributeValue("team") : spawns.getAttributeValue("team"));
                     List<Pair<Region, Vector>> regions = new ArrayList<>();
                     for (Element region : spawn.getChildren()) {
                         Location location = new Location(GameHandler.getGameHandler().getMatchWorld(), 0, 0, 0);

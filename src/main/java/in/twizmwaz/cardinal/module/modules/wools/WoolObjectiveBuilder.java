@@ -7,7 +7,7 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.type.BlockRegion;
-import in.twizmwaz.cardinal.util.TeamUtil;
+import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.DyeColor;
 import org.jdom2.Element;
 
@@ -20,9 +20,9 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
             for (Element subElement : element.getChildren("wool")) {
                 TeamModule team;
                 try {
-                    team = TeamUtil.getTeamById(element.getAttributeValue("team"));
+                    team = TeamUtils.getTeamById(element.getAttributeValue("team"));
                 } catch (NullPointerException e) {
-                    team = TeamUtil.getTeamById((subElement.getAttributeValue("team")));
+                    team = TeamUtils.getTeamById((subElement.getAttributeValue("team")));
                 }
                 DyeColor color = StringUtils.convertStringToDyeColor(subElement.getAttributeValue("color"));
                 BlockRegion place = (BlockRegion) Region.getRegion(subElement.getChildren().get(0));
@@ -52,12 +52,12 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
                 for (Element subChild : child.getChildren("wool")) {
                     TeamModule team;
                     try {
-                        team = TeamUtil.getTeamById((child.getAttributeValue("team")));
+                        team = TeamUtils.getTeamById((child.getAttributeValue("team")));
                     } catch (NullPointerException e) {
                         try {
-                            team = TeamUtil.getTeamById((subChild.getAttributeValue("team")));
+                            team = TeamUtils.getTeamById((subChild.getAttributeValue("team")));
                         } catch (NullPointerException ex) {
-                            team = TeamUtil.getTeamById((element.getAttributeValue("team")));
+                            team = TeamUtils.getTeamById((element.getAttributeValue("team")));
                         }
                     }
                     DyeColor color = StringUtils.convertStringToDyeColor(subChild.getAttributeValue("color"));

@@ -4,11 +4,17 @@ import org.bukkit.scoreboard.Team;
 
 public class ScoreboardUtils {
 
-    public static String getConversion(String string, String insertColor) {
+    public static String getConversion(String string, String insertColor, boolean doNotInterruptColorCodes) {
         int max1 = 16 - insertColor.length();
         int max2 = 32 - (insertColor.length() * 2);
         int max3 = 48 - (insertColor.length() * 2);
-        string = insertColor + string;
+        if (string.length() > max1) {
+            if (string.substring(max1 - 1, max1).equals("§") && doNotInterruptColorCodes && !insertColor.equals("")) {
+                max1--;
+                max2--;
+                max3--;
+            }
+        }
         if (string.length() > max3) {
             string = string.substring(0, max3);
         }
@@ -20,6 +26,10 @@ public class ScoreboardUtils {
             return insertColor + string.substring(max1, max2);
         }
         return null;
+    }
+
+    public static String getConversion(Team team, String string, String insertColor) {
+        return getConversion(string, insertColor, true);
     }
 
     public static String convertToScoreboard(Team team, String string, String insertColor) {
@@ -37,7 +47,6 @@ public class ScoreboardUtils {
                 max3--;
             }
         }
-        string = insertColor + string;
         if (string.length() > max3) {
             string = string.substring(0, max3);
         }

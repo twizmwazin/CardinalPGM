@@ -6,7 +6,7 @@ import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.util.TeamUtil;
+import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,7 +34,7 @@ public class Visibility implements Module {
     private void resetVisibility(Player viewer, Player toSee) {
         try {
             if (match.getState().equals(MatchState.PLAYING)) {
-                if (TeamUtil.getTeamByPlayer(toSee).isObserver() && !TeamUtil.getTeamByPlayer(viewer).isObserver())
+                if (TeamUtils.getTeamByPlayer(toSee).isObserver() && !TeamUtils.getTeamByPlayer(viewer).isObserver())
                     viewer.hidePlayer(toSee);
             } else viewer.showPlayer(toSee);
         } catch (NullPointerException e) {
@@ -73,10 +73,10 @@ public class Visibility implements Module {
         for (Player other : Bukkit.getOnlinePlayers()) {
             if (other.equals(event.getPlayer())) break;
             if (match.getState().equals(MatchState.PLAYING)) {
-                if (TeamUtil.getTeamByPlayer(other).isObserver() && !event.getNewTeam().isObserver()) {
+                if (TeamUtils.getTeamByPlayer(other).isObserver() && !event.getNewTeam().isObserver()) {
                     switched.hidePlayer(other);
                     other.showPlayer(switched);
-                } else if (event.getNewTeam().isObserver() && !TeamUtil.getTeamByPlayer(other).isObserver()) {
+                } else if (event.getNewTeam().isObserver() && !TeamUtils.getTeamByPlayer(other).isObserver()) {
                     switched.showPlayer(other);
                     other.hidePlayer(switched);
                 } else {

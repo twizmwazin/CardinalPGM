@@ -1,8 +1,10 @@
 package in.twizmwaz.cardinal.module.modules.team;
 
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameScoreboard;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -52,7 +54,17 @@ public class TeamModule<P extends Player> extends HashSet<Player> implements Mod
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onTeamSwitch(PlayerChangeTeamEvent event) {
-        if (!event.isCancelled()) remove(event.getPlayer());
+        if (!event.isCancelled()) {
+            remove(event.getPlayer());
+            if (!event.getOldTeam().equals(event.getNewTeam())) event.getPlayer().sendMessage(ChatColor.GRAY + "You have joined " + event.getNewTeam().getColor() + event.getNewTeam().getName());
+            GameScoreboard scoreboard = null;
+            for (GameScoreboard gameScoreboard : GameHandler.getGameHandler().getMatch().getModules().getModules(GameScoreboard.class)) {
+                if (gameScoreboard.getTeam().equals(event.getNewTeam())) {
+                    scoreboard = gameScoreboard;
+                }
+            }
+            if (scoreboard != null) event.getPlayer().setScoreboard(scoreboard.getScoreboard());
+        }
     }
 
     @Override

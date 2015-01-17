@@ -15,17 +15,18 @@ import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class TntTracker implements Module {
-    private HashMap<String, String> tntPlaced = new HashMap<>();
+    private HashMap<String, UUID> tntPlaced = new HashMap<>();
 
     protected TntTracker() {
     }
 
-    public static String getWhoPlaced(Entity tnt) {
+    public static UUID getWhoPlaced(Entity tnt) {
         if (tnt.getType() == EntityType.PRIMED_TNT) {
             if (tnt.hasMetadata("source")) {
-                return tnt.getMetadata("source").get(0).asString();
+                return (UUID) tnt.getMetadata("source").get(0).value();
             }
         }
         return null;
@@ -40,7 +41,7 @@ public class TntTracker implements Module {
     public void onBlockPlace(BlockPlaceEvent event) {
         if (event.getBlock().getType() == Material.TNT) {
             Location location = event.getBlock().getLocation();
-            tntPlaced.put(location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ(), event.getPlayer().getName());
+            tntPlaced.put(location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ(), event.getPlayer().getUniqueId());
         }
     }
 
@@ -49,7 +50,7 @@ public class TntTracker implements Module {
         if (event.getEntity().getType() == EntityType.PRIMED_TNT) {
             Location location = event.getEntity().getLocation();
             if (tntPlaced.containsKey(location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ())) {
-                String player = tntPlaced.get(location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ());
+                UUID player = tntPlaced.get(location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ());
                 event.getEntity().setMetadata("source", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), player));
                 tntPlaced.remove(location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ());
             }

@@ -4,9 +4,10 @@ import in.parapengu.commons.utils.StringUtils;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
+import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.regions.type.BlockRegion;
-import in.twizmwaz.cardinal.util.TeamUtil;
+import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
@@ -25,6 +26,7 @@ import org.bukkit.material.Wool;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 public class WoolObjective implements GameObjective {
 
@@ -36,9 +38,11 @@ public class WoolObjective implements GameObjective {
     private final boolean craftable;
     private final boolean show;
 
-    private Set<String> playersTouched;
+    private Set<UUID> playersTouched;
     private boolean touched;
     private boolean complete;
+
+    private GameObjectiveScoreboardHandler scoreboardHandler;
 
     protected WoolObjective(final TeamModule team, final String name, final String id, final DyeColor color, final BlockRegion place, final boolean craftable, final boolean show) {
         this.team = team;
@@ -50,6 +54,8 @@ public class WoolObjective implements GameObjective {
         this.show = show;
 
         this.playersTouched = new HashSet<>();
+
+        this.scoreboardHandler = new GameObjectiveScoreboardHandler(this);
     }
 
     @Override
@@ -87,15 +93,24 @@ public class WoolObjective implements GameObjective {
         return show;
     }
 
+    public DyeColor getColor() {
+        return color;
+    }
+
+    @Override
+    public GameObjectiveScoreboardHandler getScoreboardHandler() {
+        return scoreboardHandler;
+    }
+
     @EventHandler
     public void onWoolPickup(PlayerPickupItemEvent event) {
         Player player = event.getPlayer();
         if (!this.complete) {
             try {
                 if (event.getItem().getItemStack().getType() == Material.WOOL && event.getItem().getItemStack().getData().getData() == color.getData()) {
-                    if (TeamUtil.getTeamByPlayer(player).equals(team)) {
-                        if (!this.playersTouched.contains(player.getName())) {
-                            this.playersTouched.add(player.getName());
+                    if (TeamUtils.getTeamByPlayer(player).equals(team)) {
+                        if (!this.playersTouched.contains(player.getUniqueId())) {
+                            this.playersTouched.add(player.getUniqueId());
                         }
                         boolean oldState = this.touched;
                         this.touched = true;
@@ -110,8 +125,8 @@ public class WoolObjective implements GameObjective {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        while (playersTouched.contains(event.getEntity().getName())) {
-            playersTouched.remove(event.getEntity().getName());
+        while (playersTouched.contains(event.getEntity().getUniqueId())) {
+            playersTouched.remove(event.getEntity().getUniqueId());
         }
     }
 
@@ -120,7 +135,7 @@ public class WoolObjective implements GameObjective {
         if (event.getBlock().equals(place.getBlock())) {
             if (event.getBlock().getType().equals(Material.WOOL)) {
                 if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
-                    if (TeamUtil.getTeamByPlayer(event.getPlayer()).equals(team)) {
+                    if (TeamUtils.getTeamByPlayer(event.getPlayer()).equals(team)) {
                         this.complete = true;
                         Bukkit.broadcastMessage(team.getColor() + event.getPlayer().getDisplayName() + ChatColor.WHITE + " placed " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase() + ChatColor.WHITE + " for the " + team.getCompleteName());
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());

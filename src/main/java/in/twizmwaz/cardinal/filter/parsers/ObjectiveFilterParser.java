@@ -3,7 +3,7 @@ package in.twizmwaz.cardinal.filter.parsers;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.TeamUtil;
+import in.twizmwaz.cardinal.util.TeamUtils;
 import org.jdom2.Element;
 
 public class ObjectiveFilterParser {
@@ -19,7 +19,7 @@ public class ObjectiveFilterParser {
         }
         try {
             String team = element.getAttributeValue("team");
-            this.team = TeamUtil.getTeamById(team);
+            this.team = TeamUtils.getTeamById(team);
         } catch (NullPointerException e) {
         }
         try {

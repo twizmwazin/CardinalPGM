@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module;
 
+import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 
 public interface GameObjective extends Module {
@@ -15,5 +16,7 @@ public interface GameObjective extends Module {
     public boolean isComplete();
 
     public boolean showOnScoreboard();
+
+    public GameObjectiveScoreboardHandler getScoreboardHandler();
 
 }

@@ -7,7 +7,7 @@ import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.PlayerUtil;
-import in.twizmwaz.cardinal.util.TeamUtil;
+import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -41,7 +41,7 @@ public class TeamManagerModule implements Module {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        TeamUtil.getTeamById("observers").add(player, true);
+        TeamUtils.getTeamById("observers").add(player, true);
         //event.getPlayer().setScoreboard(TeamUtil.getTeamById("observers").getScoreboard());
         PlayerUtil.resetPlayer(player);
 
