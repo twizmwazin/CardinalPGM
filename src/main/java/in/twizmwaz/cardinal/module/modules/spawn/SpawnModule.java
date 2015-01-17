@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 import java.util.List;
+import java.util.Random;
 
 public class SpawnModule implements Module {
 
@@ -53,8 +54,18 @@ public class SpawnModule implements Module {
     }
 
     public Location getLocation() {
-        Location location = regions.get(position).getLeft().getRandomPoint().getLocation();
-        location.setDirection(regions.get(position).getRight());
-        return location;
+        if (sequential) {
+            Location location = regions.get(position).getLeft().getRandomPoint().getLocation();
+            location.setDirection(regions.get(position).getRight());
+            position++;
+            if (position == regions.size()) position = 0;
+            return location;
+        } else {
+            Random random = new Random();
+            int use = random.nextInt(regions.size());
+            Location location = regions.get(use).getLeft().getRandomPoint().getLocation();
+            location.setDirection(regions.get(use).getRight());
+            return location;
+        }
     }
 }
