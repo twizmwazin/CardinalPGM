@@ -6,7 +6,7 @@ import com.sk89q.minecraft.util.commands.CommandException;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.mapInfo.Info;
 import in.twizmwaz.cardinal.module.modules.mapInfo.contributor.Contributor;
-import in.twizmwaz.cardinal.teams.PgmTeam;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.DomUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -61,8 +61,8 @@ public class MapCommands {
             }
         }
         int total = 0;
-        for (PgmTeam team : GameHandler.getGameHandler().getMatch().getTeams()) {
-            if (team.isObserver()) break;
+        for (TeamModule team : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
+            if (team.isObserver()) continue;
             total = total + team.getMax();
         }
         sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Max players: " + ChatColor.RESET + "" + ChatColor.GOLD + total);

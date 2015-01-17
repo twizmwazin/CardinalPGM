@@ -4,6 +4,7 @@ import org.bukkit.event.HandlerList;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Random;
 
 public class ModuleCollection<M extends Module> extends ArrayList<M> {
 
@@ -22,8 +23,9 @@ public class ModuleCollection<M extends Module> extends ArrayList<M> {
 
     /**
      * Used for getting a single module. If there are multiple modules of the specified type, only one will be returned.
+     *
      * @param clazz Class that represents the module to be returned
-     * @param <T> Module type to be filtered
+     * @param <T>   Module type to be filtered
      * @return A module of the specified type
      */
     @SuppressWarnings("unchecked")
@@ -36,8 +38,9 @@ public class ModuleCollection<M extends Module> extends ArrayList<M> {
 
     /**
      * Used to get all modules of a certain type
+     *
      * @param clazz Class which represents the modules
-     * @param <T> Module type to be filtered
+     * @param <T>   Module type to be filtered
      * @return A new module
      */
     @SuppressWarnings("unchecked")
@@ -48,11 +51,23 @@ public class ModuleCollection<M extends Module> extends ArrayList<M> {
         }
         return results;
     }
-    
-    public void unregisterAll(){
+
+    /**
+     * @return Random module from this
+     */
+    public M getRandom() {
+        Random random = new Random();
+        return this.get(random.nextInt(size()));
+
+    }
+
+    /**
+     * Unregister all modules from this
+     */
+    public void unregisterAll() {
         for (M m : this) {
             HandlerList.unregisterAll(m);
         }
-        
+
     }
 }

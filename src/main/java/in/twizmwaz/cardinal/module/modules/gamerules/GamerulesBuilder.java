@@ -1,20 +1,18 @@
 package in.twizmwaz.cardinal.module.modules.gamerules;
 
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
+import in.twizmwaz.cardinal.module.ModuleCollection;
 import org.jdom2.Element;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class GamerulesBuilder implements ModuleBuilder {
 
     @Override
-    public List<Module> load(Match match) {
-        List<Module> results = new ArrayList<>();
+    public ModuleCollection load(Match match) {
+        ModuleCollection results = new ModuleCollection();
         Set<String> toDisable = new HashSet<>(128);
         for (Element itemRemove : match.getDocument().getRootElement().getChildren("gamerules")) {
             for (Element item : itemRemove.getChildren()) {

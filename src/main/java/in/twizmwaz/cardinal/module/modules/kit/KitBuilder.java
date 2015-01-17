@@ -2,8 +2,8 @@ package in.twizmwaz.cardinal.module.modules.kit;
 
 import in.parapengu.commons.utils.StringUtils;
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
+import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.util.ArmorType;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
@@ -19,8 +19,8 @@ import java.util.List;
 public class KitBuilder implements ModuleBuilder {
 
     @Override
-    public List<Module> load(Match match) {
-        List<Module> results = new ArrayList<>();
+    public ModuleCollection load(Match match) {
+        ModuleCollection results = new ModuleCollection();
         for (Element kits : match.getDocument().getRootElement().getChildren("kits")) {
             for (Element element : kits.getChildren("kit")) {
                 String name = element.getAttributeValue("name");

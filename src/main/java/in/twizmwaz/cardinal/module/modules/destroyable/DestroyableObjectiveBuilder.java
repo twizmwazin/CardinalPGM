@@ -1,11 +1,12 @@
 package in.twizmwaz.cardinal.module.modules.destroyable;
 
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
+import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.type.combinations.UnionRegion;
-import in.twizmwaz.cardinal.teams.PgmTeam;
+import in.twizmwaz.cardinal.util.TeamUtil;
 import org.bukkit.Material;
 import org.jdom2.Element;
 
@@ -15,15 +16,15 @@ import java.util.List;
 public class DestroyableObjectiveBuilder implements ModuleBuilder {
 
     @Override
-    public List<Module> load(Match match) {
-        List<Module> result = new ArrayList<>();
+    public ModuleCollection load(Match match) {
+        ModuleCollection result = new ModuleCollection();
         for (Element element : match.getDocument().getRootElement().getChildren("destroyables")) {
             for (Element subElement : element.getChildren("destroyable")) {
-                PgmTeam owner;
+                TeamModule owner;
                 try {
-                    owner = match.getTeamById(subElement.getAttributeValue("owner"));
+                    owner = TeamUtil.getTeamById(subElement.getAttributeValue("owner"));
                 } catch (NullPointerException e) {
-                    owner = match.getTeamById(element.getAttributeValue("owner"));
+                    owner = TeamUtil.getTeamById(element.getAttributeValue("owner"));
                 }
                 String name = "Monument";
                 if (subElement.getAttributeValue("name") != null) {
@@ -118,14 +119,14 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
             }
             for (Element child : element.getChildren("destroyables")) {
                 for (Element subChild : child.getChildren("destroyable")) {
-                    PgmTeam owner;
+                    TeamModule owner;
                     try {
-                        owner = match.getTeamById(subChild.getAttributeValue("owner"));
+                        owner = TeamUtil.getTeamById(subChild.getAttributeValue("owner"));
                     } catch (NullPointerException e) {
                         try {
-                            owner = match.getTeamById(child.getAttributeValue("owner"));
+                            owner = TeamUtil.getTeamById(child.getAttributeValue("owner"));
                         } catch (NullPointerException exc) {
-                            owner = match.getTeamById(element.getAttributeValue("owner"));
+                            owner = TeamUtil.getTeamById(element.getAttributeValue("owner"));
                         }
                     }
                     String name = "Monument";

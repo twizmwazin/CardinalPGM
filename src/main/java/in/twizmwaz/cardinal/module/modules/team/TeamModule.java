@@ -1,36 +1,60 @@
 package in.twizmwaz.cardinal.module.modules.team;
 
-import com.sk89q.minecraft.util.commands.ChatColor;
-import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.match.JoinType;
+import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.teams.PgmTeam;
-import in.twizmwaz.cardinal.util.PlayerUtil;
-import org.bukkit.Material;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Arrays;
+import java.util.HashSet;
+import java.util.logging.Level;
 
-public class TeamModule implements Module {
+public class TeamModule<P extends Player> extends HashSet<Player> implements Module {
 
-    private final JavaPlugin plugin;
     private final Match match;
+    private String name;
+    private final String id;
+    private int max;
+    private int maxOverfill;
+    private int respawnLimit;
+    private ChatColor color;
+    private final boolean observer;
 
-    protected TeamModule(Match match) {
-        this.plugin = GameHandler.getGameHandler().getPlugin();
+    protected TeamModule(Match match, String name, String id, int max, int maxOverfill, int respawnLimit, ChatColor color, boolean observer) {
+        Bukkit.getLogger().log(Level.INFO, name);
         this.match = match;
+        this.name = name;
+        this.id = id;
+        this.max = max;
+        this.maxOverfill = maxOverfill;
+        this.respawnLimit = respawnLimit;
+        this.color = color;
+        this.observer = observer;
+    }
+
+    public boolean add(Player player, boolean force) {
+        TeamModule old = null;
+        for (TeamModule team : match.getModules().getModules(TeamModule.class)) {
+            if (team.contains(player)) {
+                old = team;
+                break;
+            }
+        }
+        PlayerChangeTeamEvent event = new PlayerChangeTeamEvent(player, force, this, old);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (!event.isCancelled()) {
+            this.add(player);
+            return true;
+        } else return false;
+    }
+    
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onTeamSwitch(PlayerChangeTeamEvent event) {
+        if (!event.isCancelled()) remove(event.getPlayer());
     }
 
     @Override
@@ -38,49 +62,59 @@ public class TeamModule implements Module {
         HandlerList.unregisterAll(this);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        GameHandler.getGameHandler().getMatch().getTeamById("observers").add(player, JoinType.FORCED);
-        event.getPlayer().setScoreboard(GameHandler.getGameHandler().getMatch().getTeamById("observers").getScoreboard());
-        PlayerUtil.resetPlayer(player);
-
-        event.getPlayer().getInventory().setItem(0, new ItemStack(Material.COMPASS));
-        ItemStack howTo = new ItemStack(Material.WRITTEN_BOOK);
-        ItemMeta howToMeta = howTo.getItemMeta();
-        howToMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "Coming Soon");
-        howTo.setItemMeta(howToMeta);
-        BookMeta howToBookMeta = (BookMeta) howTo.getItemMeta();
-        howToBookMeta.setAuthor(ChatColor.GOLD + "CardinalPGM");
-        howTo.setItemMeta(howToBookMeta);
-        event.getPlayer().getInventory().setItem(1, howTo);
-        if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
-            ItemStack picker = new ItemStack(Material.LEATHER_HELMET);
-            ItemMeta pickerMeta = picker.getItemMeta();
-            pickerMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "Team Selection");
-            pickerMeta.setLore(Arrays.asList(ChatColor.DARK_PURPLE + "Join the game!"));
-            picker.setItemMeta(pickerMeta);
-            event.getPlayer().getInventory().setItem(2, picker);
-        }
+    public String getCompleteName() {
+        return this.color + this.name;
     }
 
-    @EventHandler
-    public void onPlayerLeave(PlayerQuitEvent event) {
-        removePlayer(event.getPlayer());
+    public Match getMatch() {
+        return match;
     }
 
-    @EventHandler
-    public void onPlayerLeave(PlayerKickEvent event) {
-        removePlayer(event.getPlayer());
+    public String getName() {
+        return name;
     }
 
-    private void removePlayer(Player player) {
-        for (PgmTeam team : match.getTeams()) {
-            if (team.hasPlayer(player)) {
-                team.remove(player);
-            }
-        }
+    public void setName(String name) {
+        this.name = name;
     }
 
+    public String getId() {
+        return id;
+    }
 
+    public int getMax() {
+        return max;
+    }
+
+    public void setMax(int max) {
+        this.max = max;
+    }
+
+    public int getMaxOverfill() {
+        return maxOverfill;
+    }
+
+    public void setMaxOverfill(int maxOverfill) {
+        this.maxOverfill = maxOverfill;
+    }
+
+    public int getRespawnLimit() {
+        return respawnLimit;
+    }
+
+    public void setRespawnLimit(int respawnLimit) {
+        this.respawnLimit = respawnLimit;
+    }
+
+    public ChatColor getColor() {
+        return color;
+    }
+
+    public void setColor(ChatColor color) {
+        this.color = color;
+    }
+
+    public boolean isObserver() {
+        return observer;
+    }
 }

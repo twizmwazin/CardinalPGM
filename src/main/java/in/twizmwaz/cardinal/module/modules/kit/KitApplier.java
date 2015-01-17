@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.kit;
 
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.PgmSpawnEvent;
 import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.event.EventHandler;
@@ -15,9 +16,12 @@ public class KitApplier implements Module {
     @EventHandler
     public void onPgmSpawn(PgmSpawnEvent event) {
         try {
-            event.getSpawn().getKit().apply(event.getPlayer());
+            Kit kit = null;
+            for (Kit kitModule : GameHandler.getGameHandler().getMatch().getModules().getModules(Kit.class)) {
+                kit = kitModule;
+            }
+            kit.apply(event.getPlayer());
         } catch (NullPointerException e) {
-
         }
     }
 

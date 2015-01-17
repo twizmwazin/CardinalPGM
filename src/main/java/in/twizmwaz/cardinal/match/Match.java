@@ -4,25 +4,26 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.match.listeners.MatchListener;
 import in.twizmwaz.cardinal.match.listeners.ObjectiveListener;
-import in.twizmwaz.cardinal.match.listeners.WorldListener;
 import in.twizmwaz.cardinal.match.util.StartTimer;
-import in.twizmwaz.cardinal.module.*;
+import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.module.ModuleFactory;
+import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.mapInfo.Info;
-import in.twizmwaz.cardinal.teams.PgmTeam;
-import in.twizmwaz.cardinal.teams.PgmTeamBuilder;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.DomUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scoreboard.Scoreboard;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class Match {
 
@@ -34,9 +35,7 @@ public class Match {
 
     private MatchState state;
     private Document document;
-    private List<PgmTeam> teams; //TO DO:convert to module
     private StartTimer startTimer;
-
     private Set<Listener> listeners = new HashSet<Listener>(); //TO DO:these need to go
 
     public Match(GameHandler handler, UUID id) {
@@ -50,14 +49,10 @@ public class Match {
         } catch (JDOMException | IOException e) {
             e.printStackTrace();
         }
-        PgmTeamBuilder teamBuilder = new PgmTeamBuilder(this);
-        teamBuilder.run();
-        teams = teamBuilder.getTeams();
         this.startTimer = new StartTimer(this, 30);
         this.state = MatchState.WAITING;
         listeners.add(new MatchListener(plugin, this));
         listeners.add(new ObjectiveListener(plugin, this));
-        listeners.add(new WorldListener(plugin, this));
     }
 
     public void registerModules() {
@@ -68,7 +63,7 @@ public class Match {
             }
         }
     }
-    
+
     public void unregisterModules() {
         for (Listener listener : listeners) {
             HandlerList.unregisterAll(listener);
@@ -112,53 +107,11 @@ public class Match {
         }
     }
 
-    public void end(PgmTeam team) {
+    public void end(TeamModule team) {
         if (getState() == MatchState.PLAYING) {
             state = MatchState.ENDED;
             Bukkit.getServer().getPluginManager().callEvent(new MatchEndEvent(team));
         }
-    }
-
-    public PgmTeam getTeam(Player player) {
-        for (PgmTeam team : teams) {
-            if (team.hasPlayer(player)) return team;
-        }
-        return null;
-    }
-
-    public PgmTeam getTeamByName(String string) {
-        for (PgmTeam team : this.teams) {
-            if (team.getName().toLowerCase().startsWith(string.toLowerCase())) return team;
-        }
-        return null;
-    }
-
-    public PgmTeam getTeamById(String string) {
-        for (PgmTeam team : this.teams) {
-            if (team.getId().toLowerCase().startsWith(string.toLowerCase())) return team;
-        }
-        return null;
-    }
-
-    public PgmTeam getTeamWithFewestPlayers() {
-        PgmTeam result = null;
-        List<Integer> teamValues = new ArrayList<>();
-        for (PgmTeam team : this.teams) {
-            if (!team.isObserver()) {
-                teamValues.add(team.getPlayerNames().size());
-            }
-        }
-        Collections.sort(teamValues);
-        for (PgmTeam team : this.teams) {
-            if (team.getPlayerNames().size() == teamValues.get(0) && !team.isObserver()) {
-                result = team;
-            }
-        }
-        return result;
-    }
-
-    public List<PgmTeam> getTeams() {
-        return teams;
     }
 
     public ModuleCollection<Module> getModules() {

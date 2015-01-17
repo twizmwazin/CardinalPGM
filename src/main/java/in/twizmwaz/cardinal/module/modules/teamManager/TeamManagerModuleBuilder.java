@@ -1,15 +1,15 @@
-package in.twizmwaz.cardinal.module.modules.worldFreeze;
+package in.twizmwaz.cardinal.module.modules.teamManager;
 
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 
-public class WorldFreezeBuilder implements ModuleBuilder {
+public class TeamManagerModuleBuilder implements ModuleBuilder {
 
     @Override
     public ModuleCollection load(Match match) {
         ModuleCollection results = new ModuleCollection();
-        results.add(new WorldFreeze(match));
+        results.add(new TeamManagerModule(match));
         return results;
     }
 

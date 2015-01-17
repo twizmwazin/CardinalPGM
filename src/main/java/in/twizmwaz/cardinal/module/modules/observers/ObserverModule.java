@@ -8,7 +8,7 @@ import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.module.modules.teamPicker.TeamPicker;
+import in.twizmwaz.cardinal.util.TeamUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -101,21 +101,21 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onBlockChange(BlockPlaceEvent event) {
-        if (match.getTeam(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
+        if (TeamUtil.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockChange(BlockBreakEvent event) {
-        if (match.getTeam(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
+        if (TeamUtil.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onInteraction(PlayerInteractEvent event) {
-        if (match.getTeam(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
+        if (TeamUtil.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             event.setCancelled(true);
             if (event.getClickedBlock() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 if (event.getClickedBlock().getType().equals(Material.CHEST) || event.getClickedBlock().getType().equals(Material.TRAPPED_CHEST)) {
@@ -166,10 +166,10 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onPlayerClick(PlayerInteractEntityEvent event) {
-        if (match.getTeam(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
+        if (TeamUtil.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             if (event.getRightClicked() instanceof Player) {
                 Player viewing = (Player) event.getRightClicked();
-                Inventory toView = Bukkit.createInventory(null, 45, match.getTeam(viewing).getColor() + ((Player) event.getRightClicked()).getName());
+                Inventory toView = Bukkit.createInventory(null, 45, TeamUtil.getTeamByPlayer(viewing).getColor() + ((Player) event.getRightClicked()).getName());
                 toView.setItem(0, viewing.getInventory().getHelmet());
                 toView.setItem(1, viewing.getInventory().getChestplate());
                 toView.setItem(2, viewing.getInventory().getLeggings());
@@ -224,7 +224,7 @@ public class ObserverModule implements Module {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getWhoClicked() instanceof Player) {
-            if (match.getTeam((Player) event.getWhoClicked()).isObserver() || match.getState() != MatchState.PLAYING) {
+            if (TeamUtil.getTeamByPlayer((Player) event.getWhoClicked()).isObserver() || match.getState() != MatchState.PLAYING) {
                 if (event.getInventory().getType() != InventoryType.PLAYER) {
                     event.setCancelled(true);
                 }
@@ -234,14 +234,14 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onPickupXP(PlayerPickupExperienceEvent event) {
-        if (match.getTeam(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
+        if (TeamUtil.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onDropItem(PlayerDropItemEvent event) {
-        if (match.getTeam(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
+        if (TeamUtil.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             ItemStack dropped = event.getItemDrop().getItemStack();
             event.getPlayer().getItemInHand().setAmount(event.getPlayer().getItemInHand().getAmount() - dropped.getAmount());
             event.setCancelled(true);
@@ -258,17 +258,10 @@ public class ObserverModule implements Module {
         }
     }
 
- /* @EventHandler
-    public void onPlayerRespawn(PlayerRespawnEvent event) {
-        if (match.getTeamById("observers").hasPlayer(event.getPlayer()) || match.getState() != MatchState.PLAYING) {
-            event.getPlayer().getInventory().setItem(0, new ItemStack(Material.COMPASS));
-        }
-    } Put this in the PGM spawn event */
-
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         try {
-            if (match.getTeam(event.getEntity()).isObserver() || !match.isRunning()) {
+            if (TeamUtil.getTeamByPlayer(event.getEntity()).isObserver() || !match.isRunning()) {
                 event.getDrops().clear();
                 event.setDroppedExp(0);
             }
@@ -280,7 +273,7 @@ public class ObserverModule implements Module {
     @EventHandler
     public void onEntityAttack(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {
-            if (match.getTeam((Player) event.getDamager()).isObserver()) {
+            if (TeamUtil.getTeamByPlayer((Player) event.getDamager()).isObserver()) {
                 event.setCancelled(true);
             }
         }
@@ -288,9 +281,9 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (match.getTeamById("observers").hasPlayer(event.getPlayer()) || match.getState() != MatchState.PLAYING) {
+        if (TeamUtil.getTeamById("observers").contains(event.getPlayer()) || match.getState() != MatchState.PLAYING) {
             if (event.getTo().getY() <= -64) {
-                event.getPlayer().teleport(match.getMatch().getTeamById("observers").getSpawnPoint());
+                //event.getPlayer().teleport(TeamUtil.getTeamById(("observers").getSpawnPoint());
             }
         }
     }

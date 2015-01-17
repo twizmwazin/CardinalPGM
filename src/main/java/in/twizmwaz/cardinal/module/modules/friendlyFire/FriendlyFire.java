@@ -2,7 +2,7 @@ package in.twizmwaz.cardinal.module.modules.friendlyFire;
 
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.teams.PgmTeam;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import org.bukkit.event.HandlerList;
 
 public class FriendlyFire implements Module {
@@ -15,10 +15,8 @@ public class FriendlyFire implements Module {
         this.match = match;
         this.arrowReturn = arrowReturn;
         if (enabled) {
-            for (PgmTeam team : match.getTeams()) {
-                for (PgmTeam team1 : match.getTeams()) {
-                    team.getScoreboard().getTeam(team1.getId()).setAllowFriendlyFire(false);
-                }
+            for (TeamModule team : match.getModules().getModules(TeamModule.class)) {
+                //        setAllowFriendlyFire(false);
             }
         }
     }
