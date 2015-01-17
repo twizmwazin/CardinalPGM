@@ -6,6 +6,7 @@ import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
+import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameScoreboard;
 import org.apache.logging.log4j.core.helpers.Integers;
 import org.bukkit.ChatColor;
 import org.jdom2.Document;
@@ -47,6 +48,9 @@ public class TeamModuleBuilder implements ModuleBuilder {
             results.add(new TeamModule(match, name, id, max, maxOverfill, respawnLimit, color, false));
         }
         results.add(new TeamModule(match, "Observers", "observers", Integer.MAX_VALUE, Integer.MAX_VALUE, -1, ChatColor.AQUA, true));
+        for (TeamModule team : results) {
+            new GameScoreboard(team);
+        }
         return results;
     }
 }

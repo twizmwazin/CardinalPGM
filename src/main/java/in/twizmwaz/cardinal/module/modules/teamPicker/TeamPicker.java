@@ -4,7 +4,7 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.MiscUtils;
-import in.twizmwaz.cardinal.util.TeamUtil;
+import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -74,7 +74,7 @@ public class TeamPicker implements Module {
         ItemStack item = event.getCurrentItem();
         Player player = (Player) event.getWhoClicked();
         if (item != null) {
-            if (TeamUtil.getTeamByPlayer(player).isObserver() || !GameHandler.getGameHandler().getMatch().isRunning()) {
+            if (TeamUtils.getTeamByPlayer(player).isObserver() || !GameHandler.getGameHandler().getMatch().isRunning()) {
                 if (event.getInventory().getName().equals(ChatColor.DARK_RED + "Pick your team")) {
                     if (item.getType().equals(Material.CHAINMAIL_HELMET)) {
                         if (item.hasItemMeta()) {
@@ -90,7 +90,7 @@ public class TeamPicker implements Module {
                     } else if (item.getType().equals(Material.LEATHER_HELMET)) {
                         if (item.hasItemMeta()) {
                             if (item.getItemMeta().hasDisplayName()) {
-                                if (TeamUtil.getTeamByName(ChatColor.stripColor(item.getItemMeta().getDisplayName())) != null) {
+                                if (TeamUtils.getTeamByName(ChatColor.stripColor(item.getItemMeta().getDisplayName())) != null) {
                                     event.setCancelled(true);
                                     player.closeInventory();
                                     player.playSound(player.getLocation(), Sound.CLICK, 1, 2);
@@ -106,7 +106,7 @@ public class TeamPicker implements Module {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (TeamUtil.getTeamByPlayer(event.getPlayer()).isObserver() || !GameHandler.getGameHandler().getMatch().isRunning()) {
+        if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || !GameHandler.getGameHandler().getMatch().isRunning()) {
             if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                 if (event.getPlayer().getItemInHand() != null) {
                     if (event.getPlayer().getItemInHand().getType().equals(Material.LEATHER_HELMET)) {

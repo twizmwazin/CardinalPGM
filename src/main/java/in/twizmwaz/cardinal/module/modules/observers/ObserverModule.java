@@ -8,7 +8,7 @@ import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.util.TeamUtil;
+import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -101,21 +101,21 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onBlockChange(BlockPlaceEvent event) {
-        if (TeamUtil.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
+        if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockChange(BlockBreakEvent event) {
-        if (TeamUtil.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
+        if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onInteraction(PlayerInteractEvent event) {
-        if (TeamUtil.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
+        if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             event.setCancelled(true);
             if (event.getClickedBlock() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 if (event.getClickedBlock().getType().equals(Material.CHEST) || event.getClickedBlock().getType().equals(Material.TRAPPED_CHEST)) {
@@ -166,10 +166,10 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onPlayerClick(PlayerInteractEntityEvent event) {
-        if (TeamUtil.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
+        if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             if (event.getRightClicked() instanceof Player) {
                 Player viewing = (Player) event.getRightClicked();
-                Inventory toView = Bukkit.createInventory(null, 45, TeamUtil.getTeamByPlayer(viewing).getColor() + ((Player) event.getRightClicked()).getName());
+                Inventory toView = Bukkit.createInventory(null, 45, TeamUtils.getTeamByPlayer(viewing).getColor() + ((Player) event.getRightClicked()).getName());
                 toView.setItem(0, viewing.getInventory().getHelmet());
                 toView.setItem(1, viewing.getInventory().getChestplate());
                 toView.setItem(2, viewing.getInventory().getLeggings());
@@ -224,7 +224,7 @@ public class ObserverModule implements Module {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getWhoClicked() instanceof Player) {
-            if (TeamUtil.getTeamByPlayer((Player) event.getWhoClicked()).isObserver() || match.getState() != MatchState.PLAYING) {
+            if (TeamUtils.getTeamByPlayer((Player) event.getWhoClicked()).isObserver() || match.getState() != MatchState.PLAYING) {
                 if (event.getInventory().getType() != InventoryType.PLAYER) {
                     event.setCancelled(true);
                 }
@@ -234,14 +234,14 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onPickupXP(PlayerPickupExperienceEvent event) {
-        if (TeamUtil.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
+        if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onDropItem(PlayerDropItemEvent event) {
-        if (TeamUtil.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
+        if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             ItemStack dropped = event.getItemDrop().getItemStack();
             event.getPlayer().getItemInHand().setAmount(event.getPlayer().getItemInHand().getAmount() - dropped.getAmount());
             event.setCancelled(true);
@@ -261,7 +261,7 @@ public class ObserverModule implements Module {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         try {
-            if (TeamUtil.getTeamByPlayer(event.getEntity()).isObserver() || !match.isRunning()) {
+            if (TeamUtils.getTeamByPlayer(event.getEntity()).isObserver() || !match.isRunning()) {
                 event.getDrops().clear();
                 event.setDroppedExp(0);
             }
@@ -273,7 +273,7 @@ public class ObserverModule implements Module {
     @EventHandler
     public void onEntityAttack(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {
-            if (TeamUtil.getTeamByPlayer((Player) event.getDamager()).isObserver()) {
+            if (TeamUtils.getTeamByPlayer((Player) event.getDamager()).isObserver()) {
                 event.setCancelled(true);
             }
         }
@@ -281,7 +281,7 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (TeamUtil.getTeamById("observers").contains(event.getPlayer()) || match.getState() != MatchState.PLAYING) {
+        if (TeamUtils.getTeamById("observers").contains(event.getPlayer()) || match.getState() != MatchState.PLAYING) {
             if (event.getTo().getY() <= -64) {
                 //event.getPlayer().teleport(TeamUtil.getTeamById(("observers").getSpawnPoint());
             }

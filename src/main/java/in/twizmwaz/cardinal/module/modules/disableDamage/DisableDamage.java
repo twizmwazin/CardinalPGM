@@ -4,7 +4,7 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
-import in.twizmwaz.cardinal.util.TeamUtil;
+import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,6 +14,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import java.util.Set;
+import java.util.UUID;
 
 public class DisableDamage implements Module {
 
@@ -56,18 +57,18 @@ public class DisableDamage implements Module {
             if (event instanceof EntityDamageByEntityEvent) {
                 if (event.getEntity() instanceof Player) {
                     Player player = (Player) event.getEntity();
-                    String source = TntTracker.getWhoPlaced(((EntityDamageByEntityEvent) event).getDamager());
+                    UUID source = TntTracker.getWhoPlaced(((EntityDamageByEntityEvent) event).getDamager());
                     Match match = GameHandler.getGameHandler().getMatch();
                     if (Bukkit.getOfflinePlayer(source).isOnline()) {
-                        if (!blockExplosionSelf && source.equals(player.getName())) {
+                        if (!blockExplosionSelf && source.equals(player.getUniqueId())) {
                             event.setCancelled(true);
                             return;
                         }
-                        if (!blockExplosionAlly && TeamUtil.getTeamByPlayer(player) == TeamUtil.getTeamByPlayer(Bukkit.getPlayer(source)) && !source.equals(player.getName())) {
+                        if (!blockExplosionAlly && TeamUtils.getTeamByPlayer(player) == TeamUtils.getTeamByPlayer(Bukkit.getPlayer(source)) && !source.equals(player.getUniqueId())) {
                             event.setCancelled(true);
                             return;
                         }
-                        if (!blockExplosionEnemy && TeamUtil.getTeamByPlayer(player) != TeamUtil.getTeamByPlayer(Bukkit.getPlayer(source))) {
+                        if (!blockExplosionEnemy && TeamUtils.getTeamByPlayer(player) != TeamUtils.getTeamByPlayer(Bukkit.getPlayer(source))) {
                             event.setCancelled(true);
                             return;
                         }

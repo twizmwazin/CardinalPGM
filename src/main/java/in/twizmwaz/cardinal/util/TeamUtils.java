@@ -2,14 +2,14 @@ package in.twizmwaz.cardinal.util;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
+import in.twizmwaz.cardinal.module.GameObjective;
+import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-public class TeamUtil {
+public class TeamUtils {
 
     public static TeamModule getTeamWithFewestPlayers(Match match) {
         TeamModule result = null;
@@ -53,5 +53,19 @@ public class TeamUtil {
             }
         }
         return null;
+    }
+
+    public static ModuleCollection<TeamModule> getTeams() {
+        return GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class);
+    }
+
+    public static Set<GameObjective> getObjectives(TeamModule team) {
+        Set<GameObjective> objectives = new HashSet<>();
+        for (GameObjective objective : GameHandler.getGameHandler().getMatch().getModules().getModules(GameObjective.class)) {
+            if (objective.getTeam().equals(team)) {
+                objectives.add(objective);
+            }
+        }
+        return objectives;
     }
 }

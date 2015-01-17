@@ -5,7 +5,7 @@ import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.util.TeamUtil;
+import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -45,7 +45,7 @@ public class MatchListener implements Listener {
     @EventHandler
     public void onCycle(CycleCompleteEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            TeamUtil.getTeamById("observers").add(player, true);
+            TeamUtils.getTeamById("observers").add(player, true);
             //player.setScoreboard(TeamUtil.getTeamById("observers").getScoreboard());
         }
     }
