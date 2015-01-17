@@ -5,7 +5,7 @@ import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleCollection;
-import in.twizmwaz.cardinal.teams.PgmTeam;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -27,7 +27,7 @@ public class ObjectiveListener implements Listener {
 
     @EventHandler
     public void onObjectiveComplete(ObjectiveCompleteEvent event) {
-        PgmTeam workingTeam = event.getObjective().getTeam();
+        TeamModule workingTeam = event.getObjective().getTeam();
         ModuleCollection<GameObjective> teamObjectives = new ModuleCollection<>();
         for (Module module : match.getModules()) {
             if (module instanceof GameObjective) {

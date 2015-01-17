@@ -1,10 +1,10 @@
 package in.twizmwaz.cardinal.module;
 
-import in.twizmwaz.cardinal.teams.PgmTeam;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 
 public interface GameObjective extends Module {
 
-    public PgmTeam getTeam();
+    public TeamModule getTeam();
 
     public String getName();
 

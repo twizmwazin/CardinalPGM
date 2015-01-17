@@ -1,10 +1,10 @@
 package in.twizmwaz.cardinal.module.modules.destroyable;
 
-import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.regions.Region;
-import in.twizmwaz.cardinal.teams.PgmTeam;
+import in.twizmwaz.cardinal.util.TeamUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -23,7 +23,7 @@ import java.util.Set;
 
 public class DestroyableObjective implements GameObjective {
 
-    private final PgmTeam team;
+    private final TeamModule team;
     private final String name;
     private final String id;
     private final Region region;
@@ -40,7 +40,7 @@ public class DestroyableObjective implements GameObjective {
     private double complete;
     private boolean completed;
 
-    protected DestroyableObjective(final PgmTeam team, final String name, final String id, final Region region, final List<Material> types, final List<Integer> damageValues, final double required, final boolean show, boolean showPercent, boolean repairable) {
+    protected DestroyableObjective(final TeamModule team, final String name, final String id, final Region region, final List<Material> types, final List<Integer> damageValues, final double required, final boolean show, boolean showPercent, boolean repairable) {
         this.team = team;
         this.name = name;
         this.id = id;
@@ -68,7 +68,7 @@ public class DestroyableObjective implements GameObjective {
     }
 
     @Override
-    public PgmTeam getTeam() {
+    public TeamModule getTeam() {
         return this.team;
     }
 
@@ -105,7 +105,7 @@ public class DestroyableObjective implements GameObjective {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event) {
         if (getBlocks().contains(event.getBlock())) {
-            if (!GameHandler.getGameHandler().getMatch().getTeam(event.getPlayer()).equals(team)) {
+            if (!TeamUtil.getTeamByPlayer(event.getPlayer()).equals(team)) {
                 this.complete += (1 / size);
                 if (this.complete >= this.required && !this.completed) {
                     this.completed = true;
@@ -135,7 +135,7 @@ public class DestroyableObjective implements GameObjective {
             if (event.getEntity().hasMetadata("source")) {
                 String player = event.getEntity().getMetadata("source").get(0).asString();
                 if (Bukkit.getOfflinePlayer(player).isOnline()) {
-                    if (GameHandler.getGameHandler().getMatch().getTeam(Bukkit.getPlayer(player)).equals(team)) {
+                    if (TeamUtil.getTeamByPlayer(Bukkit.getPlayer(player)).equals(team)) {
                         event.blockList().remove(block);
                     } else {
                         if (!playersTouched.contains(player)) {

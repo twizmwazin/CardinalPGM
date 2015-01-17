@@ -6,7 +6,8 @@ import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.MatchState;
-import in.twizmwaz.cardinal.teams.PgmTeam;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.util.TeamUtil;
 import org.bukkit.command.CommandSender;
 
 public class StartAndEndCommand {
@@ -39,7 +40,7 @@ public class StartAndEndCommand {
     public static void end(CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().getState() == MatchState.PLAYING) {
             try {
-                PgmTeam team = GameHandler.getGameHandler().getMatch().getTeamByName(cmd.getString(0));
+                TeamModule team = TeamUtil.getTeamByName(cmd.getString(0));
                 GameHandler.getGameHandler().getMatch().end(team);
             } catch (IndexOutOfBoundsException ex) {
                 GameHandler.getGameHandler().getMatch().end(null);

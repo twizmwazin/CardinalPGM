@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.module.modules.itemRemove;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
+import in.twizmwaz.cardinal.module.ModuleCollection;
 import org.bukkit.Material;
 import org.jdom2.Element;
 
@@ -12,8 +13,8 @@ import java.util.List;
 public class ItemRemoveBuilder implements ModuleBuilder {
 
     @Override
-    public List<Module> load(Match match) {
-        List<Module> results = new ArrayList<>();
+    public ModuleCollection load(Match match) {
+        ModuleCollection results = new ModuleCollection();
         for (Element itemRemove : match.getDocument().getRootElement().getChildren("itemremove")) {
             for (Element item : itemRemove.getChildren("item")) {
                 String[] broken = item.getText().split(":");

@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.module.modules.mapInfo;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
+import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.mapInfo.contributor.Contributor;
 import org.jdom2.Element;
 
@@ -12,8 +13,8 @@ import java.util.List;
 public class InfoBuilder implements ModuleBuilder {
 
     @Override
-    public List<Module> load(Match match) {
-        List<Module> results = new ArrayList<>();
+    public ModuleCollection load(Match match) {
+        ModuleCollection results = new ModuleCollection();
         Element root = match.getDocument().getRootElement();
         List<Contributor> authors;
         List<Contributor> contributors;

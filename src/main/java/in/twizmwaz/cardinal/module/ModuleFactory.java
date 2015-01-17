@@ -17,8 +17,9 @@ import in.twizmwaz.cardinal.module.modules.mapInfo.InfoBuilder;
 import in.twizmwaz.cardinal.module.modules.motd.MOTDBuilder;
 import in.twizmwaz.cardinal.module.modules.observers.ObserverModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.projectiles.ProjectilesBuilder;
-import in.twizmwaz.cardinal.module.modules.spawn.SpawnModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.spawnPlayer.RespawnModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.team.TeamModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.teamManager.TeamManagerModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.teamPicker.TeamPickerBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLock.TimeLockBuilder;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTrackerBuilder;
@@ -93,12 +94,13 @@ public class ModuleFactory {
         builderClasses.add(VisibilityBuilder.class);
         builderClasses.add(MOTDBuilder.class);
         builderClasses.add(WorldFreezeBuilder.class);
-        builderClasses.add(TeamModuleBuilder.class);
-        builderClasses.add(SpawnModuleBuilder.class);
+        builderClasses.add(TeamManagerModuleBuilder.class);
+        builderClasses.add(RespawnModuleBuilder.class);
         builderClasses.add(ObserverModuleBuilder.class);
         builderClasses.add(KillStreakBuilder.class);
         builderClasses.add(TeamPickerBuilder.class);
         builderClasses.add(InfoBuilder.class);
         builderClasses.add(GameScoreboardBuilder.class);
+        builderClasses.add(TeamModuleBuilder.class);
     }
 }

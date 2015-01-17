@@ -1,12 +1,12 @@
 package in.twizmwaz.cardinal.module.modules.wools;
 
 import in.parapengu.commons.utils.StringUtils;
-import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.regions.type.BlockRegion;
-import in.twizmwaz.cardinal.teams.PgmTeam;
+import in.twizmwaz.cardinal.util.TeamUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
@@ -28,7 +28,7 @@ import java.util.Set;
 
 public class WoolObjective implements GameObjective {
 
-    private final PgmTeam team;
+    private final TeamModule team;
     private final String name;
     private final String id;
     private final DyeColor color;
@@ -40,7 +40,7 @@ public class WoolObjective implements GameObjective {
     private boolean touched;
     private boolean complete;
 
-    protected WoolObjective(final PgmTeam team, final String name, final String id, final DyeColor color, final BlockRegion place, final boolean craftable, final boolean show) {
+    protected WoolObjective(final TeamModule team, final String name, final String id, final DyeColor color, final BlockRegion place, final boolean craftable, final boolean show) {
         this.team = team;
         this.name = name;
         this.id = id;
@@ -58,7 +58,7 @@ public class WoolObjective implements GameObjective {
     }
 
     @Override
-    public PgmTeam getTeam() {
+    public TeamModule getTeam() {
         return team;
     }
 
@@ -93,7 +93,7 @@ public class WoolObjective implements GameObjective {
         if (!this.complete) {
             try {
                 if (event.getItem().getItemStack().getType() == Material.WOOL && event.getItem().getItemStack().getData().getData() == color.getData()) {
-                    if (GameHandler.getGameHandler().getMatch().getTeam(player).equals(team)) {
+                    if (TeamUtil.getTeamByPlayer(player).equals(team)) {
                         if (!this.playersTouched.contains(player.getName())) {
                             this.playersTouched.add(player.getName());
                         }
@@ -120,7 +120,7 @@ public class WoolObjective implements GameObjective {
         if (event.getBlock().equals(place.getBlock())) {
             if (event.getBlock().getType().equals(Material.WOOL)) {
                 if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
-                    if (GameHandler.getGameHandler().getMatch().getTeam(event.getPlayer()).equals(team)) {
+                    if (TeamUtil.getTeamByPlayer(event.getPlayer()).equals(team)) {
                         this.complete = true;
                         Bukkit.broadcastMessage(team.getColor() + event.getPlayer().getDisplayName() + ChatColor.WHITE + " placed " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase() + ChatColor.WHITE + " for the " + team.getCompleteName());
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());

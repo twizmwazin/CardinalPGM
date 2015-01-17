@@ -4,6 +4,7 @@ import in.parapengu.commons.utils.StringUtils;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
+import in.twizmwaz.cardinal.module.ModuleCollection;
 import org.bukkit.entity.EntityType;
 import org.bukkit.potion.PotionEffect;
 import org.jdom2.Element;
@@ -14,11 +15,11 @@ import java.util.List;
 public class ProjectilesBuilder implements ModuleBuilder {
 
     @Override
-    public List<Module> load(Match match) {
+    public ModuleCollection load(Match match) {
         EntityType projectile = EntityType.ARROW;
         double velocityMod = 1.0;
         List<PotionEffect> potionEffects = new ArrayList<>();
-        List<Module> results = new ArrayList<>();
+        ModuleCollection results = new ModuleCollection();
         for (Element projectiles : match.getDocument().getRootElement().getChildren("modifybowprojectile")) {
             try {
                 projectile = EntityType.valueOf(StringUtils.technicalName(projectiles.getChild("projectile").getText()));

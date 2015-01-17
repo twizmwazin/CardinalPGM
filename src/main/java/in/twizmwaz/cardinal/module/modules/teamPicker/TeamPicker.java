@@ -2,8 +2,9 @@ package in.twizmwaz.cardinal.module.modules.teamPicker;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.teams.PgmTeam;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.MiscUtils;
+import in.twizmwaz.cardinal.util.TeamUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -20,7 +21,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class TeamPicker implements Module {
 
@@ -34,7 +34,7 @@ public class TeamPicker implements Module {
 
 
     public Inventory getTeamPicker() {
-        int size = (((GameHandler.getGameHandler().getMatch().getTeams().size() + 1) / 9) + 1) * 9;
+        int size = (((GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class).size() + 1) / 9) + 1) * 9;
         Inventory picker = Bukkit.createInventory(null, size, ChatColor.DARK_RED + "Pick your team");
         int item = 0;
         ItemStack autoJoin = new ItemStack(Material.CHAINMAIL_HELMET);
@@ -42,22 +42,22 @@ public class TeamPicker implements Module {
         autoJoinMeta.setDisplayName(ChatColor.GRAY + "" + ChatColor.BOLD + "Auto Join");
         int maxPlayers = 0;
         int totalPlayers = 0;
-        for (PgmTeam team : GameHandler.getGameHandler().getMatch().getTeams()) {
+        for (TeamModule team : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
             if (!team.isObserver()) {
                 maxPlayers += team.getMax();
-                totalPlayers += team.getPlayers().size();
+                totalPlayers += team.size();
             }
         }
         autoJoinMeta.setLore(Arrays.asList((totalPlayers >= maxPlayers ? ChatColor.RED + "" : ChatColor.GREEN + "") + totalPlayers + ChatColor.GOLD + " / " + ChatColor.RED + "" + maxPlayers, ChatColor.AQUA + "Puts you on the team with the fewest players"));
         autoJoin.setItemMeta(autoJoinMeta);
         picker.setItem(item, autoJoin);
         item ++;
-        for (PgmTeam team : GameHandler.getGameHandler().getMatch().getTeams()) {
+        for (TeamModule team : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
             if (!team.isObserver()) {
                 ItemStack teamStack = new ItemStack(Material.LEATHER_HELMET);
                 ItemMeta teamMeta = teamStack.getItemMeta();
                 teamMeta.setDisplayName(team.getColor() + "" + ChatColor.BOLD + team.getName());
-                teamMeta.setLore(Arrays.asList((team.getPlayers().size() >= team.getMax() ? ChatColor.RED + "" : ChatColor.GREEN + "") + team.getPlayers().size() + ChatColor.GOLD + " / " + ChatColor.RED + "" + team.getMax(), ChatColor.GREEN + "You are able to pick your team, click to join!"));
+                teamMeta.setLore(Arrays.asList((team.size() >= team.getMax() ? ChatColor.RED + "" : ChatColor.GREEN + "") + team.size() + ChatColor.GOLD + " / " + ChatColor.RED + "" + team.getMax(), ChatColor.GREEN + "You are able to pick your team, click to join!"));
                 teamStack.setItemMeta(teamMeta);
                 LeatherArmorMeta teamLeatherMeta = (LeatherArmorMeta) teamStack.getItemMeta();
                 teamLeatherMeta.setColor(MiscUtils.convertChatColorToColor(team.getColor()));
@@ -74,7 +74,7 @@ public class TeamPicker implements Module {
         ItemStack item = event.getCurrentItem();
         Player player = (Player) event.getWhoClicked();
         if (item != null) {
-            if (GameHandler.getGameHandler().getMatch().getTeam(player).isObserver() || !GameHandler.getGameHandler().getMatch().isRunning()) {
+            if (TeamUtil.getTeamByPlayer(player).isObserver() || !GameHandler.getGameHandler().getMatch().isRunning()) {
                 if (event.getInventory().getName().equals(ChatColor.DARK_RED + "Pick your team")) {
                     if (item.getType().equals(Material.CHAINMAIL_HELMET)) {
                         if (item.hasItemMeta()) {
@@ -90,7 +90,7 @@ public class TeamPicker implements Module {
                     } else if (item.getType().equals(Material.LEATHER_HELMET)) {
                         if (item.hasItemMeta()) {
                             if (item.getItemMeta().hasDisplayName()) {
-                                if (GameHandler.getGameHandler().getMatch().getTeamByName(ChatColor.stripColor(item.getItemMeta().getDisplayName())) != null) {
+                                if (TeamUtil.getTeamByName(ChatColor.stripColor(item.getItemMeta().getDisplayName())) != null) {
                                     event.setCancelled(true);
                                     player.closeInventory();
                                     player.playSound(player.getLocation(), Sound.CLICK, 1, 2);
@@ -106,7 +106,7 @@ public class TeamPicker implements Module {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (GameHandler.getGameHandler().getMatch().getTeam(event.getPlayer()).isObserver() || !GameHandler.getGameHandler().getMatch().isRunning()) {
+        if (TeamUtil.getTeamByPlayer(event.getPlayer()).isObserver() || !GameHandler.getGameHandler().getMatch().isRunning()) {
             if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                 if (event.getPlayer().getItemInHand() != null) {
                     if (event.getPlayer().getItemInHand().getType().equals(Material.LEATHER_HELMET)) {

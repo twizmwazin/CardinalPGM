@@ -4,6 +4,7 @@ import in.parapengu.commons.utils.StringUtils;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
+import in.twizmwaz.cardinal.module.ModuleCollection;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.jdom2.Element;
 
@@ -15,8 +16,8 @@ import java.util.Set;
 public class DisableDamageBuilder implements ModuleBuilder {
 
     @Override
-    public List<Module> load(Match match) {
-        List<Module> results = new ArrayList<>();
+    public ModuleCollection load(Match match) {
+        ModuleCollection results = new ModuleCollection();
         Set<DamageCause> damageTypes = new HashSet<>(128);
         boolean ally = true, self = true, enemy = true, other = true;
         for (Element itemRemove : match.getDocument().getRootElement().getChildren("disabledamage")) {

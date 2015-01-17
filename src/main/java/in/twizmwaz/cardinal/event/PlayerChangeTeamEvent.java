@@ -1,8 +1,6 @@
 package in.twizmwaz.cardinal.event;
 
-import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.match.JoinType;
-import in.twizmwaz.cardinal.teams.PgmTeam;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -13,20 +11,16 @@ public class PlayerChangeTeamEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private final Player player;
-    private PgmTeam newTeam;
-    private PgmTeam oldTeam;
-    private JoinType joinType;
+    private final boolean forced;
+    private TeamModule newTeam;
+    private TeamModule oldTeam;
     private boolean cancelled;
 
-    public PlayerChangeTeamEvent(Player player, PgmTeam team, JoinType joinType) {
+    public PlayerChangeTeamEvent(Player player, boolean forced, TeamModule newTeam, TeamModule oldTeam) {
         this.player = player;
-        this.newTeam = team;
-        this.joinType = joinType;
-        try {
-            this.oldTeam = GameHandler.getGameHandler().getMatch().getTeam(player);
-        } catch (NullPointerException ex) {
-            this.oldTeam = GameHandler.getGameHandler().getMatch().getTeamById("observers");
-        }
+        this.forced = forced;
+        this.newTeam = newTeam;
+        this.oldTeam = oldTeam;
     }
 
     public static HandlerList getHandlerList() {
@@ -41,16 +35,12 @@ public class PlayerChangeTeamEvent extends Event implements Cancellable {
         return player;
     }
 
-    public PgmTeam getNewTeam() {
+    public TeamModule getNewTeam() {
         return newTeam;
     }
 
-    public PgmTeam getOldTeam() {
+    public TeamModule getOldTeam() {
         return oldTeam;
-    }
-
-    public JoinType getJoinType() {
-        return joinType;
     }
 
     public boolean isCancelled() {

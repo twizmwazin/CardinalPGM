@@ -2,13 +2,14 @@ package in.twizmwaz.cardinal.filter.parsers;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.GameObjective;
-import in.twizmwaz.cardinal.teams.PgmTeam;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.util.TeamUtil;
 import org.jdom2.Element;
 
 public class ObjectiveFilterParser {
 
     private GameObjective objective;
-    private PgmTeam team;
+    private TeamModule team;
     private boolean any;
 
     public ObjectiveFilterParser(final Element element) {
@@ -18,7 +19,7 @@ public class ObjectiveFilterParser {
         }
         try {
             String team = element.getAttributeValue("team");
-            this.team = GameHandler.getGameHandler().getMatch().getTeamById(team);
+            this.team = TeamUtil.getTeamById(team);
         } catch (NullPointerException e) {
         }
         try {
@@ -33,7 +34,7 @@ public class ObjectiveFilterParser {
         return objective;
     }
 
-    public PgmTeam getTeam() {
+    public TeamModule getTeam() {
         return team;
     }
 

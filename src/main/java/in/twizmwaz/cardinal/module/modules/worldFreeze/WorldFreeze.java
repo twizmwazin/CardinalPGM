@@ -7,6 +7,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.weather.LightningStrikeEvent;
+import org.bukkit.event.weather.ThunderChangeEvent;
+import org.bukkit.event.weather.WeatherChangeEvent;
 
 public class WorldFreeze implements Module {
 
@@ -89,6 +92,21 @@ public class WorldFreeze implements Module {
         if (match.getState() != MatchState.PLAYING) {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void onWeatherChange(WeatherChangeEvent event) {
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onLightningStrike(LightningStrikeEvent event) {
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onThunderChange(ThunderChangeEvent event) {
+        event.setCancelled(true);
     }
 
 }

@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.module.modules.hunger;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
+import in.twizmwaz.cardinal.module.ModuleCollection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +11,8 @@ import java.util.List;
 public class HungerBuilder implements ModuleBuilder {
 
     @Override
-    public List<Module> load(Match match) {
-        List<Module> results = new ArrayList<>(1);
+    public ModuleCollection load(Match match) {
+        ModuleCollection results = new ModuleCollection();
         try {
             String data = match.getDocument().getRootElement().getChild("hunger").getChildText("depletion");
             if (data.equalsIgnoreCase("off")) {

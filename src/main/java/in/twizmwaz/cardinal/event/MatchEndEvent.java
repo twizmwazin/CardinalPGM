@@ -1,15 +1,15 @@
 package in.twizmwaz.cardinal.event;
 
-import in.twizmwaz.cardinal.teams.PgmTeam;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class MatchEndEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
-    private final PgmTeam team;
+    private final TeamModule team;
 
-    public MatchEndEvent(PgmTeam team) {
+    public MatchEndEvent(TeamModule team) {
         this.team = team;
     }
 
@@ -21,7 +21,7 @@ public class MatchEndEvent extends Event {
         return handlers;
     }
 
-    public PgmTeam getTeam() throws NullPointerException {
+    public TeamModule getTeam() throws NullPointerException {
         try {
             return team;
         } catch (NullPointerException ex) {

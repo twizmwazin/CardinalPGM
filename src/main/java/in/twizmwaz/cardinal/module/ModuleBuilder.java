@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface ModuleBuilder {
 
-    public List<Module> load(Match match);
+    public ModuleCollection load(Match match);
 
 }
