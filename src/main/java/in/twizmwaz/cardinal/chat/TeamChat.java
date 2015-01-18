@@ -18,7 +18,7 @@ public class TeamChat {
             TeamModule playerTeam = TeamUtils.getTeamByPlayer(player); //Gets the team of the online player
             TeamModule senderTeam = TeamUtils.getTeamByPlayer(sender); //Gets the team of the sender
             if (playerTeam == senderTeam) {
-                player.sendMessage(senderTeam.getColor() + "[Team] " + sender.getDisplayName() + ": " + ChatColor.WHITE + msg);
+                player.sendMessage(senderTeam.getColor() + "[Team] " + sender.getDisplayName() + ChatColor.WHITE + ": " + ChatColor.WHITE + msg);
             }
         }
     }
