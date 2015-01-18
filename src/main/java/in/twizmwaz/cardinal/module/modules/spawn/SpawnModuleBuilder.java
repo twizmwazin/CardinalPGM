@@ -2,10 +2,7 @@ package in.twizmwaz.cardinal.module.modules.spawn;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.BuilderData;
-import in.twizmwaz.cardinal.module.ModuleBuilder;
-import in.twizmwaz.cardinal.module.ModuleCollection;
-import in.twizmwaz.cardinal.module.ModuleLoadTime;
+import in.twizmwaz.cardinal.module.*;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.util.TeamUtils;
@@ -41,7 +38,11 @@ public class SpawnModuleBuilder implements ModuleBuilder {
                         location.setYaw(Float.parseFloat(region.getAttributeValue("yaw")));
                     regions.add(new ImmutablePair<>(Region.getRegion(region), location.getDirection()));
                 }
-                String kit = spawn.getAttributeValue("kit") != null ? spawn.getAttributeValue("kit") : spawns.getAttributeValue("kits");
+                String kit = null;
+                if (spawns.getAttributeValue("kit") != null)
+                    kit = spawns.getAttributeValue("kit");
+                if (spawn.getAttributeValue("kit") != null)
+                    kit = spawn.getAttributeValue("kit");
                 results.add(new SpawnModule(team, regions, kit, true, true));
             }
             for (Element spawn : spawns.getChildren("default")) {
@@ -59,7 +60,11 @@ public class SpawnModuleBuilder implements ModuleBuilder {
                         location.setYaw(Float.parseFloat(region.getAttributeValue("yaw")));
                     regions.add(new ImmutablePair<>(Region.getRegion(region), location.getDirection()));
                 }
-                String kit = spawn.getAttributeValue("kit") != null ? spawn.getAttributeValue("kit") : spawns.getAttributeValue("kits");
+                String kit = null;
+                if (spawns.getAttributeValue("kit") != null)
+                    kit = spawns.getAttributeValue("kit");
+                if (spawn.getAttributeValue("kit") != null)
+                    kit = spawn.getAttributeValue("kit");
                 results.add(new SpawnModule(team, regions, kit, true, true));
             }
             for (Element element : spawns.getChildren("spawns")) {
@@ -78,7 +83,13 @@ public class SpawnModuleBuilder implements ModuleBuilder {
                             location.setYaw(Float.parseFloat(region.getAttributeValue("yaw")));
                         regions.add(new ImmutablePair<>(Region.getRegion(region), location.getDirection()));
                     }
-                    String kit = spawn.getAttributeValue("kit") != null ? spawn.getAttributeValue("kit") : spawns.getAttributeValue("kits");
+                    String kit = null;
+                    if (spawns.getAttributeValue("kit") != null)
+                        kit = spawns.getAttributeValue("kit");
+                    if (element.getAttributeValue("kit") != null)
+                        kit = element.getAttributeValue("kit");
+                    if (spawn.getAttributeValue("kit") != null)
+                        kit = spawn.getAttributeValue("kit");
                     results.add(new SpawnModule(team, regions, kit, true, true));
                 }
             }

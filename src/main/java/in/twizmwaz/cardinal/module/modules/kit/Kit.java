@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.kit;
 
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -9,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Kit implements Module {
-
-    public static List<Kit> kits = new ArrayList<>();
 
     private String name;
     private List<KitItem> items;
@@ -32,7 +31,6 @@ public class Kit implements Module {
     private boolean jump;
 
     protected Kit(String name, List<KitItem> items, List<KitArmor> armor, List<PotionEffect> effects, String parent, boolean force, boolean potionParticles, boolean resetPearls, boolean clear, boolean clearItems, int health, float saturation, int foodLevel, float walkSpeed, float knockback, boolean jump) {
-        kits.add(this);
         this.name = name;
         this.items = items;
         this.armor = armor;
@@ -53,7 +51,7 @@ public class Kit implements Module {
     }
 
     public static Kit getKitByName(String name) {
-        for (Kit kit : kits) {
+        for (Kit kit : GameHandler.getGameHandler().getMatch().getModules().getModules(Kit.class)) {
             if (kit.getName().equalsIgnoreCase(name)) return kit;
         }
         return null;
@@ -61,7 +59,6 @@ public class Kit implements Module {
 
     @Override
     public void unload() {
-        kits.remove(this);
     }
 
     public void apply(Player player) {

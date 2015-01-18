@@ -18,7 +18,7 @@ public class KitApplier implements Module {
         try {
             Kit kit = null;
             for (Kit kitModule : GameHandler.getGameHandler().getMatch().getModules().getModules(Kit.class)) {
-                if (kitModule.getName().equalsIgnoreCase(kit.getName())) kit = kitModule;
+                if (kitModule.getName().equalsIgnoreCase(event.getSpawn().getKit())) kit = kitModule;
             }
             kit.apply(event.getPlayer());
         } catch (NullPointerException e) {
