@@ -24,7 +24,7 @@ public class TntTracker implements Module {
     }
 
     public static UUID getWhoPlaced(Entity tnt) {
-        if (tnt.getType() == EntityType.PRIMED_TNT) {
+        if (tnt.getType().equals(EntityType.PRIMED_TNT)) {
             if (tnt.hasMetadata("source")) {
                 return (UUID) tnt.getMetadata("source").get(0).value();
             }
