@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.cores;
 
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.TeamChat;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
@@ -10,6 +11,7 @@ import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.regions.type.BlockRegion;
+import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -106,12 +108,13 @@ public class CoreObjective implements GameObjective {
             if (TeamUtils.getTeamByPlayer(event.getPlayer()) != team) {
                 if (!playersTouched.contains(event.getPlayer().getUniqueId())) {
                     playersTouched.add(event.getPlayer().getUniqueId());
+                    TeamChat.sendToTeam(team.getColor() + "[Team] " + event.getPlayer().getDisplayName() + ChatColor.GRAY + " broke a piece of " + ChatColor.RED + name, team);
                 }
                 this.touched = true;
                 event.setCancelled(false);
             } else {
                 event.setCancelled(true);
-                event.getPlayer().sendMessage(ChatColor.RED + "You cannot leak your own core!");
+                ChatUtils.sendWarningMessage(event.getPlayer(), "You may not damage your own core.");
             }
         }
     }
@@ -135,6 +138,7 @@ public class CoreObjective implements GameObjective {
                     } else {
                         if (!playersTouched.contains(player)) {
                             playersTouched.add(player);
+                            TeamChat.sendToTeam(team.getColor() + "[Team] " + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " broke a piece of " + ChatColor.RED + name, team);
                         }
                         this.touched = true;
                         eventPlayer = Bukkit.getPlayer(player);

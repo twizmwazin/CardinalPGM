@@ -12,17 +12,16 @@ import org.bukkit.entity.Player;
 
 public class GlobalChat {
 
-    public static void sendGlobalMessage(String msg, Player p) {
-        TeamModule team = TeamUtils.getTeamByPlayer(p);
-        Bukkit.broadcastMessage("<" + team.getColor() + p.getDisplayName() + ChatColor.WHITE + "> " + ChatColor.WHITE + msg);
+    public static void sendGlobalMessage(String msg, Player player) {
+        TeamModule team = TeamUtils.getTeamByPlayer(player);
+        Bukkit.broadcastMessage("<" + team.getColor() + player.getDisplayName() + ChatColor.WHITE + ">: " + ChatColor.WHITE + msg);
     }
 
-    @Command(aliases = {"global","g"}, desc = "Send a message to all player on the servers")
+    @Command(aliases = {"global", "g"}, desc = "Send a message to all players on the servers")
     public static void global(final CommandContext cmd, CommandSender sender) throws CommandException {
         Player player = (Player) sender;
-        if(cmd.argsLength() == 0){
-            Chat.setChannelGloabl();
-            player.sendMessage(org.bukkit.ChatColor.GOLD + "Default channel changed to global");
+        if (cmd.argsLength() == 0) {
+            //Implement this later once toggle permissions are introduced
         } else {
             String msg = "";
             for (int i = 0; cmd.argsLength() > i; i++) {
