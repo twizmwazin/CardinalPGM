@@ -56,7 +56,6 @@ public class Rotation {
                     loaded.add(new LoadedMap(name, authors, map));
                 } catch (Exception e) {
                     Bukkit.getLogger().log(Level.WARNING, "Failed to load map at " + map.getAbsolutePath());
-                    continue;
                 }
             }
         }
@@ -80,10 +79,16 @@ public class Rotation {
                 }
             }
         } catch (IOException e) {
-            throw new RotationLoadException("An error occurred in loading the rotation file.");
+            List<String> lines = new ArrayList<>();
+            for (int x = 0; x < 8; x++) {
+                try {
+                    rotation.add(loaded.get(x));
+                } catch (IndexOutOfBoundsException ex) {
+                }
+            }
+            Bukkit.getLogger().log(Level.WARNING, "Failed to load rotation file, using a temporary rotation instead.");
         }
         position = 0;
-
     }
 
     /**
