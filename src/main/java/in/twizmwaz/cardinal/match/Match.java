@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.match;
 
+import in.twizmwaz.cardinal.Chat.Chat;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.match.listeners.MatchListener;
@@ -53,6 +54,7 @@ public class Match {
         this.state = MatchState.WAITING;
         listeners.add(new MatchListener(plugin, this));
         listeners.add(new ObjectiveListener(plugin, this));
+        listeners.add(new Chat(plugin));
     }
 
     public void registerModules() {

@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.wools;
 
 import in.parapengu.commons.utils.StringUtils;
+import in.twizmwaz.cardinal.Chat.TeamChat;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
@@ -104,27 +105,6 @@ public class WoolObjective implements GameObjective {
     }
 
     @EventHandler
-    public void onWoolPickup(PlayerPickupItemEvent event) {
-        Player player = event.getPlayer();
-        if (!this.complete) {
-            try {
-                if (event.getItem().getItemStack().getType() == Material.WOOL && event.getItem().getItemStack().getData().getData() == color.getData()) {
-                    if (TeamUtils.getTeamByPlayer(player) == team) {
-                        if (!this.playersTouched.contains(player.getUniqueId())) {
-                            this.playersTouched.add(player.getUniqueId());
-                        }
-                        boolean oldState = this.touched;
-                        this.touched = true;
-                        ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !oldState);
-                        Bukkit.getServer().getPluginManager().callEvent(touchEvent);
-                    }
-                }
-            } catch (NullPointerException e) {
-            }
-        }
-    }
-
-    @EventHandler
     public void onWoolPickup(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         if (!this.complete) {
@@ -138,11 +118,38 @@ public class WoolObjective implements GameObjective {
                         this.touched = true;
                         ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !oldState);
                         Bukkit.getServer().getPluginManager().callEvent(touchEvent);
+                        TeamChat.SendToTeam(woolTouchMsg(player), team);
                     }
                 }
             } catch (NullPointerException e) {
             }
         }
+    }
+
+    @EventHandler
+    public void onWoolPickup(PlayerPickupItemEvent event) {
+        Player player = (Player) event.getPlayer();
+        if (!this.complete) {
+            try {
+                if (event.getItem().getItemStack().getType() == Material.WOOL && event.getItem().getItemStack().getData().getData() == color.getData()) {
+                    if (TeamUtils.getTeamByPlayer(player) == team) {
+                        if (!this.playersTouched.contains(player.getUniqueId())) {
+                            this.playersTouched.add(player.getUniqueId());
+                        }
+                        boolean oldState = this.touched;
+                        this.touched = true;
+                        ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !oldState);
+                        Bukkit.getServer().getPluginManager().callEvent(touchEvent);
+                        TeamChat.SendToTeam(woolTouchMsg(player), team);
+                    }
+                }
+            } catch (NullPointerException e) {
+            }
+        }
+    }
+
+    private String woolTouchMsg(Player player){
+        return team.getColor() + "[Team] " + player.getDisplayName() + ChatColor.GRAY + " Picked up " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase();
     }
 
     @EventHandler

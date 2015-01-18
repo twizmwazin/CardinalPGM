@@ -1,10 +1,8 @@
 package in.twizmwaz.cardinal.module.modules.team;
 
-import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameScoreboard;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -59,6 +57,7 @@ public class TeamModule<P extends Player> extends HashSet<Player> implements Mod
             this.remove(event.getPlayer());
         }
     }
+
 
     @Override
     public void unload() {
@@ -120,4 +119,5 @@ public class TeamModule<P extends Player> extends HashSet<Player> implements Mod
     public boolean isObserver() {
         return observer;
     }
+
 }
