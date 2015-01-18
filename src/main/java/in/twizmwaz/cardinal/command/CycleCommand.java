@@ -2,16 +2,27 @@ package in.twizmwaz.cardinal.command;
 
 import com.sk89q.minecraft.util.commands.*;
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
+import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.command.CommandSender;
 
 public class CycleCommand {
 
-    @Command(aliases = {"cycle"}, desc = "Cycles the world and loads a new world.", usage = "[time]")
+    @Command(aliases = {"cycle"}, desc = "Cycles the world and loads a new world.", usage = "[time]", flags = "f")
     @CommandPermissions("cardinal.match.cycle")
     public static void cycle(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
-            throw new CommandException("Cannot cycle while the match is running!");
+            if(cmd.hasFlag('f')){
+                try {
+                    TeamModule team = TeamUtils.getTeamByName(cmd.getString(0));
+                    GameHandler.getGameHandler().getMatch().end(team);
+                } catch (IndexOutOfBoundsException ex) {
+                    GameHandler.getGameHandler().getMatch().end(null);
+                }
+            } else {
+                throw new CommandException("Cannot cycle while the match is running!");
+            }
         }
         try {
             GameHandler.getGameHandler().startCycleTimer(cmd.getInteger(0));
