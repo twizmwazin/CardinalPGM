@@ -5,6 +5,7 @@ import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.MatchState;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 public class CancelCommand {
@@ -21,6 +22,6 @@ public class CancelCommand {
             GameHandler.getGameHandler().getMatch().setState(MatchState.WAITING);
         } catch (NullPointerException ex) {
         }
-        sender.sendMessage("Canceled all countdowns");
+        Bukkit.broadcastMessage("All countdowns have been cancelled.");
     }
 }
