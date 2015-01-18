@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.module;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.modules.buildHeight.BuildHeightBuilder;
 import in.twizmwaz.cardinal.module.modules.cores.CoreObjectiveBuilder;
+import in.twizmwaz.cardinal.module.modules.deathMessages.DeathMessagesBuilder;
 import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.difficulty.MapDifficultyBuilder;
 import in.twizmwaz.cardinal.module.modules.disableDamage.DisableDamageBuilder;
@@ -104,5 +105,6 @@ public class ModuleFactory {
         builderClasses.add(GameScoreboardBuilder.class);
         builderClasses.add(TeamModuleBuilder.class);
         builderClasses.add(SpawnModuleBuilder.class);
+        builderClasses.add(DeathMessagesBuilder.class);
     }
 }
