@@ -86,7 +86,7 @@ public class GameScoreboard implements Module {
 
     @EventHandler
     public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
-        if (event.getNewTeam().equals(this.team)) {
+        if (event.getNewTeam() == this.team) {
             event.getPlayer().setScoreboard(this.scoreboard);
         }
         for (TeamModule teamModule : TeamUtils.getTeams()) {
@@ -107,7 +107,7 @@ public class GameScoreboard implements Module {
 
         } else {
             for (TeamModule team : TeamUtils.getTeams()) {
-                if (!team.equals(this.team) && !team.isObserver()) {
+                if (team != this.team && !team.isObserver()) {
                     for (GameObjective gameObjective : TeamUtils.getObjectives(team)) {
                         if (gameObjective.showOnScoreboard()) {
                             String insert = "";
