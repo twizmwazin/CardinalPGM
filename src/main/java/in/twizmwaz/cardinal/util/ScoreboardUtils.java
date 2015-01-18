@@ -28,7 +28,7 @@ public class ScoreboardUtils {
         return null;
     }
 
-    public static String getConversion(Team team, String string, String insertColor) {
+    public static String getConversion(String string, String insertColor) {
         return getConversion(string, insertColor, true);
     }
 
