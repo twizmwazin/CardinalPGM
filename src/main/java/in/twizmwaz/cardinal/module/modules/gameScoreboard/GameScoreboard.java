@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ScoreboardUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
@@ -32,10 +33,10 @@ public class GameScoreboard implements Module {
     protected GameScoreboard(TeamModule team) {
         this.team = team;
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        for (TeamModule teamModule : TeamUtils.getTeams()) {
-            Team scoreboardTeam = scoreboard.registerNewTeam(teamModule.getId());
-            scoreboardTeam.setPrefix(team.getColor() + "");
-            scoreboard.registerNewTeam(teamModule.getId() + "-s");
+        for (TeamModule teams : TeamUtils.getTeams()) {
+            Team scoreboardTeam = scoreboard.registerNewTeam(teams.getId());
+            scoreboardTeam.setPrefix(teams.getColor() + "");
+            scoreboard.registerNewTeam(teams.getId() + "-s");
         }
         for (GameObjective objective : GameHandler.getGameHandler().getMatch().getModules().getModules(GameObjective.class)) {
             scoreboard.registerNewTeam(objective.getScoreboardHandler().getNumber() + "-o");
@@ -55,15 +56,15 @@ public class GameScoreboard implements Module {
         HandlerList.unregisterAll(this);
     }
 
-    public static void add(TeamModule teamModule, Player player) {
+    public static void add(TeamModule team, Player player) {
         for (GameScoreboard gameScoreboard : GameHandler.getGameHandler().getMatch().getModules().getModules(GameScoreboard.class)) {
-            gameScoreboard.getScoreboard().getTeam(teamModule.getId()).addPlayer(player);
+            gameScoreboard.getScoreboard().getTeam(team.getId()).addPlayer(player);
         }
     }
 
-    public static void remove(TeamModule teamModule, Player player) {
+    public static void remove(TeamModule team, Player player) {
         for (GameScoreboard gameScoreboard : GameHandler.getGameHandler().getMatch().getModules().getModules(GameScoreboard.class)) {
-            gameScoreboard.getScoreboard().getTeam(teamModule.getId()).removePlayer(player);
+            gameScoreboard.getScoreboard().getTeam(team.getId()).removePlayer(player);
         }
     }
 
@@ -89,8 +90,8 @@ public class GameScoreboard implements Module {
         if (event.getNewTeam() == this.team) {
             event.getPlayer().setScoreboard(this.scoreboard);
         }
-        for (TeamModule teamModule : TeamUtils.getTeams()) {
-            remove(teamModule, event.getPlayer());
+        for (TeamModule team : TeamUtils.getTeams()) {
+            remove(team, event.getPlayer());
         }
         add(event.getNewTeam(), event.getPlayer());
     }
@@ -111,10 +112,10 @@ public class GameScoreboard implements Module {
                     for (GameObjective gameObjective : TeamUtils.getObjectives(team)) {
                         if (gameObjective.showOnScoreboard()) {
                             String insert = "";
-                            while (used.contains(ScoreboardUtils.getConversion(gameObjective.getScoreboardHandler().getPrefix() + " " + ChatColor.RESET + WordUtils.capitalizeFully(gameObjective.getName()), insert, true))) {
+                            while (used.contains(ScoreboardUtils.getConversion(" " + gameObjective.getScoreboardHandler().getPrefix() + " " + ChatColor.RESET + WordUtils.capitalizeFully(gameObjective.getName()), insert, true))) {
                                 insert += ChatColor.RESET;
                             }
-                            String obj = ScoreboardUtils.convertToScoreboard(scoreboard.getTeam(gameObjective.getScoreboardHandler().getNumber() + "-o"), gameObjective.getScoreboardHandler().getPrefix() + " " + ChatColor.RESET + WordUtils.capitalizeFully(gameObjective.getName()), insert, true);
+                            String obj = ScoreboardUtils.convertToScoreboard(scoreboard.getTeam(gameObjective.getScoreboardHandler().getNumber() + "-o"), " " + gameObjective.getScoreboardHandler().getPrefix() + " " + ChatColor.RESET + WordUtils.capitalizeFully(gameObjective.getName()), insert, true);
                             used.add(obj);
                             objective.getScore(obj).setScore(slot);
                             slot ++;
@@ -129,7 +130,7 @@ public class GameScoreboard implements Module {
                     used.add(steam);
                     objective.getScore(steam).setScore(slot);
                     slot ++;
-                    if (!this.team.isObserver() || !TeamUtils.getTeams().get(TeamUtils.getTeams().size() - 1).equals(team)) {
+                    if (!this.team.isObserver() || slot < getSlots()) {
                         String blank = " ";
                         while (used.contains(blank)) {
                             blank += " ";
@@ -144,10 +145,10 @@ public class GameScoreboard implements Module {
                 for (GameObjective gameObjective : TeamUtils.getObjectives(team)) {
                     if (gameObjective.showOnScoreboard()) {
                         String insert = "";
-                        while (used.contains(ScoreboardUtils.getConversion(gameObjective.getScoreboardHandler().getPrefix() + " " + ChatColor.RESET + WordUtils.capitalizeFully(gameObjective.getName()), insert, true))) {
+                        while (used.contains(ScoreboardUtils.getConversion(" " + gameObjective.getScoreboardHandler().getPrefix() + " " + ChatColor.RESET + WordUtils.capitalizeFully(gameObjective.getName()), insert, true))) {
                             insert += ChatColor.RESET;
                         }
-                        String obj = ScoreboardUtils.convertToScoreboard(scoreboard.getTeam(gameObjective.getScoreboardHandler().getNumber() + "-o"), gameObjective.getScoreboardHandler().getPrefix() + " " + ChatColor.RESET + WordUtils.capitalizeFully(gameObjective.getName()), insert, true);
+                        String obj = ScoreboardUtils.convertToScoreboard(scoreboard.getTeam(gameObjective.getScoreboardHandler().getNumber() + "-o"), " " + gameObjective.getScoreboardHandler().getPrefix() + " " + ChatColor.RESET + WordUtils.capitalizeFully(gameObjective.getName()), insert, true);
                         used.add(obj);
                         objective.getScore(obj).setScore(slot);
                         slot ++;
@@ -169,8 +170,14 @@ public class GameScoreboard implements Module {
     public int getSlots() {
         int slots = 0;
         for (TeamModule team : TeamUtils.getTeams()) {
-            slots += 2;
-            slots += TeamUtils.getObjectives(team).size();
+            if (!team.isObserver()) {
+                slots += 2;
+                for (GameObjective objective : TeamUtils.getObjectives(team)) {
+                    if (objective.showOnScoreboard()) {
+                        slots ++;
+                    }
+                }
+            }
         }
         slots --;
         return slots;

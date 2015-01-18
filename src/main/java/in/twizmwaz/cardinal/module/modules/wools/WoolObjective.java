@@ -109,7 +109,7 @@ public class WoolObjective implements GameObjective {
         if (!this.complete) {
             try {
                 if (event.getItem().getItemStack().getType() == Material.WOOL && event.getItem().getItemStack().getData().getData() == color.getData()) {
-                    if (TeamUtils.getTeamByPlayer(player).equals(team)) {
+                    if (TeamUtils.getTeamByPlayer(player) == team) {
                         if (!this.playersTouched.contains(player.getUniqueId())) {
                             this.playersTouched.add(player.getUniqueId());
                         }
@@ -130,7 +130,7 @@ public class WoolObjective implements GameObjective {
         if (!this.complete) {
             try {
                 if (event.getCurrentItem().getType() == Material.WOOL && event.getCurrentItem().getData().getData() == color.getData()) {
-                    if (TeamUtils.getTeamByPlayer(player).equals(team)) {
+                    if (TeamUtils.getTeamByPlayer(player) == team) {
                         if (!this.playersTouched.contains(player.getUniqueId())) {
                             this.playersTouched.add(player.getUniqueId());
                         }
@@ -157,7 +157,7 @@ public class WoolObjective implements GameObjective {
         if (event.getBlock().equals(place.getBlock())) {
             if (event.getBlock().getType().equals(Material.WOOL)) {
                 if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
-                    if (TeamUtils.getTeamByPlayer(event.getPlayer()).equals(team)) {
+                    if (TeamUtils.getTeamByPlayer(event.getPlayer()) == team) {
                         this.complete = true;
                         Bukkit.broadcastMessage(team.getColor() + event.getPlayer().getDisplayName() + ChatColor.WHITE + " placed " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase() + ChatColor.WHITE + " for the " + team.getCompleteName());
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
