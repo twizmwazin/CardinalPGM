@@ -19,7 +19,6 @@ public class CancelCommand {
         }
         try {
             GameHandler.getGameHandler().getMatch().getStartTimer().setCancelled(true);
-            GameHandler.getGameHandler().getMatch().setState(MatchState.WAITING);
         } catch (NullPointerException ex) {
         }
         Bukkit.broadcastMessage("All countdowns have been cancelled.");
