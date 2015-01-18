@@ -46,7 +46,6 @@ public class MatchListener implements Listener {
     public void onCycle(CycleCompleteEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             TeamUtils.getTeamById("observers").add(player, true);
-            //player.setScoreboard(TeamUtil.getTeamById("observers").getScoreboard());
         }
     }
 }
