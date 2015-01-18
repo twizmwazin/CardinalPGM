@@ -115,7 +115,7 @@ public class DestroyableObjective implements GameObjective {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event) {
         if (getBlocks().contains(event.getBlock())) {
-            if (!TeamUtils.getTeamByPlayer(event.getPlayer()).equals(team)) {
+            if (TeamUtils.getTeamByPlayer(event.getPlayer()) != team) {
                 this.complete += (1 / size);
                 if (this.complete >= this.required && !this.completed) {
                     this.completed = true;
@@ -149,7 +149,7 @@ public class DestroyableObjective implements GameObjective {
             if (TntTracker.getWhoPlaced(event.getEntity()) != null) {
                 UUID player = TntTracker.getWhoPlaced(event.getEntity());
                 if (Bukkit.getOfflinePlayer(player).isOnline()) {
-                    if (TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)).equals(team)) {
+                    if (TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)) == team) {
                         event.blockList().remove(block);
                     } else {
                         if (!playersTouched.contains(player)) {

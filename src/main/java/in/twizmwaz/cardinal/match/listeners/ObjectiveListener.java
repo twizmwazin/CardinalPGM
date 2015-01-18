@@ -36,7 +36,7 @@ public class ObjectiveListener implements Listener {
             }
         }
         for (GameObjective condition : teamObjectives) {
-            if (!condition.isComplete() && !condition.equals(event.getObjective())) return;
+            if (!condition.isComplete() && !condition.equals(event.getObjective()) && condition.showOnScoreboard()) return;
         }
         match.end(workingTeam);
     }

@@ -62,7 +62,7 @@ public class TeamUtils {
     public static Set<GameObjective> getObjectives(TeamModule team) {
         Set<GameObjective> objectives = new HashSet<>();
         for (GameObjective objective : GameHandler.getGameHandler().getMatch().getModules().getModules(GameObjective.class)) {
-            if (objective.getTeam().equals(team)) {
+            if (objective.getTeam() == team) {
                 objectives.add(objective);
             }
         }
