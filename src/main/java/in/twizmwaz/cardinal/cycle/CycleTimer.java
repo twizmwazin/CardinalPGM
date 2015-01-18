@@ -50,7 +50,6 @@ public class CycleTimer implements Runnable, Cancellable {
     @Override
     public void setCancelled(boolean isCancelled) {
         GameHandler.getGameHandler().getMatch().setState(originalState);
-        Bukkit.getLogger().log(Level.OFF, "cycle cancelled");
         this.cancelled = isCancelled;
     }
 }

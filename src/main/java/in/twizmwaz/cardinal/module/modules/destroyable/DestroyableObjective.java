@@ -120,8 +120,9 @@ public class DestroyableObjective implements GameObjective {
             if (TeamUtils.getTeamByPlayer(event.getPlayer()) != team) {
                 if (!playersTouched.contains(event.getPlayer().getUniqueId())) {
                     playersTouched.add(event.getPlayer().getUniqueId());
-                    TeamChat.sendToTeam(team.getColor() + "[Team] " + event.getPlayer().getDisplayName() + ChatColor.GRAY + " destroyed some of " + ChatColor.AQUA + name, team);
+                    TeamChat.sendToTeam(team.getColor() + "[Team] " + event.getPlayer().getDisplayName() + ChatColor.GRAY + " destroyed some of " + ChatColor.AQUA + name, TeamUtils.getTeamByPlayer(event.getPlayer()));
                 }
+                boolean oldState = this.isTouched();
                 this.complete += (1 / size);
                 if (this.complete >= this.required && !this.completed) {
                     this.completed = true;
@@ -130,8 +131,8 @@ public class DestroyableObjective implements GameObjective {
                     ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
                     Bukkit.getServer().getPluginManager().callEvent(compEvent);
                 } else if (!this.completed) {
-                    boolean oldState = this.isTouched();
                     ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), !oldState);
+                    Bukkit.getServer().getPluginManager().callEvent(touchEvent);
                 }
             } else {
                 event.setCancelled(true);
@@ -160,7 +161,7 @@ public class DestroyableObjective implements GameObjective {
                     } else {
                         if (!playersTouched.contains(player)) {
                             playersTouched.add(player);
-                            TeamChat.sendToTeam(team.getColor() + "[Team] " + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " destroyed some of " + ChatColor.AQUA + name, team);
+                            TeamChat.sendToTeam(team.getColor() + "[Team] " + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " destroyed some of " + ChatColor.AQUA + name, TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)));
                         }
                         blockDestroyed = true;
                         eventPlayer = Bukkit.getPlayer(player);

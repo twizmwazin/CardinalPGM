@@ -30,7 +30,7 @@ public class TeamUtils {
 
     public static TeamModule getTeamByName(String name) {
         for (TeamModule team : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
-            if (team.getName().replaceAll(" ", "").equalsIgnoreCase(name.replaceAll(" ", ""))) {
+            if (team.getName().replaceAll(" ", "").toLowerCase().startsWith(name.replaceAll(" ", "").toLowerCase())) {
                 return team;
             }
         }
