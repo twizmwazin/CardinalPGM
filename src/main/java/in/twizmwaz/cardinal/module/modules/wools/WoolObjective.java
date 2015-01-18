@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.wools;
 
 import in.parapengu.commons.utils.StringUtils;
+import in.twizmwaz.cardinal.Chat.TeamChat;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
@@ -117,7 +118,7 @@ public class WoolObjective implements GameObjective {
                         this.touched = true;
                         ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !oldState);
                         Bukkit.getServer().getPluginManager().callEvent(touchEvent);
-                        Bukkit.broadcastMessage(team.getColor() + player.getDisplayName() + ChatColor.GRAY + " Picked up " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase());
+                        TeamChat.SendToTeam(woolTouchMsg(player), team);
                     }
                 }
             } catch (NullPointerException e) {
@@ -139,12 +140,16 @@ public class WoolObjective implements GameObjective {
                         this.touched = true;
                         ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !oldState);
                         Bukkit.getServer().getPluginManager().callEvent(touchEvent);
-                        Bukkit.broadcastMessage(team.getColor() + player.getDisplayName() + ChatColor.GRAY + " Picked up " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase());
+                        TeamChat.SendToTeam(woolTouchMsg(player), team);
                     }
                 }
             } catch (NullPointerException e) {
             }
         }
+    }
+
+    private String woolTouchMsg(Player player){
+        return team.getColor() + "[Team] " + player.getDisplayName() + ChatColor.GRAY + " Picked up " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase();
     }
 
     @EventHandler
