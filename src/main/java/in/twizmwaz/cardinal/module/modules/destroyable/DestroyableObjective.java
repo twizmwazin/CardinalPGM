@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.destroyable;
 
+import in.twizmwaz.cardinal.chat.TeamChat;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
@@ -7,6 +8,7 @@ import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameObjectiveScoreboar
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import in.twizmwaz.cardinal.regions.Region;
+import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -116,6 +118,10 @@ public class DestroyableObjective implements GameObjective {
     public void onBlockBreak(BlockBreakEvent event) {
         if (getBlocks().contains(event.getBlock())) {
             if (TeamUtils.getTeamByPlayer(event.getPlayer()) != team) {
+                if (!playersTouched.contains(event.getPlayer().getUniqueId())) {
+                    playersTouched.add(event.getPlayer().getUniqueId());
+                    TeamChat.sendToTeam(team.getColor() + "[Team] " + event.getPlayer().getDisplayName() + ChatColor.GRAY + " destroyed some of " + ChatColor.AQUA + name, team);
+                }
                 this.complete += (1 / size);
                 if (this.complete >= this.required && !this.completed) {
                     this.completed = true;
@@ -129,7 +135,7 @@ public class DestroyableObjective implements GameObjective {
                 }
             } else {
                 event.setCancelled(true);
-                event.getPlayer().sendMessage(ChatColor.RED + "You cannot damage your own monument!");
+                ChatUtils.sendWarningMessage(event.getPlayer(), "You may not damage your own objective.");
             }
         }
     }
@@ -154,6 +160,7 @@ public class DestroyableObjective implements GameObjective {
                     } else {
                         if (!playersTouched.contains(player)) {
                             playersTouched.add(player);
+                            TeamChat.sendToTeam(team.getColor() + "[Team] " + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " destroyed some of " + ChatColor.AQUA + name, team);
                         }
                         blockDestroyed = true;
                         eventPlayer = Bukkit.getPlayer(player);

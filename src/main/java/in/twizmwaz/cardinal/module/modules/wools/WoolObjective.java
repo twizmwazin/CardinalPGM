@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.wools;
 
 import in.parapengu.commons.utils.StringUtils;
+import in.twizmwaz.cardinal.chat.GlobalChat;
 import in.twizmwaz.cardinal.chat.TeamChat;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
@@ -8,6 +9,7 @@ import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.regions.type.BlockRegion;
+import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -113,12 +115,12 @@ public class WoolObjective implements GameObjective {
                     if (TeamUtils.getTeamByPlayer(player) == team) {
                         if (!this.playersTouched.contains(player.getUniqueId())) {
                             this.playersTouched.add(player.getUniqueId());
+                            TeamChat.sendToTeam(team.getColor() + "[Team] " + player.getDisplayName() + ChatColor.GRAY + " picked up " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase(), team);
                         }
                         boolean oldState = this.touched;
                         this.touched = true;
                         ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !oldState);
                         Bukkit.getServer().getPluginManager().callEvent(touchEvent);
-                        TeamChat.SendToTeam(woolTouchMsg(player), team);
                     }
                 }
             } catch (NullPointerException e) {
@@ -135,21 +137,17 @@ public class WoolObjective implements GameObjective {
                     if (TeamUtils.getTeamByPlayer(player) == team) {
                         if (!this.playersTouched.contains(player.getUniqueId())) {
                             this.playersTouched.add(player.getUniqueId());
+                            TeamChat.sendToTeam(team.getColor() + "[Team] " + player.getDisplayName() + ChatColor.GRAY + " picked up " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase(), team);
                         }
                         boolean oldState = this.touched;
                         this.touched = true;
                         ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !oldState);
                         Bukkit.getServer().getPluginManager().callEvent(touchEvent);
-                        TeamChat.SendToTeam(woolTouchMsg(player), team);
                     }
                 }
             } catch (NullPointerException e) {
             }
         }
-    }
-
-    private String woolTouchMsg(Player player){
-        return team.getColor() + "[Team] " + player.getDisplayName() + ChatColor.GRAY + " Picked up " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase();
     }
 
     @EventHandler
@@ -170,9 +168,18 @@ public class WoolObjective implements GameObjective {
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
                         event.setCancelled(false);
-                    } else event.setCancelled(true);
-                } else event.setCancelled(true);
-            } else event.setCancelled(true);
+                    } else {
+                        event.setCancelled(true);
+                        ChatUtils.sendWarningMessage(event.getPlayer(), "You may not complete the other team's objective.");
+                    }
+                } else {
+                    event.setCancelled(true);
+                    ChatUtils.sendWarningMessage(event.getPlayer(), "Only " + StringUtils.convertDyeColorToChatColor(color) + color.name().replaceAll("_", " ").toUpperCase() + " WOOL" + ChatColor.RED + " may be placed here!");
+                }
+            } else {
+                event.setCancelled(true);
+                ChatUtils.sendWarningMessage(event.getPlayer(), "Only " + StringUtils.convertDyeColorToChatColor(color) + color.name().replaceAll("_", " ").toUpperCase() + " WOOL" + ChatColor.RED + " may be placed here!");
+            }
         }
     }
 

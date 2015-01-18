@@ -12,28 +12,27 @@ import org.bukkit.entity.Player;
 
 public class AdminChat {
 
-    public static void sendAdminessage(String msg, Player p){
-        for(Player player : Bukkit.getOnlinePlayers()){
-            TeamModule Team = TeamUtils.getTeamByPlayer(p); //Gets the team of the online player
+    public static void sendAdminMessage(String msg, Player sender){
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            TeamModule Team = TeamUtils.getTeamByPlayer(sender); //Gets the team of the online player
             if (player.isOp()) {
-                player.sendMessage(ChatColor.GRAY + "[" + ChatColor.GOLD + "A" + ChatColor.GRAY + "] " + Team.getColor() + p.getDisplayName() + ": " + ChatColor.WHITE + msg);
+                player.sendMessage(ChatColor.GRAY + "[" + ChatColor.GOLD + "A" + ChatColor.GRAY + "] " + Team.getColor() + sender.getDisplayName() + ": " + ChatColor.WHITE + msg);
             }
         }
     }
 
-    @Command(aliases = {"admin","a"}, desc = "Send a message to all ops")
+    @Command(aliases = {"admin", "a"}, desc = "Send a message to all ops")
     public static void admin(final CommandContext cmd, CommandSender sender) throws CommandException {
         Player player = (Player) sender;
         if (player.isOp()) {
             if (cmd.argsLength() == 0) {
-                Chat.setChannelAdmin();
-                player.sendMessage(ChatColor.GOLD + "Default channel changed to admin");
+                //Implement this later once toggle permissions are introduced
             } else {
                 String msg = "";
                 for (int i = 0; cmd.argsLength() > i; i++) {
                     msg += cmd.getString(i);
                 }
-                sendAdminessage(msg, player);
+                sendAdminMessage(msg, player);
             }
         }
     }
