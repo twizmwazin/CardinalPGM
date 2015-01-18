@@ -44,7 +44,7 @@ public class TeamModule<P extends Player> extends HashSet<Player> implements Mod
         }
         PlayerChangeTeamEvent event = new PlayerChangeTeamEvent(player, force, this, old);
         Bukkit.getServer().getPluginManager().callEvent(event);
-        if (!event.isCancelled()) {
+        if (!event.isCancelled() || force) {
             this.add(player);
             event.getPlayer().sendMessage(ChatColor.GRAY + "You have joined " + this.getCompleteName());
             return true;
