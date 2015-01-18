@@ -34,9 +34,9 @@ public class TeamModuleBuilder implements ModuleBuilder {
             int max = Integers.parseInt(teamNode.getAttribute("max").getValue());
             int maxOverfill;
             try {
-                maxOverfill = Integers.parseInt(teamNode.getAttribute("max-overfill").getValue(), (int) 1.2 * max);
+                maxOverfill = Integers.parseInt(teamNode.getAttribute("max-overfill").getValue(), (int) (1.2 * max));
             } catch (NullPointerException ex) {
-                maxOverfill = (int) 1.2 * max;
+                maxOverfill = (int) (1.2 * max);
             }
             int respawnLimit;
             try {
@@ -48,9 +48,6 @@ public class TeamModuleBuilder implements ModuleBuilder {
             results.add(new TeamModule(match, name, id, max, maxOverfill, respawnLimit, color, false));
         }
         results.add(new TeamModule(match, "Observers", "observers", Integer.MAX_VALUE, Integer.MAX_VALUE, -1, ChatColor.AQUA, true));
-        for (TeamModule team : results) {
-            new GameScoreboard(team);
-        }
         return results;
     }
 }

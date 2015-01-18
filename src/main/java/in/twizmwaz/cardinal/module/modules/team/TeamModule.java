@@ -53,17 +53,10 @@ public class TeamModule<P extends Player> extends HashSet<Player> implements Mod
         } else return false;
     }
     
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void onTeamSwitch(PlayerChangeTeamEvent event) {
         if (!event.isCancelled()) {
-            remove(event.getPlayer());
-            GameScoreboard scoreboard = null;
-            for (GameScoreboard gameScoreboard : GameHandler.getGameHandler().getMatch().getModules().getModules(GameScoreboard.class)) {
-                if (gameScoreboard.getTeam().equals(event.getNewTeam())) {
-                    scoreboard = gameScoreboard;
-                }
-            }
-            if (scoreboard != null) event.getPlayer().setScoreboard(scoreboard.getScoreboard());
+            this.remove(event.getPlayer());
         }
     }
 

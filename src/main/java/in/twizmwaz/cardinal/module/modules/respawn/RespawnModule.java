@@ -164,7 +164,7 @@ public class RespawnModule implements Module {
                     } else {
                         event.getPlayer().setHealth(0);
                     }
-                } else if (event.getNewTeam().isObserver()) {
+                } else {
                     TeamModule teamModule = event.getNewTeam();
                     SpawnModule spawn = null;
                     for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
@@ -175,8 +175,6 @@ public class RespawnModule implements Module {
                     if (!spawnEvent.isCancelled()) {
                         event.getPlayer().setHealth(0);
                     }
-                } else {
-                    event.getPlayer().setHealth(0);
                 }
             } catch (NullPointerException e) {
 

@@ -24,7 +24,7 @@ public class GameObjectiveScoreboardHandler {
     }
 
     public int getNumber() {
-        return num;
+        return number;
     }
 
     public String getPrefix() {
