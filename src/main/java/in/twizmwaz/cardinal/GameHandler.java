@@ -48,6 +48,7 @@ public class GameHandler {
         }
         this.match = new Match(this, matchUUID);
         this.match.registerModules();
+        Bukkit.getLogger().info("[CardinalPGM] " + this.match.getModules().size() + " modules loaded.");
         Bukkit.getServer().getPluginManager().callEvent(new CycleCompleteEvent(match));
         rotation.move();
         cycle = new Cycle(rotation.getNext(), UUID.randomUUID(), this);
