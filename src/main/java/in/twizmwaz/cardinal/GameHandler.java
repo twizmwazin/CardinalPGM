@@ -18,7 +18,6 @@ public class GameHandler {
     private static GameHandler handler;
     private final JavaPlugin plugin;
     private Rotation rotation;
-    private UUID matchUUID;
     private World matchWorld;
     private Match match;
     private Cycle cycle;
@@ -37,20 +36,17 @@ public class GameHandler {
     }
 
     public void cycleAndMakeMatch() {
-        matchUUID = UUID.randomUUID();
         rotation.move();
         World oldMatchWorld = matchWorld;
         cycle.run();
-        this.matchUUID = cycle.getUuid();
         try {
             match.unregisterModules();
         } catch (NullPointerException e) {
         }
-        this.match = new Match(this, matchUUID);
+        this.match = new Match(this, cycle.getUuid());
         this.match.registerModules();
         Bukkit.getLogger().info("[CardinalPGM] " + this.match.getModules().size() + " modules loaded.");
         Bukkit.getServer().getPluginManager().callEvent(new CycleCompleteEvent(match));
-        rotation.move();
         cycle = new Cycle(rotation.getNext(), UUID.randomUUID(), this);
         Bukkit.unloadWorld(oldMatchWorld, true);
     }
