@@ -20,6 +20,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Wool;
@@ -108,6 +109,27 @@ public class WoolObjective implements GameObjective {
         if (!this.complete) {
             try {
                 if (event.getItem().getItemStack().getType() == Material.WOOL && event.getItem().getItemStack().getData().getData() == color.getData()) {
+                    if (TeamUtils.getTeamByPlayer(player).equals(team)) {
+                        if (!this.playersTouched.contains(player.getUniqueId())) {
+                            this.playersTouched.add(player.getUniqueId());
+                        }
+                        boolean oldState = this.touched;
+                        this.touched = true;
+                        ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !oldState);
+                        Bukkit.getServer().getPluginManager().callEvent(touchEvent);
+                    }
+                }
+            } catch (NullPointerException e) {
+            }
+        }
+    }
+
+    @EventHandler
+    public void onWoolPickup(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
+        if (!this.complete) {
+            try {
+                if (event.getCurrentItem().getType() == Material.WOOL && event.getCurrentItem().getData().getData() == color.getData()) {
                     if (TeamUtils.getTeamByPlayer(player).equals(team)) {
                         if (!this.playersTouched.contains(player.getUniqueId())) {
                             this.playersTouched.add(player.getUniqueId());
