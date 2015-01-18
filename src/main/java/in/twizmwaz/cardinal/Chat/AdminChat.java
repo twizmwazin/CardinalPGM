@@ -24,15 +24,17 @@ public class AdminChat {
     @Command(aliases = {"admin","a"}, desc = "Send a message to all ops")
     public static void admin(final CommandContext cmd, CommandSender sender) throws CommandException {
         Player player = (Player) sender;
-        if(cmd.argsLength() == 0){
-            Chat.setChannelAdmin();
-            player.sendMessage(ChatColor.GOLD + "Default channel changed to admin");
-        } else {
-            String msg = "";
-            for (int i = 0; cmd.argsLength() > i; i++) {
-                msg += cmd.getString(i);
+        if (player.isOp()) {
+            if (cmd.argsLength() == 0) {
+                Chat.setChannelAdmin();
+                player.sendMessage(ChatColor.GOLD + "Default channel changed to admin");
+            } else {
+                String msg = "";
+                for (int i = 0; cmd.argsLength() > i; i++) {
+                    msg += cmd.getString(i);
+                }
+                sendAdminessage(msg, player);
             }
-            sendAdminessage(msg, player);
         }
     }
 }
