@@ -1,4 +1,4 @@
-package in.twizmwaz.cardinal.Chat;
+package in.twizmwaz.cardinal.chat;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

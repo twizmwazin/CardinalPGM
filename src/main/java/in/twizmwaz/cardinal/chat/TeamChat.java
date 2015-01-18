@@ -1,4 +1,4 @@
-package in.twizmwaz.cardinal.Chat;
+package in.twizmwaz.cardinal.chat;
 
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;

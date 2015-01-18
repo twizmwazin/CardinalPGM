@@ -2,9 +2,9 @@ package in.twizmwaz.cardinal;
 
 import com.sk89q.bukkit.util.CommandsManagerRegistration;
 import com.sk89q.minecraft.util.commands.*;
-import in.twizmwaz.cardinal.Chat.AdminChat;
-import in.twizmwaz.cardinal.Chat.GlobalChat;
-import in.twizmwaz.cardinal.Chat.TeamChat;
+import in.twizmwaz.cardinal.chat.AdminChat;
+import in.twizmwaz.cardinal.chat.GlobalChat;
+import in.twizmwaz.cardinal.chat.TeamChat;
 import in.twizmwaz.cardinal.command.*;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import org.bukkit.Bukkit;
