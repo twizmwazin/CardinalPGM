@@ -14,9 +14,9 @@ public class AdminChat {
 
     public static void sendAdminMessage(String msg, Player sender){
         for (Player player : Bukkit.getOnlinePlayers()) {
-            TeamModule Team = TeamUtils.getTeamByPlayer(sender); //Gets the team of the online player
+            TeamModule team = TeamUtils.getTeamByPlayer(sender); //Gets the team of the online player
             if (player.isOp()) {
-                player.sendMessage(ChatColor.WHITE + "[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + Team.getColor() + sender.getDisplayName() + ": " + ChatColor.WHITE + msg);
+                player.sendMessage(ChatColor.WHITE + "[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + team.getColor() + sender.getDisplayName() + ChatColor.WHITE + ": " + ChatColor.WHITE + msg);
             }
         }
     }

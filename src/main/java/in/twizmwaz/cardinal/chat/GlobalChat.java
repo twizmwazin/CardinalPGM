@@ -14,7 +14,7 @@ public class GlobalChat {
 
     public static void sendGlobalMessage(String msg, Player player) {
         TeamModule team = TeamUtils.getTeamByPlayer(player);
-        Bukkit.broadcastMessage("<" + team.getColor() + player.getDisplayName() + ChatColor.WHITE + ">: " + ChatColor.WHITE + msg);
+        Bukkit.broadcastMessage("<" + team.getColor() + player.getDisplayName() + ChatColor.WHITE + ">: " + msg);
     }
 
     @Command(aliases = {"global", "g"}, desc = "Send a message to all players on the servers")
