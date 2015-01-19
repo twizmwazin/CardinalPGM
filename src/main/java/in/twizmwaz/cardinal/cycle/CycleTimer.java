@@ -49,7 +49,9 @@ public class CycleTimer implements Runnable, Cancellable {
 
     @Override
     public void setCancelled(boolean isCancelled) {
-        GameHandler.getGameHandler().getMatch().setState(originalState);
-        this.cancelled = isCancelled;
+        if (!this.cancelled) {
+            GameHandler.getGameHandler().getMatch().setState(originalState);
+            this.cancelled = isCancelled;
+        }
     }
 }

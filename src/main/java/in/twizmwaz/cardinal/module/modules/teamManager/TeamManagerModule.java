@@ -6,7 +6,7 @@ import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.PlayerUtil;
+import in.twizmwaz.cardinal.util.PlayerUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -43,7 +43,7 @@ public class TeamManagerModule implements Module {
         Player player = event.getPlayer();
         TeamUtils.getTeamById("observers").add(player, true);
         //event.getPlayer().setScoreboard(TeamUtil.getTeamById("observers").getScoreboard());
-        PlayerUtil.resetPlayer(player);
+        PlayerUtils.resetPlayer(player);
 
         event.getPlayer().getInventory().setItem(0, new ItemStack(Material.COMPASS));
         ItemStack howTo = new ItemStack(Material.WRITTEN_BOOK);
