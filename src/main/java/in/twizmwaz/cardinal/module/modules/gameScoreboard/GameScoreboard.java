@@ -7,8 +7,8 @@ import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
 import in.twizmwaz.cardinal.util.ScoreboardUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import net.minecraft.util.org.apache.commons.lang3.text.WordUtils;
@@ -101,7 +101,7 @@ public class GameScoreboard implements Module {
             scoreboard.getObjective("scoreboard").unregister();
         }
         Objective objective = scoreboard.registerNewObjective("scoreboard", "dummy");
-        objective.setDisplayName(ChatColor.GOLD + "Objectives");
+        objective.setDisplayName(getDisplayTitle());
         int slot = 1;
         Set<String> used = new HashSet<>();
         if (getSlots() > 15) {
@@ -250,5 +250,27 @@ public class GameScoreboard implements Module {
         }
         slots --;
         return slots;
+    }
+
+    public String getDisplayTitle() {
+        boolean hasObjectives = false;
+        boolean objectivesAreWools = true;
+        for (TeamModule team : TeamUtils.getTeams()) {
+            for (GameObjective objective : TeamUtils.getShownObjectives(team)) {
+                hasObjectives = true;
+                if (!(objective instanceof WoolObjective)) {
+                    objectivesAreWools = false;
+                }
+            }
+        }
+        if (hasObjectives) {
+            if (objectivesAreWools) {
+                return "Wools";
+            } else {
+                return ChatColor.GOLD + "Objectives";
+            }
+        } else {
+            return "Scores";
+        }
     }
 }
