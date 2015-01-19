@@ -3,7 +3,6 @@ package in.twizmwaz.cardinal.match;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.Chat;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
-import in.twizmwaz.cardinal.match.listeners.MatchListener;
 import in.twizmwaz.cardinal.match.util.StartTimer;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleCollection;
