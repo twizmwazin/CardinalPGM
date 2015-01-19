@@ -257,7 +257,7 @@ public class DestroyableObjective implements GameObjective {
         }
         whoDestroyed = toCombine.get(0);
         for (int i = 1; i < toCombine.size(); i ++) {
-            whoDestroyed += ChatColor.GRAY + ", " + (i == toCombine.size() - 1 ? "and " : "") + toCombine.get(i);
+            whoDestroyed += ChatColor.GRAY + (i == toCombine.size() - 1 ? " and " : ", ") + toCombine.get(i);
         }
         return whoDestroyed;
     }
