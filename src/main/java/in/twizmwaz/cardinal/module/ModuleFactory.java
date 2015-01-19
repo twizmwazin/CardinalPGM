@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.module;
 
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.modules.armorKeep.ArmorKeepBuilder;
+import in.twizmwaz.cardinal.module.modules.broadcasts.BroadcastModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.buildHeight.BuildHeightBuilder;
 import in.twizmwaz.cardinal.module.modules.cores.CoreObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.deathMessages.DeathMessagesBuilder;
@@ -19,6 +20,7 @@ import in.twizmwaz.cardinal.module.modules.itemRemove.ItemRemoveBuilder;
 import in.twizmwaz.cardinal.module.modules.killStreakCount.KillStreakBuilder;
 import in.twizmwaz.cardinal.module.modules.kit.KitBuilder;
 import in.twizmwaz.cardinal.module.modules.mapInfo.InfoBuilder;
+import in.twizmwaz.cardinal.module.modules.match.MatchModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimerBuilder;
 import in.twizmwaz.cardinal.module.modules.motd.MOTDBuilder;
 import in.twizmwaz.cardinal.module.modules.observers.ObserverModuleBuilder;
@@ -124,5 +126,7 @@ public class ModuleFactory {
         builderClasses.add(MatchTimerBuilder.class);
         builderClasses.add(ItemKeepBuilder.class);
         builderClasses.add(ArmorKeepBuilder.class);
+        builderClasses.add(BroadcastModuleBuilder.class);
+        builderClasses.add(MatchModuleBuilder.class);
     }
 }
