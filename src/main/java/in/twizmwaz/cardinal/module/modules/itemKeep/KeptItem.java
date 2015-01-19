@@ -4,9 +4,6 @@ import org.bukkit.Material;
 
 import java.util.Set;
 
-/**
- * Created by Elliott on 19/01/2015.
- */
 public class KeptItem {
 
     private final Set<Material> materials;

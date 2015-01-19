@@ -10,9 +10,6 @@ import org.jdom2.Element;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by Elliott on 18/01/2015.
- */
 public class ItemKeepBuilder implements ModuleBuilder {
 
     @Override

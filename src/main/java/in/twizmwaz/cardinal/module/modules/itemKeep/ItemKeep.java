@@ -12,18 +12,9 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by Elliott on 18/01/2015.
- */
 public class ItemKeep implements Module{
 
-    //private final Set<Material> materials;
-
     private final KeptItem item;
-
-/*    protected ItemKeep(final Set<Material> materials) {
-        this.materials = materials;
-    }*/
 
     protected ItemKeep(KeptItem item){
         this.item = item;
@@ -40,20 +31,20 @@ public class ItemKeep implements Module{
         if(event.getEntity() instanceof Player) {
             Player player = event.getEntity();
             Inventory playerInventory = player.getInventory();
-            ArrayList<ItemStack> ItemsToKeep = new ArrayList<>();
+            ArrayList<ItemStack> itemsToKeep = new ArrayList<>();
             if(playerInventory.getContents() != null) {
                 for (ItemStack stack : playerInventory.getContents()) {
                     if (stack != null) {
                         if(item.getMaterials() != null) {
                             if (item.getMaterials().contains(stack.getType())) {
                                 stack.setDurability(item.getData());
-                                ItemsToKeep.add(stack);
+                                itemsToKeep.add(stack);
                             }
                         }
                     }
                 }
             }
-           ItemStack[] itemstack = ItemsToKeep.toArray(new ItemStack[ItemsToKeep.size()]);
+           ItemStack[] itemstack = itemsToKeep.toArray(new ItemStack[itemsToKeep.size()]);
            items.put(player, itemstack);
         }
     }
