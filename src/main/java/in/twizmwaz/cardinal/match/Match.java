@@ -51,7 +51,6 @@ public class Match {
         }
         this.startTimer = new StartTimer(this, 30);
         this.state = MatchState.WAITING;
-        listeners.add(new MatchListener(plugin, this));
         listeners.add(new Chat(plugin));
     }
 
