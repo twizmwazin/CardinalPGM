@@ -1,7 +1,8 @@
 package in.twizmwaz.cardinal.module.modules.regions;
 
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.module.modules.regions.type.*;
+import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
+import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
 import org.bukkit.block.Block;
 
 import java.util.List;

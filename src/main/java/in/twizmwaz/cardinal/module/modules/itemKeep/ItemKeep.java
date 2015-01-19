@@ -5,12 +5,12 @@ import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ItemKeep implements Module{
@@ -18,11 +18,13 @@ public class ItemKeep implements Module{
     private final Material type;
     private final int damageValue;
 
-    private HashMap<Player, HashMap<Integer, ItemStack>> items = new HashMap<>();
+    private HashMap<Player, HashMap<Integer, ItemStack>> items;
 
     protected ItemKeep(Material type, int damageValue) {
         this.type = type;
         this.damageValue = damageValue;
+
+        this.items = new HashMap<>();
     }
 
     @Override
@@ -48,7 +50,7 @@ public class ItemKeep implements Module{
         items.put(player, itemsToKeep);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPgmSpawn(PgmSpawnEvent event){
         Player player = event.getPlayer();
         Inventory inventory = player.getInventory();

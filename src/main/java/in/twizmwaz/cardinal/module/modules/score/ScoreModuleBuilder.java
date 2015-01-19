@@ -8,10 +8,7 @@ import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.StringUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
-import org.bukkit.Bukkit;
 import org.jdom2.Element;
-
-import java.text.ParseException;
 
 @BuilderData(load = ModuleLoadTime.LATER)
 public class ScoreModuleBuilder implements ModuleBuilder {

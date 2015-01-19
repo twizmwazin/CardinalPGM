@@ -1,4 +1,4 @@
-package in.twizmwaz.cardinal.module.modules.itemKeep;
+package in.twizmwaz.cardinal.module.modules.armorKeep;
 
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
@@ -9,14 +9,14 @@ import org.jdom2.Element;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ItemKeepBuilder implements ModuleBuilder {
+public class ArmorKeepBuilder implements ModuleBuilder {
 
     @SuppressWarnings("unchecked")
     @Override
     public ModuleCollection load(Match match) {
         ModuleCollection results = new ModuleCollection();
         Set<Material> materials = new HashSet<>(128);
-        for (Element itemKeep : match.getDocument().getRootElement().getChildren("itemkeep")) {
+        for (Element itemKeep : match.getDocument().getRootElement().getChildren("armorkeep")) {
             for (Element item : itemKeep.getChildren("item")) {
                 Material material;
                 int damageValue = 0;
@@ -26,7 +26,7 @@ public class ItemKeepBuilder implements ModuleBuilder {
                 } else {
                     material = Material.matchMaterial(item.getText());
                 }
-                results.add(new ItemKeep(material, damageValue));
+                results.add(new ArmorKeep(material, damageValue));
             }
         }
 

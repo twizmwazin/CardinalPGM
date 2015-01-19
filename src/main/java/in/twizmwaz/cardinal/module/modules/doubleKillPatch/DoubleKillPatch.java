@@ -1,11 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.doubleKillPatch;
 
-import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameScoreboard;
-import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;

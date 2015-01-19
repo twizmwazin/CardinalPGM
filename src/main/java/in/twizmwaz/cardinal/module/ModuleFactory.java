@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module;
 
 import in.twizmwaz.cardinal.match.Match;
+import in.twizmwaz.cardinal.module.modules.armorKeep.ArmorKeepBuilder;
 import in.twizmwaz.cardinal.module.modules.buildHeight.BuildHeightBuilder;
 import in.twizmwaz.cardinal.module.modules.cores.CoreObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.deathMessages.DeathMessagesBuilder;
@@ -26,7 +27,6 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.respawn.RespawnModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModuleBuilder;
-import in.twizmwaz.cardinal.module.modules.tasker.TaskerModule;
 import in.twizmwaz.cardinal.module.modules.tasker.TaskerModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.team.TeamModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.teamManager.TeamManagerModuleBuilder;
@@ -123,5 +123,6 @@ public class ModuleFactory {
         builderClasses.add(TaskerModuleBuilder.class);
         builderClasses.add(MatchTimerBuilder.class);
         builderClasses.add(ItemKeepBuilder.class);
+        builderClasses.add(ArmorKeepBuilder.class);
     }
 }

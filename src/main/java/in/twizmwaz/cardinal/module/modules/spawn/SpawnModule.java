@@ -1,8 +1,8 @@
 package in.twizmwaz.cardinal.module.modules.spawn;
 
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
