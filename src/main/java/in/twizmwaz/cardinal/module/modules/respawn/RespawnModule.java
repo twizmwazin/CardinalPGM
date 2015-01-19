@@ -142,8 +142,6 @@ public class RespawnModule implements Module {
 
     @EventHandler
     public void onTeamChange(PlayerChangeTeamEvent event) {
-        event.getPlayer().setMaxHealth(20);
-        PlayerUtils.resetPlayer(event.getPlayer());
         if (match.getState().equals(MatchState.ENDED)) {
             event.setCancelled(true);
         }
@@ -151,6 +149,8 @@ public class RespawnModule implements Module {
             try {
                 if (!event.getNewTeam().isObserver()) {
                     if (event.getOldTeam().isObserver()) {
+                        event.getPlayer().setMaxHealth(20);
+                        PlayerUtils.resetPlayer(event.getPlayer());
                         TeamModule teamModule = event.getNewTeam();
                         ModuleCollection<SpawnModule> modules = new ModuleCollection<SpawnModule>();
                         for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {

@@ -8,6 +8,7 @@ import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjectiveBuild
 import in.twizmwaz.cardinal.module.modules.difficulty.MapDifficultyBuilder;
 import in.twizmwaz.cardinal.module.modules.disableDamage.DisableDamageBuilder;
 import in.twizmwaz.cardinal.module.modules.friendlyFire.FriendlyFireBuilder;
+import in.twizmwaz.cardinal.module.modules.gameComplete.GameCompleteBuilder;
 import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameScoreboardBuilder;
 import in.twizmwaz.cardinal.module.modules.gamerules.GamerulesBuilder;
 import in.twizmwaz.cardinal.module.modules.hunger.HungerBuilder;
@@ -110,5 +111,6 @@ public class ModuleFactory {
         builderClasses.add(DeathMessagesBuilder.class);
         builderClasses.add(TntDefuseBuilder.class);
         builderClasses.add(ScoreModuleBuilder.class);
+        builderClasses.add(GameCompleteBuilder.class);
     }
 }

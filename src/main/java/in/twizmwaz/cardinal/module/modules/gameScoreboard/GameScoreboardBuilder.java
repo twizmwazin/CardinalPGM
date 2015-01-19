@@ -1,6 +1,5 @@
 package in.twizmwaz.cardinal.module.modules.gameScoreboard;
 
-import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
