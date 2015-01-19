@@ -131,6 +131,7 @@ public class CoreObjective implements GameObjective {
             }
         }
         boolean oldState = this.touched;
+        boolean blownUp = false;
         Player eventPlayer = null;
         for (Block block : objectiveBlownUp) {
             if (TntTracker.getWhoPlaced(event.getEntity()) != null) {
@@ -144,6 +145,7 @@ public class CoreObjective implements GameObjective {
                             TeamChat.sendToTeam(team.getColor() + "[Team] " + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " broke a piece of " + ChatColor.RED + name, TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)));
                         }
                         this.touched = true;
+                        blownUp = true;
                         eventPlayer = Bukkit.getPlayer(player);
                     }
                 } else {
@@ -151,12 +153,14 @@ public class CoreObjective implements GameObjective {
                         playersTouched.add(player);
                     }
                     this.touched = true;
+                    blownUp = true;
                 }
             } else {
                 this.touched = true;
+                blownUp = true;
             }
         }
-        if (!this.complete) {
+        if (!this.complete && blownUp) {
             ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, !oldState);
             Bukkit.getServer().getPluginManager().callEvent(touchEvent);
         }

@@ -153,7 +153,9 @@ public class DestroyableObjective implements GameObjective {
             }
         }
         boolean oldState = this.isTouched();
+        boolean blownUp = false;
         Player eventPlayer = null;
+        int originalPercent = getPercent();
         for (Block block : objectiveBlownUp) {
             boolean blockDestroyed = false;
             if (TntTracker.getWhoPlaced(event.getEntity()) != null) {
@@ -167,6 +169,7 @@ public class DestroyableObjective implements GameObjective {
                             TeamChat.sendToTeam(team.getColor() + "[Team] " + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " destroyed some of " + ChatColor.AQUA + name, TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)));
                         }
                         blockDestroyed = true;
+                        blownUp = true;
                         eventPlayer = Bukkit.getPlayer(player);
                     }
                 } else {
@@ -174,9 +177,11 @@ public class DestroyableObjective implements GameObjective {
                         playersTouched.add(player);
                     }
                     blockDestroyed = true;
+                    blownUp = true;
                 }
             } else {
                 blockDestroyed = true;
+                blownUp = true;
             }
             if (blockDestroyed) {
                 this.complete ++;
@@ -189,8 +194,8 @@ public class DestroyableObjective implements GameObjective {
                 }
             }
         }
-        if (!this.completed) {
-            ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, !oldState || showPercent);
+        if (!this.completed && blownUp) {
+            ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, !oldState || (getPercent() != originalPercent));
             Bukkit.getServer().getPluginManager().callEvent(touchEvent);
         }
     }
@@ -247,7 +252,7 @@ public class DestroyableObjective implements GameObjective {
     public String getWhoDestroyed() {
         String whoDestroyed = "";
         List<String> toCombine = new ArrayList<>();
-        for (UUID player : playerDestroyed.keySet()) {
+        for (UUID player : getSortedHashMapKeyset(playerDestroyed)) {
             if (Bukkit.getOfflinePlayer(player).isOnline() && playerDestroyed.get(player) > (1 / 3)) {
                 toCombine.add(TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)).getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " (" + (int) Math.floor((playerDestroyed.get(player) / size) * 100) + "%)");
             }
@@ -260,5 +265,26 @@ public class DestroyableObjective implements GameObjective {
             whoDestroyed += ChatColor.GRAY + (i == toCombine.size() - 1 ? " and " : ", ") + toCombine.get(i);
         }
         return whoDestroyed;
+    }
+
+    public List<UUID> getSortedHashMapKeyset(HashMap<UUID, Integer> sorting) {
+        List<UUID> uuids = new ArrayList<>();
+        HashMap<UUID, Integer> clone = new HashMap<>();
+        for (UUID player : sorting.keySet()) {
+            clone.put(player, sorting.get(player));
+        }
+        for (int i = 0; i < sorting.size(); i ++) {
+            int highestNumber = -1;
+            UUID highestUUID = null;
+            for (UUID player : clone.keySet()) {
+                if (clone.get(player) > highestNumber) {
+                    highestNumber = clone.get(player);
+                    highestUUID = player;
+                }
+            }
+            clone.remove(highestUUID);
+            uuids.add(highestUUID);
+        }
+        return uuids;
     }
 }
