@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.matchTimer;
 
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.event.EventHandler;
@@ -26,6 +27,13 @@ public class MatchTimer implements Module {
      * @return The current time stored in the module.
      */
     public long getTime() {
-        return System.currentTimeMillis() - startTime;
+        return (System.currentTimeMillis() - startTime) / 1000;
+    }
+
+    public static long getTimeInSeconds() {
+        for (MatchTimer timer : GameHandler.getGameHandler().getMatch().getModules().getModules(MatchTimer.class)) {
+            return timer.getTime();
+        }
+        return 0;
     }
 }

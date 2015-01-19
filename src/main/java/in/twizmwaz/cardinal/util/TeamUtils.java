@@ -60,8 +60,8 @@ public class TeamUtils {
         return GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class);
     }
 
-    public static Set<GameObjective> getObjectives(TeamModule team) {
-        Set<GameObjective> objectives = new HashSet<>();
+    public static List<GameObjective> getObjectives(TeamModule team) {
+        List<GameObjective> objectives = new ArrayList<>();
         for (GameObjective objective : GameHandler.getGameHandler().getMatch().getModules().getModules(GameObjective.class)) {
             if (objective instanceof WoolObjective) {
                 if (objective.getTeam() == team) {
@@ -74,8 +74,8 @@ public class TeamUtils {
         return objectives;
     }
 
-    public static Set<GameObjective> getShownObjectives(TeamModule team) {
-        Set<GameObjective> objectives = new HashSet<>();
+    public static List<GameObjective> getShownObjectives(TeamModule team) {
+        List<GameObjective> objectives = new ArrayList<>();
         for (GameObjective objective : getObjectives(team)) {
             if (objective.showOnScoreboard()) {
                 objectives.add(objective);
