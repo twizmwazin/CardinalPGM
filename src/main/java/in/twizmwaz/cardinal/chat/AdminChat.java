@@ -16,7 +16,7 @@ public class AdminChat {
         for (Player player : Bukkit.getOnlinePlayers()) {
             TeamModule Team = TeamUtils.getTeamByPlayer(sender); //Gets the team of the online player
             if (player.isOp()) {
-                player.sendMessage(ChatColor.GRAY + "[" + ChatColor.GOLD + "A" + ChatColor.GRAY + "] " + Team.getColor() + sender.getDisplayName() + ": " + ChatColor.WHITE + msg);
+                player.sendMessage(ChatColor.WHITE + "[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + Team.getColor() + sender.getDisplayName() + ": " + ChatColor.WHITE + msg);
             }
         }
     }
