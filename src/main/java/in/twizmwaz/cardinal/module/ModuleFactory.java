@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.module.modules.deathMessages.DeathMessagesBuilder;
 import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.difficulty.MapDifficultyBuilder;
 import in.twizmwaz.cardinal.module.modules.disableDamage.DisableDamageBuilder;
+import in.twizmwaz.cardinal.module.modules.doubleKillPatch.DoubleKillPatchBuilder;
 import in.twizmwaz.cardinal.module.modules.friendlyFire.FriendlyFireBuilder;
 import in.twizmwaz.cardinal.module.modules.gameComplete.GameCompleteBuilder;
 import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameScoreboardBuilder;
@@ -114,5 +115,6 @@ public class ModuleFactory {
         builderClasses.add(ScoreModuleBuilder.class);
         builderClasses.add(GameCompleteBuilder.class);
         builderClasses.add(RegionModuleBuilder.class);
+        builderClasses.add(DoubleKillPatchBuilder.class);
     }
 }

@@ -1,8 +1,5 @@
 package in.twizmwaz.cardinal.module.modules.mapInfo.contributor;
 
-/**
- * Created by kevin on 11/17/14.
- */
 public class Contributor {
 
     private String name;

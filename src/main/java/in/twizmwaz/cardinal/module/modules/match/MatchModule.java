@@ -1,26 +1,33 @@
-package in.twizmwaz.cardinal.match.listeners;
+package in.twizmwaz.cardinal.module.modules.match;
 
-import com.sk89q.minecraft.util.commands.ChatColor;
+import in.twizmwaz.cardinal.Cardinal;
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.match.Match;
+import in.twizmwaz.cardinal.match.MatchState;
+import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.server.ServerListPingEvent;
 
-public class MatchListener implements Listener {
+public class MatchModule implements Module {
 
-    private final JavaPlugin plugin;
     private final Match match;
 
-    public MatchListener(JavaPlugin plugin, Match match) {
-        this.plugin = plugin;
+    protected MatchModule(Match match) {
         this.match = match;
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    @Override
+    public void unload() {
+        HandlerList.unregisterAll(this);
     }
 
     @EventHandler
@@ -43,7 +50,7 @@ public class MatchListener implements Listener {
     }
 
     @EventHandler
-    public void onCycle(CycleCompleteEvent event) {
+    public void onCycleComplete(CycleCompleteEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             TeamUtils.getTeamById("observers").add(player, true);
         }
