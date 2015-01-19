@@ -3,10 +3,12 @@ package in.twizmwaz.cardinal.module.modules.gameScoreboard;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
+import in.twizmwaz.cardinal.event.ScoreUpdateEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
 import in.twizmwaz.cardinal.util.ScoreboardUtils;
@@ -27,10 +29,10 @@ import java.util.Set;
 
 public class GameScoreboard implements Module {
 
-    private TeamModule team;
+    private final TeamModule team;
     private Scoreboard scoreboard;
 
-    protected GameScoreboard(TeamModule team) {
+    protected GameScoreboard(final TeamModule team) {
         this.team = team;
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         for (TeamModule teams : TeamUtils.getTeams()) {
@@ -82,6 +84,11 @@ public class GameScoreboard implements Module {
 
     @EventHandler
     public void onCycleComplete(CycleCompleteEvent event) {
+        updateScoreboard();
+    }
+
+    @EventHandler
+    public void onScoreUpdate(ScoreUpdateEvent event) {
         updateScoreboard();
     }
 
@@ -143,6 +150,25 @@ public class GameScoreboard implements Module {
                             slot++;
                         }
                     }
+                    if (ScoreModule.matchHasScoring() && !team.isObserver()) {
+                        Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-s");
+                        String insert = team.getColor() + "";
+                        while (used.contains(ScoreboardUtils.getConversion(team.getName(), insert))) {
+                            insert += ChatColor.RESET;
+                        }
+                        String steam = ScoreboardUtils.convertToScoreboard(scoreboardTeam, team.getName(), insert);
+                        used.add(steam);
+                        int score = 0;
+                        for (ScoreModule scoreModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
+                            if (scoreModule.getTeam() == team) {
+                                score = scoreModule.getScore();
+                            }
+                        }
+                        if (score == 0) {
+                            objective.getScore(steam).setScore(1);
+                        }
+                        objective.getScore(steam).setScore(score);
+                    }
                 }
                 if (!team.isObserver() && TeamUtils.getShownObjectives(team).size() > 0) {
                     String compact = "";
@@ -169,6 +195,9 @@ public class GameScoreboard implements Module {
                     String steam = ScoreboardUtils.convertToScoreboard(scoreboardTeam, team.getName(), insert);
                     used.add(steam);
                     objective.getScore(steam).setScore(slot);
+                }
+                if (ScoreModule.matchHasMax()) {
+                    objective.getScore(ChatColor.RED + "---- MAX ----").setScore(ScoreModule.max());
                 }
             }
         } else {
@@ -203,6 +232,25 @@ public class GameScoreboard implements Module {
                         slot ++;
                     }
                 }
+                if (ScoreModule.matchHasScoring() && !team.isObserver()) {
+                    Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-s");
+                    String insert = team.getColor() + "";
+                    while (used.contains(ScoreboardUtils.getConversion(team.getName(), insert))) {
+                        insert += ChatColor.RESET;
+                    }
+                    String steam = ScoreboardUtils.convertToScoreboard(scoreboardTeam, team.getName(), insert);
+                    used.add(steam);
+                    int score = 0;
+                    for (ScoreModule scoreModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
+                        if (scoreModule.getTeam() == team) {
+                            score = scoreModule.getScore();
+                        }
+                    }
+                    if (score == 0) {
+                        objective.getScore(steam).setScore(1);
+                    }
+                    objective.getScore(steam).setScore(score);
+                }
             }
             if (!team.isObserver() && TeamUtils.getShownObjectives(team).size() > 0) {
                 for (GameObjective gameObjective : TeamUtils.getShownObjectives(team)) {
@@ -224,6 +272,9 @@ public class GameScoreboard implements Module {
                 used.add(steam);
                 objective.getScore(steam).setScore(slot);
             }
+            if (ScoreModule.matchHasMax()) {
+                objective.getScore(ChatColor.RED + "---- MAX ----").setScore(ScoreModule.max());
+            }
         }
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
     }
@@ -236,6 +287,7 @@ public class GameScoreboard implements Module {
                 slots += TeamUtils.getShownObjectives(team).size();
             }
         }
+        if (ScoreModule.matchHasMax()) slots ++;
         slots --;
         return slots;
     }
@@ -248,6 +300,7 @@ public class GameScoreboard implements Module {
                 if (TeamUtils.getShownObjectives(team).size() > 0) slots ++;
             }
         }
+        if (ScoreModule.matchHasMax()) slots ++;
         slots --;
         return slots;
     }
@@ -269,8 +322,10 @@ public class GameScoreboard implements Module {
             } else {
                 return ChatColor.GOLD + "Objectives";
             }
+        } else if (ScoreModule.matchHasScoring()) {
+            return ChatColor.GOLD + "Scores";
         } else {
-            return "Scores";
+            return ChatColor.RED + "" + ChatColor.BOLD + "Invalid";
         }
     }
 }

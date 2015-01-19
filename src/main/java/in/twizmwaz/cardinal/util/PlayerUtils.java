@@ -5,11 +5,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
-public class PlayerUtil {
+public class PlayerUtils {
 
     public static void resetPlayer(Player player) {
-        player.setMaxHealth(20);
-        player.setHealth(20);
+        player.setHealth(player.getMaxHealth());
         player.setFoodLevel(20);
         player.setSaturation(20);
         player.getInventory().clear();

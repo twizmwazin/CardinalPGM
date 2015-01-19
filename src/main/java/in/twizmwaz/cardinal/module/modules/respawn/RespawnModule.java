@@ -12,7 +12,7 @@ import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.PlayerUtil;
+import in.twizmwaz.cardinal.util.PlayerUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -65,7 +65,7 @@ public class RespawnModule implements Module {
         Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
         if (!spawnEvent.isCancelled()) {
             event.setSpawnLocation(chosen.getLocation());
-            PlayerUtil.resetPlayer(event.getPlayer());
+            PlayerUtils.resetPlayer(event.getPlayer());
         }
     }
 
@@ -89,7 +89,7 @@ public class RespawnModule implements Module {
     public void onMatchStart(MatchStartEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!TeamUtils.getTeamByPlayer(player).isObserver()) {
-                PlayerUtil.resetPlayer(player);
+                PlayerUtils.resetPlayer(player);
                 TeamModule teamModule = TeamUtils.getTeamByPlayer(player);
                 ModuleCollection<SpawnModule> modules = new ModuleCollection<SpawnModule>();
                 for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
@@ -117,7 +117,7 @@ public class RespawnModule implements Module {
             PgmSpawnEvent spawnEvent = new PgmSpawnEvent(player, chosen, TeamUtils.getTeamById("observers"));
             Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
             if (!spawnEvent.isCancelled()) {
-                PlayerUtil.resetPlayer(player);
+                PlayerUtils.resetPlayer(player);
                 player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
                 ItemStack howTo = new ItemStack(Material.WRITTEN_BOOK);
                 ItemMeta howToMeta = howTo.getItemMeta();
@@ -142,6 +142,8 @@ public class RespawnModule implements Module {
 
     @EventHandler
     public void onTeamChange(PlayerChangeTeamEvent event) {
+        event.getPlayer().setMaxHealth(20);
+        PlayerUtils.resetPlayer(event.getPlayer());
         if (match.getState().equals(MatchState.ENDED)) {
             event.setCancelled(true);
         }
@@ -149,7 +151,6 @@ public class RespawnModule implements Module {
             try {
                 if (!event.getNewTeam().isObserver()) {
                     if (event.getOldTeam().isObserver()) {
-                        PlayerUtil.resetPlayer(event.getPlayer());
                         TeamModule teamModule = event.getNewTeam();
                         ModuleCollection<SpawnModule> modules = new ModuleCollection<SpawnModule>();
                         for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {

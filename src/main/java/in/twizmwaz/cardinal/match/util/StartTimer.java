@@ -58,8 +58,10 @@ public class StartTimer implements Runnable, Cancellable {
 
     @Override
     public void setCancelled(boolean isCancelled) {
-        GameHandler.getGameHandler().getMatch().setState(MatchState.WAITING);
-        this.cancelled = isCancelled;
+        if (!this.cancelled) {
+            GameHandler.getGameHandler().getMatch().setState(MatchState.WAITING);
+            this.cancelled = isCancelled;
+        }
     }
 
     public void setTime(int time) {
