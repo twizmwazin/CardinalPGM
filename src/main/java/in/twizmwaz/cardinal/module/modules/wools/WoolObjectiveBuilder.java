@@ -4,9 +4,10 @@ import in.parapengu.commons.utils.StringUtils;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.regions.Region;
-import in.twizmwaz.cardinal.regions.type.BlockRegion;
+import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
+import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.DyeColor;
 import org.jdom2.Element;
@@ -25,7 +26,7 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
                     team = TeamUtils.getTeamById((subElement.getAttributeValue("team")));
                 }
                 DyeColor color = StringUtils.convertStringToDyeColor(subElement.getAttributeValue("color"));
-                BlockRegion place = (BlockRegion) Region.getRegion(subElement.getChildren().get(0));
+                BlockRegion place = (BlockRegion) RegionModuleBuilder.getRegion(subElement.getChildren().get(0));
                 String name = color.name() + " Wool";
                 if (element.getAttributeValue("name") != null) {
                     name = subElement.getAttributeValue("name");
@@ -61,7 +62,7 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
                         }
                     }
                     DyeColor color = StringUtils.convertStringToDyeColor(subChild.getAttributeValue("color"));
-                    BlockRegion place = (BlockRegion) Region.getRegion(subChild.getChildren().get(0));
+                    BlockRegion place = (BlockRegion) RegionModuleBuilder.getRegion(subChild.getChildren().get(0));
                     String name = color.name() + " Wool";
                     if (element.getAttributeValue("name") != null) {
                         name = subChild.getAttributeValue("name");

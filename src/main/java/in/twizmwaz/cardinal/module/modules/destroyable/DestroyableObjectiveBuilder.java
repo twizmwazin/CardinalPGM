@@ -3,9 +3,10 @@ package in.twizmwaz.cardinal.module.modules.destroyable;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.regions.Region;
-import in.twizmwaz.cardinal.regions.type.combinations.UnionRegion;
+import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
+import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Material;
 import org.jdom2.Element;
@@ -38,12 +39,12 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                 } else if (element.getAttributeValue("id") != null) {
                     id = element.getAttributeValue("id");
                 }
-                List<Region> regions = new ArrayList<>();
+                ModuleCollection<RegionModule> regions = new ModuleCollection<>();
                 if (subElement.getAttributeValue("region") != null) {
-                    regions.add(Region.getRegion(subElement));
+                    regions.add(RegionModuleBuilder.getRegion(subElement));
                 } else {
                     for (Element region : subElement.getChildren()) {
-                        regions.add(Region.getRegion(region));
+                        regions.add(RegionModuleBuilder.getRegion(region));
                     }
                 }
                 List<Material> types = new ArrayList<>();
@@ -115,7 +116,7 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                 } else if (element.getAttributeValue("show") != null) {
                     show = !element.getAttributeValue("show").equalsIgnoreCase("false");
                 }
-                result.add(new DestroyableObjective(owner, name, id, new UnionRegion(regions), types, damageValues, required, show, showProgress, repairable));
+                result.add(new DestroyableObjective(owner, name, id, new UnionRegion(null, regions), types, damageValues, required, show, showProgress, repairable));
             }
             for (Element child : element.getChildren("destroyables")) {
                 for (Element subChild : child.getChildren("destroyable")) {
@@ -145,12 +146,12 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                     } else if (child.getAttributeValue("id") != null) {
                         id = element.getAttributeValue("id");
                     }
-                    List<Region> regions = new ArrayList<>();
+                    ModuleCollection<RegionModule> regions = new ModuleCollection<>();
                     if (subChild.getAttributeValue("region") != null) {
-                        regions.add(Region.getRegion(subChild));
+                        regions.add(RegionModuleBuilder.getRegion(subChild));
                     } else {
                         for (Element region : subChild.getChildren()) {
-                            regions.add(Region.getRegion(region));
+                            regions.add(RegionModuleBuilder.getRegion(region));
                         }
                     }
                     List<Material> types = new ArrayList<>();
@@ -251,7 +252,7 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                     } else if (element.getAttributeValue("show") != null) {
                         show = !element.getAttributeValue("show").equalsIgnoreCase("false");
                     }
-                    result.add(new DestroyableObjective(owner, name, id, new UnionRegion(regions), types, damageValues, required, show, showProgress, repairable));
+                    result.add(new DestroyableObjective(owner, name, id, new UnionRegion(null, regions), types, damageValues, required, show, showProgress, repairable));
                 }
             }
         }

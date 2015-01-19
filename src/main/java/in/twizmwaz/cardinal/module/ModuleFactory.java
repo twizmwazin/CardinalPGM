@@ -19,6 +19,7 @@ import in.twizmwaz.cardinal.module.modules.mapInfo.InfoBuilder;
 import in.twizmwaz.cardinal.module.modules.motd.MOTDBuilder;
 import in.twizmwaz.cardinal.module.modules.observers.ObserverModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.projectiles.ProjectilesBuilder;
+import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.respawn.RespawnModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModuleBuilder;
@@ -112,5 +113,6 @@ public class ModuleFactory {
         builderClasses.add(TntDefuseBuilder.class);
         builderClasses.add(ScoreModuleBuilder.class);
         builderClasses.add(GameCompleteBuilder.class);
+        builderClasses.add(RegionModuleBuilder.class);
     }
 }

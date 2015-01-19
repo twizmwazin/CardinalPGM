@@ -2,8 +2,8 @@ package in.twizmwaz.cardinal.module.modules.hill;
 
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameObjectiveScoreboardHandler;
+import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.regions.Region;
 import org.bukkit.event.HandlerList;
 
 public class HillObjective implements GameObjective {
@@ -25,15 +25,15 @@ public class HillObjective implements GameObjective {
     private final boolean incremental;
     private final boolean permanent;
     private final boolean show;
-    private final Region capture;
-    private final Region progress;
-    private final Region captured;
+    private final RegionModule capture;
+    private final RegionModule progress;
+    private final RegionModule captured;
 
     private double controlTime;
 
     private GameObjectiveScoreboardHandler scoreboardHandler;
 
-    protected HillObjective(final TeamModule team, final String name, final String id, final int captureTime, final int points, final int pointsGrowth, final CaptureRule captureRule, final double timeMultiplier, final boolean showProgress, final boolean neutralState, final boolean incremental, final boolean permanent, final boolean show, final Region capture, final Region progress, final Region captured) {
+    protected HillObjective(final TeamModule team, final String name, final String id, final int captureTime, final int points, final int pointsGrowth, final CaptureRule captureRule, final double timeMultiplier, final boolean showProgress, final boolean neutralState, final boolean incremental, final boolean permanent, final boolean show, final RegionModule capture, final RegionModule progress, final RegionModule captured) {
         this.team = team;
         this.name = name;
         this.id = id;

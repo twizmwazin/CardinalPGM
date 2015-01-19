@@ -9,8 +9,8 @@ import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
-import in.twizmwaz.cardinal.regions.Region;
-import in.twizmwaz.cardinal.regions.type.BlockRegion;
+import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
+import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
@@ -34,7 +34,7 @@ public class CoreObjective implements GameObjective {
     private final TeamModule team;
     private final String name;
     private final String id;
-    private final Region region;
+    private final RegionModule region;
     private final int leak;
     private final int damageValue;
     private boolean show;
@@ -47,7 +47,7 @@ public class CoreObjective implements GameObjective {
 
     private GameObjectiveScoreboardHandler scoreboardHandler;
 
-    protected CoreObjective(final TeamModule team, final String name, final String id, final Region region, final int leak, final Material type, final int damageValue, final boolean show) {
+    protected CoreObjective(final TeamModule team, final String name, final String id, final RegionModule region, final int leak, final Material type, final int damageValue, final boolean show) {
         this.team = team;
         this.name = name;
         this.id = id;
@@ -194,7 +194,7 @@ public class CoreObjective implements GameObjective {
         }
     }
 
-    public Region getRegion() {
+    public RegionModule getRegion() {
         return region;
     }
 
