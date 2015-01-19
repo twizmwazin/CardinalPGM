@@ -17,6 +17,7 @@ import in.twizmwaz.cardinal.module.modules.itemRemove.ItemRemoveBuilder;
 import in.twizmwaz.cardinal.module.modules.killStreakCount.KillStreakBuilder;
 import in.twizmwaz.cardinal.module.modules.kit.KitBuilder;
 import in.twizmwaz.cardinal.module.modules.mapInfo.InfoBuilder;
+import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimerBuilder;
 import in.twizmwaz.cardinal.module.modules.motd.MOTDBuilder;
 import in.twizmwaz.cardinal.module.modules.observers.ObserverModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.projectiles.ProjectilesBuilder;
@@ -24,6 +25,8 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.respawn.RespawnModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.tasker.TaskerModule;
+import in.twizmwaz.cardinal.module.modules.tasker.TaskerModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.team.TeamModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.teamManager.TeamManagerModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.teamPicker.TeamPickerBuilder;
@@ -116,5 +119,7 @@ public class ModuleFactory {
         builderClasses.add(GameCompleteBuilder.class);
         builderClasses.add(RegionModuleBuilder.class);
         builderClasses.add(DoubleKillPatchBuilder.class);
+        builderClasses.add(TaskerModuleBuilder.class);
+        builderClasses.add(MatchTimerBuilder.class);
     }
 }
