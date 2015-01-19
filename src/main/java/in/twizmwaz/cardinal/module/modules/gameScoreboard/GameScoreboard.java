@@ -287,6 +287,7 @@ public class GameScoreboard implements Module {
                 slots += TeamUtils.getShownObjectives(team).size();
             }
         }
+        if (ScoreModule.matchHasScoring()) slots += (TeamUtils.getTeams().size() - 1);
         if (ScoreModule.matchHasMax()) slots ++;
         slots --;
         return slots;
@@ -300,6 +301,7 @@ public class GameScoreboard implements Module {
                 if (TeamUtils.getShownObjectives(team).size() > 0) slots ++;
             }
         }
+        if (ScoreModule.matchHasScoring()) slots += (TeamUtils.getTeams().size() - 1);
         if (ScoreModule.matchHasMax()) slots ++;
         slots --;
         return slots;
