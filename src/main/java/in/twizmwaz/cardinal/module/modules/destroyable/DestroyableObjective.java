@@ -39,6 +39,7 @@ public class DestroyableObjective implements GameObjective {
 
     private Set<UUID> playersTouched;
     private double size;
+    private HashMap<UUID, Integer> playerDestroyed;
 
     private double complete;
     private boolean completed;
@@ -60,12 +61,13 @@ public class DestroyableObjective implements GameObjective {
         this.completed = false;
 
         this.playersTouched = new HashSet<>();
+        this.playerDestroyed = new HashMap<>();
 
         size = 0.0;
         for (Block block : region.getBlocks()) {
             for (int i = 0; i < types.size(); i++) {
                 if (types.get(i).equals(block.getType()) && damageValues.get(i) == (int) block.getState().getData().getData()) {
-                    size++;
+                    size ++;
                     break;
                 }
             }
@@ -123,15 +125,16 @@ public class DestroyableObjective implements GameObjective {
                     TeamChat.sendToTeam(team.getColor() + "[Team] " + event.getPlayer().getDisplayName() + ChatColor.GRAY + " destroyed some of " + ChatColor.AQUA + name, TeamUtils.getTeamByPlayer(event.getPlayer()));
                 }
                 boolean oldState = this.isTouched();
-                this.complete += (1 / size);
-                if (this.complete >= this.required && !this.completed) {
+                this.complete ++;
+                this.playerDestroyed.put(event.getPlayer().getUniqueId(), (playerDestroyed.containsKey(event.getPlayer().getUniqueId()) ? playerDestroyed.get(event.getPlayer().getUniqueId()) + 1 : 1));
+                if ((this.complete / size) >= this.required && !this.completed) {
                     this.completed = true;
                     event.setCancelled(false);
-                    Bukkit.broadcastMessage(team.getCompleteName() + "'s " + ChatColor.AQUA + name + ChatColor.GRAY + " destroyed by " + ChatColor.DARK_AQUA + "the enemy");
+                    Bukkit.broadcastMessage(team.getCompleteName() + "'s " + ChatColor.AQUA + name + ChatColor.GRAY + " destroyed by " + getWhoDestroyed());
                     ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
                     Bukkit.getServer().getPluginManager().callEvent(compEvent);
                 } else if (!this.completed) {
-                    ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), !oldState || show);
+                    ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), !oldState || showPercent);
                     Bukkit.getServer().getPluginManager().callEvent(touchEvent);
                 }
             } else {
@@ -176,17 +179,18 @@ public class DestroyableObjective implements GameObjective {
                 blockDestroyed = true;
             }
             if (blockDestroyed) {
-                this.complete += (1 / size);
-                if (this.complete >= this.required && !this.completed) {
+                this.complete ++;
+                if (eventPlayer != null) this.playerDestroyed.put(eventPlayer.getUniqueId(), (playerDestroyed.containsKey(eventPlayer.getUniqueId()) ? playerDestroyed.get(eventPlayer.getUniqueId()) + 1 : 1));
+                if ((this.complete / size) >= this.required && !this.completed) {
                     this.completed = true;
-                    Bukkit.broadcastMessage(team.getCompleteName() + ChatColor.GRAY + "'s " + ChatColor.AQUA + name + ChatColor.GRAY + " destroyed by " + ChatColor.DARK_AQUA + "the enemy");
+                    Bukkit.broadcastMessage(team.getCompleteName() + ChatColor.GRAY + "'s " + ChatColor.AQUA + name + ChatColor.GRAY + " destroyed by " + getWhoDestroyed());
                     ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, eventPlayer);
                     Bukkit.getServer().getPluginManager().callEvent(compEvent);
                 }
             }
         }
         if (!this.completed) {
-            ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, !oldState || show);
+            ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, !oldState || showPercent);
             Bukkit.getServer().getPluginManager().callEvent(touchEvent);
         }
     }
@@ -212,14 +216,13 @@ public class DestroyableObjective implements GameObjective {
 
     public int getPercent() {
         double blocksRequired = required * getMonumentSize();
-        double blocksBroken = complete * getMonumentSize();
-        if (Math.floor((blocksBroken / blocksRequired) * 100) > 100) {
+        if (Math.floor((complete / blocksRequired) * 100) > 100) {
             return 100;
         }
-        if (Math.floor((blocksBroken / blocksRequired) * 100) < 0) {
+        if (Math.floor((complete / blocksRequired) * 100) < 0) {
             return 0;
         }
-        return (int) Math.floor((blocksBroken / blocksRequired) * 100);
+        return (int) Math.floor((complete / blocksRequired) * 100);
     }
 
     public boolean partOfObjective(Block block) {
@@ -239,5 +242,23 @@ public class DestroyableObjective implements GameObjective {
             }
         }
         return blocks;
+    }
+
+    public String getWhoDestroyed() {
+        String whoDestroyed = "";
+        List<String> toCombine = new ArrayList<>();
+        for (UUID player : playerDestroyed.keySet()) {
+            if (Bukkit.getOfflinePlayer(player).isOnline() && playerDestroyed.get(player) > (1 / 3)) {
+                toCombine.add(TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)).getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " (" + (int) Math.floor((playerDestroyed.get(player) / size) * 100) + "%)");
+            }
+        }
+        if (playerDestroyed.size() > 2 || toCombine.size() == 0) {
+            toCombine.add(ChatColor.DARK_AQUA + "the enemy");
+        }
+        whoDestroyed = toCombine.get(0);
+        for (int i = 1; i < toCombine.size(); i ++) {
+            whoDestroyed += ChatColor.GRAY + ", " + (i == toCombine.size() - 1 ? "and " : "") + toCombine.get(i);
+        }
+        return whoDestroyed;
     }
 }
