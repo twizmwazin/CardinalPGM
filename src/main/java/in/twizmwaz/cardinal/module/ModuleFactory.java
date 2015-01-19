@@ -13,6 +13,7 @@ import in.twizmwaz.cardinal.module.modules.gameComplete.GameCompleteBuilder;
 import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameScoreboardBuilder;
 import in.twizmwaz.cardinal.module.modules.gamerules.GamerulesBuilder;
 import in.twizmwaz.cardinal.module.modules.hunger.HungerBuilder;
+import in.twizmwaz.cardinal.module.modules.itemKeep.ItemKeepBuilder;
 import in.twizmwaz.cardinal.module.modules.itemRemove.ItemRemoveBuilder;
 import in.twizmwaz.cardinal.module.modules.killStreakCount.KillStreakBuilder;
 import in.twizmwaz.cardinal.module.modules.kit.KitBuilder;
@@ -121,5 +122,6 @@ public class ModuleFactory {
         builderClasses.add(DoubleKillPatchBuilder.class);
         builderClasses.add(TaskerModuleBuilder.class);
         builderClasses.add(MatchTimerBuilder.class);
+        builderClasses.add(ItemKeepBuilder.class);
     }
 }
