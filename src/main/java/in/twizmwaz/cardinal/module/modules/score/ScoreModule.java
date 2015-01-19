@@ -51,18 +51,20 @@ public class ScoreModule implements Module {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        if (event.getEntity().getKiller() != null) {
-            if (TeamUtils.getTeamByPlayer(event.getEntity().getKiller()) != null) {
-                if (TeamUtils.getTeamByPlayer(event.getEntity().getKiller()) == team) {
-                    score += pointsPerKill;
-                    Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
+        if (matchHasScoring()) {
+            if (event.getEntity().getKiller() != null) {
+                if (TeamUtils.getTeamByPlayer(event.getEntity().getKiller()) != null) {
+                    if (TeamUtils.getTeamByPlayer(event.getEntity().getKiller()) == team) {
+                        score += pointsPerKill;
+                        Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
+                    }
                 }
-            }
-        } else {
-            if (TeamUtils.getTeamByPlayer(event.getEntity()) != null) {
-                if (TeamUtils.getTeamByPlayer(event.getEntity()) == team) {
-                    score -= pointsPerDeath;
-                    Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
+            } else {
+                if (TeamUtils.getTeamByPlayer(event.getEntity()) != null) {
+                    if (TeamUtils.getTeamByPlayer(event.getEntity()) == team) {
+                        score -= pointsPerDeath;
+                        Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
+                    }
                 }
             }
         }
