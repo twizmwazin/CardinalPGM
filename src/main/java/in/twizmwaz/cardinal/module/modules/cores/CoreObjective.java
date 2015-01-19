@@ -108,7 +108,8 @@ public class CoreObjective implements GameObjective {
             if (TeamUtils.getTeamByPlayer(event.getPlayer()) != team) {
                 if (!playersTouched.contains(event.getPlayer().getUniqueId())) {
                     playersTouched.add(event.getPlayer().getUniqueId());
-                    TeamChat.sendToTeam(team.getColor() + "[Team] " + event.getPlayer().getDisplayName() + ChatColor.GRAY + " broke a piece of " + ChatColor.RED + name, TeamUtils.getTeamByPlayer(event.getPlayer()));
+                    TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
+                    TeamChat.sendToTeam(teamModule.getColor() + "[Team] " + event.getPlayer().getDisplayName() + ChatColor.GRAY + " broke a piece of " + ChatColor.RED + name, teamModule);
                 }
                 boolean oldState = this.touched;
                 this.touched = true;
@@ -142,7 +143,8 @@ public class CoreObjective implements GameObjective {
                     } else {
                         if (!playersTouched.contains(player)) {
                             playersTouched.add(player);
-                            TeamChat.sendToTeam(team.getColor() + "[Team] " + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " broke a piece of " + ChatColor.RED + name, TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)));
+                            TeamModule teamModule = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
+                            TeamChat.sendToTeam(teamModule.getColor() + "[Team] " + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " broke a piece of " + ChatColor.RED + name, teamModule);
                         }
                         this.touched = true;
                         blownUp = true;
