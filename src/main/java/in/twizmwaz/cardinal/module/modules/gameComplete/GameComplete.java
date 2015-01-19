@@ -1,26 +1,27 @@
-package in.twizmwaz.cardinal.match.listeners;
+package in.twizmwaz.cardinal.module.modules.gameComplete;
 
+import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.event.ScoreUpdateEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
-import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
+import org.bukkit.World;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.event.HandlerList;
 
-import java.util.HashSet;
 import java.util.Set;
 
-public class ObjectiveListener implements Listener {
+public class GameComplete implements Module {
 
-    private final Match match;
+    protected GameComplete() {
+    }
 
-    public ObjectiveListener(JavaPlugin plugin, Match match) {
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        this.match = match;
+    @Override
+    public void unload() {
+        HandlerList.unregisterAll(this);
     }
 
     @EventHandler
@@ -31,7 +32,14 @@ public class ObjectiveListener implements Listener {
                 if (!condition.isComplete() && !condition.equals(event.getObjective())) skipTeam = true;
             }
             if (TeamUtils.getShownObjectives(team).size() == 0 || skipTeam) continue;
-            match.end(team);
+            GameHandler.getGameHandler().getMatch().end(team);
+        }
+    }
+
+    @EventHandler
+    public void onScoreUpdate(ScoreUpdateEvent event) {
+        if (event.getScoreModule().getScore() >= ScoreModule.max()) {
+            GameHandler.getGameHandler().getMatch().end(event.getScoreModule().getTeam());
         }
     }
 }

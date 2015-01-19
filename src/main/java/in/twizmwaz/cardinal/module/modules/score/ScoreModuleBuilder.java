@@ -1,26 +1,17 @@
 package in.twizmwaz.cardinal.module.modules.score;
 
-import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
-import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameScoreboard;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.util.StringUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.util.Vector;
 import org.jdom2.Element;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
 
 @BuilderData(load = ModuleLoadTime.LATER)
 public class ScoreModuleBuilder implements ModuleBuilder {
@@ -50,8 +41,6 @@ public class ScoreModuleBuilder implements ModuleBuilder {
                     pointsPerKill = 1;
                     pointsPerDeath = 1;
                 }
-            } else {
-                Bukkit.broadcastMessage("dx");
             }
             if (score.getChild("kills") != null) {
                 pointsPerKill = Integer.parseInt(score.getChild("kills").getText());

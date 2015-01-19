@@ -1,10 +1,9 @@
 package in.twizmwaz.cardinal.match;
 
-import in.twizmwaz.cardinal.chat.Chat;
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.Chat;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.match.listeners.MatchListener;
-import in.twizmwaz.cardinal.match.listeners.ObjectiveListener;
 import in.twizmwaz.cardinal.match.util.StartTimer;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleCollection;
@@ -53,7 +52,6 @@ public class Match {
         this.startTimer = new StartTimer(this, 30);
         this.state = MatchState.WAITING;
         listeners.add(new MatchListener(plugin, this));
-        listeners.add(new ObjectiveListener(plugin, this));
         listeners.add(new Chat(plugin));
     }
 

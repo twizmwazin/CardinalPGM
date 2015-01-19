@@ -7,8 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.logging.Level;
-
 public class CycleTimer implements Runnable, Cancellable {
 
     private Cycle cycle;

@@ -4,17 +4,10 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.ScoreUpdateEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.regions.Region;
 import in.twizmwaz.cardinal.util.TeamUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.util.Vector;
-
-import java.util.List;
-import java.util.Random;
 
 public class ScoreModule implements Module {
 

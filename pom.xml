@@ -62,6 +62,11 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.3.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.comphenix.protocol</groupId>
+            <artifactId>ProtocolLib</artifactId>
+            <version>3.5.1-HACK</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -20,11 +20,11 @@ import java.util.List;
 
 public class Projectiles implements Module {
 
-    private EntityType projectile;
+    private final EntityType projectile;
     private double velocityMod = 1.0;
     private List<PotionEffect> potionEffects = new ArrayList<>();
 
-    protected Projectiles(EntityType projectile, double velocityMod, List<PotionEffect> potionEffects) {
+    protected Projectiles(final EntityType projectile, final double velocityMod, List<PotionEffect> potionEffects) {
         this.projectile = projectile;
         this.velocityMod = velocityMod;
         this.potionEffects = potionEffects;
@@ -73,4 +73,5 @@ public class Projectiles implements Module {
             }
         }
     }
+
 }

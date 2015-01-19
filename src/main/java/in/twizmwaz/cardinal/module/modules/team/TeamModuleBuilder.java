@@ -6,7 +6,6 @@ import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
-import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameScoreboard;
 import org.apache.logging.log4j.core.helpers.Integers;
 import org.bukkit.ChatColor;
 import org.jdom2.Document;
