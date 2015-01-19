@@ -3,6 +3,10 @@ package in.twizmwaz.cardinal.module.modules.tntDefuse;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
+import in.twizmwaz.cardinal.util.ChatUtils;
+import in.twizmwaz.cardinal.util.TeamUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -36,6 +40,18 @@ public class TntDefuse implements Module {
         if (event.getLeftClicked().getType().equals(EntityType.PRIMED_TNT)) {
             if (TntTracker.getWhoPlaced(event.getLeftClicked()) != null) {
                 UUID player = TntTracker.getWhoPlaced(event.getLeftClicked());
+                if (Bukkit.getOfflinePlayer(player).isOnline()) {
+                    if (TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)) == TeamUtils.getTeamByPlayer(event.getPlayer())) {
+                        if (!Bukkit.getPlayer(player).equals(event.getPlayer())) {
+                            event.getLeftClicked().remove();
+                            event.getPlayer().sendMessage(ChatColor.RED + "You defused " + TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)).getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.RED + "'s TNT.");
+                        }
+                    } else {
+                        ChatUtils.sendWarningMessage(event.getPlayer(), "You may not defuse enemy TNT.");
+                    }
+                } else {
+                    ChatUtils.sendWarningMessage(event.getPlayer(), "You may not defuse enemy TNT.");
+                }
             }
         }
     }
