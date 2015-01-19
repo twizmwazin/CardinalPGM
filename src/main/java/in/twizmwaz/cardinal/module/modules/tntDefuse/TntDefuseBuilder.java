@@ -6,6 +6,7 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 
 public class TntDefuseBuilder implements ModuleBuilder {
 
+    @SuppressWarnings("unchecked")
     @Override
     public ModuleCollection load(Match match) {
         ModuleCollection results = new ModuleCollection();

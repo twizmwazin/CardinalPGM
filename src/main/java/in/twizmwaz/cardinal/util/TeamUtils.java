@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -62,7 +63,21 @@ public class TeamUtils {
     public static Set<GameObjective> getObjectives(TeamModule team) {
         Set<GameObjective> objectives = new HashSet<>();
         for (GameObjective objective : GameHandler.getGameHandler().getMatch().getModules().getModules(GameObjective.class)) {
-            if (objective.getTeam() == team) {
+            if (objective instanceof WoolObjective) {
+                if (objective.getTeam() == team) {
+                    objectives.add(objective);
+                }
+            } else if (objective.getTeam() != team) {
+                objectives.add(objective);
+            }
+        }
+        return objectives;
+    }
+
+    public static Set<GameObjective> getShownObjectives(TeamModule team) {
+        Set<GameObjective> objectives = new HashSet<>();
+        for (GameObjective objective : getObjectives(team)) {
+            if (objective.showOnScoreboard()) {
                 objectives.add(objective);
             }
         }

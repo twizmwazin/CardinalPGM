@@ -85,14 +85,14 @@ public class RotationCommands {
                 }
             }
         }
-        int pages = (int) Math.ceil((loadedList.size() + 8) / 8);
+        int pages = (int) Math.ceil((loadedList.size() + 7) / 8);
         if (index > pages)
             throw new CommandException("Invalid page number specified! Maximum page number is " + pages + ".");
         sender.sendMessage(ChatColor.RED + "--------------- " + ChatColor.WHITE + "Loaded Maps " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + index + ChatColor.DARK_AQUA + " of " + ChatColor.AQUA + pages + ChatColor.DARK_AQUA + ") " + ChatColor.RED + "---------------");
         String[] maps = {"", "", "", "", "", "", "", ""};
         for (int i = 0; i <= maps.length - 1; i++) {
             int position = 8 * (index - 1) + i;
-            try {
+            if (position < ordered.size()) {
                 LoadedMap mapInfo = ordered.get(position);
                 if (mapInfo.getAuthors().size() == 1) {
                     maps[i] = maps[i] + ChatColor.GOLD + mapInfo.getName() + ChatColor.DARK_PURPLE + " by " + ChatColor.RED + mapInfo.getAuthors().get(0);
@@ -109,7 +109,6 @@ public class RotationCommands {
                     }
                 }
                 maps[i] = ChatColor.WHITE + "" + (position + 1) + ". " + maps[i];
-            } catch (ArrayIndexOutOfBoundsException e) {
             }
         }
         for (String map : maps) {

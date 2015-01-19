@@ -131,7 +131,7 @@ public class DestroyableObjective implements GameObjective {
                     ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
                     Bukkit.getServer().getPluginManager().callEvent(compEvent);
                 } else if (!this.completed) {
-                    ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), !oldState);
+                    ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), !oldState || show);
                     Bukkit.getServer().getPluginManager().callEvent(touchEvent);
                 }
             } else {
@@ -186,7 +186,7 @@ public class DestroyableObjective implements GameObjective {
             }
         }
         if (!this.completed) {
-            ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, !oldState);
+            ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, !oldState || show);
             Bukkit.getServer().getPluginManager().callEvent(touchEvent);
         }
     }
@@ -213,7 +213,13 @@ public class DestroyableObjective implements GameObjective {
     public int getPercent() {
         double blocksRequired = required * getMonumentSize();
         double blocksBroken = complete * getMonumentSize();
-        return (int) Math.round((blocksRequired / blocksBroken) * 100);
+        if (Math.floor((blocksBroken / blocksRequired) * 100) > 100) {
+            return 100;
+        }
+        if (Math.floor((blocksBroken / blocksRequired) * 100) < 0) {
+            return 0;
+        }
+        return (int) Math.floor((blocksBroken / blocksRequired) * 100);
     }
 
     public boolean partOfObjective(Block block) {
