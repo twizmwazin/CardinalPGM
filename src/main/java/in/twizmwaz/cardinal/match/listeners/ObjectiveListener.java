@@ -18,21 +18,19 @@ public class ObjectiveListener implements Listener {
 
     private final Match match;
 
-    private Set<GameObjective> conditions;
-
     public ObjectiveListener(JavaPlugin plugin, Match match) {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.match = match;
-        this.conditions = new HashSet<>();
     }
 
     @EventHandler
     public void onObjectiveComplete(ObjectiveCompleteEvent event) {
         for (TeamModule team : TeamUtils.getTeams()) {
+            boolean skipTeam = false;
             for (GameObjective condition : TeamUtils.getShownObjectives(team)) {
-                if (!condition.isComplete() && !condition.equals(event.getObjective())) return;
+                if (!condition.isComplete() && !condition.equals(event.getObjective())) skipTeam = true;
             }
-            if (TeamUtils.getShownObjectives(team).size() == 0) return;
+            if (TeamUtils.getShownObjectives(team).size() == 0 || skipTeam) continue;
             match.end(team);
         }
     }

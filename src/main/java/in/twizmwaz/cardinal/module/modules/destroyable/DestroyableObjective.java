@@ -267,24 +267,24 @@ public class DestroyableObjective implements GameObjective {
         return whoDestroyed;
     }
 
-    public List<UUID> getSortedHashMapKeyset(HashMap<UUID, Integer> sorting) {
-        List<UUID> uuids = new ArrayList<>();
-        HashMap<UUID, Integer> clone = new HashMap<>();
-        for (UUID player : sorting.keySet()) {
+    public <T> List<T> getSortedHashMapKeyset(HashMap<T, Integer> sorting) {
+        List<T> types = new ArrayList<>();
+        HashMap<T, Integer> clone = new HashMap<>();
+        for (T player : sorting.keySet()) {
             clone.put(player, sorting.get(player));
         }
         for (int i = 0; i < sorting.size(); i ++) {
             int highestNumber = -1;
-            UUID highestUUID = null;
-            for (UUID player : clone.keySet()) {
+            T highestType = null;
+            for (T player : clone.keySet()) {
                 if (clone.get(player) > highestNumber) {
                     highestNumber = clone.get(player);
-                    highestUUID = player;
+                    highestType = player;
                 }
             }
-            clone.remove(highestUUID);
-            uuids.add(highestUUID);
+            clone.remove(highestType);
+            types.add(highestType);
         }
-        return uuids;
+        return types;
     }
 }

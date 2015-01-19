@@ -9,6 +9,7 @@ public class PlayerUtil {
 
     public static void resetPlayer(Player player) {
         player.setMaxHealth(20);
+        player.setHealth(20);
         player.setFoodLevel(20);
         player.setSaturation(20);
         player.getInventory().clear();
