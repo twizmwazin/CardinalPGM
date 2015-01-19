@@ -7,7 +7,7 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.mapInfo.Info;
 import in.twizmwaz.cardinal.module.modules.mapInfo.contributor.Contributor;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.DomUtil;
+import in.twizmwaz.cardinal.util.DomUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.jdom2.Document;
@@ -72,7 +72,7 @@ public class MapCommands {
     public static void next(final CommandContext cmd, CommandSender sender) {
         String nextMap = GameHandler.getGameHandler().getRotation().getNext().getName();
         try {
-            Document doc = DomUtil.parse(new File("maps/" + nextMap + "/map.xml"));
+            Document doc = DomUtils.parse(new File("maps/" + nextMap + "/map.xml"));
             List<Contributor> authors;
             String name = doc.getRootElement().getChild("name").getText();
             authors = new ArrayList<>();

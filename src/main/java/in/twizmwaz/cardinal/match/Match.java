@@ -11,7 +11,7 @@ import in.twizmwaz.cardinal.module.ModuleFactory;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.mapInfo.Info;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.DomUtil;
+import in.twizmwaz.cardinal.util.DomUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -45,7 +45,7 @@ public class Match {
         this.modules = new ModuleCollection<>();
         this.factory = new ModuleFactory(this);
         try {
-            this.document = DomUtil.parse(new File("matches/" + this.uuid.toString() + "/map.xml"));
+            this.document = DomUtils.parse(new File("matches/" + this.uuid.toString() + "/map.xml"));
         } catch (JDOMException | IOException e) {
             e.printStackTrace();
         }

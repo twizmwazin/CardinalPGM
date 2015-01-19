@@ -1,7 +1,7 @@
 package in.twizmwaz.cardinal.rotation;
 
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
-import in.twizmwaz.cardinal.util.DomUtil;
+import in.twizmwaz.cardinal.util.DomUtils;
 import net.minecraft.util.org.apache.commons.codec.Charsets;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -45,7 +45,7 @@ public class Rotation {
             if (map.isFile()) continue;
             if (Arrays.asList(map.list()).containsAll(requirements)) {
                 try {
-                    Document xml = DomUtil.parse(new File(map.getPath() + "/map.xml"));
+                    Document xml = DomUtils.parse(new File(map.getPath() + "/map.xml"));
                     String name = xml.getRootElement().getChild("name").getText();
                     List<String> authors = new ArrayList<>();
                     for (Element authorsElement : xml.getRootElement().getChildren("authors")) {

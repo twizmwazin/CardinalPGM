@@ -230,6 +230,17 @@ public class DestroyableObjective implements GameObjective {
         return (int) Math.floor((complete / blocksRequired) * 100);
     }
 
+    public int getPercentFromAmount(int amount) {
+        double blocksRequired = required * getMonumentSize();
+        if (Math.floor((amount / blocksRequired) * 100) > 100) {
+            return 100;
+        }
+        if (Math.floor((amount / blocksRequired) * 100) < 0) {
+            return 0;
+        }
+        return (int) Math.floor((amount / blocksRequired) * 100);
+    }
+
     public boolean partOfObjective(Block block) {
         for (int i = 0; i < types.size(); i++) {
             if (types.get(i).equals(block.getType()) && damageValues.get(i) == (int) block.getState().getData().getData()) {
@@ -253,8 +264,8 @@ public class DestroyableObjective implements GameObjective {
         String whoDestroyed = "";
         List<String> toCombine = new ArrayList<>();
         for (UUID player : getSortedHashMapKeyset(playerDestroyed)) {
-            if (Bukkit.getOfflinePlayer(player).isOnline() && playerDestroyed.get(player) > (1 / 3)) {
-                toCombine.add(TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)).getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " (" + (int) Math.floor((playerDestroyed.get(player) / size) * 100) + "%)");
+            if (Bukkit.getOfflinePlayer(player).isOnline() && getPercentFromAmount(playerDestroyed.get(player)) > (1 / 3)) {
+                toCombine.add(TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)).getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " (" + getPercentFromAmount(playerDestroyed.get(player) * 100) + "%)");
             }
         }
         if (playerDestroyed.size() > 2 || toCombine.size() == 0) {

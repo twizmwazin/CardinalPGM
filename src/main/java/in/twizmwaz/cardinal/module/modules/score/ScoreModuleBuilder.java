@@ -33,14 +33,15 @@ public class ScoreModuleBuilder implements ModuleBuilder {
                 }
             }
             if (score.getChild("time") != null) {
-                try {
-                    time = StringUtils.timeStringToSeconds(score.getChild("time").getText());
-                } catch (ParseException e) {
-                }
+                time = StringUtils.timeStringToSeconds(score.getChild("time").getText());
                 if (time != 0) {
                     pointsPerKill = 1;
                     pointsPerDeath = 1;
                 }
+            }
+            if (score.getChild("king") != null) {
+                pointsPerKill = 0;
+                pointsPerDeath = 0;
             }
             if (score.getChild("kills") != null) {
                 pointsPerKill = Integer.parseInt(score.getChild("kills").getText());
