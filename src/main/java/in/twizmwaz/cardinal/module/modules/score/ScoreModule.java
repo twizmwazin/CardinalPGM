@@ -4,9 +4,14 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.ScoreUpdateEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class ScoreModule implements Module {
@@ -68,8 +73,38 @@ public class ScoreModule implements Module {
             } else {
                 if (TeamUtils.getTeamByPlayer(event.getEntity()) != null) {
                     if (TeamUtils.getTeamByPlayer(event.getEntity()) == team) {
+                        EntityDamageEvent.DamageCause cause = event.getEntity().getLastDamageCause().getCause();
+                        if (cause.equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) || cause.equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
+                            if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+                                EntityDamageByEntityEvent damageByEntityEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
+                                if (TntTracker.getWhoPlaced(damageByEntityEvent.getDamager()) != null) {
+                                    if (Bukkit.getOfflinePlayer(TntTracker.getWhoPlaced(damageByEntityEvent.getDamager())).isOnline()) {
+                                        Player source = Bukkit.getPlayer(TntTracker.getWhoPlaced(damageByEntityEvent.getDamager()));
+                                        if (TeamUtils.getTeamByPlayer(source) != team) {
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         score -= pointsPerDeath;
                         Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
+                    } else {
+                        EntityDamageEvent.DamageCause cause = event.getEntity().getLastDamageCause().getCause();
+                        if (cause.equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) || cause.equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
+                            if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+                                EntityDamageByEntityEvent damageByEntityEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
+                                if (TntTracker.getWhoPlaced(damageByEntityEvent.getDamager()) != null) {
+                                    if (Bukkit.getOfflinePlayer(TntTracker.getWhoPlaced(damageByEntityEvent.getDamager())).isOnline()) {
+                                        Player source = Bukkit.getPlayer(TntTracker.getWhoPlaced(damageByEntityEvent.getDamager()));
+                                        if (TeamUtils.getTeamByPlayer(source) != team) {
+                                            score += pointsPerKill;
+                                            Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
