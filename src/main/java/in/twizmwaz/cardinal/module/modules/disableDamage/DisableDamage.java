@@ -60,11 +60,7 @@ public class DisableDamage implements Module {
                     UUID source = TntTracker.getWhoPlaced(((EntityDamageByEntityEvent) event).getDamager());
                     Match match = GameHandler.getGameHandler().getMatch();
                     if (Bukkit.getOfflinePlayer(source).isOnline()) {
-                        if (!blockExplosionSelf && source.equals(player.getUniqueId())) {
-                            event.setCancelled(true);
-                            return;
-                        }
-                        if (!blockExplosionAlly && TeamUtils.getTeamByPlayer(player) == TeamUtils.getTeamByPlayer(Bukkit.getPlayer(source)) && !source.equals(player.getUniqueId())) {
+                        if (!blockExplosionOther) {
                             event.setCancelled(true);
                             return;
                         }
@@ -72,7 +68,13 @@ public class DisableDamage implements Module {
                             event.setCancelled(true);
                             return;
                         }
-                        if (!blockExplosionOther) event.setCancelled(true);
+                        if (!blockExplosionAlly && TeamUtils.getTeamByPlayer(player) == TeamUtils.getTeamByPlayer(Bukkit.getPlayer(source)) && !Bukkit.getPlayer(source).equals(player)) {
+                            event.setCancelled(true);
+                            return;
+                        }
+                        if (!blockExplosionSelf && source.equals(player.getUniqueId())) {
+                            event.setCancelled(true);
+                        }
                     }
                 }
             } else if (damageTypes.contains(DamageCause.BLOCK_EXPLOSION)) event.setCancelled(true);

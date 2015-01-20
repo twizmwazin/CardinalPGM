@@ -22,22 +22,22 @@ public class DisableDamageBuilder implements ModuleBuilder {
                 damageTypes.add(DamageCause.valueOf(item.getText().toUpperCase().replaceAll(" ", "_")));
                 if (DamageCause.valueOf(StringUtils.technicalName(item.getText())) == DamageCause.BLOCK_EXPLOSION) {
                     try {
-                        ally = !item.getAttribute("ally").getValue().equalsIgnoreCase("false");
+                        ally = item.getAttributeValue("ally").equalsIgnoreCase("false");
                     } catch (NullPointerException ex) {
                         //Attribute does not exist
                     }
                     try {
-                        self = !item.getAttribute("self").getValue().equalsIgnoreCase("false");
+                        self = item.getAttributeValue("self").equalsIgnoreCase("false");
                     } catch (NullPointerException ex) {
                         //Attribute does not exist
                     }
                     try {
-                        enemy = !item.getAttribute("enemy").getValue().equalsIgnoreCase("false");
+                        enemy = item.getAttributeValue("enemy").equalsIgnoreCase("false");
                     } catch (NullPointerException ex) {
                         //Attribute does not exist
                     }
                     try {
-                        other = !item.getAttribute("other").getValue().equalsIgnoreCase("false");
+                        other = item.getAttributeValue("other").equalsIgnoreCase("false");
                     } catch (NullPointerException ex) {
                         //Attribute does not exist
                     }
