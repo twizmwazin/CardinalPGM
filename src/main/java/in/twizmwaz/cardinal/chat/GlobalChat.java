@@ -25,8 +25,9 @@ public class GlobalChat {
         } else {
             String msg = "";
             for (int i = 0; cmd.argsLength() > i; i++) {
-                msg += cmd.getString(i);
+                msg += cmd.getString(i) + " ";
             }
+            msg = msg.trim();
             sendGlobalMessage(msg, player);
         }
     }

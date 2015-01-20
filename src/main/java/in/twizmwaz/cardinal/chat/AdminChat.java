@@ -30,8 +30,9 @@ public class AdminChat {
             } else {
                 String msg = "";
                 for (int i = 0; cmd.argsLength() > i; i++) {
-                    msg += cmd.getString(i);
+                    msg += cmd.getString(i) + " ";
                 }
+                msg = msg.trim();
                 sendAdminMessage(msg, player);
             }
         }
