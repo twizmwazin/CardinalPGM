@@ -36,9 +36,8 @@ public class BroadcastModule implements TaskedModule {
 
     @Override
     public void run() {
-        Bukkit.broadcastMessage("xdd");
         if (timesBroadcasted < count) {
-            if (MatchTimer.getTimeInSeconds() <= timeAfter && MatchTimer.getTimeInSeconds() <= (every * (timesBroadcasted + 1))) {
+            if (MatchTimer.getTimeInSeconds() >= (timeAfter + (every * timesBroadcasted))) {
                 if (type.equals(BroadcastType.TIP)) Bukkit.broadcastMessage(ChatColor.DARK_GRAY + "" + ChatColor.BOLD + "[" + ChatColor.BLUE + "" + ChatColor.BOLD + "Tip" + ChatColor.DARK_GRAY + "" + ChatColor.BOLD + "] " + ChatColor.AQUA + "" + ChatColor.ITALIC + message);
                 else if (type.equals(BroadcastType.ALERT)) Bukkit.broadcastMessage(ChatColor.DARK_GRAY + "" + ChatColor.BOLD + "[" + ChatColor.DARK_RED + "" + ChatColor.BOLD + "Alert" + ChatColor.DARK_GRAY + "" + ChatColor.BOLD + "] " + ChatColor.RED + "" + ChatColor.ITALIC + message);
                 timesBroadcasted ++;

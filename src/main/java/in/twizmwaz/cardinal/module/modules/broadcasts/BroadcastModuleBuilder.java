@@ -11,9 +11,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jdom2.Element;
 
 public class BroadcastModuleBuilder implements ModuleBuilder {
+    @SuppressWarnings("unchecked")
     @Override
     public ModuleCollection load(Match match) {
-        ModuleCollection result = new ModuleCollection();
+        ModuleCollection results = new ModuleCollection();
         for (Element broadcast : match.getDocument().getRootElement().getChildren("broadcasts")) {
             for (Element element : broadcast.getChildren("tip")) {
                 String message;
@@ -30,7 +31,7 @@ public class BroadcastModuleBuilder implements ModuleBuilder {
                 if (element.getAttributeValue("count") != null) {
                     count = Integer.parseInt(element.getAttributeValue("count"));
                 }
-                new BroadcastModule(message, BroadcastType.TIP, timeAfter, every, count);
+                results.add(new BroadcastModule(message, BroadcastType.TIP, timeAfter, every, count));
             }
             for (Element element : broadcast.getChildren("alert")) {
                 String message;
@@ -47,9 +48,9 @@ public class BroadcastModuleBuilder implements ModuleBuilder {
                 if (element.getAttributeValue("count") != null) {
                     count = Integer.parseInt(element.getAttributeValue("count"));
                 }
-                new BroadcastModule(message, BroadcastType.ALERT, timeAfter, every, count);
+                results.add(new BroadcastModule(message, BroadcastType.ALERT, timeAfter, every, count));
             }
         }
-        return result;
+        return results;
     }
 }

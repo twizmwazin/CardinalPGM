@@ -27,12 +27,12 @@ public class MatchTimer implements Module {
      * @return The current time stored in the module.
      */
     public long getTime() {
-        return (System.currentTimeMillis() - startTime) / 1000;
+        return startTime;
     }
 
     public static long getTimeInSeconds() {
         for (MatchTimer timer : GameHandler.getGameHandler().getMatch().getModules().getModules(MatchTimer.class)) {
-            return timer.getTime();
+            return (System.currentTimeMillis() - timer.getTime()) / 1000;
         }
         return 0;
     }
