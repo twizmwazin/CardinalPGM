@@ -30,9 +30,9 @@ public class MatchTimer implements Module {
         return startTime;
     }
 
-    public static long getTimeInSeconds() {
+    public static double getTimeInSeconds() {
         for (MatchTimer timer : GameHandler.getGameHandler().getMatch().getModules().getModules(MatchTimer.class)) {
-            return (System.currentTimeMillis() - timer.getTime()) / 1000;
+            return ((double) System.currentTimeMillis() - timer.getTime()) / 1000.0;
         }
         return 0;
     }

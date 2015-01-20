@@ -16,13 +16,15 @@ public class ScoreModule implements Module {
     private final int pointsPerKill;
     private final int pointsPerDeath;
     private final int max;
+    private final int time;
 
-    public ScoreModule(final TeamModule team, final int pointsPerKill, final int pointsPerDeath, final int max) {
+    public ScoreModule(final TeamModule team, final int pointsPerKill, final int pointsPerDeath, final int max, final int time) {
         this.team = team;
         this.score = 0;
         this.pointsPerKill = pointsPerKill;
         this.pointsPerDeath = pointsPerDeath;
         this.max = max;
+        this.time = time;
     }
 
     @Override
@@ -47,6 +49,10 @@ public class ScoreModule implements Module {
 
     public TeamModule getTeam() {
         return team;
+    }
+
+    public int getTime() {
+        return time;
     }
 
     @EventHandler
@@ -101,27 +107,19 @@ public class ScoreModule implements Module {
         return false;
     }
 
-    public static int pointsPerKill() {
-        int pointsPerKill = 0;
-        for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
-            pointsPerKill = score.getPointsPerKill();
-        }
-        return pointsPerKill;
-    }
-
-    public static int pointsPerDeath() {
-        int pointsPerDeath = 0;
-        for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
-            pointsPerDeath = score.getPointsPerDeath();
-        }
-        return pointsPerDeath;
-    }
-
     public static int max() {
         int max = 0;
         for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
             max = score.getMax();
         }
         return max;
+    }
+
+    public static int getTimeLimit() {
+        int time = 0;
+        for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
+            time = score.getTime();
+        }
+        return time;
     }
 }

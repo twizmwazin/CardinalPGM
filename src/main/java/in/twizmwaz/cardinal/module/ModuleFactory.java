@@ -34,6 +34,7 @@ import in.twizmwaz.cardinal.module.modules.team.TeamModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.teamManager.TeamManagerModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.teamPicker.TeamPickerBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLock.TimeLockBuilder;
+import in.twizmwaz.cardinal.module.modules.timeNotifications.TimeNotificationsBuilder;
 import in.twizmwaz.cardinal.module.modules.tntDefuse.TntDefuseBuilder;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTrackerBuilder;
 import in.twizmwaz.cardinal.module.modules.toolRepair.ToolRepairBuilder;
@@ -128,5 +129,6 @@ public class ModuleFactory {
         builderClasses.add(ArmorKeepBuilder.class);
         builderClasses.add(BroadcastModuleBuilder.class);
         builderClasses.add(MatchModuleBuilder.class);
+        builderClasses.add(TimeNotificationsBuilder.class);
     }
 }

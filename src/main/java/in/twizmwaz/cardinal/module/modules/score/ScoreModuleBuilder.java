@@ -49,7 +49,7 @@ public class ScoreModuleBuilder implements ModuleBuilder {
         }
         for (TeamModule team : TeamUtils.getTeams()) {
             if (!team.isObserver()) {
-                results.add(new ScoreModule(team, pointsPerKill, pointsPerDeath, max));
+                results.add(new ScoreModule(team, pointsPerKill, pointsPerDeath, max, time));
             }
         }
         return results;

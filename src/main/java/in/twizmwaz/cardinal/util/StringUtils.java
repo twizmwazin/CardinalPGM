@@ -24,6 +24,22 @@ public class StringUtils {
             case 'm': return value * 60;
             case 's': return value;
         }
-        return 0;
+        return value;
+    }
+
+    public static String formatTime(double time) {
+        int hours = (int) time / 3600;
+        int minutes = (int) (time - (hours * 3600)) / 60;
+        int seconds = (int) time - (hours * 3600) - (minutes * 60);
+        String hoursString = hours + "";
+        String minutesString = minutes + "";
+        String secondsString = seconds + "";
+        while (minutesString.length() < 2) {
+            minutesString = "0" + minutesString;
+        }
+        while (secondsString.length() < 2) {
+            secondsString = "0" + secondsString;
+        }
+        return (hours == 0 ? "" : hoursString + ":") + minutesString + ":" + secondsString;
     }
 }

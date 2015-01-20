@@ -1,13 +1,11 @@
 package in.twizmwaz.cardinal.module.modules.broadcasts;
 
-import in.twizmwaz.cardinal.GameHandler;
+import com.sk89q.minecraft.util.commands.ChatColor;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.broadcasts.BroadcastModule.BroadcastType;
 import in.twizmwaz.cardinal.util.StringUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jdom2.Element;
 
 public class BroadcastModuleBuilder implements ModuleBuilder {
@@ -21,7 +19,7 @@ public class BroadcastModuleBuilder implements ModuleBuilder {
                 int timeAfter;
                 int every;
                 int count = 1;
-                message = element.getText();
+                message = ChatColor.translateAlternateColorCodes('`', element.getText());
                 timeAfter = StringUtils.timeStringToSeconds(element.getAttributeValue("after"));
                 if (element.getAttributeValue("every") != null) {
                     every = StringUtils.timeStringToSeconds(element.getAttributeValue("every"));
@@ -38,7 +36,7 @@ public class BroadcastModuleBuilder implements ModuleBuilder {
                 int timeAfter;
                 int every;
                 int count = 1;
-                message = element.getText();
+                message = ChatColor.translateAlternateColorCodes('`', element.getText());
                 timeAfter = StringUtils.timeStringToSeconds(element.getAttributeValue("after"));
                 if (element.getAttributeValue("every") != null) {
                     every = StringUtils.timeStringToSeconds(element.getAttributeValue("every"));

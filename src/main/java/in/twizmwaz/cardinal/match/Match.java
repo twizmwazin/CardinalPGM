@@ -74,7 +74,7 @@ public class Match {
     }
 
     public boolean isRunning() {
-        return state == MatchState.PLAYING;
+        return state.equals(MatchState.PLAYING);
     }
 
     public MatchState getState() {

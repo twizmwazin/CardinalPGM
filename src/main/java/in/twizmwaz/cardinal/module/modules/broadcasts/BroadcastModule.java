@@ -38,9 +38,11 @@ public class BroadcastModule implements TaskedModule {
     public void run() {
         if (timesBroadcasted < count) {
             if (MatchTimer.getTimeInSeconds() >= (timeAfter + (every * timesBroadcasted))) {
-                if (type.equals(BroadcastType.TIP)) Bukkit.broadcastMessage(ChatColor.DARK_GRAY + "" + ChatColor.BOLD + "[" + ChatColor.BLUE + "" + ChatColor.BOLD + "Tip" + ChatColor.DARK_GRAY + "" + ChatColor.BOLD + "] " + ChatColor.AQUA + "" + ChatColor.ITALIC + message);
-                else if (type.equals(BroadcastType.ALERT)) Bukkit.broadcastMessage(ChatColor.DARK_GRAY + "" + ChatColor.BOLD + "[" + ChatColor.DARK_RED + "" + ChatColor.BOLD + "Alert" + ChatColor.DARK_GRAY + "" + ChatColor.BOLD + "] " + ChatColor.RED + "" + ChatColor.ITALIC + message);
-                timesBroadcasted ++;
+                if (type.equals(BroadcastType.TIP))
+                    Bukkit.broadcastMessage(ChatColor.GRAY + "" + ChatColor.BOLD + "[" + ChatColor.BLUE + "" + ChatColor.BOLD + "Tip" + ChatColor.GRAY + "" + ChatColor.BOLD + "] " + ChatColor.AQUA + "" + ChatColor.ITALIC + message);
+                else if (type.equals(BroadcastType.ALERT))
+                    Bukkit.broadcastMessage(ChatColor.GRAY + "" + ChatColor.BOLD + "[" + ChatColor.YELLOW + "" + ChatColor.BOLD + "Alert" + ChatColor.GRAY + "" + ChatColor.BOLD + "] " + ChatColor.GREEN + "" + ChatColor.ITALIC + message);
+                timesBroadcasted++;
             }
         }
     }

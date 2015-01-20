@@ -50,5 +50,6 @@ public class MatchModule implements Module {
         for (Player player : Bukkit.getOnlinePlayers()) {
             TeamUtils.getTeamById("observers").add(player, true);
         }
+        Bukkit.broadcastMessage(ChatColor.DARK_AQUA + "Cycled to " + ChatColor.AQUA + event.getMatch().getMapInfo().getName());
     }
 }
