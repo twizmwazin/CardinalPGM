@@ -60,20 +60,14 @@ public class DisableDamage implements Module {
                     UUID source = TntTracker.getWhoPlaced(((EntityDamageByEntityEvent) event).getDamager());
                     Match match = GameHandler.getGameHandler().getMatch();
                     if (Bukkit.getOfflinePlayer(source).isOnline()) {
-                        if (!blockExplosionOther) {
-                            event.setCancelled(true);
-                            return;
-                        }
-                        if (!blockExplosionEnemy && TeamUtils.getTeamByPlayer(player) != TeamUtils.getTeamByPlayer(Bukkit.getPlayer(source))) {
-                            event.setCancelled(true);
-                            return;
-                        }
-                        if (!blockExplosionAlly && TeamUtils.getTeamByPlayer(player) == TeamUtils.getTeamByPlayer(Bukkit.getPlayer(source)) && !Bukkit.getPlayer(source).equals(player)) {
-                            event.setCancelled(true);
-                            return;
-                        }
-                        if (!blockExplosionSelf && source.equals(player.getUniqueId())) {
-                            event.setCancelled(true);
+                        if (Bukkit.getPlayer(source).equals(player)) {
+                            event.setCancelled(!blockExplosionSelf);
+                        } else if (TeamUtils.getTeamByPlayer(Bukkit.getPlayer(source)) == TeamUtils.getTeamByPlayer(player)) {
+                            event.setCancelled(!blockExplosionAlly);
+                        } else if (TeamUtils.getTeamByPlayer(Bukkit.getPlayer(source)) != TeamUtils.getTeamByPlayer(player)) {
+                            event.setCancelled(!blockExplosionEnemy);
+                        } else {
+                            event.setCancelled(!blockExplosionOther);
                         }
                     }
                 }
