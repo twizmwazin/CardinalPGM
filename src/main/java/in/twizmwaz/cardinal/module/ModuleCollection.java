@@ -4,6 +4,7 @@ import org.bukkit.event.HandlerList;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Random;
 
 public class ModuleCollection<M extends Module> extends ArrayList<M> {
@@ -55,9 +56,11 @@ public class ModuleCollection<M extends Module> extends ArrayList<M> {
     /**
      * @return Random module from this
      */
+    @SuppressWarnings("unchecked")
     public M getRandom() {
-        Random random = new Random();
-        return this.get(random.nextInt(size()));
+        ModuleCollection copy = (ModuleCollection) this.clone();
+        Collections.shuffle(copy);
+        return (M) copy.get(0);
 
     }
 

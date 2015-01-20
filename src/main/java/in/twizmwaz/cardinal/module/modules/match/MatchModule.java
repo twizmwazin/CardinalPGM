@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 
 public class MatchModule implements Module {
@@ -44,7 +45,7 @@ public class MatchModule implements Module {
         Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # #");
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onCycleComplete(CycleCompleteEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             TeamUtils.getTeamById("observers").add(player, true);

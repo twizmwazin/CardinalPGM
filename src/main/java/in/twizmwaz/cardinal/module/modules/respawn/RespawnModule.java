@@ -105,13 +105,13 @@ public class RespawnModule implements Module {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onCycleComplete(CycleCompleteEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             TeamModule teamModule = TeamUtils.getTeamByPlayer(player);
             ModuleCollection<SpawnModule> modules = new ModuleCollection<SpawnModule>();
             for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
-                if (spawnModule.getTeam() == teamModule) modules.add(spawnModule);
+                if (spawnModule.getTeam().equals(teamModule)) modules.add(spawnModule);
             }
             SpawnModule chosen = modules.getRandom();
             PgmSpawnEvent spawnEvent = new PgmSpawnEvent(player, chosen, TeamUtils.getTeamById("observers"));

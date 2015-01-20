@@ -25,7 +25,7 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
                     team = TeamUtils.getTeamById((subElement.getAttributeValue("team")));
                 }
                 DyeColor color = StringUtils.convertStringToDyeColor(subElement.getAttributeValue("color"));
-                BlockRegion place = (BlockRegion) RegionModuleBuilder.getRegion(subElement.getChildren().get(0));
+                BlockRegion place = RegionModuleBuilder.getRegion(subElement.getChildren().get(0)).getCenterBlock();
                 String name = color.name() + " Wool";
                 if (element.getAttributeValue("name") != null) {
                     name = subElement.getAttributeValue("name");
@@ -61,7 +61,7 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
                         }
                     }
                     DyeColor color = StringUtils.convertStringToDyeColor(subChild.getAttributeValue("color"));
-                    BlockRegion place = (BlockRegion) RegionModuleBuilder.getRegion(subChild.getChildren().get(0));
+                    BlockRegion place = RegionModuleBuilder.getRegion(subChild.getChildren().get(0)).getCenterBlock();
                     String name = color.name() + " Wool";
                     if (element.getAttributeValue("name") != null) {
                         name = subChild.getAttributeValue("name");

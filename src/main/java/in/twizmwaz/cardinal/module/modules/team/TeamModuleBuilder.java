@@ -24,12 +24,7 @@ public class TeamModuleBuilder implements ModuleBuilder {
         List<Element> teamElements = teams.getChildren();
         for (Element teamNode : teamElements) {
             String name = teamNode.getText();
-            String id;
-            try {
-                id = teamNode.getAttribute("id").getValue();
-            } catch (NullPointerException ex) {
-                id = name.toLowerCase().split(" ")[0];
-            }
+            String id = teamNode.getAttributeValue("id") == null ? name.toLowerCase().split(" ")[0] : teamNode.getAttribute("id").getValue();
             int max = Integers.parseInt(teamNode.getAttribute("max").getValue());
             int maxOverfill;
             try {
