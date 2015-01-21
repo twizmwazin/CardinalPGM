@@ -51,7 +51,6 @@ public class Visibility implements Module {
     public void onPlayerJoin(PlayerJoinEvent event) {
         for (Player viewer : Bukkit.getOnlinePlayers()) this.resetVisibility(viewer, event.getPlayer());
         for (Player online : Bukkit.getOnlinePlayers()) this.resetVisibility(event.getPlayer(), online);
-
     }
 
     @EventHandler
@@ -75,23 +74,8 @@ public class Visibility implements Module {
     @EventHandler
     public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
         Player switched = event.getPlayer();
-        for (Player other : Bukkit.getOnlinePlayers()) {
-            if (other.equals(event.getPlayer())) break;
-            if (match.getState().equals(MatchState.PLAYING)) {
-                if (TeamUtils.getTeamByPlayer(other).isObserver() && !event.getNewTeam().isObserver()) {
-                    switched.hidePlayer(other);
-                    other.showPlayer(switched);
-                } else if (event.getNewTeam().isObserver() && !TeamUtils.getTeamByPlayer(other).isObserver()) {
-                    switched.showPlayer(other);
-                    other.hidePlayer(switched);
-                } else {
-                    switched.showPlayer(other);
-                    other.showPlayer(switched);
-                }
-            } else {
-                switched.showPlayer(other);
-                other.showPlayer(switched);
-            }
+        for (Player viewer : Bukkit.getOnlinePlayers()) {
+            this.resetVisibility(viewer, switched);
         }
     }
 }
