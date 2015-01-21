@@ -229,7 +229,7 @@ public class DestroyableObjective implements GameObjective {
         if (Math.floor((complete / blocksRequired) * 100) < 0) {
             return 0;
         }
-        return (int) Math.floor((complete / blocksRequired) * 100);
+        return (int) (complete / blocksRequired) * 100;
     }
 
     public int getPercentFromAmount(int amount) {
@@ -240,7 +240,7 @@ public class DestroyableObjective implements GameObjective {
         if (Math.floor((amount / blocksRequired) * 100) < 0) {
             return 0;
         }
-        return (int) Math.floor((amount / blocksRequired) * 100);
+        return (int) (amount / blocksRequired) * 100;
     }
 
     public boolean partOfObjective(Block block) {

@@ -4,6 +4,7 @@ import in.parapengu.commons.utils.StringUtils;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.modules.cores.CoreObjective;
 import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjective;
+import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
 import org.bukkit.ChatColor;
@@ -65,6 +66,20 @@ public class GameObjectiveScoreboardHandler {
                     return ChatColor.RED + "\u2715";
                 }
             }
+        } else if (objective instanceof HillObjective) {
+            HillObjective hill = (HillObjective) objective;
+            if (hill.isComplete()) {
+                return ChatColor.RESET + "" + "\u29BF" + (hill.getTeam() != null ? hill.getTeam().getColor() : ChatColor.RESET);
+            } else if (hill.isTouched()) {
+                if (hill.showProgress()) {
+                    return ChatColor.RESET + "" + (hill.getCapturingTeam() != null ? hill.getCapturingTeam().getColor() : ChatColor.RESET) + "" + hill.getPercent() + "%" + (hill.getTeam() != null ? hill.getTeam().getColor() : ChatColor.RESET);
+                } else {
+                    return ChatColor.RESET + "" + "\u29BF" + (hill.getTeam() != null ? hill.getTeam().getColor() : ChatColor.RESET);
+                }
+            } else {
+                return ChatColor.RESET + "" + "\u29BE";
+            }
+
         }
         return "";
     }

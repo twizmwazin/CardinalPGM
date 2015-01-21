@@ -4,6 +4,7 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
 import org.bukkit.entity.Player;
@@ -62,22 +63,22 @@ public class TeamUtils {
         return GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class);
     }
 
-    public static List<GameObjective> getObjectives(TeamModule team) {
-        List<GameObjective> objectives = new ArrayList<>();
+    public static ModuleCollection<GameObjective> getObjectives(TeamModule team) {
+        ModuleCollection<GameObjective> objectives = new ModuleCollection<>();
         for (GameObjective objective : GameHandler.getGameHandler().getMatch().getModules().getModules(GameObjective.class)) {
             if (objective instanceof WoolObjective) {
                 if (objective.getTeam() == team) {
                     objectives.add(objective);
                 }
-            } else if (objective.getTeam() != team) {
+            } else if (objective.getTeam() != team && !(objective instanceof HillObjective)) {
                 objectives.add(objective);
             }
         }
         return objectives;
     }
 
-    public static List<GameObjective> getShownObjectives(TeamModule team) {
-        List<GameObjective> objectives = new ArrayList<>();
+    public static ModuleCollection<GameObjective> getShownObjectives(TeamModule team) {
+        ModuleCollection<GameObjective> objectives = new ModuleCollection<>();
         for (GameObjective objective : getObjectives(team)) {
             if (objective.showOnScoreboard()) {
                 objectives.add(objective);

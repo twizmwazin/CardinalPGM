@@ -9,6 +9,7 @@ import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
@@ -116,6 +117,7 @@ public class GameScoreboard implements Module {
         Objective objective = scoreboard.registerNewObjective("scoreboard", "dummy");
         objective.setDisplayName(getDisplayTitle());
         int slot = 1;
+        int hillsSlot = -1;
         Set<String> used = new HashSet<>();
         if (getSlots() > 15) {
             if (getCompactSlots() <= 15) {
@@ -128,7 +130,7 @@ public class GameScoreboard implements Module {
                             objectiveTeam = scoreboard.getTeam(gameObjective.getScoreboardHandler().getNumber() + "-o");
                         }
                         if (objectiveTeam != null) {
-                            String insertObj = team.getColor() + "";
+                            String insertObj = "";
                             while (used.contains(ScoreboardUtils.getConversion(compact, insertObj))) {
                                 insertObj += ChatColor.RESET;
                             }
@@ -184,7 +186,7 @@ public class GameScoreboard implements Module {
                         objectiveTeam = scoreboard.getTeam(gameObjective.getScoreboardHandler().getNumber() + "-o");
                     }
                     if (objectiveTeam != null) {
-                        String insertObj = team.getColor() + "";
+                        String insertObj = "";
                         while (used.contains(ScoreboardUtils.getConversion(compact, insertObj))) {
                             insertObj += ChatColor.RESET;
                         }
@@ -204,6 +206,30 @@ public class GameScoreboard implements Module {
                 }
                 if (ScoreModule.matchHasMax()) {
                     objective.getScore(ChatColor.RED + "---- MAX ----").setScore(ScoreModule.max());
+                }
+                if (ScoreboardUtils.getHills().size() > 0) {
+                    String blank = " ";
+                    while (used.contains(blank)) {
+                        blank += " ";
+                    }
+                    used.add(blank);
+                    objective.getScore(blank).setScore(hillsSlot);
+                    hillsSlot --;
+                    String compact = "";
+                    Team objectiveTeam = null;
+                    for (HillObjective gameObjective : ScoreboardUtils.getHills()) {
+                        compact += " " + gameObjective.getScoreboardHandler().getPrefix(this.team) + "  ";
+                        objectiveTeam = scoreboard.getTeam(gameObjective.getScoreboardHandler().getNumber() + "-o");
+                    }
+                    if (objectiveTeam != null) {
+                        String insertObj = team.getColor() + "";
+                        while (used.contains(ScoreboardUtils.getConversion(compact, insertObj))) {
+                            insertObj += ChatColor.RESET;
+                        }
+                        String steam = ScoreboardUtils.convertToScoreboard(objectiveTeam, compact, insertObj);
+                        used.add(steam);
+                        objective.getScore(steam).setScore(hillsSlot);
+                    }
                 }
             }
         } else {
@@ -281,6 +307,25 @@ public class GameScoreboard implements Module {
             if (ScoreModule.matchHasMax()) {
                 objective.getScore(ChatColor.RED + "---- MAX ----").setScore(ScoreModule.max());
             }
+            if (ScoreboardUtils.getHills().size() > 0) {
+                String blank = " ";
+                while (used.contains(blank)) {
+                    blank += " ";
+                }
+                used.add(blank);
+                objective.getScore(blank).setScore(hillsSlot);
+                hillsSlot --;
+                for (HillObjective hill : ScoreboardUtils.getHills()) {
+                    String insert = "";
+                    while (used.contains(ScoreboardUtils.getConversion(" " + hill.getScoreboardHandler().getPrefix(this.team) + " " + WordUtils.capitalizeFully(hill.getName()), insert, true))) {
+                        insert += ChatColor.RESET;
+                    }
+                    String obj = ScoreboardUtils.convertToScoreboard(scoreboard.getTeam(hill.getScoreboardHandler().getNumber() + "-o"), " " + hill.getScoreboardHandler().getPrefix(this.team) + " " + WordUtils.capitalizeFully(hill.getName()), insert, true);
+                    used.add(obj);
+                    objective.getScore(obj).setScore(hillsSlot);
+                    hillsSlot --;
+                }
+            }
         }
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
     }
@@ -295,6 +340,10 @@ public class GameScoreboard implements Module {
         }
         if (ScoreModule.matchHasScoring()) slots += (TeamUtils.getTeams().size() - 1);
         if (ScoreModule.matchHasMax()) slots ++;
+        if (ScoreboardUtils.getHills().size() > 0) {
+            slots ++;
+            slots += ScoreboardUtils.getHills().size();
+        }
         slots --;
         return slots;
     }
@@ -309,6 +358,9 @@ public class GameScoreboard implements Module {
         }
         if (ScoreModule.matchHasScoring()) slots += (TeamUtils.getTeams().size() - 1);
         if (ScoreModule.matchHasMax()) slots ++;
+        if (ScoreboardUtils.getHills().size() > 0) {
+            slots += 2;
+        }
         slots --;
         return slots;
     }

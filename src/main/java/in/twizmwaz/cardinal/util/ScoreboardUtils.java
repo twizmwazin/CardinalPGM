@@ -1,5 +1,8 @@
 package in.twizmwaz.cardinal.util;
 
+import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import org.bukkit.scoreboard.Team;
 
 public class ScoreboardUtils {
@@ -67,6 +70,14 @@ public class ScoreboardUtils {
             return insertColor + string.substring(max1, max2);
         }
         return null;
+    }
+
+    public static ModuleCollection<HillObjective> getHills() {
+        ModuleCollection<HillObjective> objectives = new ModuleCollection<>();
+        for (HillObjective hill : GameHandler.getGameHandler().getMatch().getModules().getModules(HillObjective.class)) {
+            objectives.add(hill);
+        }
+        return objectives;
     }
 
 }

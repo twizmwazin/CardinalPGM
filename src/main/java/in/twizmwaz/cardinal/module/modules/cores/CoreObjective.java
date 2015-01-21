@@ -22,7 +22,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.util.Vector;
@@ -41,6 +43,7 @@ public class CoreObjective implements GameObjective {
 
     private Set<UUID> playersTouched;
     private Material currentType;
+    private Set<Block> lava = new HashSet<>();
 
     private boolean touched;
     private boolean complete;
@@ -58,6 +61,12 @@ public class CoreObjective implements GameObjective {
 
         this.playersTouched = new HashSet<>();
         this.currentType = type;
+
+        for (Block block : region.getBlocks()) {
+            if (block.getType().equals(Material.STATIONARY_LAVA) || block.getType().equals(Material.LAVA)) {
+                lava.add(block);
+            }
+        }
 
         this.scoreboardHandler = new GameObjectiveScoreboardHandler(this);
     }
@@ -100,6 +109,22 @@ public class CoreObjective implements GameObjective {
     @Override
     public GameObjectiveScoreboardHandler getScoreboardHandler() {
         return scoreboardHandler;
+    }
+
+    @EventHandler
+    public void onObsidianForm(BlockFormEvent event) {
+        if (this.lava.contains(event.getBlock())) {
+            if (event.getNewState().getType().equals(Material.OBSIDIAN)) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent event) {
+        if (lava.contains(event.getBlock())) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
