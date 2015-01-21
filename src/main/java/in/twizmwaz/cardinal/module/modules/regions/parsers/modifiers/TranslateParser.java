@@ -12,7 +12,9 @@ public class TranslateParser extends RegionParser{
 
     public TranslateParser(Element element) {
         super(element.getAttributeValue("name"));
-        this.base = RegionModuleBuilder.getRegion(element.getChildren().get(0));
+        this.base = element.getChildren().size() > 0 ? 
+                RegionModuleBuilder.getRegion(element.getChildren().get(0)) : 
+                RegionModuleBuilder.getRegion(element.getAttributeValue("region"));
         String[] offset = element.getAttributeValue("offset").replaceAll(" ", "").split(",");
         this.xOffset = Double.parseDouble(offset[0]);
         this.yOffset = Double.parseDouble(offset[1]);

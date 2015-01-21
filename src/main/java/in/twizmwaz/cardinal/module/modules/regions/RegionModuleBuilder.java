@@ -79,7 +79,9 @@ public class RegionModuleBuilder implements ModuleBuilder {
             case "region":
                 if (element.getAttributeValue("name") != null) {
                     for (RegionModule regionModule : GameHandler.getGameHandler().getMatch().getModules().getModules(RegionModule.class)) {
-                        if (element.getAttributeValue("name").equalsIgnoreCase(regionModule.getName())) return regionModule;
+                        if (element.getAttributeValue("name").equalsIgnoreCase(regionModule.getName())) {
+                            return regionModule;
+                        }
                     }
                 } else {
                     return getRegion(element.getChildren().get(0));
@@ -102,6 +104,13 @@ public class RegionModuleBuilder implements ModuleBuilder {
 
     public static RegionModule getRegion(Element element) {
         return getRegion(element, GameHandler.getGameHandler().getMatch().getDocument());
+    }
+    
+    public static RegionModule getRegion(String string) {
+        for (RegionModule regionModule : GameHandler.getGameHandler().getMatch().getModules().getModules(RegionModule.class)) {
+            if (string.equalsIgnoreCase(regionModule.getName())) return regionModule;
+        }
+        return null;
     }
 }
 

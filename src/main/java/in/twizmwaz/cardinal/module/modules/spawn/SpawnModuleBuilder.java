@@ -8,6 +8,8 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.regions.parsers.PointParser;
+import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -52,7 +54,8 @@ public class SpawnModuleBuilder implements ModuleBuilder {
             for (Element spawn : spawns.getChildren("default")) {
                 TeamModule team = TeamUtils.getTeamById("observers");
                 List<Pair<RegionModule, Vector>> regions = new ArrayList<>();
-                for (Element region : spawn.getChildren()) {
+                if (spawn.getChildren().size() > 0) 
+                    for (Element region : spawn.getChildren()) {
                     Location location = new Location(GameHandler.getGameHandler().getMatchWorld(), 0, 0, 0);
                     if (region.getParentElement().getParentElement().getParentElement().getAttributeValue("yaw") != null)
                         location.setYaw(Float.parseFloat(region.getParentElement().getParentElement().getParentElement().getAttributeValue("yaw")));
@@ -63,6 +66,9 @@ public class SpawnModuleBuilder implements ModuleBuilder {
                     if (region.getAttributeValue("yaw") != null)
                         location.setYaw(Float.parseFloat(region.getAttributeValue("yaw")));
                     regions.add(new ImmutablePair<>(RegionModuleBuilder.getRegion(region), location.getDirection()));
+                } else {
+                    PointRegion point = new PointRegion(new PointParser(spawn));
+                    regions.add(new ImmutablePair(point, point.getLocation().getDirection()));
                 }
                 String kit = null;
                 if (spawns.getAttributeValue("kit") != null)
@@ -73,7 +79,10 @@ public class SpawnModuleBuilder implements ModuleBuilder {
             }
             for (Element element : spawns.getChildren("spawns")) {
                 for (Element spawn : element.getChildren("spawn")) {
-                    TeamModule team = TeamUtils.getTeamById(spawns.getAttribute("team").isSpecified() ? spawn.getAttributeValue("team") : element.getAttribute("team").isSpecified() ? element.getAttributeValue("team") : spawns.getAttributeValue("team"));
+                    TeamModule team = null;
+                    if (spawns.getAttributeValue("team") != null) team = TeamUtils.getTeamById(spawns.getAttributeValue("team"));
+                    if (element.getAttributeValue("team") != null) team = TeamUtils.getTeamById(element.getAttributeValue("team"));
+                    if (spawn.getAttributeValue("team") != null) team = TeamUtils.getTeamById(spawn.getAttributeValue("team"));
                     List<Pair<RegionModule, Vector>> regions = new ArrayList<>();
                     for (Element region : spawn.getChildren()) {
                         Location location = new Location(GameHandler.getGameHandler().getMatchWorld(), 0, 0, 0);

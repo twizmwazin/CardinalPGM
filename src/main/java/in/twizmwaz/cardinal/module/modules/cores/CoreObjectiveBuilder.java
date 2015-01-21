@@ -38,7 +38,7 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                 }
                 ModuleCollection<RegionModule> regions = new ModuleCollection<>();
                 if (subElement.getAttributeValue("region") != null) {
-                    regions.add(RegionModuleBuilder.getRegion(subElement));
+                    regions.add(RegionModuleBuilder.getRegion(subElement.getAttributeValue("region")));
                 } else {
                     for (Element region : subElement.getChildren()) {
                         regions.add(RegionModuleBuilder.getRegion(region));
