@@ -10,6 +10,7 @@ import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjectiveBuild
 import in.twizmwaz.cardinal.module.modules.difficulty.MapDifficultyBuilder;
 import in.twizmwaz.cardinal.module.modules.disableDamage.DisableDamageBuilder;
 import in.twizmwaz.cardinal.module.modules.doubleKillPatch.DoubleKillPatchBuilder;
+import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.friendlyFire.FriendlyFireBuilder;
 import in.twizmwaz.cardinal.module.modules.gameComplete.GameCompleteBuilder;
 import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameScoreboardBuilder;
@@ -132,5 +133,6 @@ public class ModuleFactory {
         builderClasses.add(MatchModuleBuilder.class);
         builderClasses.add(TimeNotificationsBuilder.class);
         builderClasses.add(HillObjectiveBuilder.class);
+        //builderClasses.add(FilterModuleBuilder.class);
     }
 }

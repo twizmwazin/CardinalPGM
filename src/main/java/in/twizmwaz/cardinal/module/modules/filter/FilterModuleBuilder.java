@@ -2,25 +2,43 @@ package in.twizmwaz.cardinal.module.modules.filter;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
+import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.*;
 import in.twizmwaz.cardinal.module.modules.filter.type.*;
 import in.twizmwaz.cardinal.module.modules.filter.type.constant.*;
+import in.twizmwaz.cardinal.module.modules.filter.type.old.AllowFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.old.DenyFilter;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
+@BuilderData(load = ModuleLoadTime.EARLIER)
 public class FilterModuleBuilder implements ModuleBuilder {
     
     @Override
     public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
+        match.getModules().add(new AllEventFilter("allow-all", true));
+        match.getModules().add(new AllEventFilter("deny-all", false));
+        match.getModules().add(new AllPlayerFilter("allow-players", true));
+        match.getModules().add(new AllPlayerFilter("deny-players", false));
+        match.getModules().add(new AllBlockFilter("allow-blocks", true));
+        match.getModules().add(new AllBlockFilter("deny-blocks", false));
+        match.getModules().add(new AllWorldFilter("allow-world", true));
+        match.getModules().add(new AllWorldFilter("deny-world", false));
+        match.getModules().add(new AllSpawnFilter("allow-spawns", true));
+        match.getModules().add(new AllSpawnFilter("deny-spawns", false));
+        match.getModules().add(new AllEntitiesFilter("allow-entities", true));
+        match.getModules().add(new AllEntitiesFilter("deny-entities", false));
+        match.getModules().add(new AllMobFilter("allow-mobs", true));
+        match.getModules().add(new AllMobFilter("deny-mobs", false));
         for(Element element : match.getDocument().getRootElement().getChildren("filters")) {
             for (Element filter : element.getChildren("filter")) {
-                
+                match.getModules().add(getFilter(filter.getChildren().get(0)));
             }
         }
-        return results;
+        return new ModuleCollection<FilterModule>();
     }
 
     /**
@@ -62,6 +80,10 @@ public class FilterModuleBuilder implements ModuleBuilder {
                 return new HoldingFilter(new ItemFilterParser(element));
             case "wearing":
                 return new WearingFilter(new ItemFilterParser(element));
+            case "allow":
+                return new AllowFilter(new GenericFilterParser(element));
+            case "deny":
+                return new DenyFilter(new GenericFilterParser(element));
             case "filter":
                 switch (element.getAttributeValue("name").toLowerCase()) {
                     case "allow-all":
@@ -117,5 +139,17 @@ public class FilterModuleBuilder implements ModuleBuilder {
      */
     public static FilterModule getFilter(Element element) {
         return getFilter(element, GameHandler.getGameHandler().getMatch().getDocument());
+    }
+
+    /**
+     * Gets a loaded filter by the given name
+     * @param string
+     * @return
+     */
+    public static FilterModule getFilter(String string) {
+        for (FilterModule filterModule : GameHandler.getGameHandler().getMatch().getModules().getModules(FilterModule.class)) {
+            if (string.equalsIgnoreCase(filterModule.getName())) return filterModule;
+        }
+        return null;
     }
 }
