@@ -42,7 +42,6 @@ public class TeamManagerModule implements Module {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         TeamUtils.getTeamById("observers").add(player, true);
-        //event.getPlayer().setScoreboard(TeamUtil.getTeamById("observers").getScoreboard());
         PlayerUtils.resetPlayer(player);
 
         event.getPlayer().getInventory().setItem(0, new ItemStack(Material.COMPASS));
@@ -62,16 +61,22 @@ public class TeamManagerModule implements Module {
             picker.setItemMeta(pickerMeta);
             event.getPlayer().getInventory().setItem(2, picker);
         }
+
+        event.setJoinMessage(TeamUtils.getTeamByPlayer(player).getColor() + player.getDisplayName() + ChatColor.YELLOW + " joined the game");
     }
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
-        removePlayer(event.getPlayer());
+        Player player = event.getPlayer();
+        event.setQuitMessage(TeamUtils.getTeamByPlayer(player).getColor() + player.getDisplayName() + ChatColor.YELLOW + " left the game");
+        removePlayer(player);
     }
 
     @EventHandler
     public void onPlayerLeave(PlayerKickEvent event) {
-        removePlayer(event.getPlayer());
+        Player player = event.getPlayer();
+        event.setLeaveMessage(TeamUtils.getTeamByPlayer(player).getColor() + player.getDisplayName() + ChatColor.YELLOW + " left the game");
+        removePlayer(player);
     }
 
     private void removePlayer(Player player) {
