@@ -263,13 +263,12 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        try {
-            if (TeamUtils.getTeamByPlayer(event.getEntity()).isObserver() || !match.isRunning()) {
-                event.getDrops().clear();
-                event.setDroppedExp(0);
-            }
-        } catch (NullPointerException e) {
-
+        if (TeamUtils.getTeamByPlayer(event.getEntity()) == null) {
+            event.getDrops().clear();
+            event.setDroppedExp(0);
+        } else if (TeamUtils.getTeamByPlayer(event.getEntity()).isObserver()) {
+            event.getDrops().clear();
+            event.setDroppedExp(0);
         }
     }
 
