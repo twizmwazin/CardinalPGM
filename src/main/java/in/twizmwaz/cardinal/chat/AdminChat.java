@@ -29,7 +29,7 @@ public class AdminChat {
                 //Implement this later once toggle permissions are introduced
             } else {
                 String msg = "";
-                for (int i = 0; cmd.argsLength() > i; i++) {
+                for (int i = 0; i < cmd.argsLength(); i++) {
                     msg += cmd.getString(i) + " ";
                 }
                 msg = msg.trim();

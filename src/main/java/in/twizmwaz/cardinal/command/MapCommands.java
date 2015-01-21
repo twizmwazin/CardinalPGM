@@ -27,7 +27,7 @@ public class MapCommands {
         mapInfo = GameHandler.getGameHandler().getMatch().getMapInfo();
     }
 
-    @Command(aliases = {"map"}, desc = "Shows information about the currently playing map.", usage = "", min = 0, max = 0)
+    @Command(aliases = {"map"}, desc = "Shows information about the currently playing map.", usage = "")
     public static void map(final CommandContext args, CommandSender sender) throws CommandException {
         refreshMapInfo();
         sender.sendMessage(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "----------" + ChatColor.DARK_AQUA + " " + mapInfo.getName() + " " + ChatColor.GRAY + mapInfo.getVersion() + ChatColor.RED + " " + ChatColor.STRIKETHROUGH + "----------");

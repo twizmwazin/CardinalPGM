@@ -4,6 +4,7 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.event.ScoreUpdateEvent;
+import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
@@ -73,23 +74,23 @@ public class GameScoreboard implements Module {
     @EventHandler
     public void onObjectiveTouch(ObjectiveTouchEvent event) {
         if (event.updateScoreboard()) {
-            updateScoreboard();
+            Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent());
         }
     }
 
     @EventHandler
     public void onObjectiveComplete(ObjectiveCompleteEvent event) {
-        updateScoreboard();
+        Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent());
     }
 
     @EventHandler
     public void onCycleComplete(CycleCompleteEvent event) {
-        updateScoreboard();
+        Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent());
     }
 
     @EventHandler
     public void onScoreUpdate(ScoreUpdateEvent event) {
-        updateScoreboard();
+        Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent());
     }
 
     @EventHandler
@@ -101,6 +102,11 @@ public class GameScoreboard implements Module {
             remove(team, event.getPlayer());
         }
         add(event.getNewTeam(), event.getPlayer());
+    }
+
+    @EventHandler
+    public void onScoreboardUpdate(ScoreboardUpdateEvent event) {
+        this.updateScoreboard();
     }
 
     public void updateScoreboard() {

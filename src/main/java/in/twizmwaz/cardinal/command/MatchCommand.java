@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 
 public class MatchCommand {
 
-    @Command(aliases = {"matchinfo", "match"}, desc = "Shows information about the currently playing match", usage = "", min = 0, max = 0)
+    @Command(aliases = {"matchinfo", "match"}, desc = "Shows information about the currently playing match", usage = "")
     public static void map(final CommandContext args, CommandSender sender) throws CommandException {
         sender.sendMessage(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "----------------" + ChatColor.RESET + " " + ChatColor.DARK_AQUA + "Match Info" + ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "----------------");
     }

@@ -34,7 +34,7 @@ public class TeamModule<P extends Player> extends HashSet<Player> implements Mod
         this.observer = observer;
     }
 
-    public boolean add(Player player, boolean force) {
+    public boolean add(Player player, boolean force, String message) {
         TeamModule old = null;
         for (TeamModule team : match.getModules().getModules(TeamModule.class)) {
             if (team.contains(player)) {
@@ -46,9 +46,17 @@ public class TeamModule<P extends Player> extends HashSet<Player> implements Mod
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled() || force) {
             this.add(player);
-            event.getPlayer().sendMessage(ChatColor.GRAY + "You have joined " + this.getCompleteName());
+            if (message != null) {
+                if (!message.equals("")) {
+                    event.getPlayer().sendMessage(message);
+                }
+            }
             return true;
         } else return false;
+    }
+
+    public boolean add(Player player, boolean force) {
+        return add(player, force, ChatColor.GRAY + "You have joined " + this.getCompleteName());
     }
     
     @EventHandler(priority = EventPriority.LOW)

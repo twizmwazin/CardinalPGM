@@ -33,14 +33,14 @@ public class TeamChat {
         }
     }
 
-    @Command(aliases = {"team", "t"}, desc = "Send a message to all players on your team")
+    @Command(aliases = {"t"}, desc = "Send a message to all players on your team")
     public static void team(final CommandContext cmd, CommandSender sender) throws CommandException {
         Player player = (Player) sender;
         if (cmd.argsLength() == 0) {
             //Implement this later once toggle permissions are introduced
         } else {
             String msg = "";
-            for (int i = 0; cmd.argsLength() > i; i++) {
+            for (int i = 0; i < cmd.argsLength(); i++) {
                 msg += cmd.getString(i) + " ";
             }
             msg = msg.trim();
