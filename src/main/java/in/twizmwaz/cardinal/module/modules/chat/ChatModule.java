@@ -1,14 +1,18 @@
-package in.twizmwaz.cardinal.chat;
+package in.twizmwaz.cardinal.module.modules.chat;
 
+import in.twizmwaz.cardinal.chat.TeamChat;
+import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Chat implements Listener {
+public class ChatModule implements Module {
 
-    public Chat(JavaPlugin plugin){
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    @Override
+    public void unload() {
+        HandlerList.unregisterAll(this);
     }
 
     @EventHandler
@@ -16,4 +20,5 @@ public class Chat implements Listener {
         TeamChat.sendTeamMessage(event.getMessage(), event.getPlayer());
         event.setCancelled(true);
     }
+
 }

@@ -1,7 +1,6 @@
 package in.twizmwaz.cardinal.match;
 
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.chat.Chat;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.match.util.StartTimer;
 import in.twizmwaz.cardinal.module.Module;
@@ -12,16 +11,12 @@ import in.twizmwaz.cardinal.module.modules.mapInfo.Info;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.DomUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 public class Match {
@@ -32,10 +27,10 @@ public class Match {
     private final ModuleFactory factory;
     private final ModuleCollection<Module> modules;
 
+
     private MatchState state;
     private Document document;
     private StartTimer startTimer;
-    private Set<Listener> listeners = new HashSet<Listener>(); //TO DO:these need to go
 
     public Match(GameHandler handler, UUID id) {
         this.plugin = handler.getPlugin();
@@ -50,7 +45,6 @@ public class Match {
         }
         this.startTimer = new StartTimer(this, 30);
         this.state = MatchState.WAITING;
-        listeners.add(new Chat(plugin));
     }
 
     public void registerModules() {
@@ -63,9 +57,6 @@ public class Match {
     }
 
     public void unregisterModules() {
-        for (Listener listener : listeners) {
-            HandlerList.unregisterAll(listener);
-        }
         modules.unregisterAll();
     }
 
