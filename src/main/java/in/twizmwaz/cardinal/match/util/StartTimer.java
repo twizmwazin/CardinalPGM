@@ -25,14 +25,10 @@ public class StartTimer implements Runnable, Cancellable {
     @Override
     public void run() {
         if (!isCancelled()) {
-
-
             if ((time % 5 == 0 && time > 0) || (time < 5 && time > 0)) {
                 Bukkit.broadcastMessage(ChatColor.GREEN + "Match starting in " + ChatColor.DARK_RED + time + ChatColor.GREEN + " seconds");
             }
-
             if (time == 0) {
-
                 if (match.getState() != MatchState.STARTING) {
                     return;
                 } else {
@@ -40,13 +36,10 @@ public class StartTimer implements Runnable, Cancellable {
                     Bukkit.broadcastMessage(ChatColor.GREEN + "The match has started!");
                     Bukkit.getServer().getPluginManager().callEvent(new MatchStartEvent());
                 }
-
+            } else {
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, this, 20);
             }
             time--;
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, this, 20);
-        } else {
-            this.setCancelled(false);
-            match.setState(MatchState.WAITING);
         }
 
     }
@@ -58,9 +51,9 @@ public class StartTimer implements Runnable, Cancellable {
 
     @Override
     public void setCancelled(boolean isCancelled) {
-        if (!this.cancelled) {
+        this.cancelled = isCancelled;
+        if (this.cancelled) {
             GameHandler.getGameHandler().getMatch().setState(MatchState.WAITING);
-            this.cancelled = isCancelled;
         }
     }
 

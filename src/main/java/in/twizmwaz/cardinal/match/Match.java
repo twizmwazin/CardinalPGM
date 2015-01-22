@@ -100,6 +100,7 @@ public class Match {
     public void start(int time) {
         if (state == MatchState.WAITING) {
             startTimer.setTime(time);
+            startTimer.setCancelled(false);
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameHandler.getGameHandler().getPlugin(), startTimer);
             state = MatchState.STARTING;
         }
