@@ -24,10 +24,8 @@ public class TaskerModule implements TaskedModule {
 
     @Override
     public void run() {
-        if (match.isRunning()) {
-            for (TaskedModule task : match.getModules().getModules(TaskedModule.class)) {
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 1);
-            }
+        for (TaskedModule task : match.getModules().getModules(TaskedModule.class)) {
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 1);
         }
     }
     
