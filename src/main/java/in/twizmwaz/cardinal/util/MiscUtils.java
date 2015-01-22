@@ -27,7 +27,7 @@ public class MiscUtils {
                 case DARK_RED:
                     return Color.fromRGB(192, 0, 0);
                 case GOLD:
-                    return Color.fromRGB(192, 0, 0);
+                    return Color.fromRGB(255, 128, 0);
                 case GRAY:
                     return Color.fromRGB(196, 0, 0);
                 case GREEN:
