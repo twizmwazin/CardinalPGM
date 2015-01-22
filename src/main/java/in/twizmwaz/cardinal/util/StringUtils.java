@@ -1,5 +1,7 @@
 package in.twizmwaz.cardinal.util;
 
+import java.text.DecimalFormat;
+
 public class StringUtils {
 
     public static int timeStringToSeconds(String input) {
@@ -43,7 +45,7 @@ public class StringUtils {
         return (hours == 0 ? "" : hoursString + ":") + minutesString + ":" + secondsString;
     }
 
-    public static String formatTimeInMillis(double time) {
+    public static String formatTimeWithMillis(double time) {
         int hours = (int) time / 3600;
         int minutes = (int) (time - (hours * 3600)) / 60;
         int seconds = (int) time - (hours * 3600) - (minutes * 60);
@@ -51,14 +53,14 @@ public class StringUtils {
         String hoursString = hours + "";
         String minutesString = minutes + "";
         String secondsString = seconds + "";
-        String millisString = millis + "";
-        millisString = millisString.substring(2, 5);
+        String millisString = new DecimalFormat(".000").format(millis);
+        millisString = millisString.substring(1);
         while (minutesString.length() < 2) {
             minutesString = "0" + minutesString;
         }
         while (secondsString.length() < 2) {
             secondsString = "0" + secondsString;
         }
-        return (hours == 0 ? "" : hoursString + ":") + minutesString + ":" + secondsString;
+        return (hours == 0 ? "" : hoursString + ":") + minutesString + ":" + secondsString + "." + millisString;
     }
 }

@@ -60,9 +60,16 @@ public class Cardinal extends JavaPlugin {
         cmdRegister.register(RotationCommands.class);
         cmdRegister.register(CancelCommand.class);
         cmdRegister.register(TeamCommand.class);
-        cmdRegister.register(TeamChat.class);
-        cmdRegister.register(GlobalChat.class);
-        cmdRegister.register(AdminChat.class);
+
+        for (String cmd : AdminChat.commands) {
+            getCommand(cmd).setExecutor(new AdminChat());
+        }
+        for (String cmd : GlobalChat.commands) {
+            getCommand(cmd).setExecutor(new GlobalChat());
+        }
+        for (String cmd : TeamChat.commands) {
+            getCommand(cmd).setExecutor(new TeamChat());
+        }
     }
 
     public void onEnable() {

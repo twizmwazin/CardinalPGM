@@ -1,16 +1,14 @@
 package in.twizmwaz.cardinal.chat;
 
-import com.sk89q.minecraft.util.commands.Command;
-import com.sk89q.minecraft.util.commands.CommandContext;
-import com.sk89q.minecraft.util.commands.CommandException;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class AdminChat {
+public class AdminChat implements CommandExecutor {
 
     public static void sendAdminMessage(String msg, Player sender){
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -21,20 +19,29 @@ public class AdminChat {
         }
     }
 
-    @Command(aliases = {"admin", "a"}, desc = "Send a message to all ops")
-    public static void admin(final CommandContext cmd, CommandSender sender) throws CommandException {
-        Player player = (Player) sender;
-        if (player.isOp()) {
-            if (cmd.argsLength() == 0) {
-                //Implement this later once toggle permissions are introduced
-            } else {
-                String msg = "";
-                for (int i = 0; i < cmd.argsLength(); i++) {
-                    msg += cmd.getString(i) + " ";
+    public static String[] commands = {"a"};
+
+    public AdminChat() {
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, org.bukkit.command.Command cmd, String commandLabel, String[] args) {
+        String command = cmd.getName();
+        if (command.equalsIgnoreCase("a")) {
+            Player player = (Player) sender;
+            if (player.isOp()) {
+                if (args.length == 0) {
+                    //Implement this later once toggle permissions are introduced
+                } else {
+                    String msg = "";
+                    for (int i = 0; i < args.length; i++) {
+                        msg += args[i] + " ";
+                    }
+                    msg = msg.trim();
+                    sendAdminMessage(msg, player);
                 }
-                msg = msg.trim();
-                sendAdminMessage(msg, player);
             }
         }
+        return false;
     }
 }

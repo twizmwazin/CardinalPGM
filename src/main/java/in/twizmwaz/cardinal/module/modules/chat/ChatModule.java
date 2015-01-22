@@ -4,9 +4,7 @@ import in.twizmwaz.cardinal.chat.TeamChat;
 import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class ChatModule implements Module {
 
