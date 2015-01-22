@@ -4,12 +4,13 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionParser;
+import org.bukkit.util.Vector;
 import org.jdom2.Element;
 
 public class MirrorParser extends RegionParser {
 
     private RegionModule base;
-    private final double xOrigin, yOrigin, zOrigin;
+    private final Vector normal;
 
     public MirrorParser(Element element) {
         super(element.getAttributeValue("name"));
@@ -20,25 +21,18 @@ public class MirrorParser extends RegionParser {
                 if (regionModule.getName().equalsIgnoreCase(element.getAttributeValue("region"))) this.base = regionModule;
             }
         }
-        String[] origin = element.getAttributeValue("normal").replaceAll(" ", "").split(",");
-        this.xOrigin = Double.parseDouble(origin[0]);
-        this.yOrigin = Double.parseDouble(origin[1]);
-        this.zOrigin = Double.parseDouble(origin[2]);
+        String[] origin = element.getAttributeValue("origin").replaceAll(" ", "").split(",");
+        String[] normal = element.getAttributeValue("normal").replaceAll(" ", "").split(",");
+        this.normal = new Vector(Double.parseDouble(origin[0]) * Double.parseDouble(normal[0]), 
+                Double.parseDouble(origin[1]) * Double.parseDouble(normal[0]), 
+                Double.parseDouble(origin[2]) * Double.parseDouble(normal[0]));
     }
     
     public RegionModule getBase() {
         return base;
     }
 
-    public double getXOrigin() {
-        return xOrigin;
-    }
-
-    public double getYOrigin() {
-        return yOrigin;
-    }
-
-    public double getZOrigin() {
-        return zOrigin;
+    public Vector getNormal() {
+        return normal;
     }
 }

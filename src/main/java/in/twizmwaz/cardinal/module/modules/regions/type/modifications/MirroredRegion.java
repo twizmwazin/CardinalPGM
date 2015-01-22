@@ -5,69 +5,77 @@ import in.twizmwaz.cardinal.module.modules.regions.parsers.modifiers.MirrorParse
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
 import org.bukkit.block.Block;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
 
+//This technically isn't accurate, although it probably works most of the time
 public class MirroredRegion extends RegionModule {
 
     private final RegionModule base;
-    private final double xOrigin, yOrigin, zOrigin;
+    private final Vector normal;
 
-    public MirroredRegion(String name, RegionModule base, double xOrigin, double yOrigin, double zOrigin) {
+    public MirroredRegion(String name, RegionModule base, Vector normal) {
         super(name);
         this.base = base;
-        this.xOrigin = xOrigin;
-        this.yOrigin = yOrigin;
-        this.zOrigin = zOrigin;
+        this.normal = normal;
     }
 
     public MirroredRegion(MirrorParser parser) {
-        this(parser.getName(), parser.getBase(), parser.getXOrigin(), parser.getYOrigin(), parser.getZOrigin());
+        this(parser.getName(), parser.getBase(), parser.getNormal());
     }
 
     public RegionModule getBase() {
         return base;
     }
 
-    public double getXOrigin() {
-        return xOrigin;
-    }
-
-    public double getYOrigin() {
-        return yOrigin;
-    }
-
-    public double getZOrigin() {
-        return zOrigin;
+    public Vector getNormal() {
+        return normal;
     }
 
     @Override
     public boolean contains(BlockRegion region) {
-        return base.contains(new BlockRegion(null, 2 * region.getX() - region.getX(), 2 * region.getY() - region.getY(), 2 * region.getZ() - region.getZ()));
+        return base.contains(new BlockRegion(null, 
+                normal.getBlockX() == 0 ? region.getX() - normal.getBlockX() : region.getX() ,
+                normal.getBlockY() == 0 ? region.getY() - normal.getBlockY() : region.getY(),
+                normal.getBlockZ() == 0 ? region.getZ() - normal.getBlockZ() : region.getZ()));
     }
 
     @Override
     public boolean contains(PointRegion point) {
-        return base.contains(new BlockRegion(null, 2 * point.getX() - point.getX(), 2 * point.getY() - point.getY(), 2 * point.getZ() - point.getZ()));
+        return base.contains(new BlockRegion(null,
+                normal.getBlockX() == 0 ? point.getX() - normal.getBlockX() : point.getX() ,
+                normal.getBlockY() == 0 ? point.getY() - normal.getBlockY() : point.getY(),
+                normal.getBlockZ() == 0 ? point.getZ() - normal.getBlockZ() : point.getZ()));
     }
 
     @Override
     public PointRegion getRandomPoint() {
         PointRegion basePoint = base.getRandomPoint();
-        return new PointRegion(null, 2 * basePoint.getX() - basePoint.getX(), 2 * basePoint.getY() - basePoint.getY(), 2 * basePoint.getZ() - basePoint.getZ());
+        return new PointRegion(null,
+                normal.getBlockX() == 0 ? basePoint.getX() - normal.getBlockX() : basePoint.getX() ,
+                normal.getBlockY() == 0 ? basePoint.getY() - normal.getBlockY() : basePoint.getY(),
+                normal.getBlockZ() == 0 ? basePoint.getZ() - normal.getBlockZ() : basePoint.getZ());
     }
 
     @Override
     public BlockRegion getCenterBlock() {
-        return new BlockRegion(null, 2 * base.getCenterBlock().getX() - base.getCenterBlock().getX(), 2 * base.getCenterBlock().getY() - base.getCenterBlock().getY(), 2 * base.getCenterBlock().getZ() - base.getCenterBlock().getZ());
+        BlockRegion basePoint = base.getCenterBlock();
+        return new PointRegion(null,
+                normal.getBlockX() == 0 ? basePoint.getX() - normal.getBlockX() : basePoint.getX() ,
+                normal.getBlockY() == 0 ? basePoint.getY() - normal.getBlockY() : basePoint.getY(),
+                normal.getBlockZ() == 0 ? basePoint.getZ() - normal.getBlockZ() : basePoint.getZ());
     }
 
     @Override
     public List<Block> getBlocks() {
         List<Block> results = new ArrayList<>();
         for (Block block : getBase().getBlocks()) {
-            results.add(new BlockRegion(null, block.getX() - 2 * getXOrigin(), block.getY() - 2 * getYOrigin(), block.getZ() - 2 * getZOrigin()).getBlock());
+            results.add(new BlockRegion(null,
+                    normal.getBlockX() == 0 ? block.getX() - normal.getBlockX() : block.getX() ,
+                    normal.getBlockY() == 0 ? block.getY() - normal.getBlockY() : block.getY(),
+                    normal.getBlockZ() == 0 ? block.getZ() - normal.getBlockZ() : block.getZ()).getBlock());
         }
         return results;
     }
