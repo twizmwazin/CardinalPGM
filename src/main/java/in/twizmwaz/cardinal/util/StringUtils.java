@@ -42,4 +42,23 @@ public class StringUtils {
         }
         return (hours == 0 ? "" : hoursString + ":") + minutesString + ":" + secondsString;
     }
+
+    public static String formatTimeInMillis(double time) {
+        int hours = (int) time / 3600;
+        int minutes = (int) (time - (hours * 3600)) / 60;
+        int seconds = (int) time - (hours * 3600) - (minutes * 60);
+        double millis = time - (hours * 3600) - (minutes * 60) - seconds;
+        String hoursString = hours + "";
+        String minutesString = minutes + "";
+        String secondsString = seconds + "";
+        String millisString = millis + "";
+        millisString = millisString.substring(2, 5);
+        while (minutesString.length() < 2) {
+            minutesString = "0" + minutesString;
+        }
+        while (secondsString.length() < 2) {
+            secondsString = "0" + secondsString;
+        }
+        return (hours == 0 ? "" : hoursString + ":") + minutesString + ":" + secondsString;
+    }
 }

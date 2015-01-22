@@ -21,13 +21,15 @@ import java.util.UUID;
 
 public class Match {
 
+    private static int matchNumber = 1;
+
     private final JavaPlugin plugin;
     private final GameHandler handler;
     private final UUID uuid;
     private final ModuleFactory factory;
     private final ModuleCollection<Module> modules;
 
-
+    private int number;
     private MatchState state;
     private Document document;
     private StartTimer startTimer;
@@ -45,6 +47,8 @@ public class Match {
         }
         this.startTimer = new StartTimer(this, 30);
         this.state = MatchState.WAITING;
+        this.number = matchNumber;
+        matchNumber ++;
     }
 
     public void registerModules() {
@@ -106,5 +110,9 @@ public class Match {
 
     public ModuleCollection<Module> getModules() {
         return modules;
+    }
+
+    public int getNumber() {
+        return number;
     }
 }
