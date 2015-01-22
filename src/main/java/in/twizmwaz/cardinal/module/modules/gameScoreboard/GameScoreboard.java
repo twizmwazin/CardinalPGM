@@ -237,10 +237,10 @@ public class GameScoreboard implements Module {
                 if (team != this.team && !team.isObserver() && TeamUtils.getShownObjectives(team).size() > 0) {
                     for (GameObjective gameObjective : TeamUtils.getShownObjectives(team)) {
                         String insert = "";
-                        while (used.contains(ScoreboardUtils.getConversion(" " + gameObjective.getScoreboardHandler().getPrefix(this.team) + " " + ChatColor.RESET + WordUtils.capitalizeFully(gameObjective.getName()), insert, true))) {
+                        while (used.contains(ScoreboardUtils.getConversion(" " + gameObjective.getScoreboardHandler().getPrefix(this.team) + " " + ChatColor.RESET + WordUtils.capitalizeFully(gameObjective.getName().replaceAll("_", " ")), insert, true))) {
                             insert += ChatColor.RESET;
                         }
-                        String obj = ScoreboardUtils.convertToScoreboard(scoreboard.getTeam(gameObjective.getScoreboardHandler().getNumber() + "-o"), " " + gameObjective.getScoreboardHandler().getPrefix(this.team) + " " + ChatColor.RESET + WordUtils.capitalizeFully(gameObjective.getName()), insert, true);
+                        String obj = ScoreboardUtils.convertToScoreboard(scoreboard.getTeam(gameObjective.getScoreboardHandler().getNumber() + "-o"), " " + gameObjective.getScoreboardHandler().getPrefix(this.team) + " " + ChatColor.RESET + WordUtils.capitalizeFully(gameObjective.getName().replaceAll("_", " ")), insert, true);
                         used.add(obj);
                         objective.getScore(obj).setScore(slot);
                         slot ++;
@@ -287,10 +287,10 @@ public class GameScoreboard implements Module {
             if (!team.isObserver() && TeamUtils.getShownObjectives(team).size() > 0) {
                 for (GameObjective gameObjective : TeamUtils.getShownObjectives(team)) {
                     String insert = "";
-                    while (used.contains(ScoreboardUtils.getConversion(" " + gameObjective.getScoreboardHandler().getPrefix(this.team) + " " + ChatColor.RESET + WordUtils.capitalizeFully(gameObjective.getName()), insert, true))) {
+                    while (used.contains(ScoreboardUtils.getConversion(" " + gameObjective.getScoreboardHandler().getPrefix(this.team) + " " + ChatColor.RESET + WordUtils.capitalizeFully(gameObjective.getName().replaceAll("_", " ")), insert, true))) {
                         insert += ChatColor.RESET;
                     }
-                    String obj = ScoreboardUtils.convertToScoreboard(scoreboard.getTeam(gameObjective.getScoreboardHandler().getNumber() + "-o"), " " + gameObjective.getScoreboardHandler().getPrefix(this.team) + " " + ChatColor.RESET + WordUtils.capitalizeFully(gameObjective.getName()), insert, true);
+                    String obj = ScoreboardUtils.convertToScoreboard(scoreboard.getTeam(gameObjective.getScoreboardHandler().getNumber() + "-o"), " " + gameObjective.getScoreboardHandler().getPrefix(this.team) + " " + ChatColor.RESET + WordUtils.capitalizeFully(gameObjective.getName().replaceAll("_", " ")), insert, true);
                     used.add(obj);
                     objective.getScore(obj).setScore(slot);
                     slot ++;
@@ -317,10 +317,10 @@ public class GameScoreboard implements Module {
                 hillsSlot --;
                 for (HillObjective hill : ScoreboardUtils.getHills()) {
                     String insert = "";
-                    while (used.contains(ScoreboardUtils.getConversion(" " + hill.getScoreboardHandler().getPrefix(this.team) + " " + WordUtils.capitalizeFully(hill.getName()), insert, true))) {
+                    while (used.contains(ScoreboardUtils.getConversion(" " + hill.getScoreboardHandler().getPrefix(this.team) + " " + WordUtils.capitalizeFully(hill.getName().replaceAll("_", " ")), insert, true))) {
                         insert += ChatColor.RESET;
                     }
-                    String obj = ScoreboardUtils.convertToScoreboard(scoreboard.getTeam(hill.getScoreboardHandler().getNumber() + "-o"), " " + hill.getScoreboardHandler().getPrefix(this.team) + " " + WordUtils.capitalizeFully(hill.getName()), insert, true);
+                    String obj = ScoreboardUtils.convertToScoreboard(scoreboard.getTeam(hill.getScoreboardHandler().getNumber() + "-o"), " " + hill.getScoreboardHandler().getPrefix(this.team) + " " + WordUtils.capitalizeFully(hill.getName().replaceAll("_", " ")), insert, true);
                     used.add(obj);
                     objective.getScore(obj).setScore(hillsSlot);
                     hillsSlot --;
