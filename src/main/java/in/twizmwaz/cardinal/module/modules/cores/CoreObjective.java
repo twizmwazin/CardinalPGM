@@ -44,6 +44,7 @@ public class CoreObjective implements GameObjective {
     private Set<UUID> playersTouched;
     private Material currentType;
     private Set<Block> lava = new HashSet<>();
+    private Set<Block> core = new HashSet<>();
 
     private boolean touched;
     private boolean complete;
@@ -63,6 +64,9 @@ public class CoreObjective implements GameObjective {
         this.currentType = type;
 
         for (Block block : region.getBlocks()) {
+            if (partOfObjective(block)) {
+                core.add(block);
+            }
             if (block.getType().equals(Material.STATIONARY_LAVA) || block.getType().equals(Material.LAVA)) {
                 lava.add(block);
             }
@@ -144,6 +148,13 @@ public class CoreObjective implements GameObjective {
             } else {
                 event.setCancelled(true);
                 ChatUtils.sendWarningMessage(event.getPlayer(), "You may not damage your own core.");
+                return;
+            }
+        }
+        if (core.contains(event.getBlock())) {
+            if (TeamUtils.getTeamByPlayer(event.getPlayer()) == team) {
+                event.setCancelled(true);
+                ChatUtils.sendWarningMessage(event.getPlayer(), "You may not damage your own core.");
             }
         }
     }
@@ -152,7 +163,7 @@ public class CoreObjective implements GameObjective {
     public void onEntityExplode(EntityExplodeEvent event) {
         List<Block> objectiveBlownUp = new ArrayList<>();
         for (Block block : event.blockList()) {
-            if (getBlocks().contains(block)) {
+            if (getBlocks().contains(block) || core.contains(block)) {
                 objectiveBlownUp.add(block);
             }
         }
