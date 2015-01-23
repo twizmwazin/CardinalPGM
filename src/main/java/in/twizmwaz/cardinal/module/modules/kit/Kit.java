@@ -2,9 +2,11 @@ package in.twizmwaz.cardinal.module.modules.kit;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.Module;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
 
@@ -60,7 +62,7 @@ public class Kit implements Module {
     public void unload() {
     }
 
-    public void apply(Player player) {
+    public void apply(final Player player) {
         if (clear || clearItems) player.getInventory().clear();
         if (clear) {
             for (ItemStack armor : player.getInventory().getArmorContents()) {
@@ -110,9 +112,13 @@ public class Kit implements Module {
                     break;
             }
         }
-        for (PotionEffect effect : effects) {
-            player.addPotionEffect(effect);
-            player.addIgnorantEffect(effect.getType());
+        for (final PotionEffect effect : effects) {
+            Bukkit.getScheduler().scheduleSyncDelayedTask(GameHandler.getGameHandler().getPlugin(), new Runnable() {
+                @Override
+                public void run() {
+                    player.addPotionEffect(effect, true);
+                }
+            }, 1);
         }
         player.setPotionParticles(potionParticles);
     }

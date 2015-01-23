@@ -96,11 +96,11 @@ public class KitBuilder implements ModuleBuilder {
                     PotionEffectType type = StringUtils.convertStringToPotionEffectType(potion.getText());
                     int duration = 0;
                     try {
-                        duration = Integer.parseInt(potion.getAttributeValue("duration")) * 5;
+                        duration = Integer.parseInt(potion.getAttributeValue("duration")) * 20;
                     } catch (NumberFormatException e) {
-                        if (potion.getAttributeValue("duration").equalsIgnoreCase("oo")) duration = 200000;
+                        if (potion.getAttributeValue("duration").equalsIgnoreCase("oo")) duration = Integer.MAX_VALUE;
                     }
-                    int amplifier = 0;
+                    int amplifier = 1;
                     if (potion.getAttributeValue("amplifier") != null) {
                         amplifier = Integer.parseInt(potion.getAttributeValue("amplifier"));
                     }
