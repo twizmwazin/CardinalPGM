@@ -5,40 +5,49 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.BlockParser;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.util.BlockVector;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BlockRegion extends RegionModule {
 
-    private final double x, y, z;
+    private final Vector vector;
 
+    public BlockRegion(String name, Vector vector) {
+        super(name);
+        this.vector = vector;
+    }
+    
     public BlockRegion(String name, double x, double y, double z) {
         super(name);
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.vector = new BlockVector(x, y, z);
     }
 
     public BlockRegion(BlockParser parser) {
-        this(parser.getName(), parser.getX(), parser.getY(), parser.getZ());
+        this(parser.getName(), parser.getVector());
     }
 
     public double getX() {
-        return x;
+        return vector.getX();
     }
 
     public double getY() {
-        return y;
+        return vector.getY();
     }
 
     public double getZ() {
-        return z;
+        return vector.getZ();
+    }
+
+    public Vector getVector() {
+        return vector;
     }
 
     @Override
     public boolean contains(BlockRegion region) {
-        return region.getX() == getX() && region.getY() == getY() && region.getZ() == getZ();
+        return region.getVector() == getVector();
     }
 
     @Override
@@ -48,7 +57,7 @@ public class BlockRegion extends RegionModule {
 
     @Override
     public PointRegion getRandomPoint() {
-        return new PointRegion(null, x, y, z);
+        return new PointRegion(null, getVector());
     }
 
     @Override
@@ -64,11 +73,11 @@ public class BlockRegion extends RegionModule {
     }
 
     public Location getLocation() {
-        return new Location(GameHandler.getGameHandler().getMatchWorld(), x, y, z);
+        return getVector().toLocation(GameHandler.getGameHandler().getMatchWorld());
     }
 
     public Block getBlock() {
-        return this.getLocation().getBlock();
+        return this.getVector().toLocation(GameHandler.getGameHandler().getMatchWorld()).getBlock();
     }
 
 }

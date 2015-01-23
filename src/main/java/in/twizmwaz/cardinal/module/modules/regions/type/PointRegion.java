@@ -2,59 +2,47 @@ package in.twizmwaz.cardinal.module.modules.regions.type;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.PointParser;
-import org.bukkit.Location;
 import org.bukkit.block.Block;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.bukkit.util.BlockVector;
+import org.bukkit.util.Vector;
 
 public class PointRegion extends BlockRegion {
 
-    private final double x, y, z;
-    private final float yaw, pitch;
+    private final Vector vector, look;
 
-    public PointRegion(String name, double x, double y, double z, float yaw, float pitch) {
-        super(name, x, y, z);
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.yaw = yaw;
-        this.pitch = pitch;
-    }
-
-    public PointRegion(PointParser parser) {
-        this(parser.getName(), parser.getX(), parser.getY(), parser.getZ(), parser.getYaw(), parser.getPitch());
+    public PointRegion(String name, Vector vector, Vector look) {
+        super(name, vector);
+        this.vector = vector;
+        this.look = look;
     }
 
     public PointRegion(String name, double x, double y, double z) {
-        this(name, x, y, z, 0F, 0F);
+        super(name, x, y, z);
+        this.vector = new BlockVector(x, y, z);
+        this.look = new Vector();
+    }
+
+    public PointRegion(PointParser parser) {
+        this(parser.getName(), parser.getVector(), parser.getLook());
+    }
+
+    public PointRegion(String name, Vector vector) {
+        this(name, vector, new Vector());
     }
 
     public float getYaw() {
-        return yaw;
+        return vector.toLocation(null).getYaw();
     }
 
     public float getPitch() {
-        return pitch;
-    }
-
-    public Location toLocation() {
-        return new Location(GameHandler.getGameHandler().getMatchWorld(), x, y, z, yaw, pitch);
-    }
-
-    @Override
-    public BlockRegion getCenterBlock() {
-        return new BlockRegion(null, this.x, this.y, this.z);
-    }
-
-    @Override
-    public List<Block> getBlocks() {
-        List<Block> results = new ArrayList<>();
-        results.add(toLocation().getBlock());
-        return results;
+        return vector.toLocation(null).getPitch();
     }
 
     public Block getBlock() {
-        return this.toLocation().getBlock();
+        return vector.toLocation(GameHandler.getGameHandler().getMatchWorld()).getBlock();
+    }
+
+    public Vector getLook() {
+        return look;
     }
 }

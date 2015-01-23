@@ -7,76 +7,75 @@ import in.twizmwaz.cardinal.module.modules.regions.parsers.CuboidParser;
 import in.twizmwaz.cardinal.util.NumUtils;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CuboidRegion extends RegionModule {
 
-    private final double xMin, yMin, zMin, xMax, yMax, zMax;
+    private final Vector min, max;
+
+    public CuboidRegion(String name, Vector min, Vector max) {
+        super(name);
+        this.min = min;
+        this.max = max;
+    }
 
     public CuboidRegion(String name, double xMin, double yMin, double zMin, double xMax, double yMax, double zMax) {
-        super(name);
-        this.xMin = xMin;
-        this.yMin = yMin;
-        this.zMin = zMin;
-        this.xMax = xMax;
-        this.yMax = yMax;
-        this.zMax = zMax;
+        this(name, new Vector(xMin, yMin, zMin), new Vector(xMax, yMax, zMax));
     }
 
     public CuboidRegion(CuboidParser parser) {
-        this(parser.getName(), parser.getXMin(), parser.getYMin(), parser.getZMin(), parser.getXMax(), parser.getYMax(), parser.getZMax());
+        this(parser.getName(), parser.getMin(), parser.getMax());
     }
 
     public double getXMin() {
-        return xMin;
+        return min.getX();
     }
 
     public double getYMin() {
-        return yMin;
+        return min.getY();
     }
 
     public double getZMin() {
-        return zMin;
+        return min.getZ();
     }
 
     public double getXMax() {
-        return xMax;
+        return max.getX();
     }
 
     public double getYMax() {
-        return yMax;
+        return max.getY();
     }
 
     public double getZMax() {
-        return zMax;
+        return max.getZ();
     }
 
 
     @Override
     public boolean contains(BlockRegion region) {
-        return NumUtils.checkInterval(region.getX(), xMin, xMax) && NumUtils.checkInterval(region.getY(), yMin, yMax) && NumUtils.checkInterval(region.getZ(), zMin, zMax);
-
+        return region.getVector().isInAABB(min, max);
     }
 
     @Override
     public boolean contains(PointRegion region) {
-        return NumUtils.checkInterval(region.getX(), xMin, xMax) && NumUtils.checkInterval(region.getY(), yMin, yMax) && NumUtils.checkInterval(region.getZ(), zMin, zMax);
-
+        return region.getVector().isInAABB(min, max);
     }
 
     @Override
     public PointRegion getRandomPoint() {
-        double x = (xMin > xMax) ? OtherUtil.getRandom(xMax, xMin) : OtherUtil.getRandom(xMin, xMax);
-        double y = (yMin > yMax) ? OtherUtil.getRandom(yMax, yMin) : OtherUtil.getRandom(yMin, yMax);
-        double z = (zMin > zMax) ? OtherUtil.getRandom(zMax, zMin) : OtherUtil.getRandom(zMin, zMax);
+        double x = (min.getX() > max.getX()) ? OtherUtil.getRandom(max.getX(), min.getY()) : OtherUtil.getRandom(min.getX(), max.getX());
+        double y = (min.getY() > max.getBlockY()) ? OtherUtil.getRandom(max.getY(), min.getY()) : OtherUtil.getRandom(min.getY(), max.getY());
+        double z = (min.getZ() > max.getZ()) ? OtherUtil.getRandom(max.getZ(), min.getZ()) : OtherUtil.getRandom(min.getZ(), max.getZ());
         return new PointRegion(null, x, y, z);
     }
 
     @Override
     public BlockRegion getCenterBlock() {
-        return new BlockRegion(null, xMin + Math.abs(this.xMax - this.xMin), yMin + Math.abs(this.yMax - yMin), zMax + Math.abs(this.zMax - this.zMin));
+        return new BlockRegion(null, min.getMidpoint(max));
     }
 
     @Override

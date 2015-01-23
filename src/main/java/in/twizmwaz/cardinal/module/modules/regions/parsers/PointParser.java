@@ -4,56 +4,67 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionParser;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
 import in.twizmwaz.cardinal.util.NumUtils;
+import org.bukkit.util.Vector;
 import org.jdom2.Element;
 
 public class PointParser extends RegionParser {
 
-    private final double x, y, z;
-    private float yaw, pitch;
+    private final Vector vector;
+    private final Vector look;
 
     public PointParser(Element element) {
         super(element.getAttributeValue("name"));
+        double x, y, z;
         if (element.getChildren().size() > 0) {
             PointRegion subPoint = RegionModuleBuilder.getRegion(element.getChildren().get(0)).getRandomPoint();
-            this.x = subPoint.getX();
-            this.y = subPoint.getY();
-            this.z = subPoint.getZ();
+            x = subPoint.getX();
+            y = subPoint.getY();
+            z = subPoint.getZ();
         } else {
-            this.x = NumUtils.parseDouble(element.getText().replaceAll(" ", "").split(",")[0]);
-            this.y = NumUtils.parseDouble(element.getText().replaceAll(" ", "").split(",")[1]);
-            this.z = NumUtils.parseDouble(element.getText().replaceAll(" ", "").split(",")[2]);
+            x = NumUtils.parseDouble(element.getText().replaceAll(" ", "").split(",")[0]);
+            y = NumUtils.parseDouble(element.getText().replaceAll(" ", "").split(",")[1]);
+            z = NumUtils.parseDouble(element.getText().replaceAll(" ", "").split(",")[2]);
+        }
+        this.vector = new Vector(x, y, z);
+        double yaw, pitch;
+        try {
+            yaw = Float.parseFloat(element.getAttributeValue("yaw").replaceAll(" ", ""));
+        } catch (Exception e) {
+            yaw = 0F;
         }
         try {
-            this.yaw = Float.parseFloat(element.getAttributeValue("yaw").replaceAll(" ", ""));
+            pitch = Float.parseFloat(element.getAttributeValue("pitch").replaceAll(" ", ""));
         } catch (Exception e) {
-            this.yaw = 0F;
+            pitch = 0F;
         }
-        try {
-            this.pitch = Float.parseFloat(element.getAttributeValue("pitch").replaceAll(" ", ""));
-        } catch (Exception e) {
-            this.pitch = 0F;
-        }
-
+        look = new Vector(Math.cos(pitch) * Math.cos(yaw), Math.sin(pitch), Math.cos(pitch) * Math.sin(-yaw));
     }
 
     public double getX() {
-        return x;
+        return vector.getX();
     }
 
     public double getY() {
-        return y;
+        return vector.getY();
     }
 
     public double getZ() {
-        return z;
+        return vector.getZ();
     }
 
     public float getYaw() {
-        return yaw;
+        return (float) (1 / Math.acos(Math.cos(getPitch()) / getX()));
     }
 
     public float getPitch() {
-        return pitch;
+        return (float) Math.asin(getY());
     }
 
+    public Vector getVector() {
+        return vector;
+    }
+
+    public Vector getLook() {
+        return look;
+    }
 }
