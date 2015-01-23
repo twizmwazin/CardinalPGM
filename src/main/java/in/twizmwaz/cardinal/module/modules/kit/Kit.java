@@ -117,8 +117,9 @@ public class Kit implements Module {
                 @Override
                 public void run() {
                     player.addPotionEffect(effect, true);
+                    player.addIgnorantEffect(effect.getType());
                 }
-            }, 1);
+            }, 0);
         }
         player.setPotionParticles(potionParticles);
     }

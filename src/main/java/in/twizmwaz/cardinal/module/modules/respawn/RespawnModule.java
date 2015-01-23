@@ -52,6 +52,11 @@ public class RespawnModule implements Module {
         } catch (NullPointerException e) {
         }
     }
+    
+    @EventHandler(priority = EventPriority.LOW)
+    public void clearIgnorantEffects(PgmSpawnEvent event) {
+        event.getPlayer().clearIgnorantEffects();
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInitLogin(PlayerInitialSpawnEvent event) {
