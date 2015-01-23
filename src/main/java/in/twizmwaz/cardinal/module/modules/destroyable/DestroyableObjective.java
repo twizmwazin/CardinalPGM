@@ -30,12 +30,13 @@ public class DestroyableObjective implements GameObjective {
     private final String name;
     private final String id;
     private final RegionModule region;
-    private final List<Material> types;
-    private final List<Integer> damageValues;
+    private List<Material> types;
+    private List<Integer> damageValues;
     private final double required;
     private final boolean showPercent;
     private final boolean repairable;
     private final boolean show;
+    private boolean changesModes;
 
     private Set<UUID> playersTouched;
     private double size;
@@ -46,7 +47,7 @@ public class DestroyableObjective implements GameObjective {
 
     private GameObjectiveScoreboardHandler scoreboardHandler;
 
-    protected DestroyableObjective(final TeamModule team, final String name, final String id, final RegionModule region, final List<Material> types, final List<Integer> damageValues, final double required, final boolean show, boolean showPercent, boolean repairable) {
+    protected DestroyableObjective(final TeamModule team, final String name, final String id, final RegionModule region, List<Material> types, List<Integer> damageValues, final double required, final boolean show, boolean changesModes, boolean showPercent, boolean repairable) {
         this.team = team;
         this.name = name;
         this.id = id;
@@ -58,6 +59,7 @@ public class DestroyableObjective implements GameObjective {
         this.complete = 0;
         this.required = required;
         this.show = show;
+        this.changesModes = changesModes;
         this.completed = false;
 
         this.playersTouched = new HashSet<>();
@@ -299,5 +301,16 @@ public class DestroyableObjective implements GameObjective {
             types.add(highestType);
         }
         return types;
+    }
+
+    public boolean changesModes() {
+        return changesModes;
+    }
+
+    public void setMaterial(Material material, int damageValue) {
+        this.types.clear();
+        this.damageValues.clear();
+        this.types.add(material);
+        this.damageValues.add(damageValue);
     }
 }

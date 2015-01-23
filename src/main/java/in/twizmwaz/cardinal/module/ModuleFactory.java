@@ -24,6 +24,7 @@ import in.twizmwaz.cardinal.module.modules.kit.KitBuilder;
 import in.twizmwaz.cardinal.module.modules.mapInfo.InfoBuilder;
 import in.twizmwaz.cardinal.module.modules.match.MatchModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimerBuilder;
+import in.twizmwaz.cardinal.module.modules.monumentModes.MonumentModesBuilder;
 import in.twizmwaz.cardinal.module.modules.motd.MOTDBuilder;
 import in.twizmwaz.cardinal.module.modules.observers.ObserverModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.projectiles.ProjectilesBuilder;
@@ -134,6 +135,7 @@ public class ModuleFactory {
         builderClasses.add(TimeNotificationsBuilder.class);
         builderClasses.add(HillObjectiveBuilder.class);
         builderClasses.add(ChatModuleBuilder.class);
+        builderClasses.add(MonumentModesBuilder.class);
      // builderClasses.add(FilterModuleBuilder.class);
     }
 }

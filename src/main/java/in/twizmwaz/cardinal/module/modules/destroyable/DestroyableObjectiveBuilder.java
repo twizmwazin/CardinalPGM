@@ -116,7 +116,13 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                 } else if (element.getAttributeValue("show") != null) {
                     show = !element.getAttributeValue("show").equalsIgnoreCase("false");
                 }
-                result.add(new DestroyableObjective(owner, name, id, new UnionRegion(null, regions), types, damageValues, required, show, showProgress, repairable));
+                boolean changesModes = false;
+                if (subElement.getAttributeValue("mode-changes") != null) {
+                    changesModes = subElement.getAttributeValue("mode-changes").equalsIgnoreCase("true");
+                } else if (element.getAttributeValue("mode-changes") != null) {
+                    changesModes = element.getAttributeValue("mode-changes").equalsIgnoreCase("true");
+                }
+                result.add(new DestroyableObjective(owner, name, id, new UnionRegion(null, regions), types, damageValues, required, show, changesModes, showProgress, repairable));
             }
             for (Element child : element.getChildren("destroyables")) {
                 for (Element subChild : child.getChildren("destroyable")) {
@@ -252,7 +258,15 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                     } else if (element.getAttributeValue("show") != null) {
                         show = !element.getAttributeValue("show").equalsIgnoreCase("false");
                     }
-                    result.add(new DestroyableObjective(owner, name, id, new UnionRegion(null, regions), types, damageValues, required, show, showProgress, repairable));
+                    boolean changesModes = false;
+                    if (subChild.getAttributeValue("mode-changes") != null) {
+                        changesModes = subChild.getAttributeValue("mode-changes").equalsIgnoreCase("true");
+                    } else if (child.getAttributeValue("mode-changes") != null) {
+                        changesModes = child.getAttributeValue("mode-changes").equalsIgnoreCase("true");
+                    } else if (element.getAttributeValue("mode-changes") != null) {
+                        changesModes = element.getAttributeValue("mode-changes").equalsIgnoreCase("true");
+                    }
+                    result.add(new DestroyableObjective(owner, name, id, new UnionRegion(null, regions), types, damageValues, required, show, changesModes, showProgress, repairable));
                 }
             }
         }

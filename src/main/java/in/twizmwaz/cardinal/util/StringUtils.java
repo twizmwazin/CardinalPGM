@@ -16,6 +16,9 @@ public class StringUtils {
                 number = "";
             }
         }
+        if (!number.equals("")) {
+            result += Integer.parseInt(number);
+        }
         return result;
     }
 

@@ -111,7 +111,7 @@ public class ScoreModule implements Module {
     }
 
     public static boolean matchHasScoring() {
-        return matchHasPointsPerKill() || matchHasPointsPerDeath() || matchHasMax();
+        return matchHasPointsPerKill() || matchHasPointsPerDeath() || matchHasMax() || getTimeLimit() != 0;
     }
 
     public static boolean matchHasPointsPerKill() {
