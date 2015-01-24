@@ -9,6 +9,7 @@ import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
 import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
@@ -384,6 +385,8 @@ public class GameScoreboard implements Module {
             }
         } else if (ScoreModule.matchHasScoring()) {
             return ChatColor.GOLD + "Scores";
+        } else if (Blitz.getTitle() != null){
+            return ChatColor.GOLD + Blitz.getTitle();
         } else {
             return ChatColor.RED + "" + ChatColor.BOLD + "Invalid";
         }

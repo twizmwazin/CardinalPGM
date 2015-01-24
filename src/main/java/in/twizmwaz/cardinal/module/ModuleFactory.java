@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.module;
 
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.modules.armorKeep.ArmorKeepBuilder;
+import in.twizmwaz.cardinal.module.modules.blitz.BlitzBuilder;
 import in.twizmwaz.cardinal.module.modules.broadcasts.BroadcastModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.buildHeight.BuildHeightBuilder;
 import in.twizmwaz.cardinal.module.modules.chat.ChatModuleBuilder;
@@ -28,6 +29,7 @@ import in.twizmwaz.cardinal.module.modules.monumentModes.MonumentModesBuilder;
 import in.twizmwaz.cardinal.module.modules.motd.MOTDBuilder;
 import in.twizmwaz.cardinal.module.modules.observers.ObserverModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.projectiles.ProjectilesBuilder;
+import in.twizmwaz.cardinal.module.modules.rage.RageBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.respawn.RespawnModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModuleBuilder;
@@ -136,6 +138,8 @@ public class ModuleFactory {
         builderClasses.add(HillObjectiveBuilder.class);
         builderClasses.add(ChatModuleBuilder.class);
         builderClasses.add(MonumentModesBuilder.class);
+        builderClasses.add(RageBuilder.class);
+        builderClasses.add(BlitzBuilder.class);
      // builderClasses.add(FilterModuleBuilder.class);
     }
 }
