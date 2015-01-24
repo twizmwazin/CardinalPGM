@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.module;
 
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.modules.armorKeep.ArmorKeepBuilder;
+import in.twizmwaz.cardinal.module.modules.blitz.BlitzBuilder;
 import in.twizmwaz.cardinal.module.modules.broadcasts.BroadcastModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.buildHeight.BuildHeightBuilder;
 import in.twizmwaz.cardinal.module.modules.chat.ChatModuleBuilder;
@@ -138,6 +139,7 @@ public class ModuleFactory {
         builderClasses.add(ChatModuleBuilder.class);
         builderClasses.add(MonumentModesBuilder.class);
         builderClasses.add(RageBuilder.class);
+        builderClasses.add(BlitzBuilder.class);
      // builderClasses.add(FilterModuleBuilder.class);
     }
 }
