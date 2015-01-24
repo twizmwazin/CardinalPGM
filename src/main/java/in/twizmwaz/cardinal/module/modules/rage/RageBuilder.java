@@ -12,7 +12,6 @@ public class RageBuilder implements ModuleBuilder {
         ModuleCollection results = new ModuleCollection();
         for (Element element : match.getDocument().getRootElement().getChildren()){
             if (element.getName().equals("rage"))
-                System.out.println("1");
                 results.add(new Rage());
         }
         return results;
