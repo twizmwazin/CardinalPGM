@@ -10,7 +10,7 @@ import org.jdom2.Element;
 public class MirrorParser extends RegionParser {
 
     private RegionModule base;
-    private final Vector normal;
+    private final Vector origin, normal;
 
     public MirrorParser(Element element) {
         super(element.getAttributeValue("name"));
@@ -22,14 +22,17 @@ public class MirrorParser extends RegionParser {
             }
         }
         String[] origin = element.getAttributeValue("origin").replaceAll(" ", "").split(",");
+        this.origin = new Vector(Double.parseDouble(origin[0]), Double.parseDouble(origin[1]), Double.parseDouble(origin[2]));
         String[] normal = element.getAttributeValue("normal").replaceAll(" ", "").split(",");
-        this.normal = new Vector(Double.parseDouble(origin[0]) * Double.parseDouble(normal[0]), 
-                Double.parseDouble(origin[1]) * Double.parseDouble(normal[0]), 
-                Double.parseDouble(origin[2]) * Double.parseDouble(normal[0]));
+        this.normal = new Vector(Double.parseDouble(normal[0]), Double.parseDouble(normal[1]), Double.parseDouble(normal[2]));
     }
     
     public RegionModule getBase() {
         return base;
+    }
+
+    public Vector getOrigin() {
+        return origin;
     }
 
     public Vector getNormal() {

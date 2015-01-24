@@ -3,12 +3,13 @@ package in.twizmwaz.cardinal.module.modules.regions.parsers.modifiers;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionParser;
+import org.bukkit.util.Vector;
 import org.jdom2.Element;
 
 public class TranslateParser extends RegionParser{
 
     private final RegionModule base;
-    private final double xOffset, yOffset, zOffset;
+    private final Vector offset;
 
     public TranslateParser(Element element) {
         super(element.getAttributeValue("name"));
@@ -16,24 +17,15 @@ public class TranslateParser extends RegionParser{
                 RegionModuleBuilder.getRegion(element.getChildren().get(0)) : 
                 RegionModuleBuilder.getRegion(element.getAttributeValue("region"));
         String[] offset = element.getAttributeValue("offset").replaceAll(" ", "").split(",");
-        this.xOffset = Double.parseDouble(offset[0]);
-        this.yOffset = Double.parseDouble(offset[1]);
-        this.zOffset = Double.parseDouble(offset[2]);
+        this.offset = new Vector(Double.parseDouble(offset[1]), Double.parseDouble(offset[2]), Double.parseDouble(offset[3]));
     }
 
     public RegionModule getBase() {
         return base;
     }
 
-    public double getXOffset() {
-        return xOffset;
-    }
-
-    public double getYOffset() {
-        return yOffset;
-    }
-
-    public double getZOffset() {
-        return zOffset;
+    public Vector getOffset() {
+        return offset;
+        
     }
 }

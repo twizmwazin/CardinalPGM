@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.module.modules.regions.parsers.modifiers.TranslatePa
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
 import org.bukkit.block.Block;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,18 +13,16 @@ import java.util.List;
 public class TranslatedRegion extends RegionModule {
 
     private final RegionModule base;
-    private final double xOffset, yOffset, zOffset;
+    private final Vector offset;
 
-    public TranslatedRegion(String name, RegionModule base, double xOffset, double yOffset, double zOffset) {
+    public TranslatedRegion(String name, RegionModule base, Vector offset) {
         super(name);
         this.base = base;
-        this.xOffset = xOffset;
-        this.yOffset = yOffset;
-        this.zOffset = zOffset;
+        this.offset = offset;
     }
 
     public TranslatedRegion(TranslateParser parser) {
-        this(parser.getName(), parser.getBase(), parser.getXOffset(), parser.getYOffset(), parser.getZOffset());
+        this(parser.getName(), parser.getBase(), parser.getOffset());
     }
 
     public RegionModule getBase() {
@@ -31,32 +30,36 @@ public class TranslatedRegion extends RegionModule {
     }
 
     public double getXOffset() {
-        return xOffset;
+        return offset.getX();
     }
 
     public double getYOffset() {
-        return yOffset;
+        return offset.getY();
     }
 
     public double getZOffset() {
-        return zOffset;
+        return offset.getZ();
+    }
+
+    public Vector getOffset() {
+        return offset;
     }
 
     @Override
     public boolean contains(BlockRegion region) {
-        return base.contains(new BlockRegion(null, region.getX() - xOffset, region.getY() - yOffset, region.getZ() - zOffset));
+        return base.contains(new BlockRegion(null, region.getVector().add(getOffset())));
     }
 
     @Override
     public PointRegion getRandomPoint() {
         BlockRegion baseRandom = base.getCenterBlock();
-        return new PointRegion(null, baseRandom.getX() + xOffset, baseRandom.getY() + yOffset, baseRandom.getZ() + zOffset);
+        return new PointRegion(null, baseRandom.getVector().add(getOffset()));
     }
 
     @Override
     public BlockRegion getCenterBlock() {
         BlockRegion baseCenter = base.getCenterBlock();
-        return new BlockRegion(null, baseCenter.getX() + xOffset, baseCenter.getY() + yOffset, baseCenter.getZ() + zOffset);
+        return new BlockRegion(null, baseCenter.getVector().add(getOffset()));
     }
 
     @Override
