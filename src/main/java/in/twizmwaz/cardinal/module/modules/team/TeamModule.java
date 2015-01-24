@@ -56,7 +56,7 @@ public class TeamModule<P extends Player> extends HashSet<Player> implements Mod
     }
 
     public boolean add(Player player, boolean force) {
-        return add(player, force, ChatColor.GRAY + "You have joined " + this.getCompleteName());
+        return add(player, force, ChatColor.GRAY + "You joined " + this.getCompleteName());
     }
     
     @EventHandler(priority = EventPriority.LOW)
