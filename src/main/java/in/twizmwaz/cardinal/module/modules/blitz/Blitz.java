@@ -3,9 +3,12 @@ package in.twizmwaz.cardinal.module.modules.blitz;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.PgmSpawnEvent;
+import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
+import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,12 +17,12 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.metadata.LazyMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 
+@SuppressWarnings("unchecked")
 public class Blitz implements Module {
 
     /**
      *
      * TODO:
-     * - Add teams and team sizes to scoreboard
      * - Make Win condition
      * - Add countdown
      *
@@ -32,7 +35,7 @@ public class Blitz implements Module {
 
     private final JavaPlugin plugin;
 
-    private static String title = null;
+    private String title = null;
     private boolean broadcastLives;
     private int lives;
     private int time;
@@ -48,15 +51,17 @@ public class Blitz implements Module {
 
 
     @EventHandler
-    public void onDeath(PlayerDeathEvent event){
+    public void onPlayerDeath(PlayerDeathEvent event){
         Player player = event.getEntity();
         TeamModule team = TeamUtils.getTeamByPlayer(player);
-        int oldMeta = player.getMetadata("lives").get(0).asInt();
-        player.removeMetadata("lives", plugin);
-        player.setMetadata("lives", new LazyMetadataValue(plugin, LazyMetadataValue.CacheStrategy.NEVER_CACHE, new BlitzLives(oldMeta - 1)));
-        if (player.getMetadata("lives").get(0).asInt() == 0){
-            TeamUtils.getTeamById("observers").add(player, true, ChatColor.RED + "You ran out of lives!");
+        if (team != null && !team.isObserver()) {
+            int oldMeta = player.getMetadata("lives").get(0).asInt();
             player.removeMetadata("lives", plugin);
+            player.setMetadata("lives", new LazyMetadataValue(plugin, LazyMetadataValue.CacheStrategy.NEVER_CACHE, new BlitzLives(oldMeta - 1)));
+            if (player.getMetadata("lives").get(0).asInt() == 0) {
+                TeamUtils.getTeamById("observers").add(player, true, ChatColor.RED + "You ran out of lives!");
+                player.removeMetadata("lives", plugin);
+            }
         }
     }
 
@@ -69,18 +74,28 @@ public class Blitz implements Module {
                     player.setMetadata("lives", new LazyMetadataValue(plugin, LazyMetadataValue.CacheStrategy.NEVER_CACHE, new BlitzLives(lives)));
                 }
                 if (broadcastLives) {
-                    player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "You have " + ChatColor.RED + "" + ChatColor.BOLD + player.getMetadata("lives").get(0).asInt() + ChatColor.AQUA + ChatColor.BOLD + "" + " Lives Remaining");
+                    int lives = player.getMetadata("lives").get(0).asInt();
+                    player.sendMessage(ChatColor.RED + "You have " + ChatColor.AQUA + "" + ChatColor.BOLD + lives + ChatColor.RED + " " + (lives == 1 ? "life" : "lives") + " remaining.");
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
+        Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent());
     }
 
     private int getLives(Player player){
         return player.getMetadata("lives").get(0).asInt();
     }
 
-    public static String getTitle(){
-        return title;
+    public String getTitle(){
+        return this.title;
+    }
+
+    public static boolean matchIsBlitz() {
+        return GameHandler.getGameHandler().getMatch().getModules().getModule(Blitz.class) != null;
     }
 
 }

@@ -178,6 +178,20 @@ public class GameScoreboard implements Module {
                         }
                         objective.getScore(steam).setScore(score);
                     }
+                    if (Blitz.matchIsBlitz() && !team.isObserver()) {
+                        Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-s");
+                        String insert = team.getColor() + "";
+                        while (used.contains(ScoreboardUtils.getConversion(team.getName(), insert))) {
+                            insert += ChatColor.RESET;
+                        }
+                        String steam = ScoreboardUtils.convertToScoreboard(scoreboardTeam, team.getName(), insert);
+                        used.add(steam);
+                        int players = team.getPlayers().size();
+                        if (players == 0) {
+                            objective.getScore(steam).setScore(1);
+                        }
+                        objective.getScore(steam).setScore(players);
+                    }
                 }
                 if (!team.isObserver() && TeamUtils.getShownObjectives(team).size() > 0) {
                     String compact = "";
@@ -284,6 +298,20 @@ public class GameScoreboard implements Module {
                     }
                     objective.getScore(steam).setScore(score);
                 }
+                if (Blitz.matchIsBlitz() && !team.isObserver()) {
+                    Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-s");
+                    String insert = team.getColor() + "";
+                    while (used.contains(ScoreboardUtils.getConversion(team.getName(), insert))) {
+                        insert += ChatColor.RESET;
+                    }
+                    String steam = ScoreboardUtils.convertToScoreboard(scoreboardTeam, team.getName(), insert);
+                    used.add(steam);
+                    int players = team.getPlayers().size();
+                    if (players == 0) {
+                        objective.getScore(steam).setScore(1);
+                    }
+                    objective.getScore(steam).setScore(players);
+                }
             }
             if (!team.isObserver() && TeamUtils.getShownObjectives(team).size() > 0) {
                 for (GameObjective gameObjective : TeamUtils.getShownObjectives(team)) {
@@ -340,6 +368,7 @@ public class GameScoreboard implements Module {
             }
         }
         if (ScoreModule.matchHasScoring()) slots += (TeamUtils.getTeams().size() - 1);
+        if (Blitz.matchIsBlitz()) slots += (TeamUtils.getTeams().size() - 1);
         if (ScoreModule.matchHasMax()) slots ++;
         if (ScoreboardUtils.getHills().size() > 0) {
             slots ++;
@@ -358,6 +387,7 @@ public class GameScoreboard implements Module {
             }
         }
         if (ScoreModule.matchHasScoring()) slots += (TeamUtils.getTeams().size() - 1);
+        if (Blitz.matchIsBlitz()) slots += (TeamUtils.getTeams().size() - 1);
         if (ScoreModule.matchHasMax()) slots ++;
         if (ScoreboardUtils.getHills().size() > 0) {
             slots += 2;
@@ -383,10 +413,10 @@ public class GameScoreboard implements Module {
             } else {
                 return ChatColor.GOLD + "Objectives";
             }
+        } else if (GameHandler.getGameHandler().getMatch().getModules().getModule(Blitz.class) != null) {
+            return ChatColor.GOLD + GameHandler.getGameHandler().getMatch().getModules().getModule(Blitz.class).getTitle();
         } else if (ScoreModule.matchHasScoring()) {
             return ChatColor.GOLD + "Scores";
-        } else if (Blitz.getTitle() != null){
-            return ChatColor.GOLD + Blitz.getTitle();
         } else {
             return ChatColor.RED + "" + ChatColor.BOLD + "Invalid";
         }

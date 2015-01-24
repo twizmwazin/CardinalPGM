@@ -9,4 +9,8 @@ public class ChatUtils {
         player.sendMessage(ChatColor.YELLOW + " \u26A0 " + ChatColor.RED + msg);
     }
 
+    public static String getWarningMessage(String msg) {
+        return ChatColor.YELLOW + " \u26A0 " + ChatColor.RED + msg;
+    }
+
 }

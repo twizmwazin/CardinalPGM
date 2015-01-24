@@ -6,6 +6,7 @@ import com.sk89q.minecraft.util.commands.CommandException;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,7 +32,7 @@ public class JoinCommand {
             if (team != null) {
                 if (!team.contains(sender)) {
                     team.add((Player) sender, false);
-                } else throw new CommandException(ChatColor.RED + "You have already joined " + team.getCompleteName());
+                } else throw new CommandException(ChatUtils.getWarningMessage(ChatColor.RED + "You have already joined " + team.getCompleteName()));
             } else throw new CommandException("No teams matched query.");
         } catch (IndexOutOfBoundsException ex) {
             team = TeamUtils.getTeamWithFewestPlayers(GameHandler.getGameHandler().getMatch());
