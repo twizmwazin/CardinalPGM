@@ -44,21 +44,6 @@ public class IntersectRegion extends RegionModule {
     }
 
     @Override
-    public boolean contains(PointRegion region) {
-        for (RegionModule reg : getRegions()) {
-            ModuleCollection<RegionModule> working = new ModuleCollection<RegionModule>();
-            working.addAll(getRegions());
-            if (reg.contains(region)) {
-                working.remove(region);
-                for (RegionModule work : working) {
-                    if (work.contains(region)) return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    @Override
     public PointRegion getRandomPoint() {
         while (true) {
             Random random = new Random();

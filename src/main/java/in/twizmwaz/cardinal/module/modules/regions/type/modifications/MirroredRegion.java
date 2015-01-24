@@ -43,14 +43,6 @@ public class MirroredRegion extends RegionModule {
     }
 
     @Override
-    public boolean contains(PointRegion point) {
-        return base.contains(new BlockRegion(null,
-                normal.getBlockX() == 0 ? point.getX() - normal.getBlockX() : point.getX() ,
-                normal.getBlockY() == 0 ? point.getY() - normal.getBlockY() : point.getY(),
-                normal.getBlockZ() == 0 ? point.getZ() - normal.getBlockZ() : point.getZ()));
-    }
-
-    @Override
     public PointRegion getRandomPoint() {
         PointRegion basePoint = base.getRandomPoint();
         return new PointRegion(null,

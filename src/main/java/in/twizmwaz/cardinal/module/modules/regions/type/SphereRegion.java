@@ -5,36 +5,40 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.SphereParser;
 import in.twizmwaz.cardinal.util.NumUtils;
 import org.bukkit.block.Block;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SphereRegion extends RegionModule {
 
-    private final double originX, originY, originZ, radius;
+    private final Vector origin;
+    private final double radius;
 
-    public SphereRegion(String name, double originX, double originY, double originZ, double radius) {
+    public SphereRegion(String name, Vector origin, double radius) {
         super(name);
-        this.originX = originX;
-        this.originY = originY;
-        this.originZ = originZ;
+        this.origin = origin;
         this.radius = radius;
     }
 
     public SphereRegion(SphereParser parser) {
-        this(parser.getName(), parser.getOriginX(), parser.getOriginY(), parser.getOriginZ(), parser.getRadius());
+        this(parser.getName(), parser.getOrigin(), parser.getRadius());
     }
 
     public double getOriginx() {
-        return originX;
+        return origin.getX();
     }
 
     public double getOriginy() {
-        return originY;
+        return origin.getY();
     }
 
     public double getOriginz() {
-        return originZ;
+        return origin.getZ();
+    }
+
+    public Vector getOrigin() {
+        return origin;
     }
 
     public double getRadius() {
@@ -43,12 +47,7 @@ public class SphereRegion extends RegionModule {
 
     @Override
     public boolean contains(BlockRegion region) {
-        return NumUtils.hypotSphere(region.getX(), region.getY(), region.getZ()) <= getRadius();
-    }
-
-    @Override
-    public boolean contains(PointRegion region) {
-        return NumUtils.hypotSphere(region.getX(), region.getY(), region.getZ()) <= getRadius();
+        return region.getVector().isInSphere(getOrigin(), getRadius());
     }
 
     @Override
@@ -59,18 +58,18 @@ public class SphereRegion extends RegionModule {
         double d = OtherUtil.getRandom(0, 360);
         double e = OtherUtil.getRandom(0, radius);
         double f = OtherUtil.getRandom(0, 360);
-        return new PointRegion(null, originX + a * Math.sin(b), originY + c * Math.sin(d), originZ + e * Math.sin(f));
+        return new PointRegion(null, getOriginx() + a * Math.sin(b), getOriginy() + c * Math.sin(d), getOriginz() + e * Math.sin(f));
     }
 
     @Override
     public BlockRegion getCenterBlock() {
-        return new BlockRegion(null, this.getOriginx(), this.getOriginy(), this.originZ);
+        return new BlockRegion(null, this.origin);
     }
 
     @Override
     public List<Block> getBlocks() {
         List<Block> results = new ArrayList<>();
-        CuboidRegion bound = new CuboidRegion(null, originX - radius, originY - radius, originZ - radius, originX + radius, originY + radius, originZ + radius);
+        CuboidRegion bound = new CuboidRegion(null, getOriginx() - radius, getOriginy() - radius, getOriginz() - radius, getOriginx() + radius, getOriginy() + radius, getOriginz() + radius);
         for (Block block : bound.getBlocks()) {
             if (contains(new BlockRegion(null, block.getX(), block.getY(), block.getZ()))) results.add(block);
         }

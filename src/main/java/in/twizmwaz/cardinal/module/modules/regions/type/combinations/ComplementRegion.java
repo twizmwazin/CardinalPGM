@@ -41,18 +41,6 @@ public class ComplementRegion extends RegionModule {
     }
 
     @Override
-    public boolean contains(PointRegion region) {
-        List<RegionModule> working = getRegions();
-        for (RegionModule work : working) {
-            if (work.contains(region)) {
-                working.remove(work);
-            }
-        }
-        if (working.size() == 1) return true;
-        else return false;
-    }
-
-    @Override
     public PointRegion getRandomPoint() {
         while (true) {
             Random random = new Random();

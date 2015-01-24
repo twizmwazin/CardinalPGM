@@ -60,11 +60,6 @@ public class CuboidRegion extends RegionModule {
     }
 
     @Override
-    public boolean contains(PointRegion region) {
-        return region.getVector().isInAABB(min, max);
-    }
-
-    @Override
     public PointRegion getRandomPoint() {
         double x = OtherUtil.getRandom(min.getX(), max.getX());
         double y = OtherUtil.getRandom(min.getY(), max.getY());

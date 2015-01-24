@@ -23,11 +23,6 @@ public class EmptyRegion extends RegionModule {
     }
 
     @Override
-    public boolean contains(PointRegion region) {
-        return false;
-    }
-
-    @Override
     public PointRegion getRandomPoint() {
         return null;
     }

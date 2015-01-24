@@ -37,14 +37,6 @@ public class UnionRegion extends RegionModule {
     }
 
     @Override
-    public boolean contains(PointRegion region) {
-        for (RegionModule reg : getRegions()) {
-            if (reg.contains(region)) return true;
-        }
-        return false;
-    }
-
-    @Override
     public PointRegion getRandomPoint() {
         while (true) {
             Random random = new Random();

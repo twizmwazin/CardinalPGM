@@ -48,11 +48,6 @@ public class TranslatedRegion extends RegionModule {
     }
 
     @Override
-    public boolean contains(PointRegion point) {
-        return base.contains(new BlockRegion(null, point.getX() - xOffset, point.getY() - yOffset, point.getZ() - zOffset));
-    }
-
-    @Override
     public PointRegion getRandomPoint() {
         BlockRegion baseRandom = base.getCenterBlock();
         return new PointRegion(null, baseRandom.getX() + xOffset, baseRandom.getY() + yOffset, baseRandom.getZ() + zOffset);

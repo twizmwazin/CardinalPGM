@@ -21,8 +21,6 @@ public abstract class RegionModule implements Module {
     
     public abstract boolean contains(BlockRegion region);
 
-    public abstract boolean contains(PointRegion point);
-
     public abstract PointRegion getRandomPoint();
 
     public abstract BlockRegion getCenterBlock();

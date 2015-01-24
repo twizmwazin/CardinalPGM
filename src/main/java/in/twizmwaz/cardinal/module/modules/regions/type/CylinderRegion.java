@@ -5,37 +5,37 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.CylinderParser;
 import in.twizmwaz.cardinal.util.NumUtils;
 import org.bukkit.block.Block;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CylinderRegion extends RegionModule {
 
-    private final double baseX, baseY, baseZ, radius, height;
+    private final Vector base;
+    private final double radius, height;
     
-    public CylinderRegion(String name, double baseX, double baseY, double baseZ, double radius, double height) {
+    public CylinderRegion(String name, Vector base, double radius, double height) {
         super(name);
-        this.baseX = baseX;
-        this.baseY = baseY;
-        this.baseZ = baseZ;
+        this.base = base;
         this.radius = radius;
         this.height = height;
     }
 
     public CylinderRegion(CylinderParser parser) {
-        this(parser.getName(), parser.getBaseX(), parser.getBaseY(), parser.getBaseZ(), parser.getRadius(), parser.getHeight());
+        this(parser.getName(), parser.getBase(), parser.getRadius(), parser.getHeight());
     }
 
     public double getBaseX() {
-        return baseX;
+        return base.getX();
     }
 
     public double getBaseY() {
-        return baseY;
+        return base.getY();
     }
 
     public double getBaseZ() {
-        return baseZ;
+        return base.getZ();
     }
 
     public double getRadius() {
@@ -53,29 +53,23 @@ public class CylinderRegion extends RegionModule {
     }
 
     @Override
-    public boolean contains(PointRegion region) {
-        return (Math.hypot(Math.abs(region.getX() - getBaseX()), Math.abs(region.getZ() - getBaseZ())) <= getRadius()) && NumUtils.checkInterval(region.getY(), getBaseY(), getBaseY() + getHeight());
-
-    }
-
-    @Override
     public PointRegion getRandomPoint() {
         double a = OtherUtil.getRandom(0, radius);
         double b = OtherUtil.getRandom(0, 360);
         double c = OtherUtil.getRandom(0, height);
 
-        return new PointRegion(null, this.baseX + a * Math.cos(b), this.baseY + c, this.baseZ + a * Math.sin(b));
+        return new PointRegion(null, getBaseX() + a * Math.cos(b), getBaseY() + c, getBaseZ() + a * Math.sin(b));
     }
 
     @Override
     public BlockRegion getCenterBlock() {
-        return (new BlockRegion(null, this.baseX, this.baseY + .5 * height, this.baseZ));
+        return (new BlockRegion(null, new Vector(getBaseX(), getBaseY() + .5 * height, getBaseZ())));
     }
 
     @Override
     public List<Block> getBlocks() {
         List<Block> results = new ArrayList<>();
-        CuboidRegion bound = new CuboidRegion(null, baseX - radius, baseY, baseZ - radius, baseX + radius, baseY + height, baseZ + radius);
+        CuboidRegion bound = new CuboidRegion(null, getBaseX() - radius, getBaseY(), getBaseZ() - radius, getBaseX() + radius, getBaseY() + height, getBaseZ() + radius);
         for (Block block : bound.getBlocks()) {
             if (contains(new BlockRegion(null, block.getX(), block.getY(), block.getZ()))) results.add(block);
         }
