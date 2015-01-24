@@ -17,8 +17,8 @@ public class CuboidRegion extends RegionModule {
 
     public CuboidRegion(String name, Vector min, Vector max) {
         super(name);
-        this.min = min;
-        this.max = max;
+        this.min = Vector.getMinimum(min, max);
+        this.max = Vector.getMaximum(min, max);
     }
 
     public CuboidRegion(String name, double xMin, double yMin, double zMin, double xMax, double yMax, double zMax) {
@@ -66,8 +66,6 @@ public class CuboidRegion extends RegionModule {
 
     @Override
     public PointRegion getRandomPoint() {
-        Vector max = Vector.getMaximum(this.min, this.max);
-        Vector min = Vector.getMinimum(this.min, this.max);
         double x = OtherUtil.getRandom(min.getX(), max.getX());
         double y = OtherUtil.getRandom(min.getY(), max.getY());
         double z = OtherUtil.getRandom(min.getZ(), max.getZ());
