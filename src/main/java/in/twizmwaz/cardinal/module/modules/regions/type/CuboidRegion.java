@@ -4,7 +4,6 @@ import in.parapengu.commons.utils.OtherUtil;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.CuboidParser;
-import in.twizmwaz.cardinal.util.NumUtils;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
@@ -67,9 +66,11 @@ public class CuboidRegion extends RegionModule {
 
     @Override
     public PointRegion getRandomPoint() {
-        double x = (min.getX() > max.getX()) ? OtherUtil.getRandom(max.getX(), min.getY()) : OtherUtil.getRandom(min.getX(), max.getX());
-        double y = (min.getY() > max.getBlockY()) ? OtherUtil.getRandom(max.getY(), min.getY()) : OtherUtil.getRandom(min.getY(), max.getY());
-        double z = (min.getZ() > max.getZ()) ? OtherUtil.getRandom(max.getZ(), min.getZ()) : OtherUtil.getRandom(min.getZ(), max.getZ());
+        Vector max = Vector.getMaximum(this.min, this.max);
+        Vector min = Vector.getMinimum(this.min, this.max);
+        double x = OtherUtil.getRandom(min.getX(), max.getX());
+        double y = OtherUtil.getRandom(min.getY(), max.getY());
+        double z = OtherUtil.getRandom(min.getZ(), max.getZ());
         return new PointRegion(null, x, y, z);
     }
 

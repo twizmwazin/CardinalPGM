@@ -1,9 +1,12 @@
 package in.twizmwaz.cardinal.module.modules.regions.parsers;
 
 import in.twizmwaz.cardinal.module.modules.regions.RegionParser;
-import in.twizmwaz.cardinal.util.NumUtils;
 import org.bukkit.util.Vector;
 import org.jdom2.Element;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class CuboidParser extends RegionParser {
 
@@ -11,10 +14,15 @@ public class CuboidParser extends RegionParser {
     
     public CuboidParser(Element element) {
         super(element.getAttributeValue("name"));
-        String[] mins = element.getAttributeValue("min").replaceAll(" ", "").split(",");
-        String[] maxs = element.getAttributeValue("max").replaceAll(" ", "").split(",");
-        this.min = new Vector(Double.parseDouble(mins[0]), Double.parseDouble(mins[1]), Double.parseDouble(mins[2]));
-        this.max = new Vector(Double.parseDouble(maxs[0]), Double.parseDouble(maxs[1]), Double.parseDouble(maxs[2]));
+        List<String> values = new ArrayList<>();
+        values.addAll(Arrays.asList(element.getAttributeValue("min").replaceAll(" ", "").split(",")));
+        values.addAll(Arrays.asList(element.getAttributeValue("max").replaceAll(" ", "").split(",")));
+        for (String string : values) {
+            if (string.equalsIgnoreCase("oo")) values.set(values.indexOf(string), "256");
+            if (string.equalsIgnoreCase("-oo")) values.set(values.indexOf(string), "0");
+        }
+        this.min = new Vector(Double.parseDouble(values.get(0)), Double.parseDouble(values.get(1)), Double.parseDouble(values.get(2)));
+        this.max = new Vector(Double.parseDouble(values.get(3)), Double.parseDouble(values.get(4)), Double.parseDouble(values.get(5)));
     }
 
     public Vector getMin() {
