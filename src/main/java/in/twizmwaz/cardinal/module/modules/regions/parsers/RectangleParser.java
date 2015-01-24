@@ -10,10 +10,10 @@ public class RectangleParser extends RegionParser {
 
     public RectangleParser(Element element) {
         super(element.getName());
-        String min = element.getAttribute("min").getValue();
-        String max = element.getAttribute("max").getValue();
-        String[] mins = min.replaceAll(" ", "").split(",");
-        String[] maxs = max.replaceAll(" ", "").split(",");
+        String min = element.getAttributeValue("min");
+        String max = element.getAttributeValue("max");
+        String[] mins = min.trim().replaceAll(" ", ",").split(",");
+        String[] maxs = max.trim().replaceAll(" ", ",").split(",");
         xMin = NumUtils.parseDouble(mins[0]);
         zMin = NumUtils.parseDouble(mins[1]);
         xMax = NumUtils.parseDouble(maxs[0]);

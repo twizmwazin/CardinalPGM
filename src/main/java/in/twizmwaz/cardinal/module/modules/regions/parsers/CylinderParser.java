@@ -12,8 +12,8 @@ public class CylinderParser extends RegionParser {
 
     public CylinderParser(Element element) {
         super(element.getAttributeValue("name"));
-        this.radius = NumUtils.parseDouble(element.getAttribute("radius").getValue().replaceAll(" ", ""));
-        this.height = NumUtils.parseDouble(element.getAttribute("height").getValue().replaceAll(" ", ""));
+        this.radius = NumUtils.parseDouble(element.getAttributeValue("radius").trim());
+        this.height = NumUtils.parseDouble(element.getAttributeValue("height").trim());
         String[] split = element.getAttribute("base").getValue().replaceAll(" ", "").split(",");
         this.base = new Vector(NumUtils.parseDouble(split[0]), NumUtils.parseDouble(split[1]), NumUtils.parseDouble(split[2]));
     }

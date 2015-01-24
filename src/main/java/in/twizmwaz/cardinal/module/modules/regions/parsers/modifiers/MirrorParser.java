@@ -21,9 +21,9 @@ public class MirrorParser extends RegionParser {
                 if (regionModule.getName().equalsIgnoreCase(element.getAttributeValue("region"))) this.base = regionModule;
             }
         }
-        String[] origin = element.getAttributeValue("origin").replaceAll(" ", "").split(",");
+        String[] origin = element.getAttributeValue("origin").trim().replaceAll(" ", ",").split(",");
         this.origin = new Vector(Double.parseDouble(origin[0]), Double.parseDouble(origin[1]), Double.parseDouble(origin[2]));
-        String[] normal = element.getAttributeValue("normal").replaceAll(" ", "").split(",");
+        String[] normal = element.getAttributeValue("normal").trim().replaceAll(" ", ",").split(",");
         this.normal = new Vector(Double.parseDouble(normal[0]), Double.parseDouble(normal[1]), Double.parseDouble(normal[2]));
     }
     

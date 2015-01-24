@@ -15,8 +15,8 @@ public class CuboidParser extends RegionParser {
     public CuboidParser(Element element) {
         super(element.getAttributeValue("name"));
         List<String> values = new ArrayList<>();
-        values.addAll(Arrays.asList(element.getAttributeValue("min").replaceAll(" ", "").split(",")));
-        values.addAll(Arrays.asList(element.getAttributeValue("max").replaceAll(" ", "").split(",")));
+        values.addAll(Arrays.asList(element.getAttributeValue("min").trim().replaceAll(" ", ",").split(",")));
+        values.addAll(Arrays.asList(element.getAttributeValue("max").trim().replaceAll(" ", ",").split(",")));
         for (String string : values) {
             if (string.equalsIgnoreCase("oo")) values.set(values.indexOf(string), "256");
             if (string.equalsIgnoreCase("-oo")) values.set(values.indexOf(string), "0");

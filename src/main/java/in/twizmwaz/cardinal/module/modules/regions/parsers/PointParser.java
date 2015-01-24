@@ -21,19 +21,19 @@ public class PointParser extends RegionParser {
             y = subPoint.getY();
             z = subPoint.getZ();
         } else {
-            x = NumUtils.parseDouble(element.getText().replaceAll(" ", "").split(",")[0]);
-            y = NumUtils.parseDouble(element.getText().replaceAll(" ", "").split(",")[1]);
-            z = NumUtils.parseDouble(element.getText().replaceAll(" ", "").split(",")[2]);
+            x = NumUtils.parseDouble(element.getText().trim().replaceAll(" ", ",").split(",")[0]);
+            y = NumUtils.parseDouble(element.getText().trim().replaceAll(" ", ",").split(",")[1]);
+            z = NumUtils.parseDouble(element.getText().trim().replaceAll(" ", ",").split(",")[2]);
         }
         this.vector = new Vector(x, y, z);
         double yaw, pitch;
         try {
-            yaw = Float.parseFloat(element.getAttributeValue("yaw").replaceAll(" ", ""));
+            yaw = Float.parseFloat(element.getAttributeValue("yaw").trim());
         } catch (Exception e) {
             yaw = 0F;
         }
         try {
-            pitch = Float.parseFloat(element.getAttributeValue("pitch").replaceAll(" ", ""));
+            pitch = Float.parseFloat(element.getAttributeValue("pitch").trim());
         } catch (Exception e) {
             pitch = 0F;
         }

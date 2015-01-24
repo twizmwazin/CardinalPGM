@@ -14,12 +14,12 @@ public class BlockParser extends RegionParser{
         super(element.getAttributeValue("name"));
         double x, y, z;
         try {
-            String[] coords = element.getAttributeValue("location").replaceAll(" ", "").split(",");
+            String[] coords = element.getAttributeValue("location").trim().split(",");
             x = NumUtils.parseDouble(coords[0]);
             y = NumUtils.parseDouble(coords[1]);
             z = NumUtils.parseDouble(coords[2]);
         } catch (NullPointerException ex) {
-            String[] coords = element.getText().replaceAll(" ", "").split(",");
+            String[] coords = element.getText().trim().split(",");
             x = NumUtils.parseDouble(coords[0]);
             y = NumUtils.parseDouble(coords[1]);
             z = NumUtils.parseDouble(coords[2]);
