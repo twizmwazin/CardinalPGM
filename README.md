@@ -1,4 +1,4 @@
-CardinalPGM
+CardinalPGM [![Build Status](https://travis-ci.org/twizmwazin/CardinalPGM.svg?branch=master)](https://travis-ci.org/twizmwazin/CardinalPGM)
 ===========
 
 This is the next PGM clone.
