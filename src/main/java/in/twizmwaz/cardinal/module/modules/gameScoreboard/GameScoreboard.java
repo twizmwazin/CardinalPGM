@@ -117,7 +117,7 @@ public class GameScoreboard implements Module {
         }
         Objective objective = scoreboard.registerNewObjective("scoreboard", "dummy");
         objective.setDisplayName(getDisplayTitle());
-        int slot = 1;
+        int slot = 0;
         int hillsSlot = -1;
         Set<String> used = new HashSet<>();
         if (getSlots() > 15) {
@@ -131,66 +131,27 @@ public class GameScoreboard implements Module {
                             objectiveTeam = scoreboard.getTeam(gameObjective.getScoreboardHandler().getNumber() + "-o");
                         }
                         if (objectiveTeam != null) {
-                            String insertObj = "";
-                            while (used.contains(ScoreboardUtils.getConversion(compact, insertObj))) {
-                                insertObj += ChatColor.RESET;
-                            }
-                            String steam = ScoreboardUtils.convertToScoreboard(objectiveTeam, compact, insertObj);
-                            used.add(steam);
-                            objective.getScore(steam).setScore(slot);
+                            ScoreboardUtils.getNextConversion(objective, slot, objectiveTeam, compact, "", ChatColor.RESET + "", used);
                             slot++;
                         }
-                        Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-s");
-                        String insert = team.getColor() + "";
-                        while (used.contains(ScoreboardUtils.getConversion(team.getName(), insert))) {
-                            insert += ChatColor.RESET;
-                        }
-                        String steam = ScoreboardUtils.convertToScoreboard(scoreboardTeam, team.getName(), insert);
-                        used.add(steam);
-                        objective.getScore(steam).setScore(slot);
+                        ScoreboardUtils.getNextConversion(objective, slot, scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "", team.getColor() + "", used);
                         slot++;
                         if (slot < getCompactSlots()) {
-                            String blank = " ";
-                            while (used.contains(blank)) {
-                                blank += " ";
-                            }
-                            used.add(blank);
-                            objective.getScore(blank).setScore(slot);
+                            ScoreboardUtils.createBlankSlot(objective, slot, used);
                             slot++;
                         }
                     }
                     if (ScoreModule.matchHasScoring() && !team.isObserver()) {
-                        Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-s");
-                        String insert = team.getColor() + "";
-                        while (used.contains(ScoreboardUtils.getConversion(team.getName(), insert))) {
-                            insert += ChatColor.RESET;
-                        }
-                        String steam = ScoreboardUtils.convertToScoreboard(scoreboardTeam, team.getName(), insert);
-                        used.add(steam);
                         int score = 0;
                         for (ScoreModule scoreModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
                             if (scoreModule.getTeam() == team) {
                                 score = scoreModule.getScore();
                             }
                         }
-                        if (score == 0) {
-                            objective.getScore(steam).setScore(1);
-                        }
-                        objective.getScore(steam).setScore(score);
+                        ScoreboardUtils.getNextConversion(objective, score, scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "", team.getColor() + "", used);
                     }
                     if (Blitz.matchIsBlitz() && !team.isObserver()) {
-                        Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-s");
-                        String insert = team.getColor() + "";
-                        while (used.contains(ScoreboardUtils.getConversion(team.getName(), insert))) {
-                            insert += ChatColor.RESET;
-                        }
-                        String steam = ScoreboardUtils.convertToScoreboard(scoreboardTeam, team.getName(), insert);
-                        used.add(steam);
-                        int players = team.getPlayers().size();
-                        if (players == 0) {
-                            objective.getScore(steam).setScore(1);
-                        }
-                        objective.getScore(steam).setScore(players);
+                        ScoreboardUtils.getNextConversion(objective, team.getPlayers().size(), scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "", team.getColor() + "", used);
                     }
                 }
                 if (!team.isObserver() && TeamUtils.getShownObjectives(team).size() > 0) {
@@ -201,49 +162,20 @@ public class GameScoreboard implements Module {
                         objectiveTeam = scoreboard.getTeam(gameObjective.getScoreboardHandler().getNumber() + "-o");
                     }
                     if (objectiveTeam != null) {
-                        String insertObj = "";
-                        while (used.contains(ScoreboardUtils.getConversion(compact, insertObj))) {
-                            insertObj += ChatColor.RESET;
-                        }
-                        String steam = ScoreboardUtils.convertToScoreboard(objectiveTeam, compact, insertObj);
-                        used.add(steam);
-                        objective.getScore(steam).setScore(slot);
+                        ScoreboardUtils.getNextConversion(objective, slot, objectiveTeam, compact, "", ChatColor.RESET + "", used);
                         slot++;
                     }
-                    Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-s");
-                    String insert = team.getColor() + "" + ChatColor.ITALIC;
-                    while (used.contains(ScoreboardUtils.getConversion(team.getName(), insert))) {
-                        insert += ChatColor.RESET;
-                    }
-                    String steam = ScoreboardUtils.convertToScoreboard(scoreboardTeam, team.getName(), insert);
-                    used.add(steam);
-                    objective.getScore(steam).setScore(slot);
+                    ScoreboardUtils.getNextConversion(objective, slot, scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "", team.getColor() + "", used);
                 }
                 if (ScoreModule.matchHasMax()) {
                     objective.getScore(ChatColor.RED + "---- MAX ----").setScore(ScoreModule.max());
                 }
                 if (ScoreboardUtils.getHills().size() > 0) {
-                    String blank = " ";
-                    while (used.contains(blank)) {
-                        blank += " ";
-                    }
-                    used.add(blank);
-                    objective.getScore(blank).setScore(hillsSlot);
+                    ScoreboardUtils.createBlankSlot(objective, hillsSlot, used);
                     hillsSlot --;
-                    String compact = "";
-                    Team objectiveTeam = null;
-                    for (HillObjective gameObjective : ScoreboardUtils.getHills()) {
-                        compact += " " + gameObjective.getScoreboardHandler().getPrefix(this.team) + "  ";
-                        objectiveTeam = scoreboard.getTeam(gameObjective.getScoreboardHandler().getNumber() + "-o");
-                    }
-                    if (objectiveTeam != null) {
-                        String insertObj = team.getColor() + "";
-                        while (used.contains(ScoreboardUtils.getConversion(compact, insertObj))) {
-                            insertObj += ChatColor.RESET;
-                        }
-                        String steam = ScoreboardUtils.convertToScoreboard(objectiveTeam, compact, insertObj);
-                        used.add(steam);
-                        objective.getScore(steam).setScore(hillsSlot);
+                    for (HillObjective hill : ScoreboardUtils.getHills()) {
+                        ScoreboardUtils.getNextConversion(objective, hillsSlot, scoreboard.getTeam(hill.getScoreboardHandler().getNumber() + "-o"), " " + hill.getScoreboardHandler().getPrefix(this.team) + ChatColor.RESET + " " + WordUtils.capitalizeFully(hill.getName().replaceAll("_", " ")), "", ChatColor.RESET + "", used);
+                        hillsSlot --;
                     }
                 }
             }
@@ -251,107 +183,44 @@ public class GameScoreboard implements Module {
             for (TeamModule team : TeamUtils.getTeams()) {
                 if (team != this.team && !team.isObserver() && TeamUtils.getShownObjectives(team).size() > 0) {
                     for (GameObjective gameObjective : TeamUtils.getShownObjectives(team)) {
-                        String insert = "";
-                        while (used.contains(ScoreboardUtils.getConversion(" " + gameObjective.getScoreboardHandler().getPrefix(this.team) + " " + ChatColor.RESET + WordUtils.capitalizeFully(gameObjective.getName().replaceAll("_", " ")), insert, true))) {
-                            insert += ChatColor.RESET;
-                        }
-                        String obj = ScoreboardUtils.convertToScoreboard(scoreboard.getTeam(gameObjective.getScoreboardHandler().getNumber() + "-o"), " " + gameObjective.getScoreboardHandler().getPrefix(this.team) + " " + ChatColor.RESET + WordUtils.capitalizeFully(gameObjective.getName().replaceAll("_", " ")), insert, true);
-                        used.add(obj);
-                        objective.getScore(obj).setScore(slot);
+                        ScoreboardUtils.getNextConversion(objective, slot, scoreboard.getTeam(gameObjective.getScoreboardHandler().getNumber() + "-o"), " " + gameObjective.getScoreboardHandler().getPrefix(this.team) + ChatColor.RESET + " " + WordUtils.capitalizeFully(gameObjective.getName().replaceAll("_", " ")), "", ChatColor.RESET + "", used);
                         slot ++;
                     }
-                    Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-s");
-                    String insert = team.getColor() + "";
-                    while (used.contains(ScoreboardUtils.getConversion(team.getName(), insert))) {
-                        insert += ChatColor.RESET;
-                    }
-                    String steam = ScoreboardUtils.convertToScoreboard(scoreboardTeam, team.getName(), insert);
-                    used.add(steam);
-                    objective.getScore(steam).setScore(slot);
+                    ScoreboardUtils.getNextConversion(objective, slot, scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "", team.getColor() + "", used);
                     slot ++;
                     if (slot < getSlots()) {
-                        String blank = " ";
-                        while (used.contains(blank)) {
-                            blank += " ";
-                        }
-                        used.add(blank);
-                        objective.getScore(blank).setScore(slot);
+                        ScoreboardUtils.createBlankSlot(objective, slot, used);
                         slot ++;
                     }
                 }
                 if (ScoreModule.matchHasScoring() && !team.isObserver()) {
-                    Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-s");
-                    String insert = team.getColor() + "";
-                    while (used.contains(ScoreboardUtils.getConversion(team.getName(), insert))) {
-                        insert += ChatColor.RESET;
-                    }
-                    String steam = ScoreboardUtils.convertToScoreboard(scoreboardTeam, team.getName(), insert);
-                    used.add(steam);
                     int score = 0;
                     for (ScoreModule scoreModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
                         if (scoreModule.getTeam() == team) {
                             score = scoreModule.getScore();
                         }
                     }
-                    if (score == 0) {
-                        objective.getScore(steam).setScore(1);
-                    }
-                    objective.getScore(steam).setScore(score);
+                    ScoreboardUtils.getNextConversion(objective, score, scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "", team.getColor() + "", used);
                 }
                 if (Blitz.matchIsBlitz() && !team.isObserver()) {
-                    Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-s");
-                    String insert = team.getColor() + "";
-                    while (used.contains(ScoreboardUtils.getConversion(team.getName(), insert))) {
-                        insert += ChatColor.RESET;
-                    }
-                    String steam = ScoreboardUtils.convertToScoreboard(scoreboardTeam, team.getName(), insert);
-                    used.add(steam);
-                    int players = team.getPlayers().size();
-                    if (players == 0) {
-                        objective.getScore(steam).setScore(1);
-                    }
-                    objective.getScore(steam).setScore(players);
+                    ScoreboardUtils.getNextConversion(objective, team.getPlayers().size(), scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "", team.getColor() + "", used);
                 }
             }
             if (!team.isObserver() && TeamUtils.getShownObjectives(team).size() > 0) {
                 for (GameObjective gameObjective : TeamUtils.getShownObjectives(team)) {
-                    String insert = "";
-                    while (used.contains(ScoreboardUtils.getConversion(" " + gameObjective.getScoreboardHandler().getPrefix(this.team) + " " + ChatColor.RESET + WordUtils.capitalizeFully(gameObjective.getName().replaceAll("_", " ")), insert, true))) {
-                        insert += ChatColor.RESET;
-                    }
-                    String obj = ScoreboardUtils.convertToScoreboard(scoreboard.getTeam(gameObjective.getScoreboardHandler().getNumber() + "-o"), " " + gameObjective.getScoreboardHandler().getPrefix(this.team) + " " + ChatColor.RESET + WordUtils.capitalizeFully(gameObjective.getName().replaceAll("_", " ")), insert, true);
-                    used.add(obj);
-                    objective.getScore(obj).setScore(slot);
+                    ScoreboardUtils.getNextConversion(objective, slot, scoreboard.getTeam(gameObjective.getScoreboardHandler().getNumber() + "-o"),  " " + gameObjective.getScoreboardHandler().getPrefix(this.team) + ChatColor.RESET + " " + WordUtils.capitalizeFully(gameObjective.getName().replaceAll("_", " ")), "", ChatColor.RESET + "", used);
                     slot ++;
                 }
-                Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-s");
-                String insert = team.getColor() + "" + ChatColor.ITALIC;
-                while (used.contains(ScoreboardUtils.getConversion(team.getName(), insert))) {
-                    insert += ChatColor.RESET;
-                }
-                String steam = ScoreboardUtils.convertToScoreboard(scoreboardTeam, team.getName(), insert);
-                used.add(steam);
-                objective.getScore(steam).setScore(slot);
+                ScoreboardUtils.getNextConversion(objective, slot, scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "" + ChatColor.ITALIC, ChatColor.ITALIC + "", used);
             }
             if (ScoreModule.matchHasMax()) {
                 objective.getScore(ChatColor.RED + "---- MAX ----").setScore(ScoreModule.max());
             }
             if (ScoreboardUtils.getHills().size() > 0) {
-                String blank = " ";
-                while (used.contains(blank)) {
-                    blank += " ";
-                }
-                used.add(blank);
-                objective.getScore(blank).setScore(hillsSlot);
+                ScoreboardUtils.createBlankSlot(objective, hillsSlot, used);
                 hillsSlot --;
                 for (HillObjective hill : ScoreboardUtils.getHills()) {
-                    String insert = "";
-                    while (used.contains(ScoreboardUtils.getConversion(" " + hill.getScoreboardHandler().getPrefix(this.team) + " " + WordUtils.capitalizeFully(hill.getName().replaceAll("_", " ")), insert, true))) {
-                        insert += ChatColor.RESET;
-                    }
-                    String obj = ScoreboardUtils.convertToScoreboard(scoreboard.getTeam(hill.getScoreboardHandler().getNumber() + "-o"), " " + hill.getScoreboardHandler().getPrefix(this.team) + " " + WordUtils.capitalizeFully(hill.getName().replaceAll("_", " ")), insert, true);
-                    used.add(obj);
-                    objective.getScore(obj).setScore(hillsSlot);
+                    ScoreboardUtils.getNextConversion(objective, hillsSlot, scoreboard.getTeam(hill.getScoreboardHandler().getNumber() + "-o"), " " + hill.getScoreboardHandler().getPrefix(this.team) + ChatColor.RESET + " " + WordUtils.capitalizeFully(hill.getName().replaceAll("_", " ")), "", ChatColor.RESET + "", used);
                     hillsSlot --;
                 }
             }

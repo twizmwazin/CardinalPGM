@@ -3,7 +3,11 @@ package in.twizmwaz.cardinal.util;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
+import org.bukkit.ChatColor;
+import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Team;
+
+import java.util.Set;
 
 public class ScoreboardUtils {
 
@@ -78,6 +82,32 @@ public class ScoreboardUtils {
             objectives.add(hill);
         }
         return objectives;
+    }
+
+    public static void createBlankSlot(Objective objective, int slot, Set<String> used) {
+        String blank = " ";
+        while (used.contains(blank)) {
+            blank += " ";
+        }
+        used.add(blank);
+        objective.getScore(blank).setScore(slot);
+    }
+
+    public static String getNextConversion(Objective objective, int slot, Team team, String string, String insert, String addition, Set<String> used, boolean doNotInterruptColorCodes) {
+        while (used.contains(ScoreboardUtils.getConversion(string, insert))) {
+            insert += addition;
+        }
+        String steam = ScoreboardUtils.convertToScoreboard(team, string, insert, doNotInterruptColorCodes);
+        used.add(steam);
+        if (slot == 0) {
+            objective.getScore(steam).setScore(1);
+        }
+        objective.getScore(steam).setScore(slot);
+        return steam;
+    }
+
+    public static String getNextConversion(Objective objective, int slot, Team team, String string, String insert, String addition, Set<String> used) {
+        return getNextConversion(objective, slot, team, string, insert, addition, used, true);
     }
 
 }
