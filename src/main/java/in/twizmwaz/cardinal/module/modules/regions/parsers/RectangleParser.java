@@ -12,12 +12,12 @@ public class RectangleParser extends RegionParser {
         super(element.getName());
         String min = element.getAttributeValue("min");
         String max = element.getAttributeValue("max");
-        String[] mins = min.trim().replaceAll(" ", ",").split(",");
-        String[] maxs = max.trim().replaceAll(" ", ",").split(",");
-        xMin = NumUtils.parseDouble(mins[0]);
-        zMin = NumUtils.parseDouble(mins[1]);
-        xMax = NumUtils.parseDouble(maxs[0]);
-        zMax = NumUtils.parseDouble(maxs[1]);
+        String[] mins = min.contains(",") ? min.split(",") : min.trim().replaceAll(" ", ",").split(",");
+        String[] maxs = max.contains(",") ? max.split(",") : max.trim().replaceAll(" ", ",").split(",");
+        xMin = NumUtils.parseDouble(mins[0].trim());
+        zMin = NumUtils.parseDouble(mins[1].trim());
+        xMax = NumUtils.parseDouble(maxs[0].trim());
+        zMax = NumUtils.parseDouble(maxs[1].trim());
     }
 
     public double getXMin() {
