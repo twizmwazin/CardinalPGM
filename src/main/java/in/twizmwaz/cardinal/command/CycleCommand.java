@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.command;
 
 import com.sk89q.minecraft.util.commands.*;
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
 import in.twizmwaz.cardinal.util.TeamUtils;
@@ -23,7 +24,8 @@ public class CycleCommand {
             } else {
                 throw new CommandException("Cannot cycle while the match is running!");
             }
-        }
+        } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING))
+            throw new CommandException("Cannot cycle while the match is starting!");
         try {
             GameHandler.getGameHandler().startCycleTimer(cmd.getInteger(0));
         } catch (IndexOutOfBoundsException e) {
