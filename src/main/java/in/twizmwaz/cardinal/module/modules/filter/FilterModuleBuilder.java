@@ -84,6 +84,8 @@ public class FilterModuleBuilder implements ModuleBuilder {
                 return new AllowFilter(new GenericFilterParser(element));
             case "deny":
                 return new DenyFilter(new GenericFilterParser(element));
+            case "void":
+                return new VoidFilter(new GenericFilterParser(element));
             case "filter":
                 switch (element.getAttributeValue("name").toLowerCase()) {
                     case "allow-all":
