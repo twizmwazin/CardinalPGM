@@ -47,7 +47,7 @@ public class TimeNotifications implements TaskedModule {
                         Bukkit.broadcastMessage(ChatColor.AQUA + "Time Remaining: " + ChatColor.GREEN + StringUtils.formatTime(nextTimeMessage));
                         if ((nextTimeMessage / 60) % 5 == 0 && nextTimeMessage != 300) {
                             nextTimeMessage -= 300;
-                        } else if (nextTimeMessage % 60 == 0 && nextTimeMessage < 300) {
+                        } else if (nextTimeMessage % 60 == 0 && nextTimeMessage <= 300) {
                             nextTimeMessage -= 60;
                         } else {
                             nextTimeMessage = (nextTimeMessage / 300) * 300;

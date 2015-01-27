@@ -69,7 +69,7 @@ public class MatchCommand {
                     }
                 }
             }
-            if (ScoreModule.getTimeLimit() != 0) {
+            if (ScoreModule.getTimeLimit() != 0 || ScoreModule.matchHasMax()) {
                 String score = "";
                 for (ScoreModule scoreModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
                     score += scoreModule.getTeam().getColor() + "" + scoreModule.getScore() + " ";
@@ -78,7 +78,7 @@ public class MatchCommand {
                 double timeRemaining = 0.0;
                 if (ScoreModule.getTimeLimit() != 0)
                     timeRemaining = ScoreModule.getTimeLimit() - MatchTimer.getTimeInSeconds();
-                sender.sendMessage(ChatColor.DARK_AQUA + "Score: " + score + "  " + ChatColor.RED + StringUtils.formatTime(timeRemaining));
+                sender.sendMessage(ChatColor.DARK_AQUA + "Score: " + score + "   " + ChatColor.RED + (ScoreModule.getTimeLimit() != 0 ? StringUtils.formatTime(timeRemaining) : (ScoreModule.matchHasMax() ? ChatColor.GRAY + " " : "") + (ScoreModule.matchHasMax() ? ScoreModule.max() : "")));
             }
         }
     }

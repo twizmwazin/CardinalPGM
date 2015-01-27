@@ -37,8 +37,10 @@ public class GameComplete implements TaskedModule {
 
     @EventHandler
     public void onScoreUpdate(ScoreUpdateEvent event) {
-        if (event.getScoreModule().getScore() >= ScoreModule.max()) {
-            GameHandler.getGameHandler().getMatch().end(event.getScoreModule().getTeam());
+        if (ScoreModule.matchHasMax()) {
+            if (event.getScoreModule().getScore() >= ScoreModule.max()) {
+                GameHandler.getGameHandler().getMatch().end(event.getScoreModule().getTeam());
+            }
         }
     }
 

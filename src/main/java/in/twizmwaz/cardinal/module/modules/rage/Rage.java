@@ -19,18 +19,22 @@ public class Rage implements Module{
     }
 
     @EventHandler
-    public void onEntityDamageByEntity(EntityDamageByEntityEvent event){
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {
             ItemStack item = ((Player) event.getDamager()).getItemInHand();
-            if (item.containsEnchantment(Enchantment.DAMAGE_ALL) || item.getType().name().contains("SWORD")) {
-                event.setDamage(1000);
+            if (item != null) {
+                if (item.containsEnchantment(Enchantment.DAMAGE_ALL) || item.getType().name().contains("SWORD")) {
+                    event.setDamage(1000);
+                }
             }
         } else if (event.getDamager() instanceof Arrow) {
-            if (((Arrow) event.getDamager()).getShooter() instanceof Player){
+            if (((Arrow) event.getDamager()).getShooter() instanceof Player) {
                 Player shooter = (Player) ((Arrow) event.getDamager()).getShooter();
-                for (ItemStack item : shooter.getInventory()){
-                    if (item.getType().equals(Material.BOW) && item.containsEnchantment(Enchantment.ARROW_DAMAGE)){
-                        event.setDamage(1000);
+                for (ItemStack item : shooter.getInventory()) {
+                    if (item != null) {
+                        if (item.getType().equals(Material.BOW) && item.containsEnchantment(Enchantment.ARROW_DAMAGE)) {
+                            event.setDamage(1000);
+                        }
                     }
                 }
             }
