@@ -14,6 +14,7 @@ import java.util.List;
 public class MapNotification implements TaskedModule {
 
     private long startTime;
+    private int nextMessage;
 
     protected MapNotification() {
     }
@@ -26,6 +27,7 @@ public class MapNotification implements TaskedModule {
     @EventHandler
     public void onCycleComplete(CycleCompleteEvent event) {
         this.startTime = System.currentTimeMillis();
+        this.nextMessage = 600;
     }
 
     /**
@@ -38,7 +40,7 @@ public class MapNotification implements TaskedModule {
 
     @Override
     public void run() {
-        if (getTimeInSeconds() % 600 == 0 && getTimeInSeconds() != 0) {
+        if (getTimeInSeconds() >= this.nextMessage) {
             String result = "";
             List<Contributor> authors = GameHandler.getGameHandler().getMatch().getMapInfo().getAuthors();
             for (Contributor author : authors) {
@@ -51,6 +53,7 @@ public class MapNotification implements TaskedModule {
                 }
             }
             Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "Currently playing " + ChatColor.GOLD + GameHandler.getGameHandler().getMatch().getMapInfo().getName() + ChatColor.DARK_PURPLE + " by " + result);
+            nextMessage += 600;
         }
     }
 }
