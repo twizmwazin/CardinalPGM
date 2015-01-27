@@ -40,7 +40,7 @@ public class Blitz implements Module {
     private int lives;
     private int time;
 
-    protected Blitz(final String title, final boolean broadcastLives, final int lives, final int time){
+    protected Blitz(final String title, final boolean broadcastLives, final int lives, final int time) {
         this.title = title;
         this.broadcastLives = broadcastLives;
         this.lives = lives;
@@ -59,7 +59,6 @@ public class Blitz implements Module {
             player.removeMetadata("lives", plugin);
             player.setMetadata("lives", new LazyMetadataValue(plugin, LazyMetadataValue.CacheStrategy.NEVER_CACHE, new BlitzLives(oldMeta - 1)));
             if (player.getMetadata("lives").get(0).asInt() == 0) {
-                TeamUtils.getTeamById("observers").add(player, true, ChatColor.RED + "You ran out of lives!");
                 player.removeMetadata("lives", plugin);
             }
         }
@@ -71,11 +70,11 @@ public class Blitz implements Module {
             Player player = event.getPlayer();
             if (TeamUtils.getTeams().contains(TeamUtils.getTeamByPlayer(player))) {
                 if (!player.hasMetadata("lives")) {
-                    player.setMetadata("lives", new LazyMetadataValue(plugin, LazyMetadataValue.CacheStrategy.NEVER_CACHE, new BlitzLives(lives)));
+                    player.setMetadata("lives", new LazyMetadataValue(plugin, LazyMetadataValue.CacheStrategy.NEVER_CACHE, new BlitzLives(this.lives)));
                 }
-                if (broadcastLives) {
+                if (this.broadcastLives) {
                     int lives = player.getMetadata("lives").get(0).asInt();
-                    player.sendMessage(ChatColor.RED + "You have " + ChatColor.AQUA + "" + ChatColor.BOLD + lives + ChatColor.RED + " " + (lives == 1 ? "life" : "lives") + " remaining.");
+                    player.sendMessage(ChatColor.RED + "You have " + ChatColor.AQUA + "" + ChatColor.BOLD + lives + " " + (lives == 1 ? "life" : "lives") + ChatColor.RED + " remaining.");
                 }
             }
         }
