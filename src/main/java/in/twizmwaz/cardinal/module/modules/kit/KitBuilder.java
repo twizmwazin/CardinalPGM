@@ -104,9 +104,9 @@ public class KitBuilder implements ModuleBuilder {
                     } catch (NumberFormatException e) {
                         if (potion.getAttributeValue("duration").equalsIgnoreCase("oo")) duration = Integer.MAX_VALUE;
                     }
-                    int amplifier = 1;
+                    int amplifier = 0;
                     if (potion.getAttributeValue("amplifier") != null) {
-                        amplifier = Integer.parseInt(potion.getAttributeValue("amplifier"));
+                        amplifier = Integer.parseInt(potion.getAttributeValue("amplifier")) - 1;
                     }
                     potions.add(new PotionEffect(type, duration, amplifier, true));
                 }
