@@ -88,7 +88,6 @@ public class MapCommands {
             if (authors.size() == 1) {
                 sender.sendMessage(ChatColor.DARK_PURPLE + "Next map: " + ChatColor.GOLD + name + ChatColor.DARK_PURPLE + " by " + ChatColor.RED + authors.get(0).getName());
             } else if (authors.size() > 1) {
-                int size = authors.size();
                 String result = ChatColor.DARK_PURPLE + "Next map: " + ChatColor.GOLD + name + ChatColor.DARK_PURPLE + " by ";
                 for (Contributor author : authors) {
                     if (authors.indexOf(author) < authors.size() - 2) {

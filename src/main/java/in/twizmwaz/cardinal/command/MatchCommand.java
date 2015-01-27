@@ -8,7 +8,6 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.GameObjective;
-import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;

@@ -2,7 +2,6 @@ package in.twizmwaz.cardinal.module.modules.monumentModes;
 
 import com.sk89q.minecraft.util.commands.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.module.modules.cores.CoreObjective;
 import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjective;
@@ -10,7 +9,6 @@ import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 
 public class MonumentModes implements TaskedModule {

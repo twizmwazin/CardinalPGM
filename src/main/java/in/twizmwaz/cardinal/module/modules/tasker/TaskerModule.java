@@ -1,7 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.tasker;
 
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.event.MatchStartEvent;
+import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.TaskedModule;
 import org.bukkit.Bukkit;
@@ -30,7 +30,7 @@ public class TaskerModule implements TaskedModule {
     }
     
     @EventHandler
-    public void onMatchStart(MatchStartEvent event) {
+    public void onCycleComplete(CycleCompleteEvent event) {
         run();
     }
 }
