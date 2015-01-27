@@ -6,6 +6,7 @@ import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.TaskedModule;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class TaskerModule implements TaskedModule {
@@ -20,12 +21,15 @@ public class TaskerModule implements TaskedModule {
     
     @Override
     public void unload() {
+        HandlerList.unregisterAll(this);
     }
 
     @Override
     public void run() {
-        for (TaskedModule task : match.getModules().getModules(TaskedModule.class)) {
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 1);
+        if (match.equals(GameHandler.getGameHandler().getMatch())) {
+            for (TaskedModule task : match.getModules().getModules(TaskedModule.class)) {
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 1);
+            }
         }
     }
     

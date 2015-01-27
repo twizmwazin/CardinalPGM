@@ -17,6 +17,7 @@ public class MapNotification implements TaskedModule {
     private int nextMessage;
 
     protected MapNotification() {
+        this.nextMessage = 600;
     }
 
     @Override
@@ -27,7 +28,6 @@ public class MapNotification implements TaskedModule {
     @EventHandler
     public void onCycleComplete(CycleCompleteEvent event) {
         this.startTime = System.currentTimeMillis();
-        this.nextMessage = 600;
     }
 
     /**
@@ -53,7 +53,7 @@ public class MapNotification implements TaskedModule {
                 }
             }
             Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "Currently playing " + ChatColor.GOLD + GameHandler.getGameHandler().getMatch().getMapInfo().getName() + ChatColor.DARK_PURPLE + " by " + result);
-            nextMessage += 600;
+            this.nextMessage += 600;
         }
     }
 }
