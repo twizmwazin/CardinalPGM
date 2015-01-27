@@ -18,6 +18,7 @@ import org.bukkit.Material;
 import org.bukkit.block.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -66,6 +67,29 @@ public class ObserverModule implements Module {
             howToBookMeta.setAuthor(ChatColor.GOLD + "CardinalPGM");
             howTo.setItemMeta(howToBookMeta);
             player.getInventory().setItem(1, howTo);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        if (match.getState().equals(MatchState.ENDED) || match.getState().equals(MatchState.CYCLING)) {
+            if (event.getPlayer().getGameMode().equals(GameMode.SURVIVAL)) {
+                Player player = event.getPlayer();
+                player.setGameMode(GameMode.CREATIVE);
+                player.setAffectsSpawning(false);
+                player.setCollidesWithEntities(false);
+                player.setCanPickupItems(false);
+
+                player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
+                ItemStack howTo = new ItemStack(Material.WRITTEN_BOOK);
+                ItemMeta howToMeta = howTo.getItemMeta();
+                howToMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "Coming Soon");
+                howTo.setItemMeta(howToMeta);
+                BookMeta howToBookMeta = (BookMeta) howTo.getItemMeta();
+                howToBookMeta.setAuthor(ChatColor.GOLD + "CardinalPGM");
+                howTo.setItemMeta(howToBookMeta);
+                player.getInventory().setItem(1, howTo);
+            }
         }
     }
 

@@ -6,12 +6,15 @@ import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.TaskedModule;
+import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class GameComplete implements TaskedModule {
 
@@ -40,6 +43,26 @@ public class GameComplete implements TaskedModule {
         if (ScoreModule.matchHasMax()) {
             if (event.getScoreModule().getScore() >= ScoreModule.max()) {
                 GameHandler.getGameHandler().getMatch().end(event.getScoreModule().getTeam());
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        if (Blitz.matchIsBlitz()) {
+            boolean win = true;
+            TeamModule winner = null;
+            for (TeamModule team : TeamUtils.getTeams()) {
+                if (!team.isObserver()) {
+                    if (winner == null && team.getPlayers().size() > 0) {
+                        winner = team;
+                    } else if (winner != null && team.getPlayers().size() > 0) {
+                        win = false;
+                    }
+                }
+            }
+            if (win) {
+                GameHandler.getGameHandler().getMatch().end(winner);
             }
         }
     }

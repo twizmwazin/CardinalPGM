@@ -51,7 +51,7 @@ public class Blitz implements Module {
 
 
     @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent event){
+    public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         TeamModule team = TeamUtils.getTeamByPlayer(player);
         if (team != null && !team.isObserver()) {
@@ -59,6 +59,7 @@ public class Blitz implements Module {
             player.removeMetadata("lives", plugin);
             player.setMetadata("lives", new LazyMetadataValue(plugin, LazyMetadataValue.CacheStrategy.NEVER_CACHE, new BlitzLives(oldMeta - 1)));
             if (player.getMetadata("lives").get(0).asInt() == 0) {
+                TeamUtils.getTeamById("observers").add(player, true);
                 player.removeMetadata("lives", plugin);
             }
         }
@@ -68,7 +69,7 @@ public class Blitz implements Module {
     public void onPgmSpawn(PgmSpawnEvent event) {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
             Player player = event.getPlayer();
-            if (TeamUtils.getTeams().contains(TeamUtils.getTeamByPlayer(player))) {
+            if (!TeamUtils.getTeamByPlayer(player).isObserver()) {
                 if (!player.hasMetadata("lives")) {
                     player.setMetadata("lives", new LazyMetadataValue(plugin, LazyMetadataValue.CacheStrategy.NEVER_CACHE, new BlitzLives(this.lives)));
                 }
