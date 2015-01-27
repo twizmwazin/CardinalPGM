@@ -90,8 +90,12 @@ public class RegionModuleBuilder implements ModuleBuilder {
                 if (element.getAttributeValue("region") != null) {
                     for (Element regionElement : document.getRootElement().getChildren("regions")) {
                         for (Element givenRegion : regionElement.getChildren()) {
-                            if (givenRegion.getName().equalsIgnoreCase("apply"))
-                                continue;
+                            for (Element givenChild : givenRegion.getChildren()) {
+                                if (givenChild.getAttributeValue("region").equalsIgnoreCase(element.getAttributeValue("region"))) {
+                                    return getRegion(givenChild);
+                                }
+                            }
+                            if (givenRegion.getName().equalsIgnoreCase("apply")) continue;
                             if (givenRegion.getAttributeValue("region").equalsIgnoreCase(element.getAttributeValue("region"))) {
                                 return getRegion(givenRegion);
                             }
