@@ -36,8 +36,7 @@ public class ComplementRegion extends RegionModule {
                 working.remove(work);
             }
         }
-        if (working.size() == 1) return true;
-        else return false;
+        return working.size() == 1;
     }
 
     @Override

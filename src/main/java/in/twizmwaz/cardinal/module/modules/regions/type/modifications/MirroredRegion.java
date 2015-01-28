@@ -62,10 +62,8 @@ public class MirroredRegion extends RegionModule {
     public List<Block> getBlocks() {
         List<Block> results = new ArrayList<>();
         Vector translation = new Vector(origin.getBlockX() * normal.getBlockX(), origin.getBlockY() * normal.getBlockY(), origin.getBlockZ() * normal.getBlockZ());
-        for (Block block : getBase().getBlocks()) {
-            Block newBlock = block.getRelative(translation.getBlockX() - 2 * (translation.getBlockX()),
-                    translation.getBlockY() - 2 * (translation.getBlockY()),
-                    translation.getBlockZ() - 2 * (translation.getBlockZ()));
+        for (Block block : base.getBlocks()) {
+            Block newBlock = block.getRelative(translation.getBlockX() * -1, translation.getBlockY() * -1, translation.getBlockZ() * -1);
             results.add(newBlock);
         }
         return results;

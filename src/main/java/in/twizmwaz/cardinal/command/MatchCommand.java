@@ -77,7 +77,7 @@ public class MatchCommand {
                 double timeRemaining = 0.0;
                 if (ScoreModule.getTimeLimit() != 0)
                     timeRemaining = ScoreModule.getTimeLimit() - MatchTimer.getTimeInSeconds();
-                sender.sendMessage(ChatColor.DARK_AQUA + "Score: " + score + "  " + ChatColor.RED + (ScoreModule.getTimeLimit() != 0 ? StringUtils.formatTime(timeRemaining) : (ScoreModule.matchHasMax() ? ChatColor.GRAY + " " : "") + (ScoreModule.matchHasMax() ? "[" + ScoreModule.max() + "]" : "")));
+                sender.sendMessage(ChatColor.DARK_AQUA + "Score: " + score + "  " + ChatColor.RED + (ScoreModule.getTimeLimit() != 0 ? StringUtils.formatTime(timeRemaining) : (ScoreModule.matchHasMax() ? ChatColor.GRAY + "  " : "") + (ScoreModule.matchHasMax() ? "[" + ScoreModule.max() + "]" : "")));
             }
         }
     }

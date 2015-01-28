@@ -65,15 +65,7 @@ public class DestroyableObjective implements GameObjective {
         this.playersTouched = new HashSet<>();
         this.playerDestroyed = new HashMap<>();
 
-        size = 0.0;
-        for (Block block : region.getBlocks()) {
-            for (int i = 0; i < types.size(); i++) {
-                if (types.get(i).equals(block.getType()) && damageValues.get(i) == (int) block.getState().getData().getData()) {
-                    size ++;
-                    break;
-                }
-            }
-        }
+        this.size = this.getBlocks().size();
 
         this.scoreboardHandler = new GameObjectiveScoreboardHandler(this);
     }
@@ -211,10 +203,6 @@ public class DestroyableObjective implements GameObjective {
         }
     }
 
-    public double getMonumentSize() {
-        return size;
-    }
-
     public boolean showPercent() {
         return showPercent;
     }
@@ -224,25 +212,25 @@ public class DestroyableObjective implements GameObjective {
     }
 
     public int getPercent() {
-        double blocksRequired = required * getMonumentSize();
+        double blocksRequired = required * size;
         if (Math.floor((complete / blocksRequired) * 100) > 100) {
             return 100;
         }
         if (Math.floor((complete / blocksRequired) * 100) < 0) {
             return 0;
         }
-        return (int) (complete / blocksRequired) * 100;
+        return (int) Math.floor((complete / blocksRequired) * 100);
     }
 
     public int getPercentFromAmount(int amount) {
-        double blocksRequired = required * getMonumentSize();
+        double blocksRequired = required * size;
         if (Math.floor((amount / blocksRequired) * 100) > 100) {
             return 100;
         }
         if (Math.floor((amount / blocksRequired) * 100) < 0) {
             return 0;
         }
-        return (int) (amount / blocksRequired) * 100;
+        return (int) Math.floor((amount / blocksRequired) * 100);
     }
 
     public boolean partOfObjective(Block block) {
