@@ -58,6 +58,8 @@ public class ObserverModule implements Module {
             player.setCollidesWithEntities(false);
             player.setCanPickupItems(false);
 
+            player.getInventory().clear();
+
             player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
             ItemStack howTo = new ItemStack(Material.WRITTEN_BOOK);
             ItemMeta howToMeta = howTo.getItemMeta();
@@ -79,6 +81,8 @@ public class ObserverModule implements Module {
                 player.setAffectsSpawning(false);
                 player.setCollidesWithEntities(false);
                 player.setCanPickupItems(false);
+
+                player.getInventory().clear();
 
                 player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
                 ItemStack howTo = new ItemStack(Material.WRITTEN_BOOK);
