@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.regions.parsers;
 
 import in.twizmwaz.cardinal.module.modules.regions.RegionParser;
+import in.twizmwaz.cardinal.util.NumUtils;
 import org.bukkit.util.Vector;
 import org.jdom2.Element;
 
@@ -20,11 +21,9 @@ public class CuboidParser extends RegionParser {
         values.addAll(Arrays.asList(element.getAttributeValue("max").trim().replaceAll(" ", ",").split(",")));
         for (String string : values) {
             values.set(values.indexOf(string), string.trim());
-            if (string.equalsIgnoreCase("oo")) values.set(values.indexOf(string), "256");
-            if (string.equalsIgnoreCase("-oo")) values.set(values.indexOf(string), "0");
         }
-        this.min = new Vector(Double.parseDouble(values.get(0)), Double.parseDouble(values.get(1)), Double.parseDouble(values.get(2)));
-        this.max = new Vector(Double.parseDouble(values.get(3)), Double.parseDouble(values.get(4)), Double.parseDouble(values.get(5)));
+        this.min = new Vector(NumUtils.parseDouble(values.get(0)), NumUtils.parseDouble(values.get(1)), NumUtils.parseDouble(values.get(2)));
+        this.max = new Vector(NumUtils.parseDouble(values.get(3)), NumUtils.parseDouble(values.get(4)), NumUtils.parseDouble(values.get(5)));
     }
 
     public Vector getMin() {
