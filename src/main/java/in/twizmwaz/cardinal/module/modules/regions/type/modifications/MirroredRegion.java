@@ -1,9 +1,12 @@
 package in.twizmwaz.cardinal.module.modules.regions.type.modifications;
 
+import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.modifiers.MirrorParser;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
+import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
@@ -13,6 +16,7 @@ import java.util.List;
 public class MirroredRegion extends RegionModule {
 
     private final RegionModule base;
+    private final RegionModule region;
     private final Vector origin, normal;
 
     public MirroredRegion(String name, RegionModule base, Vector origin, Vector normal) {
@@ -20,6 +24,20 @@ public class MirroredRegion extends RegionModule {
         this.base = base;
         this.origin = origin;
         this.normal = normal;
+
+        ModuleCollection<RegionModule> blocks = new ModuleCollection<>();
+//        Bukkit.broadcastMessage("getBlocks() called");
+        Vector translation = new Vector(origin.getBlockX() * normal.getBlockX(), origin.getBlockY() * normal.getBlockY(), origin.getBlockZ() * normal.getBlockZ());
+//        Bukkit.broadcastMessage("translation: " + translation.getX() + ", " + translation.getY() + ", " + translation.getZ());
+//        Bukkit.broadcastMessage(base.getBlocks().size() + "");
+        for (Block block : base.getBlocks()) {
+//            Bukkit.broadcastMessage("block: " + block.getX() + ", " + block.getY() + ", " + block.getZ());
+            Block newBlock = block.getRelative(translation.getBlockX() * -1, translation.getBlockY() * -1, translation.getBlockZ() * -1);
+//            Bukkit.broadcastMessage("newBlock: " + newBlock.getX() + ", " + newBlock.getY() + ", " + newBlock.getZ());
+            blocks.add(new BlockRegion(null, newBlock.getX(), newBlock.getY(), newBlock.getZ()));
+        }
+
+        region = new UnionRegion(null, blocks);
     }
 
     public MirroredRegion(MirrorParser parser) {
@@ -40,32 +58,21 @@ public class MirroredRegion extends RegionModule {
 
     @Override
     public boolean contains(BlockRegion region) {
-        Vector translation = getOrigin().multiply(2).multiply(getNormal());
-        return base.contains(new BlockRegion(null, translation.subtract(region.getVector())));
+        return this.region.getBlocks().contains(region.getBlock());
     }
 
     @Override
     public PointRegion getRandomPoint() {
-        PointRegion basePoint = base.getRandomPoint();
-        Vector translation = getOrigin().multiply(2).multiply(getNormal());
-        return new PointRegion(null, translation.subtract(basePoint.getVector()));
+        return region.getRandomPoint();
     }
 
     @Override
     public BlockRegion getCenterBlock() {
-        BlockRegion basePoint = base.getCenterBlock();
-        Vector translation = getOrigin().multiply(2).multiply(getNormal());
-        return new PointRegion(null, translation.subtract(basePoint.getVector()));
+        return region.getCenterBlock();
     }
 
     @Override
     public List<Block> getBlocks() {
-        List<Block> results = new ArrayList<>();
-        Vector translation = new Vector(origin.getBlockX() * normal.getBlockX(), origin.getBlockY() * normal.getBlockY(), origin.getBlockZ() * normal.getBlockZ());
-        for (Block block : base.getBlocks()) {
-            Block newBlock = block.getRelative(translation.getBlockX() * -1, translation.getBlockY() * -1, translation.getBlockZ() * -1);
-            results.add(newBlock);
-        }
-        return results;
+        return region.getBlocks();
     }
 }
