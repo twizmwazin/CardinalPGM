@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class MirroredRegion extends RegionModule {
 
     private final RegionModule base;
-    private final RegionModule region;
+    private RegionModule region;
     private final Vector origin, normal;
 
     public MirroredRegion(String name, RegionModule base, Vector origin, Vector normal) {
@@ -24,20 +25,7 @@ public class MirroredRegion extends RegionModule {
         this.base = base;
         this.origin = origin;
         this.normal = normal;
-
-        ModuleCollection<RegionModule> blocks = new ModuleCollection<>();
-//        Bukkit.broadcastMessage("getBlocks() called");
-        Vector translation = new Vector(origin.getBlockX() * normal.getBlockX(), origin.getBlockY() * normal.getBlockY(), origin.getBlockZ() * normal.getBlockZ());
-//        Bukkit.broadcastMessage("translation: " + translation.getX() + ", " + translation.getY() + ", " + translation.getZ());
-//        Bukkit.broadcastMessage(base.getBlocks().size() + "");
-        for (Block block : base.getBlocks()) {
-//            Bukkit.broadcastMessage("block: " + block.getX() + ", " + block.getY() + ", " + block.getZ());
-            Block newBlock = block.getRelative(translation.getBlockX() * -1, translation.getBlockY() * -1, translation.getBlockZ() * -1);
-//            Bukkit.broadcastMessage("newBlock: " + newBlock.getX() + ", " + newBlock.getY() + ", " + newBlock.getZ());
-            blocks.add(new BlockRegion(null, newBlock.getX(), newBlock.getY(), newBlock.getZ()));
-        }
-
-        region = new UnionRegion(null, blocks);
+        this.region = null;
     }
 
     public MirroredRegion(MirrorParser parser) {
@@ -58,21 +46,56 @@ public class MirroredRegion extends RegionModule {
 
     @Override
     public boolean contains(BlockRegion region) {
-        return this.region.getBlocks().contains(region.getBlock());
+        if (this.region == null) {
+            updateRegion();
+        }
+        return this.region.contains(region);
     }
 
     @Override
     public PointRegion getRandomPoint() {
-        return region.getRandomPoint();
+        if (this.region == null) {
+            updateRegion();
+        }
+        return this.region.getRandomPoint();
     }
 
     @Override
     public BlockRegion getCenterBlock() {
-        return region.getCenterBlock();
+        if (this.region == null) {
+            updateRegion();
+        }
+        return this.region.getCenterBlock();
     }
 
     @Override
     public List<Block> getBlocks() {
-        return region.getBlocks();
+        if (this.region == null) {
+            updateRegion();
+        }
+        return this.region.getBlocks();
+    }
+
+    public void updateRegion() {
+        ModuleCollection<RegionModule> blocks = new ModuleCollection<>();
+        Vector translation = new Vector(origin.getBlockX() * (normal.getBlockX() != 0 ? 1: 0), origin.getBlockY() * (normal.getBlockY() != 0 ? 1: 0), origin.getBlockZ() * (normal.getBlockZ() != 0 ? 1: 0));
+        for (Block block : base.getBlocks()) {
+            Location location = block.getLocation();
+            int xRelative = 0;
+            int yRelative = 0;
+            int zRelative = 0;
+            if (normal.getBlockX() != 0) {
+                xRelative = (location.getBlockX() - translation.getBlockX()) * -2;
+            }
+            if (normal.getBlockY() != 0) {
+                yRelative = (location.getBlockY() - translation.getBlockY()) * -2;
+            }
+            if (normal.getBlockZ() != 0) {
+                zRelative = (location.getBlockZ() - translation.getBlockZ()) * -2;
+            }
+            Block newBlock = block.getRelative(xRelative, yRelative, zRelative);
+            blocks.add(new BlockRegion(null, newBlock.getX(), newBlock.getY(), newBlock.getZ()));
+        }
+        this.region = new UnionRegion(null, blocks);
     }
 }
