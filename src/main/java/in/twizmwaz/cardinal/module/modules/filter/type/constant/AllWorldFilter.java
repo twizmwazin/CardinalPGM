@@ -1,7 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.filter.type.constant;
 
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
-import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -13,9 +12,9 @@ public class AllWorldFilter extends AllEventFilter {
     }
 
     @Override
-    public FilterState evaluate(Event event) {
-        if (event instanceof BlockEvent) {
-            if (event instanceof BlockPlaceEvent || event instanceof BlockBreakEvent) return FilterState.ABSTAIN;
+    public FilterState evaluate(final Object object) {
+        if (object instanceof BlockEvent) {
+            if (object instanceof BlockPlaceEvent || object instanceof BlockBreakEvent) return FilterState.ABSTAIN;
             else return allow ? FilterState.ALLOW : FilterState.DENY;
         } else return FilterState.ABSTAIN;
     }

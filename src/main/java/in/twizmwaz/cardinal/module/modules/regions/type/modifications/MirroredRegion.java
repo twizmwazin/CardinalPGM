@@ -6,12 +6,10 @@ import in.twizmwaz.cardinal.module.modules.regions.parsers.modifiers.MirrorParse
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MirroredRegion extends RegionModule {

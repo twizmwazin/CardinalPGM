@@ -4,7 +4,6 @@ import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.ObjectiveFilterParser;
-import org.bukkit.event.Event;
 
 import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ALLOW;
 import static in.twizmwaz.cardinal.module.modules.filter.FilterState.DENY;

@@ -4,8 +4,6 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterParser;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.player.PlayerEvent;
 
 import static in.twizmwaz.cardinal.module.modules.filter.FilterState.*;
 

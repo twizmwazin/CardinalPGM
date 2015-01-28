@@ -4,7 +4,6 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterParser;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import org.bukkit.Bukkit;
-import org.bukkit.event.Event;
 
 import java.util.logging.Level;
 

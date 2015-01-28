@@ -5,8 +5,6 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.BlockFilterParser;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.event.Event;
-import org.bukkit.event.block.BlockEvent;
 
 import static in.twizmwaz.cardinal.module.modules.filter.FilterState.*;
 

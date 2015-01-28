@@ -1,8 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.filter.type.constant;
 
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
-import org.bukkit.event.Event;
-import org.bukkit.event.entity.EntityEvent;
+import org.bukkit.entity.Entity;
 
 public class AllEntitiesFilter extends AllEventFilter {
 
@@ -11,8 +10,8 @@ public class AllEntitiesFilter extends AllEventFilter {
     }
 
     @Override
-    public FilterState evaluate(Event event) {
-        if (event instanceof EntityEvent) return allow ? FilterState.ALLOW : FilterState.DENY;
+    public FilterState evaluate(final Object object) {
+        if (object instanceof Entity) return allow ? FilterState.ALLOW : FilterState.DENY;
         else return FilterState.ABSTAIN;
     }
 

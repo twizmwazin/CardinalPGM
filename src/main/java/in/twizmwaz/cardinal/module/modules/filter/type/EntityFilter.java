@@ -5,8 +5,6 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.EntityFilterParser;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.event.Event;
-import org.bukkit.event.entity.EntityEvent;
 
 import static in.twizmwaz.cardinal.module.modules.filter.FilterState.*;
 

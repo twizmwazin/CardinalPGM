@@ -1,10 +1,9 @@
 package in.twizmwaz.cardinal.module.modules.filter.type.constant;
 
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.entity.EntityEvent;
 
 public class AllMobFilter extends AllEventFilter {
 
@@ -13,9 +12,9 @@ public class AllMobFilter extends AllEventFilter {
     }
 
     @Override
-    public FilterState evaluate(Event event) {
-        if (event instanceof EntityEvent) {
-            if (((EntityEvent) event).getEntity() instanceof LivingEntity && !(((EntityEvent) event).getEntity() instanceof Player))
+    public FilterState evaluate(final Object object) {
+        if (object instanceof Entity) {
+            if (object instanceof LivingEntity && !(object instanceof Player))
                 return allow ? FilterState.ALLOW : FilterState.DENY;
             else return FilterState.ABSTAIN;
         } else return FilterState.ABSTAIN;

@@ -2,7 +2,6 @@ package in.twizmwaz.cardinal.module.modules.filter.type.constant;
 
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
-import org.bukkit.event.Event;
 
 public class AllEventFilter extends FilterModule {
 
@@ -14,7 +13,7 @@ public class AllEventFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(Event event) {
+    public FilterState evaluate(final Object object) {
         return allow ? FilterState.ALLOW : FilterState.DENY;
     }
 

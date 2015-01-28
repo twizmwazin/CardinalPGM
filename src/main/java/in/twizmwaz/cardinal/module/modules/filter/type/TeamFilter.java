@@ -6,8 +6,6 @@ import in.twizmwaz.cardinal.module.modules.filter.parsers.TeamFilterParser;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.player.PlayerEvent;
 
 import static in.twizmwaz.cardinal.module.modules.filter.FilterState.*;
 

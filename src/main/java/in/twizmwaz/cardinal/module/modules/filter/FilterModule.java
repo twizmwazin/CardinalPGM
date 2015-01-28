@@ -1,7 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.filter;
 
 import in.twizmwaz.cardinal.module.Module;
-import org.bukkit.event.Event;
 
 public abstract class FilterModule implements Module {
     

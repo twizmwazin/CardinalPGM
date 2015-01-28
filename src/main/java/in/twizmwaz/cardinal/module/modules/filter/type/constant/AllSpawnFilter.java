@@ -2,7 +2,6 @@ package in.twizmwaz.cardinal.module.modules.filter.type.constant;
 
 import in.twizmwaz.cardinal.event.PgmSpawnEvent;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
-import org.bukkit.event.Event;
 
 public class AllSpawnFilter extends AllEventFilter {
 
@@ -11,8 +10,8 @@ public class AllSpawnFilter extends AllEventFilter {
     }
 
     @Override
-    public FilterState evaluate(Event event) {
-        if (event instanceof PgmSpawnEvent) return allow ? FilterState.ALLOW : FilterState.DENY;
+    public FilterState evaluate(final Object object) {
+        if (object instanceof PgmSpawnEvent) return allow ? FilterState.ALLOW : FilterState.DENY;
         else return FilterState.ABSTAIN;
     }
 

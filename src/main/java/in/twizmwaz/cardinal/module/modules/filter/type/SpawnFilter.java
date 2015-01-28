@@ -3,7 +3,6 @@ package in.twizmwaz.cardinal.module.modules.filter.type;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.SpawnFilterParser;
-import org.bukkit.event.Event;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import static in.twizmwaz.cardinal.module.modules.filter.FilterState.*;
