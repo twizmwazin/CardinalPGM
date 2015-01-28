@@ -89,8 +89,12 @@ public class Kit implements Module {
         player.setWalkSpeed(walkSpeed);
         player.setKnockbackReduction(knockback);
         for (KitItem item : this.items) {
-            if (player.getInventory().getItem(item.getSlot()) == null || force) {
-                player.getInventory().setItem(item.getSlot(), item.getItem());
+            if (item.hasSlot()) {
+                if (player.getInventory().getItem(item.getSlot()) == null || force) {
+                    player.getInventory().setItem(item.getSlot(), item.getItem());
+                } else {
+                    player.getInventory().addItem(item.getItem());
+                }
             } else {
                 player.getInventory().addItem(item.getItem());
             }

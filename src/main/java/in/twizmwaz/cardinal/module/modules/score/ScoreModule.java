@@ -72,37 +72,43 @@ public class ScoreModule implements Module {
             } else {
                 if (TeamUtils.getTeamByPlayer(event.getEntity()) != null) {
                     if (TeamUtils.getTeamByPlayer(event.getEntity()) == team) {
-                        EntityDamageEvent.DamageCause cause = event.getEntity().getLastDamageCause().getCause();
-                        if (cause.equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) || cause.equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
-                            if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
-                                EntityDamageByEntityEvent damageByEntityEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
-                                if (TntTracker.getWhoPlaced(damageByEntityEvent.getDamager()) != null) {
-                                    if (Bukkit.getOfflinePlayer(TntTracker.getWhoPlaced(damageByEntityEvent.getDamager())).isOnline()) {
-                                        Player source = Bukkit.getPlayer(TntTracker.getWhoPlaced(damageByEntityEvent.getDamager()));
-                                        if (TeamUtils.getTeamByPlayer(source) != team) {
-                                            return;
+                        try {
+                            EntityDamageEvent.DamageCause cause = event.getEntity().getLastDamageCause().getCause();
+                            if (cause.equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) || cause.equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
+                                if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+                                    EntityDamageByEntityEvent damageByEntityEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
+                                    if (TntTracker.getWhoPlaced(damageByEntityEvent.getDamager()) != null) {
+                                        if (Bukkit.getOfflinePlayer(TntTracker.getWhoPlaced(damageByEntityEvent.getDamager())).isOnline()) {
+                                            Player source = Bukkit.getPlayer(TntTracker.getWhoPlaced(damageByEntityEvent.getDamager()));
+                                            if (TeamUtils.getTeamByPlayer(source) != team) {
+                                                return;
+                                            }
                                         }
                                     }
                                 }
                             }
+                            score -= pointsPerDeath;
+                            Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
+                        } catch (NullPointerException e) {
                         }
-                        score -= pointsPerDeath;
-                        Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
                     } else {
-                        EntityDamageEvent.DamageCause cause = event.getEntity().getLastDamageCause().getCause();
-                        if (cause.equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) || cause.equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
-                            if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
-                                EntityDamageByEntityEvent damageByEntityEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
-                                if (TntTracker.getWhoPlaced(damageByEntityEvent.getDamager()) != null) {
-                                    if (Bukkit.getOfflinePlayer(TntTracker.getWhoPlaced(damageByEntityEvent.getDamager())).isOnline()) {
-                                        Player source = Bukkit.getPlayer(TntTracker.getWhoPlaced(damageByEntityEvent.getDamager()));
-                                        if (TeamUtils.getTeamByPlayer(source) != team) {
-                                            score += pointsPerKill;
-                                            Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
+                        try {
+                            EntityDamageEvent.DamageCause cause = event.getEntity().getLastDamageCause().getCause();
+                            if (cause.equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) || cause.equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
+                                if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+                                    EntityDamageByEntityEvent damageByEntityEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
+                                    if (TntTracker.getWhoPlaced(damageByEntityEvent.getDamager()) != null) {
+                                        if (Bukkit.getOfflinePlayer(TntTracker.getWhoPlaced(damageByEntityEvent.getDamager())).isOnline()) {
+                                            Player source = Bukkit.getPlayer(TntTracker.getWhoPlaced(damageByEntityEvent.getDamager()));
+                                            if (TeamUtils.getTeamByPlayer(source) != team) {
+                                                score += pointsPerKill;
+                                                Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
+                                            }
                                         }
                                     }
                                 }
                             }
+                        } catch (NullPointerException e) {
                         }
                     }
                 }

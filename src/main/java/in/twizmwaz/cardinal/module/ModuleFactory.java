@@ -22,6 +22,7 @@ import in.twizmwaz.cardinal.module.modules.hill.HillObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.hunger.HungerBuilder;
 import in.twizmwaz.cardinal.module.modules.itemKeep.ItemKeepBuilder;
 import in.twizmwaz.cardinal.module.modules.itemRemove.ItemRemoveBuilder;
+import in.twizmwaz.cardinal.module.modules.killReward.KillRewardBuilder;
 import in.twizmwaz.cardinal.module.modules.killStreakCount.KillStreakBuilder;
 import in.twizmwaz.cardinal.module.modules.kit.KitBuilder;
 import in.twizmwaz.cardinal.module.modules.mapInfo.InfoBuilder;
@@ -146,5 +147,6 @@ public class ModuleFactory {
         builderClasses.add(MapNotificationBuilder.class);
         builderClasses.add(FilterModuleBuilder.class);
         builderClasses.add(AppliedRegionBuilder.class);
+        builderClasses.add(KillRewardBuilder.class);
     }
 }
