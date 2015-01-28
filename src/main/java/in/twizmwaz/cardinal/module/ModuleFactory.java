@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module;
 
 import in.twizmwaz.cardinal.match.Match;
+import in.twizmwaz.cardinal.module.modules.appliedRegion.AppliedRegionBuilder;
 import in.twizmwaz.cardinal.module.modules.armorKeep.ArmorKeepBuilder;
 import in.twizmwaz.cardinal.module.modules.blitz.BlitzBuilder;
 import in.twizmwaz.cardinal.module.modules.broadcasts.BroadcastModuleBuilder;
@@ -144,5 +145,6 @@ public class ModuleFactory {
         builderClasses.add(BlitzBuilder.class);
         builderClasses.add(MapNotificationBuilder.class);
         builderClasses.add(FilterModuleBuilder.class);
+        builderClasses.add(AppliedRegionBuilder.class);
     }
 }

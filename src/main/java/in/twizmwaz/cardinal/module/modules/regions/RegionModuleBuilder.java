@@ -29,7 +29,11 @@ public class RegionModuleBuilder implements ModuleBuilder {
         for (Element element : match.getDocument().getRootElement().getChildren("regions")) {
             for (Element givenRegion : element.getChildren()) {
                 for (Element givenChild : givenRegion.getChildren()) {
-                    for (Element givenSubChild : givenRegion.getChildren()) {
+                    for (Element givenSubChild : givenChild.getChildren()) {
+                        for (Element givenChildRegion : givenSubChild.getChildren()) {
+                            RegionModule staged = getRegion(givenSubChild);
+                            if (staged.getName() != null) match.getModules().add(staged);
+                        }
                         RegionModule staged = getRegion(givenSubChild);
                         if (staged.getName() != null) match.getModules().add(staged);
                     }
