@@ -9,42 +9,46 @@ public class MiscUtils {
         if (chatColor.isColor()) {
             switch (chatColor) {
                 case AQUA:
-                    return Color.fromRGB(0, 255, 255);
+                    return convertHexToRGB("55FFFF");
                 case BLACK:
-                    return Color.fromRGB(0, 0, 0);
+                    return convertHexToRGB("000000");
                 case BLUE:
-                    return Color.fromRGB(128, 128, 255);
+                    return convertHexToRGB("5555FF");
                 case DARK_AQUA:
-                    return Color.fromRGB(0, 128, 128);
+                    return convertHexToRGB("00AAAA");
                 case DARK_BLUE:
-                    return Color.fromRGB(0, 0, 255);
+                    return convertHexToRGB("0000AA");
                 case DARK_GRAY:
-                    return Color.fromRGB(64, 64, 64);
+                    return convertHexToRGB("555555");
                 case DARK_GREEN:
-                    return Color.fromRGB(0, 128, 0);
+                    return convertHexToRGB("00AA00");
                 case DARK_PURPLE:
-                    return Color.fromRGB(128, 0, 128);
+                    return convertHexToRGB("AA00AA");
                 case DARK_RED:
-                    return Color.fromRGB(192, 0, 0);
+                    return convertHexToRGB("AA0000");
                 case GOLD:
-                    return Color.fromRGB(255, 128, 0);
+                    return convertHexToRGB("FFAA00");
                 case GRAY:
-                    return Color.fromRGB(196, 0, 0);
+                    return convertHexToRGB("AAAAAA");
                 case GREEN:
-                    return Color.fromRGB(255, 196, 0);
+                    return convertHexToRGB("55FF55");
                 case LIGHT_PURPLE:
-                    return Color.fromRGB(255, 0, 255);
+                    return convertHexToRGB("FF55FF");
                 case RED:
-                    return Color.fromRGB(255, 0, 0);
+                    return convertHexToRGB("FF5555");
                 case WHITE:
-                    return Color.fromRGB(255, 255, 255);
+                    return convertHexToRGB("FFFFFF");
                 case YELLOW:
-                    return Color.fromRGB(255, 255, 0);
+                    return convertHexToRGB("FFFF55");
                 default:
-                    return Color.fromRGB(128, 128, 128);
+                    return convertHexToRGB("AAAAAA");
             }
         } else {
-            return Color.fromBGR(128, 128, 128);
+            return convertHexToRGB("AAAAAA");
         }
+    }
+
+    public static Color convertHexToRGB(String color) {
+        return Color.fromRGB(Integer.valueOf(color.substring(0, 2), 16), Integer.valueOf(color.substring(2, 4), 16), Integer.valueOf(color.substring(4, 6), 16));
     }
 }
