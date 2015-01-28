@@ -117,7 +117,7 @@ public class DestroyableObjective implements GameObjective {
                 if (!playersTouched.contains(event.getPlayer().getUniqueId())) {
                     playersTouched.add(event.getPlayer().getUniqueId());
                     TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
-                    TeamChat.sendToTeam(teamModule.getColor() + "[Team] " + event.getPlayer().getDisplayName() + ChatColor.GRAY + " destroyed some of " + ChatColor.AQUA + name, teamModule);
+                    TeamChat.sendToTeam(teamModule.getColor() + "[Team] " + event.getPlayer().getDisplayName() + ChatColor.GRAY + " damaged " + ChatColor.AQUA + name, teamModule);
                 }
                 boolean oldState = this.isTouched();
                 this.complete ++;
@@ -162,7 +162,7 @@ public class DestroyableObjective implements GameObjective {
                         if (!playersTouched.contains(player)) {
                             playersTouched.add(player);
                             TeamModule teamModule = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
-                            TeamChat.sendToTeam(teamModule.getColor() + "[Team] " + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " destroyed some of " + ChatColor.AQUA + name, teamModule);
+                            TeamChat.sendToTeam(teamModule.getColor() + "[Team] " + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " damaged " + ChatColor.AQUA + name, teamModule);
                         }
                         blockDestroyed = true;
                         blownUp = true;
