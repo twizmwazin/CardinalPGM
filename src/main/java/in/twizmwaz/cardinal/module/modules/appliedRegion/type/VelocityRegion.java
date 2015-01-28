@@ -18,7 +18,7 @@ public class VelocityRegion extends AppliedRegion {
     
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (getRegion().contains(new BlockRegion(null, event.getFrom().toVector())))
+        if (getRegion().contains(new BlockRegion(null, event.getTo().toVector())) && event.getPlayer().isOnGround())
             event.getPlayer().setVelocity(velocity);
     }
 }
