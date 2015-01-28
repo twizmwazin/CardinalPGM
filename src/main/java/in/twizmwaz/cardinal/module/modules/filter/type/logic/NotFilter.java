@@ -16,7 +16,7 @@ public class NotFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Event event) {
+    public FilterState evaluate(final Object object) {
         FilterState childState = childFilter.evaluate(event);
         if (childState.equals(ALLOW)) return DENY;
         else if (childState.equals(DENY)) return ALLOW;

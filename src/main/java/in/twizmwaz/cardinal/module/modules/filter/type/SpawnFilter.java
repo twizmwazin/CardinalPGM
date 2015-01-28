@@ -18,9 +18,9 @@ public class SpawnFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Event event) {
-        if (event instanceof CreatureSpawnEvent) {
-            if (((CreatureSpawnEvent) event).equals(reason)) return ALLOW;
+    public FilterState evaluate(final Object object) {
+        if (object instanceof CreatureSpawnEvent) {
+            if (((CreatureSpawnEvent) object).getSpawnReason().equals(reason)) return ALLOW;
             else return DENY;
         } else return ABSTAIN;
     }

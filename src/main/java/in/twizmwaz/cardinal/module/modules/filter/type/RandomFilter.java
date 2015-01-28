@@ -20,7 +20,7 @@ public class RandomFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Event event) {
+    public FilterState evaluate(final Object object) {
         Random random = new Random();
         double working = random.nextGaussian();
         if (working <= chance) return ALLOW;

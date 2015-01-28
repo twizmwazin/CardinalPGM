@@ -4,6 +4,7 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.ItemFilterParser;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
@@ -20,9 +21,9 @@ public class CarryingFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Event event) {
-        if (event instanceof PlayerEvent) {
-            for (ItemStack item : ((PlayerEvent) event).getPlayer().getInventory()) {
+    public FilterState evaluate(final Object object) {
+        if (object instanceof Player) {
+            for (ItemStack item : ((Player) object).getInventory()) {
                 if (item.getType().equals(material)) return ALLOW;
             }
             return DENY;

@@ -19,10 +19,10 @@ public class VoidFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(Event event) {
-        if (event instanceof BlockEvent) {
+    public FilterState evaluate(final Object object) {
+        if (object instanceof Block) {
             Block check = new Location(GameHandler.getGameHandler().getMatchWorld(), 
-                    ((BlockEvent) event).getBlock().getX(), 0, ((BlockEvent) event).getBlock().getZ()).getBlock();
+                    ((Block) object).getX(), 0, ((Block) object).getZ()).getBlock();
             return check.getType() == Material.AIR ? DENY : ALLOW;
         } else return ABSTAIN;
     }

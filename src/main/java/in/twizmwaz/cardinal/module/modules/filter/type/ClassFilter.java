@@ -17,7 +17,7 @@ public class ClassFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Event event) {
+    public FilterState evaluate(final Object object) {
         Bukkit.getLogger().log(Level.INFO, "Class Filters are not yet supported in CardinalPGM.");
         return ABSTAIN;
     }

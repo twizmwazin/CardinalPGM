@@ -19,7 +19,7 @@ public class AllowFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Event event) {
+    public FilterState evaluate(final Object object) {
         for (FilterModule child : children) {
             if (child.evaluate(event).equals(ALLOW)) return ALLOW;
         }

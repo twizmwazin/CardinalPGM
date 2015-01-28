@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.TeamFilterParser;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerEvent;
 
@@ -20,10 +21,12 @@ public class TeamFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Event event) {
-        if (event instanceof PlayerEvent) {
-            if (TeamUtils.getTeamByPlayer(((PlayerEvent) event).getPlayer()).equals(team))
-                return ALLOW;
+    public FilterState evaluate(final Object object) {
+        if (object instanceof Player) {
+            if (TeamUtils.getTeamByPlayer((Player) object) != null)
+                if (TeamUtils.getTeamByPlayer((Player) object) == team)
+                    return ALLOW;
+                else return DENY;
             else return DENY;
         } else return ABSTAIN;
     }

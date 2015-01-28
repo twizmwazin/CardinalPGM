@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.module.modules.filter.type;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.KillstreakFilterParser;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerEvent;
 
@@ -24,10 +25,10 @@ public class KillStreakFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Event event) {
-        if (event instanceof PlayerEvent) {
+    public FilterState evaluate(final Object object) {
+        if (object instanceof Player) {
             try {
-                int killStreak = ((PlayerEvent) event).getPlayer().getMetadata("killstreak").get(0).asInt();
+                int killStreak = ((Player) object).getMetadata("killstreak").get(0).asInt();
                 if (this.min > -1 && this.max > -1) {
                     if (killStreak > min && killStreak < max) return ALLOW;
                     else return DENY;

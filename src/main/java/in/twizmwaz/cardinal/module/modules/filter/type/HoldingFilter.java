@@ -4,6 +4,7 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.ItemFilterParser;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerEvent;
 
@@ -19,9 +20,9 @@ public class HoldingFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(Event event) {
-        if (event instanceof PlayerEvent) {
-            if (((PlayerEvent) event).getPlayer().getItemInHand().getType().equals(material)) return ALLOW;
+    public FilterState evaluate(final Object object) {
+        if (object instanceof Player) {
+            if (((Player) object).getItemInHand().getType().equals(material)) return ALLOW;
             else return DENY;
         }
         return ABSTAIN;

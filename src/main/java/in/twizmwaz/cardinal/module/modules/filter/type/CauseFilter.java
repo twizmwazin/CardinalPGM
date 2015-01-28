@@ -3,7 +3,9 @@ package in.twizmwaz.cardinal.module.modules.filter.type;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.CauseFilterParser;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.player.PlayerEvent;
@@ -20,17 +22,17 @@ public class CauseFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Event event) {
+    public FilterState evaluate(final Object object) {
         EventCause eventCause = null;
-        if (event instanceof PlayerEvent) {
+        if (object instanceof Player) {
             eventCause = EventCause.PLAYER;
-        } else if (event instanceof EntityEvent) {
-            if (((EntityEvent) event).getEntityType().equals(EntityType.PRIMED_TNT)) {
+        } else if (object instanceof Entity) {
+            if (((Entity) object).getType().equals(EntityType.PRIMED_TNT)) {
                 eventCause = EventCause.TNT;
             }
         }
         if (cause.equals(eventCause)) return ALLOW;
-        else if (!eventCause.equals(null)) return DENY;
+        else if (eventCause != null) return DENY;
         else return ABSTAIN;
     }
 

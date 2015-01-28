@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.module.modules.filter.type;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterParser;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerEvent;
 
@@ -15,9 +16,9 @@ public class FlyingFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Event event) {
-        if (event instanceof PlayerEvent) {
-            if (((PlayerEvent) event).getPlayer().isFlying()) return ALLOW;
+    public FilterState evaluate(final Object object) {
+        if (object instanceof Player) {
+            if (((Player) object).isFlying()) return ALLOW;
             else return DENY;
         } else return ABSTAIN;
     }

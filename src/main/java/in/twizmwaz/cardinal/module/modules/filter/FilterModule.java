@@ -15,10 +15,10 @@ public abstract class FilterModule implements Module {
     }
 
     /**
-     * @param event The event which will be filters
+     * @param object The object which will be filtered
      * @return The state of the filter.
      */
-    public abstract FilterState evaluate(final Event event);
+    public abstract FilterState evaluate(final Object object);
 
     @Override
     public void unload() {

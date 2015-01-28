@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.module.modules.filter.type;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.EntityFilterParser;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityEvent;
@@ -19,9 +20,9 @@ public class EntityFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Event event) {
-        if (event instanceof EntityEvent) {
-            if (((EntityEvent) event).getEntity().equals(entity)) return ALLOW;
+    public FilterState evaluate(final Object object) {
+        if (object instanceof Entity) {
+            if (((Entity) object).getType().equals(entity)) return ALLOW;
             else return DENY;
         } else return ABSTAIN;
     }

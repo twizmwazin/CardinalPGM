@@ -4,6 +4,7 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.BlockFilterParser;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockEvent;
 
@@ -19,9 +20,9 @@ public class BlockFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Event event) {
-        if (event instanceof BlockEvent) {
-            if (((BlockEvent) event).getBlock().getType().equals(material)) return ALLOW;
+    public FilterState evaluate(final Object object) {
+        if (object instanceof Block) {
+            if (((Block) object).getType().equals(material)) return ALLOW;
             else return DENY;
         } else return ABSTAIN;
     }
