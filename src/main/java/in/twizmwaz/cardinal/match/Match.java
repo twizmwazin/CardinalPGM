@@ -58,7 +58,6 @@ public class Match {
         for (ModuleLoadTime time : ModuleLoadTime.getOrdered()) {
             for (Module module : factory.build(time)) {
                 modules.add(module);
-                GameHandler.getGameHandler().getPlugin().getLogger().info("Loading module " + module.toString());
                 plugin.getServer().getPluginManager().registerEvents(module, plugin);
             }
         }
