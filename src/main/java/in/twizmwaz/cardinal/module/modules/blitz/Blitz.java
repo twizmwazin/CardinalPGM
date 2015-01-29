@@ -94,8 +94,20 @@ public class Blitz implements Module {
         return this.title;
     }
 
+    public int getTime() {
+        return time;
+    }
+
     public static boolean matchIsBlitz() {
         return GameHandler.getGameHandler().getMatch().getModules().getModule(Blitz.class) != null;
+    }
+
+    public static int getTimeLimit() {
+        int time = 0;
+        for (Blitz blitz : GameHandler.getGameHandler().getMatch().getModules().getModules(Blitz.class)) {
+            time = blitz.getTime();
+        }
+        return time;
     }
 
 }

@@ -24,6 +24,7 @@ public class StringUtils {
 
     private static long convert(int value, char unit) {
         switch (unit) {
+            case 'y': return value * 365 * 60 * 60 * 24;
             case 'd': return value * 60 * 60 * 24;
             case 'h': return value * 60 * 60;
             case 'm': return value * 60;

@@ -91,5 +91,30 @@ public class GameComplete implements TaskedModule {
                 }
             }
         }
+        if (Blitz.getTimeLimit() != 0) {
+            if (MatchTimer.getTimeInSeconds() >= Blitz.getTimeLimit()) {
+                TeamModule winningTeam = null;
+                int winningAmount = Integer.MIN_VALUE;
+                boolean tied = false;
+                Match match = GameHandler.getGameHandler().getMatch();
+                for (TeamModule team : TeamUtils.getTeams()) {
+                    if (!team.isObserver()) {
+                        if (team.getPlayers().size() > winningAmount) {
+                            winningTeam = team;
+                            winningAmount = team.getPlayers().size();
+                            tied = false;
+                        } else if (team.getPlayers().size() == winningAmount) {
+                            tied = true;
+                        }
+                    }
+                }
+                if (tied) {
+                    match.end(null);
+                } else {
+                    match.end(winningTeam);
+                }
+            }
+
+        }
     }
 }
