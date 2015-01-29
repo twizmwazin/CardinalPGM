@@ -41,6 +41,7 @@ public class DestroyableObjective implements GameObjective {
     private Set<UUID> playersTouched;
     private double size;
     private HashMap<UUID, Integer> playerDestroyed;
+    private List<Block> monument;
 
     private double complete;
     private boolean completed;
@@ -65,6 +66,7 @@ public class DestroyableObjective implements GameObjective {
         this.playersTouched = new HashSet<>();
         this.playerDestroyed = new HashMap<>();
 
+        this.monument = this.getBlocks();
         this.size = this.getBlocks().size();
 
         this.scoreboardHandler = new GameObjectiveScoreboardHandler(this);
@@ -252,6 +254,10 @@ public class DestroyableObjective implements GameObjective {
         return blocks;
     }
 
+    public List<Block> getMonument() {
+        return monument;
+    }
+
     public String getWhoDestroyed() {
         String whoDestroyed = "";
         List<String> toCombine = new ArrayList<>();
@@ -296,8 +302,8 @@ public class DestroyableObjective implements GameObjective {
     }
 
     public void setMaterial(Material material, int damageValue) {
-        this.types.clear();
-        this.damageValues.clear();
+        this.types = new ArrayList<>();
+        this.damageValues = new ArrayList<>();
         this.types.add(material);
         this.damageValues.add(damageValue);
     }

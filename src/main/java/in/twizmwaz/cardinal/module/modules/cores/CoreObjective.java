@@ -44,8 +44,8 @@ public class CoreObjective implements GameObjective {
     private Set<UUID> playersTouched;
     private Material currentType;
     private int damageValue;
-    private Set<Block> lava = new HashSet<>();
-    private Set<Block> core = new HashSet<>();
+    private Set<Block> lava;
+    private Set<Block> core;
 
     private boolean touched;
     private boolean complete;
@@ -65,6 +65,8 @@ public class CoreObjective implements GameObjective {
         this.playersTouched = new HashSet<>();
         this.currentType = type;
 
+        this.lava = new HashSet<>();
+        this.core = new HashSet<>();
         for (Block block : region.getBlocks()) {
             if (partOfObjective(block)) {
                 core.add(block);
@@ -236,6 +238,10 @@ public class CoreObjective implements GameObjective {
 
     public RegionModule getRegion() {
         return region;
+    }
+
+    public Set<Block> getCore() {
+        return core;
     }
 
     public boolean partOfObjective(Block block) {
