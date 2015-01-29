@@ -4,24 +4,23 @@ import in.twizmwaz.cardinal.module.modules.appliedRegion.AppliedRegion;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
-import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 
-public class BlockBreakRegion extends AppliedRegion {
+public class UseRegion extends AppliedRegion {
     
-    public BlockBreakRegion(RegionModule region, FilterModule filter, String message) {
+    public UseRegion(RegionModule region, FilterModule filter, String message) {
         super(region, filter, message);
     }
     
     @EventHandler
-    public void onBlockBreak(BlockBreakEvent event) {
-        if (region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector())) &&
-                (filter.evaluate(event.getPlayer()) == FilterState.DENY || filter.evaluate(event.getBlock()) == FilterState.DENY)) {
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && (filter.evaluate(event.getPlayer()) == FilterState.DENY || filter.evaluate(event.getClickedBlock()) == FilterState.DENY)) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }
-            
+        
     }
 }

@@ -5,10 +5,10 @@ import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
-import in.twizmwaz.cardinal.module.modules.appliedRegion.type.BlockBreakRegion;
-import in.twizmwaz.cardinal.module.modules.appliedRegion.type.BlockPlaceRegion;
-import in.twizmwaz.cardinal.module.modules.appliedRegion.type.VelocityRegion;
+import in.twizmwaz.cardinal.module.modules.appliedRegion.type.*;
+import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.filter.type.logic.AllFilter;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
@@ -17,7 +17,7 @@ import org.jdom2.Element;
 
 @BuilderData(load = ModuleLoadTime.LATE)
 public class AppliedRegionBuilder  implements ModuleBuilder {
-    
+
     @Override
     public ModuleCollection load(Match match) {
         ModuleCollection<AppliedRegion> results = new ModuleCollection<AppliedRegion>();
@@ -28,30 +28,44 @@ public class AppliedRegionBuilder  implements ModuleBuilder {
                     region = RegionModuleBuilder.getRegion(applied.getAttributeValue("region"));
                 } else {
                     ModuleCollection<RegionModule> regions = new ModuleCollection<RegionModule>();
-                    for (Element element : applied.getChildren()) {
-                        regions.add(RegionModuleBuilder.getRegion(element));
-                    }
+                    for (Element element : applied.getChildren()) regions.add(RegionModuleBuilder.getRegion(element));
                     region = new UnionRegion(null, regions);
                 }
                 String message = applied.getAttributeValue("message");
-                if (applied.getAttributeValue("velocity") != null) {
-                    String[] velocity = applied.getAttributeValue("velocity").replaceAll("@", "").split(",");
-                    results.add(new VelocityRegion(region, new Vector(Double.parseDouble(velocity[0]), 
-                            Double.parseDouble(velocity[1]), Double.parseDouble(velocity[2]))));
+                if (applied.getAttributeValue("velocity") != null)  {
+                    String[] values = applied.getAttributeValue("velocity").replaceAll("@", "").split(",");
+                    FilterModule filter = applied.getAttributeValue("filter") == null ? null : getFilter(applied.getAttributeValue("filter"));
+                    Vector velocity = new Vector(Double.parseDouble(values[0]), Double.parseDouble(values[1]), Double.parseDouble(values[2]));
+                    results.add(new VelocityRegion(region, filter, message, velocity));
                 }
-                if (applied.getAttributeValue("block") != null) {
-                    results.add(new BlockPlaceRegion(region, FilterModuleBuilder.getFilter(applied.getAttributeValue("block")), message));
-                    results.add(new BlockBreakRegion(region, FilterModuleBuilder.getFilter(applied.getAttributeValue("block")), message));
-                } else {
-                    if (applied.getAttributeValue("block-place") != null) {
-                        results.add(new BlockPlaceRegion(region, FilterModuleBuilder.getFilter(applied.getAttributeValue("block-place")), message));
-                    }
-                    if (applied.getAttributeValue("block-break") != null) {
-                        results.add(new BlockBreakRegion(region, FilterModuleBuilder.getFilter(applied.getAttributeValue("block-break")), message));
-                    }
+                /*if (applied.getAttributeValue("block-break") != null) {
+                    results.add(new BlockBreakRegion(region, getFilter(applied.getAttributeValue("block-break")), message));
                 }
+                if (applied.getAttributeValue("block-place") != null) {
+                    results.add(new BlockPlaceRegion(region, getFilter(applied.getAttributeValue("block-place")), message));
+                }
+                /*if (applied.getAttributeValue("block") != null) {
+                    results.add(new BlockEventRegion(region, getFilter(applied.getAttributeValue("block")), message));
+                }*/
+                /*if (applied.getAttributeValue("enter") != null) {
+                    results.add(new EnterRegion(region, getFilter(applied.getAttributeValue("enter")), message));
+                }
+                if (applied.getAttributeValue("leave") != null) {
+                    results.add(new LeaveRegion(region, getFilter(applied.getAttributeValue("leave")), message));
+                }*/
             }
         }
         return results;
     }
+    
+    private FilterModule getFilter(String string) {
+        if (string.split(" ").length == 1) return FilterModuleBuilder.getFilter(string);
+        else {
+            ModuleCollection<FilterModule> collection = new ModuleCollection<>();
+            for (String filter : string.split(" ")) {
+                collection.add(FilterModuleBuilder.getFilter(filter));
+            }
+            return new AllFilter(null, collection);
+        }
+    } 
 }

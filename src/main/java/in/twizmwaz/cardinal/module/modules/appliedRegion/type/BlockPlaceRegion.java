@@ -15,14 +15,14 @@ public class BlockPlaceRegion extends AppliedRegion {
     private final String message;
     
     public BlockPlaceRegion(RegionModule region, FilterModule filter, String message) {
-        super(region);
+        super(region, filter, message);
         this.filter = filter;
         this.message = message;
     }
     
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (getRegion().contains(new BlockRegion(null, event.getBlockPlaced().getLocation().toVector())) && 
+        if (region.contains(new BlockRegion(null, event.getBlockPlaced().getLocation().toVector())) &&
                 (filter.evaluate(event.getPlayer()) == FilterState.DENY || filter.evaluate(event.getBlockPlaced()) == FilterState.DENY)) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
