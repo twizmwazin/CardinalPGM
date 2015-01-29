@@ -114,87 +114,92 @@ public class DestroyableObjective implements GameObjective {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event) {
-        if (getBlocks().contains(event.getBlock())) {
-            if (TeamUtils.getTeamByPlayer(event.getPlayer()) != team) {
-                if (!playersTouched.contains(event.getPlayer().getUniqueId())) {
-                    playersTouched.add(event.getPlayer().getUniqueId());
-                    TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
-                    TeamChat.sendToTeam(teamModule.getColor() + "[Team] " + event.getPlayer().getDisplayName() + ChatColor.GRAY + " damaged " + ChatColor.AQUA + name, teamModule);
+        if (!event.isCancelled()) {
+            if (getBlocks().contains(event.getBlock())) {
+                if (TeamUtils.getTeamByPlayer(event.getPlayer()) != team) {
+                    if (!playersTouched.contains(event.getPlayer().getUniqueId())) {
+                        playersTouched.add(event.getPlayer().getUniqueId());
+                        TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
+                        if (this.show) TeamChat.sendToTeam(teamModule.getColor() + "[Team] " + event.getPlayer().getDisplayName() + ChatColor.GRAY + " damaged " + ChatColor.AQUA + name, teamModule);
+                    }
+                    boolean oldState = this.isTouched();
+                    this.complete++;
+                    this.playerDestroyed.put(event.getPlayer().getUniqueId(), (playerDestroyed.containsKey(event.getPlayer().getUniqueId()) ? playerDestroyed.get(event.getPlayer().getUniqueId()) + 1 : 1));
+                    if ((this.complete / size) >= this.required && !this.completed) {
+                        this.completed = true;
+                        event.setCancelled(false);
+                        if (this.show) Bukkit.broadcastMessage(team.getCompleteName() + "'s " + ChatColor.AQUA + name + ChatColor.GRAY + " destroyed by " + getWhoDestroyed());
+                        ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
+                        Bukkit.getServer().getPluginManager().callEvent(compEvent);
+                    } else if (!this.completed) {
+                        ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), !oldState || showPercent);
+                        Bukkit.getServer().getPluginManager().callEvent(touchEvent);
+                    }
+                } else {
+                    event.setCancelled(true);
+                    if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), "You may not damage your own objective.");
                 }
-                boolean oldState = this.isTouched();
-                this.complete ++;
-                this.playerDestroyed.put(event.getPlayer().getUniqueId(), (playerDestroyed.containsKey(event.getPlayer().getUniqueId()) ? playerDestroyed.get(event.getPlayer().getUniqueId()) + 1 : 1));
-                if ((this.complete / size) >= this.required && !this.completed) {
-                    this.completed = true;
-                    event.setCancelled(false);
-                    Bukkit.broadcastMessage(team.getCompleteName() + "'s " + ChatColor.AQUA + name + ChatColor.GRAY + " destroyed by " + getWhoDestroyed());
-                    ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
-                    Bukkit.getServer().getPluginManager().callEvent(compEvent);
-                } else if (!this.completed) {
-                    ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), !oldState || showPercent);
-                    Bukkit.getServer().getPluginManager().callEvent(touchEvent);
-                }
-            } else {
-                event.setCancelled(true);
-                ChatUtils.sendWarningMessage(event.getPlayer(), "You may not damage your own objective.");
             }
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityExplode(EntityExplodeEvent event) {
-        List<Block> objectiveBlownUp = new ArrayList<>();
-        for (Block block : event.blockList()) {
-            if (getBlocks().contains(block)) {
-                objectiveBlownUp.add(block);
+        if (!event.isCancelled()) {
+            List<Block> objectiveBlownUp = new ArrayList<>();
+            for (Block block : event.blockList()) {
+                if (getBlocks().contains(block)) {
+                    objectiveBlownUp.add(block);
+                }
             }
-        }
-        boolean oldState = this.isTouched();
-        boolean blownUp = false;
-        Player eventPlayer = null;
-        int originalPercent = getPercent();
-        for (Block block : objectiveBlownUp) {
-            boolean blockDestroyed = false;
-            if (TntTracker.getWhoPlaced(event.getEntity()) != null) {
-                UUID player = TntTracker.getWhoPlaced(event.getEntity());
-                if (Bukkit.getOfflinePlayer(player).isOnline()) {
-                    if (TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)) == team) {
-                        event.blockList().remove(block);
+            boolean oldState = this.isTouched();
+            boolean blownUp = false;
+            Player eventPlayer = null;
+            int originalPercent = getPercent();
+            for (Block block : objectiveBlownUp) {
+                boolean blockDestroyed = false;
+                if (TntTracker.getWhoPlaced(event.getEntity()) != null) {
+                    UUID player = TntTracker.getWhoPlaced(event.getEntity());
+                    if (Bukkit.getOfflinePlayer(player).isOnline()) {
+                        if (TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)) == team) {
+                            event.blockList().remove(block);
+                        } else {
+                            if (!playersTouched.contains(player)) {
+                                playersTouched.add(player);
+                                TeamModule teamModule = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
+                                if (this.show) TeamChat.sendToTeam(teamModule.getColor() + "[Team] " + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " damaged " + ChatColor.AQUA + name, teamModule);
+                            }
+                            blockDestroyed = true;
+                            blownUp = true;
+                            eventPlayer = Bukkit.getPlayer(player);
+                        }
                     } else {
                         if (!playersTouched.contains(player)) {
                             playersTouched.add(player);
-                            TeamModule teamModule = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
-                            TeamChat.sendToTeam(teamModule.getColor() + "[Team] " + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " damaged " + ChatColor.AQUA + name, teamModule);
                         }
                         blockDestroyed = true;
                         blownUp = true;
-                        eventPlayer = Bukkit.getPlayer(player);
                     }
                 } else {
-                    if (!playersTouched.contains(player)) {
-                        playersTouched.add(player);
-                    }
                     blockDestroyed = true;
                     blownUp = true;
                 }
-            } else {
-                blockDestroyed = true;
-                blownUp = true;
-            }
-            if (blockDestroyed) {
-                this.complete ++;
-                if (eventPlayer != null) this.playerDestroyed.put(eventPlayer.getUniqueId(), (playerDestroyed.containsKey(eventPlayer.getUniqueId()) ? playerDestroyed.get(eventPlayer.getUniqueId()) + 1 : 1));
-                if ((this.complete / size) >= this.required && !this.completed) {
-                    this.completed = true;
-                    Bukkit.broadcastMessage(team.getCompleteName() + ChatColor.GRAY + "'s " + ChatColor.AQUA + name + ChatColor.GRAY + " destroyed by " + getWhoDestroyed());
-                    ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, eventPlayer);
-                    Bukkit.getServer().getPluginManager().callEvent(compEvent);
+                if (blockDestroyed) {
+                    this.complete++;
+                    if (eventPlayer != null)
+                        this.playerDestroyed.put(eventPlayer.getUniqueId(), (playerDestroyed.containsKey(eventPlayer.getUniqueId()) ? playerDestroyed.get(eventPlayer.getUniqueId()) + 1 : 1));
+                    if ((this.complete / size) >= this.required && !this.completed) {
+                        this.completed = true;
+                        if (this.show) Bukkit.broadcastMessage(team.getCompleteName() + ChatColor.GRAY + "'s " + ChatColor.AQUA + name + ChatColor.GRAY + " destroyed by " + getWhoDestroyed());
+                        ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, eventPlayer);
+                        Bukkit.getServer().getPluginManager().callEvent(compEvent);
+                    }
                 }
             }
-        }
-        if (!this.completed && blownUp) {
-            ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, !oldState || (getPercent() != originalPercent));
-            Bukkit.getServer().getPluginManager().callEvent(touchEvent);
+            if (!this.completed && blownUp) {
+                ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, !oldState || (getPercent() != originalPercent));
+                Bukkit.getServer().getPluginManager().callEvent(touchEvent);
+            }
         }
     }
 
