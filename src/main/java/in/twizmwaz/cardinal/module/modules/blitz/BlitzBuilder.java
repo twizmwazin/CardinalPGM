@@ -6,7 +6,7 @@ import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.rage.Rage;
-import in.twizmwaz.cardinal.util.TimeUtils;
+import in.twizmwaz.cardinal.util.StringUtils;
 import org.jdom2.Element;
 
 @BuilderData(load = ModuleLoadTime.LATEST)
@@ -17,7 +17,7 @@ public class BlitzBuilder implements ModuleBuilder {
         for (Element element : match.getDocument().getRootElement().getChildren("blitz")) {
             boolean broadcastLives = element.getChild("broadcastLives") == null ? true : Boolean.parseBoolean(element.getChild("broadcastLives").getText());
             int lives = element.getChild("lives") == null ? 1 : Integer.parseInt(element.getChild("lives").getText());
-            int time = element.getChild("time") == null ? 0 : TimeUtils.timePeriodsToSeconds(element.getChild("time").getText());
+            int time = element.getChild("time") == null ? 0 : StringUtils.timeStringToSeconds(element.getChild("time").getText());
             String title = element.getChildText("title") == null ? (match.getModules().getModule(Rage.class) != null ? "Blitz: Rage" : "Blitz") : element.getChildText("title");
             result.add(new Blitz(title, broadcastLives, lives, time));
         }
