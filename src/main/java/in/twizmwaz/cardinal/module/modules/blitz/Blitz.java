@@ -69,13 +69,15 @@ public class Blitz implements Module {
     public void onPgmSpawn(PgmSpawnEvent event) {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
             Player player = event.getPlayer();
-            if (!TeamUtils.getTeamByPlayer(player).isObserver()) {
-                if (!player.hasMetadata("lives")) {
-                    player.setMetadata("lives", new LazyMetadataValue(plugin, LazyMetadataValue.CacheStrategy.NEVER_CACHE, new BlitzLives(this.lives)));
-                }
-                if (this.broadcastLives) {
-                    int lives = player.getMetadata("lives").get(0).asInt();
-                    player.sendMessage(ChatColor.RED + "You have " + ChatColor.AQUA + "" + ChatColor.BOLD + lives + " " + (lives == 1 ? "life" : "lives") + ChatColor.RED + " remaining.");
+            if (TeamUtils.getTeamByPlayer(player) != null) {
+                if (!TeamUtils.getTeamByPlayer(player).isObserver()) {
+                    if (!player.hasMetadata("lives")) {
+                        player.setMetadata("lives", new LazyMetadataValue(plugin, LazyMetadataValue.CacheStrategy.NEVER_CACHE, new BlitzLives(this.lives)));
+                    }
+                    if (this.broadcastLives) {
+                        int lives = player.getMetadata("lives").get(0).asInt();
+                        player.sendMessage(ChatColor.RED + "You have " + ChatColor.AQUA + "" + ChatColor.BOLD + lives + " " + (lives == 1 ? "life" : "lives") + ChatColor.RED + " remaining.");
+                    }
                 }
             }
         }

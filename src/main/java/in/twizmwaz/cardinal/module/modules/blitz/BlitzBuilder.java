@@ -9,7 +9,7 @@ import in.twizmwaz.cardinal.module.modules.rage.Rage;
 import in.twizmwaz.cardinal.util.StringUtils;
 import org.jdom2.Element;
 
-@BuilderData(load = ModuleLoadTime.LATEST)
+@BuilderData(load = ModuleLoadTime.LATER)
 public class BlitzBuilder implements ModuleBuilder {
 
     public ModuleCollection load(Match match) {
