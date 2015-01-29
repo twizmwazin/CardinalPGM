@@ -22,7 +22,7 @@ public class Rage implements Module{
         if (event.getDamager() instanceof Player) {
             ItemStack item = ((Player) event.getDamager()).getItemInHand();
             if (item != null) {
-                if (item.containsEnchantment(Enchantment.DAMAGE_ALL) || item.getType().name().contains("SWORD")) {
+                if (item.containsEnchantment(Enchantment.DAMAGE_ALL) && item.getEnchantmentLevel(Enchantment.DAMAGE_ALL) > 1) {
                     event.setDamage(1000);
                 }
             }
@@ -31,7 +31,7 @@ public class Rage implements Module{
                 Player shooter = (Player) ((Arrow) event.getDamager()).getShooter();
                 for (ItemStack item : shooter.getInventory()) {
                     if (item != null) {
-                        if (item.getType().equals(Material.BOW) && item.containsEnchantment(Enchantment.ARROW_DAMAGE)) {
+                        if (item.getType().equals(Material.BOW) && item.containsEnchantment(Enchantment.ARROW_DAMAGE) && item.getEnchantmentLevel(Enchantment.ARROW_DAMAGE) > 1) {
                             event.setDamage(1000);
                         }
                     }
