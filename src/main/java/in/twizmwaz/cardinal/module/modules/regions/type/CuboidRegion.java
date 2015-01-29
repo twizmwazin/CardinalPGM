@@ -18,7 +18,7 @@ public class CuboidRegion extends RegionModule {
     public CuboidRegion(String name, Vector min, Vector max) {
         super(name);
         this.min = Vector.getMinimum(min, max);
-        this.max = Vector.getMaximum(min, max);
+        this.max = Vector.getMaximum(min, max).subtract(new Vector(1, 1, 1));
     }
 
     public CuboidRegion(String name, double xMin, double yMin, double zMin, double xMax, double yMax, double zMax) {
