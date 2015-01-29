@@ -33,6 +33,7 @@ public class SpawnModuleBuilder implements ModuleBuilder {
                 TeamModule team = TeamUtils.getTeamById(spawns.getAttributeValue("team") != null ? spawns.getAttributeValue("team") : spawn.getAttributeValue("team"));
                 List<Pair<RegionModule, Vector>> regions = new ArrayList<>();
                 for (Element region : spawn.getChildren()) {
+                    RegionModule current = RegionModuleBuilder.getRegion(region);
                     Location location = new Location(GameHandler.getGameHandler().getMatchWorld(), 0, 0, 0);
                     if (region.getParentElement().getParentElement().getParentElement().getAttributeValue("yaw") != null)
                         location.setYaw(Float.parseFloat(region.getParentElement().getParentElement().getParentElement().getAttributeValue("yaw")));
@@ -42,7 +43,13 @@ public class SpawnModuleBuilder implements ModuleBuilder {
                         location.setYaw(Float.parseFloat(region.getParentElement().getAttributeValue("yaw")));
                     if (region.getAttributeValue("yaw") != null)
                         location.setYaw(Float.parseFloat(region.getAttributeValue("yaw")));
-                    regions.add(new ImmutablePair<>(RegionModuleBuilder.getRegion(region), location.getDirection()));
+                    if (region.getParentElement().getParentElement().getParentElement().getAttributeValue("angle") != null) 
+                        location.setDirection(parseAngle(region.getParentElement().getParentElement().getParentElement().getAttributeValue("angle")).subtract(current.getCenterBlock().getVector()));
+                    if (region.getParentElement().getParentElement().getAttributeValue("angle") != null)
+                        location.setDirection(parseAngle(region.getParentElement().getParentElement().getAttributeValue("angle")).subtract(current.getCenterBlock().getVector()));
+                    if (region.getParentElement().getAttributeValue("angle") != null) 
+                        location.setDirection(parseAngle(region.getParentElement().getAttributeValue("angle")).subtract(current.getCenterBlock().getVector()));
+                    regions.add(new ImmutablePair<>(current, location.getDirection()));
                 }
                 String kit = null;
                 if (spawns.getAttributeValue("kit") != null)
@@ -85,6 +92,7 @@ public class SpawnModuleBuilder implements ModuleBuilder {
                     if (spawn.getAttributeValue("team") != null) team = TeamUtils.getTeamById(spawn.getAttributeValue("team"));
                     List<Pair<RegionModule, Vector>> regions = new ArrayList<>();
                     for (Element region : spawn.getChildren()) {
+                        RegionModule current = RegionModuleBuilder.getRegion(region);
                         Location location = new Location(GameHandler.getGameHandler().getMatchWorld(), 0, 0, 0);
                         if (region.getParentElement().getParentElement().getParentElement().getAttributeValue("yaw") != null)
                             location.setYaw(Float.parseFloat(region.getParentElement().getParentElement().getParentElement().getAttributeValue("yaw")));
@@ -94,7 +102,13 @@ public class SpawnModuleBuilder implements ModuleBuilder {
                             location.setYaw(Float.parseFloat(region.getParentElement().getAttributeValue("yaw")));
                         if (region.getAttributeValue("yaw") != null)
                             location.setYaw(Float.parseFloat(region.getAttributeValue("yaw")));
-                        regions.add(new ImmutablePair<>(RegionModuleBuilder.getRegion(region), location.getDirection()));
+                        if (region.getParentElement().getParentElement().getParentElement().getAttributeValue("angle") != null)
+                            location.setDirection(parseAngle(region.getParentElement().getParentElement().getParentElement().getAttributeValue("angle")).subtract(current.getCenterBlock().getVector()));
+                        if (region.getParentElement().getParentElement().getAttributeValue("angle") != null)
+                            location.setDirection(parseAngle(region.getParentElement().getParentElement().getAttributeValue("angle")).subtract(current.getCenterBlock().getVector()));
+                        if (region.getParentElement().getAttributeValue("angle") != null)
+                            location.setDirection(parseAngle(region.getParentElement().getAttributeValue("angle")).subtract(current.getCenterBlock().getVector()));
+                        regions.add(new ImmutablePair<>(current, location.getDirection()));
                     }
                     String kit = null;
                     if (spawns.getAttributeValue("kit") != null)
@@ -109,5 +123,10 @@ public class SpawnModuleBuilder implements ModuleBuilder {
 
         }
         return results;
+    }
+    
+    private Vector parseAngle(String string) {
+        String[] loc = string.split(",");
+        return new Vector(Double.parseDouble(loc[0].trim()), Double.parseDouble(loc[1].trim()),Double.parseDouble(loc[2].trim()));
     }
 }
