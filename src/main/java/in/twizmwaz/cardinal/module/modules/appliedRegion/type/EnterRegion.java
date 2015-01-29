@@ -17,7 +17,7 @@ public class EnterRegion extends AppliedRegion {
     
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (region.contains(new BlockRegion(null, event.getTo().toVector())) && filter.evaluate(event.getPlayer()) == FilterState.DENY) {
+        if (region.contains(new BlockRegion(null, event.getTo().toVector())) && !region.contains(new BlockRegion(null, event.getFrom().toVector())) && filter.evaluate(event.getPlayer()).equals(FilterState.DENY)) {
             event.setTo(event.getFrom());
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }

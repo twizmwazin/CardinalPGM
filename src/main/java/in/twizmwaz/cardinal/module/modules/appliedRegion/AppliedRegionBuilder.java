@@ -38,28 +38,29 @@ public class AppliedRegionBuilder  implements ModuleBuilder {
                     Vector velocity = new Vector(Double.parseDouble(values[0]), Double.parseDouble(values[1]), Double.parseDouble(values[2]));
                     results.add(new VelocityRegion(region, filter, message, velocity));
                 }
-                /*if (applied.getAttributeValue("block-break") != null) {
+                if (applied.getAttributeValue("block-break") != null) {
                     results.add(new BlockBreakRegion(region, getFilter(applied.getAttributeValue("block-break")), message));
                 }
                 if (applied.getAttributeValue("block-place") != null) {
                     results.add(new BlockPlaceRegion(region, getFilter(applied.getAttributeValue("block-place")), message));
                 }
-                /*if (applied.getAttributeValue("block") != null) {
+                if (applied.getAttributeValue("block") != null) {
                     results.add(new BlockEventRegion(region, getFilter(applied.getAttributeValue("block")), message));
-                }*/
-                /*if (applied.getAttributeValue("enter") != null) {
+                }
+                if (applied.getAttributeValue("enter") != null) {
                     results.add(new EnterRegion(region, getFilter(applied.getAttributeValue("enter")), message));
                 }
                 if (applied.getAttributeValue("leave") != null) {
                     results.add(new LeaveRegion(region, getFilter(applied.getAttributeValue("leave")), message));
-                }*/
+                }
             }
         }
         return results;
     }
     
     private FilterModule getFilter(String string) {
-        if (string.split(" ").length == 1) return FilterModuleBuilder.getFilter(string);
+        string = string.trim();
+        if (!string.contains(" ")) return FilterModuleBuilder.getFilter(string);
         else {
             ModuleCollection<FilterModule> collection = new ModuleCollection<>();
             for (String filter : string.split(" ")) {

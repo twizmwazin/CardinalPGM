@@ -13,6 +13,7 @@ import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.DomUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.libs.jline.internal.Log;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
@@ -57,6 +58,7 @@ public class Match {
         for (ModuleLoadTime time : ModuleLoadTime.getOrdered()) {
             for (Module module : factory.build(time)) {
                 modules.add(module);
+                GameHandler.getGameHandler().getPlugin().getLogger().info("Loading module " + module.toString());
                 plugin.getServer().getPluginManager().registerEvents(module, plugin);
             }
         }

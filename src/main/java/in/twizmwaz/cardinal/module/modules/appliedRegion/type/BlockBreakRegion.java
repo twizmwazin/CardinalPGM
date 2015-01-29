@@ -17,8 +17,7 @@ public class BlockBreakRegion extends AppliedRegion {
     
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector())) &&
-                (filter.evaluate(event.getPlayer()) == FilterState.DENY || filter.evaluate(event.getBlock()) == FilterState.DENY)) {
+        if (region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector())) && (filter.evaluate(event.getPlayer()).equals(FilterState.DENY) || filter.evaluate(event.getBlock()).equals(FilterState.DENY))) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }

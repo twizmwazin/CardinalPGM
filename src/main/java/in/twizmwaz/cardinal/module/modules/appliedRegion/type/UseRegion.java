@@ -17,10 +17,9 @@ public class UseRegion extends AppliedRegion {
     
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && (filter.evaluate(event.getPlayer()) == FilterState.DENY || filter.evaluate(event.getClickedBlock()) == FilterState.DENY)) {
+        if ((event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) && (filter.evaluate(event.getPlayer()).equals(FilterState.DENY) || filter.evaluate(event.getClickedBlock()).equals(FilterState.DENY))) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }
-        
     }
 }

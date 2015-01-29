@@ -22,11 +22,9 @@ public class BlockPlaceRegion extends AppliedRegion {
     
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (region.contains(new BlockRegion(null, event.getBlockPlaced().getLocation().toVector())) &&
-                (filter.evaluate(event.getPlayer()) == FilterState.DENY || filter.evaluate(event.getBlockPlaced()) == FilterState.DENY)) {
+        if (region.contains(new BlockRegion(null, event.getBlockPlaced().getLocation().toVector())) && (filter.evaluate(event.getPlayer()).equals(FilterState.DENY) || filter.evaluate(event.getBlockPlaced()).equals(FilterState.DENY))) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }
-            
     }
 }
