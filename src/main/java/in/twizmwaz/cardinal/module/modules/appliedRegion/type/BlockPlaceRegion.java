@@ -27,8 +27,8 @@ public class BlockPlaceRegion extends AppliedRegion {
     @EventHandler
     public void onBucketEmpty(PlayerBucketEmptyEvent event) {
         if (region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector()))
-            && (filter.evaluate(event.getPlayer()) == FilterState.DENY 
-                || filter.evaluate(event.getBlockClicked().getRelative(event.getBlockFace())) == FilterState.DENY)) {
+            && (filter.evaluate(event.getPlayer()).equals(FilterState.DENY)
+                || filter.evaluate(event.getBlockClicked().getRelative(event.getBlockFace())).equals(FilterState.DENY))) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }
