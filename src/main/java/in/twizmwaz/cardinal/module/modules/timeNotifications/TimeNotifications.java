@@ -16,11 +16,7 @@ public class TimeNotifications implements TaskedModule {
     private static int nextTimeMessage;
 
     protected TimeNotifications() {
-        if (ScoreModule.getTimeLimit() == 0)
-            if (Blitz.getTimeLimit() == 0)
-                nextTimeMessage = 0;
-            else nextTimeMessage = Blitz.getTimeLimit();
-        else nextTimeMessage = ScoreModule.getTimeLimit();
+        nextTimeMessage = GameHandler.getGameHandler().getMatch().getPriorityTimeLimit();
     }
 
     @Override
@@ -33,15 +29,14 @@ public class TimeNotifications implements TaskedModule {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
             double time = MatchTimer.getTimeInSeconds();
             double timeRemaining;
-            if (ScoreModule.getTimeLimit() == 0) {
-                if (Blitz.getTimeLimit() == 0) {
-                    if (time >= nextTimeMessage) {
-                        Bukkit.broadcastMessage(ChatColor.AQUA + "Time Elapsed: " + ChatColor.GREEN + StringUtils.formatTime(nextTimeMessage));
-                        nextTimeMessage += 300;
-                    }
-                    return;
-                } else timeRemaining = Blitz.getTimeLimit() - time;
-            } else timeRemaining = ScoreModule.getTimeLimit() - time;
+            if (GameHandler.getGameHandler().getMatch().getPriorityTimeLimit() == 0) {
+                if (time >= nextTimeMessage) {
+                    Bukkit.broadcastMessage(ChatColor.AQUA + "Time Elapsed: " + ChatColor.GREEN + StringUtils.formatTime(nextTimeMessage));
+                    nextTimeMessage += 300;
+                }
+                return;
+            }
+            timeRemaining = GameHandler.getGameHandler().getMatch().getPriorityTimeLimit() - time;
             if (nextTimeMessage >= timeRemaining) {
                 if (nextTimeMessage <= 5) {
                     Bukkit.broadcastMessage(ChatColor.AQUA + "Time Remaining: " + ChatColor.DARK_RED + StringUtils.formatTime(nextTimeMessage));

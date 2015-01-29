@@ -7,7 +7,9 @@ import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleFactory;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
+import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
 import in.twizmwaz.cardinal.module.modules.mapInfo.Info;
+import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.DomUtils;
 import org.bukkit.Bukkit;
@@ -114,5 +116,17 @@ public class Match {
 
     public int getNumber() {
         return number;
+    }
+
+    public int getPriorityTimeLimit() {
+        int scoreTime = ScoreModule.getTimeLimit();
+        int blitzTime = Blitz.getTimeLimit();
+        if (scoreTime != 0)
+            if (blitzTime != 0)
+                return (scoreTime < blitzTime ? scoreTime : blitzTime);
+            else return scoreTime;
+        else if (blitzTime != 0)
+            return blitzTime;
+        return 0;
     }
 }
