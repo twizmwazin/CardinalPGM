@@ -11,6 +11,7 @@ import in.twizmwaz.cardinal.module.modules.filter.type.*;
 import in.twizmwaz.cardinal.module.modules.filter.type.constant.*;
 import in.twizmwaz.cardinal.module.modules.filter.type.old.AllowFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.old.DenyFilter;
+import org.bukkit.Bukkit;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
@@ -150,6 +151,7 @@ public class FilterModuleBuilder implements ModuleBuilder {
      */
     public static FilterModule getFilter(String string) {
         for (FilterModule filterModule : GameHandler.getGameHandler().getMatch().getModules().getModules(FilterModule.class)) {
+            Bukkit.getLogger().info(string + " " + filterModule.getName());
             if (string.equalsIgnoreCase(filterModule.getName())) return filterModule;
         }
         return null;

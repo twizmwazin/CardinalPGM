@@ -7,7 +7,7 @@ public class FilterParser {
     private final String name;
     
     public FilterParser(final Element element) {
-        this.name = element.getName();
+        this.name = element.getParentElement().getAttributeValue("name");
     }
 
     public String getName() {

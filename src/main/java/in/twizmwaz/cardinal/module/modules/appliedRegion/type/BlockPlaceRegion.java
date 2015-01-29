@@ -8,21 +8,27 @@ import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
 
 public class BlockPlaceRegion extends AppliedRegion {
     
-    private final FilterModule filter;
-    private final String message;
-    
     public BlockPlaceRegion(RegionModule region, FilterModule filter, String message) {
         super(region, filter, message);
-        this.filter = filter;
-        this.message = message;
     }
     
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         if (region.contains(new BlockRegion(null, event.getBlockPlaced().getLocation().toVector())) && (filter.evaluate(event.getPlayer()).equals(FilterState.DENY) || filter.evaluate(event.getBlockPlaced()).equals(FilterState.DENY))) {
+            event.setCancelled(true);
+            ChatUtils.sendWarningMessage(event.getPlayer(), message);
+        }
+    }
+    
+    @EventHandler
+    public void onBucketEmpty(PlayerBucketEmptyEvent event) {
+        if (region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector()))
+            && (filter.evaluate(event.getPlayer()) == FilterState.DENY 
+                || filter.evaluate(event.getBlockClicked().getRelative(event.getBlockFace())) == FilterState.DENY)) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }

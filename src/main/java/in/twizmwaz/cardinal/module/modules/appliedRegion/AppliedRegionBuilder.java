@@ -64,7 +64,8 @@ public class AppliedRegionBuilder  implements ModuleBuilder {
         else {
             ModuleCollection<FilterModule> collection = new ModuleCollection<>();
             for (String filter : string.split(" ")) {
-                collection.add(FilterModuleBuilder.getFilter(filter));
+                FilterModule filterModule = FilterModuleBuilder.getFilter(filter);
+                if (filterModule != null) collection.add(filterModule);
             }
             return new AllFilter(null, collection);
         }

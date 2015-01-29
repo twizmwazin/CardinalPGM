@@ -5,34 +5,58 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
+import in.twizmwaz.cardinal.util.ChatUtils;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockBurnEvent;
-import org.bukkit.event.block.BlockFadeEvent;
-import org.bukkit.event.block.BlockFormEvent;
-import org.bukkit.event.block.BlockFromToEvent;
-import org.bukkit.event.block.BlockGrowEvent;
-import org.bukkit.event.block.BlockIgniteEvent;
-import org.bukkit.event.block.BlockPistonEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.BlockSpreadEvent;
+import org.bukkit.event.block.*;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
 
 public class BlockEventRegion extends AppliedRegion {
-    
+
     public BlockEventRegion(RegionModule region, FilterModule filter, String message) {
         super(region, filter, message);
     }
-    
+
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (filter.evaluate(event.getBlock()).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector()))) {
+        if ((filter.evaluate(event.getBlock()) == FilterState.DENY || filter.evaluate(event.getPlayer()) == FilterState.DENY)
+                && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector()))) {
             event.setCancelled(true);
+            ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }
     }
 
     @EventHandler
-    public void onBurnBreak(BlockBurnEvent event) {
-        if (filter.evaluate(event.getBlock()).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector()))) {
+    public void onBlockPlace(BlockPlaceEvent event) {
+        if ((filter.evaluate(event.getBlock()) == FilterState.DENY || filter.evaluate(event.getPlayer()) == FilterState.DENY)
+                && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector()))) {
+            event.setCancelled(true);
+            ChatUtils.sendWarningMessage(event.getPlayer(), message);
+        }
+    }
+
+    @EventHandler
+    public void onBucketEmpty(PlayerBucketEmptyEvent event) {
+        if ((filter.evaluate(event.getBlockClicked().getRelative(event.getBlockFace())) == FilterState.DENY || filter.evaluate(event.getPlayer()) == FilterState.DENY)
+                && region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector()))) {
+            event.setCancelled(true);
+            ChatUtils.sendWarningMessage(event.getPlayer(), message);
+        }
+    }
+
+    @EventHandler
+
+    public void onBucketFill(PlayerBucketFillEvent event) {
+        if ((filter.evaluate(event.getBlockClicked().getRelative(event.getBlockFace())) == FilterState.DENY || filter.evaluate(event.getPlayer()) == FilterState.DENY)
+                && region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector()))) {
+            event.setCancelled(true);
+            ChatUtils.sendWarningMessage(event.getPlayer(), message);
+        }
+    }
+
+    @EventHandler
+    public void onBlockBurn(BlockBurnEvent event) {
+        if (filter.evaluate(event.getBlock()) == FilterState.DENY && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector()))) {
             event.setCancelled(true);
         }
     }
@@ -43,7 +67,7 @@ public class BlockEventRegion extends AppliedRegion {
             event.setCancelled(true);
         }
     }
-    
+
     @EventHandler
     public void onBlockForm(BlockFormEvent event) {
         if (filter.evaluate(event.getBlock()).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector()))) {
@@ -73,15 +97,15 @@ public class BlockEventRegion extends AppliedRegion {
     }
 
     @EventHandler
-    public void onBlockPiston(BlockPistonEvent event) {
+    public void onBlockPiston(BlockPistonExtendEvent event) {
         if (filter.evaluate(event.getBlock()).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector()))) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onBlockPlace(BlockPlaceEvent event) {
-        if (filter.evaluate(event.getBlock()).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector()))) {
+    public void onBlockPiston(BlockPistonRetractEvent event) {
+        if (filter.evaluate(event.getBlock()) == FilterState.DENY && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector()))) {
             event.setCancelled(true);
         }
     }
@@ -93,3 +117,4 @@ public class BlockEventRegion extends AppliedRegion {
         }
     }
 }
+

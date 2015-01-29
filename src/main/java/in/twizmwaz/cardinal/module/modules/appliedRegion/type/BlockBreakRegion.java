@@ -8,6 +8,7 @@ import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
 
 public class BlockBreakRegion extends AppliedRegion {
     
@@ -21,6 +22,15 @@ public class BlockBreakRegion extends AppliedRegion {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }
-            
+    }
+
+    @EventHandler
+    public void onBucketFill(PlayerBucketFillEvent event) {
+        if (region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector()))
+                && (filter.evaluate(event.getPlayer()) == FilterState.DENY
+                || filter.evaluate(event.getBlockClicked().getRelative(event.getBlockFace())) == FilterState.DENY)) {
+            event.setCancelled(true);
+            ChatUtils.sendWarningMessage(event.getPlayer(), message);
+        }
     }
 }
