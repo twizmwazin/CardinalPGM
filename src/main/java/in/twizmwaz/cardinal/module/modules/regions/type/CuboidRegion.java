@@ -18,17 +18,7 @@ public class CuboidRegion extends RegionModule {
     public CuboidRegion(String name, Vector min, Vector max) {
         super(name);
         this.min = Vector.getMinimum(min, max);
-        Vector newMax = Vector.getMaximum(min, max);
-        if (newMax.getX() != Double.NEGATIVE_INFINITY) {
-            newMax.setX(newMax.getX() - 1);
-        }
-        if (newMax.getY() != Double.NEGATIVE_INFINITY) {
-            newMax.setY(newMax.getY() - 1);
-        }
-        if (newMax.getZ() != Double.NEGATIVE_INFINITY) {
-            newMax.setZ(newMax.getZ() - 1);
-        }
-        this.max = newMax;
+        this.max = Vector.getMaximum(min, max);
 
     }
 
@@ -86,9 +76,9 @@ public class CuboidRegion extends RegionModule {
     @Override
     public List<Block> getBlocks() {
         List<Block> results = new ArrayList<>();
-        for (int x = (int) getXMin(); x <= getXMax(); x++) {
-            for (int z = (int) getZMin(); z <= getZMax(); z++) {
-                for (int y = (int) getYMin(); y <= getYMax(); y++) {
+        for (int x = (int) getXMin(); x < getXMax(); x++) {
+            for (int z = (int) getZMin(); z < getZMax(); z++) {
+                for (int y = (int) getYMin(); y < getYMax(); y++) {
                     results.add((new Location(GameHandler.getGameHandler().getMatchWorld(), x, y, z).getBlock()));
                 }
             }
