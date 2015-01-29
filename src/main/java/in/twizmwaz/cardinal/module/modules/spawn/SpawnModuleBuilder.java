@@ -6,6 +6,7 @@ import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
+import in.twizmwaz.cardinal.module.modules.kit.Kit;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.PointParser;
@@ -23,11 +24,10 @@ import java.util.List;
 
 @BuilderData(load = ModuleLoadTime.EARLY)
 public class SpawnModuleBuilder implements ModuleBuilder {
-
-    @SuppressWarnings("unchecked")
+    
     @Override
     public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
+        ModuleCollection<SpawnModule> results = new ModuleCollection<SpawnModule>();
         for (Element spawns : match.getDocument().getRootElement().getChildren("spawns")) {
             for (Element spawn : spawns.getChildren("spawn")) {
                 TeamModule team = TeamUtils.getTeamById(spawns.getAttributeValue("team") != null ? spawns.getAttributeValue("team") : spawn.getAttributeValue("team"));
@@ -51,11 +51,15 @@ public class SpawnModuleBuilder implements ModuleBuilder {
                         location.setDirection(parseAngle(region.getParentElement().getAttributeValue("angle")).subtract(current.getCenterBlock().getVector()));
                     regions.add(new ImmutablePair<>(current, location.getDirection()));
                 }
-                String kit = null;
+                String kits = null;
                 if (spawns.getAttributeValue("kit") != null)
-                    kit = spawns.getAttributeValue("kit");
+                    kits = spawns.getAttributeValue("kit");
                 if (spawn.getAttributeValue("kit") != null)
-                    kit = spawn.getAttributeValue("kit");
+                    kits = spawn.getAttributeValue("kit");
+                Kit kit = null;
+                for (Kit kitModule : match.getModules().getModules(Kit.class)) {
+                    if (kitModule.getName().equals(kits)) kit = kitModule;
+                }
                 results.add(new SpawnModule(team, regions, kit, true, true));
             }
             for (Element spawn : spawns.getChildren("default")) {
@@ -75,13 +79,17 @@ public class SpawnModuleBuilder implements ModuleBuilder {
                     regions.add(new ImmutablePair<>(RegionModuleBuilder.getRegion(region), location.getDirection()));
                 } else {
                     PointRegion point = new PointRegion(new PointParser(spawn));
-                    regions.add(new ImmutablePair(point, point.getLocation().getDirection()));
+                    regions.add(new ImmutablePair<RegionModule, Vector>(point, point.getLocation().getDirection()));
                 }
-                String kit = null;
+                String kits = null;
                 if (spawns.getAttributeValue("kit") != null)
-                    kit = spawns.getAttributeValue("kit");
+                    kits = spawns.getAttributeValue("kit");
                 if (spawn.getAttributeValue("kit") != null)
-                    kit = spawn.getAttributeValue("kit");
+                    kits = spawn.getAttributeValue("kit");
+                Kit kit = null;
+                for (Kit kitModule : match.getModules().getModules(Kit.class)) {
+                    if (kitModule.getName().equals(kits)) kit = kitModule;
+                }
                 results.add(new SpawnModule(team, regions, kit, true, true));
             }
             for (Element element : spawns.getChildren("spawns")) {
@@ -110,13 +118,17 @@ public class SpawnModuleBuilder implements ModuleBuilder {
                             location.setDirection(parseAngle(region.getParentElement().getAttributeValue("angle")).subtract(current.getCenterBlock().getVector()));
                         regions.add(new ImmutablePair<>(current, location.getDirection()));
                     }
-                    String kit = null;
+                    String kits = null;
                     if (spawns.getAttributeValue("kit") != null)
-                        kit = spawns.getAttributeValue("kit");
+                        kits = spawns.getAttributeValue("kit");
                     if (element.getAttributeValue("kit") != null)
-                        kit = element.getAttributeValue("kit");
+                        kits = element.getAttributeValue("kit");
                     if (spawn.getAttributeValue("kit") != null)
-                        kit = spawn.getAttributeValue("kit");
+                        kits = spawn.getAttributeValue("kit");
+                    Kit kit = null;
+                    for (Kit kitModule : match.getModules().getModules(Kit.class)) {
+                        if (kitModule.getName().equals(kits)) kit = kitModule;
+                    }
                     results.add(new SpawnModule(team, regions, kit, true, true));
                 }
             }

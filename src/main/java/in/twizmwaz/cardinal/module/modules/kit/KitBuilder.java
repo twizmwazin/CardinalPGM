@@ -3,8 +3,10 @@ package in.twizmwaz.cardinal.module.modules.kit;
 import in.parapengu.commons.utils.StringUtils;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
+import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.util.ArmorType;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
@@ -18,6 +20,7 @@ import org.jdom2.Element;
 import java.util.ArrayList;
 import java.util.List;
 
+@BuilderData(load = ModuleLoadTime.EARLIER)
 public class KitBuilder implements ModuleBuilder {
 
     @SuppressWarnings("unchecked")
