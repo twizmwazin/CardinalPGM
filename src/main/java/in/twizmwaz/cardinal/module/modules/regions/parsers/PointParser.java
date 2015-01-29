@@ -4,7 +4,7 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionParser;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
 import in.twizmwaz.cardinal.util.NumUtils;
-import org.bukkit.util.Vector;
+import org.bukkit.util.*;
 import org.jdom2.Element;
 
 public class PointParser extends RegionParser {
@@ -31,7 +31,7 @@ public class PointParser extends RegionParser {
                 z = NumUtils.parseDouble(element.getText().trim().replaceAll(" ", ",").split(",")[2]);
             }
         }
-        this.vector = new Vector(x, y, z);
+        this.vector = new BlockVector(x, y, z);
         double yaw, pitch;
         try {
             yaw = Float.parseFloat(element.getAttributeValue("yaw").trim());
@@ -43,7 +43,7 @@ public class PointParser extends RegionParser {
         } catch (Exception e) {
             pitch = 0F;
         }
-        look = new Vector(Math.cos(pitch) * Math.cos(yaw), Math.sin(pitch), Math.cos(pitch) * Math.sin(-yaw));
+        look = new BlockVector(Math.cos(pitch) * Math.cos(yaw), Math.sin(pitch), Math.cos(pitch) * Math.sin(-yaw));
     }
 
     public double getX() {

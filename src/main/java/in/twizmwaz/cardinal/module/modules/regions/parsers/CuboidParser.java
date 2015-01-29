@@ -2,7 +2,7 @@ package in.twizmwaz.cardinal.module.modules.regions.parsers;
 
 import in.twizmwaz.cardinal.module.modules.regions.RegionParser;
 import in.twizmwaz.cardinal.util.NumUtils;
-import org.bukkit.util.Vector;
+import org.bukkit.util.*;
 import org.jdom2.Element;
 
 import java.util.ArrayList;
@@ -22,8 +22,8 @@ public class CuboidParser extends RegionParser {
         for (String string : values) {
             values.set(values.indexOf(string), string.trim());
         }
-        this.min = new Vector(NumUtils.parseDouble(values.get(0)), NumUtils.parseDouble(values.get(1)), NumUtils.parseDouble(values.get(2)));
-        this.max = new Vector(NumUtils.parseDouble(values.get(3)), NumUtils.parseDouble(values.get(4)), NumUtils.parseDouble(values.get(5)));
+        this.min = new BlockVector(NumUtils.parseDouble(values.get(0)), NumUtils.parseDouble(values.get(1)), NumUtils.parseDouble(values.get(2)));
+        this.max = new BlockVector(NumUtils.parseDouble(values.get(3)), NumUtils.parseDouble(values.get(4)), NumUtils.parseDouble(values.get(5)));
     }
 
     public Vector getMin() {

@@ -8,7 +8,7 @@ import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.util.Vector;
+import org.bukkit.util.*;
 
 import java.util.List;
 
@@ -76,7 +76,7 @@ public class MirroredRegion extends RegionModule {
 
     public void updateRegion() {
         ModuleCollection<RegionModule> blocks = new ModuleCollection<>();
-        Vector translation = new Vector(origin.getBlockX() * (normal.getBlockX() != 0 ? 1: 0), origin.getBlockY() * (normal.getBlockY() != 0 ? 1: 0), origin.getBlockZ() * (normal.getBlockZ() != 0 ? 1: 0));
+        Vector translation = new BlockVector(origin.getBlockX() * (normal.getBlockX() != 0 ? 1: 0), origin.getBlockY() * (normal.getBlockY() != 0 ? 1: 0), origin.getBlockZ() * (normal.getBlockZ() != 0 ? 1: 0));
         for (Block block : base.getBlocks()) {
             Location location = block.getLocation();
             int xRelative = 0;

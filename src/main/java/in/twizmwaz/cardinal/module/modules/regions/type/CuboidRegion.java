@@ -6,7 +6,7 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.CuboidParser;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.util.Vector;
+import org.bukkit.util.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class CuboidRegion extends RegionModule {
     }
 
     public CuboidRegion(String name, double xMin, double yMin, double zMin, double xMax, double yMax, double zMax) {
-        this(name, new Vector(xMin, yMin, zMin), new Vector(xMax, yMax, zMax));
+        this(name, new BlockVector(xMin, yMin, zMin), new BlockVector(xMax, yMax, zMax));
     }
 
     public CuboidRegion(CuboidParser parser) {

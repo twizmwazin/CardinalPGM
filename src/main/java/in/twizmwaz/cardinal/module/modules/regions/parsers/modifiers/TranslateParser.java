@@ -3,7 +3,7 @@ package in.twizmwaz.cardinal.module.modules.regions.parsers.modifiers;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionParser;
-import org.bukkit.util.Vector;
+import org.bukkit.util.*;
 import org.jdom2.Element;
 
 public class TranslateParser extends RegionParser{
@@ -18,7 +18,7 @@ public class TranslateParser extends RegionParser{
                 RegionModuleBuilder.getRegion(element.getAttributeValue("region"));
         String[] offset = element.getAttributeValue("offset").contains(",") ?  element.getAttributeValue("offset").split(",") :
                 element.getAttributeValue("offset").trim().replaceAll(" ","").split(",");
-        this.offset = new Vector(Double.parseDouble(offset[0].trim()),
+        this.offset = new BlockVector(Double.parseDouble(offset[0].trim()),
                 Double.parseDouble(offset[1].trim()),
                 Double.parseDouble(offset[2].trim()));
     }
