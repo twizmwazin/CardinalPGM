@@ -29,7 +29,7 @@ public class MonumentModesBuilder implements ModuleBuilder {
                 } else {
                     material = Material.matchMaterial(mode.getAttributeValue("material"));
                 }
-                String name = "MODE CHANGE";
+                String name = material.name().replaceAll("_", " ") + " MODE";
                 if (mode.getAttributeValue("name") != null) {
                     name = ChatColor.translateAlternateColorCodes('`', mode.getAttributeValue("name"));
                 }

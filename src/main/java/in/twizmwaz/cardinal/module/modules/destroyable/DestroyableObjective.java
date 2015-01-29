@@ -9,6 +9,7 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import in.twizmwaz.cardinal.util.ChatUtils;
+import in.twizmwaz.cardinal.util.MiscUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -266,7 +267,7 @@ public class DestroyableObjective implements GameObjective {
     public String getWhoDestroyed() {
         String whoDestroyed = "";
         List<String> toCombine = new ArrayList<>();
-        for (UUID player : getSortedHashMapKeyset(playerDestroyed)) {
+        for (UUID player : MiscUtils.getSortedHashMapKeyset(playerDestroyed)) {
             if (Bukkit.getOfflinePlayer(player).isOnline() && getPercentFromAmount(playerDestroyed.get(player)) > (1 / 3)) {
                 toCombine.add(TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)).getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " (" + getPercentFromAmount(playerDestroyed.get(player) * 100) + "%)");
             }
@@ -279,27 +280,6 @@ public class DestroyableObjective implements GameObjective {
             whoDestroyed += ChatColor.GRAY + (i == toCombine.size() - 1 ? " and " : ", ") + toCombine.get(i);
         }
         return whoDestroyed;
-    }
-
-    public <T> List<T> getSortedHashMapKeyset(HashMap<T, Integer> sorting) {
-        List<T> types = new ArrayList<>();
-        HashMap<T, Integer> clone = new HashMap<>();
-        for (T player : sorting.keySet()) {
-            clone.put(player, sorting.get(player));
-        }
-        for (int i = 0; i < sorting.size(); i ++) {
-            int highestNumber = -1;
-            T highestType = null;
-            for (T player : clone.keySet()) {
-                if (clone.get(player) > highestNumber) {
-                    highestNumber = clone.get(player);
-                    highestType = player;
-                }
-            }
-            clone.remove(highestType);
-            types.add(highestType);
-        }
-        return types;
     }
 
     public boolean changesModes() {
