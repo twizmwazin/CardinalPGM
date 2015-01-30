@@ -133,7 +133,7 @@ public class FilterModuleBuilder implements ModuleBuilder {
                             for (Element filterElement : document.getRootElement().getChildren("filters")) {
                                 for (Element givenFilter : filterElement.getChildren()) {
                                     if (givenFilter.getAttributeValue("name").equalsIgnoreCase(element.getAttributeValue("name")))
-                                        return getFilter(givenFilter);
+                                        return getFilter(givenFilter.getChildren().get(0));
                                 }
                             }
                         } else {
