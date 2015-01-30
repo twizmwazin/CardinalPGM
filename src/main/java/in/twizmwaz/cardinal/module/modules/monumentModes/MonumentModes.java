@@ -66,4 +66,16 @@ public class MonumentModes implements TaskedModule {
         }
     }
 
+    public Material getType() {
+        return material;
+    }
+
+    public boolean hasRan() {
+        return ran;
+    }
+
+    public int getTimeAfter() {
+        return after;
+    }
+
 }

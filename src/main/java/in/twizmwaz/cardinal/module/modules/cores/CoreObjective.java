@@ -137,93 +137,100 @@ public class CoreObjective implements GameObjective {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event) {
-        if (getBlocks().contains(event.getBlock())) {
-            if (TeamUtils.getTeamByPlayer(event.getPlayer()) != team) {
-                if (!playersTouched.contains(event.getPlayer().getUniqueId())) {
-                    playersTouched.add(event.getPlayer().getUniqueId());
-                    TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
-                    TeamChat.sendToTeam(teamModule.getColor() + "[Team] " + event.getPlayer().getDisplayName() + ChatColor.GRAY + " broke a piece of " + ChatColor.RED + name, teamModule);
+        if (!event.isCancelled()) {
+            if (getBlocks().contains(event.getBlock())) {
+                if (TeamUtils.getTeamByPlayer(event.getPlayer()) != team) {
+                    if (!playersTouched.contains(event.getPlayer().getUniqueId())) {
+                        playersTouched.add(event.getPlayer().getUniqueId());
+                        TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
+                        if (this.show) TeamChat.sendToTeam(teamModule.getColor() + "[Team] " + event.getPlayer().getDisplayName() + ChatColor.GRAY + " broke a piece of " + ChatColor.RED + name, teamModule);
+                    }
+                    boolean oldState = this.touched;
+                    this.touched = true;
+                    ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), !oldState);
+                    Bukkit.getServer().getPluginManager().callEvent(touchEvent);
+                    event.setCancelled(false);
+                } else {
+                    event.setCancelled(true);
+                    if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), "You may not damage your own core.");
+                    return;
                 }
-                boolean oldState = this.touched;
-                this.touched = true;
-                ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), !oldState);
-                Bukkit.getServer().getPluginManager().callEvent(touchEvent);
-                event.setCancelled(false);
-            } else {
-                event.setCancelled(true);
-                ChatUtils.sendWarningMessage(event.getPlayer(), "You may not damage your own core.");
-                return;
             }
-        }
-        if (core.contains(event.getBlock())) {
-            if (TeamUtils.getTeamByPlayer(event.getPlayer()) == team) {
-                event.setCancelled(true);
-                ChatUtils.sendWarningMessage(event.getPlayer(), "You may not damage your own core.");
+            if (core.contains(event.getBlock())) {
+                if (TeamUtils.getTeamByPlayer(event.getPlayer()) == team) {
+                    event.setCancelled(true);
+                    if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), "You may not damage your own core.");
+                }
             }
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityExplode(EntityExplodeEvent event) {
-        List<Block> objectiveBlownUp = new ArrayList<>();
-        for (Block block : event.blockList()) {
-            if (getBlocks().contains(block) || core.contains(block)) {
-                objectiveBlownUp.add(block);
+        if (!event.isCancelled()) {
+            List<Block> objectiveBlownUp = new ArrayList<>();
+            for (Block block : event.blockList()) {
+                if (getBlocks().contains(block) || core.contains(block)) {
+                    objectiveBlownUp.add(block);
+                }
             }
-        }
-        boolean oldState = this.touched;
-        boolean blownUp = false;
-        Player eventPlayer = null;
-        for (Block block : objectiveBlownUp) {
-            if (TntTracker.getWhoPlaced(event.getEntity()) != null) {
-                UUID player = TntTracker.getWhoPlaced(event.getEntity());
-                if (Bukkit.getOfflinePlayer(player).isOnline()) {
-                    if (TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)) == team) {
-                        event.blockList().remove(block);
+            boolean oldState = this.touched;
+            boolean blownUp = false;
+            Player eventPlayer = null;
+            for (Block block : objectiveBlownUp) {
+                if (TntTracker.getWhoPlaced(event.getEntity()) != null) {
+                    UUID player = TntTracker.getWhoPlaced(event.getEntity());
+                    if (Bukkit.getOfflinePlayer(player).isOnline()) {
+                        if (TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)) == team) {
+                            event.blockList().remove(block);
+                        } else {
+                            if (!playersTouched.contains(player)) {
+                                playersTouched.add(player);
+                                TeamModule teamModule = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
+                                if (this.show) TeamChat.sendToTeam(teamModule.getColor() + "[Team] " + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " broke a piece of " + ChatColor.RED + name, teamModule);
+                            }
+                            this.touched = true;
+                            blownUp = true;
+                            eventPlayer = Bukkit.getPlayer(player);
+                        }
                     } else {
                         if (!playersTouched.contains(player)) {
                             playersTouched.add(player);
-                            TeamModule teamModule = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
-                            TeamChat.sendToTeam(teamModule.getColor() + "[Team] " + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " broke a piece of " + ChatColor.RED + name, teamModule);
                         }
                         this.touched = true;
                         blownUp = true;
-                        eventPlayer = Bukkit.getPlayer(player);
                     }
                 } else {
-                    if (!playersTouched.contains(player)) {
-                        playersTouched.add(player);
-                    }
                     this.touched = true;
                     blownUp = true;
                 }
-            } else {
-                this.touched = true;
-                blownUp = true;
             }
-        }
-        if (!this.complete && blownUp) {
-            ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, !oldState);
-            Bukkit.getServer().getPluginManager().callEvent(touchEvent);
+            if (!this.complete && blownUp) {
+                ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, !oldState);
+                Bukkit.getServer().getPluginManager().callEvent(touchEvent);
+            }
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockFromTo(BlockFromToEvent event) {
-        Block to = event.getToBlock();
-        Block from = event.getBlock();
-        if (CoreObjective.getClosestCore(to.getX(), to.getY(), to.getZ()).equals(this)) {
-            if ((from.getType().equals(Material.LAVA) || from.getType().equals(Material.STATIONARY_LAVA)) && to.getType().equals(Material.AIR)) {
-                double minY = 256;
-                for (Block block : getBlocks()) {
-                    if (block.getY() < minY) minY = block.getY();
-                }
-                if (minY - to.getY() >= leak && !this.complete) {
-                    this.complete = true;
-                    event.setCancelled(false);
-                    Bukkit.broadcastMessage(team.getCompleteName() + ChatColor.RED + "'s " + ChatColor.DARK_AQUA + name + ChatColor.RED + " has leaked!");
-                    ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, null);
-                    Bukkit.getServer().getPluginManager().callEvent(compEvent);
+        if (!event.isCancelled()) {
+            Block to = event.getToBlock();
+            Block from = event.getBlock();
+            if (CoreObjective.getClosestCore(to.getX(), to.getY(), to.getZ()).equals(this)) {
+                if ((from.getType().equals(Material.LAVA) || from.getType().equals(Material.STATIONARY_LAVA)) && to.getType().equals(Material.AIR)) {
+                    double minY = 256;
+                    for (Block block : getBlocks()) {
+                        if (block.getY() < minY)
+                            minY = block.getY();
+                    }
+                    if (minY - to.getY() >= leak && !this.complete) {
+                        this.complete = true;
+                        event.setCancelled(false);
+                        if (this.show) Bukkit.broadcastMessage(team.getCompleteName() + ChatColor.RED + "'s " + ChatColor.DARK_AQUA + name + ChatColor.RED + " has leaked!");
+                        ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, null);
+                        Bukkit.getServer().getPluginManager().callEvent(compEvent);
+                    }
                 }
             }
         }

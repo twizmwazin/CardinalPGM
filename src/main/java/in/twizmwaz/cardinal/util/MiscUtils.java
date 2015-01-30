@@ -3,6 +3,10 @@ package in.twizmwaz.cardinal.util;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public class MiscUtils {
 
     public static Color convertChatColorToColor(ChatColor chatColor) {
@@ -50,5 +54,26 @@ public class MiscUtils {
 
     public static Color convertHexToRGB(String color) {
         return Color.fromRGB(Integer.valueOf(color.substring(0, 2), 16), Integer.valueOf(color.substring(2, 4), 16), Integer.valueOf(color.substring(4, 6), 16));
+    }
+
+    public static <T> List<T> getSortedHashMapKeyset(HashMap<T, Integer> sorting) {
+        List<T> types = new ArrayList<>();
+        HashMap<T, Integer> clone = new HashMap<>();
+        for (T player : sorting.keySet()) {
+            clone.put(player, sorting.get(player));
+        }
+        for (int i = 0; i < sorting.size(); i ++) {
+            int highestNumber = -1;
+            T highestType = null;
+            for (T player : clone.keySet()) {
+                if (clone.get(player) > highestNumber) {
+                    highestNumber = clone.get(player);
+                    highestType = player;
+                }
+            }
+            clone.remove(highestType);
+            types.add(highestType);
+        }
+        return types;
     }
 }

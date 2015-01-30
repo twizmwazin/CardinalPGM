@@ -15,16 +15,7 @@ public class KitApplier implements Module {
 
     @EventHandler
     public void onPgmSpawn(PgmSpawnEvent event) {
-        try {
-            Kit kit = null;
-            for (Kit kitModule : GameHandler.getGameHandler().getMatch().getModules().getModules(Kit.class)) {
-                if (kitModule.getName() != null && kitModule.getName().equalsIgnoreCase(event.getSpawn().getKit())) {
-                    kit = kitModule;
-                }
-            }
-            kit.apply(event.getPlayer());
-        } catch (NullPointerException e) {
-        }
+        if (event.getSpawn().getKit() != null) event.getSpawn().getKit().apply(event.getPlayer());
     }
 
 }
