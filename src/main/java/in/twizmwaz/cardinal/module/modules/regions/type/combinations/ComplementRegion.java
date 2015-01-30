@@ -30,13 +30,12 @@ public class ComplementRegion extends RegionModule {
 
     @Override
     public boolean contains(BlockRegion region) {
-        List<RegionModule> working = getRegions();
-        for (RegionModule work : working) {
-            if (work.contains(region)) {
-                working.remove(work);
+        for (RegionModule regionModule : this.regions) {
+            if (regionModule.contains(region)) {
+                return false;
             }
         }
-        return working.size() == 1;
+        return true;
     }
 
     @Override
