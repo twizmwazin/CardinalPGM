@@ -9,7 +9,7 @@ public class RectangleParser extends RegionParser {
     private final double xMin, zMin, xMax, zMax;
 
     public RectangleParser(Element element) {
-        super(element.getName());
+        super(element.getAttributeValue("name"));
         String min = element.getAttributeValue("min");
         String max = element.getAttributeValue("max");
         String[] mins = min.contains(",") ? min.split(",") : min.trim().replaceAll(" ", ",").split(",");

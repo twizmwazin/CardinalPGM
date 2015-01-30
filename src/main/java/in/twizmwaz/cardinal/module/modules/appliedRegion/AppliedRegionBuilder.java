@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.appliedRegion;
 
+import com.sk89q.minecraft.util.commands.ChatColor;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
@@ -31,7 +32,7 @@ public class AppliedRegionBuilder  implements ModuleBuilder {
                     for (Element element : applied.getChildren()) regions.add(RegionModuleBuilder.getRegion(element));
                     region = new UnionRegion(null, regions);
                 }
-                String message = applied.getAttributeValue("message");
+                String message = ChatColor.translateAlternateColorCodes('`', applied.getAttributeValue("message"));
                 if (applied.getAttributeValue("velocity") != null)  {
                     String[] values = applied.getAttributeValue("velocity").replaceAll("@", "").split(",");
                     FilterModule filter = applied.getAttributeValue("filter") == null ? null : getFilter(applied.getAttributeValue("filter"));

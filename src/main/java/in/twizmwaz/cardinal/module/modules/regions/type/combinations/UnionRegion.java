@@ -30,21 +30,16 @@ public class UnionRegion extends RegionModule {
 
     @Override
     public boolean contains(BlockRegion region) {
-        for (RegionModule reg : getRegions()) {
-            if (reg.contains(region)) return true;
+        for (RegionModule regionModule : getRegions()) {
+            if (regionModule.contains(region)) return true;
         }
         return false;
     }
 
     @Override
     public PointRegion getRandomPoint() {
-        while (true) {
-            Random random = new Random();
-            PointRegion point = regions.get(random.nextInt(regions.size())).getRandomPoint();
-            if (this.contains(point)) {
-                return point;
-            }
-        }
+        Random random = new Random();
+        return regions.get(random.nextInt(regions.size())).getRandomPoint();
     }
 
     @Override
