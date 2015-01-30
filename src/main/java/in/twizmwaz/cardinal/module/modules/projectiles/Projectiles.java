@@ -51,7 +51,7 @@ public class Projectiles implements Module {
         if (event.getCause().equals(DamageCause.PROJECTILE)) {
             ProjectileSource source = ((Projectile) event.getDamager()).getShooter();
             if (source instanceof Player) {
-                ((Player) source).playSound(((Player) source).getLocation(), Sound.SUCCESSFUL_HIT, 10, 0.5F);
+                ((Player) source).playSound(((Player) source).getLocation(), Sound.SUCCESSFUL_HIT, 0.2F, 0.5F);
             }
             if (event.getDamager().getType().equals(projectile) && event.getDamager().hasMetadata("custom")) {
                 Entity arrow = event.getEntity().getWorld().spawnEntity(event.getDamager().getLocation(), EntityType.ARROW);
