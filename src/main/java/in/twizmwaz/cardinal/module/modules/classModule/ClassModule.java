@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.kit.Kit;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -53,6 +54,9 @@ public class ClassModule implements Module {
                 event.setCancelled(true);
                 ChatUtils.sendWarningMessage(event.getPlayer(), "You do not have access to this class.");
             }
+            if (!event.isCancelled()) {
+                event.getPlayer().sendMessage(ChatColor.GREEN + "You have selected " + ChatColor.GOLD + "" + ChatColor.UNDERLINE + name);
+            }
         }
     }
 
@@ -90,10 +94,21 @@ public class ClassModule implements Module {
         return null;
     }
 
+    public static ClassModule getClassByName(String name) {
+        for (ClassModule classModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class)) {
+            if (classModule.getName().equalsIgnoreCase(name) || classModule.getName().toLowerCase().startsWith(name.toLowerCase())) return classModule;
+        }
+        return null;
+    }
+
     public static boolean defaultClassPresent() {
         for (ClassModule classModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class)) {
             if (classModule.isDefaultClass()) return true;
         }
         return false;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

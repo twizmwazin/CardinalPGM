@@ -111,6 +111,22 @@ public class TeamPicker implements Module {
                                     player.closeInventory();
                                     player.playSound(player.getLocation(), Sound.CLICK, 1, 2);
                                     Bukkit.dispatchCommand(player, "join " + ChatColor.stripColor(item.getItemMeta().getDisplayName()));
+                                } else {
+                                    event.setCancelled(true);
+                                    player.closeInventory();
+                                    player.playSound(player.getLocation(), Sound.CLICK, 1, 2);
+                                    Bukkit.dispatchCommand(player, "class " + ChatColor.stripColor(item.getItemMeta().getDisplayName()));
+                                }
+                            }
+                        }
+                    } else {
+                        if (item.hasItemMeta()) {
+                            if (item.getItemMeta().hasDisplayName()) {
+                                if (ClassModule.getClassByName(ChatColor.stripColor(item.getItemMeta().getDisplayName())) != null) {
+                                    event.setCancelled(true);
+                                    player.closeInventory();
+                                    player.playSound(player.getLocation(), Sound.CLICK, 1, 2);
+                                    Bukkit.dispatchCommand(player, "class " + ChatColor.stripColor(item.getItemMeta().getDisplayName()));
                                 }
                             }
                         }

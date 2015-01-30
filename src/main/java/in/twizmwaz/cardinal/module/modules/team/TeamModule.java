@@ -46,7 +46,7 @@ public class TeamModule<P extends Player> extends HashSet<Player> implements Mod
                 break;
             }
         }
-        if (Blitz.matchIsBlitz() && GameHandler.getGameHandler().getMatch().isRunning() && !this.isObserver()) {
+        if (Blitz.matchIsBlitz() && GameHandler.getGameHandler().getMatch().isRunning() && !this.isObserver() && !force) {
             player.sendMessage(ChatColor.RED + "You may not join during a " + ChatColor.AQUA + "" + ChatColor.ITALIC + GameHandler.getGameHandler().getMatch().getModules().getModule(Blitz.class).getTitle() + ChatColor.RED + " match.");
             return false;
         }
