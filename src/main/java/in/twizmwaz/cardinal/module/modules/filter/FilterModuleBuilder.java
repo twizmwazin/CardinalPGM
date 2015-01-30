@@ -15,7 +15,6 @@ import in.twizmwaz.cardinal.module.modules.filter.type.logic.NotFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.logic.OneFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.old.AllowFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.old.DenyFilter;
-import org.bukkit.Bukkit;
 import org.jdom2.Document;
 import org.jdom2.Element;
 

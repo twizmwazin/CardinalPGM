@@ -12,7 +12,7 @@ public class StringUtils {
         for (int i = 0; i < input.length(); i ++) {
             char c = input.charAt(i);
             if (Character.isDigit(c) && !currentUnit.equals("")) {
-                time += convert(Integer.parseInt(current), currentUnit);
+                time += convert(Integer.parseInt(current) * (negative ? -1 : 1), currentUnit);
                 current = "";
                 currentUnit = "";
             }
@@ -24,7 +24,7 @@ public class StringUtils {
                 currentUnit += c + "";
             }
         }
-        time += convert(Integer.parseInt(current), currentUnit);
+        time += convert(Integer.parseInt(current) * (negative ? -1 : 1), currentUnit);
         return time;
     }
 
@@ -41,6 +41,11 @@ public class StringUtils {
     }
 
     public static String formatTime(double time) {
+        boolean negative = false;
+        if (time < 0) {
+            negative = true;
+            time *= -1;
+        }
         int hours = (int) time / 3600;
         int minutes = (int) (time - (hours * 3600)) / 60;
         int seconds = (int) time - (hours * 3600) - (minutes * 60);
@@ -53,10 +58,15 @@ public class StringUtils {
         while (secondsString.length() < 2) {
             secondsString = "0" + secondsString;
         }
-        return (hours == 0 ? "" : hoursString + ":") + minutesString + ":" + secondsString;
+        return (negative ? "-" : "") + (hours == 0 ? "" : hoursString + ":") + minutesString + ":" + secondsString;
     }
 
     public static String formatTimeWithMillis(double time) {
+        boolean negative = false;
+        if (time < 0) {
+            negative = true;
+            time *= -1;
+        }
         int hours = (int) time / 3600;
         int minutes = (int) (time - (hours * 3600)) / 60;
         int seconds = (int) time - (hours * 3600) - (minutes * 60);
@@ -72,6 +82,6 @@ public class StringUtils {
         while (secondsString.length() < 2) {
             secondsString = "0" + secondsString;
         }
-        return (hours == 0 ? "" : hoursString + ":") + minutesString + ":" + secondsString + "." + millisString;
+        return (negative ? "-" : "") + (hours == 0 ? "" : hoursString + ":") + minutesString + ":" + secondsString + "." + millisString;
     }
 }

@@ -1,9 +1,6 @@
 package in.twizmwaz.cardinal.command;
 
-import com.sk89q.minecraft.util.commands.Command;
-import com.sk89q.minecraft.util.commands.CommandContext;
-import com.sk89q.minecraft.util.commands.CommandException;
-import com.sk89q.minecraft.util.commands.CommandPermissionsException;
+import com.sk89q.minecraft.util.commands.*;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
@@ -60,7 +57,7 @@ public class ModesCommand {
                     throw new CommandException("No results match!");
                 } else if (cmd.getString(0).equalsIgnoreCase("push")) {
                     if (!sender.hasPermission("cardinal.modes.push")) throw new CommandPermissionsException();
-                    throw new CommandException("Modifying monument mode times is not yet supported in Cardinal.");
+                    throw new CommandUsageException("Too few arguments.", "/modes push <time period>");
                 } else {
                     int page;
                     try {
@@ -95,7 +92,11 @@ public class ModesCommand {
                     } else throw new CommandException("Unknown page selected! " + ((modes.size() + 7) / 8) + " total pages.");
                 } else if (cmd.getString(0).equalsIgnoreCase("push")) {
                     if (!sender.hasPermission("cardinal.modes.push")) throw new CommandPermissionsException();
-                    throw new CommandException("Modifying monument mode times is not yet supported in Cardinal.");
+                    int time = StringUtils.timeStringToSeconds(cmd.getString(1));
+                    for (MonumentModes mode : GameHandler.getGameHandler().getMatch().getModules().getModules(MonumentModes.class)) {
+                        mode.setTimeAfter(mode.getTimeAfter() + time);
+                    }
+                    sender.sendMessage(ChatColor.GOLD + "All modes have been pushed " + (time < 0 ? "backwards" : "forwards") + " by " + StringUtils.formatTime(time));
                 }
             }
         } else throw new CommandException("No results match!");

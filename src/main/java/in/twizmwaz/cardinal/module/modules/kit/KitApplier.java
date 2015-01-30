@@ -1,6 +1,5 @@
 package in.twizmwaz.cardinal.module.modules.kit;
 
-import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.PgmSpawnEvent;
 import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.event.EventHandler;
