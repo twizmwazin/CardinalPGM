@@ -163,7 +163,6 @@ public class FilterModuleBuilder implements ModuleBuilder {
      */
     public static FilterModule getFilter(String string) {
         for (FilterModule filterModule : GameHandler.getGameHandler().getMatch().getModules().getModules(FilterModule.class)) {
-            Bukkit.getLogger().info(string + " " + filterModule.getName());
             if (string.equalsIgnoreCase(filterModule.getName())) return filterModule;
         }
         return null;
