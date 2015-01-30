@@ -169,7 +169,7 @@ public class RespawnModule implements Module {
                             event.getPlayer().teleport(chosen.getLocation());
                         }
                     } else {
-                        event.getPlayer().setMetadata("true", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), "teamChange"));
+                        event.getPlayer().setMetadata("teamChange", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), "teamChange"));
                         event.getPlayer().setHealth(0);
                     }
                 } else {
@@ -181,7 +181,7 @@ public class RespawnModule implements Module {
                     PgmSpawnEvent spawnEvent = new PgmSpawnEvent(event.getPlayer(), spawn, event.getNewTeam());
                     Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
                     if (!spawnEvent.isCancelled()) {
-                        event.getPlayer().setMetadata("true", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), "teamChange"));
+                        event.getPlayer().setMetadata("teamChange", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), "teamChange"));
                         event.getPlayer().setHealth(0);
                     }
                 }
