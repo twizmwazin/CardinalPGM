@@ -50,13 +50,7 @@ public class ComplementRegion extends RegionModule {
 
     @Override
     public BlockRegion getCenterBlock() {
-        double xTotal = 0, yTotal = 0, zTotal = 0;
-        for (RegionModule child : regions) {
-            xTotal = xTotal + child.getCenterBlock().getX();
-            yTotal = yTotal + child.getCenterBlock().getY();
-            zTotal = zTotal + child.getCenterBlock().getZ();
-        }
-        return new BlockRegion(null, xTotal / regions.size(), yTotal / regions.size(), zTotal / regions.size());
+        return regions.get(0).getCenterBlock();
     }
 
     @Override
