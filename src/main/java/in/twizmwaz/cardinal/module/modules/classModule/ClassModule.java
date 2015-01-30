@@ -59,8 +59,8 @@ public class ClassModule implements Module {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPgmSpawn(PgmSpawnEvent event) {
         if (!playerClass.containsKey(event.getPlayer().getUniqueId()) && (this.defaultClass || (!defaultClassPresent() && GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class).equals(this)))) playerClass.put(event.getPlayer().getUniqueId(), this);
-        if (playerClass.get(event.getPlayer().getUniqueId()).equals(this)) {
-            kit.apply(event.getPlayer());
+        if (playerClass.containsKey(event.getPlayer().getUniqueId()) && playerClass.get(event.getPlayer().getUniqueId()).equals(this)) {
+            if (kit != null) kit.apply(event.getPlayer());
         }
     }
 

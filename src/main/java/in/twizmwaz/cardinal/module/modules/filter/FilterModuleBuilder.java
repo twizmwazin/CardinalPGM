@@ -59,7 +59,7 @@ public class FilterModuleBuilder implements ModuleBuilder {
             case "cause":
                 return new CauseFilter(new CauseFilterParser(element));
             case "class":
-                return new ClassFilter(new FilterParser(element));
+                return new ClassFilter(new ClassFilterParser(element));
             case "crouching":
                 return new CrouchingFilter(new FilterParser(element));
             case "entity":

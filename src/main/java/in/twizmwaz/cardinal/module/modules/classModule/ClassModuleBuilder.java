@@ -1,13 +1,16 @@
 package in.twizmwaz.cardinal.module.modules.classModule;
 
 import in.twizmwaz.cardinal.match.Match;
+import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.kit.Kit;
 import in.twizmwaz.cardinal.module.modules.kit.KitBuilder;
 import org.bukkit.Material;
 import org.jdom2.Element;
 
+@BuilderData(load = ModuleLoadTime.EARLY)
 public class ClassModuleBuilder implements ModuleBuilder {
 
     @Override
@@ -57,7 +60,7 @@ public class ClassModuleBuilder implements ModuleBuilder {
                 } else if (classes.getAttributeValue("restrict") != null) {
                     restrict = !classes.getAttributeValue("restrict").equalsIgnoreCase("false");
                 }
-                Kit kit = KitBuilder.getKit(classElement.getChildren().get(0));
+                Kit kit = classElement.getChildren().size() > 0 ? KitBuilder.getKit(classElement.getChildren().get(0)) : null;
                 results.add(new ClassModule(name, description, longDescription, icon, sticky, defaultClass, restrict, kit));
             }
         }

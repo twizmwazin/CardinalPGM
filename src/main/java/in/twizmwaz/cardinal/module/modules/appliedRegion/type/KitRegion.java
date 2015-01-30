@@ -24,7 +24,7 @@ public class KitRegion extends AppliedRegion {
         if (event.isCancelled()) return;
         if (filter != null) {
             if (region.contains(new BlockRegion(null, event.getTo().toVector())) && !region.contains(new BlockRegion(null, event.getFrom().toVector()))
-                    && !filter.evaluate(event.getTo()).equals(FilterState.DENY)) {
+                    && (!filter.evaluate(event.getTo()).equals(FilterState.DENY) && !filter.evaluate(event.getPlayer()).equals(FilterState.DENY))) {
                 kit.apply(event.getPlayer());
             }
         } else if (region.contains(new BlockRegion(null, event.getTo().toVector())) && !region.contains(new BlockRegion(null, event.getFrom().toVector()))) {

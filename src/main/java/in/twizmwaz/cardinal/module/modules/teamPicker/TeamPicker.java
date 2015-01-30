@@ -36,8 +36,8 @@ public class TeamPicker implements Module {
 
 
     public Inventory getTeamPicker(Player player) {
-        int size = (((GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class).size() + 1) / 9) + 1) * 9;
-        int classesSize = ((GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class).size() + 1) / 9) * 9;
+        int size = ((GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class).size() / 9) + 1) * 9;
+        int classesSize = ((GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class).size() + 8) / 9) * 9;
         Inventory picker = Bukkit.createInventory(null, size + classesSize, ChatColor.DARK_RED + "Pick your team");
         int item = 0;
         ItemStack autoJoin = new ItemStack(Material.CHAINMAIL_HELMET);

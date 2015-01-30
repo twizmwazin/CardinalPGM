@@ -92,17 +92,9 @@ public class RegionModuleBuilder implements ModuleBuilder {
                 }
             default:
                 if (element.getAttributeValue("region") != null) {
-                    for (Element regionElement : document.getRootElement().getChildren("regions")) {
-                        for (Element givenRegion : regionElement.getChildren()) {
-                            for (Element givenChild : givenRegion.getChildren()) {
-                                if (givenChild.getAttributeValue("region").equalsIgnoreCase(element.getAttributeValue("region"))) {
-                                    return getRegion(givenChild);
-                                }
-                            }
-                            if (givenRegion.getName().equalsIgnoreCase("apply")) continue;
-                            if (givenRegion.getAttributeValue("region").equalsIgnoreCase(element.getAttributeValue("region"))) {
-                                return getRegion(givenRegion);
-                            }
+                    for (RegionModule regionModule : GameHandler.getGameHandler().getMatch().getModules().getModules(RegionModule.class)) {
+                        if (element.getAttributeValue("region").equalsIgnoreCase(regionModule.getName())) {
+                            return regionModule;
                         }
                     }
                 }
