@@ -1,10 +1,15 @@
 package in.twizmwaz.cardinal.module.modules.portal;
 
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
+import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
+import in.twizmwaz.cardinal.util.TeamUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
@@ -44,23 +49,46 @@ public class Portal implements Module {
         HandlerList.unregisterAll(this);
     }
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerMove(PlayerMoveEvent event) {
         if (region.contains(new BlockRegion(null, event.getTo().toVector()))) {
-            if (destination != null) {
-                event.setTo(destination.getRandomPoint().getLocation());
-            } else {
-                Location newLocation = event.getTo();
-                if (xRelative) newLocation.setX(newLocation.getX() + location.getX()); else newLocation.setX(location.getX());
-                if (yRelative) newLocation.setY(newLocation.getY() + location.getY()); else newLocation.setY(location.getY());
-                if (zRelative) newLocation.setZ(newLocation.getZ() + location.getZ()); else newLocation.setZ(location.getZ());
-                if (yawRelative) newLocation.setYaw(newLocation.getYaw() + yaw); else newLocation.setYaw(yaw);
-                if (pitchRelative) newLocation.setPitch(newLocation.getPitch() + pitch); else newLocation.setPitch(pitch);
-                event.setTo(newLocation);
+            if (filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW) || (TeamUtils.getTeamByPlayer(event.getPlayer()) != null && TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
+                if (destination != null) {
+                    event.getPlayer().teleport(destination.getRandomPoint().getLocation());
+                    if (sound) event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2F, 1);
+                } else {
+                    Location newLocation = event.getTo();
+                    if (xRelative)
+                        newLocation.setX(newLocation.getX() + location.getX());
+                    else
+                        newLocation.setX(location.getX());
+                    if (yRelative)
+                        newLocation.setY(newLocation.getY() + location.getY());
+                    else
+                        newLocation.setY(location.getY());
+                    if (zRelative)
+                        newLocation.setZ(newLocation.getZ() + location.getZ());
+                    else
+                        newLocation.setZ(location.getZ());
+                    if (yawRelative)
+                        newLocation.setYaw(newLocation.getYaw() + yaw);
+                    else
+                        newLocation.setYaw(yaw);
+                    if (pitchRelative)
+                        newLocation.setPitch(newLocation.getPitch() + pitch);
+                    else
+                        newLocation.setPitch(pitch);
+                    event.getPlayer().teleport(newLocation);
+                    if (sound) event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2F, 1);
+                }
             }
         }
-        if (this.bidirectional && destination != null && destination.contains(new BlockRegion(null, event.getTo().toVector()))) {
-            event.setTo(region.getRandomPoint().getLocation());
+        if (destination != null && destination.contains(new BlockRegion(null, event.getTo().toVector())) && this.bidirectional) {
+            if (filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW) || (TeamUtils.getTeamByPlayer(event.getPlayer()) != null && TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
+                event.getPlayer().teleport(region.getRandomPoint().getLocation());
+                if (sound) event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2F, 1);
+            }
+
         }
     }
 

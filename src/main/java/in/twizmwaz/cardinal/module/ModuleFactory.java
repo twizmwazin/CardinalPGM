@@ -32,6 +32,7 @@ import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimerBuilder;
 import in.twizmwaz.cardinal.module.modules.monumentModes.MonumentModesBuilder;
 import in.twizmwaz.cardinal.module.modules.motd.MOTDBuilder;
 import in.twizmwaz.cardinal.module.modules.observers.ObserverModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.portal.PortalBuilder;
 import in.twizmwaz.cardinal.module.modules.projectiles.ProjectilesBuilder;
 import in.twizmwaz.cardinal.module.modules.rage.RageBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
@@ -148,5 +149,6 @@ public class ModuleFactory {
         builderClasses.add(FilterModuleBuilder.class);
         builderClasses.add(AppliedRegionBuilder.class);
         builderClasses.add(KillRewardBuilder.class);
+        builderClasses.add(PortalBuilder.class);
     }
 }
