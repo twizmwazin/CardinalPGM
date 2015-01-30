@@ -268,12 +268,15 @@ public class DestroyableObjective implements GameObjective {
         String whoDestroyed = "";
         List<String> toCombine = new ArrayList<>();
         for (UUID player : MiscUtils.getSortedHashMapKeyset(playerDestroyed)) {
-            if (Bukkit.getOfflinePlayer(player).isOnline() && getPercentFromAmount(playerDestroyed.get(player)) > (1 / 3)) {
-                toCombine.add(TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)).getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " (" + getPercentFromAmount(playerDestroyed.get(player) * 100) + "%)");
+            if (Bukkit.getOfflinePlayer(player).isOnline() && getPercentFromAmount(playerDestroyed.get(player)) > (100 / 3)) {
+                toCombine.add(TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)).getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " (" + getPercentFromAmount(playerDestroyed.get(player)) + "%)");
             }
         }
-        if (playerDestroyed.size() > 2 || toCombine.size() == 0) {
+        if (toCombine.size() == 0) {
             toCombine.add(ChatColor.DARK_AQUA + "the enemy");
+        }
+        if (toCombine.size() < playerDestroyed.keySet().size()) {
+            toCombine.add(ChatColor.DARK_AQUA + "others");
         }
         whoDestroyed = toCombine.get(0);
         for (int i = 1; i < toCombine.size(); i ++) {

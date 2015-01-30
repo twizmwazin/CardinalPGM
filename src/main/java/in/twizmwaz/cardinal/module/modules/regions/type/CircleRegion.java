@@ -26,9 +26,4 @@ public class CircleRegion extends CylinderRegion {
         }
         return results;
     }
-
-    public double getRadius() {
-        return super.getRadius();
-    }
-
 }

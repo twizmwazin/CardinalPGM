@@ -55,7 +55,7 @@ public class DisableDamage implements Module {
             event.setCancelled(true);
         } else if (event.getCause() == DamageCause.BLOCK_EXPLOSION || event.getCause() == DamageCause.ENTITY_EXPLOSION) {
             if (event instanceof EntityDamageByEntityEvent) {
-                if (event.getEntity() instanceof Player) {
+                if (event.getEntity() instanceof Player && TntTracker.getWhoPlaced(((EntityDamageByEntityEvent) event).getDamager()) != null) {
                     Player player = (Player) event.getEntity();
                     UUID source = TntTracker.getWhoPlaced(((EntityDamageByEntityEvent) event).getDamager());
                     Match match = GameHandler.getGameHandler().getMatch();

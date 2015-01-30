@@ -75,7 +75,11 @@ public class RegionModuleBuilder implements ModuleBuilder {
                 return new NegativeRegion(new CombinationParser(element, document));
             case "union":
             case "regions":
-                return new UnionRegion((new CombinationParser(element, document)));
+                CombinationParser parser = new CombinationParser(element, document);
+                for (RegionModule region : parser.getRegions()) {
+                    GameHandler.getGameHandler().getMatch().getModules().add(region);
+                }
+                return new UnionRegion(parser);
             case "translate":
                 return new TranslatedRegion(new TranslateParser(element));
             case "mirror":
