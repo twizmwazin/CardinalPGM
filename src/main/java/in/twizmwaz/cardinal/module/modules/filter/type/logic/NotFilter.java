@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.module.modules.filter.type.logic;
 
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
+import in.twizmwaz.cardinal.module.modules.filter.parsers.ChildFilterParser;
 
 import static in.twizmwaz.cardinal.module.modules.filter.FilterState.*;
 
@@ -12,6 +13,10 @@ public class NotFilter extends FilterModule {
     public NotFilter(final String name, final FilterModule childFilter) {
         super(name);
         this.childFilter = childFilter;
+    }
+    
+    public NotFilter(final ChildFilterParser parser) {
+        this(parser.getName(), parser.getChild());
     }
 
     @Override

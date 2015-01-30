@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.module.modules.filter.type.logic;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
+import in.twizmwaz.cardinal.module.modules.filter.parsers.ChildrenFilterParser;
 
 import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ALLOW;
 import static in.twizmwaz.cardinal.module.modules.filter.FilterState.DENY;
@@ -14,6 +15,10 @@ public class AllFilter extends FilterModule {
     public AllFilter(final String name, final ModuleCollection<FilterModule> children) {
         super(name);
         this.children = children;
+    }
+    
+    public AllFilter(final ChildrenFilterParser parser) {
+        this(parser.getName(), parser.getChildren());
     }
 
     @Override
