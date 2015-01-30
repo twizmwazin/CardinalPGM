@@ -3,6 +3,8 @@ package in.twizmwaz.cardinal.rotation;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import in.twizmwaz.cardinal.util.DomUtils;
 import net.minecraft.util.org.apache.commons.codec.Charsets;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jdom2.Document;
@@ -47,13 +49,33 @@ public class Rotation {
                 try {
                     Document xml = DomUtils.parse(new File(map.getPath() + "/map.xml"));
                     String name = xml.getRootElement().getChild("name").getText();
-                    List<String> authors = new ArrayList<>();
+                    String version = xml.getRootElement().getChild("version").getText();
+                    String objective = xml.getRootElement().getChild("objective").getText();
+                    List<Pair<String, String>> authors = new ArrayList<>();
                     for (Element authorsElement : xml.getRootElement().getChildren("authors")) {
                         for (Element author : authorsElement.getChildren()) {
-                            authors.add(author.getText());
+                            authors.add(new ImmutablePair<>(author.getText(), author.getAttributeValue("contribution")));
                         }
                     }
-                    loaded.add(new LoadedMap(name, authors, map));
+                    List<Pair<String, String>> contributors = new ArrayList<>();
+                    for (Element contributorsElement : xml.getRootElement().getChildren("contributors")) {
+                        for (Element contributor : contributorsElement.getChildren()) {
+                           contributors.add(new ImmutablePair<>(contributor.getText(), contributor.getAttributeValue("contribution")));
+                        }
+                    }
+                    List<String> rules = new ArrayList<>();
+                    for (Element rulesElement : xml.getRootElement().getChildren("rules")) {
+                        for (Element rule : rulesElement.getChildren()) {
+                            rules.add(rule.getText());
+                        }
+                    }
+                    int maxPlayers = 0;
+                    for (Element teams : xml.getRootElement().getChildren("teams")) {
+                        for (Element team : teams.getChildren()) {
+                            maxPlayers = maxPlayers + Integer.parseInt(team.getAttributeValue("max"));
+                        }
+                    }
+                    loaded.add(new LoadedMap(name, version, objective, authors, contributors, rules, maxPlayers, map));
                 } catch (Exception e) {
                     Bukkit.getLogger().log(Level.WARNING, "Failed to load map at " + map.getAbsolutePath());
                 }
@@ -70,9 +92,9 @@ public class Rotation {
         rotation = new ArrayList<>();
         try {
             List<String> lines = Files.readAllLines(rotationFile.toPath(), Charsets.UTF_8);
-            for (int i = 0; i < lines.size(); i++) {
+            for (String line : lines) {
                 for (LoadedMap map : loaded) {
-                    if (map.getName().replaceAll(" ", "").equalsIgnoreCase(lines.get(i).replaceAll(" ", ""))) {
+                    if (map.getName().replaceAll(" ", "").equalsIgnoreCase(line.replaceAll(" ", ""))) {
                         rotation.add(map);
                         break;
                     }
@@ -94,12 +116,12 @@ public class Rotation {
     /**
      * Move the position in the rotation by one. If the end of the rotation is reached, it will be automatically reset.
      */
-    public void move() {
+    public int move() {
         position++;
         if (position > rotation.size() - 1) {
             position = 0;
         }
-        return;
+        return position;
     }
 
     /**
@@ -123,11 +145,29 @@ public class Rotation {
         return loaded;
     }
 
+    /**
+     * @return Gets the rotation index of the next map
+     */
     public int getNextIndex() {
         if (position + 1 >= rotation.size()) {
             return position + 1;
         } else {
             return 0;
         }
+    }
+
+    /**
+     * @param string The name of map to be searched for
+     * @return The map
+     */
+    public LoadedMap getMap(String string) {
+        for (LoadedMap map : loaded) {
+            if (map.getName().toLowerCase().startsWith(string.toLowerCase())) return map;
+        }
+        return null;
+    }
+    
+    public LoadedMap getCurrent() {
+        return rotation.get(position);
     }
 }

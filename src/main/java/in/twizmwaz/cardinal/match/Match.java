@@ -11,6 +11,7 @@ import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
 import in.twizmwaz.cardinal.module.modules.mapInfo.Info;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.rotation.LoadedMap;
 import in.twizmwaz.cardinal.util.DomUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,6 +29,7 @@ public class Match {
     private final JavaPlugin plugin;
     private final GameHandler handler;
     private final UUID uuid;
+    private final LoadedMap loadedMap;
     private final ModuleFactory factory;
     private final ModuleCollection<Module> modules;
 
@@ -36,7 +38,7 @@ public class Match {
     private Document document;
     private StartTimer startTimer;
 
-    public Match(GameHandler handler, UUID id) {
+    public Match(GameHandler handler, UUID id, LoadedMap map) {
         this.plugin = handler.getPlugin();
         this.uuid = id;
         this.handler = handler;
@@ -49,6 +51,7 @@ public class Match {
         }
         this.startTimer = new StartTimer(this, 30);
         this.state = MatchState.WAITING;
+        this.loadedMap = map;
         this.number = matchNumber;
         matchNumber ++;
     }
@@ -128,5 +131,9 @@ public class Match {
         else if (blitzTime != 0)
             return blitzTime;
         return 0;
+    }
+
+    public LoadedMap getLoadedMap() {
+        return loadedMap;
     }
 }

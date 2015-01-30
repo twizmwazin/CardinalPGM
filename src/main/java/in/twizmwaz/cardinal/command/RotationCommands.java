@@ -6,6 +6,7 @@ import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
@@ -36,13 +37,13 @@ public class RotationCommands {
                     maps[i] = maps[i] + ChatColor.GOLD + mapInfo.getName() + ChatColor.DARK_PURPLE + " by " + ChatColor.RED + mapInfo.getAuthors().get(0);
                 } else if (mapInfo.getAuthors().size() > 1) {
                     maps[i] = maps[i] + ChatColor.GOLD + mapInfo.getName() + ChatColor.DARK_PURPLE + " by ";
-                    for (String author : mapInfo.getAuthors()) {
+                    for (Pair<String, String> author : mapInfo.getAuthors()) {
                         if (mapInfo.getAuthors().indexOf(author) < mapInfo.getAuthors().size() - 2) {
-                            maps[i] = maps[i] + ChatColor.RED + author + ChatColor.DARK_PURPLE + ", ";
+                            maps[i] = maps[i] + ChatColor.RED + author.getLeft() + ChatColor.DARK_PURPLE + ", ";
                         } else if (mapInfo.getAuthors().indexOf(author) == mapInfo.getAuthors().size() - 2) {
-                            maps[i] = maps[i] + ChatColor.RED + author + ChatColor.DARK_PURPLE + " and ";
+                            maps[i] = maps[i] + ChatColor.RED + author.getLeft() + ChatColor.DARK_PURPLE + " and ";
                         } else if (mapInfo.getAuthors().indexOf(author) == mapInfo.getAuthors().size() - 1) {
-                            maps[i] = maps[i] + ChatColor.RED + author;
+                            maps[i] = maps[i] + ChatColor.RED + author.getLeft();
                         }
                     }
                 }
@@ -95,16 +96,16 @@ public class RotationCommands {
             if (position < ordered.size()) {
                 LoadedMap mapInfo = ordered.get(position);
                 if (mapInfo.getAuthors().size() == 1) {
-                    maps[i] = maps[i] + ChatColor.GOLD + mapInfo.getName() + ChatColor.DARK_PURPLE + " by " + ChatColor.RED + mapInfo.getAuthors().get(0);
+                    maps[i] = maps[i] + ChatColor.GOLD + mapInfo.getName() + ChatColor.DARK_PURPLE + " by " + ChatColor.RED + mapInfo.getAuthors().get(0).getLeft();
                 } else if (mapInfo.getAuthors().size() > 1) {
                     maps[i] = maps[i] + ChatColor.GOLD + mapInfo.getName() + ChatColor.DARK_PURPLE + " by ";
-                    for (String author : mapInfo.getAuthors()) {
+                    for (Pair<String, String> author : mapInfo.getAuthors()) {
                         if (mapInfo.getAuthors().indexOf(author) < mapInfo.getAuthors().size() - 2) {
-                            maps[i] = maps[i] + ChatColor.RED + author + ChatColor.DARK_PURPLE + ", ";
+                            maps[i] = maps[i] + ChatColor.RED + author.getLeft() + ChatColor.DARK_PURPLE + ", ";
                         } else if (mapInfo.getAuthors().indexOf(author) == mapInfo.getAuthors().size() - 2) {
-                            maps[i] = maps[i] + ChatColor.RED + author + ChatColor.DARK_PURPLE + " and ";
+                            maps[i] = maps[i] + ChatColor.RED + author.getLeft() + ChatColor.DARK_PURPLE + " and ";
                         } else if (mapInfo.getAuthors().indexOf(author) == mapInfo.getAuthors().size() - 1) {
-                            maps[i] = maps[i] + ChatColor.RED + author;
+                            maps[i] = maps[i] + ChatColor.RED + author.getLeft();
                         }
                     }
                 }

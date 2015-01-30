@@ -4,10 +4,11 @@ import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.module.modules.mapInfo.Info;
 import in.twizmwaz.cardinal.module.modules.mapInfo.contributor.Contributor;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.rotation.LoadedMap;
 import in.twizmwaz.cardinal.util.DomUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.jdom2.Document;
@@ -21,36 +22,38 @@ import java.util.List;
 
 public class MapCommands {
 
-    private static Info mapInfo;
-
-    public static void refreshMapInfo() {
-        mapInfo = GameHandler.getGameHandler().getMatch().getMapInfo();
-    }
-
     @Command(aliases = {"map"}, desc = "Shows information about the currently playing map.", usage = "")
     public static void map(final CommandContext args, CommandSender sender) throws CommandException {
-        refreshMapInfo();
+        LoadedMap mapInfo;
+        if (args.argsLength() == 0) mapInfo = GameHandler.getGameHandler().getMatch().getLoadedMap();
+        else {
+            String search = "";
+            for (int a = 0; a < args.argsLength(); a++) {
+                search = search + args.getString(a) + " ";
+            }
+            mapInfo = GameHandler.getGameHandler().getRotation().getMap(search.trim());
+        }
         sender.sendMessage(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "----------" + ChatColor.DARK_AQUA + " " + mapInfo.getName() + " " + ChatColor.GRAY + mapInfo.getVersion() + ChatColor.RED + " " + ChatColor.STRIKETHROUGH + "----------");
         sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Objective: " + ChatColor.RESET + "" + ChatColor.GOLD + mapInfo.getObjective());
         if (mapInfo.getAuthors().size() > 1) {
             sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Authors:");
-            for (Contributor contributor : mapInfo.getAuthors()) {
-                if (contributor.hasContribution()) {
-                    sender.sendMessage("* " + ChatColor.RED + contributor.getName() + ChatColor.RESET + " " + ChatColor.GREEN + "" + ChatColor.ITALIC + "(" + contributor.getContribution() + ")");
+            for (Pair<String, String> contributor : mapInfo.getAuthors()) {
+                if (contributor.getRight() != null) {
+                    sender.sendMessage("* " + ChatColor.RED + contributor.getLeft() + ChatColor.RESET + " " + ChatColor.GREEN + "" + ChatColor.ITALIC + "(" + contributor.getRight() + ")");
                 } else {
-                    sender.sendMessage("* " + ChatColor.RED + contributor.getName());
+                    sender.sendMessage("* " + ChatColor.RED + contributor.getLeft());
                 }
             }
         } else {
-            sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Author: " + ChatColor.RESET + ChatColor.GOLD + mapInfo.getAuthors().get(0).getName());
+            sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Author: " + ChatColor.RESET + ChatColor.GOLD + mapInfo.getAuthors().get(0).getLeft());
         }
         if (mapInfo.getContributors().size() > 0) {
             sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Contributors:");
-            for (Contributor contributor : mapInfo.getContributors()) {
-                if (contributor.hasContribution()) {
-                    sender.sendMessage("* " + ChatColor.RED + contributor.getName() + ChatColor.RESET + ChatColor.GREEN + "" + ChatColor.ITALIC + " (" + contributor.getContribution() + ")");
+            for (Pair<String, String> contributor : mapInfo.getContributors()) {
+                if (contributor.getRight() != null) {
+                    sender.sendMessage("* " + ChatColor.RED + contributor.getLeft() + ChatColor.RESET + ChatColor.GREEN + "" + ChatColor.ITALIC + " (" + contributor.getRight() + ")");
                 } else {
-                    sender.sendMessage("* " + ChatColor.RED + contributor.getName());
+                    sender.sendMessage("* " + ChatColor.RED + contributor.getLeft());
                 }
             }
         }
@@ -60,12 +63,7 @@ public class MapCommands {
                 sender.sendMessage(ChatColor.WHITE + "" + i + ") " + ChatColor.GOLD + mapInfo.getRules().get(i - 1));
             }
         }
-        int total = 0;
-        for (TeamModule team : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
-            if (team.isObserver()) continue;
-            total = total + team.getMax();
-        }
-        sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Max players: " + ChatColor.RESET + "" + ChatColor.GOLD + total);
+        sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Max players: " + ChatColor.RESET + "" + ChatColor.GOLD + mapInfo.getMaxPlayers());
     }
 
     @Command(aliases = {"next", "nextmap", "nm", "mn"}, desc = "Shows next map.", usage = "")
@@ -101,9 +99,7 @@ public class MapCommands {
                 sender.sendMessage(result);
             }
 
-        } catch (JDOMException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (JDOMException | IOException e) {
             e.printStackTrace();
         }
     }
