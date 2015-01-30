@@ -13,14 +13,14 @@ import org.bukkit.event.HandlerList;
 
 public class MonumentModes implements TaskedModule {
 
-    private final int after;
+    private int after;
     private final Material material;
     private final int damageValue;
     private final String name;
 
     private boolean ran;
 
-    public MonumentModes(final int after, final Material material, final int damageValue, final String name) {
+    public MonumentModes(int after, final Material material, final int damageValue, final String name) {
         this.after = after;
         this.material = material;
         this.damageValue = damageValue;
@@ -76,6 +76,10 @@ public class MonumentModes implements TaskedModule {
 
     public int getTimeAfter() {
         return after;
+    }
+
+    public void setTimeAfter(int after) {
+        this.after = after;
     }
 
 }

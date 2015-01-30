@@ -9,6 +9,10 @@ import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.*;
 import in.twizmwaz.cardinal.module.modules.filter.type.*;
 import in.twizmwaz.cardinal.module.modules.filter.type.constant.*;
+import in.twizmwaz.cardinal.module.modules.filter.type.logic.AllFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.logic.AnyFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.logic.NotFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.logic.OneFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.old.AllowFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.old.DenyFilter;
 import org.jdom2.Document;
@@ -48,44 +52,52 @@ public class FilterModuleBuilder implements ModuleBuilder {
      */
     public static FilterModule getFilter(Element element, Document document) {
         switch (element.getName().toLowerCase()) {
-            case "team":
-                return new TeamFilter((new TeamFilterParser(element)));
             case "block":
                 return new BlockFilter(new BlockFilterParser(element));
-            case "spawn":
-                return new SpawnFilter(new SpawnFilterParser(element));
-            case "mob":
-                return new MobFilter(new MobFilterParser(element));
-            case "entity":
-                return new EntityFilter(new EntityFilterParser(element));
-            case "kill-streak":
-                return new KillStreakFilter(new KillstreakFilterParser(element));
-            case "class":
-                return new ClassFilter(new FilterParser(element));
-            case "random":
-                return new RandomFilter(new RandomFilterParser(element));
-            case "crouching":
-                return new CrouchingFilter(new FilterParser(element));
-            case "flying":
-                return new FlyingFilter(new FilterParser(element));
-            case "can-fly":
-                return new FlyingAbilityFilter(new FilterParser(element));
-            case "objective":
-                return new ObjectiveFilter(new ObjectiveFilterParser(element));
-            case "cause":
-                return new CauseFilter(new CauseFilterParser(element));
             case "carrying":
                 return new CarryingFilter(new ItemFilterParser(element));
+            case "cause":
+                return new CauseFilter(new CauseFilterParser(element));
+            case "class":
+                return new ClassFilter(new ClassFilterParser(element));
+            case "crouching":
+                return new CrouchingFilter(new FilterParser(element));
+            case "entity":
+                return new EntityFilter(new EntityFilterParser(element));
+            case "can-fly":
+                return new FlyingAbilityFilter(new FilterParser(element));
+            case "flying":
+                return new FlyingFilter(new FilterParser(element));
             case "holding":
                 return new HoldingFilter(new ItemFilterParser(element));
+            case "kill-streak":
+                return new KillStreakFilter(new KillstreakFilterParser(element));
+            case "mob":
+                return new MobFilter(new MobFilterParser(element));
+            case "objective":
+                return new ObjectiveFilter(new ObjectiveFilterParser(element));
+            case "random":
+                return new RandomFilter(new RandomFilterParser(element));
+            case "spawn":
+                return new SpawnFilter(new SpawnFilterParser(element));
+            case "team":
+                return new TeamFilter((new TeamFilterParser(element)));
+            case "void":
+                return new VoidFilter(new GenericFilterParser(element));
             case "wearing":
                 return new WearingFilter(new ItemFilterParser(element));
+            case "all":
+                return new AllFilter(new ChildrenFilterParser(element));
+            case "any":
+                return new AnyFilter(new ChildrenFilterParser(element));
+            case "not":
+                return new NotFilter(new ChildFilterParser(element));
+            case "one":
+                return new OneFilter(new ChildrenFilterParser(element));
             case "allow":
                 return new AllowFilter(new GenericFilterParser(element));
             case "deny":
                 return new DenyFilter(new GenericFilterParser(element));
-            case "void":
-                return new VoidFilter(new GenericFilterParser(element));
             case "filter":
                 switch (element.getAttributeValue("name").toLowerCase()) {
                     case "allow-all":

@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.module.modules.teamPicker;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.MiscUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
@@ -9,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -33,9 +35,10 @@ public class TeamPicker implements Module {
     }
 
 
-    public Inventory getTeamPicker() {
-        int size = (((GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class).size() + 1) / 9) + 1) * 9;
-        Inventory picker = Bukkit.createInventory(null, size, ChatColor.DARK_RED + "Pick your team");
+    public Inventory getTeamPicker(Player player) {
+        int size = ((GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class).size() / 9) + 1) * 9;
+        int classesSize = ((GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class).size() + 8) / 9) * 9;
+        Inventory picker = Bukkit.createInventory(null, size + classesSize, ChatColor.DARK_RED + "Pick your team");
         int item = 0;
         ItemStack autoJoin = new ItemStack(Material.CHAINMAIL_HELMET);
         ItemMeta autoJoinMeta = autoJoin.getItemMeta();
@@ -65,6 +68,19 @@ public class TeamPicker implements Module {
                 picker.setItem(item, teamStack);
                 item++;
             }
+        }
+        item = size;
+        for (ClassModule classModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class)) {
+            ItemStack classStack = new ItemStack(classModule.getIcon());
+            ItemMeta classMeta = classStack.getItemMeta();
+            classMeta.setDisplayName(ChatColor.GREEN + classModule.getName());
+            classMeta.setLore(Arrays.asList(ChatColor.GOLD + classModule.getLongDescription()));
+            classStack.setItemMeta(classMeta);
+            if (classModule.equals(ClassModule.getClassByPlayer(player))) {
+                classStack.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
+            }
+            picker.setItem(item, classStack);
+            item++;
         }
         return picker;
     }
@@ -113,7 +129,7 @@ public class TeamPicker implements Module {
                         if (event.getPlayer().getItemInHand().hasItemMeta()) {
                             if (event.getPlayer().getItemInHand().getItemMeta().hasDisplayName()) {
                                 if (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().equals(ChatColor.GREEN + "" + ChatColor.BOLD + "Team Selection")) {
-                                    event.getPlayer().openInventory(getTeamPicker());
+                                    event.getPlayer().openInventory(getTeamPicker(event.getPlayer()));
                                 }
                             }
                         }

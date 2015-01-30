@@ -30,20 +30,18 @@ public class ComplementRegion extends RegionModule {
 
     @Override
     public boolean contains(BlockRegion region) {
-        List<RegionModule> working = getRegions();
-        for (RegionModule work : working) {
-            if (work.contains(region)) {
-                working.remove(work);
-            }
+        if (!regions.get(0).contains(region)) return false;
+        for (int i = 1; i < regions.size(); i ++) {
+            if (regions.get(i).contains(region)) return false;
         }
-        return working.size() == 1;
+        return true;
     }
 
     @Override
     public PointRegion getRandomPoint() {
         while (true) {
             Random random = new Random();
-            PointRegion point = regions.get(random.nextInt(regions.size())).getRandomPoint();
+            PointRegion point = regions.get(0).getRandomPoint();
             if (this.contains(point)) {
                 return point;
             }
@@ -52,13 +50,7 @@ public class ComplementRegion extends RegionModule {
 
     @Override
     public BlockRegion getCenterBlock() {
-        double xTotal = 0, yTotal = 0, zTotal = 0;
-        for (RegionModule child : regions) {
-            xTotal = xTotal + child.getCenterBlock().getX();
-            yTotal = yTotal + child.getCenterBlock().getY();
-            zTotal = zTotal + child.getCenterBlock().getZ();
-        }
-        return new BlockRegion(null, xTotal / regions.size(), yTotal / regions.size(), zTotal / regions.size());
+        return regions.get(0).getCenterBlock();
     }
 
     @Override

@@ -4,7 +4,7 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.PointParser;
 import org.bukkit.block.Block;
 import org.bukkit.util.BlockVector;
-import org.bukkit.util.*;
+import org.bukkit.util.Vector;
 
 public class PointRegion extends BlockRegion {
 

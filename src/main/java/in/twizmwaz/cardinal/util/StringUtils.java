@@ -5,35 +5,47 @@ import java.text.DecimalFormat;
 public class StringUtils {
 
     public static int timeStringToSeconds(String input) {
-        int result = 0;
-        String number = "";
+        int time = 0;
+        String currentUnit = "";
+        String current = "";
+        boolean negative = false;
         for (int i = 0; i < input.length(); i ++) {
             char c = input.charAt(i);
-            if (Character.isDigit(c)) {
-                number += c;
-            } else if (Character.isLetter(c) && !number.isEmpty()) {
-                result += convert(Integer.parseInt(number), c);
-                number = "";
+            if (Character.isDigit(c) && !currentUnit.equals("")) {
+                time += convert(Integer.parseInt(current) * (negative ? -1 : 1), currentUnit);
+                current = "";
+                currentUnit = "";
+            }
+            if (c == '-') {
+                negative = true;
+            } else if (Character.isDigit(c)) {
+                current += Integer.parseInt(c + "");
+            } else {
+                currentUnit += c + "";
             }
         }
-        if (!number.equals("")) {
-            result += Integer.parseInt(number);
-        }
-        return result;
+        time += convert(Integer.parseInt(current) * (negative ? -1 : 1), currentUnit);
+        return time;
     }
 
-    private static long convert(int value, char unit) {
+    private static int convert(int value, String unit) {
         switch (unit) {
-            case 'y': return value * 365 * 60 * 60 * 24;
-            case 'd': return value * 60 * 60 * 24;
-            case 'h': return value * 60 * 60;
-            case 'm': return value * 60;
-            case 's': return value;
+            case "y": return value * 365 * 60 * 60 * 24;
+            case "mo": return value * 31 * 60 * 60 * 24;
+            case "d": return value * 60 * 60 * 24;
+            case "h": return value * 60 * 60;
+            case "m": return value * 60;
+            case "s": return value;
         }
         return value;
     }
 
     public static String formatTime(double time) {
+        boolean negative = false;
+        if (time < 0) {
+            negative = true;
+            time *= -1;
+        }
         int hours = (int) time / 3600;
         int minutes = (int) (time - (hours * 3600)) / 60;
         int seconds = (int) time - (hours * 3600) - (minutes * 60);
@@ -46,10 +58,15 @@ public class StringUtils {
         while (secondsString.length() < 2) {
             secondsString = "0" + secondsString;
         }
-        return (hours == 0 ? "" : hoursString + ":") + minutesString + ":" + secondsString;
+        return (negative ? "-" : "") + (hours == 0 ? "" : hoursString + ":") + minutesString + ":" + secondsString;
     }
 
     public static String formatTimeWithMillis(double time) {
+        boolean negative = false;
+        if (time < 0) {
+            negative = true;
+            time *= -1;
+        }
         int hours = (int) time / 3600;
         int minutes = (int) (time - (hours * 3600)) / 60;
         int seconds = (int) time - (hours * 3600) - (minutes * 60);
@@ -65,6 +82,6 @@ public class StringUtils {
         while (secondsString.length() < 2) {
             secondsString = "0" + secondsString;
         }
-        return (hours == 0 ? "" : hoursString + ":") + minutesString + ":" + secondsString + "." + millisString;
+        return (negative ? "-" : "") + (hours == 0 ? "" : hoursString + ":") + minutesString + ":" + secondsString + "." + millisString;
     }
 }
