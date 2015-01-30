@@ -41,7 +41,7 @@ public class ComplementRegion extends RegionModule {
     public PointRegion getRandomPoint() {
         while (true) {
             Random random = new Random();
-            PointRegion point = regions.get(random.nextInt(regions.size())).getRandomPoint();
+            PointRegion point = regions.get(0).getRandomPoint();
             if (this.contains(point)) {
                 return point;
             }
