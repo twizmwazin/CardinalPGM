@@ -32,7 +32,7 @@ public class AppliedRegionBuilder  implements ModuleBuilder {
                     for (Element element : applied.getChildren()) regions.add(RegionModuleBuilder.getRegion(element));
                     region = new UnionRegion(null, regions);
                 }
-                String message = ChatColor.translateAlternateColorCodes('`', applied.getAttributeValue("message"));
+                String message = (applied.getAttributeValue("message") != null ? ChatColor.translateAlternateColorCodes('`', applied.getAttributeValue("message")) : null);
                 if (applied.getAttributeValue("velocity") != null)  {
                     String[] values = applied.getAttributeValue("velocity").replaceAll("@", "").split(",");
                     FilterModule filter = applied.getAttributeValue("filter") == null ? null : getFilter(applied.getAttributeValue("filter"));
