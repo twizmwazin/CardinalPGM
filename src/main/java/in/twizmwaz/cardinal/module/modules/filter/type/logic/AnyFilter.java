@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 
 import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ALLOW;
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.DENY;
 
 public class AnyFilter extends FilterModule {
 
@@ -20,7 +21,7 @@ public class AnyFilter extends FilterModule {
         for (FilterModule child : children) {
             if (child.evaluate(object).equals(ALLOW)) return ALLOW;
         }
-        return ALLOW;
+        return DENY;
     }
 
 }
