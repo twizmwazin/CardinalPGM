@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.module.modules.blitz.BlitzBuilder;
 import in.twizmwaz.cardinal.module.modules.broadcasts.BroadcastModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.buildHeight.BuildHeightBuilder;
 import in.twizmwaz.cardinal.module.modules.chat.ChatModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.classModule.ClassModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.cores.CoreObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.deathMessages.DeathMessagesBuilder;
 import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjectiveBuilder;
@@ -150,5 +151,6 @@ public class ModuleFactory {
         builderClasses.add(AppliedRegionBuilder.class);
         builderClasses.add(KillRewardBuilder.class);
         builderClasses.add(PortalBuilder.class);
+        builderClasses.add(ClassModuleBuilder.class);
     }
 }

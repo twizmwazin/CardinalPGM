@@ -1,13 +1,16 @@
 package in.twizmwaz.cardinal.module.modules.classModule;
 
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.ClassChangeEvent;
 import in.twizmwaz.cardinal.event.PgmSpawnEvent;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.kit.Kit;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 
 import java.util.HashMap;
@@ -25,7 +28,9 @@ public class ClassModule implements Module {
     private final boolean defaultClass;
     private final boolean restrict;
 
-    protected ClassModule(final String name, final String description, final String longDescription, final Material icon, final boolean sticky, final boolean defaultClass, final boolean restrict) {
+    private final Kit kit;
+
+    protected ClassModule(final String name, final String description, final String longDescription, final Material icon, final boolean sticky, final boolean defaultClass, final boolean restrict, final Kit kit) {
         this.name = name;
         this.description = description;
         this.longDescription = longDescription;
@@ -33,28 +38,35 @@ public class ClassModule implements Module {
         this.sticky = sticky;
         this.defaultClass = defaultClass;
         this.restrict = restrict;
+
+        this.kit = kit;
     }
 
     @EventHandler
     public void onClassChange(ClassChangeEvent event) {
-        if (event.getClassModule().isSticky() && TeamUtils.getTeamByPlayer(event.getPlayer()) != null && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) {
-            event.setCancelled(true);
-            ChatUtils.sendWarningMessage(event.getPlayer(), "You may not change your class during the match.");
+        if (event.getClassModule().equals(this)) {
+            if (sticky && TeamUtils.getTeamByPlayer(event.getPlayer()) != null && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) {
+                event.setCancelled(true);
+                ChatUtils.sendWarningMessage(event.getPlayer(), "You may not change your class during the match.");
+            }
+            if (!restrict && !event.getPlayer().isOp()) {
+                event.setCancelled(true);
+                ChatUtils.sendWarningMessage(event.getPlayer(), "You do not have access to this class.");
+            }
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPgmSpawn(PgmSpawnEvent event) {
-        if (!playerClass.containsKey(event.getPlayer().getUniqueId()) && this.defaultClass) playerClass.put(event.getPlayer().getUniqueId(), this);
+        if (!playerClass.containsKey(event.getPlayer().getUniqueId()) && (this.defaultClass || (!defaultClassPresent() && GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class).equals(this)))) playerClass.put(event.getPlayer().getUniqueId(), this);
+        if (playerClass.get(event.getPlayer().getUniqueId()).equals(this)) {
+            kit.apply(event.getPlayer());
+        }
     }
 
     @Override
     public void unload() {
         HandlerList.unregisterAll(this);
-    }
-
-    public boolean isSticky() {
-        return sticky;
     }
 
     public Material getIcon() {
@@ -69,8 +81,19 @@ public class ClassModule implements Module {
         return longDescription;
     }
 
+    public boolean isDefaultClass() {
+        return defaultClass;
+    }
+
     public static ClassModule getClassByPlayer(Player player) {
         if (playerClass.containsKey(player.getUniqueId())) return playerClass.get(player.getUniqueId());
         return null;
+    }
+
+    public static boolean defaultClassPresent() {
+        for (ClassModule classModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class)) {
+            if (classModule.isDefaultClass()) return true;
+        }
+        return false;
     }
 }
