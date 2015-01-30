@@ -11,6 +11,7 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.filter.type.logic.AllFilter;
 import in.twizmwaz.cardinal.module.modules.kit.Kit;
+import in.twizmwaz.cardinal.module.modules.portal.Portal;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
@@ -64,6 +65,14 @@ public class AppliedRegionBuilder  implements ModuleBuilder {
                 if (applied.getAttributeValue("kit") != null) {
                     results.add(new KitRegion(region, getFilter(applied.getAttributeValue("filter")), message, Kit.getKitByName(applied.getAttributeValue("kit"))));
                 }
+            }
+        }
+        for (Portal portal : match.getModules().getModules(Portal.class)) {
+            if (portal.getDestination() != null) {
+                results.add(new BlockPlaceRegion(portal.getDestination(), getFilter("deny-all"), null));
+            }
+            if (portal.protect()) {
+                results.add(new BlockEventRegion(portal.getRegion(), getFilter("deny-all"), null));
             }
         }
         return results;
