@@ -10,6 +10,7 @@ import in.twizmwaz.cardinal.module.modules.appliedRegion.type.*;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.filter.type.logic.AllFilter;
+import in.twizmwaz.cardinal.module.modules.kit.Kit;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
@@ -45,6 +46,9 @@ public class AppliedRegionBuilder  implements ModuleBuilder {
                 if (applied.getAttributeValue("block-place") != null) {
                     results.add(new BlockPlaceRegion(region, getFilter(applied.getAttributeValue("block-place")), message));
                 }
+                if (applied.getAttributeValue("block-place-against") != null) {
+                    results.add(new BlockPlaceAgainstRegion(region, getFilter(applied.getAttributeValue("block-place-against")), message));
+                }
                 if (applied.getAttributeValue("block") != null) {
                     results.add(new BlockEventRegion(region, getFilter(applied.getAttributeValue("block")), message));
                 }
@@ -53,6 +57,12 @@ public class AppliedRegionBuilder  implements ModuleBuilder {
                 }
                 if (applied.getAttributeValue("leave") != null) {
                     results.add(new LeaveRegion(region, getFilter(applied.getAttributeValue("leave")), message));
+                }
+                if (applied.getAttributeValue("use") != null) {
+                    results.add(new UseRegion(region, getFilter(applied.getAttributeValue("use")), message));
+                }
+                if (applied.getAttributeValue("kit") != null) {
+                    results.add(new KitRegion(region, getFilter(applied.getAttributeValue("filter")), message, Kit.getKitByName(applied.getAttributeValue("kit"))));
                 }
             }
         }
