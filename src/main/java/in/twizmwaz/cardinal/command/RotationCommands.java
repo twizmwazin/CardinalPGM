@@ -17,14 +17,9 @@ public class RotationCommands {
 
     @Command(aliases = {"rotation", "rot"}, desc = "Shows the current rotation.", usage = "[page]")
     public static void rotation(final CommandContext cmd, CommandSender sender) throws CommandException {
-        int index;
-        try {
-            index = cmd.getInteger(0);
-        } catch (IndexOutOfBoundsException ex) {
-            index = 1;
-        }
+        int index = cmd.argsLength() == 0 ? 1 : cmd.getInteger(0);
         List<LoadedMap> rot = GameHandler.getGameHandler().getRotation().getRotation();
-        int pages = (int) Math.ceil((rot.size() + 8) / 8);
+        int pages = (int) Math.ceil((rot.size() + 7) / 8);
         if (index > pages)
             throw new CommandException("Invalid page number specified! Maximum page number is " + pages + ".");
         sender.sendMessage(ChatColor.RED + "------------- " + ChatColor.WHITE + "Current Rotation " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + index + ChatColor.DARK_AQUA + " of " + ChatColor.AQUA + pages + ChatColor.DARK_AQUA + ") " + ChatColor.RED + "-------------");
@@ -34,7 +29,7 @@ public class RotationCommands {
             try {
                 LoadedMap mapInfo = rot.get(position);
                 if (mapInfo.getAuthors().size() == 1) {
-                    maps[i] = maps[i] + ChatColor.GOLD + mapInfo.getName() + ChatColor.DARK_PURPLE + " by " + ChatColor.RED + mapInfo.getAuthors().get(0);
+                    maps[i] = maps[i] + ChatColor.GOLD + mapInfo.getName() + ChatColor.DARK_PURPLE + " by " + ChatColor.RED + mapInfo.getAuthors().get(0).getLeft();
                 } else if (mapInfo.getAuthors().size() > 1) {
                     maps[i] = maps[i] + ChatColor.GOLD + mapInfo.getName() + ChatColor.DARK_PURPLE + " by ";
                     for (Pair<String, String> author : mapInfo.getAuthors()) {

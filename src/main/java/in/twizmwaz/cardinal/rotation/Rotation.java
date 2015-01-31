@@ -149,11 +149,7 @@ public class Rotation {
      * @return Gets the rotation index of the next map
      */
     public int getNextIndex() {
-        if (position + 1 >= rotation.size()) {
-            return position + 1;
-        } else {
-            return 0;
-        }
+        return position;
     }
 
     /**
@@ -168,6 +164,11 @@ public class Rotation {
     }
     
     public LoadedMap getCurrent() {
-        return rotation.get(position);
+        try {
+            return rotation.get(position - 1);
+        } catch (IndexOutOfBoundsException e) {
+            return rotation.get(0);
+        }
+        
     }
 }
