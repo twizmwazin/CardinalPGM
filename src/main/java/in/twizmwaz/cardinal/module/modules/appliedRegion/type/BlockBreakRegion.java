@@ -26,7 +26,7 @@ public class BlockBreakRegion extends AppliedRegion {
     
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector().add(new Vector(0.5, 0.5, 0.5)))) && (filter.evaluate(event.getPlayer()).equals(FilterState.DENY) || filter.evaluate(event.getBlock()).equals(FilterState.DENY))) {
+        if (!event.isCancelled() && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector().add(new Vector(0.5, 0.5, 0.5)))) && (filter.evaluate(event.getPlayer()).equals(FilterState.DENY) || filter.evaluate(event.getBlock()).equals(FilterState.DENY))) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }
@@ -34,7 +34,7 @@ public class BlockBreakRegion extends AppliedRegion {
 
     @EventHandler
     public void onBucketFill(PlayerBucketFillEvent event) {
-        if (region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))
+        if (!event.isCancelled() && region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))
                 && (filter.evaluate(event.getPlayer()).equals(FilterState.DENY)
                 || filter.evaluate(event.getBlockClicked().getRelative(event.getBlockFace())).equals(FilterState.DENY))) {
             event.setCancelled(true);

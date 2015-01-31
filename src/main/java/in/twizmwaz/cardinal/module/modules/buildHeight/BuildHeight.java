@@ -36,7 +36,7 @@ public class BuildHeight implements Module {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (event.getBlock().getY() >= height) {
+        if (event.getBlock().getY() >= height && !event.isCancelled()) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), "You have reached the maximum build height! " + ChatColor.GRAY + "(" + height + " blocks)");
         }
@@ -44,7 +44,7 @@ public class BuildHeight implements Module {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (event.getBlock().getY() >= height) {
+        if (event.getBlock().getY() >= height && !event.isCancelled()) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), "You have reached the maximum build height! " + ChatColor.GRAY + "(" + height + " blocks)");
         }
@@ -53,7 +53,7 @@ public class BuildHeight implements Module {
     @EventHandler
     public void onEmptyBucket(PlayerBucketEmptyEvent event) {
         Block toFill = event.getBlockClicked().getRelative(event.getBlockFace());
-        if (toFill.getY() >= height) {
+        if (toFill.getY() >= height && !event.isCancelled()) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), "You have reached the maximum build height! " + ChatColor.GRAY + "(" + height + " blocks)");
         }
@@ -62,7 +62,7 @@ public class BuildHeight implements Module {
     @EventHandler
     public void onFillBucket(PlayerBucketFillEvent event) {
         Block toEmpty = event.getBlockClicked().getRelative(event.getBlockFace());
-        if (toEmpty.getY() >= height) {
+        if (toEmpty.getY() >= height && !event.isCancelled()) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), "You have reached the maximum build height! " + ChatColor.GRAY + "(" + height + " blocks)");
         }

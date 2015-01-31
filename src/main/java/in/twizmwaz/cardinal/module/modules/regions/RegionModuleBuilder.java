@@ -17,6 +17,7 @@ import in.twizmwaz.cardinal.module.modules.regions.type.combinations.NegativeReg
 import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.modifications.MirroredRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.modifications.TranslatedRegion;
+import org.bukkit.Bukkit;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
@@ -31,18 +32,26 @@ public class RegionModuleBuilder implements ModuleBuilder {
                 for (Element givenChild : givenRegion.getChildren()) {
                     for (Element givenSubChild : givenChild.getChildren()) {
                         for (Element givenChildRegion : givenSubChild.getChildren()) {
-                            RegionModule staged = getRegion(givenSubChild);
-                            if (staged.getName() != null) match.getModules().add(staged);
+                            RegionModule staged = getRegion(givenChildRegion);
+                            if (staged.getName() != null) {
+                                match.getModules().add(staged);
+                            }
                         }
                         RegionModule staged = getRegion(givenSubChild);
-                        if (staged.getName() != null) match.getModules().add(staged);
+                        if (staged.getName() != null) {
+                            match.getModules().add(staged);
+                        }
                     }
                     RegionModule staged = getRegion(givenChild);
-                    if (staged.getName() != null) match.getModules().add(staged);
+                    if (staged.getName() != null) {
+                        match.getModules().add(staged);
+                    }
                 }
                 if (!givenRegion.getName().equals("apply")) {
                     RegionModule staged = getRegion(givenRegion);
-                    if (staged.getName() != null) match.getModules().add(staged);
+                    if (staged.getName() != null) {
+                        match.getModules().add(staged);
+                    }
                 }
             }
         }

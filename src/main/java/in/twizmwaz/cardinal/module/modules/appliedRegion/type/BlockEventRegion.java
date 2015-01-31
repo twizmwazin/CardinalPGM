@@ -8,6 +8,7 @@ import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.*;
@@ -27,7 +28,7 @@ public class BlockEventRegion extends AppliedRegion {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if ((filter.evaluate(event.getBlock()).equals(FilterState.DENY) || filter.evaluate(event.getPlayer()).equals(FilterState.DENY))
+        if (!event.isCancelled() && (filter.evaluate(event.getBlock()).equals(FilterState.DENY) || filter.evaluate(event.getPlayer()).equals(FilterState.DENY))
                 && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
@@ -36,7 +37,7 @@ public class BlockEventRegion extends AppliedRegion {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if ((filter.evaluate(event.getBlock()).equals(FilterState.DENY) || filter.evaluate(event.getPlayer()).equals(FilterState.DENY))
+        if (!event.isCancelled() && (filter.evaluate(event.getBlock()).equals(FilterState.DENY) || filter.evaluate(event.getPlayer()).equals(FilterState.DENY))
                 && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
@@ -45,17 +46,16 @@ public class BlockEventRegion extends AppliedRegion {
 
     @EventHandler
     public void onBucketEmpty(PlayerBucketEmptyEvent event) {
-        if ((filter.evaluate(event.getBlockClicked().getRelative(event.getBlockFace())).equals(FilterState.DENY) || filter.evaluate(event.getPlayer()).equals(FilterState.DENY))
+        Material newMaterial = (event.getBucket().equals(Material.WATER_BUCKET) ? Material.WATER : (event.getBucket().equals(Material.LAVA_BUCKET) ? Material.LAVA : Material.AIR));
+        if (!event.isCancelled() && (filter.evaluate(newMaterial).equals(FilterState.DENY) || filter.evaluate(event.getPlayer()).equals(FilterState.DENY))
                 && region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }
     }
 
-    @EventHandler
-
     public void onBucketFill(PlayerBucketFillEvent event) {
-        if ((filter.evaluate(event.getBlockClicked().getRelative(event.getBlockFace())).equals(FilterState.DENY) || filter.evaluate(event.getPlayer()).equals(FilterState.DENY))
+        if (!event.isCancelled() && (filter.evaluate(event.getBlockClicked().getRelative(event.getBlockFace())).equals(FilterState.DENY) || filter.evaluate(event.getPlayer()).equals(FilterState.DENY))
                 && region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);

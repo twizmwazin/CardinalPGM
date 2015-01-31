@@ -30,13 +30,10 @@ public class IntersectRegion extends RegionModule {
 
     @Override
     public boolean contains(BlockRegion region) {
-        for (RegionModule reg : getRegions()) {
-            ModuleCollection<RegionModule> working = new ModuleCollection<>();
-            working.addAll(getRegions());
-            if (reg.contains(region)) {
-                working.remove(region);
-                for (RegionModule work : working) {
-                    if (work.contains(region)) return true;
+        for (int i = 0; i < regions.size(); i ++) {
+            for (int k = 0; k < regions.size(); k ++) {
+                if (i != k) {
+                    if (regions.get(i).contains(region) && regions.get(k).contains(region)) return true;
                 }
             }
         }
@@ -69,8 +66,16 @@ public class IntersectRegion extends RegionModule {
     public List<Block> getBlocks() {
         List<Block> results = new ArrayList<>();
         try {
-            for (Block block : regions.get(0).getBlocks()) {
-                if (contains(new BlockRegion(null, block.getX(), block.getY(), block.getZ()))) results.add(block);
+            for (int i = 0; i < regions.size(); i ++) {
+                for (int k = 0; k < regions.size(); k ++) {
+                    if (i != k) {
+                        for (Block block : regions.get(i).getBlocks()) {
+                            if (regions.get(k).contains(new BlockRegion(null, block.getLocation().toVector())) && !results.contains(block)) {
+                                results.add(block);
+                            }
+                        }
+                    }
+                }
             }
         } catch (IndexOutOfBoundsException e) {
         }

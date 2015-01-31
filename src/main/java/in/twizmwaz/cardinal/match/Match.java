@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleFactory;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
+import in.twizmwaz.cardinal.module.modules.appliedRegion.AppliedRegion;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
 import in.twizmwaz.cardinal.module.modules.mapInfo.Info;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
@@ -59,6 +60,8 @@ public class Match {
     public void registerModules() {
         for (ModuleLoadTime time : ModuleLoadTime.getOrdered()) {
             for (Module module : factory.build(time)) {
+                Bukkit.broadcastMessage("ey " + module.toString());
+                if (module instanceof AppliedRegion) Bukkit.broadcastMessage(module.toString());
                 modules.add(module);
                 plugin.getServer().getPluginManager().registerEvents(module, plugin);
             }

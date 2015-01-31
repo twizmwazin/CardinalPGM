@@ -22,6 +22,9 @@ public class BlockFilter extends FilterModule {
         if (object instanceof Block) {
             if (((Block) object).getType().equals(material)) return ALLOW;
             else return DENY;
+        } else if (object instanceof Material) {
+            if (object.equals(material)) return ALLOW;
+            else return DENY;
         } else return ABSTAIN;
     }
 

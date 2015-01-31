@@ -15,6 +15,7 @@ import in.twizmwaz.cardinal.module.modules.portal.Portal;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
+import org.bukkit.Bukkit;
 import org.bukkit.util.Vector;
 import org.jdom2.Element;
 
@@ -63,7 +64,7 @@ public class AppliedRegionBuilder  implements ModuleBuilder {
                     results.add(new UseRegion(region, getFilter(applied.getAttributeValue("use")), message));
                 }
                 if (applied.getAttributeValue("kit") != null) {
-                    results.add(new KitRegion(region, getFilter(applied.getAttributeValue("filter")), message, Kit.getKitByName(applied.getAttributeValue("kit"))));
+                    results.add(new KitRegion(region, (applied.getAttributeValue("filter") != null ? getFilter(applied.getAttributeValue("filter")) : null), message, Kit.getKitByName(applied.getAttributeValue("kit"))));
                 }
             }
         }
