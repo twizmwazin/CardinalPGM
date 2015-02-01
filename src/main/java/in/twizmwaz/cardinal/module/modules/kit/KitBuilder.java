@@ -8,6 +8,8 @@ import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.util.ArmorType;
+import in.twizmwaz.cardinal.util.MiscUtils;
+import in.twizmwaz.cardinal.util.ParseUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -49,42 +51,8 @@ public class KitBuilder implements ModuleBuilder {
             }
             List<KitItem> items = new ArrayList<>(36);
             for (Element item : element.getChildren("item")) {
-                int amount;
-                try {
-                    amount = Integer.parseInt(item.getAttributeValue("amount"));
-                } catch (NumberFormatException e) {
-                    amount = 1;
-                }
-                ItemStack itemStack = new ItemStack(StringUtils.convertStringToMaterial(item.getText()), amount);
-                if (item.getAttributeValue("damage") != null) {
-                    itemStack.setDurability(Short.parseShort(item.getAttributeValue("damage")));
-                }
-                try {
-                    for (String raw : item.getAttributeValue("enchantment").split(";")) {
-                        String[] enchant = raw.split(":");
-                        try {
-                            itemStack.addUnsafeEnchantment(StringUtils.convertStringToEnchantment(enchant[0]), Integer.parseInt(enchant[1]));
-                        } catch (ArrayIndexOutOfBoundsException e) {
-                            itemStack.addUnsafeEnchantment(StringUtils.convertStringToEnchantment(enchant[0]), 1);
-                        }
-                    }
-                } catch (NullPointerException e) {
-
-                }
-                ItemMeta meta = itemStack.getItemMeta();
-                if (item.getAttributeValue("name") != null) {
-                    meta.setDisplayName(ChatColor.translateAlternateColorCodes('`', item.getAttributeValue("name")));
-                }
-                if (item.getAttributeValue("lore") != null) {
-                    ArrayList<String> lore = new ArrayList<>();
-                    for (String raw : item.getAttributeValue("lore").split("\\|")) {
-                        String colored = ChatColor.translateAlternateColorCodes('`', raw);
-                        lore.add(colored);
-                    }
-                    meta.setLore(lore);
-                }
+                ItemStack itemStack = ParseUtils.getItem(item);
                 int slot = item.getAttributeValue("slot") != null ? Integer.parseInt(item.getAttributeValue("slot")) : -1;
-                itemStack.setItemMeta(meta);
                 items.add(new KitItem(itemStack, slot));
             }
             List<KitArmor> armor = new ArrayList<>(4);
