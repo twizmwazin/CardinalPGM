@@ -40,7 +40,7 @@ public class GameHandler {
         World oldMatchWorld = matchWorld;
         cycle.run();
         if (match != null) match.unregisterModules();
-        this.match = new Match(this, cycle.getUuid(), rotation.getCurrent());
+        this.match = new Match(this, cycle.getUuid(), cycle.getMap());
         this.match.registerModules();
         Bukkit.getLogger().info("[CardinalPGM] " + this.match.getModules().size() + " modules loaded.");
         Bukkit.getServer().getPluginManager().callEvent(new CycleCompleteEvent(match));
