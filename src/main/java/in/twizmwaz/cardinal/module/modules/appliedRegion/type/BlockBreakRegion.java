@@ -41,21 +41,4 @@ public class BlockBreakRegion extends AppliedRegion {
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }
     }
-
-    @EventHandler
-    public void onEntityExplode(EntityExplodeEvent event) {
-        Set<Block> blocksToRemove = new HashSet<>();
-        for (Block block : event.blockList()) {
-            if (region.contains(new BlockRegion(null, block.getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
-                if (TntTracker.getWhoPlaced(event.getEntity()) != null) {
-                    if (Bukkit.getOfflinePlayer(TntTracker.getWhoPlaced(event.getEntity())).isOnline()) {
-                        if (filter.evaluate(Bukkit.getPlayer(TntTracker.getWhoPlaced(event.getEntity()))).equals(FilterState.DENY) || filter.evaluate(block).equals(FilterState.DENY)) blocksToRemove.add(block);;
-                    } else blocksToRemove.add(block);
-                } else blocksToRemove.add(block);
-            }
-        }
-        for (Block block : blocksToRemove) {
-            event.blockList().remove(block);
-        }
-    }
 }
