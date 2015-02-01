@@ -30,7 +30,7 @@
         <playerCommand>You must be a player to use this command.</playerCommand>
         <noMapMatch>No maps matched query.</noMapMatch>
         <noTeamMatch>No teams matched query.</noTeamMatch>
-        <noRotsMatch>No rotations matched query.</noRotsMatch>
+        <noRotMatch>No rotations matched query.</noRotMatch>
         <noPlayerMatch>No players matched query.</noPlayerMatch>
         <multiplePlayers>More than one player found! Use {0} for exact matching.</multiplePlayers>
         <unknownError>An unknown error has occurred. Please refer to the server console.</unknownError>
@@ -38,7 +38,7 @@
         <autoJoinSwitch>(you didn't choose a team, so we assumed you wouldn't mind)</autoJoinSwitch>
         <ownCore>You may not damage your own core.</ownCore>
         <ownObjective>You may not damage your own objective.</ownObjective>
-        <enemeyObjective>You may not repair an enemy objective.</enemeyObjective>
+        <enemyObjective>You may not repair an enemy objective.</enemyObjective>
         <repairObjective>This objective may not be repaired.</repairObjective>
         <noPotions>No potion effects</noPotions>
         <teamPlace>Only a member of {0} may place {1} here!</teamPlace>
