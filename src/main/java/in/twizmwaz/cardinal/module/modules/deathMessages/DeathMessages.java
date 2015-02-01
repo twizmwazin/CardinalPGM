@@ -4,6 +4,8 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import in.twizmwaz.cardinal.module.modules.tracker.DamageTracker;
+import in.twizmwaz.cardinal.module.modules.tracker.SpleefTracker;
+import in.twizmwaz.cardinal.module.modules.tracker.event.PlayerSpleefEvent;
 import in.twizmwaz.cardinal.module.modules.tracker.event.TrackerDamageEvent;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
@@ -83,6 +85,9 @@ public class DeathMessages implements Module {
                             } catch (NullPointerException e) {
                                 deathMessage = playerName + ChatColor.GRAY + " hit the ground too hard (" + Math.round(event.getEntity().getFallDistance()) + " blocks)";
                             }
+                        } else if (SpleefTracker.getLastSpleefEvent(event.getEntity()) != null && (System.currentTimeMillis() - SpleefTracker.getLastSpleefEvent(event.getEntity()).getTime() <= 10000)) {
+                            PlayerSpleefEvent spleefEvent = SpleefTracker.getLastSpleefEvent(event.getEntity());
+                            deathMessage = playerName + ChatColor.GRAY + " was spleefed off a high place " + "(" + Math.round(event.getEntity().getFallDistance()) + " blocks)" + " by " + (spleefEvent.getSpleefer().isOnline() ? TeamUtils.getTeamByPlayer((Player) spleefEvent.getSpleefer()).getColor() : ChatColor.AQUA) + spleefEvent.getSpleefer().getName() + ChatColor.GRAY + "'s " + (spleefEvent.getSpleefType().equals(SpleefTracker.Type.TNT) ? "TNT" : (spleefEvent.getSpleeferItem().getType().equals(Material.AIR) ? "fists of fury" : (spleefEvent.getSpleeferItem().getEnchantments() != null && spleefEvent.getSpleeferItem().getEnchantments().size() > 0 ? "enchanted " : "") + spleefEvent.getSpleeferItem().getType().name().replaceAll("_", " ").toLowerCase()));
                         } else {
                             deathMessage = playerName + ChatColor.GRAY + " hit the ground too hard (" + Math.round(event.getEntity().getFallDistance()) + " blocks)";
                         }
@@ -139,6 +144,9 @@ public class DeathMessages implements Module {
                             } catch (NullPointerException e) {
                                 deathMessage = playerName + ChatColor.GRAY + " fell out of the world";
                             }
+                        } else if (SpleefTracker.getLastSpleefEvent(event.getEntity()) != null && (System.currentTimeMillis() - SpleefTracker.getLastSpleefEvent(event.getEntity()).getTime() <= 10000)) {
+                            PlayerSpleefEvent spleefEvent = SpleefTracker.getLastSpleefEvent(event.getEntity());
+                            deathMessage = playerName + ChatColor.GRAY + " was spleefed out of the world by " + (spleefEvent.getSpleefer().isOnline() ? TeamUtils.getTeamByPlayer((Player) spleefEvent.getSpleefer()).getColor() : ChatColor.AQUA) + spleefEvent.getSpleefer().getName() + ChatColor.GRAY + "'s " + (spleefEvent.getSpleefType().equals(SpleefTracker.Type.TNT) ? "TNT" : (spleefEvent.getSpleeferItem().getType().equals(Material.AIR) ? "fists of fury" : (spleefEvent.getSpleeferItem().getEnchantments() != null && spleefEvent.getSpleeferItem().getEnchantments().size() > 0 ? "enchanted " : "") + spleefEvent.getSpleeferItem().getType().name().replaceAll("_", " ").toLowerCase()));
                         } else {
                             deathMessage = playerName + ChatColor.GRAY + " fell out of the world";
                         }

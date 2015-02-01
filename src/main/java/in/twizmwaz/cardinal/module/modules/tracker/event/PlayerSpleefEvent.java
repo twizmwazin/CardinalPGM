@@ -14,12 +14,14 @@ public class PlayerSpleefEvent extends Event {
     private final OfflinePlayer spleefer;
     private final ItemStack spleeferItem;
     private final SpleefTracker.Type spleefType;
+    private final long time;
 
     public PlayerSpleefEvent(Player spleefed, OfflinePlayer spleefer, ItemStack spleeferItem, SpleefTracker.Type spleefType) {
         this.spleefed = spleefed;
         this.spleefer = spleefer;
         this.spleeferItem = spleeferItem;
         this.spleefType = spleefType;
+        this.time = System.currentTimeMillis();
     }
 
     public static HandlerList getHandlerList() {
@@ -44,5 +46,9 @@ public class PlayerSpleefEvent extends Event {
 
     public ItemStack getSpleeferItem() {
         return spleeferItem;
+    }
+
+    public long getTime() {
+        return time;
     }
 }
