@@ -68,7 +68,7 @@ public class DeathMessages implements Module {
                             deathMessage = playerName + ChatColor.GRAY + " was slain";
                         }
                     } else if (cause.equals(DamageCause.FALL)) {
-                        deathMessage = playerName + ChatColor.GRAY + " hit the ground too hard";
+                        deathMessage = playerName + ChatColor.GRAY + " hit the ground too hard (" + Math.round(event.getEntity().getFallDistance()) + " blocks)";
                     } else if (cause.equals(DamageCause.FALLING_BLOCK)) {
                         deathMessage = playerName + ChatColor.GRAY + " was squashed by a falling anvil";
                     } else if (cause.equals(DamageCause.FIRE)) {
