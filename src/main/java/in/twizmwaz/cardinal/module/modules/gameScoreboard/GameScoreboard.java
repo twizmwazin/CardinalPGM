@@ -165,7 +165,7 @@ public class GameScoreboard implements Module {
                         ScoreboardUtils.getNextConversion(objective, slot, objectiveTeam, compact, "", ChatColor.RESET + "", used);
                         slot++;
                     }
-                    ScoreboardUtils.getNextConversion(objective, slot, scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "", team.getColor() + "", used);
+                    ScoreboardUtils.getNextConversion(objective, slot, scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "" + ChatColor.ITALIC, ChatColor.ITALIC + "", used);
                 }
                 if (ScoreModule.matchHasMax()) {
                     objective.getScore(ChatColor.RED + "---- MAX ----").setScore(ScoreModule.max());
