@@ -60,8 +60,6 @@ public class Match {
     public void registerModules() {
         for (ModuleLoadTime time : ModuleLoadTime.getOrdered()) {
             for (Module module : factory.build(time)) {
-                Bukkit.broadcastMessage("ey " + module.toString());
-                if (module instanceof AppliedRegion) Bukkit.broadcastMessage(module.toString());
                 modules.add(module);
                 plugin.getServer().getPluginManager().registerEvents(module, plugin);
             }

@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.module.modules.gameComplete;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.ScoreUpdateEvent;
+import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.GameObjective;
@@ -15,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 
 public class GameComplete implements TaskedModule {
 
@@ -48,7 +50,7 @@ public class GameComplete implements TaskedModule {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerDeath(PlayerDeathEvent event) {
+    public void onPlayerDeath(ScoreboardUpdateEvent event) {
         if (Blitz.matchIsBlitz()) {
             boolean win = true;
             TeamModule winner = null;
