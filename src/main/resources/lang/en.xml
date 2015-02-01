@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<locale lang="en">
+    <error>
+        <restartDuringMatch>You may not restart during a match. Use -f to override.</restartDuringMatch>
+        <cycleDuringMatch>You may not cycle during a match. Use -f to override.</cycleDuringMatch>
+        <matchRunning>Match is already running.</matchRunning>
+        <matchNoResume>Match has finished and may not be resumed.</matchNoResume>
+        <matchNoStart>Match could not be started at this time.</matchNoStart>
+        <matchNoEnd>Match could not be ended at this time.</matchNoEnd>
+        <noSetNext>You may not set the next map when a restart is queued. Use -f to override.</noSetNext>
+        <disabledCommand>This command is disabled. Maps will reload automatically if changes are detected.</disabledCommand>
+        <rotPointInvalid>Specified rotation point is not valid.</rotPointInvalid>
+        <invalidTime>Invalid countdown time specified.</invalidTime>
+        <teamChatDefault>Team chat is already your default channel.</teamChatDefault>
+        <teamChannel>Your team channel could not be resolved. Please try again in a few moments.</teamChannel>
+        <noClass>No class matched query.</noClass>
+        <classRestricted>The {0} class is restricted</classRestricted>
+        <noClassChange>You may not change classes because your current class is sticky.</noClassChange>
+        <classesDisabled>Classes are not enabled on this map.</classesDisabled>
+        <noTeam>You are not on a team.</noTeam>
+        <alreadyObs>You are already on the observing team.</alreadyObs>
+        <alreadyJoined>You have already joined {0}</alreadyJoined>
+        <teamFull>Sorry, {0} is completely full</teamFull>
+        <forceExemption>{0} is exempt from being forced on to teams.</forceExemption>
+        <noShuffle>You may not shuffle teams during a match.</noShuffle>
+        <teamExists>A team by the name of {0} already exists.</teamExists>
+        <mayNotJoin>You may not join during a {0} match.</mayNotJoin>
+        <matchOver>Match is over</matchOver>
+        <cycle>Please wait for the server to cycle</cycle>
+        <playerCommand>You must be a player to use this command.</playerCommand>
+        <noMapMatch>No maps matched query.</noMapMatch>
+        <noTeamMatch>No teams matched query.</noTeamMatch>
+        <noRotsMatch>No rotations matched query.</noRotsMatch>
+        <noPlayerMatch>No players matched query.</noPlayerMatch>
+        <multiplePlayers>More than one player found! Use {0} for exact matching.</multiplePlayers>
+        <unknownError>An unknown error has occurred. Please refer to the server console.</unknownError>
+        <movedForBalance>You were moved to {0} to balance team sizes</movedForBalance>
+        <autoJoinSwitch>(you didn't choose a team, so we assumed you wouldn't mind)</autoJoinSwitch>
+        <ownCore>You may not damage your own core.</ownCore>
+        <ownObjective>You may not damage your own objective.</ownObjective>
+        <enemeyObjective>You may not repair an enemy objective.</enemeyObjective>
+        <repairObjective>This objective may not be repaired.</repairObjective>
+        <noPotions>No potion effects</noPotions>
+        <teamPlace>Only a member of {0} may place {1} here!</teamPlace>
+        <blockPlace>Only {0} may be placed here!</blockPlace>
+        <noCraft>You may not craft {0}.</noCraft>
+        <bedsDisabled>Beds are disabled on this map!</bedsDisabled>
+        <pearlOut>You may not use Ender Pearls to leave your lane</pearlOut>
+        <laneReEnter>You may not re-enter your lane</laneReEnter>
+        <landminePlace>You can't place a landmine there!</landminePlace>
+        <landmineExists>A landmine already exists there!</landmineExists>
+        <landmineProximity>You can't place landmines that close to one another!</landmineProximity>
+        <tutorialTp>WARNING: Unable to safely teleport you to tutorial spot!</tutorialTp>
+        <defuseTntWater>You may not defuse TNT in water.</defuseTntWater>
+        <defuseTntEnemy>You may not defuse enemy TNT.</defuseTntEnemy>
+        <noPermission>You do not have permission.</noPermission>
+        <numberString>Number expected, string received instead.</numberString>
+        <errorRejoin>Uh oh! We had an error. Please try rejoining.</errorRejoin>
+        <serverFull>Server is full</serverFull>
+        <teamsFull>Teams are full</teamsFull>
+        <teansCapacity>Teams are at capacity</teansCapacity>
+        <invalidMatch>Invalid match</invalidMatch>
+        <ratingRange>Rating must be between {0} and {1}, inclusive.</ratingRange>
+        <ratingsDisabled>Map ratings are not enabled on this server.</ratingsDisabled>
+        <lowParticipation>Sorry, you haven't participated in this match enough to rate the map</lowParticipation>
+        <rateWhilePlaying>To rate the map while playing, type {0}</rateWhilePlaying>
+    </error>
+    <generic>
+        <mapSet>Next map set to {0}</mapSet>
+        <markedForReloading>{0} successfully marked for reloading.</markedForReloading>
+        <allMarkedReloading>All maps successfully marked for reloading.</allMarkedReloading>
+        <countdownCancelled>All countdowns cancelled.</countdownCancelled>
+        <autoStart>Auto-start enabled for this match</autoStart>
+        <autoStartDisabled>Auto-start disabled for this match</autoStartDisabled>
+        <skippedOver>Successfully skipped over {0}</skippedOver>
+        <skippedFromTo>Successfully skipped {0} to {1}</skippedFromTo>
+        <skippedTo>Successfully skipped to {0}</skippedTo>
+        <configReload>Configuration successfully reloaded.</configReload>
+        <mapNext>Next map: {0}</mapNext>
+        <rotationSet>Current rotation set to {0}</rotationSet>
+        <rotationReload>Successfully reloaded the rotation</rotationReload>
+        <rotationAppend>Successfully appended {0} to the rotation</rotationAppend>
+        <insertedIndex>{0} successfully inserted at index {1}</insertedIndex>
+        <removedInstance>Successfully removed all instances of {0} from the rotation</removedInstance>
+        <removedMap>Successfully removed map at index {0} from the rotation</removedMap>
+        <playerForce>{0} successfully forced onto {1}</playerForce>
+        <teamShuffle>Teams successfully shuffled.</teamShuffle>
+        <teamAlias>{0} successfully renamed to {1}</teamAlias>
+        <channelSet>Changed default channel to team chat.</channelSet>
+        <messageSent>Message sent.</messageSent>
+        <onTeam>You are on {0}</onTeam>
+        <haveSelected>You have selected {0}</haveSelected>
+        <changeOnSpawn>Changes will take effect on next spawn.</changeOnSpawn>
+        <classCurrent>Current class:</classCurrent>
+        <classList>List all classes by typing '/classes'</classList>
+        <errorsCleared>Errors cleared!</errorsCleared>
+        <noErrors>No errors!</noErrors>
+        <joined>You joined {0}</joined>
+        <worldDefuse>You defused world TNT.</worldDefuse>
+        <defusePlayerTnt>You defused {0}'s TNT.</defusePlayerTnt>
+        <landminePlanted>Landmine planted!</landminePlanted>
+        <ratingSaved>Your rating of {0} for {1} {2} has been saved.</ratingSaved>
+        <ratingChange>You can change your rating later using the hopper, or by typing {0}</ratingChange>
+        <mapRated>Someone on {0} rated this map {1}</mapRated>
+        <mapRe-Rated>Someone on {0} re-rated this map from {2} to {1}</mapRe-Rated>
+        <autoBalance>Teams will be auto-balanced if {0} remains stacked</autoBalance>
+        <youChangedRating>You changed your rating for {1} {2} from {3} to {0}.</youChangedRating>
+    </generic>
+    <misc>
+        <enemy>the enemy</enemy>
+        <fate>fate</fate>
+        <others>others</others>
+        <blocks>{0} blocks</blocks>
+        <ownership>{0}'s {1}</ownership>
+        <and>and</and>
+        <by>by</by>
+        <team>Team</team>
+    </misc>
+    <userInterface>
+        <mapLoaded>Loaded Maps</mapLoaded>
+        <mapObjective>Objective</mapObjective>
+        <mapAuthor>Author</mapAuthor>
+        <mapAuthors>Authors</mapAuthors>
+        <mapContributors>Contributors</mapContributors>
+        <mapRules>Rules</mapRules>
+        <mapMax>Max players</mapMax>
+        <rotationCurrent>Current Rotation</rotationCurrent>
+        <rotationLoaded>Loaded Rotations</rotationLoaded>
+        <matchInfo>Match Info</matchInfo>
+        <time>Time</time>
+        <matchTime>Match Time</matchTime>
+        <goals>Goals</goals>
+        <classes>Classes</classes>
+        <of>{0} of {1}</of>
+        <xmlErrors>XML Errors</xmlErrors>
+        <close>Close</close>
+        <teamSelection>Team/Class Selection</teamSelection>
+        <teamJoinTip>Join the game!</teamJoinTip>
+        <teamPick>Pick your team</teamPick>
+        <teamJoinAuto>Auto Join</teamJoinAuto>
+        <teamJoinAutoLore>Puts you on the team with the fewest players</teamJoinAutoLore>
+        <teamCapacity>Team is at capacity, you can not join.</teamCapacity>
+        <teamCanPick>You are able to pick your team, click to join!</teamCanPick>
+        <teamSelection>Team Selection</teamSelection>
+        <tutorialView>View Tutorial</tutorialView>
+        <tutorialLore>Learn how to play {0}!</tutorialLore>
+        <potionEffects>Potion Effects</potionEffects>
+        <hungerLevel>Hunger level</hungerLevel>
+        <healthLevel>Health level</healthLevel>
+        <oneMap>1 map</oneMap>
+        <maps>{0} maps</maps>
+        <second>{0} second</second>
+        <seconds>{0} seconds</seconds>
+        <matchStarted>The match has started!</matchStarted>
+        <matchStartCancelled>Match start cancelled</matchStartCancelled>
+        <matchOver>Game over!</matchOver>
+        <matchWin>{0} wins!</matchWin>
+        <matchTeamWin>Your team won!</matchTeamWin>
+        <matchTeamLose>Your team lost</matchTeamLose>
+        <matchMaxScoreReached>Score limit of {0} reached</matchMaxScoreReached>
+        <playerJoin>{0} joined the game</playerJoin>
+        <playerLeave>{0} left the game</playerLeave>
+        <serverRestart>Server restarting!</serverRestart>
+        <mapPlaying>Currently playing {0}</mapPlaying>
+        <objectivePlaced>{0} placed {2} for the {1}</objectivePlaced>
+        <objectiveLeaked>{0}'s {1} has leaked!</objectiveLeaked>
+        <objectiveDestroyed>{0}'s {1} destroyed by {2}</objectiveDestroyed>
+        <objectiveTouchedFor>{0} broke a piece of {1} for the {2}</objectiveTouchedFor>
+        <objectiveTouched>{0} broke a piece of {1}</objectiveTouched>
+        <objectiveDamagedFor>{0} damaged {1} for the {2}</objectiveDamagedFor>
+        <objectiveDamaged>{0} damaged {1}</objectiveDamaged>
+        <creditReceived>You will receive credit when this objective is completed.</creditReceived>
+        <objectiveTouchedFor>{0} picked up {1} for the {2}</objectiveTouchedFor>
+        <objectiveTouched>{0} picked up {1}</objectiveTouched>
+        <scoredFor>{0} scored {1} for {2}</scoredFor>
+        <onePoint>1 point</onePoint>
+        <points>{0} points</points>
+        <amountRemaining>You have {0} remaining.</amountRemaining>
+        <oneLife>1 life</oneLife>
+        <lives>{0} lives</lives>
+        <timer>Time Remaining:</timer>
+        <leftLane>You have left your lane</leftLane>
+        <scores>Scores</scores>
+        <typeForMapInfo>type /map for info</typeForMapInfo>
+        <cyclingTimer>Cycling to {0} in {1}</cyclingTimer>
+        <cycledTo>Cycled to {0}</cycledTo>
+        <matchStartingIn>Match starting in {0}</matchStartingIn>
+        <serverRestartingIn>Server restarting in {0}</serverRestartingIn>
+        <tntDefuser>TNT Defuser</tntDefuser>
+        <tntRadiusDefuser>Right-click to defuse TNT in a 5-block radius</tntRadiusDefuser>
+        <rateMap>Rate This Map</rateMap>
+        <terrible>Terrible!</terrible>
+        <bad>Bad</bad>
+        <ok>OK</ok>
+        <good>Good</good>
+        <amazing>Amazing!</amazing>
+        <teamChoose>Choose your team/class</teamChoose>
+    </userInterface>
+</locale>
