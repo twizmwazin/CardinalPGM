@@ -67,7 +67,7 @@ public class MiscUtils {
             clone.put(player, sorting.get(player));
         }
         for (int i = 0; i < sorting.size(); i ++) {
-            int highestNumber = -1;
+            int highestNumber = Integer.MIN_VALUE;
             T highestType = null;
             for (T player : clone.keySet()) {
                 if (clone.get(player) > highestNumber) {

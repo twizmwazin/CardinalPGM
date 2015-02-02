@@ -17,16 +17,11 @@ public class TeamUtils {
 
     public static TeamModule getTeamWithFewestPlayers(Match match) {
         TeamModule result = null;
-        List<Integer> teamValues = new ArrayList<>();
-        for (TeamModule team : match.getModules().getModules(TeamModule.class)) {
-            if (!team.isObserver()) {
-                teamValues.add(team.size());
-            }
-        }
-        Collections.sort(teamValues);
-        for (TeamModule team : match.getModules().getModules(TeamModule.class)) {
-            if (team.size() == teamValues.get(0) && !team.isObserver()) {
+        double percent = Double.POSITIVE_INFINITY;
+        for (TeamModule team : getTeams()) {
+            if ((team.getPlayers().size() / team.getMax()) < percent && !team.isObserver()) {
                 result = team;
+                percent = team.getPlayers().size() / team.getMax();
             }
         }
         return result;

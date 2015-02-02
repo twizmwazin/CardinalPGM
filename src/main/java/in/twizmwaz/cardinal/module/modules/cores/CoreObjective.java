@@ -267,11 +267,11 @@ public class CoreObjective implements GameObjective {
 
     public static CoreObjective getClosestCore(double x, double y, double z) {
         CoreObjective core = null;
-        double closestDistance = -1;
+        double closestDistance = Double.POSITIVE_INFINITY;
         for (Module module : GameHandler.getGameHandler().getMatch().getModules()) {
             if (module instanceof CoreObjective) {
                 BlockRegion center = ((CoreObjective) module).getRegion().getCenterBlock();
-                if (closestDistance == -1 || new Vector(x, y, z).distance(new Vector(center.getX(), center.getY(), center.getZ())) < closestDistance) {
+                if (new Vector(x, y, z).distance(new Vector(center.getX(), center.getY(), center.getZ())) < closestDistance) {
                     core = (CoreObjective) module;
                     closestDistance = new Vector(x, y, z).distance(new Vector(center.getX(), center.getY(), center.getZ()));
                 }
