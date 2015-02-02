@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
 import in.twizmwaz.cardinal.util.ParseUtils;
 import org.bukkit.inventory.ItemStack;
 import org.jdom2.Element;
@@ -24,9 +25,11 @@ public class ScoreboxBuilder implements ModuleBuilder {
                 if (box.getAttributeValue("region") != null) {
                     region = RegionModuleBuilder.getRegion(box);
                 } else {
-                    for (Element child : box.getChildren("region")) {
-                        region = RegionModuleBuilder.getRegion(child);
+                    ModuleCollection<RegionModule> queued = new ModuleCollection<>();
+                    for (Element child : box.getChildren()) {
+                        queued.add(RegionModuleBuilder.getRegion(child));
                     }
+                    region = new UnionRegion(null, queued);
                 }
                 int points = 0;
                 if (box.getAttributeValue("points") != null) {
