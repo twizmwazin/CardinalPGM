@@ -32,26 +32,14 @@ public class RegionModuleBuilder implements ModuleBuilder {
                 for (Element givenChild : givenRegion.getChildren()) {
                     for (Element givenSubChild : givenChild.getChildren()) {
                         for (Element givenChildRegion : givenSubChild.getChildren()) {
-                            RegionModule staged = getRegion(givenChildRegion);
-                            if (staged.getName() != null) {
-                                match.getModules().add(staged);
-                            }
+                            getRegion(givenChildRegion);
                         }
-                        RegionModule staged = getRegion(givenSubChild);
-                        if (staged.getName() != null) {
-                            match.getModules().add(staged);
-                        }
+                        getRegion(givenSubChild);
                     }
-                    RegionModule staged = getRegion(givenChild);
-                    if (staged.getName() != null) {
-                        match.getModules().add(staged);
-                    }
+                    getRegion(givenChild);
                 }
                 if (!givenRegion.getName().equals("apply")) {
-                    RegionModule staged = getRegion(givenRegion);
-                    if (staged.getName() != null) {
-                        match.getModules().add(staged);
-                    }
+                    getRegion(givenRegion);
                 }
             }
         }
@@ -59,40 +47,69 @@ public class RegionModuleBuilder implements ModuleBuilder {
     }
 
     public static RegionModule getRegion(Element element, Document document) {
+        RegionModule region;
         switch (element.getName().toLowerCase()) {
             case "block":
-                return new BlockRegion(new BlockParser(element));
+                region = new BlockRegion(new BlockParser(element));
+                GameHandler.getGameHandler().getMatch().getModules().add(region);
+                return region;
             case "point":
-                return new PointRegion(new PointParser(element));
+                region = new PointRegion(new PointParser(element));
+                GameHandler.getGameHandler().getMatch().getModules().add(region);
+                return region;
             case "circle":
-                return new CircleRegion(new CircleParser(element));
+                region = new CircleRegion(new CircleParser(element));
+                GameHandler.getGameHandler().getMatch().getModules().add(region);
+                return region;
             case "cuboid":
-                return new CuboidRegion(new CuboidParser(element));
+                region = new CuboidRegion(new CuboidParser(element));
+                GameHandler.getGameHandler().getMatch().getModules().add(region);
+                return region;
             case "cylinder":
-                return new CylinderRegion(new CylinderParser(element));
+                region = new CylinderRegion(new CylinderParser(element));
+                GameHandler.getGameHandler().getMatch().getModules().add(region);
+                return region;
             case "empty":
-                return new EmptyRegion(new EmptyParser(element));
+                region = new EmptyRegion(new EmptyParser(element));
+                GameHandler.getGameHandler().getMatch().getModules().add(region);
+                return region;
             case "rectangle":
-                return new RectangleRegion(new RectangleParser(element));
+                region = new RectangleRegion(new RectangleParser(element));
+                GameHandler.getGameHandler().getMatch().getModules().add(region);
+                return region;
             case "sphere":
-                return new SphereRegion(new SphereParser(element));
+                region = new SphereRegion(new SphereParser(element));
+                GameHandler.getGameHandler().getMatch().getModules().add(region);
+                return region;
             case "complement":
-                return new ComplementRegion(new CombinationParser(element, document));
+                region = new ComplementRegion(new CombinationParser(element, document));
+                GameHandler.getGameHandler().getMatch().getModules().add(region);
+                return region;
             case "intersect":
-                return new IntersectRegion(new CombinationParser(element, document));
+                region = new IntersectRegion(new CombinationParser(element, document));
+                GameHandler.getGameHandler().getMatch().getModules().add(region);
+                return region;
             case "negative":
-                return new NegativeRegion(new CombinationParser(element, document));
+                region = new NegativeRegion(new CombinationParser(element, document));
+                GameHandler.getGameHandler().getMatch().getModules().add(region);
+                return region;
             case "union":
             case "regions":
                 CombinationParser parser = new CombinationParser(element, document);
-                for (RegionModule region : parser.getRegions()) {
-                    GameHandler.getGameHandler().getMatch().getModules().add(region);
+                for (RegionModule regionChild : parser.getRegions()) {
+                    GameHandler.getGameHandler().getMatch().getModules().add(regionChild);
                 }
-                return new UnionRegion(parser);
+                region = new UnionRegion(parser);
+                GameHandler.getGameHandler().getMatch().getModules().add(region);
+                return region;
             case "translate":
-                return new TranslatedRegion(new TranslateParser(element));
+                region = new TranslatedRegion(new TranslateParser(element));
+                GameHandler.getGameHandler().getMatch().getModules().add(region);
+                return region;
             case "mirror":
-                return new MirroredRegion(new MirrorParser(element));
+                region = new MirroredRegion(new MirrorParser(element));
+                GameHandler.getGameHandler().getMatch().getModules().add(region);
+                return region;
             case "region":
                 if (element.getAttributeValue("name") != null) {
                     for (RegionModule regionModule : GameHandler.getGameHandler().getMatch().getModules().getModules(RegionModule.class)) {
@@ -118,7 +135,7 @@ public class RegionModuleBuilder implements ModuleBuilder {
     public static RegionModule getRegion(Element element) {
         return getRegion(element, GameHandler.getGameHandler().getMatch().getDocument());
     }
-    
+
     public static RegionModule getRegion(String string) {
         for (RegionModule regionModule : GameHandler.getGameHandler().getMatch().getModules().getModules(RegionModule.class)) {
             if (string.equalsIgnoreCase(regionModule.getName())) return regionModule;
@@ -126,4 +143,3 @@ public class RegionModuleBuilder implements ModuleBuilder {
         return null;
     }
 }
-
