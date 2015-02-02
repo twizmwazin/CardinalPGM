@@ -14,6 +14,7 @@ public class TrackerDamageEvent extends Event {
     private final OfflinePlayer damager;
     private final ItemStack damagerItem;
     private final DamageTracker.Type damageType;
+    private DamageTracker.SpecificType specificType = null;
 
     public TrackerDamageEvent(Player player, OfflinePlayer damager, ItemStack damagerItem, DamageTracker.Type damageType) {
         this.player = player;
@@ -44,5 +45,17 @@ public class TrackerDamageEvent extends Event {
 
     public ItemStack getDamagerItem() {
         return damagerItem;
+    }
+
+    public DamageTracker.SpecificType getSpecificType() {
+        return specificType;
+    }
+
+    public boolean hasSpecificType() {
+        return specificType != null;
+    }
+
+    public void setSpecificType(DamageTracker.SpecificType specificType) {
+        this.specificType = specificType;
     }
 }
