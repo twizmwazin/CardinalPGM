@@ -39,6 +39,7 @@ import in.twizmwaz.cardinal.module.modules.rage.RageBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.respawn.RespawnModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.scorebox.ScoreboxBuilder;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.tasker.TaskerModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.team.TeamModuleBuilder;
@@ -154,5 +155,6 @@ public class ModuleFactory {
         builderClasses.add(PortalBuilder.class);
         builderClasses.add(ClassModuleBuilder.class);
         builderClasses.add(TrackerBuilder.class);
+        builderClasses.add(ScoreboxBuilder.class);
     }
 }

@@ -1,0 +1,57 @@
+package in.twizmwaz.cardinal.module.modules.scorebox;
+
+import in.twizmwaz.cardinal.match.Match;
+import in.twizmwaz.cardinal.module.ModuleBuilder;
+import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
+import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
+import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
+import in.twizmwaz.cardinal.util.ParseUtils;
+import org.bukkit.inventory.ItemStack;
+import org.jdom2.Element;
+
+import java.util.HashMap;
+
+public class ScoreboxBuilder implements ModuleBuilder {
+
+    @Override
+    public ModuleCollection load(Match match) {
+        ModuleCollection<Scorebox> results = new ModuleCollection<>();
+        for (Element score : match.getDocument().getRootElement().getChildren("score")) {
+            for (Element box : score.getChildren("box")) {
+                RegionModule region = null;
+                if (box.getAttributeValue("region") != null) {
+                    region = RegionModuleBuilder.getRegion(box);
+                } else {
+                    for (Element child : box.getChildren("region")) {
+                        region = RegionModuleBuilder.getRegion(child);
+                    }
+                }
+                int points = 0;
+                if (box.getAttributeValue("points") != null) {
+                    points = Integer.parseInt(box.getAttributeValue("points"));
+                } else if (box.getAttributeValue("value") != null) {
+                    points = Integer.parseInt(box.getAttributeValue("value"));
+                }
+                FilterModule filter = null;
+                if (box.getAttributeValue("filter") != null) {
+                    filter = FilterModuleBuilder.getFilter(box.getAttributeValue("filter"));
+                } else {
+                    for (Element child : box.getChildren("filter")) {
+                        filter = FilterModuleBuilder.getFilter(child);
+                    }
+                }
+                HashMap<ItemStack, Integer> redeemables = new HashMap<>();
+                for (Element child : box.getChildren("redeemables")) {
+                    for (Element item : child.getChildren("item")) {
+                        redeemables.put(ParseUtils.getItem(item), (item.getAttributeValue("points") != null ? Integer.parseInt(item.getAttributeValue("points")) : (item.getAttributeValue("value") != null ? Integer.parseInt(item.getAttributeValue("value")) : 0)));
+                    }
+                }
+                results.add(new Scorebox(region, points, filter, redeemables));
+            }
+        }
+        return results;
+    }
+
+}
