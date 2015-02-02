@@ -58,7 +58,7 @@
         <errorRejoin>Uh oh! Hemos tenido un error. Por favor prueba relogueando.</errorRejoin>
         <serverFull>El servidor está lleno</serverFull>
         <teamsFull>Los equipos están llenos</teamsFull>
-        <teansCapacity>Los equipos están en su máxima capacidad</teansCapacity>
+        <teamsCapacity>Los equipos están en su máxima capacidad</teamsCapacity>
         <invalidMatch>Partida no válida</invalidMatch>
         <ratingRange>La puntuación debe estar entre {0} y {1}, incluyéndolos.</ratingRange>
         <ratingsDisabled>Las puntuaciones de los mapas no están activadas en este servidor.</ratingsDisabled>

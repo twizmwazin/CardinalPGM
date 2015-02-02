@@ -58,7 +58,7 @@
         <errorRejoin>Uh oh! We had an error. Please try rejoining.</errorRejoin>
         <serverFull>Server is full</serverFull>
         <teamsFull>Teams are full</teamsFull>
-        <teansCapacity>Teams are at capacity</teansCapacity>
+        <teamsCapacity>Teams are at capacity</teamsCapacity>
         <invalidMatch>Invalid match</invalidMatch>
         <ratingRange>Rating must be between {0} and {1}, inclusive.</ratingRange>
         <ratingsDisabled>Map ratings are not enabled on this server.</ratingsDisabled>
