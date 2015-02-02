@@ -7,11 +7,13 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
@@ -27,57 +29,50 @@ public class Blockdrops implements Module {
     }
 
     private final RegionModule region;
-    private final ModuleCollection<FilterModule> filter;
+    private final FilterModule filter;
     private final Set<ItemStack> drops;
     private final Material replace;
     private final int experience;
-    private final boolean wrongtool;
+    private final boolean wrongTool;
 
-    protected Blockdrops(final RegionModule region, final ModuleCollection<FilterModule> filter, final Set<ItemStack> drops, final Material replace, final int experience, final boolean wrongtool) {
+    protected Blockdrops(final RegionModule region, final FilterModule filter, final Set<ItemStack> drops, final Material replace, final int experience, final boolean wrongTool) {
         this.region = region;
         this.filter = filter;
         this.drops = drops;
         this.replace = replace;
         this.experience = experience;
-        this.wrongtool = wrongtool;
+        this.wrongTool = wrongTool;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event) {
-        Player player = event.getPlayer();
-        Block blockBroken = event.getBlock();
-        boolean proceed = true;
-        for (FilterModule filter : this.filter) {
-            if ((!filter.evaluate(player).equals(FilterState.DENY) && !filter.evaluate(blockBroken).equals(FilterState.DENY))) {
-                proceed = false;
-            }
-        }
-        if (proceed) {
-            if (region != null) {
-                if (region.contains(new BlockRegion(null, blockBroken.getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
-                    if (!wrongtool) {
-                        if (blockBroken.getDrops() != null) {
-                            Blockdrop(blockBroken);
+        if (!event.isCancelled()) {
+            Player player = event.getPlayer();
+            Block block = event.getBlock();
+            if (!filter.evaluate(player).equals(FilterState.DENY) && !filter.evaluate(block).equals(FilterState.DENY)) {
+                if (region == null || region.contains(new BlockRegion(null, block.getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
+                    if (!this.wrongTool) {
+                        if (block.getDrops() != null && block.getDrops().size() > 0) {
+                            for (ItemStack drop : this.drops) {
+                                GameHandler.getGameHandler().getMatchWorld().dropItemNaturally(block.getLocation(), drop);
+                            }
+                            if (this.experience != 0) {
+                                ExperienceOrb xp = GameHandler.getGameHandler().getMatchWorld().spawn(block.getLocation(), ExperienceOrb.class);
+                                xp.setExperience(this.experience);
+                            }
                         }
                     } else {
-                        Blockdrop(blockBroken);
+                        Bukkit.getLogger().info("5");
+                        for (ItemStack drop : this.drops) {
+                            GameHandler.getGameHandler().getMatchWorld().dropItemNaturally(block.getLocation(), drop);
+                        }
+                        ExperienceOrb xp = GameHandler.getGameHandler().getMatchWorld().spawn(block.getLocation(), ExperienceOrb.class);
+                        xp.setExperience(this.experience);
                     }
                     event.setCancelled(true);
+                    block.setType(replace);
                 }
-
             }
         }
     }
-
-    private void Blockdrop(Block block){
-        for (ItemStack item : drops) {
-            if (item != null)
-                block.getWorld().dropItemNaturally(block.getLocation(), item);
-        }
-        block.setType(replace);
-
-        ExperienceOrb xp = GameHandler.getGameHandler().getMatchWorld().spawn(block.getLocation(), ExperienceOrb.class);
-        xp.setExperience(experience);
-    }
-
 }

@@ -11,19 +11,18 @@ import static in.twizmwaz.cardinal.module.modules.filter.FilterState.*;
 public class BlockFilter extends FilterModule {
 
     private final Material material;
+    private final int damageValue;
 
     public BlockFilter(final BlockFilterParser parser) {
         super(parser.getName());
         this.material = parser.getMaterial();
+        this.damageValue = parser.getDamageValue();
     }
 
     @Override
     public FilterState evaluate(final Object object) {
         if (object instanceof Block) {
-            if (((Block) object).getType().equals(material)) return ALLOW;
-            else return DENY;
-        } else if (object instanceof Material) {
-            if (object.equals(material)) return ALLOW;
+            if (((Block) object).getType().equals(material) && (int) ((Block) object).getState().getData().getData() == damageValue) return ALLOW;
             else return DENY;
         } else return ABSTAIN;
     }

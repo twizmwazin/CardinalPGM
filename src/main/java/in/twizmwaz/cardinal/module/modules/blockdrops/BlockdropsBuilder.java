@@ -20,18 +20,16 @@ public class BlockdropsBuilder implements ModuleBuilder {
 
     @Override
     public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection<>();
+        ModuleCollection<Blockdrops> results = new ModuleCollection<>();
         for (Element element : match.getDocument().getRootElement().getChildren("blockdrops")) {
             for (Element rule : element.getChildren("rule")) {
                 RegionModule region = null;
-                for (Element regionElement : rule.getChildren("region")) {
-                    ModuleCollection<RegionModule> regions = new ModuleCollection<RegionModule>();
-                    regions.add(RegionModuleBuilder.getRegion(regionElement));
-                    region = new UnionRegion(null, regions);
+                if (rule.getChild("region") != null) {
+                    region = RegionModuleBuilder.getRegion(rule.getChild("region"));
                 }
-                ModuleCollection<FilterModule> filters = new ModuleCollection<>();
-                for (Element filter : rule.getChildren("filter")) {
-                    filters.add(FilterModuleBuilder.getFilter(filter.getChildren().get(0)));
+                FilterModule filter = null;
+                if (rule.getChild("filter") != null) {
+                    filter = FilterModuleBuilder.getFilter(rule.getChild("filter").getChildren().get(0));
                 }
                 Set<ItemStack> drops = new HashSet<ItemStack>(128);
                 for (Element items : rule.getChildren("drops")) {
@@ -47,11 +45,11 @@ public class BlockdropsBuilder implements ModuleBuilder {
                 for (Element experienceElement : rule.getChildren("experience")) {
                     experience = Integer.parseInt(experienceElement.getText());
                 }
-                boolean wrongtool = false;
-                for (Element wrongtoolElement : rule.getChildren("wrongtool")) {
-                    wrongtool = Boolean.parseBoolean(wrongtoolElement.getText());
+                boolean wrongTool = false;
+                for (Element wrongToolElement : rule.getChildren("wrongtool")) {
+                    wrongTool = Boolean.parseBoolean(wrongToolElement.getText());
                 }
-                results.add(new Blockdrops(region, filters, drops, replace, experience, wrongtool));
+                results.add(new Blockdrops(region, filter, drops, replace, experience, wrongTool));
             }
 
         }
