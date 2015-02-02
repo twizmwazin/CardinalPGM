@@ -102,7 +102,7 @@
         <ratingSaved>Your rating of {0} for {1} {2} has been saved.</ratingSaved>
         <ratingChange>You can change your rating later using the hopper, or by typing {0}</ratingChange>
         <mapRated>Someone on {0} rated this map {1}</mapRated>
-        <mapRe-Rated>Someone on {0} re-rated this map from {2} to {1}</mapRe-Rated>
+        <mapReRated>Someone on {0} re-rated this map from {2} to {1}</mapReRated>
         <autoBalance>Teams will be auto-balanced if {0} remains stacked</autoBalance>
         <youChangedRating>You changed your rating for {1} {2} from {3} to {0}.</youChangedRating>
     </generic>

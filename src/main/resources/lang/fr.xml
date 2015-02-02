@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<locale lang="en">
+<locale lang="fr">
     <error>
         <restartDuringMatch>Vous ne pouvez pas relancer la partie pendant un match. Utilisez -f pour forcer l'opération.</restartDuringMatch>
         <cycleDuringMatch>Vous ne pouvez pas passer au match suivant pendant un match. Utilisez -f pour forcer l'opération.</cycleDuringMatch>
@@ -102,7 +102,7 @@
         <ratingSaved>Votre avis de {0} pour {1} {2} a été enregistré.</ratingSaved>
         <ratingChange>Vous pouvez modifier votre avis ultérieurement à l'aide de l'entonnoir, ou en écrivant {0}</ratingChange>
         <mapRated>Quelqu'un sur {0} a évalué cette map {1}</mapRated>
-        <mapRe-Rated>Une personne sur {0} a réévalué cette map de {2} à {1}</mapRe-Rated>
+        <mapReRated>Une personne sur {0} a réévalué cette map de {2} à {1}</mapReRated>
         <autoBalance>Les équipes seront auto-équilibrées si la répartition des joueurs reste disproportionnée en faveur de {0}</autoBalance>
         <youChangedRating>Vous avez réévalué {1} {2} de {3} à {0}.</youChangedRating>
     </generic>

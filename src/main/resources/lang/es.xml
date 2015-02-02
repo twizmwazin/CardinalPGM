@@ -102,7 +102,7 @@
         <ratingSaved>Tu puntuación de {0} para {1} {2} ha sido guardada.</ratingSaved>
         <ratingChange>Puedes cambiar tu puntuación luego usando la tolva, o escribiendo {0}</ratingChange>
         <mapRated>Alguien en {0} puntuó este mapa con {1}</mapRated>
-        <mapRe-Rated>Alguien en {0} puntuó de nuevo este mapa de {2} a {1}</mapRe-Rated>
+        <mapReRated>Alguien en {0} puntuó de nuevo este mapa de {2} a {1}</mapReRated>
         <autoBalance>Los equipos serán automáticamente balanceados si {0} continúa stackeado</autoBalance>
         <youChangedRating>Has cambiado tu puntuación para {1} {2} de {3} a {0}.</youChangedRating>
     </generic>
