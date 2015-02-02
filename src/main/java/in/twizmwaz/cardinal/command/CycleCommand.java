@@ -26,6 +26,8 @@ public class CycleCommand {
             }
         } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING))
             throw new CommandException("Cannot cycle while the match is starting!");
+        if (GameHandler.getGameHandler().getCycleTimer() != null)
+            GameHandler.getGameHandler().getCycleTimer().setCancelled(true);
         try {
             GameHandler.getGameHandler().startCycleTimer(cmd.getInteger(0));
         } catch (IndexOutOfBoundsException e) {
