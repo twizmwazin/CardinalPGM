@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.GenericFilterParser;
 
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ABSTAIN;
 import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ALLOW;
 import static in.twizmwaz.cardinal.module.modules.filter.FilterState.DENY;
 
@@ -21,6 +22,7 @@ public class AllowFilter extends FilterModule {
     public FilterState evaluate(final Object object) {
         for (FilterModule child : children) {
             if (child.evaluate(object).equals(ALLOW)) return ALLOW;
+            if (child.evaluate(object).equals(ABSTAIN)) return ABSTAIN;
         }
         return DENY;
     }
