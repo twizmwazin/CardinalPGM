@@ -10,11 +10,12 @@ import java.util.ArrayList;
 
 public class ParseUtils {
     public static ItemStack getItem(Element element) {
-        int amount;
-        try {
-            amount = Integer.parseInt(element.getAttributeValue("amount"));
-        } catch (NumberFormatException e) {
-            amount = 1;
+        int amount = 1;
+        if (element.getAttributeValue("amount") != null) {
+            try {
+                amount = Integer.parseInt(element.getAttributeValue("amount"));
+            } catch (NumberFormatException e) {
+            }
         }
         ItemStack itemStack = new ItemStack(Material.matchMaterial(element.getText()), amount);
         if (element.getAttributeValue("damage") != null) {
