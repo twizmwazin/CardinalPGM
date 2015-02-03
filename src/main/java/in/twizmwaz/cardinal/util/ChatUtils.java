@@ -11,7 +11,7 @@ public class ChatUtils {
 
     public static String getWarningMessage(String msg) {
         if (msg == null) return null;
-        else return ChatColor.YELLOW + " \u26A0 " + ChatColor.RED + msg;
+        else return ChatColor.YELLOW + " \u26A0 " + ChatColor.RED + ChatColor.translateAlternateColorCodes('`', msg);
     }
 
 }
