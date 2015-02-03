@@ -36,7 +36,6 @@ public class ProximityAlarmBuilder implements ModuleBuilder {
                     region = RegionModuleBuilder.getRegion(subElement.getChild("region"));
                 } else if (subElement.getAttributeValue("region") != null) {
                     region = RegionModuleBuilder.getRegion(subElement.getAttributeValue("region"));
-                    Bukkit.getLogger().log(Level.INFO, "BUILDER: REGION " + subElement.getAttributeValue("region"));
                 }
                 FilterModule detect = null;
                 if (subElement.getChild("detect") != null) {
