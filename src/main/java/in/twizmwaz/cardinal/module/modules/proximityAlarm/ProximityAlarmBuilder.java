@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.proximityAlarm;
 
+import com.sk89q.minecraft.util.commands.ChatColor;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
@@ -25,6 +26,7 @@ public class ProximityAlarmBuilder implements ModuleBuilder {
                 } else if (element.getAttributeValue("message") != null) {
                     message = element.getAttributeValue("message");
                 }
+                if (message != null) message = ChatColor.translateAlternateColorCodes('`', message);
                 int flareradius = 4;
                 if (subElement.getAttributeValue("flare-radius") != null) {
                     flareradius = Integer.parseInt(subElement.getAttributeValue("flare-radius"));

@@ -66,7 +66,7 @@ public class Rotation {
                     List<String> rules = new ArrayList<>();
                     for (Element rulesElement : xml.getRootElement().getChildren("rules")) {
                         for (Element rule : rulesElement.getChildren()) {
-                            rules.add(rule.getText());
+                            rules.add(rule.getText().trim());
                         }
                     }
                     int maxPlayers = 0;

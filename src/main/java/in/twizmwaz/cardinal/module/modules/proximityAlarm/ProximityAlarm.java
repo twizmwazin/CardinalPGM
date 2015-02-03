@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.scoreboard.Team;
 
 import java.util.logging.Level;
 
@@ -39,11 +40,10 @@ public class ProximityAlarm implements Module{
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (region.contains(new BlockRegion(null, event.getTo().toVector())) && !region.contains(new BlockRegion(null, event.getFrom().toVector())) && !detect.evaluate(event.getPlayer()).equals(FilterState.DENY)
-                && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() && GameHandler.getGameHandler().getMatch().isRunning()) {
+        if (region.contains(new BlockRegion(null, event.getTo().toVector())) && !region.contains(new BlockRegion(null, event.getFrom().toVector())) && !detect.evaluate(event.getPlayer()).equals(FilterState.DENY) && TeamUtils.getTeamByPlayer(event.getPlayer()) != null && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() && GameHandler.getGameHandler().getMatch().isRunning()) {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                if (notify.evaluate(player).equals(FilterState.ALLOW)) {
-                    player.sendMessage(ChatColor.RED + ChatColor.translateAlternateColorCodes('`',message));
+                if (!notify.evaluate(player).equals(FilterState.DENY)) {
+                    player.sendMessage(ChatColor.RED + message);
                 }
             }
         }

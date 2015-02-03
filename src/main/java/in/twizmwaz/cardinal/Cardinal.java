@@ -6,13 +6,17 @@ import in.twizmwaz.cardinal.chat.AdminChat;
 import in.twizmwaz.cardinal.chat.GlobalChat;
 import in.twizmwaz.cardinal.chat.TeamChat;
 import in.twizmwaz.cardinal.command.*;
+import in.twizmwaz.cardinal.permissions.Setting;
+import in.twizmwaz.cardinal.permissions.SettingValue;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.*;
 import java.util.logging.Level;
 
 public class Cardinal extends JavaPlugin {
@@ -75,7 +79,33 @@ public class Cardinal extends JavaPlugin {
     }
 
     public void onEnable() {
+        FileConfiguration config = getConfig();
+        if (!config.contains("settings")) {
+//            config.addDefault("settings", Arrays.asList("deathmessages"));
+        }
+        config.options().copyDefaults(true);
         saveDefaultConfig();
+
+        if (config.contains("settings")) {
+            for (String settingName : config.getStringList("settings")) {
+                List<String> names = new ArrayList<>();
+                Set<SettingValue> values = new HashSet<>();
+                names.add(settingName.trim());
+                if (config.contains("setting." + settingName + ".aliases")) {
+                    for (String alias : config.getStringList("setting." + settingName + ".aliases")) {
+                        names.add(alias.trim());
+                    }
+                }
+                if (config.contains("setting." + settingName + ".values")) {
+                    for (String valueName : config.getStringList("setting." + settingName + ".values")) {
+                        if (valueName.contains("[default]")) values.add(new SettingValue(valueName.replaceAll("[default]", "").trim(), true));
+                        else values.add(new SettingValue(valueName.trim(), false));
+                    }
+                }
+                new Setting(names, values);
+            }
+        }
+
         try {
             gameHandler = new GameHandler(this);
         } catch (RotationLoadException e) {
