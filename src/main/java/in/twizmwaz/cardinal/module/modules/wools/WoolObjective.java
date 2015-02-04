@@ -191,7 +191,7 @@ public class WoolObjective implements GameObjective {
 
     @EventHandler
     public void onCraftWool(CraftItemEvent event) {
-        if (event.getRecipe().getResult().equals(new ItemStack(Material.WOOL, 1, color.getData())) && this.craftable) {
+        if (event.getRecipe().getResult().equals(new ItemStack(Material.WOOL, 1, color.getData())) && !this.craftable) {
             event.setCancelled(true);
         }
     }
