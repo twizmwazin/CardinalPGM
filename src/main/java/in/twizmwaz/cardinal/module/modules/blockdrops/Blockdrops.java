@@ -55,32 +55,35 @@ public class Blockdrops implements Module {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event) {
         if (!event.isCancelled()) {
-            Player player = event.getPlayer();
-            Block block = event.getBlock();
-            if (!filter.evaluate(player).equals(FilterState.DENY) && !filter.evaluate(block).equals(FilterState.DENY)) {
-                if (region == null || region.contains(new BlockRegion(null, block.getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
-                    if (!this.wrongTool) {
-                        if (block.getDrops() != null && block.getDrops().size() > 0) {
+            if (filter != null) {
+                Player player = event.getPlayer();
+                Block block = event.getBlock();
+                if (!filter.evaluate(player).equals(FilterState.DENY) && !filter.evaluate(block).equals(FilterState.DENY)) {
+                    if (region == null || region.contains(new BlockRegion(null, block.getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
+                        if (!this.wrongTool) {
+                            if (block.getDrops() != null && block.getDrops().size() > 0) {
+                                for (ItemStack drop : this.drops) {
+                                    GameHandler.getGameHandler().getMatchWorld().dropItemNaturally(block.getLocation(), drop);
+                                }
+                                if (this.experience != 0) {
+                                    ExperienceOrb xp = GameHandler.getGameHandler().getMatchWorld().spawn(block.getLocation(), ExperienceOrb.class);
+                                    xp.setExperience(this.experience);
+                                }
+                            }
+                        } else {
                             for (ItemStack drop : this.drops) {
                                 GameHandler.getGameHandler().getMatchWorld().dropItemNaturally(block.getLocation(), drop);
                             }
-                            if (this.experience != 0) {
-                                ExperienceOrb xp = GameHandler.getGameHandler().getMatchWorld().spawn(block.getLocation(), ExperienceOrb.class);
-                                xp.setExperience(this.experience);
-                            }
+                            ExperienceOrb xp = GameHandler.getGameHandler().getMatchWorld().spawn(block.getLocation(), ExperienceOrb.class);
+                            xp.setExperience(this.experience);
                         }
-                    } else {
-                        for (ItemStack drop : this.drops) {
-                            GameHandler.getGameHandler().getMatchWorld().dropItemNaturally(block.getLocation(), drop);
-                        }
-                        ExperienceOrb xp = GameHandler.getGameHandler().getMatchWorld().spawn(block.getLocation(), ExperienceOrb.class);
-                        xp.setExperience(this.experience);
+                        event.setCancelled(true);
+                        block.setType(replace);
                     }
-                    event.setCancelled(true);
-                    block.setType(replace);
                 }
             }
         }
+
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
