@@ -50,7 +50,6 @@ public class CylinderRegion extends RegionModule {
 
     @Override
     public boolean contains(BlockRegion region) {
-        Bukkit.getLogger().info(((Math.hypot(Math.abs(region.getX() - getBaseX()), Math.abs(region.getZ() - getBaseZ())) <= getRadius()) && NumUtils.checkInterval(region.getY(), getBaseY(), getBaseY() + getHeight())) + "");
         return (Math.hypot(Math.abs(region.getX() - getBaseX()), Math.abs(region.getZ() - getBaseZ())) <= getRadius()) && NumUtils.checkInterval(region.getY(), getBaseY(), getBaseY() + getHeight());
     }
 
