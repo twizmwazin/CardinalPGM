@@ -1,7 +1,7 @@
 name: ${plugin.name}
 description: ${project.description}
 main: ${plugin.mainClass}
-version: ${project.version}
+version: ${project.version}-${describe}
 authors: [twiz_mwazin]
 prefix: CardinalPGM
 commands:
