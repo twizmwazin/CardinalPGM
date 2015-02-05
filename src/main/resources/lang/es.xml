@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <locale lang="es">
     <error>
-        <restartDuringMatch>No puedes reiniciar durante una partida. Usa -f para forzar.</restartDuringMatch>
-        <cycleDuringMatch>No puedes rotar durante una partida. Utiliza -f para forzar.</cycleDuringMatch>
+        <restartDuringMatch>No puedes reiniciar el servidor durante una partida. Usa -f para forzar el reinicio.</restartDuringMatch>
+        <cycleDuringMatch>No puedes rotar durante una partida. Utiliza -f para forzar la rotacion.</cycleDuringMatch>
         <matchRunning>La partida ya ha comenzado.</matchRunning>
         <matchNoResume>La partida ha terminado y no se puede reanudar.</matchNoResume>
-        <matchNoStart>La partida no se pudo iniciar en este momento.</matchNoStart>
-        <matchNoEnd>La partida no pudo ser terminada en este momento.</matchNoEnd>
-        <noSetNext>No puedes establecer el siguiente mapa cuando hay un reinicio programado. Usa -f para sobreescribir.</noSetNext>
-        <disabledCommand>Este comando está inhabilitado. Los mapas se volverán a cargar automáticamente si se detectan cambios.</disabledCommand>
+        <matchNoStart>La partida no se ha podido iniciar.</matchNoStart>
+        <matchNoEnd>La partida no se ha podido finalizar.</matchNoEnd>
+        <noSetNext>No puedes establecer el siguiente mapa cuando ya hay un reinicio programado. Usa -f para sobreescribir.</noSetNext>
+        <disabledCommand>Este comando está inhabilitado. Los mapas se volverán a cargar automáticamente en el caso de que se detectan cambios.</disabledCommand>
         <rotPointInvalid>El punto de rotación especificado no es válido.</rotPointInvalid>
         <invalidTime>La cuenta atrás especificada es inválida.</invalidTime>
-        <teamChatDefault>El chat de equipo ya es su chat por defecto.</teamChatDefault>
-        <teamChannel>El chat de tu equipo no ha podido ser determinado. Por favor inténtalo de nuevo dentro de unos instantes.</teamChannel>
+        <teamChatDefault>El chat de equipo ya esta habilitado.</teamChatDefault>
+        <teamChannel>El chat de tu equipo no ha podido ser determinado. Por favor inténtalo de nuevo dentro de unos momentos.</teamChannel>
         <noClass>No se ha encontrado ninguna clase con esos criterios.</noClass>
         <classRestricted>La clase {0} está restringida</classRestricted>
-        <noClassChange>No puedes cambiarte de clase porque tu clase actual es fija.</noClassChange>
+        <noClassChange>No puedes cambiarte de clase debido a que tu actual clase es fija.</noClassChange>
         <classesDisabled>Las clases no están disponibles en este mapa.</classesDisabled>
         <noTeam>No estás en un equipo.</noTeam>
-        <alreadyObs>Ya estás en el equipo observador.</alreadyObs>
+        <alreadyObs>Ya estás observando.</alreadyObs>
         <alreadyJoined>Ya estás en {0}</alreadyJoined>
         <teamFull>Lo sentimos, {0} está completamente lleno</teamFull>
         <forceExemption>{0} está exento de ser forzado a los equipos.</forceExemption>
-        <noShuffle>No debes mezclar los equipos durante una partida.</noShuffle>
+        <noShuffle>No puedes mezclar los equipos durante una partida.</noShuffle>
         <teamExists>Un equipo con el nombre {0} ya existe.</teamExists>
         <mayNotJoin>No puedes unirte durante una partida de {0}.</mayNotJoin>
         <matchOver>La partida ha finalizado</matchOver>
