@@ -21,6 +21,7 @@ import java.util.logging.Level;
 
 public class Cardinal extends JavaPlugin {
 
+    private static Cardinal instance;
     private static GameHandler gameHandler;
     private CommandsManager<CommandSender> commands;
 
@@ -66,7 +67,7 @@ public class Cardinal extends JavaPlugin {
         cmdRegister.register(TeamCommand.class);
         cmdRegister.register(ModesCommand.class);
         cmdRegister.register(ClassCommands.class);
-
+        cmdRegister.register(CardinalCommand.class);
         for (String cmd : AdminChat.commands) {
             getCommand(cmd).setExecutor(new AdminChat());
         }
@@ -79,6 +80,7 @@ public class Cardinal extends JavaPlugin {
     }
 
     public void onEnable() {
+        instance = this;
         FileConfiguration config = getConfig();
         if (!config.contains("settings")) {
 //            config.addDefault("settings", Arrays.asList("deathmessages"));
@@ -105,7 +107,6 @@ public class Cardinal extends JavaPlugin {
                 new Setting(names, values);
             }
         }
-
         try {
             gameHandler = new GameHandler(this);
         } catch (RotationLoadException e) {
@@ -122,5 +123,9 @@ public class Cardinal extends JavaPlugin {
 
     public JavaPlugin getPlugin() {
         return this;
+    }
+
+    public static Cardinal getInstance() {
+        return instance;
     }
 }
