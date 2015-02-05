@@ -130,7 +130,7 @@ public class Blockdrops implements Module {
         public void onEntiyChangeBlock (EntityChangeBlockEvent event) {
             if (event.getEntity() instanceof FallingBlock) {
                 if (event.getEntity().hasMetadata("falling-block")) {
-                    if (event.getEntity().getMetadata("falling-block").get(0).asInt() <= new Random().nextInt() * this.fallchance) {
+                    if (new Random().nextGaussian() <= this.landchance) {
                         event.setCancelled(true);
                     }
                 }
