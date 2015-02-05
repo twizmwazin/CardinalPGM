@@ -22,6 +22,9 @@ public class JoinCommand {
             sender.sendMessage(ChatColor.RED + "Match is over " + ChatColor.DARK_AQUA + "- " + ChatColor.GOLD + "Please wait for the server to cycle");
             return;
         }
+        if (cmd.argsLength() == 0 && !TeamUtils.getTeamByPlayer((Player) sender).isObserver()) {
+            throw new CommandException(ChatUtils.getWarningMessage(ChatColor.RED + "You have already joined a team"));
+        }
         try {
             for (TeamModule teamModule : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
                 if (teamModule.getName().toLowerCase().startsWith(cmd.getString(0).toLowerCase())) {
