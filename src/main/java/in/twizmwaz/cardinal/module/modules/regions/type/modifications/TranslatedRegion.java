@@ -48,7 +48,7 @@ public class TranslatedRegion extends RegionModule {
 
     @Override
     public boolean contains(BlockRegion region) {
-        return base.contains(new BlockRegion(null, region.getVector().add(getOffset())));
+        return base.contains(new BlockRegion(null, region.getVector().subtract(getOffset())));
     }
 
     @Override
