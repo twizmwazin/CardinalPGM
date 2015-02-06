@@ -41,20 +41,20 @@ public class Blockdrops implements Module {
     private final Material replace;
     private final int experience;
     private final boolean wrongTool;
-    private final double fallchance;
-    private final double landchance;
-    private final double fallspeed;
+    private final double fallChance;
+    private final double landChance;
+    private final double fallSpeed;
 
-    protected Blockdrops(final RegionModule region, final FilterModule filter, final Set<ItemStack> drops, final Material replace, final int experience, final boolean wrongTool, final double fallchance, final double landchance, final double fallspeed) {
+    protected Blockdrops(final RegionModule region, final FilterModule filter, final Set<ItemStack> drops, final Material replace, final int experience, final boolean wrongTool, final double fallChance, final double landChance, final double fallSpeed) {
         this.region = region;
         this.filter = filter;
         this.drops = drops;
         this.replace = replace;
         this.experience = experience;
         this.wrongTool = wrongTool;
-        this.fallchance = fallchance;
-        this.landchance = landchance;
-        this.fallspeed = fallspeed;
+        this.fallChance = fallChance;
+        this.landChance = landChance;
+        this.fallSpeed = fallSpeed;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -93,10 +93,10 @@ public class Blockdrops implements Module {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityExplode(EntityExplodeEvent event) {
-        if (fallchance != 0.0) {
+        if (fallChance != 0.0) {
             if (region != null) {
                 if (region.contains(new BlockRegion(null, event.getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
-                    double fallchance = event.blockList().size() * this.fallchance;
+                    double fallchance = event.blockList().size() * this.fallChance;
                     for (double i = fallchance; i > 0; i--) {
                         Block block = event.blockList().get((int) i);
                         if (!filter.evaluate(block).equals(FilterState.DENY)) {
@@ -110,7 +110,7 @@ public class Blockdrops implements Module {
 
                 }
             } else {
-                double flyingBlocks = event.blockList().size() * this.fallchance;
+                double flyingBlocks = event.blockList().size() * this.fallChance;
                 for (double i = flyingBlocks - 1; i > 0; i--) {
                     Block block = event.blockList().get((int) i);
                     if (!filter.evaluate(block).equals(FilterState.DENY)) {
@@ -130,7 +130,7 @@ public class Blockdrops implements Module {
         public void onEntiyChangeBlock (EntityChangeBlockEvent event) {
             if (event.getEntity() instanceof FallingBlock) {
                 if (event.getEntity().hasMetadata("falling-block")) {
-                    if (new Random().nextGaussian() <= this.landchance) {
+                    if (new Random().nextGaussian() <= this.landChance) {
                         event.setCancelled(true);
                     }
                 }
