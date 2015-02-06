@@ -25,7 +25,7 @@ public class PortalBuilder implements ModuleBuilder {
                     x = NumUtils.parseDouble(portal.getAttributeValue("x").replaceAll("@", ""));
                     xRelative = !portal.getAttributeValue("x").contains("@");
                 } else if (portals.getAttributeValue("x") != null) {
-                    x = NumUtils.parseDouble(portals.getAttributeValue("x"));
+                    x = NumUtils.parseDouble(portals.getAttributeValue("x").replaceAll("@", ""));
                     xRelative = !portals.getAttributeValue("x").contains("@");
                 }
                 double y = 0;
@@ -34,7 +34,7 @@ public class PortalBuilder implements ModuleBuilder {
                     y = NumUtils.parseDouble(portal.getAttributeValue("y").replaceAll("@", ""));
                     yRelative = !portal.getAttributeValue("y").contains("@");
                 } else if (portals.getAttributeValue("y") != null) {
-                    y = NumUtils.parseDouble(portals.getAttributeValue("y"));
+                    y = NumUtils.parseDouble(portals.getAttributeValue("y").replaceAll("@", ""));
                     yRelative = !portals.getAttributeValue("y").contains("@");
                 }
                 double z = 0;
@@ -43,7 +43,7 @@ public class PortalBuilder implements ModuleBuilder {
                     z = NumUtils.parseDouble(portal.getAttributeValue("z").replaceAll("@", ""));
                     zRelative = !portal.getAttributeValue("z").contains("@");
                 } else if (portals.getAttributeValue("z") != null) {
-                    z = NumUtils.parseDouble(portals.getAttributeValue("z"));
+                    z = NumUtils.parseDouble(portals.getAttributeValue("z").replaceAll("@", ""));
                     zRelative = !portals.getAttributeValue("z").contains("@");
                 }
                 RegionModule region = null;
@@ -91,7 +91,7 @@ public class PortalBuilder implements ModuleBuilder {
                     yaw = (int) NumUtils.parseDouble(portal.getAttributeValue("yaw").replaceAll("@", ""));
                     yawRelative = !portal.getAttributeValue("yaw").contains("@");
                 } else if (portals.getAttributeValue("yaw") != null) {
-                    yaw = (int) NumUtils.parseDouble(portals.getAttributeValue("yaw"));
+                    yaw = (int) NumUtils.parseDouble(portals.getAttributeValue("yaw").replaceAll("@", ""));
                     yawRelative = !portals.getAttributeValue("yaw").contains("@");
                 }
                 int pitch = 0;
@@ -100,7 +100,7 @@ public class PortalBuilder implements ModuleBuilder {
                     pitch = (int) NumUtils.parseDouble(portal.getAttributeValue("pitch").replaceAll("@", ""));
                     pitchRelative = !portal.getAttributeValue("pitch").contains("@");
                 } else if (portals.getAttributeValue("pitch") != null) {
-                    pitch = (int) NumUtils.parseDouble(portals.getAttributeValue("pitch"));
+                    pitch = (int) NumUtils.parseDouble(portals.getAttributeValue("pitch").replaceAll("@", ""));
                     pitchRelative = !portals.getAttributeValue("pitch").contains("@");
                 }
                 RegionModule destination = null;
