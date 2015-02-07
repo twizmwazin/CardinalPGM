@@ -170,8 +170,8 @@
         <objectiveDamagedFor>{0} ha danneggiato {1} per la {2}</objectiveDamagedFor>
         <objectiveDamaged>{0} ha danneggiato {1}</objectiveDamaged>
         <creditReceived>Riceverai il riconoscimento quando l'obiettivo sará completato.</creditReceived>
-        <objectiveTouchedFor>{0} ha preso {1} per la {2}</objectiveTouchedFor>
-        <objectiveTouched>{0} ha preso {1}</objectiveTouched>
+        <objectivePickedFor>{0} ha preso {1} per la {2}</objectivePickedFor>
+        <objectivePicked>{0} ha preso {1}</objectivePicked>
         <scoredFor>{0} ha fatto {1} punti per {2}</scoredFor>
         <onePoint>1 punto</onePoint>
         <points>{0} punti</points>
