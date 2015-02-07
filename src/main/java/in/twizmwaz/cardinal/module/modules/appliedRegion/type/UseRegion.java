@@ -20,8 +20,8 @@ public class UseRegion extends AppliedRegion {
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getClickedBlock() == null) return;
         if (region.contains(new BlockRegion(null, event.getClickedBlock().getLocation().toVector()))
-                && (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) 
-                && (filter.evaluate(event.getPlayer()).equals(FilterState.DENY) || filter.evaluate(event.getClickedBlock()).equals(FilterState.DENY))) {
+                && (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR)
+                && filter.evaluate(event.getPlayer(), event.getClickedBlock()).equals(FilterState.DENY)) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }

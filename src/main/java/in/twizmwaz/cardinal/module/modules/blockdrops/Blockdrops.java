@@ -49,7 +49,7 @@ public class Blockdrops implements Module {
         if (!event.isCancelled()) {
             Player player = event.getPlayer();
             Block block = event.getBlock();
-            if (!filter.evaluate(player).equals(FilterState.DENY) && !filter.evaluate(block).equals(FilterState.DENY)) {
+            if (filter.evaluate(player, block).equals(FilterState.ALLOW)) {
                 if (region == null || region.contains(new BlockRegion(null, block.getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
                     if (!this.wrongTool) {
                         if (block.getDrops() != null && block.getDrops().size() > 0) {

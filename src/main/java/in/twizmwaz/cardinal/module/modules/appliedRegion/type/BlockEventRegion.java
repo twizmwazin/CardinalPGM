@@ -28,7 +28,7 @@ public class BlockEventRegion extends AppliedRegion {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (!event.isCancelled() && (filter.evaluate(event.getBlock()).equals(FilterState.DENY) || filter.evaluate(event.getPlayer()).equals(FilterState.DENY))
+        if (!event.isCancelled() && filter.evaluate(event.getPlayer(), event.getBlock()).equals(FilterState.DENY)
                 && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
@@ -46,7 +46,7 @@ public class BlockEventRegion extends AppliedRegion {
     @EventHandler
     public void onBucketEmpty(PlayerBucketEmptyEvent event) {
         Material newMaterial = (event.getBucket().equals(Material.WATER_BUCKET) ? Material.WATER : (event.getBucket().equals(Material.LAVA_BUCKET) ? Material.LAVA : Material.AIR));
-        if (!event.isCancelled() && (filter.evaluate(newMaterial).equals(FilterState.DENY) || filter.evaluate(event.getPlayer()).equals(FilterState.DENY))
+        if (!event.isCancelled() && filter.evaluate(event.getPlayer(), newMaterial).equals(FilterState.DENY)
                 && region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
@@ -54,7 +54,7 @@ public class BlockEventRegion extends AppliedRegion {
     }
 
     public void onBucketFill(PlayerBucketFillEvent event) {
-        if (!event.isCancelled() && (filter.evaluate(event.getBlockClicked().getRelative(event.getBlockFace())).equals(FilterState.DENY) || filter.evaluate(event.getPlayer()).equals(FilterState.DENY))
+        if (!event.isCancelled() && filter.evaluate(event.getPlayer(), event.getBlockClicked().getRelative(event.getBlockFace())).equals(FilterState.DENY)
                 && region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
@@ -131,7 +131,7 @@ public class BlockEventRegion extends AppliedRegion {
             if (region.contains(new BlockRegion(null, block.getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
                 if (TntTracker.getWhoPlaced(event.getEntity()) != null) {
                     if (Bukkit.getOfflinePlayer(TntTracker.getWhoPlaced(event.getEntity())).isOnline()) {
-                        if (filter.evaluate(Bukkit.getPlayer(TntTracker.getWhoPlaced(event.getEntity()))).equals(FilterState.DENY) || filter.evaluate(block).equals(FilterState.DENY)) blocksToRemove.add(block);
+                        if (filter.evaluate(Bukkit.getPlayer(TntTracker.getWhoPlaced(event.getEntity())), block).equals(FilterState.DENY)) blocksToRemove.add(block);
                     } else blocksToRemove.add(block);
                 } else blocksToRemove.add(block);
             }
