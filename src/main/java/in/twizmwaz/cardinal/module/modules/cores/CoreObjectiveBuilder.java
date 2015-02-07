@@ -52,7 +52,7 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                     leak = Integer.parseInt(element.getAttributeValue("leak").replaceAll(" ", ""));
                 }
                 Material type = Material.OBSIDIAN;
-                int damageValue = 0;
+                int damageValue = -1;
                 if (subElement.getAttributeValue("material") != null) {
                     String material = subElement.getAttributeValue("material");
                     if (material.contains(":")) {
@@ -129,7 +129,7 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                         leak = Integer.parseInt(element.getAttributeValue("leak").replaceAll(" ", ""));
                     }
                     Material type = Material.OBSIDIAN;
-                    int damageValue = 0;
+                    int damageValue = -1;
                     if (subChild.getAttributeValue("material") != null) {
                         String material = subChild.getAttributeValue("material");
                         if (material.contains(":")) {

@@ -19,13 +19,17 @@ public class CarryingFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Object object) {
-        if (object instanceof Player) {
-            for (ItemStack item : ((Player) object).getInventory()) {
-                if (item.getType().equals(material)) return ALLOW;
+    public FilterState evaluate(final Object... objects) {
+        for (Object object : objects) {
+            if (object instanceof Player) {
+                for (ItemStack item : ((Player) object).getInventory()) {
+                    if (item.getType().equals(material))
+                        return ALLOW;
+                }
+                return DENY;
             }
-            return DENY;
-        } else return ABSTAIN;
+        }
+        return ABSTAIN;
     }
 
 }

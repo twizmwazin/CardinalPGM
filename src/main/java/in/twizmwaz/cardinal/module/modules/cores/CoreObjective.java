@@ -252,7 +252,7 @@ public class CoreObjective implements GameObjective {
     }
 
     public boolean partOfObjective(Block block) {
-        return currentType.equals(block.getType()) && damageValue == (int) block.getState().getData().getData();
+        return currentType.equals(block.getType()) && (damageValue == -1 || damageValue == (int) block.getState().getData().getData());
     }
 
     public List<Block> getBlocks() {

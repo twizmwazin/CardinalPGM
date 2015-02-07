@@ -62,7 +62,6 @@ public class Blockdrops implements Module {
                             }
                         }
                     } else {
-                        Bukkit.getLogger().info("5");
                         for (ItemStack drop : this.drops) {
                             GameHandler.getGameHandler().getMatchWorld().dropItemNaturally(block.getLocation(), drop);
                         }

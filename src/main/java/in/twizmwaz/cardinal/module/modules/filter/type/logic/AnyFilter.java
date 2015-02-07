@@ -21,11 +21,11 @@ public class AnyFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Object object) {
+    public FilterState evaluate(final Object... objects) {
         boolean abstain = true;
         for (FilterModule child : children) {
-            if (!child.evaluate(object).equals(ABSTAIN)) abstain = false;
-            if (child.evaluate(object).equals(ALLOW)) return ALLOW;
+            if (!child.evaluate(objects).equals(ABSTAIN)) abstain = false;
+            if (child.evaluate(objects).equals(ALLOW)) return ALLOW;
         }
         if (abstain) return ABSTAIN;
         return DENY;

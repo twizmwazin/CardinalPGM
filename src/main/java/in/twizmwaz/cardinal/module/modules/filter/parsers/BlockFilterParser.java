@@ -16,7 +16,7 @@ public class BlockFilterParser extends FilterParser {
             this.damageValue = Integer.parseInt(element.getText().split(":")[1]);
         } else {
             this.material = Material.matchMaterial(element.getText());
-            this.damageValue = 0;
+            this.damageValue = -1;
         }
     }
 

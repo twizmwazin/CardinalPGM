@@ -243,7 +243,7 @@ public class DestroyableObjective implements GameObjective {
 
     public boolean partOfObjective(Block block) {
         for (int i = 0; i < types.size(); i++) {
-            if (types.get(i).equals(block.getType()) && damageValues.get(i) == (int) block.getState().getData().getData()) {
+            if (types.get(i).equals(block.getType()) && (damageValues.get(i) == -1 || damageValues.get(i) == (int) block.getState().getData().getData())) {
                 return true;
             }
         }

@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.module.modules.filter.type;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.BlockFilterParser;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
@@ -20,11 +21,13 @@ public class BlockFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Object object) {
-        if (object instanceof Block) {
-            if (((Block) object).getType().equals(material) && (int) ((Block) object).getState().getData().getData() == damageValue) return ALLOW;
-            else return DENY;
-        } else return ABSTAIN;
+    public FilterState evaluate(final Object... objects) {
+        for (Object object : objects) {
+            if (object instanceof Block) {
+                if (((Block) object).getType().equals(material) && (damageValue == -1 || (int) ((Block) object).getState().getData().getData() == damageValue)) return ALLOW;
+                else return DENY;
+            }
+        }
+        return ABSTAIN;
     }
-
 }

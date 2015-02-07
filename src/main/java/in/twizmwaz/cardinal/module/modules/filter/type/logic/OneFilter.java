@@ -21,12 +21,12 @@ public class OneFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Object object) {
+    public FilterState evaluate(final Object... objects) {
         boolean found = false;
         boolean abstain = true;
         for (FilterModule child : children) {
-            if (!child.evaluate(object).equals(ABSTAIN)) abstain = false;
-            if (child.evaluate(object).equals(ALLOW)) {
+            if (!child.evaluate(objects).equals(ABSTAIN)) abstain = false;
+            if (child.evaluate(objects).equals(ALLOW)) {
                 if (!found) found = true;
                 else return DENY;
             }

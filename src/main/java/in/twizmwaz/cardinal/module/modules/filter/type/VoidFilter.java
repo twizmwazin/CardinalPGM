@@ -17,11 +17,14 @@ public class VoidFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Object object) {
-        if (object instanceof Block) {
-            Block check = new Location(GameHandler.getGameHandler().getMatchWorld(), 
-                    ((Block) object).getX(), 0, ((Block) object).getZ()).getBlock();
-            return check.getType() == Material.AIR ? ALLOW : DENY;
-        } else return ABSTAIN;
+    public FilterState evaluate(final Object... objects) {
+        for (Object object : objects) {
+            if (object instanceof Block) {
+                Block check = new Location(GameHandler.getGameHandler().getMatchWorld(),
+                        ((Block) object).getX(), 0, ((Block) object).getZ()).getBlock();
+                return check.getType() == Material.AIR ? ALLOW : DENY;
+            }
+        }
+        return ABSTAIN;
     }
 }

@@ -19,7 +19,7 @@ public class RandomFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Object object) {
+    public FilterState evaluate(final Object... objects) {
         Random random = new Random();
         double working = random.nextGaussian();
         if (working <= chance) return ALLOW;

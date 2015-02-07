@@ -12,11 +12,13 @@ public class AllMobFilter extends AllEventFilter {
     }
 
     @Override
-    public FilterState evaluate(final Object object) {
-        if (object instanceof Entity) {
-            if (object instanceof LivingEntity && !(object instanceof Player))
-                return allow ? FilterState.ALLOW : FilterState.DENY;
-            else return FilterState.ABSTAIN;
-        } else return FilterState.ABSTAIN;
+    public FilterState evaluate(final Object... objects) {
+        for (Object object : objects) {
+            if (object instanceof Entity) {
+                if (object instanceof LivingEntity && !(object instanceof Player)) return allow ? FilterState.ALLOW : FilterState.DENY;
+                else return FilterState.ABSTAIN;
+            }
+        }
+        return FilterState.ABSTAIN;
     }
 }

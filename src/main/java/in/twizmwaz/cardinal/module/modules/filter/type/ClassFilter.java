@@ -24,10 +24,13 @@ public class ClassFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Object object) {
-        if (object instanceof Player) {
-            if (ClassModule.getClassByPlayer((Player) object).getName().equalsIgnoreCase(classModule)) return ALLOW;
-            return DENY;
+    public FilterState evaluate(final Object... objects) {
+        for (Object object : objects) {
+            if (object instanceof Player) {
+                if (ClassModule.getClassByPlayer((Player) object).getName().equalsIgnoreCase(classModule))
+                    return ALLOW;
+                return DENY;
+            }
         }
         return ABSTAIN;
     }

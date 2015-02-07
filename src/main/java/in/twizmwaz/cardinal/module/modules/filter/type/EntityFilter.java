@@ -18,11 +18,16 @@ public class EntityFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Object object) {
-        if (object instanceof Entity) {
-            if (((Entity) object).getType().equals(entity)) return ALLOW;
-            else return DENY;
-        } else return ABSTAIN;
+    public FilterState evaluate(final Object... objects) {
+        for (Object object : objects) {
+            if (object instanceof Entity) {
+                if (((Entity) object).getType().equals(entity))
+                    return ALLOW;
+                else
+                    return DENY;
+            }
+        }
+        return ABSTAIN;
     }
 
 }

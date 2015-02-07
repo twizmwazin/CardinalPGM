@@ -19,18 +19,22 @@ public class CauseFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Object object) {
-        EventCause eventCause = null;
-        if (object instanceof Player) {
-            eventCause = EventCause.PLAYER;
-        } else if (object instanceof Entity) {
-            if (((Entity) object).getType().equals(EntityType.PRIMED_TNT)) {
-                eventCause = EventCause.TNT;
+    public FilterState evaluate(final Object... objects) {
+        for (Object object : objects) {
+            EventCause eventCause = null;
+            if (object instanceof Player) {
+                eventCause = EventCause.PLAYER;
+            } else if (object instanceof Entity) {
+                if (((Entity) object).getType().equals(EntityType.PRIMED_TNT)) {
+                    eventCause = EventCause.TNT;
+                }
             }
+            if (cause.equals(eventCause))
+                return ALLOW;
+            else if (eventCause != null)
+                return DENY;
         }
-        if (cause.equals(eventCause)) return ALLOW;
-        else if (eventCause != null) return DENY;
-        else return ABSTAIN;
+        return ABSTAIN;
     }
 
     public enum EventCause {

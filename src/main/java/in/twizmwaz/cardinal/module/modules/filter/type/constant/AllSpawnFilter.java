@@ -10,9 +10,11 @@ public class AllSpawnFilter extends AllEventFilter {
     }
 
     @Override
-    public FilterState evaluate(final Object object) {
-        if (object instanceof PgmSpawnEvent) return allow ? FilterState.ALLOW : FilterState.DENY;
-        else return FilterState.ABSTAIN;
+    public FilterState evaluate(final Object... objects) {
+        for (Object object : objects) {
+            if (object instanceof PgmSpawnEvent) return allow ? FilterState.ALLOW : FilterState.DENY;
+        }
+        return FilterState.ABSTAIN;
     }
 
 }

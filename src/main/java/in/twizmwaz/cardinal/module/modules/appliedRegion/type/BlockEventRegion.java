@@ -37,8 +37,7 @@ public class BlockEventRegion extends AppliedRegion {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (!event.isCancelled() && (filter.evaluate(event.getBlock()).equals(FilterState.DENY) || filter.evaluate(event.getPlayer()).equals(FilterState.DENY))
-                && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
+        if (!event.isCancelled() && filter.evaluate(event.getPlayer(), event.getBlockPlaced()).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }
