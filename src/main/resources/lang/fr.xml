@@ -134,7 +134,7 @@
         <of>{0} de {1}</of>
         <xmlErrors>Erreurs XML</xmlErrors>
         <close>Fermer</close>
-        <teamSelection>Team/Class Selection</teamSelection>
+        <teamClassSelection>Team/Class Selection</teamClassSelection>
         <teamJoinTip>Join the game!</teamJoinTip>
         <teamPick>Choisissez votre équipe</teamPick>
         <teamJoinAuto>Joindre automatiquement</teamJoinAuto>

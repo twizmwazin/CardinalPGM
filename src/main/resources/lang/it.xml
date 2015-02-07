@@ -134,7 +134,7 @@
         <of>{0} di {1}</of>
         <xmlErrors>Errori nell'XML</xmlErrors>
         <close>Chiudere</close>
-        <teamSelection>Seleziona la classe</teamSelection>
+        <teamClassSelection>Seleziona la classe</teamClassSelection>
         <teamJoinTip>Usa questo libro per selezionare facilmente la tua classe!</teamJoinTip>
         <teamPick>Scegli la tua squadra</teamPick>
         <teamJoinAuto>Entra in una squadra a caso</teamJoinAuto>
