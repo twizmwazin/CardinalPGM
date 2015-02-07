@@ -49,7 +49,19 @@ public class BlockdropsBuilder implements ModuleBuilder {
                 for (Element wrongToolElement : rule.getChildren("wrongtool")) {
                     wrongTool = Boolean.parseBoolean(wrongToolElement.getText());
                 }
-                results.add(new Blockdrops(region, filter, drops, replace, experience, wrongTool));
+                double fallChance = 0.0;
+                if (rule.getChild("fall-chance") != null) {
+                    fallChance = Double.parseDouble(rule.getChild("fall-chance").getText());
+                }
+                double landChance = 0.0;
+                if (rule.getChild("land-chance") != null) {
+                    landChance = Double.parseDouble(rule.getChild("land-chance").getText());
+                }
+                double fallSpeed = 0.0;
+                if (rule.getChild("fall-speed") != null) {
+                    fallSpeed = Double.parseDouble(rule.getChild("fall-speed").getText());
+                }
+                results.add(new Blockdrops(region, filter, drops, replace, experience, wrongTool, fallChance, landChance, fallSpeed));
             }
 
         }
