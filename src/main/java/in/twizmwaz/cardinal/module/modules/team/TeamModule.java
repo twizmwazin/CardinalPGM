@@ -5,7 +5,6 @@ import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
-import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -14,7 +13,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 
 import java.util.HashSet;
-import java.util.Set;
 
 public class TeamModule<P extends Player> extends HashSet<Player> implements Module {
 
@@ -64,13 +62,17 @@ public class TeamModule<P extends Player> extends HashSet<Player> implements Mod
         return add(player, force, ChatColor.GRAY + "You joined " + this.getCompleteName());
     }
     
+    public boolean add(Player player) {
+        return this.add(player, false);
+    }
+    
     @EventHandler(priority = EventPriority.LOW)
     public void onTeamSwitch(PlayerChangeTeamEvent event) {
         if (!event.isCancelled()) {
             this.remove(event.getPlayer());
         }
         if (event.getNewTeam() == this) {
-            this.add(event.getPlayer());
+            super.add(event.getPlayer());
         }
     }
 
