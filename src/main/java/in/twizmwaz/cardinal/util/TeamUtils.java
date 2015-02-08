@@ -9,10 +9,6 @@ import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public class TeamUtils {
 
     public static TeamModule getTeamWithFewestPlayers(Match match) {

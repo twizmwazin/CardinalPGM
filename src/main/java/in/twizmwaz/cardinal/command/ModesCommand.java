@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.command;
 
-import com.sk89q.minecraft.util.commands.*;
+import com.sk89q.minecraft.util.commands.Command;
+import com.sk89q.minecraft.util.commands.CommandContext;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
@@ -17,7 +18,7 @@ import java.util.List;
 public class ModesCommand {
 
     @Command(aliases = {"modes", "mode"}, desc = "Lists information about the map's monument modes.", usage = "[list, next, push] [page]", max = 2)
-    public static void modes(final CommandContext cmd, CommandSender sender) throws CommandException {
+    public static void modes(final CommandContext cmd, CommandSender sender) {
         if (GameHandler.getGameHandler().getMatch().getModules().getModule(MonumentModes.class) != null) {
             ModuleCollection<MonumentModes> modes = GameHandler.getGameHandler().getMatch().getModules().getModules(MonumentModes.class);
             HashMap<MonumentModes, Integer> modesWithTime = new HashMap<>();
@@ -54,15 +55,15 @@ public class ModesCommand {
                             return;
                         }
                     }
-                    throw new CommandException("No results match!");
+                    sender.sendMessage(ChatColor.RED + "No results match.");
                 } else if (cmd.getString(0).equalsIgnoreCase("push")) {
-                    if (!sender.hasPermission("cardinal.modes.push")) throw new CommandPermissionsException();
-                    throw new CommandUsageException("Too few arguments.", "/modes push <time period>");
+                    if (!sender.hasPermission("cardinal.modes.push")) { sender.sendMessage(ChatColor.RED + "You don't have permission."); }
+                    sender.sendMessage(ChatColor.RED + "Too few arguments. \n" + "/modes push <time period>");
                 } else {
                     int page;
                     try {
                         page = Integer.parseInt(cmd.getString(0));
-                    } catch (NumberFormatException e) { throw new CommandException("Number expected, string received instead."); }
+                    } catch (NumberFormatException e) { throw new NumberFormatException(); }
                     if (page <= ((modes.size() + 7) / 8)) {
                         sender.sendMessage(ChatColor.RED + "-------------- " + ChatColor.RESET + "Monument Modes" + ChatColor.DARK_AQUA + " (" + ChatColor.AQUA + page + ChatColor.DARK_AQUA + " of " + ChatColor.AQUA + ((modes.size() + 7) / 8) + ChatColor.DARK_AQUA + ")" + ChatColor.RED + " --------------");
                         int count = 1;
@@ -72,14 +73,14 @@ public class ModesCommand {
                             }
                             count++;
                         }
-                    } else throw new CommandException("Unknown page selected! " + ((modes.size() + 7) / 8) + " total pages.");
+                    } else { sender.sendMessage(ChatColor.RED + "Unknown page selected! " + ((modes.size() + 7) / 8) + " total pages."); }
                 }
             } else {
                 if (cmd.getString(0).equalsIgnoreCase("list")) {
                     int page;
                     try {
                         page = Integer.parseInt(cmd.getString(1));
-                    } catch (NumberFormatException e) { throw new CommandException("Number expected, string received instead."); }
+                    } catch (NumberFormatException e) { throw new NumberFormatException(); }
                     if (page <= ((modes.size() + 7) / 8)) {
                         sender.sendMessage(ChatColor.RED + "-------------- " + ChatColor.RESET + "Monument Modes" + ChatColor.DARK_AQUA + " (" + ChatColor.AQUA + page + ChatColor.DARK_AQUA + " of " + ChatColor.AQUA + ((GameHandler.getGameHandler().getMatch().getModules().getModules(MonumentModes.class).size() + 7) / 8) + ChatColor.DARK_AQUA + ")" + ChatColor.RED + " --------------");
                         int count = 1;
@@ -89,9 +90,9 @@ public class ModesCommand {
                             }
                             count++;
                         }
-                    } else throw new CommandException("Unknown page selected! " + ((modes.size() + 7) / 8) + " total pages.");
+                    } else { sender.sendMessage(ChatColor.RED + "Unknown page selected! " + ((modes.size() + 7) / 8) + " total pages."); }
                 } else if (cmd.getString(0).equalsIgnoreCase("push")) {
-                    if (!sender.hasPermission("cardinal.modes.push")) throw new CommandPermissionsException();
+                    if (!sender.hasPermission("cardinal.modes.push")) { sender.sendMessage(ChatColor.RED + "You don't have permission."); }
                     int time = StringUtils.timeStringToSeconds(cmd.getString(1));
                     for (MonumentModes mode : GameHandler.getGameHandler().getMatch().getModules().getModules(MonumentModes.class)) {
                         mode.setTimeAfter(mode.getTimeAfter() + time);
@@ -99,7 +100,7 @@ public class ModesCommand {
                     sender.sendMessage(ChatColor.GOLD + "All modes have been pushed " + (time < 0 ? "backwards" : "forwards") + " by " + StringUtils.formatTime(time));
                 }
             }
-        } else throw new CommandException("No results match!");
+        } else { sender.sendMessage(ChatColor.RED + "No results match."); }
     }
 
 }
