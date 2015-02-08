@@ -15,7 +15,8 @@ public class StartAndEndCommand {
 
     @Command(aliases = {"start"}, desc = "Starts the match.", usage = "[time]", min = 1, max = 1)
     public static void start(CommandContext cmd, CommandSender sender) {
-        if(!sender.hasPermission("cardinal.match.start")) { sender.sendMessage("You don't have permission."); }
+        if(!sender.hasPermission("cardinal.match.start"))
+            sender.sendMessage("You don't have permission.");
         if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.WAITING)) {
             int time = 30;
             try {
@@ -32,7 +33,8 @@ public class StartAndEndCommand {
 
     @Command(aliases = {"end", "finish"}, desc = "Ends the match.", usage = "[time]", min = 0, max = 0)
     public static void end(CommandContext cmd, CommandSender sender) {
-        if(!sender.hasPermission("cardinal.match.end")) { sender.sendMessage("You don't have permission."); }
+        if(!sender.hasPermission("cardinal.match.end"))
+            sender.sendMessage("You don't have permission.");
         if (GameHandler.getGameHandler().getMatch().getState() == MatchState.PLAYING) {
             try {
                 TeamModule team = TeamUtils.getTeamByName(cmd.getString(0));

@@ -14,7 +14,8 @@ public class CycleCommand {
 
     @Command(aliases = {"cycle"}, desc = "Cycles the world and loads a new world.", usage = "[time]", flags = "f")
     public static void cycle(final CommandContext cmd, CommandSender sender) {
-        if(!(sender.hasPermission("cardinal.match.cycle"))) { sender.sendMessage(ChatColor.RED + "You don't have permission."); }
+        if(!(sender.hasPermission("cardinal.match.cycle")))
+            sender.sendMessage(ChatColor.RED + "You don't have permission.");
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
             if(cmd.hasFlag('f')){
                 try {
@@ -37,9 +38,8 @@ public class CycleCommand {
 
     @Command(aliases = {"setnext", "sn"}, desc = "Sets the next map.", usage = "[map]", min = 0)
     public static void setNext(final CommandContext cmd, CommandSender sender) {
-        if(!(sender.hasPermission("cardinal.match.setnext"))) {
+        if(!(sender.hasPermission("cardinal.match.setnext")))
             sender.sendMessage(ChatColor.RED + "You don't have permission.");
-        }
         String input = "";
         try {
             for (int i = 0; i < cmd.argsLength(); i++) {
