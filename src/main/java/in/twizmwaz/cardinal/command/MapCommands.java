@@ -2,10 +2,8 @@ package in.twizmwaz.cardinal.command;
 
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
-import com.sk89q.minecraft.util.commands.CommandException;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.mapInfo.contributor.Contributor;
-import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
 import in.twizmwaz.cardinal.util.DomUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -22,8 +20,8 @@ import java.util.List;
 
 public class MapCommands {
 
-    @Command(aliases = {"map"}, desc = "Shows information about the currently playing map.", usage = "")
-    public static void map(final CommandContext args, CommandSender sender) throws CommandException {
+    @Command(aliases = {"map"}, desc = "Shows information about the currently playing map.", min = 0, max = 0)
+    public static void map(final CommandContext args, CommandSender sender) {
         LoadedMap mapInfo;
         if (args.argsLength() == 0) mapInfo = GameHandler.getGameHandler().getMatch().getLoadedMap();
         else {
@@ -66,7 +64,7 @@ public class MapCommands {
         sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Max players: " + ChatColor.RESET + "" + ChatColor.GOLD + mapInfo.getMaxPlayers());
     }
 
-    @Command(aliases = {"next", "nextmap", "nm", "mn"}, desc = "Shows next map.", usage = "")
+    @Command(aliases = {"next", "nextmap", "nm", "mn"}, desc = "Shows next map.", min = 0, max = 0)
     public static void next(final CommandContext cmd, CommandSender sender) {
         String nextMap = GameHandler.getGameHandler().getRotation().getNext().getName();
         try {
@@ -98,7 +96,6 @@ public class MapCommands {
                 }
                 sender.sendMessage(result);
             }
-
         } catch (JDOMException | IOException e) {
             e.printStackTrace();
         }
