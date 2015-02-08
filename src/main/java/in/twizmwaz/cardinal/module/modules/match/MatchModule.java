@@ -38,7 +38,15 @@ public class MatchModule implements Module {
         Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # #");
         Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# #    " + ChatColor.GOLD + "Game over!" + ChatColor.DARK_PURPLE + "    # #");
         try {
-            Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# # " + event.getTeam().getColor() + event.getTeam().getName() + " wins!" + ChatColor.DARK_PURPLE + " # #");
+            if (event.getTeam().size() == 1) {
+                String player = null;
+                for (Object teammate : event.getTeam()) {
+                    player = ((Player) teammate).getDisplayName();
+                }
+                Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# # " + event.getTeam().getColor() + player + " wins!" + ChatColor.DARK_PURPLE + " # #");
+            } else {
+                Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# # " + event.getTeam().getColor() + event.getTeam().getName() + " wins!" + ChatColor.DARK_PURPLE + " # #");
+            }
         } catch (NullPointerException ex) {
 
         }

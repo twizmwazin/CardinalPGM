@@ -136,14 +136,4 @@ public class TeamModule<P extends Player> extends HashSet<Player> implements Mod
         return observer;
     }
 
-    public Set<Player> getPlayers() {
-        Set<Player> players = new HashSet<>();
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (TeamUtils.getTeamByPlayer(player) == this) {
-                players.add(player);
-            }
-        }
-        return players;
-    }
-
 }

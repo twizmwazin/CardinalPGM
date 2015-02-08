@@ -56,9 +56,9 @@ public class GameComplete implements TaskedModule {
             TeamModule winner = null;
             for (TeamModule team : TeamUtils.getTeams()) {
                 if (!team.isObserver()) {
-                    if (winner == null && team.getPlayers().size() > 0) {
+                    if (winner == null && team.size() > 0) {
                         winner = team;
-                    } else if (winner != null && team.getPlayers().size() > 0) {
+                    } else if (winner != null && team.size() > 0) {
                         win = false;
                     }
                 }
@@ -101,11 +101,11 @@ public class GameComplete implements TaskedModule {
                 Match match = GameHandler.getGameHandler().getMatch();
                 for (TeamModule team : TeamUtils.getTeams()) {
                     if (!team.isObserver()) {
-                        if (team.getPlayers().size() > winningAmount) {
+                        if (team.size() > winningAmount) {
                             winningTeam = team;
-                            winningAmount = team.getPlayers().size();
+                            winningAmount = team.size();
                             tied = false;
-                        } else if (team.getPlayers().size() == winningAmount) {
+                        } else if (team.size() == winningAmount) {
                             tied = true;
                         }
                     }

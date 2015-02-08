@@ -151,7 +151,7 @@ public class GameScoreboard implements Module {
                         ScoreboardUtils.getNextConversion(objective, score, scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "", team.getColor() + "", used);
                     }
                     if (Blitz.matchIsBlitz() && !team.isObserver()) {
-                        ScoreboardUtils.getNextConversion(objective, team.getPlayers().size(), scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "", team.getColor() + "", used);
+                        ScoreboardUtils.getNextConversion(objective, team.size(), scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "", team.getColor() + "", used);
                     }
                 }
                 if (!team.isObserver() && TeamUtils.getShownObjectives(team).size() > 0) {
@@ -203,7 +203,7 @@ public class GameScoreboard implements Module {
                     ScoreboardUtils.getNextConversion(objective, score, scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "", team.getColor() + "", used);
                 }
                 if (Blitz.matchIsBlitz() && !team.isObserver()) {
-                    ScoreboardUtils.getNextConversion(objective, team.getPlayers().size(), scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "", team.getColor() + "", used);
+                    ScoreboardUtils.getNextConversion(objective, team.size(), scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "", team.getColor() + "", used);
                 }
             }
             if (!team.isObserver() && TeamUtils.getShownObjectives(team).size() > 0) {
