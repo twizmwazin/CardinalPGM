@@ -42,7 +42,7 @@ public class BlockRegion extends RegionModule {
     }
 
     public Vector getVector() {
-        return vector;
+        return vector.clone();
     }
 
     @Override
