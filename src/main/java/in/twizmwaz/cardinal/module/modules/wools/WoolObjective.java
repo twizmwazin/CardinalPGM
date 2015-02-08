@@ -114,7 +114,7 @@ public class WoolObjective implements GameObjective {
                     if (TeamUtils.getTeamByPlayer(player) == team) {
                         if (!this.playersTouched.contains(player.getUniqueId())) {
                             this.playersTouched.add(player.getUniqueId());
-                            if (this.show) TeamChat.sendToTeam(team.getColor() + "[Team] " + player.getDisplayName() + ChatColor.GRAY + " picked up " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase().replace('_', ' '), team);
+                            if (this.show) TeamChat.sendToTeam(team.getColor() + "[Team] " + player.getDisplayName() + ChatColor.GRAY + " picked up " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " "), team);
                         }
                         boolean oldState = this.touched;
                         this.touched = true;
@@ -136,7 +136,7 @@ public class WoolObjective implements GameObjective {
                     if (TeamUtils.getTeamByPlayer(player) == team) {
                         if (!this.playersTouched.contains(player.getUniqueId())) {
                             this.playersTouched.add(player.getUniqueId());
-                            if (this.show) TeamChat.sendToTeam(team.getColor() + "[Team] " + player.getDisplayName() + ChatColor.GRAY + " picked up " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase(), team);
+                            if (this.show) TeamChat.sendToTeam(team.getColor() + "[Team] " + player.getDisplayName() + ChatColor.GRAY + " picked up " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " "), team);
                         }
                         boolean oldState = this.touched;
                         this.touched = true;
@@ -163,7 +163,7 @@ public class WoolObjective implements GameObjective {
                 if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
                     if (TeamUtils.getTeamByPlayer(event.getPlayer()) == team) {
                         this.complete = true;
-                        if (this.show) Bukkit.broadcastMessage(team.getColor() + event.getPlayer().getDisplayName() + ChatColor.WHITE + " placed " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase() + ChatColor.WHITE + " for the " + team.getCompleteName());
+                        if (this.show) Bukkit.broadcastMessage(team.getColor() + event.getPlayer().getDisplayName() + ChatColor.WHITE + " placed " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " ") + ChatColor.WHITE + " for the " + team.getCompleteName());
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
                         event.setCancelled(false);
@@ -173,11 +173,11 @@ public class WoolObjective implements GameObjective {
                     }
                 } else {
                     event.setCancelled(true);
-                    if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), "Only " + StringUtils.convertDyeColorToChatColor(color) + color.name().replaceAll("_", " ").toUpperCase() + " WOOL" + ChatColor.RED + " may be placed here!");
+                    if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), "Only " + StringUtils.convertDyeColorToChatColor(color) + color.name().replaceAll("_", " ").toUpperCase().replaceAll("_", " ") + " WOOL" + ChatColor.RED + " may be placed here!");
                 }
             } else {
                 event.setCancelled(true);
-                if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), "Only " + StringUtils.convertDyeColorToChatColor(color) + color.name().replaceAll("_", " ").toUpperCase() + " WOOL" + ChatColor.RED + " may be placed here!");
+                if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), "Only " + StringUtils.convertDyeColorToChatColor(color) + color.name().replaceAll("_", " ").toUpperCase().replaceAll("_", " ") + " WOOL" + ChatColor.RED + " may be placed here!");
             }
         }
     }

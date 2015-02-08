@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -19,9 +20,9 @@ public class TeamUtils {
         TeamModule result = null;
         double percent = Double.POSITIVE_INFINITY;
         for (TeamModule team : getTeams()) {
-            if ((team.getPlayers().size() / team.getMax()) < percent && !team.isObserver()) {
+            if (!team.isObserver() && (team.size() / (double) team.getMax()) < percent) {
                 result = team;
-                percent = team.getPlayers().size() / team.getMax();
+                percent = team.size() / (double) team.getMax();
             }
         }
         return result;
