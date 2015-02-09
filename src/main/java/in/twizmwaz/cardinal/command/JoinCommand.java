@@ -19,7 +19,7 @@ public class JoinCommand {
     public static void join(final CommandContext cmd, CommandSender sender) throws CommandException {
         TeamModule team = null;
         if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) || GameHandler.getGameHandler().getMatch().getState().equals(MatchState.CYCLING)) {
-            sender.sendMessage(ChatColor.RED + "Match is over " + ChatColor.DARK_AQUA + "- " + ChatColor.GOLD + "Please wait for the server to cycle");
+            ChatUtils.sendWarningMessage(sender.sendMessage(), ChatColor.RED + "Match is over");
             return;
         }
         try {
