@@ -23,178 +23,177 @@
         <teamFull>Beklagar, {0} är helt full</teamFull>
         <forceExemption>{0} är befriad från att tvingas till ett lag.</forceExemption>
         <noShuffle>Du kan inte blanda lagen under en pågående match.</noShuffle>
-        // I'm going to finish this then, actually I am a bit busy.
-        <teamExists>A team by the name of {0} already exists.</teamExists>
-        <mayNotJoin>You may not join during a {0} match.</mayNotJoin>
-        <matchOver>Match is over</matchOver>
-        <cycle>Please wait for the server to cycle</cycle>
-        <playerCommand>You must be a player to use this command.</playerCommand>
-        <noMapMatch>No maps matched query.</noMapMatch>
-        <noTeamMatch>No teams matched query.</noTeamMatch>
-        <noRotMatch>No rotations matched query.</noRotMatch>
-        <noPlayerMatch>No players matched query.</noPlayerMatch>
-        <multiplePlayers>More than one player found! Use {0} for exact matching.</multiplePlayers>
-        <unknownError>An unknown error has occurred. Please refer to the server console.</unknownError>
-        <movedForBalance>You were moved to {0} to balance team sizes</movedForBalance>
-        <autoJoinSwitch>(you didn't choose a team, so we assumed you wouldn't mind)</autoJoinSwitch>
-        <ownCore>You may not damage your own core.</ownCore>
-        <ownObjective>You may not damage your own objective.</ownObjective>
-        <enemyObjective>You may not repair an enemy objective.</enemyObjective>
-        <repairObjective>This objective may not be repaired.</repairObjective>
-        <noPotions>No potion effects</noPotions>
-        <teamPlace>Only a member of {0} may place {1} here!</teamPlace>
-        <blockPlace>Only {0} may be placed here!</blockPlace>
-        <noCraft>You may not craft {0}.</noCraft>
-        <bedsDisabled>Beds are disabled on this map!</bedsDisabled>
-        <pearlOut>You may not use Ender Pearls to leave your lane</pearlOut>
-        <laneReEnter>You may not re-enter your lane</laneReEnter>
-        <landminePlace>You can't place a landmine there!</landminePlace>
-        <landmineExists>A landmine already exists there!</landmineExists>
-        <landmineProximity>You can't place landmines that close to one another!</landmineProximity>
-        <tutorialTp>WARNING: Unable to safely teleport you to tutorial spot!</tutorialTp>
-        <defuseTntWater>You may not defuse TNT in water.</defuseTntWater>
-        <defuseTntEnemy>You may not defuse enemy TNT.</defuseTntEnemy>
-        <noPermission>You do not have permission.</noPermission>
-        <numberString>Number expected, string received instead.</numberString>
-        <errorRejoin>Uh oh! We had an error. Please try rejoining.</errorRejoin>
-        <serverFull>Server is full</serverFull>
-        <teamsFull>Teams are full</teamsFull>
-        <teamsCapacity>Teams are at capacity</teamsCapacity>
-        <invalidMatch>Invalid match</invalidMatch>
-        <ratingRange>Rating must be between {0} and {1}, inclusive.</ratingRange>
-        <ratingsDisabled>Map ratings are not enabled on this server.</ratingsDisabled>
-        <lowParticipation>Sorry, you haven't participated in this match enough to rate the map</lowParticipation>
-        <rateWhilePlaying>To rate the map while playing, type {0}</rateWhilePlaying>
+        <teamExists>Ett lag med namnet {0} existerar redan.</teamExists>
+        <mayNotJoin>Du kan inte ansluta dig under en pågående {0}match.</mayNotJoin>
+        <matchOver>Matchen har slutat</matchOver>
+        <cycle>Var vänlig vänta på att servern roteras</cycle>
+        <playerCommand>Du måste vara en spelare för att använda det här kommandot.</playerCommand>
+        <noMapMatch>Inga kartor matchade förfrågan.</noMapMatch>
+        <noTeamMatch>Inga lag matchade förfrågan.</noTeamMatch>
+        <noRotMatch>Ingen rotationer matchade förfrågan.</noRotMatch>
+        <noPlayerMatch>Inga spelare matchade förfrågan.</noPlayerMatch>
+        <multiplePlayers>Fler än en spelare hittade! Använd {0} för exakt matchning.</multiplePlayers>
+        <unknownError>Ett okänt fel har uppstått. Se serverkonsolen.</unknownError>
+        <movedForBalance>Du flyttades till {0} för att jämna ut lagstorlekarna</movedForBalance>
+        <autoJoinSwitch>(du valde inget lag, så vi antog att du inte motsatte dig lagbytet)</autoJoinSwitch>
+        <ownCore>Du får inte skada din egna kärna.</ownCore>
+        <ownObjective>Du får inte skada ditt eget objektiv.</ownObjective>
+        <enemyObjective>Du får inte reparera fiendens objektiv.</enemyObjective>
+        <repairObjective>Detta objektiv får inte repareras.</repairObjective>
+        <noPotions>Inga brygdeffekter</noPotions>
+        <teamPlace>Endast medlemmar av {0} kan placera {1} här!</teamPlace>
+        <blockPlace>Endast {0} kan placeras här!</blockPlace>
+        <noCraft>Du får inte tillverka {0}.</noCraft>
+        <bedsDisabled>Sängar är inaktiverade på denna karta!</bedsDisabled>
+        <pearlOut>Du får inte använda Enderpärlor för att lämna din bana</pearlOut>
+        <laneReEnter>Du får inte återinträda på din bana</laneReEnter>
+        <landminePlace>Du kan inte placera en landmina där!</landminePlace>
+        <landmineExists>Det finns redan en landmina där!</landmineExists>
+        <landmineProximity>Du kan inte placera landminor så nära varandra!</landmineProximity>
+        <tutorialTp>VARNING: Det gick inte att teleportera dig till övningsplatsen!</tutorialTp>
+        <defuseTntWater>Du kan inte desarmera TNT i vatten.</defuseTntWater>
+        <defuseTntEnemy>Du kan inte desarmera fiendens TNT.</defuseTntEnemy>
+        <noPermission>Du har inte behörighet.</noPermission>
+        <numberString>Nummer förväntades, tog istället emot sträng.</numberString>
+        <errorRejoin>Oj! Vi hade ett fel. Försök återansluta.</errorRejoin>
+        <serverFull>Servern är full</serverFull>
+        <teamsFull>Lagen är fulla</teamsFull>
+        <teamsCapacity>Lagen har nått maxantalet spelare</teamsCapacity>
+        <invalidMatch>Ogiltig match</invalidMatch>
+        <ratingRange>Betygsättning måste vara mellan {0,number,integer} och {1,number,integer}, inkluderad.</ratingRange>
+        <ratingsDisabled>Betygsättning för kartor är inte aktiverat på den här servern.</ratingsDisabled>
+        <lowParticipation>Tyvärr, du har inte deltagit tillräckligt i den här matchen för att betygsätta kartan</lowParticipation>
+        <rateWhilePlaying>För att betygsätta kartan medan du spelar, skriv {0}</rateWhilePlaying>
     </error>
     <generic>
-        <mapSet>Next map set to {0}</mapSet>
-        <markedForReloading>{0} successfully marked for reloading.</markedForReloading>
-        <allMarkedReloading>All maps successfully marked for reloading.</allMarkedReloading>
-        <countdownCancelled>All countdowns cancelled.</countdownCancelled>
-        <autoStart>Auto-start enabled for this match</autoStart>
-        <autoStartDisabled>Auto-start disabled for this match</autoStartDisabled>
-        <skippedOver>Successfully skipped over {0}</skippedOver>
-        <skippedFromTo>Successfully skipped {0} to {1}</skippedFromTo>
-        <skippedTo>Successfully skipped to {0}</skippedTo>
-        <configReload>Configuration successfully reloaded.</configReload>
-        <mapNext>Next map: {0}</mapNext>
-        <rotationSet>Current rotation set to {0}</rotationSet>
-        <rotationReload>Successfully reloaded the rotation</rotationReload>
-        <rotationAppend>Successfully appended {0} to the rotation</rotationAppend>
-        <insertedIndex>{0} successfully inserted at index {1}</insertedIndex>
-        <removedInstance>Successfully removed all instances of {0} from the rotation</removedInstance>
-        <removedMap>Successfully removed map at index {0} from the rotation</removedMap>
-        <playerForce>{0} successfully forced onto {1}</playerForce>
-        <teamShuffle>Teams successfully shuffled.</teamShuffle>
-        <teamAlias>{0} successfully renamed to {1}</teamAlias>
-        <channelSet>Changed default channel to team chat.</channelSet>
-        <messageSent>Message sent.</messageSent>
-        <onTeam>You are on {0}</onTeam>
-        <haveSelected>You have selected {0}</haveSelected>
-        <changeOnSpawn>Changes will take effect on next spawn.</changeOnSpawn>
-        <classCurrent>Current class:</classCurrent>
-        <classList>List all classes by typing '/classes'</classList>
-        <errorsCleared>Errors cleared!</errorsCleared>
-        <noErrors>No errors!</noErrors>
-        <joined>You joined {0}</joined>
-        <worldDefuse>You defused world TNT.</worldDefuse>
-        <defusePlayerTnt>You defused {0}'s TNT.</defusePlayerTnt>
-        <landminePlanted>Landmine planted!</landminePlanted>
-        <ratingSaved>Your rating of {0} for {1} {2} has been saved.</ratingSaved>
-        <ratingChange>You can change your rating later using the hopper, or by typing {0}</ratingChange>
-        <mapRated>Someone on {0} rated this map {1}</mapRated>
-        <mapReRated>Someone on {0} re-rated this map from {2} to {1}</mapReRated>
-        <autoBalance>Teams will be auto-balanced if {0} remains stacked</autoBalance>
-        <youChangedRating>You changed your rating for {1} {2} from {3} to {0}.</youChangedRating>
+        <mapSet>Nästa karta vald till {0}</mapSet>
+        <markedForReloading>{0} har markerats för omladdning.</markedForReloading>
+        <allMarkedReloading>Alla kartor markerades framgångsrikt för omladdning.</allMarkedReloading>
+        <countdownCancelled>Avbröt alla nedräkningar.</countdownCancelled>
+        <autoStart>Automatisk igångsättning påslagen för den här matchen</autoStart>
+        <autoStartDisabled>Automatisk igångsättning avslagen för den här matchen</autoStartDisabled>
+        <skippedOver>Hoppade framgångsrikt över {0}</skippedOver>
+        <skippedFromTo>Hoppade framgångsrikt över {0} till {1}</skippedFromTo>
+        <skippedTo>Hoppade framgångsrikt till {0}</skippedTo>
+        <configReload>Konfigurationen laddades framgångsrikt om.</configReload>
+        <mapNext>Nästa karta: {0}</mapNext>
+        <rotationSet>Nuvarande rotation vald till {0}</rotationSet>
+        <rotationReload>Laddade framgångsrikt om rotationen</rotationReload>
+        <rotationAppend>Bifogade framgångsrikt {0} till rotationen</rotationAppend>
+        <insertedIndex>{0} infogades framgångsrikt vid index {1}</insertedIndex>
+        <removedInstance>Lyckades ta bort alla förekomster av {0} från rotationen</removedInstance>
+        <removedMap>Lyckades ta bort karta vid index {0} från rotationen</removedMap>
+        <playerForce>{0} tvingades framgångsrikt till {1}</playerForce>
+        <teamShuffle>Lagblandningen lyckades.</teamShuffle>
+        <teamAlias>{0} har nu bytt namn till {1}</teamAlias>
+        <channelSet>Ändrade standardkanal till lagchatten.</channelSet>
+        <messageSent>Sände meddelande.</messageSent>
+        <onTeam>Du är i {0}</onTeam>
+        <haveSelected>Du har markerat {0}</haveSelected>
+        <changeOnSpawn>Ändringarna kommer börja gälla vid nästa start.</changeOnSpawn>
+        <classCurrent>Nuvarande klass:</classCurrent>
+        <classList>Lista alla klasser genom att skriva '/classes'</classList>
+        <errorsCleared>Fel rensade!</errorsCleared>
+        <noErrors>Inga fel!</noErrors>
+        <joined>Du anslöt dig till {0}</joined>
+        <worldDefuse>Du desarmerade världs-TNT.</worldDefuse>
+        <defusePlayerTnt>Du desarmerade {0}'s TNT.</defusePlayerTnt>
+        <landminePlanted>Landmina planterad!</landminePlanted>
+        <ratingSaved>Ditt betyg {0} för {1} {2} har sparats.</ratingSaved>
+        <ratingChange>Du kan ändra ditt betyg senare genom att använda hopparen, eller genom att skriva {0}</ratingChange>
+        <mapRated>Någon på {0} betygsatte den här kartan {1}</mapRated>
+        <mapReRated>Någon på {0} ändrade sin betygsättning från {2} till {1}</mapReRated>
+        <autoBalance>Lagen kommer att jämnas ut om {0} fortsätter att vara stackat</autoBalance>
+        <youChangedRating>Du ändrade ditt betyg för {1} {2} från {3} till {0}.</youChangedRating>
     </generic>
     <misc>
-        <enemy>the enemy</enemy>
-        <fate>fate</fate>
-        <others>others</others>
-        <blocks>{0} blocks</blocks>
-        <ownership>{0}'s {1}</ownership>
-        <and>and</and>
-        <by>by</by>
-        <team>Team</team>
+        <enemy>fienden</enemy>
+        <fate>öde</fate>
+        <others>andra</others>
+        <blocks>{0} block</blocks>
+        <ownership>{0}s {1}</ownership>
+        <and>och</and>
+        <by>av</by>
+        <team>Lag</team>
     </misc>
     <userInterface>
-        <mapLoaded>Loaded Maps</mapLoaded>
-        <mapObjective>Objective</mapObjective>
-        <mapAuthor>Author</mapAuthor>
-        <mapAuthors>Authors</mapAuthors>
-        <mapContributors>Contributors</mapContributors>
-        <mapRules>Rules</mapRules>
-        <mapMax>Max players</mapMax>
-        <rotationCurrent>Current Rotation</rotationCurrent>
-        <rotationLoaded>Loaded Rotations</rotationLoaded>
-        <matchInfo>Match Info</matchInfo>
-        <time>Time</time>
-        <matchTime>Match Time</matchTime>
-        <goals>Goals</goals>
-        <classes>Classes</classes>
-        <of>{0} of {1}</of>
-        <xmlErrors>XML Errors</xmlErrors>
-        <close>Close</close>
-        <teamSelection>Team/Class Selection</teamSelection>
-        <teamJoinTip>Join the game!</teamJoinTip>
-        <teamPick>Pick your team</teamPick>
-        <teamJoinAuto>Auto Join</teamJoinAuto>
-        <teamJoinAutoLore>Puts you on the team with the fewest players</teamJoinAutoLore>
-        <teamCapacity>Team is at capacity, you can not join.</teamCapacity>
-        <teamCanPick>You are able to pick your team, click to join!</teamCanPick>
-        <teamSelection>Team Selection</teamSelection>
-        <tutorialView>View Tutorial</tutorialView>
-        <tutorialLore>Learn how to play {0}!</tutorialLore>
-        <potionEffects>Potion Effects</potionEffects>
-        <hungerLevel>Hunger level</hungerLevel>
-        <healthLevel>Health level</healthLevel>
-        <oneMap>1 map</oneMap>
-        <maps>{0} maps</maps>
-        <second>{0} second</second>
-        <seconds>{0} seconds</seconds>
-        <matchStarted>The match has started!</matchStarted>
-        <matchStartCancelled>Match start cancelled</matchStartCancelled>
-        <matchOver>Game over!</matchOver>
-        <matchWin>{0} wins!</matchWin>
-        <matchTeamWin>Your team won!</matchTeamWin>
-        <matchTeamLose>Your team lost</matchTeamLose>
-        <matchMaxScoreReached>Score limit of {0} reached</matchMaxScoreReached>
-        <playerJoin>{0} joined the game</playerJoin>
-        <playerLeave>{0} left the game</playerLeave>
-        <serverRestart>Server restarting!</serverRestart>
-        <mapPlaying>Currently playing {0}</mapPlaying>
-        <objectivePlaced>{0} placed {2} for the {1}</objectivePlaced>
-        <objectiveLeaked>{0}'s {1} has leaked!</objectiveLeaked>
-        <objectiveDestroyed>{0}'s {1} destroyed by {2}</objectiveDestroyed>
-        <objectiveTouchedFor>{0} broke a piece of {1} for the {2}</objectiveTouchedFor>
-        <objectiveTouched>{0} broke a piece of {1}</objectiveTouched>
-        <objectiveDamagedFor>{0} damaged {1} for the {2}</objectiveDamagedFor>
-        <objectiveDamaged>{0} damaged {1}</objectiveDamaged>
-        <creditReceived>You will receive credit when this objective is completed.</creditReceived>
-        <objectiveTouchedFor>{0} picked up {1} for the {2}</objectiveTouchedFor>
-        <objectiveTouched>{0} picked up {1}</objectiveTouched>
-        <scoredFor>{0} scored {1} for {2}</scoredFor>
-        <onePoint>1 point</onePoint>
-        <points>{0} points</points>
-        <amountRemaining>You have {0} remaining.</amountRemaining>
-        <oneLife>1 life</oneLife>
-        <lives>{0} lives</lives>
-        <timer>Time Remaining:</timer>
-        <leftLane>You have left your lane</leftLane>
-        <scores>Scores</scores>
-        <typeForMapInfo>type /map for info</typeForMapInfo>
-        <cyclingTimer>Cycling to {0} in {1}</cyclingTimer>
-        <cycledTo>Cycled to {0}</cycledTo>
-        <matchStartingIn>Match starting in {0}</matchStartingIn>
-        <serverRestartingIn>Server restarting in {0}</serverRestartingIn>
-        <tntDefuser>TNT Defuser</tntDefuser>
-        <tntRadiusDefuser>Right-click to defuse TNT in a 5-block radius</tntRadiusDefuser>
-        <rateMap>Rate This Map</rateMap>
-        <terrible>Terrible!</terrible>
-        <bad>Bad</bad>
-        <ok>OK</ok>
-        <good>Good</good>
-        <amazing>Amazing!</amazing>
+        <mapLoaded>Laddade Kartor</mapLoaded>
+        <mapObjective>Objektiv</mapObjective>
+        <mapAuthor>Upphovsman</mapAuthor>
+        <mapAuthors>Upphovsmän</mapAuthors>
+        <mapContributors>Bidragsgivare</mapContributors>
+        <mapRules>Regler</mapRules>
+        <mapMax>Maximalt antal spelare</mapMax>
+        <rotationCurrent>Nuvarande Rotation</rotationCurrent>
+        <rotationLoaded>Laddade Rotationer</rotationLoaded>
+        <matchInfo>Matchinformation</matchInfo>
+        <time>Tid</time>
+        <matchTime>Matchtid</matchTime>
+        <goals>Mål</goals>
+        <classes>Klasser</classes>
+        <of>{0} av {1}</of>
+        <xmlErrors>XML-fel</xmlErrors>
+        <close>Stäng</close>
+        <teamSelection>Val av klass</teamSelection>
+        <teamJoinTip>Anslut dig till spelet!</teamJoinTip>
+        <teamPick>Välj ditt lag</teamPick>
+        <teamJoinAuto>Anslut Automatiskt</teamJoinAuto>
+        <teamJoinAutoLore>Placerar dig i laget med minst spelare</teamJoinAutoLore>
+        <teamCapacity>Lagen har nått maxantalet spelare, du kan inte ansluta.</teamCapacity>
+        <teamCanPick>Du kan välja ditt lag, klicka för att ansluta!</teamCanPick>
+        <teamSelection>Lagval</teamSelection>
+        <tutorialView>Visa Övningsprogram</tutorialView>
+        <tutorialLore>Lär dig spela {0}!</tutorialLore>
+        <potionEffects>Brygdeffekter</potionEffects>
+        <hungerLevel>Hungernivå</hungerLevel>
+        <healthLevel>Hälsa</healthLevel>
+        <oneMap>1 karta</oneMap>
+        <maps>{0} kartor</maps>
+        <second>{0} sekund</second>
+        <seconds>{0} sekunder</seconds>
+        <matchStarted>Matchen har börjat!</matchStarted>
+        <matchStartCancelled>Matchstart avbruten</matchStartCancelled>
+        <matchOver>Spelet är slut!</matchOver>
+        <matchWin>{0} vinner!</matchWin>
+        <matchTeamWin>Ditt lag vann!</matchTeamWin>
+        <matchTeamLose>Ditt lag förlorade</matchTeamLose>
+        <matchMaxScoreReached>Poänggränsen {0} nådd</matchMaxScoreReached>
+        <playerJoin>{0} anslöt sig till spelet</playerJoin>
+        <playerLeave>{0} lämnade spelet</playerLeave>
+        <serverRestart>Servern startas om!</serverRestart>
+        <mapPlaying>Just nu spelas {0}</mapPlaying>
+        <objectivePlaced>{0} placerade {2} för {1}</objectivePlaced>
+        <objectiveLeaked>{0}s {1} har läckt!</objectiveLeaked>
+        <objectiveDestroyed>{0}s {1} förstördes av {2}</objectiveDestroyed>
+        <objectiveTouchedFor>{0} förstörde en bit utav {2} för {1}</objectiveTouchedFor>
+        <objectiveTouched>{0} förstörde en bit av {1}</objectiveTouched>
+        <objectiveDamagedFor>{0} skadade {2} för {1}</objectiveDamagedFor>
+        <objectiveDamaged>{0} skadade {1}</objectiveDamaged>
+        <creditReceived>Du får erkännande när målet är avklarat.</creditReceived>
+        <objectiveTouchedFor>{0} plockade upp {2} för {1}</objectiveTouchedFor>
+        <objectiveTouched>{0} plockade upp {1}</objectiveTouched>
+        <scoredFor>{0} tog {1} poäng för {2}<scoredFor>
+        <onePoint>1 poäng</onePoint>
+        <points>Du har {0} kvar.</points>
+        <amountRemaining>Du har {0} kvar.</amountRemaining>
+        <oneLife>1 liv</oneLife>
+        <lives>{0} liv</lives>
+        <timer>Återstående tid:</timer>
+        <leftLane>Du har lämnat din bana</leftLane>
+        <scores>Ställning</scores>
+        <typeForMapInfo>skriv /map för info</typeForMapInfo>
+        <cyclingTimer>Cirkulerar till {0} om {1}</cyclingTimer>
+        <cycledTo>Roterade till {0}</cycledTo>
+        <matchStartingIn>Matchen börjar inom {0}</matchStartingIn>
+        <serverRestartingIn>Servern startas om inom {0}!</serverRestartingIn>
+        <tntDefuser>TNT-desarmerare</tntDefuser>
+        <tntRadiusDefuser>Högerklicka för att desarmera TNT i en 5-blocks radie</tntRadiusDefuser>
+        <rateMap>Betygsätt den här kartan</rateMap>
+        <terrible>Fruktansvärd!</terrible>
+        <bad>Dålig</bad>
+        <ok>Okej</ok>
+        <good>Bra</good>
+        <amazing>Fantastisk!</amazing>
         <teamChoose>Choose your team/class</teamChoose>
     </userInterface>
 </locale>
