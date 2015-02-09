@@ -93,11 +93,19 @@ public class ModuleFactory {
         for (ModuleBuilder builder : builders) {
             try {
                 if (builder.getClass().getAnnotation(BuilderData.class).load().equals(time)) {
-                    results.addAll(builder.load(match));
+                    try {
+                        results.addAll(builder.load(match));
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                    }
                 }
             } catch (NullPointerException e) {
                 if (time != ModuleLoadTime.NORMAL) ;
-                else results.addAll(builder.load(match));
+                else try {
+                    results.addAll(builder.load(match));
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
             }
         }
         return results;
