@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 
 public class Rotation {
@@ -54,13 +55,14 @@ public class Rotation {
                     List<Pair<String, String>> authors = new ArrayList<>();
                     for (Element authorsElement : xml.getRootElement().getChildren("authors")) {
                         for (Element author : authorsElement.getChildren()) {
-                            authors.add(new ImmutablePair<>(author.getText(), author.getAttributeValue("contribution")));
+                            String authorName = author.getAttributeValue("uuid") == null ? author.getText() : Bukkit.getOfflinePlayer(UUID.fromString(author.getAttributeValue("uuid"))).getName();
+                            authors.add(new ImmutablePair<>(authorName, author.getAttributeValue("contribution")));
                         }
                     }
                     List<Pair<String, String>> contributors = new ArrayList<>();
                     for (Element contributorsElement : xml.getRootElement().getChildren("contributors")) {
                         for (Element contributor : contributorsElement.getChildren()) {
-                           contributors.add(new ImmutablePair<>(contributor.getText(), contributor.getAttributeValue("contribution")));
+                            contributors.add(new ImmutablePair<>(contributor.getText(), contributor.getAttributeValue("contribution")));
                         }
                     }
                     List<String> rules = new ArrayList<>();
@@ -162,13 +164,12 @@ public class Rotation {
         }
         return null;
     }
-    
+
     public LoadedMap getCurrent() {
         try {
             return rotation.get(position - 1);
         } catch (IndexOutOfBoundsException e) {
             return rotation.get(0);
         }
-        
     }
 }
