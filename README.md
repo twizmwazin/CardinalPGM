@@ -13,7 +13,7 @@ When creating an issue, be careful to follow the following guidelines:
 - Make sure the same issue is not already reported. Duplicate issues are not useful and will only hinder development.
 - Make sure the topic of the issue is an issue with the plugin, not a missing or requested feature.
 - Have a demonstration of the bug or clear instructions to produce it.
-- Include the version of the plugin the issue is found on. The version can be found by typing '/cardinal -v'.
+- Include the version of the plugin the issue is found on. The version can be found by typing `/cardinal -v`.
 - Make sure the report uses clear and concise English.
 By following these guidelines, it will help developers to quickly and accurately resolve the issue.
 
