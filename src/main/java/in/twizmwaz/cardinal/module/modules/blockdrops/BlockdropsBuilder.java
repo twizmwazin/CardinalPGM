@@ -7,7 +7,6 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
-import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
 import in.twizmwaz.cardinal.util.ParseUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

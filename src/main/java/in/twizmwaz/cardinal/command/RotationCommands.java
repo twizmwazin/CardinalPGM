@@ -3,7 +3,6 @@ package in.twizmwaz.cardinal.command;
 import com.sk89q.minecraft.util.commands.ChatColor;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
-import com.sk89q.minecraft.util.commands.CommandException;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
 import org.apache.commons.lang3.tuple.Pair;
@@ -15,13 +14,12 @@ import java.util.List;
 
 public class RotationCommands {
 
-    @Command(aliases = {"rotation", "rot"}, desc = "Shows the current rotation.", usage = "[page]")
-    public static void rotation(final CommandContext cmd, CommandSender sender) throws CommandException {
+    @Command(aliases = {"rotation", "rot"}, desc = "Shows the current rotation.", usage = "[page]", min = 0, max = 0)
+    public static void rotation(final CommandContext cmd, CommandSender sender) {
         int index = cmd.argsLength() == 0 ? 1 : cmd.getInteger(0);
         List<LoadedMap> rot = GameHandler.getGameHandler().getRotation().getRotation();
         int pages = (int) Math.ceil((rot.size() + 7) / 8);
-        if (index > pages)
-            throw new CommandException("Invalid page number specified! Maximum page number is " + pages + ".");
+        if (index > pages) { sender.sendMessage("Invalid page number specified! Maximum page number is" + pages + "."); }
         sender.sendMessage(ChatColor.RED + "------------- " + ChatColor.WHITE + "Current Rotation " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + index + ChatColor.DARK_AQUA + " of " + ChatColor.AQUA + pages + ChatColor.DARK_AQUA + ") " + ChatColor.RED + "-------------");
         String[] maps = {"", "", "", "", "", "", "", ""};
         for (int i = 0; i <= maps.length - 1; i++) {
@@ -47,9 +45,7 @@ public class RotationCommands {
                 } else {
                     maps[i] = ChatColor.WHITE + "" + (position + 1) + ". " + maps[i];
                 }
-
-            } catch (IndexOutOfBoundsException e) {
-            }
+            } catch (IndexOutOfBoundsException e) {}
         }
         for (String map : maps) {
             if (!map.equalsIgnoreCase("")) {
@@ -58,8 +54,8 @@ public class RotationCommands {
         }
     }
 
-    @Command(aliases = {"maps"}, desc = "Shows all currently loaded maps.", usage = "[page]")
-    public static void maps(final CommandContext cmd, CommandSender sender) throws CommandException {
+    @Command(aliases = {"maps"}, desc = "Shows all currently loaded maps.", usage = "[page]", min = 0, max = 1)
+    public static void maps(final CommandContext cmd, CommandSender sender) {
         int index;
         try {
             index = cmd.getInteger(0);
@@ -82,8 +78,7 @@ public class RotationCommands {
             }
         }
         int pages = (int) Math.ceil((loadedList.size() + 7) / 8);
-        if (index > pages)
-            throw new CommandException("Invalid page number specified! Maximum page number is " + pages + ".");
+        if (index > pages) { sender.sendMessage(ChatColor.RED + "Invalid page number specified! Maximum page number is " + pages + "."); }
         sender.sendMessage(ChatColor.RED + "--------------- " + ChatColor.WHITE + "Loaded Maps " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + index + ChatColor.DARK_AQUA + " of " + ChatColor.AQUA + pages + ChatColor.DARK_AQUA + ") " + ChatColor.RED + "---------------");
         String[] maps = {"", "", "", "", "", "", "", ""};
         for (int i = 0; i <= maps.length - 1; i++) {

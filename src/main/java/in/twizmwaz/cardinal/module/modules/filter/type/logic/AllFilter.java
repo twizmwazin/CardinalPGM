@@ -4,7 +4,6 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.ChildrenFilterParser;
-import org.bukkit.Bukkit;
 
 import static in.twizmwaz.cardinal.module.modules.filter.FilterState.*;
 

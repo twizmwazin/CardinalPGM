@@ -15,8 +15,6 @@ import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 
 public class GameComplete implements TaskedModule {
 

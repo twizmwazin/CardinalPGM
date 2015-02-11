@@ -7,7 +7,6 @@ import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleFactory;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
-import in.twizmwaz.cardinal.module.modules.appliedRegion.AppliedRegion;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
 import in.twizmwaz.cardinal.module.modules.mapInfo.Info;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
