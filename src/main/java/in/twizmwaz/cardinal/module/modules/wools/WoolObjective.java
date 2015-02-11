@@ -158,7 +158,7 @@ public class WoolObjective implements GameObjective {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (!event.isCancelled() && event.getBlock().equals(place.getBlock())) {
+        if (event.getBlock().equals(place.getBlock())) {
             if (event.getBlock().getType().equals(Material.WOOL)) {
                 if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
                     if (TeamUtils.getTeamByPlayer(event.getPlayer()) == team) {
