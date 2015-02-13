@@ -6,7 +6,7 @@
 
     <groupId>in.twizmwaz.cardinal</groupId>
     <artifactId>CardinalPGM</artifactId>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
 
     <properties>
         <plugin.name>Cardinal</plugin.name>
@@ -15,10 +15,6 @@
     </properties>
 
     <repositories>
-        <repository>
-            <id>maven-repo</id>
-            <url>http://repo1.maven.org/maven2</url>
-        </repository>
         <repository>
             <id>overcast-repo</id>
             <url>https://repo.oc.tc/content/groups/public/</url>
