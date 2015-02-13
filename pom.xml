@@ -24,8 +24,8 @@
             <url>https://repo.oc.tc/content/groups/public/</url>
         </repository>
         <repository>
-            <id>komp-repo</id>
-            <url>http://repo.kompking.info/nexus/content/groups/public/</url>
+            <id>twiz-releases</id>
+            <url>http://repo.twizmwaz.in/content/repositories/releases/</url>
         </repository>
     </repositories>
 
