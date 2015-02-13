@@ -172,7 +172,7 @@
         <creditReceived>Du får erkännande när målet är avklarat.</creditReceived>
         <objectiveTouchedFor>{0} plockade upp {2} för {1}</objectiveTouchedFor>
         <objectiveTouched>{0} plockade upp {1}</objectiveTouched>
-        <scoredFor>{0} tog {1} poäng för {2}<scoredFor>
+        <scoredFor>{0} tog {1} poäng för {2}</scoredFor>
         <onePoint>1 poäng</onePoint>
         <points>Du har {0} kvar.</points>
         <amountRemaining>Du har {0} kvar.</amountRemaining>

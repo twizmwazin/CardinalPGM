@@ -32,7 +32,7 @@
         <noTeamMatch>No se ha encontrado ningún equipo con esos criterios.</noTeamMatch>
         <noRotMatch>No se ha encontrado ninguna rotación con esos criterios.</noRotMatch>
         <noPlayerMatch>Ningún jugador coincide con ese criterio.</noPlayerMatch>
-        <multiplePlayers>¡Más de un jugador encontrado! Utiliza @<nombre> para una búsqueda más precisa.</multiplePlayers>
+        <multiplePlayers>¡Más de un jugador encontrado! Utiliza {0} para una búsqueda más precisa.</multiplePlayers>
         <unknownError>Se ha producido un error desconocido. Por favor consulte la consola del servidor.</unknownError>
         <movedForBalance>Has sido movido a {0} para balancear el tamaño de los equipos</movedForBalance>
         <autoJoinSwitch>(no elegiste un equipo, así que asumimos que no te importaría)</autoJoinSwitch>

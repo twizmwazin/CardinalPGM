@@ -1,5 +1,9 @@
 package in.twizmwaz.cardinal.chat;
 
+import in.twizmwaz.cardinal.Cardinal;
+import org.jdom2.Document;
+import org.jdom2.Element;
+
 public enum ChatConstant {
     
     ERROR_RESTART_DURING_MATCH("error.restartDuringMatch"),
@@ -192,7 +196,6 @@ public enum ChatConstant {
     UI_AMAZING("userInterface.amazing"),
     UI_TEAM_CHOOSE("userInterface.teamChoose");
     
-    
     private final String path;
     
     private ChatConstant(String path) {
@@ -200,7 +203,14 @@ public enum ChatConstant {
     }
     
     public String getMessage(String locale) {
-        return "";
+        Document localized = Cardinal.getLocaleHandler().getLocaleDocument(locale.split("_")[0]);
+        String message = null;
+        Element work = localized.getRootElement();
+        for (String element : this.path.split("\\.")) {
+            work = work.getChild(element);
+            message = work.getText();
+        }
+        return message;
     }
     
 }

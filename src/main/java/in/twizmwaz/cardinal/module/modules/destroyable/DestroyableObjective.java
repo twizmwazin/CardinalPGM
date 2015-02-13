@@ -1,6 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.destroyable;
 
-import in.twizmwaz.cardinal.chat.TeamChat;
+import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
@@ -121,7 +121,7 @@ public class DestroyableObjective implements GameObjective {
                     if (!playersTouched.contains(event.getPlayer().getUniqueId())) {
                         playersTouched.add(event.getPlayer().getUniqueId());
                         TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
-                        if (this.show) TeamChat.sendToTeam(teamModule.getColor() + "[Team] " + event.getPlayer().getDisplayName() + ChatColor.GRAY + " damaged " + ChatColor.AQUA + name, teamModule);
+                        if (this.show) TeamUtils.getTeamChannel(teamModule).sendMessage(teamModule.getColor() + "[Team] " + event.getPlayer().getDisplayName() + ChatColor.GRAY + " damaged " + ChatColor.AQUA + name);
                     }
                     boolean oldState = this.isTouched();
                     this.complete++;
@@ -168,7 +168,7 @@ public class DestroyableObjective implements GameObjective {
                             if (!playersTouched.contains(player)) {
                                 playersTouched.add(player);
                                 TeamModule teamModule = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
-                                if (this.show) TeamChat.sendToTeam(teamModule.getColor() + "[Team] " + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " damaged " + ChatColor.AQUA + name, teamModule);
+                                if (this.show) TeamUtils.getTeamChannel(teamModule).sendMessage(teamModule.getColor() + "[Team] " + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " damaged " + ChatColor.AQUA + name);
                             }
                             blockDestroyed = true;
                             blownUp = true;

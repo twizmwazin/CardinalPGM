@@ -48,4 +48,8 @@ public class PermissionModule implements Module {
         attachmentMap.remove(event.getPlayer());
     }
     
+    public PermissionAttachment getPlayerAttachment(Player player) {
+        return attachmentMap.get(player);
+    }
+    
 }

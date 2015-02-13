@@ -1,7 +1,10 @@
 package in.twizmwaz.cardinal.module.modules.chat;
 
-import in.twizmwaz.cardinal.chat.TeamChat;
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
+import in.twizmwaz.cardinal.util.TeamUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -15,8 +18,11 @@ public class ChatModule implements Module {
 
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-        TeamChat.sendTeamMessage(event.getMessage(), event.getPlayer());
         event.setCancelled(true);
+        //get default channel
+        for (TeamChannel channel : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamChannel.class)) {
+            if (channel.getTeam().equals(TeamUtils.getTeamByPlayer(event.getPlayer()))) 
+                channel.sendMessage(channel.getTeam().getColor() + "[Team] " + event.getPlayer().getDisplayName() + ChatColor.RESET + ": " + event.getMessage());
+        }
     }
-
 }

@@ -1,7 +1,10 @@
 package in.twizmwaz.cardinal.module.modules.wools;
 
 import in.parapengu.commons.utils.StringUtils;
-import in.twizmwaz.cardinal.chat.TeamChat;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
+import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
@@ -114,7 +117,9 @@ public class WoolObjective implements GameObjective {
                     if (TeamUtils.getTeamByPlayer(player) == team) {
                         if (!this.playersTouched.contains(player.getUniqueId())) {
                             this.playersTouched.add(player.getUniqueId());
-                            if (this.show) TeamChat.sendToTeam(team.getColor() + "[Team] " + player.getDisplayName() + ChatColor.GRAY + " picked up " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " "), team);
+                            if (this.show) for (TeamChannel channel : team.getMatch().getModules().getModules(TeamChannel.class)) {
+                                if (this.show) TeamUtils.getTeamChannel(team).sendMessage(team.getColor() + "[Team] " + player.getDisplayName() + ChatColor.GRAY + " picked up " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " "));
+                            }
                         }
                         boolean oldState = this.touched;
                         this.touched = true;
@@ -136,7 +141,7 @@ public class WoolObjective implements GameObjective {
                     if (TeamUtils.getTeamByPlayer(player) == team) {
                         if (!this.playersTouched.contains(player.getUniqueId())) {
                             this.playersTouched.add(player.getUniqueId());
-                            if (this.show) TeamChat.sendToTeam(team.getColor() + "[Team] " + player.getDisplayName() + ChatColor.GRAY + " picked up " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " "), team);
+                            if (this.show) TeamUtils.getTeamChannel(team).sendMessage(team.getColor() + "[Team] " + player.getDisplayName() + ChatColor.GRAY + " picked up " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " "));
                         }
                         boolean oldState = this.touched;
                         this.touched = true;

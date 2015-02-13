@@ -8,6 +8,7 @@ import in.twizmwaz.cardinal.module.modules.blockdrops.BlockdropsBuilder;
 import in.twizmwaz.cardinal.module.modules.broadcasts.BroadcastModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.buildHeight.BuildHeightBuilder;
 import in.twizmwaz.cardinal.module.modules.chat.ChatModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannelModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.cores.CoreObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.deathMessages.DeathMessagesBuilder;
@@ -34,6 +35,7 @@ import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimerBuilder;
 import in.twizmwaz.cardinal.module.modules.monumentModes.MonumentModesBuilder;
 import in.twizmwaz.cardinal.module.modules.motd.MOTDBuilder;
 import in.twizmwaz.cardinal.module.modules.observers.ObserverModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.permissions.PermissionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.portal.PortalBuilder;
 import in.twizmwaz.cardinal.module.modules.projectiles.ProjectilesBuilder;
 import in.twizmwaz.cardinal.module.modules.proximityAlarm.ProximityAlarmBuilder;
@@ -168,5 +170,7 @@ public class ModuleFactory {
         builderClasses.add(ScoreboxBuilder.class);
         builderClasses.add(BlockdropsBuilder.class);
         builderClasses.add(ProximityAlarmBuilder.class);
+        builderClasses.add(PermissionModuleBuilder.class);
+        builderClasses.add(ChatChannelModuleBuilder.class);
     }
 }

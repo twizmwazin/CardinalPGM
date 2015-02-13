@@ -1,7 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.cores;
 
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.chat.TeamChat;
+import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
@@ -143,7 +143,7 @@ public class CoreObjective implements GameObjective {
                     if (!playersTouched.contains(event.getPlayer().getUniqueId())) {
                         playersTouched.add(event.getPlayer().getUniqueId());
                         TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
-                        if (this.show) TeamChat.sendToTeam(teamModule.getColor() + "[Team] " + event.getPlayer().getDisplayName() + ChatColor.GRAY + " broke a piece of " + ChatColor.RED + name, teamModule);
+                        if (this.show) TeamUtils.getTeamChannel(teamModule).sendMessage(teamModule.getColor() + "[Team] " + event.getPlayer().getDisplayName() + ChatColor.GRAY + " broke a piece of " + ChatColor.RED + name);
                     }
                     boolean oldState = this.touched;
                     this.touched = true;
@@ -187,7 +187,7 @@ public class CoreObjective implements GameObjective {
                             if (!playersTouched.contains(player)) {
                                 playersTouched.add(player);
                                 TeamModule teamModule = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
-                                if (this.show) TeamChat.sendToTeam(teamModule.getColor() + "[Team] " + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " broke a piece of " + ChatColor.RED + name, teamModule);
+                                if (this.show) TeamUtils.getTeamChannel(teamModule).sendMessage(teamModule.getColor() + "[Team] " + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " broke a piece of " + ChatColor.RED + name);
                             }
                             this.touched = true;
                             blownUp = true;

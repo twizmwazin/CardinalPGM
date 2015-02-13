@@ -4,13 +4,3 @@ main: ${plugin.mainClass}
 version: ${project.version}-${describe}
 authors: [twiz_mwazin]
 prefix: CardinalPGM
-commands:
-  a:
-    description:
-      Sends a message to other operators.
-  g:
-    description:
-      Sends a message to all players.
-  t:
-    description:
-      Sends a message to a player's team.

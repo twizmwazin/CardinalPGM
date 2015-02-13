@@ -1,10 +1,12 @@
-package in.twizmwaz.cardinal.chat;
+package in.twizmwaz.cardinal.module.modules.chatChannels;
 
+import in.twizmwaz.cardinal.chat.ChatMessage;
+import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.entity.Player;
 
-import java.util.Set;
+import java.util.Collection;
 
-public interface ChatChannel {
+public interface ChatChannelModule extends Module {
 
     /**
      * @param string Raw String to be sent to all players in this channel
@@ -13,14 +15,13 @@ public interface ChatChannel {
 
     /**
      * @param message The generic message to be translated
-     * @param strings String arguments for the localized message
      */
-    public void sendLocalizedMessage(ChatMessage message, String[] strings);
+    public void sendLocalizedMessage(ChatMessage message);
 
     /**
      * @return A set of all the members of the channel
      */
-    public Set<Player> getMembers();
+    public Collection<? extends Player> getMembers();
 
     /**
      * @param player Adds player as a member

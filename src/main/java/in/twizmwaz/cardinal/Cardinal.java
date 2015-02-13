@@ -2,9 +2,7 @@ package in.twizmwaz.cardinal;
 
 import com.sk89q.bukkit.util.CommandsManagerRegistration;
 import com.sk89q.minecraft.util.commands.*;
-import in.twizmwaz.cardinal.chat.AdminChat;
-import in.twizmwaz.cardinal.chat.GlobalChat;
-import in.twizmwaz.cardinal.chat.TeamChat;
+import in.twizmwaz.cardinal.chat.LocaleHandler;
 import in.twizmwaz.cardinal.command.*;
 import in.twizmwaz.cardinal.permissions.Setting;
 import in.twizmwaz.cardinal.permissions.SettingValue;
@@ -15,7 +13,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jdom2.JDOMException;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -23,6 +23,7 @@ public class Cardinal extends JavaPlugin {
 
     private static Cardinal instance;
     private static GameHandler gameHandler;
+    private static LocaleHandler localeHandler;
     private CommandsManager<CommandSender> commands;
 
     @Override
@@ -68,19 +69,26 @@ public class Cardinal extends JavaPlugin {
         cmdRegister.register(ModesCommand.class);
         cmdRegister.register(ClassCommands.class);
         cmdRegister.register(CardinalCommand.class);
-        for (String cmd : AdminChat.commands) {
+        /*for (String cmd : AdminChat.commands) {
             getCommand(cmd).setExecutor(new AdminChat());
         }
         for (String cmd : GlobalChat.commands) {
             getCommand(cmd).setExecutor(new GlobalChat());
         }
-        for (String cmd : TeamChat.commands) {
-            getCommand(cmd).setExecutor(new TeamChat());
-        }
+        for (String cmd : TeamChannel.commands) {
+            getCommand(cmd).setExecutor(new TeamChannel());
+        }*/
     }
 
     public void onEnable() {
         instance = this;
+        try {
+            localeHandler = new LocaleHandler(this);
+        } catch (IOException | JDOMException e) {
+            e.printStackTrace();
+            this.setEnabled(false);
+            return;
+        }
         FileConfiguration config = getConfig();
         if (!config.contains("settings")) {
 //            config.addDefault("settings", Arrays.asList("deathmessages"));
@@ -119,6 +127,10 @@ public class Cardinal extends JavaPlugin {
 
     public GameHandler getGameHandler() {
         return gameHandler;
+    }
+
+    public static LocaleHandler getLocaleHandler() {
+        return localeHandler;
     }
 
     public JavaPlugin getPlugin() {
