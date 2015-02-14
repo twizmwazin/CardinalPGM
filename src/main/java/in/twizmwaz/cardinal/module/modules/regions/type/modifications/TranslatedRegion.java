@@ -43,7 +43,7 @@ public class TranslatedRegion extends RegionModule {
     }
 
     public Vector getOffset() {
-        return offset;
+        return offset.clone().add(new Vector(-0.5, -0.5, -0.5));
     }
 
     @Override
