@@ -72,12 +72,14 @@ public class Tnt implements Module {
                     }
                 }
                 if (yield != 0.3) {
-                    /** Currently Broken **/
-                    /*
-                    for (Block block : event.blockList()) {
-                        block.getDrops().clear();
-                    }
-                    */
+                    /**
+                     * Currently Broken
+                     *
+                     * TODO: Fix it.
+                     */
+
+                    event.setYield((float) yield);
+
 
                 }
             } else {
