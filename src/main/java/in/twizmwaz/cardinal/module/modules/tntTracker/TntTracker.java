@@ -59,11 +59,13 @@ public class TntTracker implements Module {
 
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent event) {
-        if (event.getEntity().getType() == EntityType.PRIMED_TNT) {
-            for (Block block : event.blockList()) {
-                if (block.getType() == Material.TNT && getWhoPlaced(event.getEntity()) != null) {
-                    Location location = block.getLocation();
-                    tntPlaced.put(location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ(), getWhoPlaced(event.getEntity()));
+        if (event.getEntity() != null) {
+            if (event.getEntity().getType() == EntityType.PRIMED_TNT) {
+                for (Block block : event.blockList()) {
+                    if (block.getType() == Material.TNT && getWhoPlaced(event.getEntity()) != null) {
+                        Location location = block.getLocation();
+                        tntPlaced.put(location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ(), getWhoPlaced(event.getEntity()));
+                    }
                 }
             }
         }

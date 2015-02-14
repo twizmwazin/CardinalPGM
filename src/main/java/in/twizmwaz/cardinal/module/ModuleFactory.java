@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module;
 
 import in.twizmwaz.cardinal.match.Match;
+import in.twizmwaz.cardinal.module.modules.Tnt.TntBuilder;
 import in.twizmwaz.cardinal.module.modules.appliedRegion.AppliedRegionBuilder;
 import in.twizmwaz.cardinal.module.modules.armorKeep.ArmorKeepBuilder;
 import in.twizmwaz.cardinal.module.modules.blitz.BlitzBuilder;
@@ -172,5 +173,6 @@ public class ModuleFactory {
         builderClasses.add(ProximityAlarmBuilder.class);
         builderClasses.add(PermissionModuleBuilder.class);
         builderClasses.add(ChatChannelModuleBuilder.class);
+        builderClasses.add(TntBuilder.class);
     }
 }

@@ -32,4 +32,10 @@ public class NumUtils {
         if (string.equalsIgnoreCase("-oo")) return Double.NEGATIVE_INFINITY;
         return Double.parseDouble(string);
     }
+
+    public static boolean parseBoolean(String string) {
+        if (string.equalsIgnoreCase("on")) return true;
+        if (string.equalsIgnoreCase("off")) return false;
+        return Boolean.parseBoolean(string);
+    }
 }
