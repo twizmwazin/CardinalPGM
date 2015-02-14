@@ -20,8 +20,8 @@ import java.util.logging.Level;
 
 public class Tnt implements Module {
 
-    private final boolean instantignite;
-    private final boolean blockdamage;
+    private final boolean instantIgnite;
+    private final boolean blockDamage;
     private final double yield;
     private final double power;
     private final int fuse;
@@ -31,9 +31,9 @@ public class Tnt implements Module {
         HandlerList.unregisterAll(this);
     }
 
-    protected Tnt(final boolean instantignite, final boolean blockdamage, final double yield, final double power, final int fuse) {
-        this.instantignite = instantignite;
-        this.blockdamage = blockdamage;
+    protected Tnt(final boolean instantIgnite, final boolean blockDamage, final double yield, final double power, final int fuse) {
+        this.instantIgnite = instantIgnite;
+        this.blockDamage = blockDamage;
         this.yield = yield;
         this.power = power;
         this.fuse = fuse;
@@ -42,7 +42,7 @@ public class Tnt implements Module {
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         Block block = event.getBlock();
-        if (block.getType().equals(Material.TNT) && instantignite) {
+        if (block.getType().equals(Material.TNT) && instantIgnite) {
             event.setCancelled(true);
             Entity tntPrimed = GameHandler.getGameHandler().getMatchWorld().spawnEntity(block.getLocation(), EntityType.PRIMED_TNT);
             tntPrimed.setMetadata("instantignite", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), true));
@@ -64,9 +64,9 @@ public class Tnt implements Module {
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent event) {
         if (event.getEntity() instanceof TNTPrimed) {
-            if (blockdamage) {
+            if (blockDamage) {
                 if (event.getEntity().hasMetadata("instantignite")) {
-                    if (instantignite && event.getEntity().getMetadata("instantignite").get(0).value().equals(true)) {
+                    if (instantIgnite && event.getEntity().getMetadata("instantignite").get(0).value().equals(true)) {
                         event.setCancelled(true);
                         GameHandler.getGameHandler().getMatchWorld().createExplosion(event.getLocation(), (float) power);
                     }

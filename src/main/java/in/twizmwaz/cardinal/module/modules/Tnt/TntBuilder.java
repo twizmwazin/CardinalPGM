@@ -14,13 +14,13 @@ public class TntBuilder implements ModuleBuilder {
     public ModuleCollection load(Match match) {
         ModuleCollection results = new ModuleCollection();
         for (Element element : match.getDocument().getRootElement().getChildren("tnt")) {
-            boolean instantignite = false;
+            boolean instantIgnite = false;
             if (element.getChild("instantignite") != null) {
-               instantignite = NumUtils.parseBoolean(element.getChildText("instantignite"));
+                instantIgnite = NumUtils.parseBoolean(element.getChildText("instantignite"));
             }
-            boolean blockdamage = true;
+            boolean blockDamage = true;
             if (element.getChild("blockdamage") != null) {
-                blockdamage = NumUtils.parseBoolean(element.getChildText("blockdamage"));
+                blockDamage = NumUtils.parseBoolean(element.getChildText("blockdamage"));
             }
             double yield = 0.3;
             if (element.getChild("yield") != null) {
@@ -34,7 +34,7 @@ public class TntBuilder implements ModuleBuilder {
             if (element.getChild("fuse") != null) {
                 fuse = StringUtils.timeStringToSeconds(element.getChildText("fuse"));
             }
-            results.add(new Tnt(instantignite, blockdamage, yield, power, fuse));
+            results.add(new Tnt(instantIgnite, blockDamage, yield, power, fuse));
         }
         return results;
     }
