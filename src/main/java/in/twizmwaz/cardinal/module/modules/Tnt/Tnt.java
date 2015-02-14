@@ -51,8 +51,13 @@ public class Tnt implements Module {
 
     @EventHandler
     public void onExplosionPrime(ExplosionPrimeEvent event) {
-        if (event.getEntity() instanceof TNTPrimed && fuse != 4) {
-            ((TNTPrimed) event.getEntity()).setFuseTicks(fuse * 20);
+        if (event.getEntity() instanceof TNTPrimed) {
+            if (fuse != 4) {
+                ((TNTPrimed) event.getEntity()).setFuseTicks(fuse * 20);
+            }
+            if (power != 4.0) {
+                event.setRadius((float) power * 10);
+            }
         }
     }
 
@@ -60,16 +65,20 @@ public class Tnt implements Module {
     public void onEntityExplode(EntityExplodeEvent event) {
         if (event.getEntity() instanceof TNTPrimed) {
             if (blockdamage) {
-                if (instantignite && event.getEntity().getMetadata("instantignite").get(0).value().equals(true)) {
-                    event.setCancelled(true);
-                    GameHandler.getGameHandler().getMatchWorld().createExplosion(event.getLocation(), (float) power);
-                }
-                if (power != 4.0) {
-                    event.setCancelled(true);
-                    GameHandler.getGameHandler().getMatchWorld().createExplosion(event.getLocation(), (float) power);
+                if (event.getEntity().hasMetadata("instantignite")) {
+                    if (instantignite && event.getEntity().getMetadata("instantignite").get(0).value().equals(true)) {
+                        event.setCancelled(true);
+                        GameHandler.getGameHandler().getMatchWorld().createExplosion(event.getLocation(), (float) power);
+                    }
                 }
                 if (yield != 0.3) {
-                   // event.setYield((float) yield);
+                    /** Currently Broken **/
+                    /*
+                    for (Block block : event.blockList()) {
+                        block.getDrops().clear();
+                    }
+                    */
+
                 }
             } else {
                 event.setCancelled(true);
