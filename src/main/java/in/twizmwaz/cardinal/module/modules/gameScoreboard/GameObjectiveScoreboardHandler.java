@@ -33,7 +33,7 @@ public class GameObjectiveScoreboardHandler {
             WoolObjective wool = (WoolObjective) objective;
             if (wool.isComplete()) {
                 return StringUtils.convertDyeColorToChatColor(wool.getColor()) + "\u2B1B";
-            } else if (wool.isTouched() && this.team == team) {
+            } else if (wool.isTouched() && (this.team == team || team.isObserver())) {
                 return StringUtils.convertDyeColorToChatColor(wool.getColor()) + "\u2592";
             } else {
                 return StringUtils.convertDyeColorToChatColor(wool.getColor()) + "\u2B1C";
@@ -42,7 +42,7 @@ public class GameObjectiveScoreboardHandler {
             CoreObjective core = (CoreObjective) objective;
             if (core.isComplete()) {
                 return ChatColor.GREEN + "\u2714";
-            } else if (core.isTouched() && this.team != team) {
+            } else if (core.isTouched() && (this.team != team || team.isObserver())) {
                 return ChatColor.YELLOW + "\u2733";
             } else {
                 return ChatColor.RED + "\u2715";
@@ -52,7 +52,7 @@ public class GameObjectiveScoreboardHandler {
             if (destroyable.showPercent()) {
                 if (destroyable.isComplete()) {
                     return ChatColor.GREEN + "" + destroyable.getPercent() + "%";
-                } else if (destroyable.isTouched() && this.team != team) {
+                } else if (destroyable.isTouched() && (this.team != team || team.isObserver())) {
                     return ChatColor.YELLOW + "" + destroyable.getPercent() + "%";
                 } else {
                     return ChatColor.RED + "" + destroyable.getPercent() + "%";
