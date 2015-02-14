@@ -61,7 +61,6 @@ public class Tnt implements Module {
         if (event.getEntity() instanceof TNTPrimed) {
             if (blockdamage) {
                 if (instantignite && event.getEntity().getMetadata("instantignite").get(0).value().equals(true)) {
-                    Bukkit.broadcastMessage("Has meta");
                     event.setCancelled(true);
                     GameHandler.getGameHandler().getMatchWorld().createExplosion(event.getLocation(), (float) power);
                 }
@@ -73,7 +72,6 @@ public class Tnt implements Module {
                    // event.setYield((float) yield);
                 }
             } else {
-                Bukkit.broadcastMessage("!blockdamage - canceling");
                 event.setCancelled(true);
                 GameHandler.getGameHandler().getMatchWorld().createExplosion(event.getLocation().getX(), event.getLocation().getY(), event.getLocation().getZ(), (float) power, false, false);
             }
