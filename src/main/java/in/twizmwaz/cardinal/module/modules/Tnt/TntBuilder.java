@@ -1,9 +1,8 @@
-package in.twizmwaz.cardinal.module.modules.Tnt;
+package in.twizmwaz.cardinal.module.modules.tnt;
 
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
-import in.twizmwaz.cardinal.module.modules.blockdrops.Blockdrops;
 import in.twizmwaz.cardinal.util.NumUtils;
 import in.twizmwaz.cardinal.util.StringUtils;
 import org.jdom2.Element;

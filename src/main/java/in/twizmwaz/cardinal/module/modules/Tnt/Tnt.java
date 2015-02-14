@@ -1,22 +1,25 @@
-package in.twizmwaz.cardinal.module.modules.Tnt;
+package in.twizmwaz.cardinal.module.modules.tnt;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.Module;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Explosive;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.util.Vector;
 
-import java.util.logging.Level;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Tnt implements Module {
 
@@ -44,8 +47,12 @@ public class Tnt implements Module {
         Block block = event.getBlock();
         if (block.getType().equals(Material.TNT) && instantIgnite) {
             event.setCancelled(true);
-            Entity tntPrimed = GameHandler.getGameHandler().getMatchWorld().spawnEntity(block.getLocation(), EntityType.PRIMED_TNT);
-            tntPrimed.setMetadata("instantignite", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), true));
+            ItemStack tntStack = event.getPlayer().getItemInHand();
+            tntStack.setAmount(tntStack.getAmount() - 1);
+            event.getPlayer().setItemInHand(tntStack);
+            Entity tntPrimed = GameHandler.getGameHandler().getMatchWorld().spawnEntity(block.getLocation().add(new Vector(0.5, 0.5, 0.5)), EntityType.PRIMED_TNT);
+            Explosive tnt = (Explosive) tntPrimed;
+            tnt.setYield((float) power);
         }
     }
 
@@ -61,30 +68,17 @@ public class Tnt implements Module {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityExplode(EntityExplodeEvent event) {
         if (event.getEntity() instanceof TNTPrimed) {
-            if (blockDamage) {
-                if (event.getEntity().hasMetadata("instantignite")) {
-                    if (instantIgnite && event.getEntity().getMetadata("instantignite").get(0).value().equals(true)) {
-                        event.setCancelled(true);
-                        GameHandler.getGameHandler().getMatchWorld().createExplosion(event.getLocation(), (float) power);
-                    }
+            if (!blockDamage) {
+                List<Block> toRemove = new ArrayList<>();
+                for (Block block : event.blockList()) {
+                    toRemove.add(block);
                 }
-                if (yield != 0.3) {
-                    /**
-                     * Currently Broken
-                     *
-                     * TODO: Fix it.
-                     */
-
-                    event.setYield((float) yield);
-
-
+                for (Block block : toRemove) {
+                    event.blockList().remove(block);
                 }
-            } else {
-                event.setCancelled(true);
-                GameHandler.getGameHandler().getMatchWorld().createExplosion(event.getLocation().getX(), event.getLocation().getY(), event.getLocation().getZ(), (float) power, false, false);
             }
         }
     }
