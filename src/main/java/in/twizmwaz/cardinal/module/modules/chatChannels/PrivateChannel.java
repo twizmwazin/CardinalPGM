@@ -1,6 +1,5 @@
 package in.twizmwaz.cardinal.module.modules.chatChannels;
 
-import in.twizmwaz.cardinal.chat.ChatMessage;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

@@ -71,15 +71,7 @@ public class Cardinal extends JavaPlugin {
         cmdRegister.register(ModesCommand.class);
         cmdRegister.register(ClassCommands.class);
         cmdRegister.register(CardinalCommand.class);
-        /*for (String cmd : AdminChat.commands) {
-            getCommand(cmd).setExecutor(new AdminChat());
-        }
-        for (String cmd : GlobalChat.commands) {
-            getCommand(cmd).setExecutor(new GlobalChat());
-        }
-        for (String cmd : TeamChannel.commands) {
-            getCommand(cmd).setExecutor(new TeamChannel());
-        }*/
+        cmdRegister.register(ChatCommands.class);
     }
 
     public void onEnable() {
