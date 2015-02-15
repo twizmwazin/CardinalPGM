@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.permissions;
 
+import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -34,6 +35,12 @@ public class PermissionModule implements Module {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         attachmentMap.put(event.getPlayer(), event.getPlayer().addAttachment(plugin));
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onCycleComplete(CycleCompleteEvent event) {
+        for (Player player : Bukkit.getOnlinePlayers())
+        attachmentMap.put(player, player.addAttachment(plugin));
     }
     
     @EventHandler(priority = EventPriority.HIGHEST)
