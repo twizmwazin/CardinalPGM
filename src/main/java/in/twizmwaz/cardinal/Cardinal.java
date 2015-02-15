@@ -83,6 +83,14 @@ public class Cardinal extends JavaPlugin {
     }
 
     public void onEnable() {
+        instance = this;
+        try {
+            localeHandler = new LocaleHandler(this);
+        } catch (IOException | JDOMException e) {
+            e.printStackTrace();
+            this.setEnabled(false);
+            return;
+        }
         FileConfiguration config = getConfig();
         if (!config.contains("deleteMaches")) {
             config.addDefault("deleteMaches", "true");
@@ -97,14 +105,6 @@ public class Cardinal extends JavaPlugin {
                     e.printStackTrace();
                 }
             }
-        }
-        instance = this;
-        try {
-            localeHandler = new LocaleHandler(this);
-        } catch (IOException | JDOMException e) {
-            e.printStackTrace();
-            this.setEnabled(false);
-            return;
         }
         if (!config.contains("settings")) {
 //            config.addDefault("settings", Arrays.asList("deathmessages"));
