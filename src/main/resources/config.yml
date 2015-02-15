@@ -1,2 +1,3 @@
 repo: maps
 rotation: rotation.txt
+deleteMatches: true

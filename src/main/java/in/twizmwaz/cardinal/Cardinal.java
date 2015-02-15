@@ -7,14 +7,17 @@ import in.twizmwaz.cardinal.command.*;
 import in.twizmwaz.cardinal.permissions.Setting;
 import in.twizmwaz.cardinal.permissions.SettingValue;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
+import org.apache.logging.log4j.core.helpers.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jdom2.JDOMException;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
@@ -123,6 +126,25 @@ public class Cardinal extends JavaPlugin {
             return;
         }
         setupCommands();
+    }
+
+    @Override
+    public void onDisable() {
+        FileConfiguration config = getConfig();
+        if (!config.contains("deleteMaches")) {
+            config.addDefault("deleteMaches", "true");
+        }
+        if (config.contains("deleteMaches")) {
+            if (Boolean.parseBoolean(config.getString("deleteMatches"))) {
+                Bukkit.getLogger().log(Level.INFO, "[CardianlPGM] Deleting match files, this can be disabled via the configuration");
+                File matches = new File("matches/");
+                try {
+                    net.minecraft.util.org.apache.commons.io.FileUtils.deleteDirectory(matches);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public GameHandler getGameHandler() {
