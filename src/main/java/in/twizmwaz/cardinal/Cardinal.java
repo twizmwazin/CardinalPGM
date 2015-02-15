@@ -83,6 +83,21 @@ public class Cardinal extends JavaPlugin {
     }
 
     public void onEnable() {
+        FileConfiguration config = getConfig();
+        if (!config.contains("deleteMaches")) {
+            config.addDefault("deleteMaches", "true");
+        }
+        if (config.contains("deleteMaches")) {
+            if (Boolean.parseBoolean(config.getString("deleteMatches"))) {
+                Bukkit.getLogger().log(Level.INFO, "[CardianlPGM] Deleting match files, this can be disabled via the configuration");
+                File matches = new File("matches/");
+                try {
+                    FileUtils.deleteDirectory(matches);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         instance = this;
         try {
             localeHandler = new LocaleHandler(this);
@@ -91,7 +106,6 @@ public class Cardinal extends JavaPlugin {
             this.setEnabled(false);
             return;
         }
-        FileConfiguration config = getConfig();
         if (!config.contains("settings")) {
 //            config.addDefault("settings", Arrays.asList("deathmessages"));
         }
@@ -125,25 +139,6 @@ public class Cardinal extends JavaPlugin {
             return;
         }
         setupCommands();
-    }
-
-    @Override
-    public void onDisable() {
-        FileConfiguration config = getConfig();
-        if (!config.contains("deleteMaches")) {
-            config.addDefault("deleteMaches", "true");
-        }
-        if (config.contains("deleteMaches")) {
-            if (Boolean.parseBoolean(config.getString("deleteMatches"))) {
-                Bukkit.getLogger().log(Level.INFO, "[CardianlPGM] Deleting match files, this can be disabled via the configuration");
-                File matches = new File("matches/");
-                try {
-                    FileUtils.deleteDirectory(matches);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     public GameHandler getGameHandler() {

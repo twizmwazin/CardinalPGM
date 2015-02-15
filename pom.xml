@@ -111,6 +111,7 @@
                                     <include>in.parapengu:commons</include>
                                     <include>org.jdom:jdom2</include>
                                     <include>org.apache.commons:commons-lang3</include>
+                                    <include>commons-io:commons-io</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
