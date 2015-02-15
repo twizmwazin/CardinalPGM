@@ -1,7 +1,6 @@
 package in.twizmwaz.cardinal.module;
 
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.modules.tnt.TntBuilder;
 import in.twizmwaz.cardinal.module.modules.appliedRegion.AppliedRegionBuilder;
 import in.twizmwaz.cardinal.module.modules.armorKeep.ArmorKeepBuilder;
 import in.twizmwaz.cardinal.module.modules.blitz.BlitzBuilder;
@@ -29,7 +28,6 @@ import in.twizmwaz.cardinal.module.modules.itemRemove.ItemRemoveBuilder;
 import in.twizmwaz.cardinal.module.modules.killReward.KillRewardBuilder;
 import in.twizmwaz.cardinal.module.modules.killStreakCount.KillStreakBuilder;
 import in.twizmwaz.cardinal.module.modules.kit.KitBuilder;
-import in.twizmwaz.cardinal.module.modules.mapInfo.InfoBuilder;
 import in.twizmwaz.cardinal.module.modules.mapNotification.MapNotificationBuilder;
 import in.twizmwaz.cardinal.module.modules.match.MatchModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimerBuilder;
@@ -52,6 +50,7 @@ import in.twizmwaz.cardinal.module.modules.teamManager.TeamManagerModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.teamPicker.TeamPickerBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLock.TimeLockBuilder;
 import in.twizmwaz.cardinal.module.modules.timeNotifications.TimeNotificationsBuilder;
+import in.twizmwaz.cardinal.module.modules.tnt.TntBuilder;
 import in.twizmwaz.cardinal.module.modules.tntDefuse.TntDefuseBuilder;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTrackerBuilder;
 import in.twizmwaz.cardinal.module.modules.toolRepair.ToolRepairBuilder;
@@ -139,7 +138,6 @@ public class ModuleFactory {
         builderClasses.add(ObserverModuleBuilder.class);
         builderClasses.add(KillStreakBuilder.class);
         builderClasses.add(TeamPickerBuilder.class);
-        builderClasses.add(InfoBuilder.class);
         builderClasses.add(GameScoreboardBuilder.class);
         builderClasses.add(TeamModuleBuilder.class);
         builderClasses.add(SpawnModuleBuilder.class);

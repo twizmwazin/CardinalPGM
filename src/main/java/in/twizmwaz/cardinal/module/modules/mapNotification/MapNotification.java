@@ -4,7 +4,8 @@ import com.sk89q.minecraft.util.commands.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.module.TaskedModule;
-import in.twizmwaz.cardinal.module.modules.mapInfo.contributor.Contributor;
+import in.twizmwaz.cardinal.rotation.LoadedMap;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -41,18 +42,19 @@ public class MapNotification implements TaskedModule {
     @Override
     public void run() {
         if (getTimeInSeconds() >= this.nextMessage) {
+            LoadedMap map = GameHandler.getGameHandler().getMatch().getLoadedMap();
             String result = "";
-            List<Contributor> authors = GameHandler.getGameHandler().getMatch().getMapInfo().getAuthors();
-            for (Contributor author : authors) {
+            List<Pair<String, String>> authors =map.getAuthors();
+            for (Pair<String, String> author : authors) {
                 if (authors.indexOf(author) < authors.size() - 2) {
-                    result = result + org.bukkit.ChatColor.RED + author.getName() + org.bukkit.ChatColor.DARK_PURPLE + ", ";
+                    result = result + org.bukkit.ChatColor.RED + author.getLeft() + org.bukkit.ChatColor.DARK_PURPLE + ", ";
                 } else if (authors.indexOf(author) == authors.size() - 2) {
-                    result = result + org.bukkit.ChatColor.RED + author.getName() + org.bukkit.ChatColor.DARK_PURPLE + " and ";
+                    result = result + org.bukkit.ChatColor.RED + author.getLeft() + org.bukkit.ChatColor.DARK_PURPLE + " and ";
                 } else if (authors.indexOf(author) == authors.size() - 1) {
-                    result = result + org.bukkit.ChatColor.RED + author.getName();
+                    result = result + org.bukkit.ChatColor.RED + author.getLeft();
                 }
             }
-            Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "Currently playing " + ChatColor.GOLD + GameHandler.getGameHandler().getMatch().getMapInfo().getName() + ChatColor.DARK_PURPLE + " by " + result);
+            Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "Currently playing " + ChatColor.GOLD + map.getName() + ChatColor.DARK_PURPLE + " by " + result);
             this.nextMessage += 600;
         }
     }

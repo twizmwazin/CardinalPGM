@@ -4,21 +4,10 @@ import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.module.modules.mapInfo.contributor.Contributor;
-import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
-import in.twizmwaz.cardinal.util.DomUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MapCommands {
 
@@ -32,6 +21,7 @@ public class MapCommands {
                 search = search + args.getString(a) + " ";
             }
             mapInfo = GameHandler.getGameHandler().getRotation().getMap(search.trim());
+            if (mapInfo == null) throw new CommandException("No maps matched query");
         }
         sender.sendMessage(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "----------" + ChatColor.DARK_AQUA + " " + mapInfo.getName() + " " + ChatColor.GRAY + mapInfo.getVersion() + ChatColor.RED + " " + ChatColor.STRIKETHROUGH + "----------");
         sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Objective: " + ChatColor.RESET + "" + ChatColor.GOLD + mapInfo.getObjective());
@@ -68,39 +58,22 @@ public class MapCommands {
 
     @Command(aliases = {"next", "nextmap", "nm", "mn"}, desc = "Shows next map.", usage = "")
     public static void next(final CommandContext cmd, CommandSender sender) {
-        String nextMap = GameHandler.getGameHandler().getRotation().getNext().getName();
-        try {
-            Document doc = DomUtils.parse(new File("maps/" + nextMap + "/map.xml"));
-            List<Contributor> authors;
-            String name = doc.getRootElement().getChild("name").getText();
-            authors = new ArrayList<>();
-            for (Element element : doc.getRootElement().getChildren("authors")) {
-                for (Element author : element.getChildren()) {
-                    if (author.hasAttributes()) {
-                        authors.add(new Contributor(author.getText(), author.getAttribute("contribution").getValue()));
-                    } else {
-                        authors.add(new Contributor(author.getText()));
-                    }
-                }
-            }
-            if (authors.size() == 1) {
-                sender.sendMessage(ChatColor.DARK_PURPLE + "Next map: " + ChatColor.GOLD + name + ChatColor.DARK_PURPLE + " by " + ChatColor.RED + authors.get(0).getName());
-            } else if (authors.size() > 1) {
-                String result = ChatColor.DARK_PURPLE + "Next map: " + ChatColor.GOLD + name + ChatColor.DARK_PURPLE + " by ";
-                for (Contributor author : authors) {
-                    if (authors.indexOf(author) < authors.size() - 2) {
-                        result = result + ChatColor.RED + author.getName() + ChatColor.DARK_PURPLE + ", ";
-                    } else if (authors.indexOf(author) == authors.size() - 2) {
-                        result = result + ChatColor.RED + author.getName() + ChatColor.DARK_PURPLE + " and ";
-                    } else if (authors.indexOf(author) == authors.size() - 1) {
-                        result = result + ChatColor.RED + author.getName();
-                    }
-                }
-                sender.sendMessage(result);
-            }
+        LoadedMap next = GameHandler.getGameHandler().getRotation().getNext();
 
-        } catch (JDOMException | IOException e) {
-            e.printStackTrace();
+        if (next.getAuthors().size() == 1) {
+            sender.sendMessage(ChatColor.DARK_PURPLE + "Next map: " + ChatColor.GOLD + next.getName() + ChatColor.DARK_PURPLE + " by " + ChatColor.RED + next.getAuthors().get(0).getLeft());
+        } else if (next.getAuthors().size() > 1) {
+            String result = ChatColor.DARK_PURPLE + "Next map: " + ChatColor.GOLD + next.getName() + ChatColor.DARK_PURPLE + " by ";
+            for (Pair<String, String> author: next.getAuthors()) {
+                if (next.getAuthors().indexOf(author) < next.getAuthors().size() - 2) {
+                    result = result + ChatColor.RED + author.getLeft() + ChatColor.DARK_PURPLE + ", ";
+                } else if (next.getAuthors().indexOf(author) == next.getAuthors().size() - 2) {
+                    result = result + ChatColor.RED + author.getLeft() + ChatColor.DARK_PURPLE + " and ";
+                } else if (next.getAuthors().indexOf(author) == next.getAuthors().size() - 1) {
+                    result = result + ChatColor.RED + author.getLeft();
+                }
+            }
+            sender.sendMessage(result);
         }
     }
 }
