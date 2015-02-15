@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.command.*;
 import in.twizmwaz.cardinal.permissions.Setting;
 import in.twizmwaz.cardinal.permissions.SettingValue;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
+import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -137,7 +138,7 @@ public class Cardinal extends JavaPlugin {
                 Bukkit.getLogger().log(Level.INFO, "[CardianlPGM] Deleting match files, this can be disabled via the configuration");
                 File matches = new File("matches/");
                 try {
-                    net.minecraft.util.org.apache.commons.io.FileUtils.deleteDirectory(matches);
+                    FileUtils.deleteDirectory(matches);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
