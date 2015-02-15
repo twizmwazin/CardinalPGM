@@ -11,6 +11,7 @@ import in.twizmwaz.cardinal.util.ArmorType;
 import in.twizmwaz.cardinal.util.MiscUtils;
 import in.twizmwaz.cardinal.util.ParseUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -102,6 +103,23 @@ public class KitBuilder implements ModuleBuilder {
                 }
                 potions.add(new PotionEffect(type, duration, amplifier, true));
             }
+            List<KitBook> books = new ArrayList<>();
+            for (Element book : element.getChildren("book")) {
+                String title = null;
+                if (book.getChildText("title") != null) {
+                    title = book.getChildText("title");
+                }
+                String author = null;
+                if (book.getChildText("author") != null) {
+                    author = book.getChildText("author");
+                }
+                int slot = book.getAttributeValue("slot") != null ? Integer.parseInt(book.getAttributeValue("slot")) : -1;
+                List<String> pages = new ArrayList<>();
+                for (Element page : book.getChild("pages").getChildren("page")) {
+                    pages.add(ChatColor.translateAlternateColorCodes('`', page.getText()).replace("\u0009", ""));
+                }
+                books.add(new KitBook( title, author, pages, slot));
+            }
             String parent = element.getAttributeValue("parents");
             boolean force = element.getAttributeValue("force") != null && Boolean.parseBoolean(element.getAttributeValue("force"));
             boolean potionParticles;
@@ -157,7 +175,7 @@ public class KitBuilder implements ModuleBuilder {
             boolean jump = false;
             if (element.getChildren("double-jump").size() > 0)
                 jump = true;
-            return new Kit(name, items, armor, potions, parent, force, potionParticles, resetPearls, clear, clearItems, health, saturation, foodLevel, walkSpeed, knockback, jump);
+            return new Kit(name, items, armor, potions, books ,parent, force, potionParticles, resetPearls, clear, clearItems, health, saturation, foodLevel, walkSpeed, knockback, jump);
         } else {
             return getKit(element.getParentElement(), document, true);
         }
