@@ -102,7 +102,7 @@ public class Cardinal extends JavaPlugin {
         config.options().copyDefaults(true);
         saveConfig();
         if (Boolean.parseBoolean(config.getString("deleteMatches"))) {
-            Bukkit.getLogger().log(Level.INFO, "[CardianlPGM] Deleting match files, this can be disabled via the configuration");
+            Bukkit.getLogger().log(Level.INFO, "[CardinalPGM] Deleting match files, this can be disabled via the configuration");
             File matches = new File("matches/");
             try {
                 FileUtils.deleteDirectory(matches);
