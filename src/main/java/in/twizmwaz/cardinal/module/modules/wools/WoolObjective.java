@@ -1,9 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.wools;
 
 import in.parapengu.commons.utils.StringUtils;
-import in.twizmwaz.cardinal.chat.ChatConstant;
-import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
-import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
@@ -12,6 +9,7 @@ import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameObjectiveScoreboar
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ChatUtils;
+import in.twizmwaz.cardinal.util.FireworkUtil;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -169,6 +167,7 @@ public class WoolObjective implements GameObjective {
                     if (TeamUtils.getTeamByPlayer(event.getPlayer()) == team) {
                         this.complete = true;
                         if (this.show) Bukkit.broadcastMessage(team.getColor() + event.getPlayer().getDisplayName() + ChatColor.WHITE + " placed " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " ") + ChatColor.WHITE + " for the " + team.getCompleteName());
+                        FireworkUtil.spawnFirework(event.getPlayer().getLocation(), event.getPlayer().getWorld());
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
                         event.setCancelled(false);

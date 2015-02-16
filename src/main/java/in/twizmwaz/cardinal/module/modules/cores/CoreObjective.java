@@ -1,7 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.cores;
 
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
@@ -12,6 +11,7 @@ import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import in.twizmwaz.cardinal.util.ChatUtils;
+import in.twizmwaz.cardinal.util.FireworkUtil;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -228,6 +228,7 @@ public class CoreObjective implements GameObjective {
                         this.complete = true;
                         event.setCancelled(false);
                         if (this.show) Bukkit.broadcastMessage(team.getCompleteName() + ChatColor.RED + "'s " + ChatColor.DARK_AQUA + name + ChatColor.RED + " has leaked!");
+                        FireworkUtil.spawnFirework(event.getBlock().getLocation(), event.getBlock().getWorld());
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, null);
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
                     }

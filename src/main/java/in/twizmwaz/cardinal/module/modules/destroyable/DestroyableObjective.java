@@ -9,6 +9,7 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import in.twizmwaz.cardinal.util.ChatUtils;
+import in.twizmwaz.cardinal.util.FireworkUtil;
 import in.twizmwaz.cardinal.util.MiscUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
@@ -130,6 +131,7 @@ public class DestroyableObjective implements GameObjective {
                         this.completed = true;
                         event.setCancelled(false);
                         if (this.show) Bukkit.broadcastMessage(team.getCompleteName() + "'s " + ChatColor.AQUA + name + ChatColor.GRAY + " destroyed by " + getWhoDestroyed());
+                        FireworkUtil.spawnFirework(event.getPlayer().getLocation(), event.getPlayer().getWorld());
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
                     } else if (!this.completed) {
