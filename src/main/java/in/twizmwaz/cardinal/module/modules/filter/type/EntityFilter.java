@@ -14,7 +14,7 @@ public class EntityFilter extends FilterModule {
 
     public EntityFilter(final EntityFilterParser parser) {
         super(parser.getName());
-        this.entity = parser.getMobType();
+        this.entity = parser.getEntityType();
     }
 
     @Override

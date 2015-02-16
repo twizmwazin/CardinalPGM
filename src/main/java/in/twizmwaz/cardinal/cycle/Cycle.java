@@ -47,8 +47,6 @@ public class Cycle implements Runnable {
             }
         });
         World world = Bukkit.createWorld(wc);
-        world.setSpawnFlags(false, false);
-
         handler.setMatchWorld(world);
     }
 }

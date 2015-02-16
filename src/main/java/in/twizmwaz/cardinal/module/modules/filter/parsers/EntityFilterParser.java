@@ -6,15 +6,15 @@ import org.jdom2.Element;
 
 public class EntityFilterParser extends FilterParser {
 
-    private final EntityType mobType;
+    private final EntityType entityType;
 
     public EntityFilterParser(final Element element) {
         super(element);
-        this.mobType = EntityType.valueOf(element.getText().toUpperCase().replace(" ", "_"));
+        this.entityType = EntityType.valueOf(element.getText().toUpperCase().replace(" ", "_"));
     }
 
-    public EntityType getMobType() {
-        return mobType;
+    public EntityType getEntityType() {
+        return entityType;
     }
 
 }
