@@ -84,26 +84,17 @@ public class Cardinal extends JavaPlugin {
             return;
         }
         FileConfiguration config = getConfig();
-        if (!config.contains("deleteMaches")) {
-            config.addDefault("deleteMaches", "true");
-        }
-        if (config.contains("deleteMaches")) {
-            if (Boolean.parseBoolean(config.getString("deleteMatches"))) {
-                Bukkit.getLogger().log(Level.INFO, "[CardianlPGM] Deleting match files, this can be disabled via the configuration");
-                File matches = new File("matches/");
-                try {
-                    FileUtils.deleteDirectory(matches);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        config.options().copyDefaults(true);
+        saveConfig();
+        if (Boolean.parseBoolean(config.getString("deleteMatches"))) {
+            Bukkit.getLogger().log(Level.INFO, "[CardianlPGM] Deleting match files, this can be disabled via the configuration");
+            File matches = new File("matches/");
+            try {
+                FileUtils.deleteDirectory(matches);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
-        if (!config.contains("settings")) {
-//            config.addDefault("settings", Arrays.asList("deathmessages"));
-        }
-        config.options().copyDefaults(true);
-        saveDefaultConfig();
-
         if (config.contains("settings")) {
             for (String settingName : config.getStringList("settings")) {
                 List<String> names = new ArrayList<>();
