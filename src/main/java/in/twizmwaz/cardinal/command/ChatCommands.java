@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 
 public class ChatCommands {
 
-    @Command(aliases = {"global", "g"}, desc = "Talk in global chat.")
+    @Command(aliases = {"g"}, desc = "Talk in global chat.")
     public static void global(final CommandContext cmd, CommandSender sender) throws CommandException {
         ChatChannelModule channel = GameHandler.getGameHandler().getMatch().getModules().getModule(GlobalChannel.class);
         if (sender instanceof Player) {
@@ -26,7 +26,7 @@ public class ChatCommands {
         } else throw new CommandException("Console cannot talk.");
     }
 
-    @Command(aliases = {"admin", "a"}, desc = "Talk in admin chat.")
+    @Command(aliases = {"a"}, desc = "Talk in admin chat.")
     public static void admin(final CommandContext cmd, CommandSender sender) throws CommandException {
         ChatChannelModule channel = GameHandler.getGameHandler().getMatch().getModules().getModule(AdminChannel.class);
         if (sender instanceof Player) {
@@ -36,7 +36,7 @@ public class ChatCommands {
         } else throw new CommandException("Console cannot talk.");
     }
 
-    @Command(aliases = {"team", "t"}, desc = "Talk in team chat.")
+    @Command(aliases = {"t"}, desc = "Talk in team chat.")
     public static void team(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (sender instanceof Player) {
             TeamModule team = TeamUtils.getTeamByPlayer((Player) sender);
