@@ -27,6 +27,7 @@ public class Cardinal extends JavaPlugin {
     private static GameHandler gameHandler;
     private static LocaleHandler localeHandler;
     private CommandsManager<CommandSender> commands;
+    private static Database database;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -74,6 +75,7 @@ public class Cardinal extends JavaPlugin {
         cmdRegister.register(ChatCommands.class);
     }
 
+    @Override
     public void onEnable() {
         instance = this;
         try {
@@ -82,6 +84,19 @@ public class Cardinal extends JavaPlugin {
             e.printStackTrace();
             this.setEnabled(false);
             return;
+        }
+        File databaseFile = new File(getDataFolder().getAbsolutePath() + "/database.xml");
+        if (databaseFile.exists()) {
+            try {
+                database = Database.loadFromFile(databaseFile);
+            } catch (JDOMException | IOException e) {
+                e.printStackTrace();
+                Bukkit.getLogger().log(Level.SEVERE, "CardinalPGM failed to initialize because of an IOException. Please try restarting your server.");
+                this.setEnabled(false);
+                return;
+            }
+        } else {
+            database = Database.newInstance(databaseFile);
         }
         FileConfiguration config = getConfig();
         config.options().copyDefaults(true);
@@ -123,6 +138,11 @@ public class Cardinal extends JavaPlugin {
         }
         setupCommands();
     }
+    
+    @Override
+    public void onDisable() {
+        database.save(new File(getDataFolder().getAbsolutePath() + "/database.xml"));
+    }
 
     public GameHandler getGameHandler() {
         return gameHandler;
@@ -138,5 +158,9 @@ public class Cardinal extends JavaPlugin {
 
     public static Cardinal getInstance() {
         return instance;
+    }
+    
+    public static Database getCardinalDatabase() {
+        return database;
     }
 }
