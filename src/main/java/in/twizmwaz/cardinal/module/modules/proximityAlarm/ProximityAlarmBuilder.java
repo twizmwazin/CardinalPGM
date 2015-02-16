@@ -27,11 +27,11 @@ public class ProximityAlarmBuilder implements ModuleBuilder {
                     message = element.getAttributeValue("message");
                 }
                 if (message != null) message = ChatColor.translateAlternateColorCodes('`', message);
-                int flareradius = 4;
+                int flareRadius = 4;
                 if (subElement.getAttributeValue("flare-radius") != null) {
-                    flareradius = Integer.parseInt(subElement.getAttributeValue("flare-radius"));
+                    flareRadius = Integer.parseInt(subElement.getAttributeValue("flare-radius"));
                 } else if (element.getAttributeValue("flare-radius") != null) {
-                    flareradius = Integer.parseInt(element.getAttributeValue("flare-radius"));
+                    flareRadius = Integer.parseInt(element.getAttributeValue("flare-radius"));
                 }
                 RegionModule region = null;
                 if (subElement.getChild("region") != null) {
@@ -47,7 +47,7 @@ public class ProximityAlarmBuilder implements ModuleBuilder {
                 if (subElement.getChild("notify") != null) {
                     notify = FilterModuleBuilder.getFilter(subElement.getChild("notify").getChildren().get(0));
                 }
-                results.add(new ProximityAlarm(message, flareradius, region, detect, notify));
+                results.add(new ProximityAlarm(message, flareRadius, region, detect, notify));
             }
         }
         return results;
