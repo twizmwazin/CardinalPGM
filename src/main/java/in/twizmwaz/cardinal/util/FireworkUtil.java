@@ -15,10 +15,9 @@ public class FireworkUtil {
         Firework firework = (Firework) world.spawn(location, Firework.class);
         FireworkMeta fireworkMeta = firework.getFireworkMeta();
         Random random = new Random();
-        int randomColor = random.nextInt(17);
-        FireworkEffect effect = FireworkEffect.builder().withColor(randomColor(randomColor)).with(FireworkEffect.Type.BALL).trail(true).build();
+        FireworkEffect effect = FireworkEffect.builder().withColor(randomColor(random.nextInt(17))).with(FireworkEffect.Type.BALL).trail(true).build();
         fireworkMeta.addEffect(effect);
-        fireworkMeta.setPower(0);
+        fireworkMeta.setPower(1);
         firework.setFireworkMeta(fireworkMeta);
     }
 
@@ -27,7 +26,7 @@ public class FireworkUtil {
         FireworkMeta fireworkMeta = firework.getFireworkMeta();
         FireworkEffect effect = FireworkEffect.builder().withColor(color).with(FireworkEffect.Type.BALL).trail(true).build();
         fireworkMeta.addEffect(effect);
-        fireworkMeta.setPower(0);
+        fireworkMeta.setPower(1);
         firework.setFireworkMeta(fireworkMeta);
     }
 
