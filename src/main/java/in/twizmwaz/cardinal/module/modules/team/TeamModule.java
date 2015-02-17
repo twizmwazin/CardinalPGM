@@ -1,6 +1,10 @@
 package in.twizmwaz.cardinal.module.modules.team;
 
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.ChatMessage;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
@@ -12,9 +16,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 
-public class TeamModule<P extends Player> extends HashSet<Player> implements Module {
+public class TeamModule<P extends Player> extends ArrayList<Player> implements Module {
 
     private final Match match;
     private String name;
@@ -36,7 +40,7 @@ public class TeamModule<P extends Player> extends HashSet<Player> implements Mod
         this.observer = observer;
     }
 
-    public boolean add(Player player, boolean force, String message) {
+    public boolean add(Player player, boolean force, boolean message) {
         TeamModule old = null;
         for (TeamModule team : match.getModules().getModules(TeamModule.class)) {
             if (team.contains(player)) {
@@ -45,21 +49,20 @@ public class TeamModule<P extends Player> extends HashSet<Player> implements Mod
             }
         }
         if (Blitz.matchIsBlitz() && GameHandler.getGameHandler().getMatch().isRunning() && !this.isObserver() && !force) {
-            player.sendMessage(ChatColor.RED + "You may not join during a " + ChatColor.AQUA + "" + ChatColor.ITALIC + GameHandler.getGameHandler().getMatch().getModules().getModule(Blitz.class).getTitle() + ChatColor.RED + " match.");
+            String title = GameHandler.getGameHandler().getMatch().getModules().getModule(Blitz.class).getTitle();
+            player.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.ERROR_MAY_NOT_JOIN, new UnlocalizedChatMessage(ChatColor.ITALIC + "" + ChatColor.AQUA + title + ChatColor.RESET + ChatColor.RED))).getMessage(player.getLocale()));
             return false;
         }
         PlayerChangeTeamEvent event = new PlayerChangeTeamEvent(player, force, this, old);
         Bukkit.getServer().getPluginManager().callEvent(event);
-        if (message != null) {
-            if (!message.equals("")) {
-                event.getPlayer().sendMessage(message);
-            }
+        if (message) {
+            event.getPlayer().sendMessage((new LocalizedChatMessage(ChatConstant.GENERIC_JOINED, new UnlocalizedChatMessage(event.getNewTeam().getCompleteName())).getMessage(event.getPlayer().getLocale())));
         }
         return !event.isCancelled() || force;
     }
 
     public boolean add(Player player, boolean force) {
-        return add(player, force, ChatColor.GRAY + "You joined " + this.getCompleteName());
+        return add(player, force, true);
     }
     
     public boolean add(Player player) {

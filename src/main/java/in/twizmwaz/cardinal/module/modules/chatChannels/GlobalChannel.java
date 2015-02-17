@@ -19,7 +19,7 @@ public class GlobalChannel implements ChatChannelModule {
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.sendMessage(message.getMessage(player.getLocale()));
         }
-        Bukkit.getLogger().info(message.getMessage(message.getMessage(Locale.getDefault().toString())));
+        Bukkit.getServer().getConsoleSender().sendMessage(message.getMessage(message.getMessage(Locale.getDefault().toString())));
     }
 
     @Override

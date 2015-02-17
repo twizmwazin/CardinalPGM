@@ -1,10 +1,15 @@
 package in.twizmwaz.cardinal.module.modules.match;
 
+import in.twizmwaz.cardinal.Cardinal;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.chatChannels.GlobalChannel;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,34 +33,33 @@ public class MatchModule implements Module {
 
     @EventHandler
     public void onMatchStart(MatchStartEvent event) {
-        Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # #");
-        Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# # " + ChatColor.GOLD + "The match has started!" + ChatColor.DARK_PURPLE + " # #");
-        Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # #");
+        GlobalChannel channel = match.getModules().getModule(GlobalChannel.class);
+        channel.sendMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # #");
+        channel.sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # " + ChatColor.GOLD + "{0}" + ChatColor.DARK_PURPLE + " # #", new LocalizedChatMessage(ChatConstant.UI_MATCH_STARTED)));
+        channel.sendMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # #");
+        
     }
 
     @EventHandler
     public void onMatchEnd(MatchEndEvent event) {
-        Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # #");
+        GlobalChannel channel = match.getModules().getModule(GlobalChannel.class);
+        channel.sendMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # #");
         Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# #    " + ChatColor.GOLD + "Game over!" + ChatColor.DARK_PURPLE + "    # #");
-        try {
+        channel.sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# #    " + ChatColor.GOLD + "{0}" + ChatColor.DARK_PURPLE + "    # #", ChatConstant.UI_MATCH_OVER.asMessage()));
+        if (event.getTeam() != null) {
             if (event.getTeam().size() == 1) {
-                String player = null;
-                for (Object teammate : event.getTeam()) {
-                    player = ((Player) teammate).getDisplayName();
-                }
-                Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# # " + event.getTeam().getColor() + player + " wins!" + ChatColor.DARK_PURPLE + " # #");
+                channel.sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # {0}" + ChatColor.DARK_PURPLE + " # #", new LocalizedChatMessage(ChatConstant.UI_MATCH_WIN, new UnlocalizedChatMessage(event.getTeam().getColor() + ((Player) event.getTeam().get(0)).getDisplayName()))));
             } else {
-                Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# # " + event.getTeam().getColor() + event.getTeam().getName() + " wins!" + ChatColor.DARK_PURPLE + " # #");
+                channel.sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # {0}" + ChatColor.DARK_PURPLE + " # #", new LocalizedChatMessage(ChatConstant.UI_MATCH_WIN, new UnlocalizedChatMessage(event.getTeam().getCompleteName()))));
             }
-        } catch (NullPointerException ex) {
-
         }
-        Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # #");
+        channel.sendMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # #");
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onCycleComplete(CycleCompleteEvent event) {
-        Bukkit.broadcastMessage(ChatColor.DARK_AQUA + "Cycled to " + ChatColor.AQUA + event.getMatch().getLoadedMap().getName());
+        GlobalChannel channel = match.getModules().getModule(GlobalChannel.class);
+        channel.sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "{0}", new LocalizedChatMessage(ChatConstant.UI_CYCLED_TO, new UnlocalizedChatMessage(ChatColor.AQUA + event.getMatch().getLoadedMap().getName()))));
         for (Player player : Bukkit.getOnlinePlayers()) {
             TeamUtils.getTeamById("observers").add(player, true);
         }

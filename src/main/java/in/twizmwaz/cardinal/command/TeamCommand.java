@@ -31,7 +31,7 @@ public class TeamCommand {
                     msg = msg.trim();
                     if (TeamUtils.getTeamByName(msg) != null) {
                         TeamModule team = TeamUtils.getTeamByName(msg);
-                        team.add(Bukkit.getPlayer(cmd.getString(1)), true, ChatColor.GRAY + "You were forced to " + team.getCompleteName());
+                        team.add(Bukkit.getPlayer(cmd.getString(1)), true, false);
                         sender.sendMessage(team.getColor() + Bukkit.getPlayer(cmd.getString(1)).getDisplayName() + ChatColor.GRAY + " forced to " + team.getCompleteName());
                     } else {
                         throw new CommandException("Invalid team specified!");
@@ -69,7 +69,7 @@ public class TeamCommand {
                     if (!TeamUtils.getTeamByPlayer(player).isObserver()) {
                         playersToShuffle.add(player);
                         TeamModule observers = TeamUtils.getTeamById("observers");
-                        observers.add(player, true, "");
+                        observers.add(player, true, false);
                     }
                 }
             }

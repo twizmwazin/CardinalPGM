@@ -44,7 +44,7 @@ public class TeamManagerModule implements Module {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         PlayerUtils.resetPlayer(player);
-        TeamUtils.getTeamById("observers").add(player, true);
+        TeamUtils.getTeamById("observers").add(player, true, false);
         event.getPlayer().getInventory().setItem(0, new ItemStack(Material.COMPASS));
         ItemStack howTo = new ItemStack(Material.WRITTEN_BOOK);
         ItemMeta howToMeta = howTo.getItemMeta();

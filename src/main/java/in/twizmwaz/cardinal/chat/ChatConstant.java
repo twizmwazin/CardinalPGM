@@ -202,6 +202,10 @@ public enum ChatConstant {
         this.path = path;
     }
     
+    public LocalizedChatMessage asMessage() {
+        return new LocalizedChatMessage(this);
+    }
+    
     public String getMessage(String locale) {
         Document localized = Cardinal.getLocaleHandler().getLocaleDocument(locale.split("_")[0]);
         String message = null;
