@@ -112,10 +112,12 @@ public class GameScoreboard implements Module {
     }
 
     public void updateScoreboard() {
-        if (scoreboard.getObjective("scoreboard") != null) {
-            scoreboard.getObjective("scoreboard").unregister();
+        Objective objective;
+        if (scoreboard.getObjective("scoreboard-0") != null) {
+            objective = scoreboard.registerNewObjective("scoreboard-1", "dummy");
+        } else {
+            objective = scoreboard.registerNewObjective("scoreboard-0", "dummy");
         }
-        Objective objective = scoreboard.registerNewObjective("scoreboard", "dummy");
         objective.setDisplayName(getDisplayTitle());
         int slot = 0;
         int hillsSlot = -1;
@@ -226,6 +228,11 @@ public class GameScoreboard implements Module {
             }
         }
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        if (objective.getName().equals("scoreboard-0")) {
+            if (scoreboard.getObjective("scoreboard-1") != null) scoreboard.getObjective("scoreboard-1").unregister();
+        } else {
+            if (scoreboard.getObjective("scoreboard-0") != null) scoreboard.getObjective("scoreboard-0").unregister();
+        }
     }
 
     public int getSlots() {
