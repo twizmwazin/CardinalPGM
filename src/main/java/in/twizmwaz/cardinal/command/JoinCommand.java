@@ -17,27 +17,31 @@ public class JoinCommand {
 
     @Command(aliases = {"join"}, desc = "Join a team.", usage = "[team]")
     public static void join(final CommandContext cmd, CommandSender sender) throws CommandException {
-        TeamModule team = null;
-        if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) || GameHandler.getGameHandler().getMatch().getState().equals(MatchState.CYCLING)) {
-            ChatUtils.sendWarningMessage((Player) sender, ChatColor.RED + "Match is over");
-            return;
-        }
-        try {
-            for (TeamModule teamModule : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
-                if (teamModule.getName().toLowerCase().startsWith(cmd.getString(0).toLowerCase())) {
-                    team = teamModule;
-                    break;
-                }
+        if (sender instanceof Player) {
+            TeamModule team = null;
+            if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) || GameHandler.getGameHandler().getMatch().getState().equals(MatchState.CYCLING)) {
+                ChatUtils.sendWarningMessage((Player) sender, ChatColor.RED + "Match is over");
+                return;
             }
-            if (team != null) {
-                if (!team.contains(sender)) {
-                    team.add((Player) sender, false);
-                } else throw new CommandException(ChatUtils.getWarningMessage(ChatColor.RED + "You have already joined " + team.getCompleteName()));
-            } else throw new CommandException("No teams matched query.");
-        } catch (IndexOutOfBoundsException ex) {
-            team = TeamUtils.getTeamWithFewestPlayers(GameHandler.getGameHandler().getMatch());
-            team.add((Player) sender, false);
-        }
+            try {
+                for (TeamModule teamModule : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
+                    if (teamModule.getName().toLowerCase().startsWith(cmd.getString(0).toLowerCase())) {
+                        team = teamModule;
+                        break;
+                    }
+                }
+                if (team != null) {
+                    if (!team.contains(sender)) {
+                        team.add((Player) sender, false);
+                    } else
+                        throw new CommandException(ChatUtils.getWarningMessage(ChatColor.RED + "You have already joined " + team.getCompleteName()));
+                } else
+                    throw new CommandException("No teams matched query.");
+            } catch (IndexOutOfBoundsException ex) {
+                team = TeamUtils.getTeamWithFewestPlayers(GameHandler.getGameHandler().getMatch());
+                team.add((Player) sender, false);
+            }
+        } else throw new CommandException("Console cannot use this command.");
     }
 
     @Command(aliases = {"leave"}, desc = "Leave the game.")

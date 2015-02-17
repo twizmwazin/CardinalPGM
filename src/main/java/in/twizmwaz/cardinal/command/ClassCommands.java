@@ -26,20 +26,23 @@ public class ClassCommands {
 
     @Command(aliases = {"class"}, desc = "Allows you to change your class.")
     public static void classCommand(final CommandContext cmd, CommandSender sender) throws CommandException {
-        if (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null) {
-            if (cmd.argsLength() == 0) {
-                if (sender instanceof Player && ClassModule.getClassByPlayer((Player) sender) != null) {
-                    sender.sendMessage(ChatColor.GREEN + "Current class: " + ChatColor.GOLD + "" + ChatColor.UNDERLINE + ClassModule.getClassByPlayer((Player) sender).getName());
-                    sender.sendMessage(ChatColor.DARK_PURPLE + "List all classes by typing " + ChatColor.GOLD + "'/classes'");
+        if (sender instanceof Player) {
+            if (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null) {
+                if (cmd.argsLength() == 0) {
+                    if (ClassModule.getClassByPlayer((Player) sender) != null) {
+                        sender.sendMessage(ChatColor.GREEN + "Current class: " + ChatColor.GOLD + "" + ChatColor.UNDERLINE + ClassModule.getClassByPlayer((Player) sender).getName());
+                        sender.sendMessage(ChatColor.DARK_PURPLE + "List all classes by typing " + ChatColor.GOLD + "'/classes'");
+                    }
+                } else {
+                    String input = cmd.getJoinedStrings(0);
+                    if (ClassModule.getClassByName(input) != null) {
+                        ClassModule.playerClass.put(((Player) sender).getUniqueId(), ClassModule.getClassByName(input));
+                        ClassChangeEvent changeEvent = new ClassChangeEvent((Player) sender, ClassModule.getClassByName(input));
+                        Bukkit.getServer().getPluginManager().callEvent(changeEvent);
+                    } else
+                        throw new CommandException("No class matched query.");
                 }
-            } else {
-                String input = cmd.getJoinedStrings(0);
-                if (ClassModule.getClassByName(input) != null) {
-                    ClassModule.playerClass.put(((Player) sender).getUniqueId(), ClassModule.getClassByName(input));
-                    ClassChangeEvent changeEvent = new ClassChangeEvent((Player) sender, ClassModule.getClassByName(input));
-                    Bukkit.getServer().getPluginManager().callEvent(changeEvent);
-                } else throw new CommandException("No class matched query.");
-            }
-        } else throw new CommandException("Classes are not enabled on this map.");
+            } else throw new CommandException("Classes are not enabled on this map.");
+        } else throw new CommandException("Console cannot use this command.");
     }
 }

@@ -23,7 +23,7 @@ public class ChatCommands {
             TeamModule team = TeamUtils.getTeamByPlayer((Player) sender);
             String message = assembleMessage(cmd);
             channel.sendMessage("<" + team.getColor() + ((Player) sender).getDisplayName() + ChatColor.RESET + ">:" + message);
-        } else throw new CommandException("Console cannot talk.");
+        } else throw new CommandException("Console cannot use this command.");
     }
 
     @Command(aliases = {"a"}, desc = "Talk in admin chat.")
@@ -33,7 +33,7 @@ public class ChatCommands {
             TeamModule team = TeamUtils.getTeamByPlayer((Player) sender);
             String message = assembleMessage(cmd);
             channel.sendMessage("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + team.getColor() + ((Player) sender).getDisplayName() + ChatColor.RESET + ":"  + message);
-        } else throw new CommandException("Console cannot talk.");
+        } else throw new CommandException("Console cannot use this command.");
     }
 
     @Command(aliases = {"t"}, desc = "Talk in team chat.")
@@ -43,7 +43,7 @@ public class ChatCommands {
             ChatChannelModule channel = TeamUtils.getTeamChannel(team);
             String message = assembleMessage(cmd);
             channel.sendMessage(team.getColor() + "[Team] " + ((Player) sender).getDisplayName() + ChatColor.RESET + ": " + message);
-        } else throw new CommandException("Console cannot talk.");
+        } else throw new CommandException("Console cannot use this command.");
     }
     
     private static String assembleMessage(CommandContext context) {

@@ -27,22 +27,27 @@ public class SettingCommands {
 
     @Command(aliases = {"set"}, desc = "Set a setting to a specific value.", usage = "<setting> <value>", min = 2)
     public static void set(final CommandContext cmd, CommandSender sender) throws CommandException {
-        if (Settings.getSettingByName(cmd.getString(0)) != null) {
-            if (Settings.getSettingByName(cmd.getString(0)).getSettingValueByName(cmd.getString(1)) != null) {
-                Settings.getSettingByName(cmd.getString(0)).setValueByPlayer((Player) sender, Settings.getSettingByName(cmd.getString(0)).getSettingValueByName(cmd.getString(1)));
-                sender.sendMessage(ChatColor.YELLOW + Settings.getSettingByName(cmd.getString(0)).getNames().get(0) + ": " + ChatColor.WHITE + Settings.getSettingByName(cmd.getString(0)).getSettingValueByName(cmd.getString(1)).getValue());
-            } else throw new CommandException("No value by this name!");
-        } else throw new CommandException("No setting by this name!");
+        if (sender instanceof Player) {
+            if (Settings.getSettingByName(cmd.getString(0)) != null) {
+                if (Settings.getSettingByName(cmd.getString(0)).getSettingValueByName(cmd.getString(1)) != null) {
+                    Settings.getSettingByName(cmd.getString(0)).setValueByPlayer((Player) sender, Settings.getSettingByName(cmd.getString(0)).getSettingValueByName(cmd.getString(1)));
+                    sender.sendMessage(ChatColor.YELLOW + Settings.getSettingByName(cmd.getString(0)).getNames().get(0) + ": " + ChatColor.WHITE + Settings.getSettingByName(cmd.getString(0)).getSettingValueByName(cmd.getString(1)).getValue());
+                } else throw new CommandException("No value by this name!");
+            } else throw new CommandException("No setting by this name!");
+        } else throw new CommandException("Console cannot use this command.");
     }
 
     @Command(aliases = {"toggle"}, desc = "Toggle a setting.", usage = "<setting>", min = 1)
     public static void toggle(final CommandContext cmd, CommandSender sender) throws CommandException {
-        if (Settings.getSettingByName(cmd.getString(0)) != null) {
-            int index = Settings.getSettingByName(cmd.getString(0)).getValues().indexOf(Settings.getSettingByName(cmd.getString(0)).getValueByPlayer((Player) sender));
-            index ++;
-            if (index >= Settings.getSettingByName(cmd.getString(0)).getValues().size()) index = 0;
-            Bukkit.dispatchCommand(sender, "set " + cmd.getString(0) + " " + Settings.getSettingByName(cmd.getString(0)).getValues().get(index).getValue());
-        } else throw new CommandException("No setting by this name!");
+        if (sender instanceof Player) {
+            if (Settings.getSettingByName(cmd.getString(0)) != null) {
+                int index = Settings.getSettingByName(cmd.getString(0)).getValues().indexOf(Settings.getSettingByName(cmd.getString(0)).getValueByPlayer((Player) sender));
+                index++;
+                if (index >= Settings.getSettingByName(cmd.getString(0)).getValues().size())
+                    index = 0;
+                Bukkit.dispatchCommand(sender, "set " + cmd.getString(0) + " " + Settings.getSettingByName(cmd.getString(0)).getValues().get(index).getValue());
+            } else throw new CommandException("No setting by this name!");
+        } else throw new CommandException("Console cannot use this command.");
     }
 
 }
