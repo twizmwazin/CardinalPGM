@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 
 public class JoinCommand {
 
-    @Command(aliases = {"join"}, desc = "Join a team", usage = "[team]")
+    @Command(aliases = {"join"}, desc = "Join a team.", usage = "[team]")
     public static void join(final CommandContext cmd, CommandSender sender) throws CommandException {
         TeamModule team = null;
         if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) || GameHandler.getGameHandler().getMatch().getState().equals(MatchState.CYCLING)) {
@@ -40,7 +40,7 @@ public class JoinCommand {
         }
     }
 
-    @Command(aliases = {"leave"}, desc = "Leave the game")
+    @Command(aliases = {"leave"}, desc = "Leave the game.")
     public static void leave(final CommandContext cmd, CommandSender sender) {
         Bukkit.getServer().dispatchCommand(sender, "join observers");
     }

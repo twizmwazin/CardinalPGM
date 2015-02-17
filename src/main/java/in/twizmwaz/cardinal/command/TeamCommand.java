@@ -19,7 +19,7 @@ import java.util.Random;
 
 public class TeamCommand {
 
-    @Command(aliases = {"team"}, desc = "Manage the teams in the match", usage = "<force, alias, shuffle> [player, old team] [force team, new team]", min = 1)
+    @Command(aliases = {"team"}, desc = "Manage the teams in the match.", usage = "<force, alias, shuffle> [player, old team] [force team, new team]", min = 1)
     public static void team(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (cmd.getString(0).equalsIgnoreCase("force")) {
             if (cmd.argsLength() >= 3) {

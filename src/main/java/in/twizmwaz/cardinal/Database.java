@@ -43,7 +43,6 @@ public final class Database {
         outputter.setFormat(Format.getPrettyFormat());
         try {
             outputter.output(document, new FileWriter(file));
-            Bukkit.getLogger().info("[CardinalPGM] Database successfully saved to disk!");
             return true;
         } catch (IOException e) {
             e.printStackTrace();

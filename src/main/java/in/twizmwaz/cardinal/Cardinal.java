@@ -4,9 +4,9 @@ import com.sk89q.bukkit.util.CommandsManagerRegistration;
 import com.sk89q.minecraft.util.commands.*;
 import in.twizmwaz.cardinal.chat.LocaleHandler;
 import in.twizmwaz.cardinal.command.*;
-import in.twizmwaz.cardinal.permissions.Setting;
-import in.twizmwaz.cardinal.permissions.SettingValue;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
+import in.twizmwaz.cardinal.settings.Setting;
+import in.twizmwaz.cardinal.settings.SettingValue;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -19,9 +19,8 @@ import org.jdom2.JDOMException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 
 public class Cardinal extends JavaPlugin {
@@ -76,6 +75,7 @@ public class Cardinal extends JavaPlugin {
         cmdRegister.register(ClassCommands.class);
         cmdRegister.register(CardinalCommand.class);
         cmdRegister.register(ChatCommands.class);
+        cmdRegister.register(SettingCommands.class);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class Cardinal extends JavaPlugin {
             this.setEnabled(false);
             return;
         }
-        File databaseFile = new File(getDataFolder().getAbsolutePath() + "/database.xml");
+        File databaseFile = new File(getDataFolder(), "database.xml");
         if (databaseFile.exists()) {
             try {
                 database = Database.loadFromFile(databaseFile);
@@ -102,9 +102,36 @@ public class Cardinal extends JavaPlugin {
             database = Database.newInstance(databaseFile);
         }
         FileConfiguration config = getConfig();
+        config.addDefault("deleteMatches", true);
+        if (!config.contains("settings")) {
+            config.addDefault("settings", Arrays.asList("Blood", "DeathMessages", "HighlightDeathMessages", "JoinMessages", "Observers", "Picker", "PrivateMessages", "Scoreboard", "Sounds"));
+            config.addDefault("setting.Blood.values", Arrays.asList("on", "off[default]"));
+            config.addDefault("setting.Blood.description", "See blood when players get hurt");
+            config.addDefault("setting.DeathMessages.aliases", Arrays.asList("dms"));
+            config.addDefault("setting.DeathMessages.values", Arrays.asList("own", "all[default]"));
+            config.addDefault("setting.DeathMessages.description", "Death messages displayed to you");
+            config.addDefault("setting.HighlightDeathMessages.aliases", Arrays.asList("hdms"));
+            config.addDefault("setting.HighlightDeathMessages.values", Arrays.asList("underline", "italics", "white", "none", "bold[default]"));
+            config.addDefault("setting.HighlightDeathMessages.description", "Highlight death messages that you are involved in");
+            config.addDefault("setting.JoinMessages.aliases", Arrays.asList("jms"));
+            config.addDefault("setting.JoinMessages.values", Arrays.asList("none", "all[default]"));
+            config.addDefault("setting.JoinMessages.description", "Join messages displayed to you");
+            config.addDefault("setting.Observers.aliases", Arrays.asList("obs"));
+            config.addDefault("setting.Observers.values", Arrays.asList("none", "all[default]"));
+            config.addDefault("setting.Observers.description", "See other observers while spectating");
+            config.addDefault("setting.Picker.values", Arrays.asList("off", "on[default]"));
+            config.addDefault("setting.Picker.description", "Open a helpful GUI for picking classes and teams");
+            config.addDefault("setting.PrivateMessages.aliases", Arrays.asList("pms"));
+            config.addDefault("setting.PrivateMessages.values", Arrays.asList("none", "all[default]"));
+            config.addDefault("setting.PrivateMessages.description", "Who can send you private messages");
+            config.addDefault("setting.Scoreboard.values", Arrays.asList("off", "on[default]"));
+            config.addDefault("setting.Scoreboard.description", "See the scoreboard with game information");
+            config.addDefault("setting.Sounds.values", Arrays.asList("off", "on[default]"));
+            config.addDefault("setting.Sounds.description", "Hear sounds to alert you of the last three seconds of a countdown");
+        }
         config.options().copyDefaults(true);
         saveConfig();
-        if (Boolean.parseBoolean(config.getString("deleteMatches"))) {
+        if (config.getBoolean("deleteMatches")) {
             Bukkit.getLogger().log(Level.INFO, "[CardinalPGM] Deleting match files, this can be disabled via the configuration");
             File matches = new File("matches/");
             try {
@@ -116,20 +143,22 @@ public class Cardinal extends JavaPlugin {
         if (config.contains("settings")) {
             for (String settingName : config.getStringList("settings")) {
                 List<String> names = new ArrayList<>();
-                Set<SettingValue> values = new HashSet<>();
+                String description = "No description.";
+                List<SettingValue> values = new ArrayList<>();
                 names.add(settingName.trim());
                 if (config.contains("setting." + settingName + ".aliases")) {
                     for (String alias : config.getStringList("setting." + settingName + ".aliases")) {
                         names.add(alias.trim());
                     }
                 }
+                if (config.contains("setting." + settingName + ".description")) description = config.getString("setting." + settingName + ".description");
                 if (config.contains("setting." + settingName + ".values")) {
                     for (String valueName : config.getStringList("setting." + settingName + ".values")) {
-                        if (valueName.contains("[default]")) values.add(new SettingValue(valueName.replaceAll("[default]", "").trim(), true));
+                        if (valueName.endsWith("[default]")) values.add(new SettingValue(valueName.trim().substring(0, valueName.length() - 9), true));
                         else values.add(new SettingValue(valueName.trim(), false));
                     }
                 }
-                new Setting(names, values);
+                new Setting(names, description, values);
             }
         }
         try {

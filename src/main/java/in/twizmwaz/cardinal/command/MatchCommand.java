@@ -22,7 +22,7 @@ import org.bukkit.entity.Player;
 
 public class MatchCommand {
 
-    @Command(aliases = {"matchinfo", "match"}, desc = "Shows information about the currently playing match", usage = "")
+    @Command(aliases = {"matchinfo", "match"}, desc = "Shows information about the currently playing match.", usage = "")
     public static void match(final CommandContext args, CommandSender sender) throws CommandException {
         sender.sendMessage(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "------" + ChatColor.DARK_AQUA + " Match Info " + ChatColor.GRAY + "(" + GameHandler.getGameHandler().getMatch().getNumber() + ")" + ChatColor.RED + " " + ChatColor.STRIKETHROUGH + "------");
         sender.sendMessage(ChatColor.DARK_PURPLE + "Time: " + ChatColor.GOLD + StringUtils.formatTimeWithMillis(MatchTimer.getTimeInSeconds()));

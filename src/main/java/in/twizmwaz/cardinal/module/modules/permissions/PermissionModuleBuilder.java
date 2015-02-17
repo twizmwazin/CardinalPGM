@@ -12,7 +12,7 @@ public class PermissionModuleBuilder implements ModuleBuilder {
     
     @Override
     public ModuleCollection load(Match match) {
-        ModuleCollection<PermissionModule> results = new ModuleCollection<PermissionModule>();
+        ModuleCollection<PermissionModule> results = new ModuleCollection<>();
         results.add(new PermissionModule(GameHandler.getGameHandler().getPlugin()));
         return results;
     }

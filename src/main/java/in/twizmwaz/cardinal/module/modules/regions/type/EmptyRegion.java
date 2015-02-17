@@ -2,7 +2,6 @@ package in.twizmwaz.cardinal.module.modules.regions.type;
 
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.EmptyParser;
-import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 

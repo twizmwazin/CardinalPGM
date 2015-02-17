@@ -1,4 +1,4 @@
-package in.twizmwaz.cardinal.permissions;
+package in.twizmwaz.cardinal.settings;
 
 public class SettingValue {
 

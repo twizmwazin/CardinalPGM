@@ -1,36 +1,34 @@
-package in.twizmwaz.cardinal.permissions;
+package in.twizmwaz.cardinal.settings;
 
+import in.twizmwaz.cardinal.Cardinal;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-import java.util.Set;
 
 public class Setting {
 
     private List<String> names;
-    private Set<SettingValue> values;
+    private String description;
+    private List<SettingValue> values;
 
-    public Setting(List<String> names, Set<SettingValue> values) {
+    public Setting(List<String> names, String description, List<SettingValue> values) {
         this.names = names;
+        this.description = description;
         this.values = values;
 
         boolean hasDefault = false;
         for (SettingValue value : values) {
             if (value.isDefault()) hasDefault = true;
         }
-        if (!hasDefault) {
-            for (SettingValue value : values) {
-                value.setDefault(true);
-                break;
-            }
-        }
+        if (!hasDefault) values.get(0).setDefault(true);
+        Settings.addSetting(this);
     }
 
     public List<String> getNames() {
         return names;
     }
 
-    public Set<SettingValue> getValues() {
+    public List<SettingValue> getValues() {
         return values;
     }
 
@@ -55,10 +53,21 @@ public class Setting {
     }
 
     public SettingValue getValueByPlayer(Player player) {
-        for (SettingValue settingValue : values) {
-            if (player.hasPermission("setting." + names.get(0) + "." + settingValue.getValue())) return settingValue;
+        if (Cardinal.getCardinalDatabase().get(player, "setting_" + this.names.get(0)).equals("")) {
+            SettingValue defaultValue = null;
+            for (SettingValue value : this.values) {
+                if (value.isDefault()) defaultValue = value;
+            }
+            if (defaultValue != null) Cardinal.getCardinalDatabase().put(player, "setting_" + this.names.get(0), defaultValue.getValue());
         }
-        return null;
+        return this.getSettingValueByName(Cardinal.getCardinalDatabase().get(player, "setting_" + this.names.get(0)));
     }
 
+    public void setValueByPlayer(Player player, SettingValue value) {
+        Cardinal.getCardinalDatabase().put(player, "setting_" + this.names.get(0), value.getValue());
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }

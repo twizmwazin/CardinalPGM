@@ -22,7 +22,7 @@ public class PermissionModule implements Module {
     
     public PermissionModule(Plugin plugin) {
         this.plugin = plugin;
-        this.attachmentMap = new HashMap<Player, PermissionAttachment>();
+        this.attachmentMap = new HashMap<>();
     }
     
     @Override
