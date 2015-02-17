@@ -43,8 +43,7 @@ public class MatchModule implements Module {
     @EventHandler
     public void onMatchEnd(MatchEndEvent event) {
         GlobalChannel channel = match.getModules().getModule(GlobalChannel.class);
-        channel.sendMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # #");
-        Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "# #    " + ChatColor.GOLD + "Game over!" + ChatColor.DARK_PURPLE + "    # #");
+        channel.sendMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # #");
         channel.sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# #    " + ChatColor.GOLD + "{0}" + ChatColor.DARK_PURPLE + "    # #", ChatConstant.UI_MATCH_OVER.asMessage()));
         if (event.getTeam() != null) {
             if (event.getTeam().size() == 1) {
@@ -53,7 +52,7 @@ public class MatchModule implements Module {
                 channel.sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # {0}" + ChatColor.DARK_PURPLE + " # #", new LocalizedChatMessage(ChatConstant.UI_MATCH_WIN, new UnlocalizedChatMessage(event.getTeam().getCompleteName()))));
             }
         }
-        channel.sendMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # #");
+        channel.sendMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # #");
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

@@ -47,6 +47,8 @@ public class GameObjectiveScoreboardHandler {
                 return ChatColor.GREEN + "\u2714";
             } else if (core.isTouched() && (this.team != team || team.isObserver())) {
                 return ChatColor.YELLOW + "\u2733";
+            } else if (this.team != team || team.isObserver()) {
+                return ChatColor.RED + "\u2715 " + ChatColor.RESET + NumUtils.convertToSubscript(core.getProximity() == Double.POSITIVE_INFINITY || core.getProximity() == Double.NEGATIVE_INFINITY ? core.getProximity() : Math.round(core.getProximity() * 10.0) / 10.0);
             } else {
                 return ChatColor.RED + "\u2715";
             }

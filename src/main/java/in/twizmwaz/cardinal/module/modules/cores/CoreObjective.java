@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.cores;
 
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
@@ -27,6 +28,7 @@ import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -40,6 +42,8 @@ public class CoreObjective implements GameObjective {
     private final int leak;
     private final boolean show;
     private boolean changesModes;
+
+    private double proximity;
 
     private Set<UUID> playersTouched;
     private Material currentType;
@@ -61,6 +65,8 @@ public class CoreObjective implements GameObjective {
         this.damageValue = damageValue;
         this.show = show;
         this.changesModes = changesModes;
+
+        this.proximity = Double.POSITIVE_INFINITY;
 
         this.playersTouched = new HashSet<>();
         this.currentType = type;
@@ -292,5 +298,19 @@ public class CoreObjective implements GameObjective {
     public void setMaterial(Material material, int damageValue) {
         this.currentType = material;
         this.damageValue = damageValue;
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        if (GameHandler.getGameHandler().getMatch().isRunning() && !this.touched && TeamUtils.getTeamByPlayer(event.getPlayer()) != null && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() && TeamUtils.getTeamByPlayer(event.getPlayer()) != this.team) {
+            if (event.getPlayer().getLocation().toVector().distance(region.getCenterBlock().getVector()) < proximity) {
+                proximity = event.getPlayer().getLocation().toVector().distance(region.getCenterBlock().getVector());
+                Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent());
+            }
+        }
+    }
+
+    public double getProximity() {
+        return proximity;
     }
 }
