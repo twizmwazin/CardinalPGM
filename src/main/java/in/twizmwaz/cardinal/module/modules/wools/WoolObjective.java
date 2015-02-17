@@ -1,9 +1,12 @@
 package in.twizmwaz.cardinal.module.modules.wools;
 
 import in.parapengu.commons.utils.StringUtils;
+import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
+import in.twizmwaz.cardinal.module.modules.appliedRegion.AppliedRegion;
 import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
@@ -14,6 +17,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,13 +28,13 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Wool;
+import org.bukkit.util.Vector;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class WoolObjective implements GameObjective {
 
@@ -40,6 +45,9 @@ public class WoolObjective implements GameObjective {
     private final BlockRegion place;
     private final boolean craftable;
     private final boolean show;
+
+    private Vector block;
+    private double proximity;
 
     private Set<UUID> playersTouched;
     private boolean touched;
@@ -55,6 +63,8 @@ public class WoolObjective implements GameObjective {
         this.place = place;
         this.craftable = craftable;
         this.show = show;
+
+        this.proximity = Double.POSITIVE_INFINITY;
 
         this.playersTouched = new HashSet<>();
 
@@ -195,5 +205,56 @@ public class WoolObjective implements GameObjective {
         if (event.getRecipe().getResult().equals(new ItemStack(Material.WOOL, 1, color.getData())) && !this.craftable) {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        /* if (GameHandler.getGameHandler().getMatch().isRunning() && !this.touched && TeamUtils.getTeamByPlayer(event.getPlayer()) != null && TeamUtils.getTeamByPlayer(event.getPlayer()) == this.team) {
+            if (block == null) {
+                List<Block> blockList = new ArrayList<>();
+                for (AppliedRegion region : GameHandler.getGameHandler().getMatch().getModules().getModules(AppliedRegion.class)) {
+                    for (Block block : region.getRegion().getBlocks()) {
+                        if (block.getType().equals(Material.CHEST) || block.getType().equals(Material.TRAPPED_CHEST)) {
+                            if (((Chest) block.getState()).getInventory().contains(new ItemStack(Material.WOOL, 1, color.getData()))) {
+                                blockList.add(block);
+                            }
+                        }
+                    }
+                }
+                Vector block = null;
+                if (blockList.size() > 0) {
+                    block = blockList.get(0).getLocation().toVector();
+                    for (Block each : blockList) {
+                        block = block.midpoint(each.getLocation().toVector());
+                    }
+                }
+                this.block = block;
+            }
+            if (event.getPlayer().getLocation().toVector().distance(block) < proximity) {
+                proximity = event.getPlayer().getLocation().toVector().distance(block);
+                Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent());
+            }
+        } */
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onSafetyPlace(BlockPlaceEvent event) {
+        if (!event.isCancelled() && this.touched) {
+            if (event.getBlock().getType().equals(Material.WOOL)) {
+                if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
+                    if (TeamUtils.getTeamByPlayer(event.getPlayer()) == team) {
+                        if (event.getBlockPlaced().getLocation().distance(place.getLocation()) < proximity) {
+                            proximity = event.getBlockPlaced().getLocation().distance(place.getLocation());
+                            Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent());
+                        }
+                        Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent());
+                    }
+                }
+            }
+        }
+    }
+
+    public double getProximity() {
+        return proximity;
     }
 }

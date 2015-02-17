@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjective;
 import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
+import in.twizmwaz.cardinal.util.NumUtils;
 import org.bukkit.ChatColor;
 
 public class GameObjectiveScoreboardHandler {
@@ -34,7 +35,9 @@ public class GameObjectiveScoreboardHandler {
             if (wool.isComplete()) {
                 return StringUtils.convertDyeColorToChatColor(wool.getColor()) + "\u2B1B";
             } else if (wool.isTouched() && (this.team == team || team.isObserver())) {
-                return StringUtils.convertDyeColorToChatColor(wool.getColor()) + "\u2592";
+                return StringUtils.convertDyeColorToChatColor(wool.getColor()) + "\u2592 " + ChatColor.RESET + NumUtils.convertToSubscript(wool.getProximity() == Double.POSITIVE_INFINITY || wool.getProximity() == Double.NEGATIVE_INFINITY ? wool.getProximity() : Math.round(wool.getProximity() * 10.0) / 10.0);
+            } else if (this.team == team || team.isObserver()) {
+                return StringUtils.convertDyeColorToChatColor(wool.getColor()) + "\u2B1C " + ChatColor.RESET + NumUtils.convertToSubscript(wool.getProximity() == Double.POSITIVE_INFINITY || wool.getProximity() == Double.NEGATIVE_INFINITY ? wool.getProximity() : Math.round(wool.getProximity() * 10.0) / 10.0);
             } else {
                 return StringUtils.convertDyeColorToChatColor(wool.getColor()) + "\u2B1C";
             }

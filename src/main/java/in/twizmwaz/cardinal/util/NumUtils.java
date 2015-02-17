@@ -37,4 +37,10 @@ public class NumUtils {
         if (string.equalsIgnoreCase("on")) return true;
         return !string.equalsIgnoreCase("off") && Boolean.parseBoolean(string);
     }
+
+    public static String convertToSubscript(double number) {
+        if (number == Double.POSITIVE_INFINITY) return "\u221E";
+        if (number == Double.NEGATIVE_INFINITY) return "-\u221E";
+        return (number + "").replaceAll("0", "\u2080").replaceAll("1", "\u2081").replaceAll("2", "\u2082").replaceAll("3", "\u2083").replaceAll("4", "\u2084").replaceAll("5", "\u2085").replaceAll("6", "\u2086").replaceAll("7", "\u2087").replaceAll("8", "\u2088").replaceAll("9", "\u2089");
+    }
 }

@@ -17,6 +17,10 @@ public abstract class AppliedRegion implements Module {
         this.message = message;
     }
 
+    public RegionModule getRegion() {
+        return region;
+    }
+
     @Override
     public void unload() {
         HandlerList.unregisterAll(this);
