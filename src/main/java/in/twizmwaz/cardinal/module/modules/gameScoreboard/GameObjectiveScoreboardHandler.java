@@ -45,9 +45,9 @@ public class GameObjectiveScoreboardHandler {
             CoreObjective core = (CoreObjective) objective;
             if (core.isComplete()) {
                 return ChatColor.GREEN + "\u2714";
-            } else if (core.isTouched() && (this.team != team || team.isObserver())) {
+            } else if (core.isTouched() && this.team != team) {
                 return ChatColor.YELLOW + "\u2733";
-            } else if (this.team != team || team.isObserver()) {
+            } else if (this.team != team) {
                 return ChatColor.RED + "\u2715 " + ChatColor.RESET + NumUtils.convertToSubscript(core.getProximity() == Double.POSITIVE_INFINITY || core.getProximity() == Double.NEGATIVE_INFINITY ? core.getProximity() : Math.round(core.getProximity() * 10.0) / 10.0);
             } else {
                 return ChatColor.RED + "\u2715";
@@ -57,8 +57,10 @@ public class GameObjectiveScoreboardHandler {
             if (destroyable.showPercent() || team.isObserver()) {
                 if (destroyable.isComplete()) {
                     return ChatColor.GREEN + "" + destroyable.getPercent() + "%";
-                } else if (destroyable.isTouched() && (this.team != team || team.isObserver())) {
+                } else if (destroyable.isTouched() && this.team != team) {
                     return ChatColor.YELLOW + "" + destroyable.getPercent() + "%";
+                } else if (this.team != team) {
+                    return ChatColor.RED + "" + destroyable.getPercent() + "% " + ChatColor.RESET + NumUtils.convertToSubscript(destroyable.getProximity() == Double.POSITIVE_INFINITY || destroyable.getProximity() == Double.NEGATIVE_INFINITY ? destroyable.getProximity() : Math.round(destroyable.getProximity() * 10.0) / 10.0);
                 } else {
                     return ChatColor.RED + "" + destroyable.getPercent() + "%";
                 }
@@ -67,6 +69,8 @@ public class GameObjectiveScoreboardHandler {
                     return ChatColor.GREEN + "\u2714";
                 } else if (destroyable.isTouched() && this.team != team) {
                     return ChatColor.YELLOW + "\u2733";
+                } else if (this.team != team) {
+                    return ChatColor.RED + "\u2715 " + ChatColor.RESET + NumUtils.convertToSubscript(destroyable.getProximity() == Double.POSITIVE_INFINITY || destroyable.getProximity() == Double.NEGATIVE_INFINITY ? destroyable.getProximity() : Math.round(destroyable.getProximity() * 10.0) / 10.0);
                 } else {
                     return ChatColor.RED + "\u2715";
                 }
