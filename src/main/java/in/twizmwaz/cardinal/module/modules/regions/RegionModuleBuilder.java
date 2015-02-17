@@ -109,23 +109,21 @@ public class RegionModuleBuilder implements ModuleBuilder {
                 region = new MirroredRegion(new MirrorParser(element));
                 if (region.getName() != null) GameHandler.getGameHandler().getMatch().getModules().add(region); 
                 return region;
-            case "region":
+            default:
                 if (element.getAttributeValue("name") != null) {
                     for (RegionModule regionModule : GameHandler.getGameHandler().getMatch().getModules().getModules(RegionModule.class)) {
                         if (element.getAttributeValue("name").equalsIgnoreCase(regionModule.getName())) {
                             return regionModule;
                         }
                     }
-                } else {
-                    return getRegion(element.getChildren().get(0));
-                }
-            default:
-                if (element.getAttributeValue("region") != null) {
+                } else if (element.getAttributeValue("region") != null) {
                     for (RegionModule regionModule : GameHandler.getGameHandler().getMatch().getModules().getModules(RegionModule.class)) {
                         if (element.getAttributeValue("region").equalsIgnoreCase(regionModule.getName())) {
                             return regionModule;
                         }
                     }
+                } else {
+                    return getRegion(element.getChildren().get(0));
                 }
                 return null;
         }

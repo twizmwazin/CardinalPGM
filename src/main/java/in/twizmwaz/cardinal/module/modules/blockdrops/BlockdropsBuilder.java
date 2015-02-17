@@ -28,7 +28,7 @@ public class BlockdropsBuilder implements ModuleBuilder {
                 }
                 FilterModule filter = null;
                 if (rule.getChild("filter") != null) {
-                    filter = FilterModuleBuilder.getFilter(rule.getChild("filter"));
+                    filter = FilterModuleBuilder.getFilter(rule.getChild("filter").getChildren().get(0));
                 }
                 Set<ItemStack> drops = new HashSet<>();
                 for (Element items : rule.getChildren("drops")) {

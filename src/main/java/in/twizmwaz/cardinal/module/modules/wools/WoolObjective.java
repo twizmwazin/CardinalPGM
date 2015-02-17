@@ -129,7 +129,7 @@ public class WoolObjective implements GameObjective {
 
     @EventHandler
     public void onWoolPickup(PlayerPickupItemEvent event) {
-        Player player = (Player) event.getPlayer();
+        Player player = event.getPlayer();
         if (!this.complete) {
             try {
                 if (event.getItem().getItemStack().getType() == Material.WOOL && event.getItem().getItemStack().getData().getData() == color.getData()) {
