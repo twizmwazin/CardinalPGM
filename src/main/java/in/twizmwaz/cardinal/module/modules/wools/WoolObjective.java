@@ -115,9 +115,7 @@ public class WoolObjective implements GameObjective {
                     if (TeamUtils.getTeamByPlayer(player) == team) {
                         if (!this.playersTouched.contains(player.getUniqueId())) {
                             this.playersTouched.add(player.getUniqueId());
-                            if (this.show) for (TeamChannel channel : team.getMatch().getModules().getModules(TeamChannel.class)) {
-                                if (this.show) TeamUtils.getTeamChannel(team).sendMessage(team.getColor() + "[Team] " + player.getDisplayName() + ChatColor.GRAY + " picked up " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " "));
-                            }
+                            if (this.show) TeamUtils.getTeamChannel(team).sendMessage(team.getColor() + "[Team] " + player.getDisplayName() + ChatColor.GRAY + " picked up " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " "));
                         }
                         boolean oldState = this.touched;
                         this.touched = true;
