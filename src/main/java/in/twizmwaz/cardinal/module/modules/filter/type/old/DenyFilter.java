@@ -4,11 +4,8 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.ChildrenFilterParser;
-import in.twizmwaz.cardinal.module.modules.filter.parsers.GenericFilterParser;
 
-import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ABSTAIN;
-import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ALLOW;
-import static in.twizmwaz.cardinal.module.modules.filter.FilterState.DENY;
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.*;
 
 public class DenyFilter extends FilterModule {
 

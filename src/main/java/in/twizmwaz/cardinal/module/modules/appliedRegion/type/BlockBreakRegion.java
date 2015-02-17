@@ -5,18 +5,11 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
-import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import in.twizmwaz.cardinal.util.ChatUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.util.Vector;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class BlockBreakRegion extends AppliedRegion {
     
@@ -26,7 +19,7 @@ public class BlockBreakRegion extends AppliedRegion {
     
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (!event.isCancelled() && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector().add(new Vector(0.5, 0.5, 0.5)))) && filter.evaluate(event.getPlayer(), event.getBlock()).equals(FilterState.DENY)) {
+        if (!event.isCancelled() && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector().add(new Vector(0.5, 0.5, 0.5)))) && filter.evaluate(event.getPlayer(), event.getBlock(), event).equals(FilterState.DENY)) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }
@@ -34,7 +27,7 @@ public class BlockBreakRegion extends AppliedRegion {
 
     @EventHandler
     public void onBucketFill(PlayerBucketFillEvent event) {
-        if (!event.isCancelled() && region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector().add(new Vector(0.5, 0.5, 0.5)))) && filter.evaluate(event.getPlayer(), event.getBlockClicked().getRelative(event.getBlockFace())).equals(FilterState.DENY)) {
+        if (!event.isCancelled() && region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector().add(new Vector(0.5, 0.5, 0.5)))) && filter.evaluate(event.getPlayer(), event.getBlockClicked().getRelative(event.getBlockFace()), event).equals(FilterState.DENY)) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }

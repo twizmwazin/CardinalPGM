@@ -11,10 +11,9 @@ import java.util.Set;
 
 public class ArmorKeepBuilder implements ModuleBuilder {
 
-    @SuppressWarnings("unchecked")
     @Override
     public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
+        ModuleCollection<ArmorKeep> results = new ModuleCollection<>();
         Set<Material> materials = new HashSet<>(128);
         for (Element itemKeep : match.getDocument().getRootElement().getChildren("armorkeep")) {
             for (Element item : itemKeep.getChildren("item")) {

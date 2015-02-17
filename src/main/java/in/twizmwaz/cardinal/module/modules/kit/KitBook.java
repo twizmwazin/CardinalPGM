@@ -1,7 +1,5 @@
 package in.twizmwaz.cardinal.module.modules.kit;
 
-import org.bukkit.inventory.ItemStack;
-
 import java.util.List;
 
 class KitBook {

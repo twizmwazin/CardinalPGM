@@ -35,7 +35,6 @@ public class NumUtils {
 
     public static boolean parseBoolean(String string) {
         if (string.equalsIgnoreCase("on")) return true;
-        if (string.equalsIgnoreCase("off")) return false;
-        return Boolean.parseBoolean(string);
+        return !string.equalsIgnoreCase("off") && Boolean.parseBoolean(string);
     }
 }

@@ -8,10 +8,7 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
-import org.bukkit.Bukkit;
 import org.jdom2.Element;
-
-import java.util.logging.Level;
 
 public class ProximityAlarmBuilder implements ModuleBuilder {
 

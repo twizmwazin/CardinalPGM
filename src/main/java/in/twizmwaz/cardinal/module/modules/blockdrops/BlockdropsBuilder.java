@@ -7,7 +7,6 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
-import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
 import in.twizmwaz.cardinal.util.ParseUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -29,9 +28,9 @@ public class BlockdropsBuilder implements ModuleBuilder {
                 }
                 FilterModule filter = null;
                 if (rule.getChild("filter") != null) {
-                    filter = FilterModuleBuilder.getFilter(rule.getChild("filter").getChildren().get(0));
+                    filter = FilterModuleBuilder.getFilter(rule.getChild("filter"));
                 }
-                Set<ItemStack> drops = new HashSet<ItemStack>(128);
+                Set<ItemStack> drops = new HashSet<>();
                 for (Element items : rule.getChildren("drops")) {
                     for (Element item : items.getChildren("item")) {
                         drops.add(ParseUtils.getItem(item));

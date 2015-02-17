@@ -15,7 +15,6 @@ import in.twizmwaz.cardinal.module.modules.portal.Portal;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
-import org.bukkit.Bukkit;
 import org.bukkit.util.Vector;
 import org.jdom2.Element;
 

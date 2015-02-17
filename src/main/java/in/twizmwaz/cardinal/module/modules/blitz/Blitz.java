@@ -20,14 +20,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 @SuppressWarnings("unchecked")
 public class Blitz implements Module {
 
-    /**
-     *
-     * TODO:
-     * - Make Win condition
-     * - Add countdown
-     *
-     */
-
     @Override
     public void unload() {
         HandlerList.unregisterAll(this);
@@ -55,10 +47,10 @@ public class Blitz implements Module {
         Player player = event.getEntity();
         TeamModule team = TeamUtils.getTeamByPlayer(player);
         if (team != null && !team.isObserver()) {
-            int oldMeta = player.getMetadata("lives").get(0).asInt();
+            int oldMeta = this.getLives(player);
             player.removeMetadata("lives", plugin);
             player.setMetadata("lives", new LazyMetadataValue(plugin, LazyMetadataValue.CacheStrategy.NEVER_CACHE, new BlitzLives(oldMeta - 1)));
-            if (player.getMetadata("lives").get(0).asInt() == 0) {
+            if (this.getLives(player) == 0) {
                 TeamUtils.getTeamById("observers").add(player, true);
                 player.removeMetadata("lives", plugin);
             }
@@ -75,7 +67,7 @@ public class Blitz implements Module {
                         player.setMetadata("lives", new LazyMetadataValue(plugin, LazyMetadataValue.CacheStrategy.NEVER_CACHE, new BlitzLives(this.lives)));
                     }
                     if (this.broadcastLives) {
-                        int lives = player.getMetadata("lives").get(0).asInt();
+                        int lives = this.getLives(player);
                         player.sendMessage(ChatColor.RED + "You have " + ChatColor.AQUA + "" + ChatColor.BOLD + lives + " " + (lives == 1 ? "life" : "lives") + ChatColor.RED + " remaining.");
                     }
                 }

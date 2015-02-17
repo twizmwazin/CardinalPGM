@@ -1,6 +1,8 @@
 package in.twizmwaz.cardinal.command;
 
-import com.sk89q.minecraft.util.commands.*;
+import com.sk89q.minecraft.util.commands.Command;
+import com.sk89q.minecraft.util.commands.CommandContext;
+import com.sk89q.minecraft.util.commands.CommandException;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.ClassChangeEvent;
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
