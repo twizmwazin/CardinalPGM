@@ -46,7 +46,7 @@ public class WoolObjective implements GameObjective {
     private final boolean craftable;
     private final boolean show;
 
-    private Vector block;
+    private Vector location;
     private double proximity;
 
     private Set<UUID> playersTouched;
@@ -55,7 +55,7 @@ public class WoolObjective implements GameObjective {
 
     private GameObjectiveScoreboardHandler scoreboardHandler;
 
-    protected WoolObjective(final TeamModule team, final String name, final String id, final DyeColor color, final BlockRegion place, final boolean craftable, final boolean show) {
+    protected WoolObjective(final TeamModule team, final String name, final String id, final DyeColor color, final BlockRegion place, final boolean craftable, final boolean show, final Vector location) {
         this.team = team;
         this.name = name;
         this.id = id;
@@ -63,6 +63,7 @@ public class WoolObjective implements GameObjective {
         this.place = place;
         this.craftable = craftable;
         this.show = show;
+        this.location = location;
 
         this.proximity = Double.POSITIVE_INFINITY;
 
@@ -128,6 +129,7 @@ public class WoolObjective implements GameObjective {
                         }
                         boolean oldState = this.touched;
                         this.touched = true;
+                        if (!oldState && location != null) proximity = location.distance(place.getVector());
                         ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !oldState);
                         Bukkit.getServer().getPluginManager().callEvent(touchEvent);
                     }
@@ -150,6 +152,7 @@ public class WoolObjective implements GameObjective {
                         }
                         boolean oldState = this.touched;
                         this.touched = true;
+                        if (!oldState && location != null) proximity = location.distance(place.getVector());
                         ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !oldState);
                         Bukkit.getServer().getPluginManager().callEvent(touchEvent);
                     }
@@ -209,32 +212,12 @@ public class WoolObjective implements GameObjective {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        /* if (GameHandler.getGameHandler().getMatch().isRunning() && !this.touched && TeamUtils.getTeamByPlayer(event.getPlayer()) != null && TeamUtils.getTeamByPlayer(event.getPlayer()) == this.team) {
-            if (block == null) {
-                List<Block> blockList = new ArrayList<>();
-                for (AppliedRegion region : GameHandler.getGameHandler().getMatch().getModules().getModules(AppliedRegion.class)) {
-                    for (Block block : region.getRegion().getBlocks()) {
-                        if (block.getType().equals(Material.CHEST) || block.getType().equals(Material.TRAPPED_CHEST)) {
-                            if (((Chest) block.getState()).getInventory().contains(new ItemStack(Material.WOOL, 1, color.getData()))) {
-                                blockList.add(block);
-                            }
-                        }
-                    }
-                }
-                Vector block = null;
-                if (blockList.size() > 0) {
-                    block = blockList.get(0).getLocation().toVector();
-                    for (Block each : blockList) {
-                        block = block.midpoint(each.getLocation().toVector());
-                    }
-                }
-                this.block = block;
-            }
-            if (event.getPlayer().getLocation().toVector().distance(block) < proximity) {
-                proximity = event.getPlayer().getLocation().toVector().distance(block);
+        if (location != null && GameHandler.getGameHandler().getMatch().isRunning() && !this.touched && TeamUtils.getTeamByPlayer(event.getPlayer()) != null && TeamUtils.getTeamByPlayer(event.getPlayer()) == this.team) {
+            if (event.getPlayer().getLocation().toVector().distance(location) < proximity) {
+                proximity = event.getPlayer().getLocation().toVector().distance(location);
                 Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent());
             }
-        } */
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
