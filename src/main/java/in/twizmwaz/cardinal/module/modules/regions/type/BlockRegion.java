@@ -46,10 +46,10 @@ public class BlockRegion extends RegionModule {
     }
 
     @Override
-    public boolean contains(BlockRegion region) {
-        return region.getVector().getBlockX() == getVector().getBlockX() &&
-                region.getVector().getBlockY() == getVector().getBlockY() &&
-                region.getVector().getBlockZ() == getVector().getBlockZ();
+    public boolean contains(Vector vector) {
+        return vector.getBlockX() == getVector().getBlockX() &&
+                vector.getBlockY() == getVector().getBlockY() &&
+                vector.getBlockZ() == getVector().getBlockZ();
     }
 
     @Override

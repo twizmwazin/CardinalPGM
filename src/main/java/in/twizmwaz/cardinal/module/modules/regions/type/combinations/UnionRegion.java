@@ -6,6 +6,7 @@ import in.twizmwaz.cardinal.module.modules.regions.parsers.modifiers.Combination
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
 import org.bukkit.block.Block;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +30,9 @@ public class UnionRegion extends RegionModule {
     }
 
     @Override
-    public boolean contains(BlockRegion region) {
+    public boolean contains(Vector vector) {
         for (RegionModule regionModule : getRegions()) {
-            if (regionModule.contains(region)) return true;
+            if (regionModule.contains(vector)) return true;
         }
         return false;
     }

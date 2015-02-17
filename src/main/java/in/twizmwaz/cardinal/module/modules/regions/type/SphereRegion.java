@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.module.modules.regions.type;
 import in.parapengu.commons.utils.OtherUtil;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.SphereParser;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
@@ -45,8 +46,8 @@ public class SphereRegion extends RegionModule {
     }
 
     @Override
-    public boolean contains(BlockRegion region) {
-        return region.getVector().isInSphere(getOrigin(), getRadius());
+    public boolean contains(Vector vector) {
+        return vector.isInSphere(getOrigin(), getRadius());
     }
 
     @Override

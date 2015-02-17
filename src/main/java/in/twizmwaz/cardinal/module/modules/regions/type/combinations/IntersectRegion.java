@@ -6,6 +6,7 @@ import in.twizmwaz.cardinal.module.modules.regions.parsers.modifiers.Combination
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
 import org.bukkit.block.Block;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +30,11 @@ public class IntersectRegion extends RegionModule {
     }
 
     @Override
-    public boolean contains(BlockRegion region) {
+    public boolean contains(Vector vector) {
         for (int i = 0; i < regions.size(); i ++) {
             for (int k = 0; k < regions.size(); k ++) {
                 if (i != k) {
-                    if (regions.get(i).contains(region) && regions.get(k).contains(region)) return true;
+                    if (regions.get(i).contains(vector) && regions.get(k).contains(vector)) return true;
                 }
             }
         }

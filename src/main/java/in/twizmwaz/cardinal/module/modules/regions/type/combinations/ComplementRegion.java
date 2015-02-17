@@ -6,6 +6,7 @@ import in.twizmwaz.cardinal.module.modules.regions.parsers.modifiers.Combination
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
 import org.bukkit.block.Block;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +30,10 @@ public class ComplementRegion extends RegionModule {
     }
 
     @Override
-    public boolean contains(BlockRegion region) {
-        if (!regions.get(0).contains(region)) return false;
+    public boolean contains(Vector vector) {
+        if (!regions.get(0).contains(vector)) return false;
         for (int i = 1; i < regions.size(); i ++) {
-            if (regions.get(i).contains(region)) return false;
+            if (regions.get(i).contains(vector)) return false;
         }
         return true;
     }

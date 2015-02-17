@@ -44,11 +44,11 @@ public class MirroredRegion extends RegionModule {
     }
 
     @Override
-    public boolean contains(BlockRegion region) {
+    public boolean contains(Vector vector) {
         if (this.region == null) {
             updateRegion();
         }
-        return this.region.contains(region);
+        return this.region.contains(vector);
     }
 
     @Override

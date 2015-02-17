@@ -4,6 +4,7 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.modifiers.TranslateParser;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
@@ -46,8 +47,8 @@ public class TranslatedRegion extends RegionModule {
     }
 
     @Override
-    public boolean contains(BlockRegion region) {
-        return base.contains(new BlockRegion(null, region.getVector().subtract(getOffset())));
+    public boolean contains(Vector vector) {
+        return base.contains(new BlockRegion(null, vector.subtract(getOffset())));
     }
 
     @Override

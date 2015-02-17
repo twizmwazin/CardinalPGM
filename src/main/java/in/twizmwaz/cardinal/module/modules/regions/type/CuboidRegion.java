@@ -55,10 +55,9 @@ public class CuboidRegion extends RegionModule {
         return max.getZ();
     }
 
-
     @Override
-    public boolean contains(BlockRegion region) {
-        return region.getVector().isInAABB(min, max);
+    public boolean contains(Vector vector) {
+        return vector.isInAABB(min, max);
     }
 
     @Override

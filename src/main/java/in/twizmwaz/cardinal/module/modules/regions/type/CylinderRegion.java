@@ -4,6 +4,7 @@ import in.parapengu.commons.utils.OtherUtil;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.CylinderParser;
 import in.twizmwaz.cardinal.util.NumUtils;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
@@ -48,8 +49,8 @@ public class CylinderRegion extends RegionModule {
     }
 
     @Override
-    public boolean contains(BlockRegion region) {
-        return (Math.hypot(Math.abs(region.getX() - getBaseX()), Math.abs(region.getZ() - getBaseZ())) <= getRadius()) && NumUtils.checkInterval(region.getY(), getBaseY(), getBaseY() + getHeight());
+    public boolean contains(Vector vector) {
+        return (Math.hypot(Math.abs(vector.getX() - getBaseX()), Math.abs(vector.getZ() - getBaseZ())) <= getRadius()) && NumUtils.checkInterval(vector.getY(), getBaseY(), getBaseY() + getHeight());
     }
 
     @Override
