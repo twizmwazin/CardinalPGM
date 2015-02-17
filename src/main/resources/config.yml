@@ -1,3 +1,72 @@
 repo: maps
 rotation: rotation.txt
 deleteMatches: true
+settings:
+- Blood
+- DeathMessages
+- HighlightDeathMessages
+- JoinMessages
+- Observers
+- Picker
+- PrivateMessages
+- Scoreboard
+- Sounds
+setting:
+  Blood:
+    values:
+    - 'on'
+    - off[default]
+    description: See blood when players get hurt
+  DeathMessages:
+    aliases:
+    - dms
+    values:
+    - own
+    - all[default]
+    description: Death messages displayed to you
+  HighlightDeathMessages:
+    aliases:
+    - hdms
+    values:
+    - underline
+    - italics
+    - white
+    - none
+    - bold[default]
+    description: Highlight death messages that you are involved in
+  JoinMessages:
+    aliases:
+    - jms
+    values:
+    - none
+    - all[default]
+    description: Join messages displayed to you
+  Observers:
+    aliases:
+    - obs
+    values:
+    - none
+    - all[default]
+    description: See other observers while spectating
+  Picker:
+    values:
+    - 'off'
+    - on[default]
+    description: Open a helpful GUI for picking classes and teams
+  PrivateMessages:
+    aliases:
+    - pms
+    values:
+    - none
+    - all[default]
+    description: Who can send you private messages
+  Scoreboard:
+    values:
+    - 'off'
+    - on[default]
+    description: See the scoreboard with game information
+  Sounds:
+    values:
+    - 'off'
+    - on[default]
+    description: Hear sounds to alert you of the last three seconds of a countdown
