@@ -49,7 +49,7 @@ public class GameObjectiveScoreboardHandler {
             }
         } else if (objective instanceof DestroyableObjective) {
             DestroyableObjective destroyable = (DestroyableObjective) objective;
-            if (destroyable.showPercent()) {
+            if (destroyable.showPercent() || team.isObserver()) {
                 if (destroyable.isComplete()) {
                     return ChatColor.GREEN + "" + destroyable.getPercent() + "%";
                 } else if (destroyable.isTouched() && (this.team != team || team.isObserver())) {
