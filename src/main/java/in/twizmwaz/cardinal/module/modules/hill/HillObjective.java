@@ -4,31 +4,30 @@ import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class HillObjective implements GameObjective {
 
-    private TeamModule team;
-    private final String name;
-    private final String id;
-    private final int captureTime;
-    private final int points;
-    private final double pointsGrowth;
+    private TeamModule team, capturingTeam;
+    private final String name, id;
+    private final int captureTime, points;
+    private final double pointsGrowth, timeMultiplier;
     private final CaptureRule captureRule;
-    private final double timeMultiplier;
-    private final boolean showProgress;
-    private final boolean neutralState;
-    private final boolean incremental;
-    private final boolean permanent;
-    private final boolean show;
-    private final RegionModule capture;
-    private final RegionModule progress;
-    private final RegionModule captured;
-
-    private TeamModule capturingTeam;
+    private final boolean showProgress ,neutralState, incremental, permanent, show;
+    private final RegionModule capture, progress, captured;
     private double controlTime;
 
     private GameObjectiveScoreboardHandler scoreboardHandler;
+    private final Set<Player> capturingPlayers;
 
     protected HillObjective(final TeamModule team, final String name, final String id, final int captureTime, final int points, final double pointsGrowth, final CaptureRule captureRule, final double timeMultiplier, final boolean showProgress, final boolean neutralState, final boolean incremental, final boolean permanent, final boolean show, final RegionModule capture, final RegionModule progress, final RegionModule captured) {
         this.team = team;
@@ -52,6 +51,30 @@ public class HillObjective implements GameObjective {
         this.controlTime = 0;
 
         scoreboardHandler = new GameObjectiveScoreboardHandler(this);
+        this.capturingPlayers = new HashSet<>();
+    }
+    
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        if (capture.contains(event.getTo()) && !capturingPlayers.contains(event.getPlayer()))
+            capturingPlayers.add(event.getPlayer());
+        if (!capture.contains(event.getTo()) && capturingPlayers.contains(event.getPlayer()))
+            capturingPlayers.remove(event.getPlayer());
+    }
+    
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        if (capturingPlayers.contains(event.getEntity())) capturingPlayers.remove(event.getEntity());
+    }
+    
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent event) {
+        if (capturingPlayers.contains(event.getPlayer())) capturingPlayers.remove(event.getPlayer());
+    }
+
+    @EventHandler
+    public void onPlayerLeave(PlayerKickEvent event) {
+        if (capturingPlayers.contains(event.getPlayer())) capturingPlayers.remove(event.getPlayer());
     }
 
     @Override
