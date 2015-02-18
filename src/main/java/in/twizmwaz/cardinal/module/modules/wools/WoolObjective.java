@@ -241,4 +241,8 @@ public class WoolObjective implements GameObjective {
     public double getProximity() {
         return proximity;
     }
+
+    public boolean showProximity() {
+        return location != null;
+    }
 }
