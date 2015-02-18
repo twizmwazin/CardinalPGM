@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.snowflakes;
 
 import in.twizmwaz.cardinal.Cardinal;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.util.TeamUtils;
@@ -30,7 +31,7 @@ public class Snowflakes implements Module {
         if (killer != null && TeamUtils.getTeamByPlayer(event.getPlayer()) != TeamUtils.getTeamByPlayer(event.getKiller())) {
             int snowflakes = 1;
             double multiplier = 1.0;
-            killer.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "+" + (int) (snowflakes * multiplier) + ChatColor.WHITE + " Snowflakes" + ChatColor.DARK_PURPLE + " | " + ChatColor.GOLD + "" + ChatColor.ITALIC + multiplier + "x" + ChatColor.DARK_PURPLE + " | " + ChatColor.GRAY + "killed " + TeamUtils.getTeamByPlayer(event.getPlayer()).getColor() + event.getPlayer().getName());
+            killer.sendMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "+" + (int) (snowflakes * multiplier) + ChatColor.WHITE + " Snowflakes" + ChatColor.DARK_PURPLE + " | " + ChatColor.GOLD + "" + ChatColor.ITALIC + multiplier + "x" + ChatColor.DARK_PURPLE + " | " + ChatColor.GRAY + "killed " + TeamUtils.getTeamByPlayer(event.getPlayer()).getColor() + event.getPlayer().getName()).getMessage(event.getKiller().getLocale()));
             if (Cardinal.getCardinalDatabase().get(killer, "snowflakes").equals("")) {
                 Cardinal.getCardinalDatabase().put(killer, "snowflakes", (int) (snowflakes * multiplier) + "");
             } else {

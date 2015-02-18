@@ -3,9 +3,15 @@ package in.twizmwaz.cardinal.chat;
 public class LocalizedChatMessage implements ChatMessage {
     
     private final ChatConstant message;
-    private final ChatMessage[] strings;
+    private ChatMessage[] messages = {};
+    private String[] strings = {};
 
-    public LocalizedChatMessage(ChatConstant message, ChatMessage... strings) {
+    public LocalizedChatMessage(ChatConstant message, ChatMessage... messages) {
+        this.message = message;
+        this.messages = messages;
+    }
+
+    public LocalizedChatMessage(ChatConstant message, String... strings) {
         this.message = message;
         this.strings = strings;
     }
@@ -13,8 +19,11 @@ public class LocalizedChatMessage implements ChatMessage {
     @Override
     public String getMessage(String locale) {
         String message = this.message.getMessage(locale);
+        for (int i = 0; i < this.messages.length; i++) {
+            message = message.replaceAll("\\{" + i + "\\}", this.messages[i].getMessage(locale));
+        }
         for (int i = 0; i < this.strings.length; i++) {
-            message = message.replaceAll("\\{" + i + "\\}", this.strings[i].getMessage(locale));
+            message = message.replaceAll("\\{" + i + "\\}", this.strings[i]);
         }
         return message;
     }
