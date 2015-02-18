@@ -2,7 +2,7 @@ package in.twizmwaz.cardinal.module.modules.blitz;
 
 
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.event.PgmSpawnEvent;
+import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.module.Module;
@@ -58,7 +58,7 @@ public class Blitz implements Module {
     }
 
     @EventHandler
-    public void onPgmSpawn(PgmSpawnEvent event) {
+    public void onPgmSpawn(CardinalSpawnEvent event) {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
             Player player = event.getPlayer();
             if (TeamUtils.getTeamByPlayer(player) != null) {

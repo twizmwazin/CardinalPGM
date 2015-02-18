@@ -1,6 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.filter.type.constant;
 
-import in.twizmwaz.cardinal.event.PgmSpawnEvent;
+import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 
 public class AllSpawnFilter extends AllEventFilter {
@@ -12,7 +12,7 @@ public class AllSpawnFilter extends AllEventFilter {
     @Override
     public FilterState evaluate(final Object... objects) {
         for (Object object : objects) {
-            if (object instanceof PgmSpawnEvent) return allow ? FilterState.ALLOW : FilterState.DENY;
+            if (object instanceof CardinalSpawnEvent) return allow ? FilterState.ALLOW : FilterState.DENY;
         }
         return FilterState.ABSTAIN;
     }

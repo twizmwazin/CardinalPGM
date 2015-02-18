@@ -2,7 +2,7 @@ package in.twizmwaz.cardinal.module.modules.classModule;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.ClassChangeEvent;
-import in.twizmwaz.cardinal.event.PgmSpawnEvent;
+import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.kit.Kit;
 import in.twizmwaz.cardinal.util.ChatUtils;
@@ -61,7 +61,7 @@ public class ClassModule implements Module {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPgmSpawn(PgmSpawnEvent event) {
+    public void onPgmSpawn(CardinalSpawnEvent event) {
         if (!playerClass.containsKey(event.getPlayer().getUniqueId()) && (this.defaultClass || (!defaultClassPresent() && GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class).equals(this)))) playerClass.put(event.getPlayer().getUniqueId(), this);
         if (playerClass.containsKey(event.getPlayer().getUniqueId()) && playerClass.get(event.getPlayer().getUniqueId()).equals(this)) {
             if (kit != null) kit.apply(event.getPlayer());

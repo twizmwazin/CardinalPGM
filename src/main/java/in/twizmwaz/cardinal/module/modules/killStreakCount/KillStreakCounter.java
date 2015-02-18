@@ -1,7 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.killStreakCount;
 
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.event.PgmSpawnEvent;
+import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.entity.Player;
@@ -36,7 +36,7 @@ public class KillStreakCounter implements Module {
     }
 
     @EventHandler
-    public void onPgmSpawn(PgmSpawnEvent event) {
+    public void onPgmSpawn(CardinalSpawnEvent event) {
         try {
             event.getPlayer().removeMetadata("killstreak", plugin);
         } catch (NullPointerException e) {

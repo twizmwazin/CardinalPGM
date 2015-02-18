@@ -3,7 +3,7 @@ package in.twizmwaz.cardinal.module.modules.observers;
 import com.sk89q.minecraft.util.commands.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
-import in.twizmwaz.cardinal.event.PgmSpawnEvent;
+import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
@@ -112,7 +112,7 @@ public class ObserverModule implements Module {
     }
 
     @EventHandler
-    public void onPlayerSpawn(PgmSpawnEvent event) {
+    public void onPlayerSpawn(CardinalSpawnEvent event) {
         if (!event.getTeam().isObserver()) {
             event.getPlayer().setGameMode(GameMode.SURVIVAL);
             event.getPlayer().setAffectsSpawning(true);

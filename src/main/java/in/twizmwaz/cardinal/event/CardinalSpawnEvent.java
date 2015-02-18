@@ -7,7 +7,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class PgmSpawnEvent extends Event implements Cancellable {
+public class CardinalSpawnEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
     private final Player player;
@@ -15,7 +15,7 @@ public class PgmSpawnEvent extends Event implements Cancellable {
     private final TeamModule team;
     private boolean cancelled;
 
-    public PgmSpawnEvent(final Player player, final SpawnModule spawn, final TeamModule team) {
+    public CardinalSpawnEvent(final Player player, final SpawnModule spawn, final TeamModule team) {
         this.player = player;
         this.spawn = spawn;
         this.team = team;

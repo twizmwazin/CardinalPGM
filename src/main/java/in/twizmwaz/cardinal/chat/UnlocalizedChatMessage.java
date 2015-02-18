@@ -5,7 +5,11 @@ public class UnlocalizedChatMessage implements ChatMessage  {
     private final String message;
     private ChatMessage[] messages = {};
     private String[] strings = {};
-    
+
+    public UnlocalizedChatMessage(String message) {
+        this.message = message;
+    }
+
     public UnlocalizedChatMessage(String message, ChatMessage... messages) {
         this.message = message;
         this.messages = messages;

@@ -6,6 +6,10 @@ public class LocalizedChatMessage implements ChatMessage {
     private ChatMessage[] messages = {};
     private String[] strings = {};
 
+    public LocalizedChatMessage(ChatConstant message) {
+        this.message = message;
+    }
+
     public LocalizedChatMessage(ChatConstant message, ChatMessage... messages) {
         this.message = message;
         this.messages = messages;
