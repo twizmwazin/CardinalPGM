@@ -1,5 +1,8 @@
 package in.twizmwaz.cardinal.util;
 
+import org.bukkit.ChatColor;
+import org.bukkit.util.ChatPaginator;
+
 import java.text.DecimalFormat;
 
 public class StringUtils {
@@ -83,5 +86,27 @@ public class StringUtils {
             secondsString = "0" + secondsString;
         }
         return (negative ? "-" : "") + (hours == 0 ? "" : hoursString + ":") + minutesString + ":" + secondsString + "." + millisString;
+    }
+
+    /**
+     * @author OvercastNetwork
+     * @author MonsieurApple
+     * @author Anxuiz
+     * @author Ramsey
+     *
+     * https://github.com/rmsy/Whitelister
+     *
+     */
+
+    /** Repeat character 'c' n times. */
+    public static String repeat(String c, int n) {
+        assert n >= 0;
+        return new String(new char[n]).replace("\0", c);
+    }
+
+    public static String padMessage(String message, String c, ChatColor dashColor, ChatColor messageColor) {
+        message = " " + message + " ";
+        String dashes = StringUtils.repeat(c, (ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH - ChatColor.stripColor(message).length() - 2) / (c.length() * 2));
+        return dashColor + dashes + ChatColor.RESET + messageColor + message + ChatColor.RESET + dashColor + dashes;
     }
 }
