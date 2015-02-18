@@ -55,9 +55,9 @@ public class ChatCommands {
             e.printStackTrace();
         }
         for (int i = 1; i < args.length; i++) {
-            results += " " + args[i];
+            results += args[i] + " ";
         }
-        return results;
+        return results.trim();
     }
     
 }

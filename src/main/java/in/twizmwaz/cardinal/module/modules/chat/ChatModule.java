@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.chat;
 
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
 import in.twizmwaz.cardinal.util.TeamUtils;
@@ -22,8 +23,8 @@ public class ChatModule implements Module {
         event.setCancelled(true);
         //get default channel
         for (TeamChannel channel : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamChannel.class)) {
-            if (channel.getTeam().equals(TeamUtils.getTeamByPlayer(event.getPlayer()))) {
-                channel.sendMessage(channel.getTeam().getColor() + event.getPlayer().getDisplayName() + ChatColor.RESET + ": " + event.getMessage());
+            if (channel.getTeam() == TeamUtils.getTeamByPlayer(event.getPlayer())) {
+                channel.sendLocalizedMessage(new UnlocalizedChatMessage(channel.getTeam().getColor() + event.getPlayer().getDisplayName() + ChatColor.RESET + ": " + event.getMessage()));
                 ConsoleCommandSender console = GameHandler.getGameHandler().getPlugin().getServer().getConsoleSender();
                 console.sendMessage(channel.getTeam().getColor() + "[" + channel.getTeam().getName() + "] " + event.getPlayer().getDisplayName() + ChatColor.RESET + ": " + event.getMessage());
             }

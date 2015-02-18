@@ -155,7 +155,7 @@ public class CoreObjective implements GameObjective {
                         playersTouched.add(event.getPlayer().getUniqueId());
                         TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
                         ChatChannelModule channel = TeamUtils.getTeamChannel(teamModule);
-                        if (this.show) channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED, teamModule.getColor() + event.getPlayer().getDisplayName() + ChatColor.GRAY, ChatColor.RED + name));
+                        if (this.show && !this.complete) channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED, teamModule.getColor() + event.getPlayer().getDisplayName() + ChatColor.GRAY, ChatColor.RED + name));
                         
                     }
                     boolean oldState = this.touched;
@@ -201,7 +201,7 @@ public class CoreObjective implements GameObjective {
                                 playersTouched.add(player);
                                 TeamModule teamModule = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
                                 ChatChannelModule channel = TeamUtils.getTeamChannel(teamModule);
-                                if (this.show) channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED, teamModule.getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY, ChatColor.RED + name));
+                                if (this.show && !this.complete) channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED, teamModule.getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY, ChatColor.RED + name));
                             }
                             this.touched = true;
                             blownUp = true;

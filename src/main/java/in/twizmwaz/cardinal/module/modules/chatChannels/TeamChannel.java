@@ -30,7 +30,7 @@ public class TeamChannel extends PrivateChannel {
     @Override
     public void sendLocalizedMessage(ChatMessage message) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.hasPermission(permission)) player.sendMessage(team.getColor() + "[" + ChatConstant.MISC_TEAM .getMessage(player.getLocale()) + "] " + message.getMessage(player.getLocale()));
+            if (player.hasPermission(permission)) player.sendMessage(team.getColor() + "[" + ChatConstant.MISC_TEAM.getMessage(player.getLocale()) + "] " + message.getMessage(player.getLocale()));
         }
     }
 
