@@ -35,7 +35,7 @@ public class Snowflakes implements Module {
         } else if (event.getPlayerSpleefEvent() != null && event.getPlayerSpleefEvent().getSpleefer().isOnline()) {
             killer = (Player) event.getPlayerSpleefEvent().getSpleefer();
         }
-        if (killer != null && TeamUtils.getTeamByPlayer(event.getPlayer()) != TeamUtils.getTeamByPlayer(event.getKiller())) {
+        if (killer != null && TeamUtils.getTeamByPlayer(event.getPlayer()) != TeamUtils.getTeamByPlayer(killer)) {
             Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(killer, ChangeReason.PLAYER_KILL, 1, 1.0, event.getPlayer().getName()));
         }
     }
