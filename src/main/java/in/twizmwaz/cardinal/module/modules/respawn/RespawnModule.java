@@ -141,6 +141,13 @@ public class RespawnModule implements Module {
                     picker.setItemMeta(pickerMeta);
                     player.getInventory().setItem(2, picker);
                 }
+                if (player.hasPermission("tnt.defuse")) {
+                    ItemStack shears = new ItemStack(Material.SHEARS);
+                    ItemMeta meta = shears.getItemMeta();
+                    meta.setDisplayName(ChatColor.RED + "TNT Defuser");
+                    shears.setItemMeta(meta);
+                    player.getInventory().setItem(4, shears);
+                }
                 player.teleport(chosen.getLocation());
             }
         }
