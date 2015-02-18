@@ -27,7 +27,7 @@ public class Snowflakes implements Module {
         } else if (event.getPlayerSpleefEvent() != null && event.getPlayerSpleefEvent().getSpleefer().isOnline()) {
             killer = (Player) event.getPlayerSpleefEvent().getSpleefer();
         }
-        if (killer != null) {
+        if (killer != null && TeamUtils.getTeamByPlayer(event.getPlayer()) != TeamUtils.getTeamByPlayer(event.getKiller())) {
             int snowflakes = 1;
             double multiplier = 1.0;
             killer.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "+" + (int) (snowflakes * multiplier) + ChatColor.WHITE + " Snowflakes" + ChatColor.DARK_PURPLE + " | " + ChatColor.GOLD + "" + ChatColor.ITALIC + multiplier + "x" + ChatColor.DARK_PURPLE + " | " + ChatColor.GRAY + "killed " + TeamUtils.getTeamByPlayer(event.getPlayer()).getColor() + event.getPlayer().getName());
