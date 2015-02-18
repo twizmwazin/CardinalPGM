@@ -3,14 +3,21 @@ package in.twizmwaz.cardinal.module.modules.snowflakes;
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalDeathEvent;
+import in.twizmwaz.cardinal.event.SnowflakeChangeEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.util.TeamUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 
 public class Snowflakes implements Module {
+
+    public enum ChangeReason {
+        PLAYER_KILL(), OBJECTIVE_TOUCH(), OBJECTIVE_COMPLETE()
+    }
 
     public Snowflakes() {
     }
@@ -29,14 +36,24 @@ public class Snowflakes implements Module {
             killer = (Player) event.getPlayerSpleefEvent().getSpleefer();
         }
         if (killer != null && TeamUtils.getTeamByPlayer(event.getPlayer()) != TeamUtils.getTeamByPlayer(event.getKiller())) {
-            int snowflakes = 1;
-            double multiplier = 1.0;
-            killer.sendMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "+" + (int) (snowflakes * multiplier) + ChatColor.WHITE + " Snowflakes" + ChatColor.DARK_PURPLE + " | " + ChatColor.GOLD + "" + ChatColor.ITALIC + multiplier + "x" + ChatColor.DARK_PURPLE + " | " + ChatColor.GRAY + "killed " + TeamUtils.getTeamByPlayer(event.getPlayer()).getColor() + event.getPlayer().getName()).getMessage(event.getKiller().getLocale()));
-            if (Cardinal.getCardinalDatabase().get(killer, "snowflakes").equals("")) {
-                Cardinal.getCardinalDatabase().put(killer, "snowflakes", (int) (snowflakes * multiplier) + "");
-            } else {
-                Cardinal.getCardinalDatabase().put(killer, "snowflakes", (Integer.parseInt(Cardinal.getCardinalDatabase().get(killer, "snowflakes")) + (int) (snowflakes * multiplier)) + "");
-            }
+            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(killer, ChangeReason.PLAYER_KILL, 1, 1.0, event.getPlayer().getName()));
+        }
+    }
+
+    @EventHandler
+    public void onSnowflakeChange(SnowflakeChangeEvent event) {
+        String reason;
+        if (event.getChangeReason().equals(ChangeReason.PLAYER_KILL)) {
+            reason = "killed " + TeamUtils.getTeamByPlayer(Bukkit.getPlayer(event.get(0))).getColor() + event.get(0);
+        } else {
+            reason = "unknown reason";
+        }
+        event.getPlayer().sendMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "+" + event.getFinalAmount() + ChatColor.WHITE + " Snowflakes" + ChatColor.DARK_PURPLE + " | " + ChatColor.GOLD + "" + ChatColor.ITALIC + event.getMultiplier() + "x" + ChatColor.DARK_PURPLE + " | " + ChatColor.GRAY + reason).getMessage(event.getPlayer().getLocale()));
+        event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ORB_PICKUP, 10, 1);
+        if (Cardinal.getCardinalDatabase().get(event.getPlayer(), "snowflakes").equals("")) {
+            Cardinal.getCardinalDatabase().put(event.getPlayer(), "snowflakes", event.getFinalAmount() + "");
+        } else {
+            Cardinal.getCardinalDatabase().put(event.getPlayer(), "snowflakes", (Integer.parseInt(Cardinal.getCardinalDatabase().get(event.getPlayer(), "snowflakes")) + event.getFinalAmount()) + "");
         }
     }
 
