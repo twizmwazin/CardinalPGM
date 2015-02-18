@@ -13,6 +13,7 @@ import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannelModuleBuilder
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.cores.CoreObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.deathMessages.DeathMessagesBuilder;
+import in.twizmwaz.cardinal.module.modules.deathTracker.DeathTrackerBuilder;
 import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.difficulty.MapDifficultyBuilder;
 import in.twizmwaz.cardinal.module.modules.disableDamage.DisableDamageBuilder;
@@ -175,6 +176,7 @@ public class ModuleFactory {
         builderClasses.add(ChatChannelModuleBuilder.class);
         builderClasses.add(TntBuilder.class);
         builderClasses.add(MobModuleBuilder.class);
+        builderClasses.add(DeathTrackerBuilder.class);
      // builderClasses.add(BloodBuilder.class);
     }
 }
