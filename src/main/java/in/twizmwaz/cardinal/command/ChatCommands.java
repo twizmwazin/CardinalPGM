@@ -4,9 +4,11 @@ import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.module.modules.chatChannels.AdminChannel;
 import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannelModule;
 import in.twizmwaz.cardinal.module.modules.chatChannels.GlobalChannel;
+import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -40,9 +42,9 @@ public class ChatCommands {
     public static void team(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (sender instanceof Player) {
             TeamModule team = TeamUtils.getTeamByPlayer((Player) sender);
-            ChatChannelModule channel = TeamUtils.getTeamChannel(team);
+            TeamChannel channel = TeamUtils.getTeamChannel(team);
             String message = assembleMessage(cmd);
-            channel.sendMessage(team.getColor() + "[Team] " + ((Player) sender).getDisplayName() + ChatColor.RESET + ": " + message);
+            channel.sendLocalizedMessage(new UnlocalizedChatMessage(channel.getTeam().getColor() + ((Player) sender).getDisplayName() + ChatColor.RESET + ": " + message));
         } else throw new CommandException("Console cannot use this command.");
     }
     
