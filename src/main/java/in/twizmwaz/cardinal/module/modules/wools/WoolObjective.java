@@ -153,6 +153,7 @@ public class WoolObjective implements GameObjective {
                         boolean oldState = this.touched;
                         this.touched = true;
                         if (!oldState && location != null) proximity = location.distance(place.getVector());
+                        else if (!oldState) proximity = player.getLocation().toVector().distance(place.getVector());
                         ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !oldState);
                         Bukkit.getServer().getPluginManager().callEvent(touchEvent);
                     }
