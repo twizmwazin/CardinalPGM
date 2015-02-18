@@ -209,7 +209,7 @@ public class WhitelistCommands {
     @CommandPermissions("whitelist.kick")
     public static void kick(final CommandContext args, final CommandSender sender) throws CommandException {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (!player.isWhitelisted()) {
+            if (!player.isWhitelisted() && !player.isOp()) {
                 player.kickPlayer("All players who were not on the whitelist were kicked");
             }
         }
