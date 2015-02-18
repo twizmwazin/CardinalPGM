@@ -69,6 +69,13 @@ public class ObserverModule implements Module {
             howToBookMeta.setAuthor(ChatColor.GOLD + "CardinalPGM");
             howTo.setItemMeta(howToBookMeta);
             player.getInventory().setItem(1, howTo);
+            if (player.hasPermission("tnt.defuse")) {
+                ItemStack shears = new ItemStack(Material.SHEARS);
+                ItemMeta meta = shears.getItemMeta();
+                meta.setDisplayName(ChatColor.RED + "TNT Defuser");
+                shears.setItemMeta(meta);
+                player.getInventory().setItem(4, shears);
+            }
         }
     }
 
@@ -93,6 +100,13 @@ public class ObserverModule implements Module {
                 howToBookMeta.setAuthor(ChatColor.GOLD + "CardinalPGM");
                 howTo.setItemMeta(howToBookMeta);
                 player.getInventory().setItem(1, howTo);
+                if (player.hasPermission("tnt.defuse")) {
+                    ItemStack shears = new ItemStack(Material.SHEARS);
+                    ItemMeta meta = shears.getItemMeta();
+                    meta.setDisplayName(ChatColor.RED + "TNT Defuser");
+                    shears.setItemMeta(meta);
+                    player.getInventory().setItem(4, shears);
+                }
             }
         }
     }
@@ -127,6 +141,14 @@ public class ObserverModule implements Module {
                 picker.setItemMeta(pickerMeta);
                 event.getPlayer().getInventory().setItem(2, picker);
             }
+            if (event.getPlayer().hasPermission("tnt.defuse")) {
+                ItemStack shears = new ItemStack(Material.SHEARS);
+                ItemMeta meta = shears.getItemMeta();
+                meta.setDisplayName(ChatColor.RED + "TNT Defuser");
+                shears.setItemMeta(meta);
+                event.getPlayer().getInventory().setItem(4, shears);
+            }
+
         }
     }
 
