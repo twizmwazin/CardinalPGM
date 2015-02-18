@@ -164,7 +164,7 @@
         <mapPlaying>Currently playing {0}</mapPlaying>
         <objectivePlaced>{0} placed {2} for the {1}</objectivePlaced>
         <objectiveLeaked>{0}'s {1} has leaked!</objectiveLeaked>
-        <objectiveDestroyed>{0}'s {1} destroyed by {2}</objectiveDestroyed>
+        <objectiveDestroyed>{0}'s {1} was destroyed by {2}</objectiveDestroyed>
         <objectiveTouchedFor>{0} broke a piece of {1} for the {2}</objectiveTouchedFor>
         <objectiveTouched>{0} broke a piece of {1}</objectiveTouched>
         <objectiveDamagedFor>{0} damaged {1} for the {2}</objectiveDamagedFor>

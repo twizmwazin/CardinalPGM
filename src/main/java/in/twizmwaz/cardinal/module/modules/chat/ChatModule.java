@@ -23,7 +23,7 @@ public class ChatModule implements Module {
         //get default channel
         for (TeamChannel channel : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamChannel.class)) {
             if (channel.getTeam().equals(TeamUtils.getTeamByPlayer(event.getPlayer()))) {
-                channel.sendMessage(channel.getTeam().getColor() + "[Team] " + event.getPlayer().getDisplayName() + ChatColor.RESET + ": " + event.getMessage());
+                channel.sendMessage(channel.getTeam().getColor() + event.getPlayer().getDisplayName() + ChatColor.RESET + ": " + event.getMessage());
                 ConsoleCommandSender console = GameHandler.getGameHandler().getPlugin().getServer().getConsoleSender();
                 console.sendMessage(channel.getTeam().getColor() + "[" + channel.getTeam().getName() + "] " + event.getPlayer().getDisplayName() + ChatColor.RESET + ": " + event.getMessage());
             }

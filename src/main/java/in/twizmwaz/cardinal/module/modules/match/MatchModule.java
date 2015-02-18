@@ -60,7 +60,7 @@ public class MatchModule implements Module {
         GlobalChannel channel = match.getModules().getModule(GlobalChannel.class);
         channel.sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "{0}", new LocalizedChatMessage(ChatConstant.UI_CYCLED_TO, new UnlocalizedChatMessage(ChatColor.AQUA + event.getMatch().getLoadedMap().getName()))));
         for (Player player : Bukkit.getOnlinePlayers()) {
-            TeamUtils.getTeamById("observers").add(player, true);
+            TeamUtils.getTeamById("observers").add(player, true, false);
         }
     }
 }

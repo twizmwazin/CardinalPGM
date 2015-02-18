@@ -1,11 +1,16 @@
 package in.twizmwaz.cardinal.module.modules.cores;
 
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannelModule;
+import in.twizmwaz.cardinal.module.modules.chatChannels.GlobalChannel;
 import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
@@ -149,7 +154,9 @@ public class CoreObjective implements GameObjective {
                     if (!playersTouched.contains(event.getPlayer().getUniqueId())) {
                         playersTouched.add(event.getPlayer().getUniqueId());
                         TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
-                        if (this.show) TeamUtils.getTeamChannel(teamModule).sendMessage(teamModule.getColor() + "[Team] " + event.getPlayer().getDisplayName() + ChatColor.GRAY + " broke a piece of " + ChatColor.RED + name);
+                        ChatChannelModule channel = TeamUtils.getTeamChannel(teamModule);
+                        if (this.show) channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED, new UnlocalizedChatMessage(teamModule.getColor() + event.getPlayer().getDisplayName() + ChatColor.GRAY), new UnlocalizedChatMessage(ChatColor.RED + name)));
+                        
                     }
                     boolean oldState = this.touched;
                     this.touched = true;
@@ -158,14 +165,14 @@ public class CoreObjective implements GameObjective {
                     event.setCancelled(false);
                 } else {
                     event.setCancelled(true);
-                    if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), "You may not damage your own core.");
+                    if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), ChatConstant.ERROR_OWN_CORE.asMessage());
                     return;
                 }
             }
             if (core.contains(event.getBlock())) {
                 if (TeamUtils.getTeamByPlayer(event.getPlayer()) == team) {
                     event.setCancelled(true);
-                    if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), "You may not damage your own core.");
+                    if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), ChatConstant.ERROR_OWN_CORE.asMessage());
                 }
             }
         }
@@ -193,7 +200,8 @@ public class CoreObjective implements GameObjective {
                             if (!playersTouched.contains(player)) {
                                 playersTouched.add(player);
                                 TeamModule teamModule = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
-                                if (this.show) TeamUtils.getTeamChannel(teamModule).sendMessage(teamModule.getColor() + "[Team] " + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " broke a piece of " + ChatColor.RED + name);
+                                ChatChannelModule channel = TeamUtils.getTeamChannel(teamModule);
+                                if (this.show) channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED, new UnlocalizedChatMessage(teamModule.getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY), new UnlocalizedChatMessage(ChatColor.RED + name)));
                             }
                             this.touched = true;
                             blownUp = true;
@@ -233,7 +241,8 @@ public class CoreObjective implements GameObjective {
                     if (minY - to.getY() >= leak && !this.complete) {
                         this.complete = true;
                         event.setCancelled(false);
-                        if (this.show) Bukkit.broadcastMessage(team.getCompleteName() + ChatColor.RED + "'s " + ChatColor.DARK_AQUA + name + ChatColor.RED + " has leaked!");
+                        ChatChannelModule global = team.getMatch().getModules().getModule(GlobalChannel.class);
+                        if (this.show) global.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_LEAKED, new UnlocalizedChatMessage(team.getCompleteName() + ChatColor.RED), new UnlocalizedChatMessage(ChatColor.DARK_AQUA + name + ChatColor.RED)));
                         FireworkUtil.spawnFirework(event.getBlock().getLocation(), event.getBlock().getWorld());
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, null);
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
