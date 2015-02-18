@@ -155,7 +155,7 @@ public class CoreObjective implements GameObjective {
                         playersTouched.add(event.getPlayer().getUniqueId());
                         TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
                         ChatChannelModule channel = TeamUtils.getTeamChannel(teamModule);
-                        if (this.show) channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED, new UnlocalizedChatMessage(teamModule.getColor() + event.getPlayer().getDisplayName() + ChatColor.GRAY), new UnlocalizedChatMessage(ChatColor.RED + name)));
+                        if (this.show) channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED, teamModule.getColor() + event.getPlayer().getDisplayName() + ChatColor.GRAY, ChatColor.RED + name));
                         
                     }
                     boolean oldState = this.touched;
@@ -201,7 +201,7 @@ public class CoreObjective implements GameObjective {
                                 playersTouched.add(player);
                                 TeamModule teamModule = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
                                 ChatChannelModule channel = TeamUtils.getTeamChannel(teamModule);
-                                if (this.show) channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED, new UnlocalizedChatMessage(teamModule.getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY), new UnlocalizedChatMessage(ChatColor.RED + name)));
+                                if (this.show) channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED, teamModule.getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY, ChatColor.RED + name));
                             }
                             this.touched = true;
                             blownUp = true;
@@ -242,7 +242,7 @@ public class CoreObjective implements GameObjective {
                         this.complete = true;
                         event.setCancelled(false);
                         ChatChannelModule global = team.getMatch().getModules().getModule(GlobalChannel.class);
-                        if (this.show) global.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_LEAKED, new UnlocalizedChatMessage(team.getCompleteName() + ChatColor.RED), new UnlocalizedChatMessage(ChatColor.DARK_AQUA + name + ChatColor.RED)));
+                        if (this.show) global.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_LEAKED, team.getCompleteName() + ChatColor.RED, ChatColor.DARK_AQUA + name + ChatColor.RED));
                         FireworkUtil.spawnFirework(event.getBlock().getLocation(), event.getBlock().getWorld());
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, null);
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
