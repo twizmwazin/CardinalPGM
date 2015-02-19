@@ -81,6 +81,7 @@ public class Cardinal extends JavaPlugin {
         cmdRegister.register(ChatCommands.class);
         cmdRegister.register(SettingCommands.class);
         cmdRegister.register(WhitelistCommands.WhitelistParentCommand.class);
+        cmdRegister.register(SnowflakesCommand.class);
     }
 
     @Override
