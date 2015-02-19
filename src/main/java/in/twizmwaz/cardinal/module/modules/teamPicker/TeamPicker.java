@@ -19,6 +19,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerLocaleChangeEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -146,9 +147,34 @@ public class TeamPicker implements Module {
                     if (event.getPlayer().getItemInHand().getType().equals(Material.LEATHER_HELMET)) {
                         if (event.getPlayer().getItemInHand().hasItemMeta()) {
                             if (event.getPlayer().getItemInHand().getItemMeta().hasDisplayName()) {
-                                if (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().equals(ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(event.getPlayer().getLocale())) || event.getPlayer().getItemInHand().getItemMeta().getDisplayName().equals(ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(event.getPlayer().getLocale()))) {
+                                if (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().equals(ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(event.getPlayer().getLocale())) || ChatColor.stripColor(event.getPlayer().getItemInHand().getItemMeta().getDisplayName()).equals(new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(event.getPlayer().getLocale()))) {
                                     event.getPlayer().openInventory(getTeamPicker(event.getPlayer()));
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerLocaleChange(PlayerLocaleChangeEvent event) {
+        for (ItemStack item : event.getPlayer().getInventory().getContents()) {
+            if (item != null) {
+                if (item.getType().equals(Material.LEATHER_HELMET)) {
+                    if (item.hasItemMeta()) {
+                        if (item.getItemMeta().hasDisplayName()) {
+                            if (item.getItemMeta().getDisplayName().equals(ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(event.getOldLocale()))) {
+                                ItemMeta meta = item.getItemMeta();
+                                meta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(event.getNewLocale()));
+                                meta.setLore(Arrays.asList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(event.getPlayer().getLocale())));
+                                item.setItemMeta(meta);
+                            } else if (item.getItemMeta().getDisplayName().equals(ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(event.getOldLocale()))) {
+                                ItemMeta meta = item.getItemMeta();
+                                meta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(event.getNewLocale()));
+                                meta.setLore(Arrays.asList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(event.getPlayer().getLocale())));
+                                item.setItemMeta(meta);
                             }
                         }
                     }

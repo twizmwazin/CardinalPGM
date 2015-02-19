@@ -1,9 +1,9 @@
 package in.twizmwaz.cardinal.module.modules.teamManager;
 
-import com.sk89q.minecraft.util.commands.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
@@ -13,6 +13,7 @@ import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.PlayerUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,6 +28,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 public class TeamManagerModule implements Module {
 
@@ -72,14 +74,25 @@ public class TeamManagerModule implements Module {
             shears.setItemMeta(meta);
             player.getInventory().setItem(4, shears);
         }
-
-        event.setJoinMessage(TeamUtils.getTeamByPlayer(player).getColor() + player.getDisplayName() + ChatColor.YELLOW + " joined the game");
+        event.setJoinMessage(null);
+        for (Player player1 : Bukkit.getOnlinePlayers()) {
+            if (!player1.equals(player)) {
+                player1.sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", new LocalizedChatMessage(ChatConstant.UI_PLAYER_JOIN, TeamUtils.getTeamByPlayer(player).getColor() + player.getDisplayName() + ChatColor.YELLOW)).getMessage(player1.getLocale()));
+            }
+        }
+        Bukkit.getLogger().info(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", new LocalizedChatMessage(ChatConstant.UI_PLAYER_JOIN, TeamUtils.getTeamByPlayer(player).getColor() + player.getDisplayName() + ChatColor.YELLOW)).getMessage(Locale.getDefault().toString()));
     }
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        event.setQuitMessage(TeamUtils.getTeamByPlayer(player).getColor() + player.getDisplayName() + ChatColor.YELLOW + " left the game");
+        event.setQuitMessage(null);
+        for (Player player1 : Bukkit.getOnlinePlayers()) {
+            if (!player1.equals(player)) {
+                player1.sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", new LocalizedChatMessage(ChatConstant.UI_PLAYER_LEAVE, TeamUtils.getTeamByPlayer(player).getColor() + player.getDisplayName() + ChatColor.YELLOW)).getMessage(player1.getLocale()));
+            }
+        }
+        Bukkit.getLogger().info(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", new LocalizedChatMessage(ChatConstant.UI_PLAYER_LEAVE, TeamUtils.getTeamByPlayer(player).getColor() + player.getDisplayName() + ChatColor.YELLOW)).getMessage(Locale.getDefault().toString()));
         removePlayer(player);
     }
 

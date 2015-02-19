@@ -1,6 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.mapNotification;
 
-import com.sk89q.minecraft.util.commands.ChatColor;
+import org.bukkit.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;

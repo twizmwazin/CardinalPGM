@@ -1,6 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.monumentModes;
 
-import com.sk89q.minecraft.util.commands.ChatColor;
+import org.bukkit.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.module.TaskedModule;

@@ -1,6 +1,6 @@
 package in.twizmwaz.cardinal.command;
 
-import com.sk89q.minecraft.util.commands.ChatColor;
+import org.bukkit.ChatColor;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;

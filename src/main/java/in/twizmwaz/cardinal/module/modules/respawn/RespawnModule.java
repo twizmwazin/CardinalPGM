@@ -1,6 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.respawn;
 
-import com.sk89q.minecraft.util.commands.ChatColor;
+import org.bukkit.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -139,7 +139,7 @@ public class RespawnModule implements Module {
                 if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
                     ItemStack picker = new ItemStack(Material.LEATHER_HELMET);
                     ItemMeta pickerMeta = picker.getItemMeta();
-                    pickerMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(player.getLocale()) : new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(player.getLocale())));
+                    pickerMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(player.getLocale()) : new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(player.getLocale())));
                     pickerMeta.setLore(Arrays.asList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(player.getLocale())));
                     picker.setItemMeta(pickerMeta);
                     player.getInventory().setItem(2, picker);

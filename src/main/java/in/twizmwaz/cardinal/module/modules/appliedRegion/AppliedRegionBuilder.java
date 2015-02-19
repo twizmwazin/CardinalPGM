@@ -1,6 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.appliedRegion;
 
-import com.sk89q.minecraft.util.commands.ChatColor;
+import org.bukkit.ChatColor;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
