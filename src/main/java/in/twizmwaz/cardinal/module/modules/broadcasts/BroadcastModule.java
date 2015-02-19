@@ -1,8 +1,10 @@
 package in.twizmwaz.cardinal.module.modules.broadcasts;
 
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
+import in.twizmwaz.cardinal.util.ChatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.HandlerList;
@@ -41,9 +43,9 @@ public class BroadcastModule implements TaskedModule {
             if (timesBroadcasted < count) {
                 if (MatchTimer.getTimeInSeconds() >= (timeAfter + (every * timesBroadcasted))) {
                     if (type.equals(BroadcastType.TIP))
-                        Bukkit.broadcastMessage(ChatColor.GRAY + "" + ChatColor.BOLD + "[" + ChatColor.BLUE + "" + ChatColor.BOLD + "Tip" + ChatColor.GRAY + "" + ChatColor.BOLD + "] " + ChatColor.AQUA + "" + ChatColor.ITALIC + message);
+                        ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "" + ChatColor.BOLD + "[" + ChatColor.BLUE + "" + ChatColor.BOLD + "Tip" + ChatColor.GRAY + "" + ChatColor.BOLD + "] " + ChatColor.AQUA + "" + ChatColor.ITALIC + message));
                     else if (type.equals(BroadcastType.ALERT))
-                        Bukkit.broadcastMessage(ChatColor.GRAY + "" + ChatColor.BOLD + "[" + ChatColor.YELLOW + "" + ChatColor.BOLD + "Alert" + ChatColor.GRAY + "" + ChatColor.BOLD + "] " + ChatColor.GREEN + "" + ChatColor.ITALIC + message);
+                        ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "" + ChatColor.BOLD + "[" + ChatColor.YELLOW + "" + ChatColor.BOLD + "Alert" + ChatColor.GRAY + "" + ChatColor.BOLD + "] " + ChatColor.GREEN + "" + ChatColor.ITALIC + message));
                     timesBroadcasted++;
                 }
             }

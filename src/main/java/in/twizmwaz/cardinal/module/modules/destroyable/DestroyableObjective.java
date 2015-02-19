@@ -151,7 +151,7 @@ public class DestroyableObjective implements GameObjective {
                     }
                 } else {
                     event.setCancelled(true);
-                    if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), "You may not damage your own objective.");
+                    if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_OWN_OBJECTIVE));
                 }
             }
         }

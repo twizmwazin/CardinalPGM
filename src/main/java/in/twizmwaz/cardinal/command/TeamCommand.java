@@ -5,6 +5,8 @@ import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandUsageException;
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
@@ -15,6 +17,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class TeamCommand {
@@ -53,7 +56,8 @@ public class TeamCommand {
                     }
                     msg = msg.trim();
                     TeamModule team = TeamUtils.getTeamByName(cmd.getString(1));
-                    Bukkit.broadcastMessage(team.getCompleteName() + ChatColor.GRAY + " renamed to " + team.getColor() + msg);
+                    String locale = sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString();
+                    sender.sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_TEAM_ALIAS, team.getCompleteName() + ChatColor.GRAY, team.getColor() + msg + ChatColor.GRAY).getMessage(locale));
                     team.setName(msg);
                     Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent());
                 } else {
@@ -79,7 +83,8 @@ public class TeamCommand {
                 team.add(player, true);
                 playersToShuffle.remove(player);
             }
-            Bukkit.broadcastMessage(ChatColor.GREEN + "Teams have been shuffled!");
+            String locale = sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString();
+            sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.GENERIC_TEAM_SHUFFLE).getMessage(locale));
         } else {
             throw new CommandUsageException("Invalid arguments.", "/team <force, alias, shuffle> [player, old team] [force team, new team]");
         }

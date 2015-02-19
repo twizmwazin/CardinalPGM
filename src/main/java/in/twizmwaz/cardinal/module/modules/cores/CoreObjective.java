@@ -164,14 +164,14 @@ public class CoreObjective implements GameObjective {
                     event.setCancelled(false);
                 } else {
                     event.setCancelled(true);
-                    if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), ChatConstant.ERROR_OWN_CORE.asMessage());
+                    if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_OWN_CORE));
                     return;
                 }
             }
             if (core.contains(event.getBlock())) {
                 if (TeamUtils.getTeamByPlayer(event.getPlayer()) == team) {
                     event.setCancelled(true);
-                    if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), ChatConstant.ERROR_OWN_CORE.asMessage());
+                    if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_OWN_CORE));
                 }
             }
         }

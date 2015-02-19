@@ -31,9 +31,9 @@ public class ParseUtils {
             for (String raw : element.getAttributeValue("enchantment").split(";")) {
                 String[] enchant = raw.split(":");
                 try {
-                    itemStack.addUnsafeEnchantment(Enchantment.getByName(enchant[0]), Integer.parseInt(enchant[1]));
+                    itemStack.addUnsafeEnchantment(Enchantment.getByName(StringUtils.getTechnicalName(enchant[0])), Integer.parseInt(enchant[1]));
                 } catch (ArrayIndexOutOfBoundsException e) {
-                    itemStack.addUnsafeEnchantment(Enchantment.getByName(enchant[0]), 1);
+                    itemStack.addUnsafeEnchantment(Enchantment.getByName(StringUtils.getTechnicalName(enchant[0])), 1);
                 }
             }
         } catch (NullPointerException e) {

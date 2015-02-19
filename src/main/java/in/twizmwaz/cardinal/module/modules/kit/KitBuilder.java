@@ -7,7 +7,9 @@ import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.util.ArmorType;
+import in.twizmwaz.cardinal.util.MiscUtils;
 import in.twizmwaz.cardinal.util.ParseUtils;
+import in.twizmwaz.cardinal.util.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -67,16 +69,16 @@ public class KitBuilder implements ModuleBuilder {
                 }
                 if (itemStack.getItemMeta() instanceof LeatherArmorMeta && piece.getAttributeValue("color") != null) {
                     LeatherArmorMeta meta = (LeatherArmorMeta) itemStack.getItemMeta();
-                    meta.setColor(Color.fromRGB(Integer.parseInt(piece.getAttributeValue("color"))));
+                    meta.setColor(MiscUtils.convertHexToRGB(piece.getAttributeValue("color")));
                     itemStack.setItemMeta(meta);
                 }
                 try {
                     for (String raw : piece.getAttributeValue("enchantment").split(";")) {
                         String[] enchant = raw.split(":");
                         try {
-                            itemStack.addUnsafeEnchantment(Enchantment.getByName(enchant[0]), Integer.parseInt(enchant[1]));
+                            itemStack.addUnsafeEnchantment(Enchantment.getByName(StringUtils.getTechnicalName(enchant[0])), Integer.parseInt(enchant[1]));
                         } catch (ArrayIndexOutOfBoundsException e) {
-                            itemStack.addUnsafeEnchantment(Enchantment.getByName(enchant[0]), 1);
+                            itemStack.addUnsafeEnchantment(Enchantment.getByName(StringUtils.getTechnicalName(enchant[0])), 1);
                         }
                     }
                 } catch (NullPointerException e) {
@@ -87,7 +89,7 @@ public class KitBuilder implements ModuleBuilder {
             }
             List<PotionEffect> potions = new ArrayList<>();
             for (Element potion : element.getChildren("potion")) {
-                PotionEffectType type = PotionEffectType.getByName(potion.getText());
+                PotionEffectType type = PotionEffectType.getByName(StringUtils.getTechnicalName(potion.getText()));
                 int duration = 0;
                 try {
                     duration = Integer.parseInt(potion.getAttributeValue("duration")) * 20;

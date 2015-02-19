@@ -2,7 +2,11 @@ package in.twizmwaz.cardinal.cycle;
 
 import com.sk89q.minecraft.util.commands.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.match.MatchState;
+import in.twizmwaz.cardinal.util.ChatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,7 +32,7 @@ public class CycleTimer implements Runnable, Cancellable {
         if (!isCancelled()) {
             GameHandler.getGameHandler().getMatch().setState(MatchState.CYCLING);
             if ((this.time % 5 == 0 && time > 0) || (time < 5 && time > 0)) {
-                Bukkit.broadcastMessage(ChatColor.DARK_AQUA + "Cycling to " + ChatColor.AQUA + cycle.getMap().getName() + ChatColor.DARK_AQUA + " in " + ChatColor.DARK_RED + time + ChatColor.DARK_AQUA + " second" + (time != 1 ? "s" : ""));
+                ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "{0}", new LocalizedChatMessage(ChatConstant.UI_CYCLING_TIMER, new UnlocalizedChatMessage(ChatColor.AQUA + cycle.getMap().getName() + ChatColor.DARK_AQUA), (this.time == 1 ? new LocalizedChatMessage(ChatConstant.UI_SECOND, ChatColor.DARK_RED + "1" + ChatColor.DARK_AQUA) : new LocalizedChatMessage(ChatConstant.UI_SECONDS, ChatColor.DARK_RED + (this.time + "") + ChatColor.DARK_AQUA)))));
             }
             if (this.time == 0) {
                 GameHandler.getGameHandler().cycleAndMakeMatch();

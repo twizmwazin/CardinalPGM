@@ -1,6 +1,9 @@
 package in.twizmwaz.cardinal.module.modules.scorebox;
 
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.ScoreUpdateEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
@@ -9,6 +12,7 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -65,9 +69,9 @@ public class Scorebox implements Module {
                             if (score.getTeam() == playerTeam) {
                                 score.setScore(score.getScore() + points);
                                 Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(score));
+                                ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}", new LocalizedChatMessage(ChatConstant.UI_SCORED_FOR, new UnlocalizedChatMessage(playerTeam.getColor() + event.getPlayer().getDisplayName() + ChatColor.GRAY), new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "{0}" + ChatColor.GRAY, points == 1 ? new LocalizedChatMessage(ChatConstant.UI_ONE_POINT) : new LocalizedChatMessage(ChatConstant.UI_POINTS, points + "" + ChatColor.GRAY)), new UnlocalizedChatMessage(playerTeam.getCompleteName()))));
                             }
                         }
-                        Bukkit.broadcastMessage(playerTeam.getColor() + event.getPlayer().getDisplayName() + ChatColor.GRAY + " scored " + ChatColor.DARK_AQUA + points + ChatColor.GRAY + " points for the " + playerTeam.getCompleteName());
                     }
                 }
             }
