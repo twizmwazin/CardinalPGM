@@ -21,7 +21,7 @@ public class ChatCommands {
         if (sender instanceof Player) {
             TeamModule team = TeamUtils.getTeamByPlayer((Player) sender);
             String message = assembleMessage(cmd);
-            ChatUtils.getGlobalChannel().sendMessage("<" + team.getColor() + ((Player) sender).getDisplayName() + ChatColor.RESET + ">:" + message);
+            ChatUtils.getGlobalChannel().sendMessage("<" + team.getColor() + ((Player) sender).getDisplayName() + ChatColor.RESET + ">: " + message);
         } else throw new CommandException("Console cannot use this command.");
     }
 
@@ -30,8 +30,8 @@ public class ChatCommands {
         if (sender instanceof Player) {
             TeamModule team = TeamUtils.getTeamByPlayer((Player) sender);
             String message = assembleMessage(cmd);
-            ChatUtils.getAdminChannel().sendMessage("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + team.getColor() + ((Player) sender).getDisplayName() + ChatColor.RESET + ":" + message);
-            Bukkit.getLogger().info("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + team.getColor() + ((Player) sender).getDisplayName() + ChatColor.RESET + ":"  + message);
+            ChatUtils.getAdminChannel().sendMessage("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + team.getColor() + ((Player) sender).getDisplayName() + ChatColor.RESET + ": " + message);
+            Bukkit.getLogger().info("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + team.getColor() + ((Player) sender).getDisplayName() + ChatColor.RESET + ": "  + message);
         } else throw new CommandException("Console cannot use this command.");
     }
 
