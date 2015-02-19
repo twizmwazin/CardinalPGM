@@ -139,8 +139,20 @@ public class DeathMessages implements Module {
                         deathMessage = playerName + ChatColor.GRAY + " died";
                     }
                     for (Player player : Bukkit.getOnlinePlayers()) {
+                        boolean involved = false;
+                        if (event.getPlayer().equals(player)) {
+                            involved = true;
+                        } else if (event.getKiller() != null) {
+                            if (event.getKiller().equals(player)) {
+                                involved = true;
+                            }
+                        } else if (event.getPlayerSpleefEvent() != null) {
+                            if (event.getPlayerSpleefEvent().getSpleefer().equals(player)) {
+                                involved = true;
+                            }
+                        }
                         UnlocalizedChatMessage toSend = new UnlocalizedChatMessage(deathMessage);
-                        if (Settings.getSettingByName("HighlightDeathMessages") != null) {
+                        if (Settings.getSettingByName("HighlightDeathMessages") != null && involved) {
                             if (Settings.getSettingByName("HighlightDeathMessages").getValueByPlayer(player).getValue().equalsIgnoreCase("bold")) {
                                 String message = deathMessage;
                                 boolean bold = false;
