@@ -1,15 +1,15 @@
 package in.twizmwaz.cardinal.command;
 
-import java.util.List;
-import java.util.Set;
-
 import com.sk89q.minecraft.util.commands.*;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.OfflinePlayer;
+
+import java.util.List;
+import java.util.Set;
 
 
 /**

@@ -1,6 +1,11 @@
 package in.twizmwaz.cardinal.util;
 
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatMessage;
+import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.module.modules.chatChannels.AdminChannel;
+import in.twizmwaz.cardinal.module.modules.chatChannels.GlobalChannel;
+import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -24,6 +29,18 @@ public class ChatUtils {
     
     public static String getLocale(CommandSender sender) {
         return sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString();
+    }
+
+    public static GlobalChannel getGlobalChannel() {
+        return GameHandler.getGameHandler().getMatch().getModules().getModule(GlobalChannel.class);
+    }
+
+    public static AdminChannel getAdminChannel() {
+        return GameHandler.getGameHandler().getMatch().getModules().getModule(AdminChannel.class);
+    }
+
+    public static ModuleCollection<TeamChannel> getTeamChannels() {
+        return GameHandler.getGameHandler().getMatch().getModules().getModules(TeamChannel.class);
     }
 
 }

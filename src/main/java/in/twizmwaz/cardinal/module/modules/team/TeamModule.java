@@ -2,7 +2,6 @@ package in.twizmwaz.cardinal.module.modules.team;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
-import in.twizmwaz.cardinal.chat.ChatMessage;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;

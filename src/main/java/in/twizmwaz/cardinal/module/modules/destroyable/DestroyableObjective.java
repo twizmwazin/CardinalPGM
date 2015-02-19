@@ -8,7 +8,6 @@ import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
-import in.twizmwaz.cardinal.module.modules.chatChannels.GlobalChannel;
 import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;

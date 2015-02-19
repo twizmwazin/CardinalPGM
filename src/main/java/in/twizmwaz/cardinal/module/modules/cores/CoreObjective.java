@@ -9,8 +9,6 @@ import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannelModule;
-import in.twizmwaz.cardinal.module.modules.chatChannels.GlobalChannel;
 import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
 import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
@@ -242,8 +240,7 @@ public class CoreObjective implements GameObjective {
                     if (minY - to.getY() >= leak && !this.complete) {
                         this.complete = true;
                         event.setCancelled(false);
-                        GlobalChannel global = team.getMatch().getModules().getModule(GlobalChannel.class);
-                        if (this.show) global.sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_LEAKED, team.getCompleteName() + ChatColor.RED, ChatColor.DARK_AQUA + name + ChatColor.RED)));
+                        if (this.show) ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_LEAKED, team.getCompleteName() + ChatColor.RED, ChatColor.DARK_AQUA + name + ChatColor.RED)));
                         FireworkUtil.spawnFirework(event.getBlock().getLocation(), event.getBlock().getWorld());
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, null);
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);

@@ -1,6 +1,8 @@
 package in.twizmwaz.cardinal.module.modules.teamPicker;
 
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
@@ -144,7 +146,7 @@ public class TeamPicker implements Module {
                     if (event.getPlayer().getItemInHand().getType().equals(Material.LEATHER_HELMET)) {
                         if (event.getPlayer().getItemInHand().hasItemMeta()) {
                             if (event.getPlayer().getItemInHand().getItemMeta().hasDisplayName()) {
-                                if (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().equals(ChatColor.GREEN + "" + ChatColor.BOLD + "Team Selection")) {
+                                if (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().equals(ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(event.getPlayer().getLocale())) || event.getPlayer().getItemInHand().getItemMeta().getDisplayName().equals(ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(event.getPlayer().getLocale()))) {
                                     event.getPlayer().openInventory(getTeamPicker(event.getPlayer()));
                                 }
                             }

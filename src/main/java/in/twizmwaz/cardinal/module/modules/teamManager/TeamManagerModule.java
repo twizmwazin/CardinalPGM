@@ -2,10 +2,13 @@ package in.twizmwaz.cardinal.module.modules.teamManager;
 
 import com.sk89q.minecraft.util.commands.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.PlayerUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
@@ -57,15 +60,15 @@ public class TeamManagerModule implements Module {
         if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
             ItemStack picker = new ItemStack(Material.LEATHER_HELMET);
             ItemMeta pickerMeta = picker.getItemMeta();
-            pickerMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "Team Selection");
-            pickerMeta.setLore(Arrays.asList(ChatColor.DARK_PURPLE + "Join the game!"));
+            pickerMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(event.getPlayer().getLocale()) : new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(event.getPlayer().getLocale())));
+            pickerMeta.setLore(Arrays.asList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(event.getPlayer().getLocale())));
             picker.setItemMeta(pickerMeta);
             event.getPlayer().getInventory().setItem(2, picker);
         }
         if (player.hasPermission("tnt.defuse")) {
             ItemStack shears = new ItemStack(Material.SHEARS);
             ItemMeta meta = shears.getItemMeta();
-            meta.setDisplayName(ChatColor.RED + "TNT Defuser");
+            meta.setDisplayName(ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(event.getPlayer().getLocale()));
             shears.setItemMeta(meta);
             player.getInventory().setItem(4, shears);
         }

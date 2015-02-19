@@ -6,7 +6,6 @@ import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 

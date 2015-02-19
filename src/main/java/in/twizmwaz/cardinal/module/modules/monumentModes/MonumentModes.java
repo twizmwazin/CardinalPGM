@@ -2,11 +2,12 @@ package in.twizmwaz.cardinal.module.modules.monumentModes;
 
 import com.sk89q.minecraft.util.commands.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.module.modules.cores.CoreObjective;
 import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjective;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
-import org.bukkit.Bukkit;
+import in.twizmwaz.cardinal.util.ChatUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.HandlerList;
@@ -60,7 +61,7 @@ public class MonumentModes implements TaskedModule {
                         destroyable.setMaterial(this.material, this.damageValue);
                     }
                 }
-                Bukkit.broadcastMessage(ChatColor.DARK_AQUA + "> > > > " + ChatColor.RED + name + ChatColor.DARK_AQUA + " < < < <");
+                ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "> > > > " + ChatColor.RED + name + ChatColor.DARK_AQUA + " < < < <"));
                 this.ran = true;
             }
         }

@@ -7,7 +7,6 @@ import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.module.TaskedModule;
-import in.twizmwaz.cardinal.module.modules.chatChannels.GlobalChannel;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;

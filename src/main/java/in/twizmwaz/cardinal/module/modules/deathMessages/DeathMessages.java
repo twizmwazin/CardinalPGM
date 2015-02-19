@@ -4,10 +4,8 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import in.twizmwaz.cardinal.module.modules.tracker.DamageTracker;
 import in.twizmwaz.cardinal.module.modules.tracker.SpleefTracker;
-import in.twizmwaz.cardinal.module.modules.tracker.event.PlayerSpleefEvent;
 import in.twizmwaz.cardinal.module.modules.tracker.event.TrackerDamageEvent;
 import in.twizmwaz.cardinal.settings.Settings;
 import in.twizmwaz.cardinal.util.TeamUtils;
@@ -16,9 +14,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.entity.PlayerDeathEvent;
 
 
 public class DeathMessages implements Module {

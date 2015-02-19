@@ -6,7 +6,6 @@ import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
-import in.twizmwaz.cardinal.module.modules.appliedRegion.AppliedRegion;
 import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
@@ -17,8 +16,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -34,7 +31,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Wool;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class WoolObjective implements GameObjective {
 

@@ -2,13 +2,16 @@ package in.twizmwaz.cardinal.module.modules.observers;
 
 import com.sk89q.minecraft.util.commands.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.event.MatchEndEvent;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
+import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
@@ -72,7 +75,7 @@ public class ObserverModule implements Module {
             if (player.hasPermission("tnt.defuse")) {
                 ItemStack shears = new ItemStack(Material.SHEARS);
                 ItemMeta meta = shears.getItemMeta();
-                meta.setDisplayName(ChatColor.RED + "TNT Defuser");
+                meta.setDisplayName(ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
                 shears.setItemMeta(meta);
                 player.getInventory().setItem(4, shears);
             }
@@ -103,7 +106,7 @@ public class ObserverModule implements Module {
                 if (player.hasPermission("tnt.defuse")) {
                     ItemStack shears = new ItemStack(Material.SHEARS);
                     ItemMeta meta = shears.getItemMeta();
-                    meta.setDisplayName(ChatColor.RED + "TNT Defuser");
+                    meta.setDisplayName(ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
                     shears.setItemMeta(meta);
                     player.getInventory().setItem(4, shears);
                 }
@@ -136,15 +139,15 @@ public class ObserverModule implements Module {
             if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
                 ItemStack picker = new ItemStack(Material.LEATHER_HELMET);
                 ItemMeta pickerMeta = picker.getItemMeta();
-                pickerMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "Team Selection");
-                pickerMeta.setLore(Arrays.asList(ChatColor.DARK_PURPLE + "Join the game!"));
+                pickerMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(event.getPlayer().getLocale()) : new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(event.getPlayer().getLocale())));
+                pickerMeta.setLore(Arrays.asList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(event.getPlayer().getLocale())));
                 picker.setItemMeta(pickerMeta);
                 event.getPlayer().getInventory().setItem(2, picker);
             }
             if (event.getPlayer().hasPermission("tnt.defuse")) {
                 ItemStack shears = new ItemStack(Material.SHEARS);
                 ItemMeta meta = shears.getItemMeta();
-                meta.setDisplayName(ChatColor.RED + "TNT Defuser");
+                meta.setDisplayName(ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(event.getPlayer().getLocale()));
                 shears.setItemMeta(meta);
                 event.getPlayer().getInventory().setItem(4, shears);
             }
@@ -229,7 +232,7 @@ public class ObserverModule implements Module {
                 toView.setItem(3, viewing.getInventory().getBoots());
                 ItemStack potion = new ItemStack(Material.POTION, 1);
                 ItemMeta potionMeta = potion.getItemMeta();
-                potionMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.ITALIC + "Potion Effects");
+                potionMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_POTION_EFFECTS).getMessage(event.getPlayer().getLocale()));
                 ArrayList<String> effects = new ArrayList<String>();
                 for (PotionEffect effect : viewing.getActivePotionEffects()) {
                     String effectType = effect.getType().getName().toLowerCase().replaceAll("_", " ");
@@ -253,12 +256,12 @@ public class ObserverModule implements Module {
                 toView.setItem(6, potion);
                 ItemStack food = new ItemStack(Material.SPECKLED_MELON, viewing.getFoodLevel());
                 ItemMeta foodMeta = food.getItemMeta();
-                foodMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.ITALIC + "Hunger Level");
+                foodMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_HUNGER_LEVEL).getMessage(event.getPlayer().getLocale()));
                 food.setItemMeta(foodMeta);
                 toView.setItem(7, food);
                 ItemStack health = new ItemStack(Material.POTION, (int) Math.ceil(viewing.getHealth()), (short) 16389);
                 ItemMeta healthMeta = health.getItemMeta();
-                healthMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.ITALIC + "Health Level");
+                healthMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_HEALTH_LEVEL).getMessage(event.getPlayer().getLocale()));
                 health.setItemMeta(healthMeta);
                 toView.setItem(8, health);
                 for (int i = 36; i <= 44; i++) {
