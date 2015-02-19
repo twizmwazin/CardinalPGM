@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
 import in.twizmwaz.cardinal.util.TeamUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.event.EventHandler;
@@ -21,13 +22,6 @@ public class ChatModule implements Module {
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         event.setCancelled(true);
-        //get default channel
-        for (TeamChannel channel : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamChannel.class)) {
-            if (channel.getTeam() == TeamUtils.getTeamByPlayer(event.getPlayer())) {
-                channel.sendLocalizedMessage(new UnlocalizedChatMessage(channel.getTeam().getColor() + event.getPlayer().getDisplayName() + ChatColor.RESET + ": " + event.getMessage()));
-                ConsoleCommandSender console = GameHandler.getGameHandler().getPlugin().getServer().getConsoleSender();
-                console.sendMessage(channel.getTeam().getColor() + "[" + channel.getTeam().getName() + "] " + event.getPlayer().getDisplayName() + ChatColor.RESET + ": " + event.getMessage());
-            }
-        }
+        Bukkit.dispatchCommand(event.getPlayer(), "t " + event.getMessage());
     }
 }

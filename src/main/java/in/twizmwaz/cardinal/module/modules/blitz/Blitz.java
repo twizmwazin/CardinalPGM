@@ -2,6 +2,8 @@ package in.twizmwaz.cardinal.module.modules.blitz;
 
 
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
@@ -68,7 +70,11 @@ public class Blitz implements Module {
                     }
                     if (this.broadcastLives) {
                         int lives = this.getLives(player);
-                        player.sendMessage(ChatColor.RED + "You have " + ChatColor.AQUA + "" + ChatColor.BOLD + lives + " " + (lives == 1 ? "life" : "lives") + ChatColor.RED + " remaining.");
+                        if (lives == 1) {
+                            player.sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_AMOUNT_REMAINING, ChatColor.AQUA + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_ONE_LIFE).getMessage(player.getLocale()) + ChatColor.RED).getMessage(player.getLocale()));
+                        } else {
+                            player.sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_AMOUNT_REMAINING, ChatColor.AQUA + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_LIVES, lives + "").getMessage(player.getLocale()) + ChatColor.RED).getMessage(player.getLocale()));
+                        }
                     }
                 }
             }

@@ -12,6 +12,7 @@ import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -35,6 +36,7 @@ public class ChatCommands {
             TeamModule team = TeamUtils.getTeamByPlayer((Player) sender);
             String message = assembleMessage(cmd);
             channel.sendMessage("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + team.getColor() + ((Player) sender).getDisplayName() + ChatColor.RESET + ":"  + message);
+            Bukkit.getLogger().info("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + team.getColor() + ((Player) sender).getDisplayName() + ChatColor.RESET + ":"  + message);
         } else throw new CommandException("Console cannot use this command.");
     }
 
@@ -45,6 +47,7 @@ public class ChatCommands {
             TeamChannel channel = TeamUtils.getTeamChannel(team);
             String message = assembleMessage(cmd);
             channel.sendLocalizedMessage(new UnlocalizedChatMessage(channel.getTeam().getColor() + ((Player) sender).getDisplayName() + ChatColor.RESET + ": " + message));
+            Bukkit.getLogger().info(team.getColor() + "[" + team.getName() + "] " + ((Player) sender).getDisplayName() + ChatColor.RESET + ": " + message);
         } else throw new CommandException("Console cannot use this command.");
     }
     

@@ -11,6 +11,7 @@ import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannelModule;
 import in.twizmwaz.cardinal.module.modules.chatChannels.GlobalChannel;
+import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
 import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
@@ -154,7 +155,7 @@ public class CoreObjective implements GameObjective {
                     if (!playersTouched.contains(event.getPlayer().getUniqueId())) {
                         playersTouched.add(event.getPlayer().getUniqueId());
                         TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
-                        ChatChannelModule channel = TeamUtils.getTeamChannel(teamModule);
+                        TeamChannel channel = TeamUtils.getTeamChannel(teamModule);
                         if (this.show && !this.complete) channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED, teamModule.getColor() + event.getPlayer().getDisplayName() + ChatColor.GRAY, ChatColor.RED + name));
                         
                     }
@@ -200,7 +201,7 @@ public class CoreObjective implements GameObjective {
                             if (!playersTouched.contains(player)) {
                                 playersTouched.add(player);
                                 TeamModule teamModule = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
-                                ChatChannelModule channel = TeamUtils.getTeamChannel(teamModule);
+                                TeamChannel channel = TeamUtils.getTeamChannel(teamModule);
                                 if (this.show && !this.complete) channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED, teamModule.getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY, ChatColor.RED + name));
                             }
                             this.touched = true;
@@ -241,8 +242,8 @@ public class CoreObjective implements GameObjective {
                     if (minY - to.getY() >= leak && !this.complete) {
                         this.complete = true;
                         event.setCancelled(false);
-                        ChatChannelModule global = team.getMatch().getModules().getModule(GlobalChannel.class);
-                        if (this.show) global.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_LEAKED, team.getCompleteName() + ChatColor.RED, ChatColor.DARK_AQUA + name + ChatColor.RED));
+                        GlobalChannel global = team.getMatch().getModules().getModule(GlobalChannel.class);
+                        if (this.show) global.sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_LEAKED, team.getCompleteName() + ChatColor.RED, ChatColor.DARK_AQUA + name + ChatColor.RED)));
                         FireworkUtil.spawnFirework(event.getBlock().getLocation(), event.getBlock().getWorld());
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, null);
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);

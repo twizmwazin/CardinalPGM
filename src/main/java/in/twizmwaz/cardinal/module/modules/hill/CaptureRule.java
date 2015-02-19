@@ -7,7 +7,7 @@ public enum CaptureRule {
     LEAD();
     
     public static CaptureRule parseCaptureRule(String string) {
-        switch (string) {
+        switch (string.toLowerCase()) {
             case "exclusive": return EXCLUSIVE;
             case "majority": return MAJORITY;
             case "lead": return LEAD;
