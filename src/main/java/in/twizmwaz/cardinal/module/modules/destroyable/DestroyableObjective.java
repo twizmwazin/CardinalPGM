@@ -220,6 +220,14 @@ public class DestroyableObjective implements GameObjective {
         }
     }
 
+    public int getBlocksRequired() {
+        return (int) Math.ceil(size * required);
+    }
+
+    public int getBlocksBroken() {
+        return (int) complete;
+    }
+
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         while (playersTouched.contains(event.getEntity().getUniqueId())) {

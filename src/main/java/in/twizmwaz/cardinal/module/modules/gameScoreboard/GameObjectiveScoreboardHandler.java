@@ -54,7 +54,7 @@ public class GameObjectiveScoreboardHandler {
             }
         } else if (objective instanceof DestroyableObjective) {
             DestroyableObjective destroyable = (DestroyableObjective) objective;
-            if (destroyable.showPercent() || team.isObserver()) {
+            if (destroyable.showPercent()) {
                 if (destroyable.isComplete()) {
                     return ChatColor.GREEN + "" + destroyable.getPercent() + "%";
                 } else if (destroyable.isTouched() && this.team != team) {
@@ -63,6 +63,16 @@ public class GameObjectiveScoreboardHandler {
                     return ChatColor.RED + "" + destroyable.getPercent() + "% " + ChatColor.RESET + NumUtils.convertToSubscript(destroyable.getProximity() == Double.POSITIVE_INFINITY || destroyable.getProximity() == Double.NEGATIVE_INFINITY ? destroyable.getProximity() : Math.round(destroyable.getProximity() * 10.0) / 10.0);
                 } else {
                     return ChatColor.RED + "" + destroyable.getPercent() + "%";
+                }
+            } else if (team.isObserver()) {
+                if (destroyable.isComplete()) {
+                    return ChatColor.GREEN + "" + destroyable.getPercent() + "% " + ChatColor.GRAY + destroyable.getBlocksBroken() + "/" + destroyable.getBlocksRequired();
+                } else if (destroyable.isTouched() && this.team != team) {
+                    return ChatColor.YELLOW + "" + destroyable.getPercent() + "% " + ChatColor.GRAY + destroyable.getBlocksBroken() + "/" + destroyable.getBlocksRequired();
+                } else if (this.team != team) {
+                    return ChatColor.RED + "" + destroyable.getPercent() + "% " + ChatColor.GRAY + destroyable.getBlocksBroken() + "/" + destroyable.getBlocksRequired() + " " + ChatColor.RESET + NumUtils.convertToSubscript(destroyable.getProximity() == Double.POSITIVE_INFINITY || destroyable.getProximity() == Double.NEGATIVE_INFINITY ? destroyable.getProximity() : Math.round(destroyable.getProximity() * 10.0) / 10.0);
+                } else {
+                    return ChatColor.RED + "" + destroyable.getPercent() + "% " + ChatColor.GRAY + destroyable.getBlocksBroken() + "/" + destroyable.getBlocksRequired();
                 }
             } else {
                 if (destroyable.isComplete()) {
