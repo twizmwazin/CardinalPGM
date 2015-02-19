@@ -41,11 +41,11 @@ public class TeamPicker implements Module {
     public Inventory getTeamPicker(Player player) {
         int size = ((GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class).size() / 9) + 1) * 9;
         int classesSize = ((GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class).size() + 8) / 9) * 9;
-        Inventory picker = Bukkit.createInventory(null, size + classesSize, ChatColor.DARK_RED + "Pick your team");
+        Inventory picker = Bukkit.createInventory(null, size + classesSize, ChatColor.DARK_RED + new LocalizedChatMessage(ChatConstant.UI_TEAM_PICK).getMessage(player.getLocale()));
         int item = 0;
         ItemStack autoJoin = new ItemStack(Material.CHAINMAIL_HELMET);
         ItemMeta autoJoinMeta = autoJoin.getItemMeta();
-        autoJoinMeta.setDisplayName(ChatColor.GRAY + "" + ChatColor.BOLD + "Auto Join");
+        autoJoinMeta.setDisplayName(ChatColor.GRAY + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_AUTO).getMessage(player.getLocale()));
         int maxPlayers = 0;
         int totalPlayers = 0;
         for (TeamModule team : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
@@ -54,7 +54,7 @@ public class TeamPicker implements Module {
                 totalPlayers += team.size();
             }
         }
-        autoJoinMeta.setLore(Arrays.asList((totalPlayers >= maxPlayers ? ChatColor.RED + "" : ChatColor.GREEN + "") + totalPlayers + ChatColor.GOLD + " / " + ChatColor.RED + "" + maxPlayers, ChatColor.AQUA + "Puts you on the team with the fewest players"));
+        autoJoinMeta.setLore(Arrays.asList((totalPlayers >= maxPlayers ? ChatColor.RED + "" : ChatColor.GREEN + "") + totalPlayers + ChatColor.GOLD + " / " + ChatColor.RED + "" + maxPlayers, ChatColor.AQUA + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_AUTO_LORE).getMessage(player.getLocale())));
         autoJoin.setItemMeta(autoJoinMeta);
         picker.setItem(item, autoJoin);
         item++;
@@ -63,7 +63,7 @@ public class TeamPicker implements Module {
                 ItemStack teamStack = new ItemStack(Material.LEATHER_HELMET);
                 ItemMeta teamMeta = teamStack.getItemMeta();
                 teamMeta.setDisplayName(team.getColor() + "" + ChatColor.BOLD + team.getName());
-                teamMeta.setLore(Arrays.asList((team.size() >= team.getMax() ? ChatColor.RED + "" : ChatColor.GREEN + "") + team.size() + ChatColor.GOLD + " / " + ChatColor.RED + "" + team.getMax(), ChatColor.GREEN + "You are able to pick your team, click to join!"));
+                teamMeta.setLore(Arrays.asList((team.size() >= team.getMax() ? ChatColor.RED + "" : ChatColor.GREEN + "") + team.size() + ChatColor.GOLD + " / " + ChatColor.RED + "" + team.getMax(), ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.UI_TEAM_CAN_PICK).getMessage(player.getLocale())));
                 teamStack.setItemMeta(teamMeta);
                 LeatherArmorMeta teamLeatherMeta = (LeatherArmorMeta) teamStack.getItemMeta();
                 teamLeatherMeta.setColor(MiscUtils.convertChatColorToColor(team.getColor()));
