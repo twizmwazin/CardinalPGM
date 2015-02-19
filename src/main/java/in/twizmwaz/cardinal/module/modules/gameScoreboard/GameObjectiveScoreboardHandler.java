@@ -35,7 +35,7 @@ public class GameObjectiveScoreboardHandler {
             if (wool.isComplete()) {
                 return MiscUtils.convertDyeColorToChatColor(wool.getColor()) + "\u2B1B";
             } else if (wool.isTouched() && (this.team == team || team.isObserver())) {
-                return MiscUtils.convertDyeColorToChatColor(wool.getColor()) + "\u2592 " + (wool.showProximity() ? ChatColor.RESET + NumUtils.convertToSubscript(wool.getProximity() == Double.POSITIVE_INFINITY || wool.getProximity() == Double.NEGATIVE_INFINITY ? wool.getProximity() : Math.round(wool.getProximity() * 10.0) / 10.0) : "");
+                return MiscUtils.convertDyeColorToChatColor(wool.getColor()) + "\u2592" + (wool.showProximity() ? " " + ChatColor.RESET + NumUtils.convertToSubscript(wool.getProximity() == Double.POSITIVE_INFINITY || wool.getProximity() == Double.NEGATIVE_INFINITY ? wool.getProximity() : Math.round(wool.getProximity() * 10.0) / 10.0) : "");
             } else if ((this.team == team || team.isObserver()) && wool.showProximity()) {
                 return MiscUtils.convertDyeColorToChatColor(wool.getColor()) + "\u2B1C " + ChatColor.RESET + NumUtils.convertToSubscript(wool.getProximity() == Double.POSITIVE_INFINITY || wool.getProximity() == Double.NEGATIVE_INFINITY ? wool.getProximity() : Math.round(wool.getProximity() * 10.0) / 10.0);
             } else {
