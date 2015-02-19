@@ -6,6 +6,7 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocaleHandler;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.command.*;
+import in.twizmwaz.cardinal.demographics.DemographicsHandler;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import in.twizmwaz.cardinal.settings.Setting;
 import in.twizmwaz.cardinal.settings.SettingValue;
@@ -22,7 +23,6 @@ import org.jdom2.JDOMException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -33,6 +33,7 @@ public class Cardinal extends JavaPlugin {
     private static LocaleHandler localeHandler;
     private CommandsManager<CommandSender> commands;
     private static Database database;
+    private DemographicsHandler demographicsHandler;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -107,34 +108,9 @@ public class Cardinal extends JavaPlugin {
         } else {
             database = Database.newInstance(databaseFile);
         }
+        this.demographicsHandler = new DemographicsHandler(this);
         FileConfiguration config = getConfig();
         config.addDefault("deleteMatches", true);
-        if (!config.contains("settings")) {
-            config.addDefault("settings", Arrays.asList("Blood", "DeathMessages", "HighlightDeathMessages", "JoinMessages", "Observers", "Picker", "PrivateMessages", "Scoreboard", "Sounds"));
-            config.addDefault("setting.Blood.values", Arrays.asList("on", "off[default]"));
-            config.addDefault("setting.Blood.description", "See blood when players get hurt");
-            config.addDefault("setting.DeathMessages.aliases", Arrays.asList("dms"));
-            config.addDefault("setting.DeathMessages.values", Arrays.asList("own", "all[default]"));
-            config.addDefault("setting.DeathMessages.description", "Death messages displayed to you");
-            config.addDefault("setting.HighlightDeathMessages.aliases", Arrays.asList("hdms"));
-            config.addDefault("setting.HighlightDeathMessages.values", Arrays.asList("underline", "italics", "white", "none", "bold[default]"));
-            config.addDefault("setting.HighlightDeathMessages.description", "Highlight death messages that you are involved in");
-            config.addDefault("setting.JoinMessages.aliases", Arrays.asList("jms"));
-            config.addDefault("setting.JoinMessages.values", Arrays.asList("none", "all[default]"));
-            config.addDefault("setting.JoinMessages.description", "Join messages displayed to you");
-            config.addDefault("setting.Observers.aliases", Arrays.asList("obs"));
-            config.addDefault("setting.Observers.values", Arrays.asList("none", "all[default]"));
-            config.addDefault("setting.Observers.description", "See other observers while spectating");
-            config.addDefault("setting.Picker.values", Arrays.asList("off", "on[default]"));
-            config.addDefault("setting.Picker.description", "Open a helpful GUI for picking classes and teams");
-            config.addDefault("setting.PrivateMessages.aliases", Arrays.asList("pms"));
-            config.addDefault("setting.PrivateMessages.values", Arrays.asList("none", "all[default]"));
-            config.addDefault("setting.PrivateMessages.description", "Who can send you private messages");
-            config.addDefault("setting.Scoreboard.values", Arrays.asList("off", "on[default]"));
-            config.addDefault("setting.Scoreboard.description", "See the scoreboard with game information");
-            config.addDefault("setting.Sounds.values", Arrays.asList("off", "on[default]"));
-            config.addDefault("setting.Sounds.description", "Hear sounds to alert you of the last three seconds of a countdown");
-        }
         config.options().copyDefaults(true);
         saveConfig();
         if (config.getBoolean("deleteMatches")) {
@@ -180,6 +156,7 @@ public class Cardinal extends JavaPlugin {
     @Override
     public void onDisable() {
         database.save(new File(getDataFolder().getAbsolutePath() + "/database.xml"));
+        demographicsHandler.saveAndReport();
     }
 
     public GameHandler getGameHandler() {
