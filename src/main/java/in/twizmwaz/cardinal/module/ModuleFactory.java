@@ -46,6 +46,7 @@ import in.twizmwaz.cardinal.module.modules.respawn.RespawnModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.scorebox.ScoreboxBuilder;
 import in.twizmwaz.cardinal.module.modules.snowflakes.SnowflakesBuilder;
+import in.twizmwaz.cardinal.module.modules.sound.SoundModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.tasker.TaskerModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.team.TeamModuleBuilder;
@@ -178,7 +179,7 @@ public class ModuleFactory {
         builderClasses.add(MobModuleBuilder.class);
         builderClasses.add(DeathTrackerBuilder.class);
         builderClasses.add(SnowflakesBuilder.class);
-     // builderClasses.add(SoundModuleBuilder.class);
+        builderClasses.add(SoundModuleBuilder.class);
      // builderClasses.add(BloodBuilder.class);
     }
 }

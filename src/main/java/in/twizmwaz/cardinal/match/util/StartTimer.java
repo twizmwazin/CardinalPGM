@@ -8,6 +8,7 @@ import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
+import in.twizmwaz.cardinal.settings.Settings;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -45,8 +46,20 @@ public class StartTimer implements Runnable, Cancellable {
             } else {
                 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, this, 20);
             }
-            if (time <= 3 && time >= 1) for (Player player : Bukkit.getOnlinePlayers()) player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1);
-            if (time == 0) for (Player player : Bukkit.getOnlinePlayers()) player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 2);
+            if (time <= 3 && time >= 1) {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    if (Settings.getSettingByName("Sounds") != null && Settings.getSettingByName("Sounds").getValueByPlayer(player).getValue().equalsIgnoreCase("on")) {
+                        player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1);
+                    }
+                }
+            }
+            if (time == 0) {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    if (Settings.getSettingByName("Sounds") != null && Settings.getSettingByName("Sounds").getValueByPlayer(player).getValue().equalsIgnoreCase("on")) {
+                        player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 2);
+                    }
+                }
+            }
             time--;
         }
 
