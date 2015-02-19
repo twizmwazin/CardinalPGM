@@ -1,6 +1,5 @@
 package in.twizmwaz.cardinal.module.modules.wools;
 
-import in.parapengu.commons.utils.StringUtils;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
@@ -8,6 +7,7 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.NumUtils;
+import in.twizmwaz.cardinal.util.ParseUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.DyeColor;
 import org.bukkit.util.Vector;
@@ -26,7 +26,7 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
                 } catch (NullPointerException e) {
                     team = TeamUtils.getTeamById((subElement.getAttributeValue("team")));
                 }
-                DyeColor color = StringUtils.convertStringToDyeColor(subElement.getAttributeValue("color"));
+                DyeColor color = ParseUtils.parseDyeColor(subElement.getAttributeValue("color"));
                 BlockRegion place = RegionModuleBuilder.getRegion(subElement.getChildren().get(0)).getCenterBlock();
                 String name = color == null ? "Wool" : color.name() + " Wool";
                 if (element.getAttributeValue("name") != null) {
@@ -68,7 +68,7 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
                             team = TeamUtils.getTeamById((element.getAttributeValue("team")));
                         }
                     }
-                    DyeColor color = StringUtils.convertStringToDyeColor(subChild.getAttributeValue("color"));
+                    DyeColor color = ParseUtils.parseDyeColor(subChild.getAttributeValue("color"));
                     BlockRegion place = RegionModuleBuilder.getRegion(subChild.getChildren().get(0)).getCenterBlock();
                     String name = color == null ? "Wool" : color.name() + " Wool";
                     if (element.getAttributeValue("name") != null) {

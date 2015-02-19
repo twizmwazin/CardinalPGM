@@ -1,8 +1,8 @@
 package in.twizmwaz.cardinal.module.modules.regions.type;
 
-import in.parapengu.commons.utils.OtherUtil;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.SphereParser;
+import in.twizmwaz.cardinal.util.NumUtils;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
@@ -51,12 +51,12 @@ public class SphereRegion extends RegionModule {
 
     @Override
     public PointRegion getRandomPoint() {
-        double a = OtherUtil.getRandom(0, radius);
-        double b = OtherUtil.getRandom(0, 360);
-        double c = OtherUtil.getRandom(0, radius);
-        double d = OtherUtil.getRandom(0, 360);
-        double e = OtherUtil.getRandom(0, radius);
-        double f = OtherUtil.getRandom(0, 360);
+        double a = NumUtils.getRandom(0, radius);
+        double b = NumUtils.getRandom(0, 360);
+        double c = NumUtils.getRandom(0, radius);
+        double d = NumUtils.getRandom(0, 360);
+        double e = NumUtils.getRandom(0, radius);
+        double f = NumUtils.getRandom(0, 360);
         return new PointRegion(null, getOriginx() + a * Math.sin(b), getOriginy() + c * Math.sin(d), getOriginz() + e * Math.sin(f));
     }
 

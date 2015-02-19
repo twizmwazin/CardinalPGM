@@ -1,6 +1,5 @@
 package in.twizmwaz.cardinal.module.modules.kit;
 
-import in.parapengu.commons.utils.StringUtils;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.BuilderData;
@@ -10,6 +9,9 @@ import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.util.ArmorType;
 import in.twizmwaz.cardinal.util.ParseUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
@@ -23,10 +25,9 @@ import java.util.List;
 @BuilderData(load = ModuleLoadTime.EARLIER)
 public class KitBuilder implements ModuleBuilder {
 
-    @SuppressWarnings("unchecked")
     @Override
     public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
+        ModuleCollection<in.twizmwaz.cardinal.module.Module> results = new ModuleCollection<in.twizmwaz.cardinal.module.Module>();
         for (Element kits : match.getDocument().getRootElement().getChildren("kits")) {
             for (Element element : kits.getChildren("kit")) {
                 results.add(getKit(element));
@@ -60,22 +61,22 @@ public class KitBuilder implements ModuleBuilder {
             armors.addAll(element.getChildren("leggings"));
             armors.addAll(element.getChildren("boots"));
             for (Element piece : armors) {
-                ItemStack itemStack = new ItemStack(StringUtils.convertStringToMaterial(piece.getText()), 1);
+                ItemStack itemStack = new ItemStack(Material.matchMaterial(piece.getText()), 1);
                 if (piece.getAttributeValue("damage") != null) {
                     itemStack.setDurability(Short.parseShort(piece.getAttributeValue("damage")));
                 }
                 if (itemStack.getItemMeta() instanceof LeatherArmorMeta && piece.getAttributeValue("color") != null) {
                     LeatherArmorMeta meta = (LeatherArmorMeta) itemStack.getItemMeta();
-                    meta.setColor(StringUtils.convertHexStringToColor(piece.getAttributeValue("color")));
+                    meta.setColor(Color.fromRGB(Integer.parseInt(piece.getAttributeValue("color"))));
                     itemStack.setItemMeta(meta);
                 }
                 try {
                     for (String raw : piece.getAttributeValue("enchantment").split(";")) {
                         String[] enchant = raw.split(":");
                         try {
-                            itemStack.addUnsafeEnchantment(StringUtils.convertStringToEnchantment(enchant[0]), Integer.parseInt(enchant[1]));
+                            itemStack.addUnsafeEnchantment(Enchantment.getByName(enchant[0]), Integer.parseInt(enchant[1]));
                         } catch (ArrayIndexOutOfBoundsException e) {
-                            itemStack.addUnsafeEnchantment(StringUtils.convertStringToEnchantment(enchant[0]), 1);
+                            itemStack.addUnsafeEnchantment(Enchantment.getByName(enchant[0]), 1);
                         }
                     }
                 } catch (NullPointerException e) {
@@ -86,7 +87,7 @@ public class KitBuilder implements ModuleBuilder {
             }
             List<PotionEffect> potions = new ArrayList<>();
             for (Element potion : element.getChildren("potion")) {
-                PotionEffectType type = StringUtils.convertStringToPotionEffectType(potion.getText());
+                PotionEffectType type = PotionEffectType.getByName(potion.getText());
                 int duration = 0;
                 try {
                     duration = Integer.parseInt(potion.getAttributeValue("duration")) * 20;

@@ -1,6 +1,5 @@
 package in.twizmwaz.cardinal.module.modules.wools;
 
-import in.parapengu.commons.utils.StringUtils;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
@@ -11,6 +10,7 @@ import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.FireworkUtil;
+import in.twizmwaz.cardinal.util.MiscUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -124,7 +124,7 @@ public class WoolObjective implements GameObjective {
                     if (TeamUtils.getTeamByPlayer(player) == team) {
                         if (!this.playersTouched.contains(player.getUniqueId())) {
                             this.playersTouched.add(player.getUniqueId());
-                            if (this.show && !this.complete) TeamUtils.getTeamChannel(team).sendMessage(team.getColor() + "[Team] " + player.getDisplayName() + ChatColor.GRAY + " picked up " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " "));
+                            if (this.show && !this.complete) TeamUtils.getTeamChannel(team).sendMessage(team.getColor() + "[Team] " + player.getDisplayName() + ChatColor.GRAY + " picked up " + MiscUtils.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " "));
                         }
                         boolean oldState = this.touched;
                         this.touched = true;
@@ -147,7 +147,7 @@ public class WoolObjective implements GameObjective {
                     if (TeamUtils.getTeamByPlayer(player) == team) {
                         if (!this.playersTouched.contains(player.getUniqueId())) {
                             this.playersTouched.add(player.getUniqueId());
-                            if (this.show && !this.complete) TeamUtils.getTeamChannel(team).sendMessage(team.getColor() + "[Team] " + player.getDisplayName() + ChatColor.GRAY + " picked up " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " "));
+                            if (this.show && !this.complete) TeamUtils.getTeamChannel(team).sendMessage(team.getColor() + "[Team] " + player.getDisplayName() + ChatColor.GRAY + " picked up " + MiscUtils.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " "));
                         }
                         boolean oldState = this.touched;
                         this.touched = true;
@@ -176,7 +176,7 @@ public class WoolObjective implements GameObjective {
                 if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
                     if (TeamUtils.getTeamByPlayer(event.getPlayer()) == team) {
                         this.complete = true;
-                        if (this.show) Bukkit.broadcastMessage(team.getColor() + event.getPlayer().getDisplayName() + ChatColor.WHITE + " placed " + StringUtils.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " ") + ChatColor.WHITE + " for the " + team.getCompleteName());
+                        if (this.show) Bukkit.broadcastMessage(team.getColor() + event.getPlayer().getDisplayName() + ChatColor.WHITE + " placed " + MiscUtils.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " ") + ChatColor.WHITE + " for the " + team.getCompleteName());
                         FireworkUtil.spawnFirework(event.getPlayer().getLocation(), event.getPlayer().getWorld());
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
@@ -187,11 +187,11 @@ public class WoolObjective implements GameObjective {
                     }
                 } else {
                     event.setCancelled(true);
-                    if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), "Only " + StringUtils.convertDyeColorToChatColor(color) + color.name().replaceAll("_", " ").toUpperCase().replaceAll("_", " ") + " WOOL" + ChatColor.RED + " may be placed here!");
+                    if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), "Only " + MiscUtils.convertDyeColorToChatColor(color) + color.name().replaceAll("_", " ").toUpperCase().replaceAll("_", " ") + " WOOL" + ChatColor.RED + " may be placed here!");
                 }
             } else {
                 event.setCancelled(true);
-                if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), "Only " + StringUtils.convertDyeColorToChatColor(color) + color.name().replaceAll("_", " ").toUpperCase().replaceAll("_", " ") + " WOOL" + ChatColor.RED + " may be placed here!");
+                if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), "Only " + MiscUtils.convertDyeColorToChatColor(color) + color.name().replaceAll("_", " ").toUpperCase().replaceAll("_", " ") + " WOOL" + ChatColor.RED + " may be placed here!");
             }
         }
     }

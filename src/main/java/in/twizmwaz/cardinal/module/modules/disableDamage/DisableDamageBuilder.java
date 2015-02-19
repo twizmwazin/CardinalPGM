@@ -1,9 +1,9 @@
 package in.twizmwaz.cardinal.module.modules.disableDamage;
 
-import in.parapengu.commons.utils.StringUtils;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.util.StringUtils;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.jdom2.Element;
 
@@ -20,7 +20,7 @@ public class DisableDamageBuilder implements ModuleBuilder {
         for (Element itemRemove : match.getDocument().getRootElement().getChildren("disabledamage")) {
             for (Element item : itemRemove.getChildren("damage")) {
                 damageTypes.add(DamageCause.valueOf(item.getText().toUpperCase().replaceAll(" ", "_")));
-                if (DamageCause.valueOf(StringUtils.technicalName(item.getText())) == DamageCause.BLOCK_EXPLOSION) {
+                if (DamageCause.valueOf(StringUtils.getTechnicalName(item.getText())) == DamageCause.BLOCK_EXPLOSION) {
                     try {
                         ally = item.getAttributeValue("ally").equalsIgnoreCase("false");
                     } catch (NullPointerException ex) {

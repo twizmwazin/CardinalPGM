@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.util;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
+import org.bukkit.DyeColor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +51,48 @@ public class MiscUtils {
         } else {
             return convertHexToRGB("AAAAAA");
         }
+    }
+
+    /**
+     * @author ParaPenguin
+     */
+    public static ChatColor convertDyeColorToChatColor(DyeColor dye) {
+        switch (dye) {
+            case WHITE:
+                return ChatColor.WHITE;
+            case ORANGE:
+                return ChatColor.GOLD;
+            case MAGENTA:
+                return ChatColor.LIGHT_PURPLE;
+            case LIGHT_BLUE:
+                return ChatColor.AQUA;
+            case YELLOW:
+                return ChatColor.YELLOW;
+            case LIME:
+                return ChatColor.GREEN;
+            case PINK:
+                return ChatColor.LIGHT_PURPLE;
+            case GRAY:
+                return ChatColor.GRAY;
+            case SILVER:
+                return ChatColor.GRAY;
+            case CYAN:
+                return ChatColor.DARK_AQUA;
+            case PURPLE:
+                return ChatColor.DARK_PURPLE;
+            case BLUE:
+                return ChatColor.BLUE;
+            case BROWN:
+                return ChatColor.GOLD;
+            case GREEN:
+                return ChatColor.DARK_GREEN;
+            case RED:
+                return ChatColor.DARK_RED;
+            case BLACK:
+                return ChatColor.BLACK;
+        }
+
+        return ChatColor.WHITE;
     }
 
     public static Color convertHexToRGB(String color) {

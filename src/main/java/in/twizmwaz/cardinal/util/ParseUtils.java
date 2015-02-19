@@ -1,7 +1,9 @@
 package in.twizmwaz.cardinal.util;
 
 import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -12,6 +14,7 @@ import org.jdom2.Element;
 import java.util.ArrayList;
 
 public class ParseUtils {
+    
     public static ItemStack getItem(Element element) {
         int amount = 1;
         if (element.getAttributeValue("amount") != null) {
@@ -28,9 +31,9 @@ public class ParseUtils {
             for (String raw : element.getAttributeValue("enchantment").split(";")) {
                 String[] enchant = raw.split(":");
                 try {
-                    itemStack.addUnsafeEnchantment(in.parapengu.commons.utils.StringUtils.convertStringToEnchantment(enchant[0]), Integer.parseInt(enchant[1]));
+                    itemStack.addUnsafeEnchantment(Enchantment.getByName(enchant[0]), Integer.parseInt(enchant[1]));
                 } catch (ArrayIndexOutOfBoundsException e) {
-                    itemStack.addUnsafeEnchantment(in.parapengu.commons.utils.StringUtils.convertStringToEnchantment(enchant[0]), 1);
+                    itemStack.addUnsafeEnchantment(Enchantment.getByName(enchant[0]), 1);
                 }
             }
         } catch (NullPointerException e) {
@@ -65,5 +68,19 @@ public class ParseUtils {
         }
         itemStack.setItemMeta(meta);
         return itemStack;
+    }
+    
+    public static ChatColor parseChatColor(String string) {
+        for (ChatColor color : ChatColor.values()) {
+            if (color.name().equals(StringUtils.getTechnicalName(string))) return color;
+        }
+        return ChatColor.WHITE;
+    }
+
+    public static DyeColor parseDyeColor(String string) {
+        for (DyeColor color : DyeColor.values()) {
+            if (color.name().equals(StringUtils.getTechnicalName(string))) return color;
+        }
+        return DyeColor.WHITE;
     }
 }

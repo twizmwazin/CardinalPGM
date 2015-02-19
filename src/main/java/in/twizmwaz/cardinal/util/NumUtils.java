@@ -12,19 +12,8 @@ public class NumUtils {
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
     }
 
-    @Deprecated
-    public static double randomInterval(double min, double max) {
-        double high, low;
-        if (min < max) {
-            low = min;
-            high = max;
-        }
-        if (max < min) {
-            low = max;
-            high = min;
-        }
-        Random random = new Random();
-        return min + (random.nextGaussian() * (max - min));
+    public static double getRandom(double min, double max) {
+        return new Random().nextInt((int) (max - min) + 1) + min;
     }
 
     public static double parseDouble(String string) {

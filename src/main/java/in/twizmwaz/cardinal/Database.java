@@ -26,13 +26,13 @@ public final class Database {
         this.document = new Document(new Element("database"));
     }
     
-    protected static Database newInstance(File file) {
+    public static Database newInstance(File file) {
         Database newDatabase = new Database();
         newDatabase.save(file);
         return newDatabase;
     }
     
-    protected static Database loadFromFile(File file) throws JDOMException, IOException {
+    public static Database loadFromFile(File file) throws JDOMException, IOException {
         SAXBuilder saxBuilder = new SAXBuilder();
         return new Database(saxBuilder.build(file));
     }

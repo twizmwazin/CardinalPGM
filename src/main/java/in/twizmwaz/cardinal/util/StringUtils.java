@@ -87,6 +87,10 @@ public class StringUtils {
         }
         return (negative ? "-" : "") + (hours == 0 ? "" : hoursString + ":") + minutesString + ":" + secondsString + "." + millisString;
     }
+    
+    public static String getTechnicalName(String string) {
+        return string.trim().toUpperCase().replaceAll(" ", "_");
+    }
 
     /**
      * @author OvercastNetwork
