@@ -43,7 +43,7 @@ public class Cardinal extends JavaPlugin {
         } catch (CommandPermissionsException e) {
             sender.sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_NO_PERMISSION).getMessage(locale));
         } catch (MissingNestedCommandException e) {
-            sender.sendMessage(ChatColor.RED + e.getUsage());
+            sender.sendMessage(ChatColor.RED + e.getUsage().replace("{cmd}", cmd.getName()));
         } catch (CommandUsageException e) {
             sender.sendMessage(ChatColor.RED + e.getMessage());
             sender.sendMessage(ChatColor.RED + e.getUsage());
