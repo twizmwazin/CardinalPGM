@@ -64,6 +64,9 @@
         <ratingsDisabled>Le valutazioni delle mappe non sono disponibili in questo server.</ratingsDisabled>
         <lowParticipation>Siamo spiacenti, non hai partecipato abbastanza a questa partita per poter votare la mappa</lowParticipation>
         <rateWhilePlaying>Per votare la mappa durante il gioco, scrivi {0}</rateWhilePlaying>
+        <noRecentPM>Non avere messaggi privati per rispondere.</noRecentPM>
+        <playerNotFound>Non trovato nessun giocatore con quel nome.</playerNotFound>
+        <playerDisabledPMs>Il tuo messaggio non è stato inviato perché {0} ha scelto di non ricevere messaggi privati.</playerDisabledPMs>
     </error>
     <generic>
         <mapSet>{0} è stata stabilita come mappa successiva</mapSet>
