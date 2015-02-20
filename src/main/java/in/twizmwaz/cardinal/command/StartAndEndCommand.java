@@ -5,10 +5,15 @@ import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.Locale;
 
 public class StartAndEndCommand {
     private static int timer;
@@ -22,16 +27,18 @@ public class StartAndEndCommand {
             try {
                 time = cmd.getInteger(0);
             } catch (IndexOutOfBoundsException ex) {
-
             }
             GameHandler.getGameHandler().getMatch().start(time);
         } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
             try {
                 GameHandler.getGameHandler().getMatch().getStartTimer().setTime(cmd.getInteger(0));
             } catch (NullPointerException e) {
-
             }
-        } else throw new CommandException("Cannot start a match right now!");
+        } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_RESUME).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+        } else {
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_START).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+        }
 
     }
 
@@ -46,7 +53,7 @@ public class StartAndEndCommand {
                 GameHandler.getGameHandler().getMatch().end(null);
             }
 
-        } else throw new CommandException("Cannot end a game that is not currently playing!");
+        } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_END).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
     }
 
 }

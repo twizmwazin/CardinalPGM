@@ -29,7 +29,7 @@ public class MatchCommand {
     @Command(aliases = {"matchinfo", "match"}, desc = "Shows information about the currently playing match.", usage = "")
     public static void match(final CommandContext args, CommandSender sender) throws CommandException {
         sender.sendMessage(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "------" + ChatColor.DARK_AQUA + " " + new LocalizedChatMessage(ChatConstant.UI_MATCH_INFO).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + " " + ChatColor.GRAY + "(" + GameHandler.getGameHandler().getMatch().getNumber() + ")" + ChatColor.RED + " " + ChatColor.STRIKETHROUGH + "------");
-        sender.sendMessage(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_MATCH_TIME).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + ": " + ChatColor.GOLD + StringUtils.formatTimeWithMillis(MatchTimer.getTimeInSeconds()));
+        sender.sendMessage(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TIME).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + ": " + ChatColor.GOLD + StringUtils.formatTimeWithMillis(MatchTimer.getTimeInSeconds()));
         String teams = "";
         boolean hasObjectives = false;
         for (TeamModule team : TeamUtils.getTeams()) {

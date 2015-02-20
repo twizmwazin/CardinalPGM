@@ -37,7 +37,7 @@ public class TeamCommand {
                         team.add(Bukkit.getPlayer(cmd.getString(1)), true, false);
                         sender.sendMessage(team.getColor() + Bukkit.getPlayer(cmd.getString(1)).getDisplayName() + ChatColor.GRAY + " forced to " + team.getCompleteName());
                     } else {
-                        throw new CommandException("Invalid team specified!");
+                        throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAM_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
                     }
                 } else {
                     throw new CommandException("Player specified is not online!");
@@ -48,8 +48,6 @@ public class TeamCommand {
         } else if (cmd.getString(0).equalsIgnoreCase("alias")) {
             if (cmd.argsLength() >= 3) {
                 if (TeamUtils.getTeamByName(cmd.getString(1)) != null) {
-                    if (TeamUtils.getTeamByName(cmd.getString(1)).isObserver())
-                        throw new CommandException("You cannot rename observers!");
                     String msg = "";
                     for (int i = 2; i < cmd.argsLength(); i++) {
                         msg += cmd.getString(i) + " ";
@@ -61,7 +59,7 @@ public class TeamCommand {
                     team.setName(msg);
                     Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent());
                 } else {
-                    throw new CommandException("Invalid team specified!");
+                    throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAM_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
                 }
             } else {
                 throw new CommandUsageException("Too few arguments!", "/team <alias> <old team> <new team>");
