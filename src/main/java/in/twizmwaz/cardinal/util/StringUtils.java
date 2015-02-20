@@ -15,19 +15,19 @@ public class StringUtils {
         for (int i = 0; i < input.length(); i ++) {
             char c = input.charAt(i);
             if (Character.isDigit(c) && !currentUnit.equals("")) {
-                time += convert(Integer.parseInt(current) * (negative ? -1 : 1), currentUnit);
+                time += convert(NumUtils.parseInt(current) * (negative ? -1 : 1), currentUnit);
                 current = "";
                 currentUnit = "";
             }
             if (c == '-') {
                 negative = true;
             } else if (Character.isDigit(c)) {
-                current += Integer.parseInt(c + "");
+                current += NumUtils.parseInt(c + "");
             } else {
                 currentUnit += c + "";
             }
         }
-        time += convert(Integer.parseInt(current) * (negative ? -1 : 1), currentUnit);
+        time += convert(NumUtils.parseInt(current) * (negative ? -1 : 1), currentUnit);
         return time;
     }
 

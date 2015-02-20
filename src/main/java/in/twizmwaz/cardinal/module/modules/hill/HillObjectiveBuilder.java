@@ -51,9 +51,9 @@ public class HillObjectiveBuilder implements ModuleBuilder {
             capturetime = StringUtils.timeStringToSeconds(element.getAttributeValue("capture-time"));
         int points = 1;
         if (element.getParentElement().getAttributeValue("points") != null)
-            points = Integer.parseInt(element.getParentElement().getAttributeValue("points"));
+            points = NumUtils.parseInt(element.getParentElement().getAttributeValue("points"));
         if (element.getAttributeValue("points") != null)
-            points = Integer.parseInt(element.getAttributeValue("points"));
+            points = NumUtils.parseInt(element.getAttributeValue("points"));
         double pointsGrowth = 0;
         if (element.getParentElement().getAttributeValue("points-growth") != null)
             pointsGrowth = Double.parseDouble(element.getParentElement().getAttributeValue("points-growth"));

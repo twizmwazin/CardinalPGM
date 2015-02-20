@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.proximityAlarm;
 
+import in.twizmwaz.cardinal.util.NumUtils;
 import org.bukkit.ChatColor;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
@@ -26,9 +27,9 @@ public class ProximityAlarmBuilder implements ModuleBuilder {
                 if (message != null) message = ChatColor.translateAlternateColorCodes('`', message);
                 int flareRadius = 4;
                 if (subElement.getAttributeValue("flare-radius") != null) {
-                    flareRadius = Integer.parseInt(subElement.getAttributeValue("flare-radius"));
+                    flareRadius = NumUtils.parseInt(subElement.getAttributeValue("flare-radius"));
                 } else if (element.getAttributeValue("flare-radius") != null) {
-                    flareRadius = Integer.parseInt(element.getAttributeValue("flare-radius"));
+                    flareRadius = NumUtils.parseInt(element.getAttributeValue("flare-radius"));
                 }
                 RegionModule region = null;
                 if (subElement.getChild("region") != null) {

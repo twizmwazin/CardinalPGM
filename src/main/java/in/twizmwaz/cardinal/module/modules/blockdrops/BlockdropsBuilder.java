@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
+import in.twizmwaz.cardinal.util.NumUtils;
 import in.twizmwaz.cardinal.util.ParseUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -42,7 +43,7 @@ public class BlockdropsBuilder implements ModuleBuilder {
                 }
                 int experience = 0;
                 for (Element experienceElement : rule.getChildren("experience")) {
-                    experience = Integer.parseInt(experienceElement.getText());
+                    experience = NumUtils.parseInt(experienceElement.getText());
                 }
                 boolean wrongTool = false;
                 for (Element wrongToolElement : rule.getChildren("wrongtool")) {

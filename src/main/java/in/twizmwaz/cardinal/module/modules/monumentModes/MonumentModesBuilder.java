@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.monumentModes;
 
+import in.twizmwaz.cardinal.util.NumUtils;
 import org.bukkit.ChatColor;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.BuilderData;
@@ -25,7 +26,7 @@ public class MonumentModesBuilder implements ModuleBuilder {
                 int damageValue = 0;
                 if (mode.getAttributeValue("material").contains(":")) {
                     material = Material.matchMaterial(mode.getAttributeValue("material").split(":")[0]);
-                    damageValue = Integer.parseInt(mode.getAttributeValue("material").split(":")[1]);
+                    damageValue = NumUtils.parseInt(mode.getAttributeValue("material").split(":")[1]);
                 } else {
                     material = Material.matchMaterial(mode.getAttributeValue("material"));
                 }

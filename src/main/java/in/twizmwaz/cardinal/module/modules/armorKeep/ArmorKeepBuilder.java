@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.module.modules.armorKeep;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.util.NumUtils;
 import org.bukkit.Material;
 import org.jdom2.Element;
 
@@ -21,7 +22,7 @@ public class ArmorKeepBuilder implements ModuleBuilder {
                 int damageValue = 0;
                 if (item.getText().contains(":")) {
                     material = Material.matchMaterial(item.getText().split(":")[0]);
-                    damageValue = Integer.parseInt(item.getText().split(":")[1]);
+                    damageValue = NumUtils.parseInt(item.getText().split(":")[1]);
                 } else {
                     material = Material.matchMaterial(item.getText());
                 }

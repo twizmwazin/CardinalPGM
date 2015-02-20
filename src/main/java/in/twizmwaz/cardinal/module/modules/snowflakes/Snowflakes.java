@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.event.SnowflakeChangeEvent;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.util.NumUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -16,7 +17,7 @@ import org.bukkit.event.HandlerList;
 public class Snowflakes implements Module {
 
     public enum ChangeReason {
-        PLAYER_KILL(), OBJECTIVE_TOUCH(), OBJECTIVE_COMPLETE()
+        PLAYER_KILL(), OBJECTIVE_TOUCH(), OBJECTIVE_COMPLETE(), TEAM_WIN(), TEAM_LOYAL()
     }
 
     public Snowflakes() {
@@ -53,7 +54,7 @@ public class Snowflakes implements Module {
         if (Cardinal.getCardinalDatabase().get(event.getPlayer(), "snowflakes").equals("")) {
             Cardinal.getCardinalDatabase().put(event.getPlayer(), "snowflakes", event.getFinalAmount() + "");
         } else {
-            Cardinal.getCardinalDatabase().put(event.getPlayer(), "snowflakes", (Integer.parseInt(Cardinal.getCardinalDatabase().get(event.getPlayer(), "snowflakes")) + event.getFinalAmount()) + "");
+            Cardinal.getCardinalDatabase().put(event.getPlayer(), "snowflakes", (NumUtils.parseInt(Cardinal.getCardinalDatabase().get(event.getPlayer(), "snowflakes")) + event.getFinalAmount()) + "");
         }
     }
 

@@ -4,6 +4,8 @@ import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ChatUtils;
@@ -20,7 +22,7 @@ public class JoinCommand {
         if (sender instanceof Player) {
             TeamModule team = null;
             if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) || GameHandler.getGameHandler().getMatch().getState().equals(MatchState.CYCLING)) {
-                ChatUtils.sendWarningMessage((Player) sender, ChatColor.RED + "Match is over");
+                ChatUtils.sendWarningMessage((Player) sender, ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_MATCH_OVER).getMessage(((Player) sender).getLocale()));
                 return;
             }
             try {
@@ -33,10 +35,11 @@ public class JoinCommand {
                 if (team != null) {
                     if (!team.contains(sender)) {
                         team.add((Player) sender, false);
-                    } else
-                        throw new CommandException(ChatUtils.getWarningMessage(ChatColor.RED + "You have already joined " + team.getCompleteName()));
+                    } else {
+                        throw new CommandException(ChatUtils.getWarningMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_JOINED, team.getCompleteName() + ChatColor.RED).getMessage(((Player) sender).getLocale())));
+                    }
                 } else
-                    throw new CommandException("No teams matched query.");
+                    throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAM_MATCH).getMessage(((Player) sender).getLocale()));
             } catch (IndexOutOfBoundsException ex) {
                 team = TeamUtils.getTeamWithFewestPlayers(GameHandler.getGameHandler().getMatch());
                 team.add((Player) sender, false);

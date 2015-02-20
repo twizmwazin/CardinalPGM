@@ -8,6 +8,7 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
+import in.twizmwaz.cardinal.util.NumUtils;
 import in.twizmwaz.cardinal.util.ParseUtils;
 import org.bukkit.inventory.ItemStack;
 import org.jdom2.Element;
@@ -33,9 +34,9 @@ public class ScoreboxBuilder implements ModuleBuilder {
                 }
                 int points = 0;
                 if (box.getAttributeValue("points") != null) {
-                    points = Integer.parseInt(box.getAttributeValue("points"));
+                    points = NumUtils.parseInt(box.getAttributeValue("points"));
                 } else if (box.getAttributeValue("value") != null) {
-                    points = Integer.parseInt(box.getAttributeValue("value"));
+                    points = NumUtils.parseInt(box.getAttributeValue("value"));
                 }
                 FilterModule filter = null;
                 if (box.getAttributeValue("filter") != null) {
@@ -48,7 +49,7 @@ public class ScoreboxBuilder implements ModuleBuilder {
                 HashMap<ItemStack, Integer> redeemables = new HashMap<>();
                 for (Element child : box.getChildren("redeemables")) {
                     for (Element item : child.getChildren("item")) {
-                        redeemables.put(ParseUtils.getItem(item), (item.getAttributeValue("points") != null ? Integer.parseInt(item.getAttributeValue("points")) : (item.getAttributeValue("value") != null ? Integer.parseInt(item.getAttributeValue("value")) : 0)));
+                        redeemables.put(ParseUtils.getItem(item), (item.getAttributeValue("points") != null ? NumUtils.parseInt(item.getAttributeValue("points")) : (item.getAttributeValue("value") != null ? NumUtils.parseInt(item.getAttributeValue("value")) : 0)));
                     }
                 }
                 results.add(new Scorebox(region, points, filter, redeemables));

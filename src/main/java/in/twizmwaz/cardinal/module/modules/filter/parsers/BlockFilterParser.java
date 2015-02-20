@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.filter.parsers;
 
 import in.twizmwaz.cardinal.module.modules.filter.FilterParser;
+import in.twizmwaz.cardinal.util.NumUtils;
 import org.bukkit.Material;
 import org.jdom2.Element;
 
@@ -13,7 +14,7 @@ public class BlockFilterParser extends FilterParser {
         super(element);
         if (element.getText().contains(":")) {
             this.material = Material.matchMaterial(element.getText().split(":")[0]);
-            this.damageValue = Integer.parseInt(element.getText().split(":")[1]);
+            this.damageValue = NumUtils.parseInt(element.getText().split(":")[1]);
         } else {
             this.material = Material.matchMaterial(element.getText());
             this.damageValue = -1;

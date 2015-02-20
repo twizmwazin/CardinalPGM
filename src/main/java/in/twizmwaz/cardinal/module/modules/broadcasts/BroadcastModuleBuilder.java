@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.broadcasts;
 
+import in.twizmwaz.cardinal.util.NumUtils;
 import org.bukkit.ChatColor;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
@@ -27,7 +28,7 @@ public class BroadcastModuleBuilder implements ModuleBuilder {
                     every = timeAfter;
                 }
                 if (element.getAttributeValue("count") != null) {
-                    count = Integer.parseInt(element.getAttributeValue("count"));
+                    count = NumUtils.parseInt(element.getAttributeValue("count"));
                 }
                 results.add(new BroadcastModule(message, BroadcastType.TIP, timeAfter, every, count));
             }
@@ -44,7 +45,7 @@ public class BroadcastModuleBuilder implements ModuleBuilder {
                     every = timeAfter;
                 }
                 if (element.getAttributeValue("count") != null) {
-                    count = Integer.parseInt(element.getAttributeValue("count"));
+                    count = NumUtils.parseInt(element.getAttributeValue("count"));
                 }
                 results.add(new BroadcastModule(message, BroadcastType.ALERT, timeAfter, every, count));
             }

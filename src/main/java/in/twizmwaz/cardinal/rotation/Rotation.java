@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.rotation;
 
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import in.twizmwaz.cardinal.util.DomUtils;
+import in.twizmwaz.cardinal.util.NumUtils;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -74,7 +75,7 @@ public class Rotation {
                     int maxPlayers = 0;
                     for (Element teams : xml.getRootElement().getChildren("teams")) {
                         for (Element team : teams.getChildren()) {
-                            maxPlayers = maxPlayers + Integer.parseInt(team.getAttributeValue("max"));
+                            maxPlayers = maxPlayers + NumUtils.parseInt(team.getAttributeValue("max"));
                         }
                     }
                     loaded.add(new LoadedMap(name, version, objective, authors, contributors, rules, maxPlayers, map));

@@ -22,6 +22,12 @@ public class NumUtils {
         return Double.parseDouble(string);
     }
 
+    public static int parseInt(String string) {
+        if (string.equalsIgnoreCase("oo")) return Integer.MAX_VALUE;
+        if (string.equalsIgnoreCase("-oo")) return Integer.MIN_VALUE;
+        return Integer.parseInt(string);
+    }
+
     public static boolean parseBoolean(String string) {
         if (string.equalsIgnoreCase("on")) return true;
         return !string.equalsIgnoreCase("off") && Boolean.parseBoolean(string);

@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.util.NumUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Material;
 import org.jdom2.Element;
@@ -47,9 +48,9 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                 }
                 int leak = 5;
                 if (subElement.getAttributeValue("leak") != null) {
-                    leak = Integer.parseInt(subElement.getAttributeValue("leak").replaceAll(" ", ""));
+                    leak = NumUtils.parseInt(subElement.getAttributeValue("leak").replaceAll(" ", ""));
                 } else if (element.getAttributeValue("leak") != null) {
-                    leak = Integer.parseInt(element.getAttributeValue("leak").replaceAll(" ", ""));
+                    leak = NumUtils.parseInt(element.getAttributeValue("leak").replaceAll(" ", ""));
                 }
                 Material type = Material.OBSIDIAN;
                 int damageValue = -1;
@@ -57,7 +58,7 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                     String material = subElement.getAttributeValue("material");
                     if (material.contains(":")) {
                         type = Material.matchMaterial(material.split(":")[0].trim());
-                        damageValue = Integer.parseInt(material.split(":")[1].trim());
+                        damageValue = NumUtils.parseInt(material.split(":")[1].trim());
                     } else {
                         type = Material.matchMaterial(material.trim());
                     }
@@ -65,7 +66,7 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                     String material = element.getAttributeValue("material");
                     if (material.contains(":")) {
                         type = Material.matchMaterial(material.split(":")[0].trim());
-                        damageValue = Integer.parseInt(material.split(":")[1].trim());
+                        damageValue = NumUtils.parseInt(material.split(":")[1].trim());
                     } else {
                         type = Material.matchMaterial(material.trim());
                     }
@@ -122,11 +123,11 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                     }
                     int leak = 5;
                     if (subChild.getAttributeValue("leak") != null) {
-                        leak = Integer.parseInt(subChild.getAttributeValue("leak").replaceAll(" ", ""));
+                        leak = NumUtils.parseInt(subChild.getAttributeValue("leak").replaceAll(" ", ""));
                     } else if (child.getAttributeValue("leak") != null) {
-                        leak = Integer.parseInt(child.getAttributeValue("leak").replaceAll(" ", ""));
+                        leak = NumUtils.parseInt(child.getAttributeValue("leak").replaceAll(" ", ""));
                     } else if (element.getAttributeValue("leak") != null) {
-                        leak = Integer.parseInt(element.getAttributeValue("leak").replaceAll(" ", ""));
+                        leak = NumUtils.parseInt(element.getAttributeValue("leak").replaceAll(" ", ""));
                     }
                     Material type = Material.OBSIDIAN;
                     int damageValue = -1;
@@ -134,7 +135,7 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                         String material = subChild.getAttributeValue("material");
                         if (material.contains(":")) {
                             type = Material.matchMaterial(material.split(":")[0].trim());
-                            damageValue = Integer.parseInt(material.split(":")[1].trim());
+                            damageValue = NumUtils.parseInt(material.split(":")[1].trim());
                         } else {
                             type = Material.matchMaterial(material.trim());
                         }
@@ -142,7 +143,7 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                         String material = child.getAttributeValue("material");
                         if (material.contains(":")) {
                             type = Material.matchMaterial(material.split(":")[0].trim());
-                            damageValue = Integer.parseInt(material.split(":")[1].trim());
+                            damageValue = NumUtils.parseInt(material.split(":")[1].trim());
                         } else {
                             type = Material.matchMaterial(material.trim());
                         }
@@ -150,7 +151,7 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                         String material = element.getAttributeValue("material");
                         if (material.contains(":")) {
                             type = Material.matchMaterial(material.split(":")[0].trim());
-                            damageValue = Integer.parseInt(material.split(":")[1].trim());
+                            damageValue = NumUtils.parseInt(material.split(":")[1].trim());
                         } else {
                             type = Material.matchMaterial(material.trim());
                         }

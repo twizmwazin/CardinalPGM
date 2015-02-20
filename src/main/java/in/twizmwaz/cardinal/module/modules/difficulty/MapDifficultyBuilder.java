@@ -3,17 +3,16 @@ package in.twizmwaz.cardinal.module.modules.difficulty;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.util.NumUtils;
 import org.bukkit.Difficulty;
 
 public class MapDifficultyBuilder implements ModuleBuilder {
 
     @Override
     public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
+        ModuleCollection<MapDifficulty> results = new ModuleCollection<>();
         try {
-            Difficulty difficulty;
-
-            switch (Integer.parseInt(match.getDocument().getRootElement().getChildText("difficulty"))) {
+            switch (NumUtils.parseInt(match.getDocument().getRootElement().getChildText("difficulty"))) {
                 case 0:
                     results.add(new MapDifficulty(Difficulty.PEACEFUL));
                     break;
@@ -27,8 +26,7 @@ public class MapDifficultyBuilder implements ModuleBuilder {
                     results.add(new MapDifficulty(Difficulty.HARD));
                     break;
             }
-        } catch (NumberFormatException e) {
-
+        } catch (NumberFormatException | NullPointerException e) {
         }
         return results;
     }
