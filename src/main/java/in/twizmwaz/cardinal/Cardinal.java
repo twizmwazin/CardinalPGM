@@ -110,7 +110,7 @@ public class Cardinal extends JavaPlugin {
         } else {
             database = Database.newInstance(databaseFile);
         }
-        this.demographicsHandler = new DemographicsHandler(this);
+        this.demographicsHandler = new DemographicsHandler();
         FileConfiguration config = getConfig();
         config.addDefault("deleteMatches", true);
         config.options().copyDefaults(true);

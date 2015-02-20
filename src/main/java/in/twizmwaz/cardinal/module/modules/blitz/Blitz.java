@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.blitz;
 
 
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -19,7 +20,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.metadata.LazyMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 
-@SuppressWarnings("unchecked")
 public class Blitz implements Module {
 
     @Override
@@ -27,7 +27,6 @@ public class Blitz implements Module {
         HandlerList.unregisterAll(this);
     }
 
-    private final JavaPlugin plugin;
 
     private String title = null;
     private boolean broadcastLives;
@@ -39,8 +38,6 @@ public class Blitz implements Module {
         this.broadcastLives = broadcastLives;
         this.lives = lives;
         this.time = time;
-
-        this.plugin = GameHandler.getGameHandler().getPlugin();
     }
 
 
@@ -50,11 +47,11 @@ public class Blitz implements Module {
         TeamModule team = TeamUtils.getTeamByPlayer(player);
         if (team != null && !team.isObserver()) {
             int oldMeta = this.getLives(player);
-            player.removeMetadata("lives", plugin);
-            player.setMetadata("lives", new LazyMetadataValue(plugin, LazyMetadataValue.CacheStrategy.NEVER_CACHE, new BlitzLives(oldMeta - 1)));
+            player.removeMetadata("lives", Cardinal.getInstance());
+            player.setMetadata("lives", new LazyMetadataValue(Cardinal.getInstance(), LazyMetadataValue.CacheStrategy.NEVER_CACHE, new BlitzLives(oldMeta - 1)));
             if (this.getLives(player) == 0) {
                 TeamUtils.getTeamById("observers").add(player, true);
-                player.removeMetadata("lives", plugin);
+                player.removeMetadata("lives", Cardinal.getInstance());
             }
         }
     }
@@ -66,7 +63,7 @@ public class Blitz implements Module {
             if (TeamUtils.getTeamByPlayer(player) != null) {
                 if (!TeamUtils.getTeamByPlayer(player).isObserver()) {
                     if (!player.hasMetadata("lives")) {
-                        player.setMetadata("lives", new LazyMetadataValue(plugin, LazyMetadataValue.CacheStrategy.NEVER_CACHE, new BlitzLives(this.lives)));
+                        player.setMetadata("lives", new LazyMetadataValue(Cardinal.getInstance(), LazyMetadataValue.CacheStrategy.NEVER_CACHE, new BlitzLives(this.lives)));
                     }
                     if (this.broadcastLives) {
                         int lives = this.getLives(player);

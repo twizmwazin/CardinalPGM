@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.match;
 
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.match.util.StartTimer;
@@ -25,7 +26,6 @@ public class Match {
 
     private static int matchNumber = 1;
 
-    private final JavaPlugin plugin;
     private final GameHandler handler;
     private final UUID uuid;
     private final LoadedMap loadedMap;
@@ -38,7 +38,6 @@ public class Match {
     private StartTimer startTimer;
 
     public Match(GameHandler handler, UUID id, LoadedMap map) {
-        this.plugin = handler.getPlugin();
         this.uuid = id;
         this.handler = handler;
         this.modules = new ModuleCollection<>();
@@ -59,7 +58,7 @@ public class Match {
         for (ModuleLoadTime time : ModuleLoadTime.getOrdered()) {
             for (Module module : factory.build(time)) {
                 modules.add(module);
-                plugin.getServer().getPluginManager().registerEvents(module, plugin);
+                Cardinal.getInstance().getServer().getPluginManager().registerEvents(module, Cardinal.getInstance());
             }
         }
     }

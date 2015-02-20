@@ -32,11 +32,9 @@ import java.util.Locale;
 
 public class TeamManagerModule implements Module {
 
-    private final JavaPlugin plugin;
     private final Match match;
 
     protected TeamManagerModule(Match match) {
-        this.plugin = GameHandler.getGameHandler().getPlugin();
         this.match = match;
     }
 

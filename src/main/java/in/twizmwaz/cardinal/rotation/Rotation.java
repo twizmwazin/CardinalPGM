@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.rotation;
 
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import in.twizmwaz.cardinal.util.DomUtils;
 import in.twizmwaz.cardinal.util.NumUtils;
@@ -22,16 +23,14 @@ import java.util.logging.Level;
 
 public class Rotation {
 
-    private JavaPlugin plugin;
     private File rotationFile;
     private List<LoadedMap> rotation;
     private List<LoadedMap> loaded;
     private int position;
     private File repo;
 
-    public Rotation(JavaPlugin plugin) throws RotationLoadException {
-        this.plugin = plugin;
-        this.rotationFile = new File(plugin.getConfig().getString("rotation"));
+    public Rotation() throws RotationLoadException {
+        this.rotationFile = new File(Cardinal.getInstance().getConfig().getString("rotation"));
         refreshRepo();
         refreshRotation();
     }
@@ -43,7 +42,7 @@ public class Rotation {
      */
     public void refreshRepo() throws RotationLoadException {
         loaded = new ArrayList<>();
-        this.repo = new File(plugin.getConfig().getString("repo"));
+        this.repo = new File(Cardinal.getInstance().getConfig().getString("repo"));
         List<String> requirements = Arrays.asList("map.xml", "region", "level.dat");
         for (File map : repo.listFiles()) {
             if (map.isFile()) continue;

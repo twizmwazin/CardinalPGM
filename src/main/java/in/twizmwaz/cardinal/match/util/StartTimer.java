@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.match.util;
 
+import in.twizmwaz.cardinal.Cardinal;
 import org.bukkit.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
@@ -21,12 +22,10 @@ public class StartTimer implements Runnable, Cancellable {
     private int time;
     private Match match;
     private boolean cancelled;
-    private JavaPlugin plugin;
 
     public StartTimer(Match match, int seconds) {
         this.time = seconds;
         this.match = match;
-        this.plugin = GameHandler.getGameHandler().getPlugin();
     }
 
     @Override
@@ -44,7 +43,7 @@ public class StartTimer implements Runnable, Cancellable {
                     Bukkit.getServer().getPluginManager().callEvent(new MatchStartEvent());
                 }
             } else {
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, this, 20);
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(), this, 20);
             }
             if (time <= 3 && time >= 1) {
                 for (Player player : Bukkit.getOnlinePlayers()) {

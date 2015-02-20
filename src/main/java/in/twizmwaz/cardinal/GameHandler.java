@@ -26,7 +26,7 @@ public class GameHandler {
     public GameHandler(JavaPlugin plugin) throws RotationLoadException {
         this.plugin = plugin;
         handler = this;
-        rotation = new Rotation(plugin);
+        rotation = new Rotation();
         cycle = new Cycle(rotation.getNext(), UUID.randomUUID(), this);
         cycleAndMakeMatch();
     }

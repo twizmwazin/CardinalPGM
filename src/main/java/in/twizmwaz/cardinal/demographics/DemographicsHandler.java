@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.demographics;
 
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.Database;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -13,18 +14,16 @@ import java.io.File;
 import java.io.IOException;
 
 public class DemographicsHandler implements Listener {
-    
-    private final JavaPlugin plugin;
+
     private Database database;
     
-    public DemographicsHandler(JavaPlugin plugin) {
-        this.plugin = plugin;
+    public DemographicsHandler() {
         loadDatabase();
-        Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, Cardinal.getInstance());
     }
     
     private void loadDatabase() {
-        File demographicsFile = new File(plugin.getDataFolder(), "demographics.xml");
+        File demographicsFile = new File(Cardinal.getInstance().getDataFolder(), "demographics.xml");
         if (demographicsFile.exists()) {
             try {
                 database = Database.loadFromFile(demographicsFile);
@@ -37,12 +36,12 @@ public class DemographicsHandler implements Listener {
     }
     
     public void saveAndReport() {
-        database.save(new File(plugin.getDataFolder(), "demographics.xml"));
+        database.save(new File(Cardinal.getInstance().getDataFolder(), "demographics.xml"));
     }
     
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new LookupService(event.getPlayer(), database), 0);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(), new LookupService(event.getPlayer(), database), 0);
     }
     
     @EventHandler
