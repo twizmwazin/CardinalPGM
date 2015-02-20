@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.command;
 
 import com.sk89q.minecraft.util.commands.*;
+import in.twizmwaz.cardinal.util.NumUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -40,11 +41,8 @@ public class TeleportCommands {
             } else if (cmd.argsLength() == 4) {
                 if (sender.hasPermission("cardinal.teleport")) {
                     try {
-                        Player from = Bukkit.getPlayer(cmd.getString(0));
-                        double x = cmd.getDouble(1);
-                        double y = cmd.getDouble(2);
-                        double z = cmd.getDouble(3);
-                        from.teleport(new Location(from.getWorld(), x, y, z));
+                        Player teleporting = Bukkit.getPlayer(cmd.getString(0));
+                        teleporting.teleport(new Location(teleporting.getWorld(), (cmd.getString(1).contains("~") ? NumUtils.parseDouble(cmd.getString(1).replaceAll("~", "")) + teleporting.getLocation().getX() : cmd.getDouble(1)), (cmd.getString(2).contains("~") ? NumUtils.parseDouble(cmd.getString(2).replaceAll("~", "")) + teleporting.getLocation().getY() : cmd.getDouble(2)), (cmd.getString(3).contains("~") ? NumUtils.parseDouble(cmd.getString(3).replaceAll("~", "")) + teleporting.getLocation().getZ() : cmd.getDouble(3)), teleporting.getLocation().getYaw(), teleporting.getLocation().getPitch()));
                         sender.sendMessage(ChatColor.YELLOW + "Teleported.");
                     } catch (NullPointerException e) {
                         throw new CommandException("Player specified not online!");
