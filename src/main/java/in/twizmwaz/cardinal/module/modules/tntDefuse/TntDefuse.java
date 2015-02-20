@@ -44,7 +44,7 @@ public class TntDefuse implements Module {
                                 event.getLeftClicked().remove();
                                 event.getPlayer().sendMessage(ChatColor.RED + "You defused " + playerTeam.getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.RED + "'s TNT.");
                                 ChatChannelModule channel = GameHandler.getGameHandler().getMatch().getModules().getModule(AdminChannel.class);
-                                channel.sendMessage("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + TeamUtils.getTeamByPlayer(event.getPlayer()).getColor() + event.getPlayer().getDisplayName() + ChatColor.RESET + " defused " + playerTeam.getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.RESET + "'s TNT");
+                                channel.sendMessage("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + TeamUtils.getTeamByPlayer(event.getPlayer()).getColor() + event.getPlayer().getDisplayName() + ChatColor.RESET + " defused " + playerTeam.getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.RESET + "'s " + ChatColor.DARK_RED + "TNT");
                             }
                         } else {
                             ChatUtils.sendWarningMessage(event.getPlayer(), "You may not defuse TNT in water!");

@@ -1,12 +1,16 @@
 package in.twizmwaz.cardinal.command;
 
 import com.sk89q.minecraft.util.commands.*;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.util.NumUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.Locale;
 
 public class TeleportCommands {
 
@@ -20,7 +24,7 @@ public class TeleportCommands {
                         ((Player) sender).teleport(player);
                         sender.sendMessage(ChatColor.YELLOW + "Teleported.");
                     } catch (NullPointerException e) {
-                        throw new CommandException("Player specified not online!");
+                        throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(((Player) sender).getLocale()));
                     }
                 } else {
                     throw new CommandPermissionsException();
@@ -33,7 +37,7 @@ public class TeleportCommands {
                         from.teleport(to);
                         sender.sendMessage(ChatColor.YELLOW + "Teleported.");
                     } catch (NullPointerException e) {
-                        throw new CommandException("Player specified not online!");
+                        throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(((Player) sender).getLocale()));
                     }
                 } else {
                     throw new CommandPermissionsException();
@@ -45,7 +49,7 @@ public class TeleportCommands {
                         teleporting.teleport(new Location(teleporting.getWorld(), (cmd.getString(1).contains("~") ? NumUtils.parseDouble(cmd.getString(1).replaceAll("~", "")) + teleporting.getLocation().getX() : cmd.getDouble(1)), (cmd.getString(2).contains("~") ? NumUtils.parseDouble(cmd.getString(2).replaceAll("~", "")) + teleporting.getLocation().getY() : cmd.getDouble(2)), (cmd.getString(3).contains("~") ? NumUtils.parseDouble(cmd.getString(3).replaceAll("~", "")) + teleporting.getLocation().getZ() : cmd.getDouble(3)), teleporting.getLocation().getYaw(), teleporting.getLocation().getPitch()));
                         sender.sendMessage(ChatColor.YELLOW + "Teleported.");
                     } catch (NullPointerException e) {
-                        throw new CommandException("Player specified not online!");
+                        throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(((Player) sender).getLocale()));
                     }
                 } else {
                     throw new CommandPermissionsException();
@@ -67,7 +71,7 @@ public class TeleportCommands {
                 teleporting.teleport((Player) sender);
                 sender.sendMessage(ChatColor.YELLOW + "Teleported.");
             } catch (NullPointerException e) {
-                throw new CommandException("Player specified not online!");
+                throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
             }
         } else throw new CommandException("Console cannot use this command.");
     }

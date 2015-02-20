@@ -40,7 +40,7 @@ public class TeamCommand {
                         throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAM_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
                     }
                 } else {
-                    throw new CommandException("Player specified is not online!");
+                    throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
                 }
             } else {
                 throw new CommandUsageException("Too few arguments.", "/team <force> <player> <force team>");
