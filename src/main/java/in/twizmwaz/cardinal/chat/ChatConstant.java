@@ -4,7 +4,7 @@ import in.twizmwaz.cardinal.Cardinal;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
-public enum ChatConstant {
+public enum  ChatConstant {
     
     ERROR_RESTART_DURING_MATCH("error.restartDuringMatch"),
     ERROR_CYCLE_DURING_MATCH("error.cycleDuringMatch"),
@@ -69,6 +69,9 @@ public enum ChatConstant {
     ERROR_RATINGS_DISABLED("error.ratingsDisabled"),
     ERROR_LOW_PARTICIPATION("error.lowParticipation"),
     ERROR_RATE_WHILE_PLAYING("error.rateWhilePlaying"),
+    ERROR_NO_RECENT_PM("error.noRecentPM"),
+    ERROR_PLAYER_NOT_FOUND("error.playerNotFound"),
+    ERROR_PLAYER_DISABLED_PMS("error.playerDisabledPMs"),
     
     GENERIC_MAP_SET("generic.mapSet"),
     GENERIC_MARKED_FOR_RELOADING("generic.markedForReloading"),

@@ -64,6 +64,9 @@
         <ratingsDisabled>Las puntuaciones de los mapas no están activadas en este servidor.</ratingsDisabled>
         <lowParticipation>Lo sentimos, no has participado lo suficiente en esta partida para puntuar el mapa</lowParticipation>
         <rateWhilePlaying>Para puntuar el mapa mientras juegas, escribe {0}</rateWhilePlaying>
+        <noRecentPM>No tienes mensajes privados por responder</noRecentPM>
+        <playerNotFound>No se ha encontrado ningún jugador con ese nombre.</playerNotFound>
+        <playerDisabledPMs>Tu mensaje no fue enviado porque {0} eligió no recibir mensajes privados.</playerDisabledPMs>
     </error>
     <generic>
         <mapSet>El siguiente mapa ha sido establecido a {0}</mapSet>

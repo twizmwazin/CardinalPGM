@@ -64,6 +64,9 @@
         <ratingsDisabled>Map ratings are not enabled on this server.</ratingsDisabled>
         <lowParticipation>Sorry, you haven't participated in this match enough to rate the map</lowParticipation>
         <rateWhilePlaying>To rate the map while playing, type {0}</rateWhilePlaying>
+        <noRecentPM>You have no private messages to reply to</noRecentPM>
+        <playerNotFound>No players matched query.</playerNotFound>
+        <playerDisabledPMs>Your message was not sent because {0} has chosen not to receive private messages.</playerDisabledPMs>
     </error>
     <generic>
         <mapSet>Next map set to {0}</mapSet>
