@@ -16,15 +16,13 @@ import java.util.UUID;
 public class GameHandler {
 
     private static GameHandler handler;
-    private final JavaPlugin plugin;
     private Rotation rotation;
     private World matchWorld;
     private Match match;
     private Cycle cycle;
     private CycleTimer cycleTimer;
 
-    public GameHandler(JavaPlugin plugin) throws RotationLoadException {
-        this.plugin = plugin;
+    public GameHandler() throws RotationLoadException {
         handler = this;
         rotation = new Rotation();
         cycle = new Cycle(rotation.getNext(), UUID.randomUUID(), this);
@@ -77,7 +75,7 @@ public class GameHandler {
     }
 
     public JavaPlugin getPlugin() {
-        return plugin;
+        return Cardinal.getInstance();
     }
 
     public boolean startCycleTimer(int seconds) {

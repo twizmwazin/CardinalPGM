@@ -10,7 +10,6 @@ import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class CycleTimer implements Runnable, Cancellable {
 
