@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 
 public class ChatCommands {
 
-    @Command(aliases = {"g"}, desc = "Talk in global chat.")
+    @Command(aliases = {"g"}, desc = "Talk in global chat.", usage = "/{cmd} <message>", min = 1)
     public static void global(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (sender instanceof Player) {
             TeamModule team = TeamUtils.getTeamByPlayer((Player) sender);
@@ -26,7 +26,7 @@ public class ChatCommands {
         } else throw new CommandException("Console cannot use this command.");
     }
 
-    @Command(aliases = {"a"}, desc = "Talk in admin chat.")
+    @Command(aliases = {"a"}, desc = "Talk in admin chat.", usage = "/{cmd} <message>", min = 1)
     public static void admin(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (sender instanceof Player) {
             TeamModule team = TeamUtils.getTeamByPlayer((Player) sender);
@@ -37,7 +37,7 @@ public class ChatCommands {
         } else throw new CommandException("Console cannot use this command.");
     }
 
-    @Command(aliases = {"t"}, desc = "Talk in team chat.")
+    @Command(aliases = {"t"}, desc = "Talk in team chat.", usage = "/{cmd} <message>", min = 1)
     public static void team(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (sender instanceof Player) {
             TeamModule team = TeamUtils.getTeamByPlayer((Player) sender);
@@ -50,17 +50,7 @@ public class ChatCommands {
     }
     
     private static String assembleMessage(CommandContext context) {
-        String results = "";
-        String[] args = {""};
-        try {
-            args = (String[]) FieldUtils.readDeclaredField(context, "originalArgs", true);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        for (int i = 1; i < args.length; i++) {
-            results += args[i] + " ";
-        }
-        return results.trim();
+        return context.getJoinedStrings(0);
     }
     
 }
