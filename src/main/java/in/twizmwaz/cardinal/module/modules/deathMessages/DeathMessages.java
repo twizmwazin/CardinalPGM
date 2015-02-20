@@ -217,7 +217,9 @@ public class DeathMessages implements Module {
                                 toSend = new UnlocalizedChatMessage(message);
                             }
                         }
-                        player.sendMessage(toSend.getMessage(player.getLocale()));
+                        if (Settings.getSettingByName("DeathMessages") == null || Settings.getSettingByName("DeathMessages").getValueByPlayer(player).getValue().equalsIgnoreCase("all")) {
+                            player.sendMessage(toSend.getMessage(player.getLocale()));
+                        }
                     }
                 } else {
                     event.getPlayer().removeMetadata("teamChange", GameHandler.getGameHandler().getPlugin());
