@@ -38,16 +38,6 @@ public class PrivateMessageCommands {
     }
 
     private static String assembleMessage(CommandContext context) {
-        String results = "";
-        String[] args = {""};
-        try {
-            args = (String[]) FieldUtils.readDeclaredField(context, "originalArgs", true);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        for (int i = 2; i < args.length; i++) {
-            results += args[i] + " ";
-        }
-        return results.trim();
+        return context.getJoinedStrings(0);
     }
 }
