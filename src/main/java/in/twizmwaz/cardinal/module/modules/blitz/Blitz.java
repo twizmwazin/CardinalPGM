@@ -18,7 +18,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.metadata.LazyMetadataValue;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class Blitz implements Module {
 

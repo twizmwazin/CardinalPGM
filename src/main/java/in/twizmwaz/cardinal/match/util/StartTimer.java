@@ -15,7 +15,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class StartTimer implements Runnable, Cancellable {
 

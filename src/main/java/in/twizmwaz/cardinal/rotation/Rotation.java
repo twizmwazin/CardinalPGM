@@ -8,7 +8,6 @@ import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
