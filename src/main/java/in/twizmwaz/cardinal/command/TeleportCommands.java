@@ -10,8 +10,6 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Locale;
-
 public class TeleportCommands {
 
     @Command(aliases = {"tp", "teleport"}, desc = "Teleport players.", usage = "<player> [to, x] [y] [z]", min = 1, max = 4)
@@ -71,7 +69,7 @@ public class TeleportCommands {
                 teleporting.teleport((Player) sender);
                 sender.sendMessage(ChatColor.YELLOW + "Teleported.");
             } catch (NullPointerException e) {
-                throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+                throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(((Player) sender).getLocale()));
             }
         } else throw new CommandException("Console cannot use this command.");
     }

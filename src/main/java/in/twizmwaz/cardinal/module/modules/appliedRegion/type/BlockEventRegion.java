@@ -29,7 +29,7 @@ public class BlockEventRegion extends AppliedRegion {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         if (!event.isCancelled() && filter.evaluate(event.getPlayer(), event.getBlock()).equals(FilterState.DENY)
-                && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
+                && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector()))) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }
@@ -37,7 +37,7 @@ public class BlockEventRegion extends AppliedRegion {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (!event.isCancelled() && filter.evaluate(event.getPlayer(), event.getBlockPlaced(), event).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
+        if (!event.isCancelled() && filter.evaluate(event.getPlayer(), event.getBlockPlaced(), event).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector()))) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }
@@ -47,7 +47,7 @@ public class BlockEventRegion extends AppliedRegion {
     public void onBucketEmpty(PlayerBucketEmptyEvent event) {
         Material newMaterial = (event.getBucket().equals(Material.WATER_BUCKET) ? Material.WATER : (event.getBucket().equals(Material.LAVA_BUCKET) ? Material.LAVA : Material.AIR));
         if (!event.isCancelled() && filter.evaluate(event.getPlayer(), newMaterial, event).equals(FilterState.DENY)
-                && region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
+                && region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector()))) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }
@@ -55,7 +55,7 @@ public class BlockEventRegion extends AppliedRegion {
 
     public void onBucketFill(PlayerBucketFillEvent event) {
         if (!event.isCancelled() && filter.evaluate(event.getPlayer(), event.getBlockClicked().getRelative(event.getBlockFace()), event).equals(FilterState.DENY)
-                && region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
+                && region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector()))) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }
@@ -63,63 +63,63 @@ public class BlockEventRegion extends AppliedRegion {
 
     @EventHandler
     public void onBlockBurn(BlockBurnEvent event) {
-        if (filter.evaluate(event.getBlock(), event).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
+        if (filter.evaluate(event.getBlock(), event).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector()))) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockFade(BlockFadeEvent event) {
-        if (filter.evaluate(event.getBlock(), event).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
+        if (filter.evaluate(event.getBlock(), event).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector()))) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockForm(BlockFormEvent event) {
-        if (filter.evaluate(event.getBlock(), event).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
+        if (filter.evaluate(event.getBlock(), event).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector()))) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockFromTo(BlockFromToEvent event) {
-        if (filter.evaluate(event.getToBlock(), event).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getToBlock().getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
+        if (filter.evaluate(event.getToBlock(), event).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getToBlock().getLocation().toVector()))) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockGrow(BlockGrowEvent event) {
-        if (filter.evaluate(event.getBlock(), event).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
+        if (filter.evaluate(event.getBlock(), event).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector()))) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockIgnite(BlockIgniteEvent event) {
-        if (filter.evaluate(event.getBlock(), event).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
+        if (filter.evaluate(event.getBlock(), event).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector()))) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockPiston(BlockPistonExtendEvent event) {
-        if (filter.evaluate(event.getBlock(), event).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
+        if (filter.evaluate(event.getBlock(), event).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector()))) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockPiston(BlockPistonRetractEvent event) {
-        if (filter.evaluate(event.getBlock(), event).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
+        if (filter.evaluate(event.getBlock(), event).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector()))) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockSpread(BlockSpreadEvent event) {
-        if (filter.evaluate(event.getBlock(), event).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
+        if (filter.evaluate(event.getBlock(), event).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector()))) {
             event.setCancelled(true);
         }
     }
@@ -128,7 +128,7 @@ public class BlockEventRegion extends AppliedRegion {
     public void onEntityExplode(EntityExplodeEvent event) {
         Set<Block> blocksToRemove = new HashSet<>();
         for (Block block : event.blockList()) {
-            if (region.contains(new BlockRegion(null, block.getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
+            if (region.contains(new BlockRegion(null, block.getLocation().toVector()))) {
                 if (TntTracker.getWhoPlaced(event.getEntity()) != null) {
                     if (Bukkit.getOfflinePlayer(TntTracker.getWhoPlaced(event.getEntity())).isOnline()) {
                         if (filter.evaluate(Bukkit.getPlayer(TntTracker.getWhoPlaced(event.getEntity())), block).equals(FilterState.DENY)) blocksToRemove.add(block);

@@ -30,19 +30,19 @@ public class BlockRegion extends RegionModule {
     }
 
     public double getX() {
-        return vector.getX();
+        return vector.getX() + 0.5;
     }
 
     public double getY() {
-        return vector.getY();
+        return vector.getY() + 0.5;
     }
 
     public double getZ() {
-        return vector.getZ();
+        return vector.getZ() + 0.5;
     }
 
     public Vector getVector() {
-        return vector.clone();
+        return vector.clone().add(new Vector(0.5, 0.5, 0.5));
     }
 
     @Override
