@@ -23,7 +23,9 @@ public class ParseUtils {
             } catch (NumberFormatException e) {
             }
         }
-        ItemStack itemStack = new ItemStack(Material.matchMaterial(element.getText()), amount);
+        ItemStack itemStack;
+        if (element.getText().contains(":")) itemStack = new ItemStack(Material.matchMaterial(element.getText().split(":")[0]), amount, (short) NumUtils.parseInt(element.getText().split(":")[1]));
+        else itemStack = new ItemStack(Material.matchMaterial(element.getText()), amount);
         if (element.getAttributeValue("damage") != null) {
             itemStack.setDurability(Short.parseShort(element.getAttributeValue("damage")));
         }
