@@ -1,9 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.observers;
 
 import in.twizmwaz.cardinal.module.modules.tutorial.Tutorial;
-import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.ItemUtils;
-import net.minecraft.server.v1_7_R4.Item;
 import org.bukkit.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
