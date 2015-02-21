@@ -30,6 +30,8 @@ public class PermissionModule implements Module {
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.removeAttachment(attachmentMap.get(player));
         }
+
+        attachmentMap.clear();
     }
     
     @EventHandler(priority = EventPriority.LOWEST)
@@ -40,7 +42,7 @@ public class PermissionModule implements Module {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onCycleComplete(CycleCompleteEvent event) {
         for (Player player : Bukkit.getOnlinePlayers())
-        attachmentMap.put(player, player.addAttachment(plugin));
+            attachmentMap.put(player, player.addAttachment(plugin));
     }
     
     @EventHandler(priority = EventPriority.HIGHEST)

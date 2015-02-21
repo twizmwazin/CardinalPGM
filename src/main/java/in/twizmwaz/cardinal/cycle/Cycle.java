@@ -41,12 +41,7 @@ public class Cycle implements Runnable {
     @Override
     public void run() {
         GenerateMap.copyWorldFromRepository(map.getFolder(), uuid);
-        WorldCreator wc = new WorldCreator("matches/" + uuid.toString()).generator(new ChunkGenerator() {
-            public byte[] generate(World world, Random random, int x, int z) {
-                return new byte[65536];
-            }
-        });
-        World world = Bukkit.createWorld(wc);
+        World world = new WorldCreator("matches/" + uuid.toString()).generator(new NullChunkGenerator()).createWorld();
         handler.setMatchWorld(world);
     }
 }
