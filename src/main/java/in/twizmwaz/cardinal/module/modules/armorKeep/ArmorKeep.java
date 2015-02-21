@@ -36,6 +36,10 @@ public class ArmorKeep implements Module{
     @Override
     public void unload() {
         HandlerList.unregisterAll(this);
+        helmet.clear();
+        chestplate.clear();
+        leggings.clear();
+        boots.clear();
     }
 
     @EventHandler

@@ -11,13 +11,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.lang.ref.WeakReference;
 import java.util.UUID;
 
 public class GameHandler {
 
     private static GameHandler handler;
     private Rotation rotation;
-    private World matchWorld;
+    private WeakReference<World> matchWorld;
     private Match match;
     private Cycle cycle;
     private CycleTimer cycleTimer;
@@ -35,7 +36,7 @@ public class GameHandler {
 
     public void cycleAndMakeMatch() {
         rotation.move();
-        World oldMatchWorld = matchWorld;
+        World oldMatchWorld = matchWorld.get();
         cycle.run();
         if (match != null) match.unregisterModules();
         this.match = new Match(this, cycle.getUuid(), cycle.getMap());
@@ -51,11 +52,11 @@ public class GameHandler {
     }
 
     public World getMatchWorld() {
-        return matchWorld;
+        return matchWorld.get();
     }
 
     public void setMatchWorld(World world) {
-        this.matchWorld = world;
+        matchWorld = new WeakReference<>(world);
     }
 
     public Match getMatch() {

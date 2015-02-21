@@ -50,7 +50,7 @@ public class Match {
         this.state = MatchState.WAITING;
         this.loadedMap = map;
         this.number = matchNumber;
-        matchNumber ++;
+        matchNumber++;
     }
 
     public void registerModules() {

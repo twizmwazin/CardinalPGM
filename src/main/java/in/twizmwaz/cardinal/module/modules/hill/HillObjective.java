@@ -110,6 +110,7 @@ public class HillObjective implements GameObjective {
     @Override
     public void unload() {
         HandlerList.unregisterAll(this);
+        capturingPlayers.clear();
     }
 
     @Override
