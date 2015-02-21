@@ -6,6 +6,7 @@ import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.util.ItemUtils;
 import in.twizmwaz.cardinal.util.MiscUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
@@ -43,9 +44,7 @@ public class TeamPicker implements Module {
         int classesSize = ((GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class).size() + 8) / 9) * 9;
         Inventory picker = Bukkit.createInventory(null, size + classesSize, ChatColor.DARK_RED + new LocalizedChatMessage(ChatConstant.UI_TEAM_PICK).getMessage(player.getLocale()));
         int item = 0;
-        ItemStack autoJoin = new ItemStack(Material.CHAINMAIL_HELMET);
-        ItemMeta autoJoinMeta = autoJoin.getItemMeta();
-        autoJoinMeta.setDisplayName(ChatColor.GRAY + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_AUTO).getMessage(player.getLocale()));
+
         int maxPlayers = 0;
         int totalPlayers = 0;
         for (TeamModule team : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
@@ -54,34 +53,24 @@ public class TeamPicker implements Module {
                 totalPlayers += team.size();
             }
         }
-        autoJoinMeta.setLore(Arrays.asList((totalPlayers >= maxPlayers ? ChatColor.RED + "" : ChatColor.GREEN + "") + totalPlayers + ChatColor.GOLD + " / " + ChatColor.RED + "" + maxPlayers, ChatColor.AQUA + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_AUTO_LORE).getMessage(player.getLocale())));
-        autoJoin.setItemMeta(autoJoinMeta);
+        ItemStack autoJoin = ItemUtils.createItem(Material.CHAINMAIL_HELMET, 1, (short)0, ChatColor.GRAY + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_AUTO).getMessage(player.getLocale()), Arrays.asList((totalPlayers >= maxPlayers ? ChatColor.RED + "" : ChatColor.GREEN + "") + totalPlayers + ChatColor.GOLD + " / " + ChatColor.RED + "" + maxPlayers, ChatColor.AQUA + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_AUTO_LORE).getMessage(player.getLocale())));
         picker.setItem(item, autoJoin);
         item++;
         for (TeamModule team : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
             if (!team.isObserver()) {
-                ItemStack teamStack = new ItemStack(Material.LEATHER_HELMET);
-                ItemMeta teamMeta = teamStack.getItemMeta();
-                teamMeta.setDisplayName(team.getColor() + "" + ChatColor.BOLD + team.getName());
-                teamMeta.setLore(Arrays.asList((team.size() >= team.getMax() ? ChatColor.RED + "" : ChatColor.GREEN + "") + team.size() + ChatColor.GOLD + " / " + ChatColor.RED + "" + team.getMax(), ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.UI_TEAM_CAN_PICK).getMessage(player.getLocale())));
-                teamStack.setItemMeta(teamMeta);
-                LeatherArmorMeta teamLeatherMeta = (LeatherArmorMeta) teamStack.getItemMeta();
-                teamLeatherMeta.setColor(MiscUtils.convertChatColorToColor(team.getColor()));
-                teamStack.setItemMeta(teamLeatherMeta);
+                ItemStack teamStack = ItemUtils.createLeatherArmor(Material.LEATHER_HELMET, 1, team.getColor() + "" + ChatColor.BOLD + team.getName(), Arrays.asList((team.size() >= team.getMax() ? ChatColor.RED + "" : ChatColor.GREEN + "") + team.size() + ChatColor.GOLD + " / " + ChatColor.RED + "" + team.getMax(), ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.UI_TEAM_CAN_PICK).getMessage(player.getLocale())), MiscUtils.convertChatColorToColor(team.getColor()));
                 picker.setItem(item, teamStack);
                 item++;
             }
         }
         item = size;
         for (ClassModule classModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class)) {
-            ItemStack classStack = new ItemStack(classModule.getIcon());
+            ItemStack classStack = ItemUtils.createItem(classModule.getIcon(), 1, (short)0, ChatColor.GREEN + classModule.getName(), Arrays.asList(ChatColor.GOLD + classModule.getLongDescription()));
             ItemMeta classMeta = classStack.getItemMeta();
-            classMeta.setDisplayName(ChatColor.GREEN + classModule.getName());
-            classMeta.setLore(Arrays.asList(ChatColor.GOLD + classModule.getLongDescription()));
-            classStack.setItemMeta(classMeta);
             if (classModule.equals(ClassModule.getClassByPlayer(player))) {
                 classStack.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
             }
+            classStack.setItemMeta(classMeta);
             picker.setItem(item, classStack);
             item++;
         }
@@ -165,17 +154,26 @@ public class TeamPicker implements Module {
                 if (item.getType().equals(Material.LEATHER_HELMET)) {
                     if (item.hasItemMeta()) {
                         if (item.getItemMeta().hasDisplayName()) {
+                            ItemMeta meta = item.getItemMeta();
+
+                            StringBuilder name = new StringBuilder();
+                            name.append(ChatColor.GREEN);
+                            name.append(ChatColor.BOLD);
+
+                            StringBuilder lore = new StringBuilder();
+                            lore.append(ChatColor.DARK_PURPLE);
+                            lore.append(new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(event.getPlayer().getLocale()));
+
                             if (item.getItemMeta().getDisplayName().equals(ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(event.getOldLocale()))) {
-                                ItemMeta meta = item.getItemMeta();
-                                meta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(event.getNewLocale()));
-                                meta.setLore(Arrays.asList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(event.getPlayer().getLocale())));
-                                item.setItemMeta(meta);
+                                name.append(new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(event.getNewLocale()));
+                                meta.setDisplayName(name.toString());
+                                meta.setLore(Arrays.asList(lore.toString()));
                             } else if (item.getItemMeta().getDisplayName().equals(ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(event.getOldLocale()))) {
-                                ItemMeta meta = item.getItemMeta();
-                                meta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(event.getNewLocale()));
-                                meta.setLore(Arrays.asList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(event.getPlayer().getLocale())));
-                                item.setItemMeta(meta);
+                                name.append(new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(event.getNewLocale()));
+                                meta.setDisplayName(name.toString());
+                                meta.setLore(Arrays.asList(lore.toString()));
                             }
+                            item.setItemMeta(meta);
                         }
                     }
                 }
