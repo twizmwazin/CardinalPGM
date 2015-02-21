@@ -137,6 +137,10 @@ public class RespawnModule implements Module {
                             Arrays.asList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(player.getLocale())));
                     player.getInventory().setItem(2, picker);
                 }
+                if (match.getDocument().getRootElement().getChild("tutorial") != null) {
+                    ItemStack tutorialEmerald = ItemUtils.createItem(Material.EMERALD, 1, (short) 0, ChatColor.GOLD + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TUTORIAL_VIEW).getMessage(player.getLocale()));
+                    player.getInventory().setItem(3, tutorialEmerald);
+                }
                 if (player.hasPermission("tnt.defuse")) {
                     ItemStack shears = ItemUtils.createItem(Material.SHEARS, 1, (short)0, ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
                     player.getInventory().setItem(4, shears);

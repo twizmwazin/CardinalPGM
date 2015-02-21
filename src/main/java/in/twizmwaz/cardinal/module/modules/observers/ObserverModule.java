@@ -1,6 +1,9 @@
 package in.twizmwaz.cardinal.module.modules.observers;
 
+import in.twizmwaz.cardinal.module.modules.tutorial.Tutorial;
+import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.ItemUtils;
+import net.minecraft.server.v1_7_R4.Item;
 import org.bukkit.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
@@ -65,9 +68,58 @@ public class ObserverModule implements Module {
         player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
         ItemStack howTo = ItemUtils.createBook(Material.WRITTEN_BOOK, 1, ChatColor.AQUA.toString() + ChatColor.BOLD + "Coming Soon", ChatColor.GOLD + "CardinalPGM");
         player.getInventory().setItem(1, howTo);
+        if (match.getDocument().getRootElement().getChild("tutorial") != null) {
+            ItemStack tutorialEmerald = ItemUtils.createItem(Material.EMERALD, 1, (short) 0, ChatColor.GOLD + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TUTORIAL_VIEW).getMessage(player.getLocale()));
+            player.getInventory().setItem(3, tutorialEmerald);
+        }
         if (player.hasPermission("tnt.defuse")) {
-            ItemStack shears = ItemUtils.createItem(Material.SHEARS, 1, (short)0, ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
+            ItemStack shears = ItemUtils.createItem(Material.SHEARS, 1, (short) 0, ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
             player.getInventory().setItem(4, shears);
+        }
+    }
+
+    @EventHandler
+    public void onRightClick(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        int stage = 0;
+        if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            if (player.getItemInHand().getType().equals(Material.EMERALD) && player.getItemInHand().hasItemMeta()) {
+                int slot = player.getInventory().getHeldItemSlot();
+                ModuleCollection<Tutorial> modules = match.getModules().getModules(Tutorial.class);
+                stage++;
+                Tutorial tutorial = modules.get(stage);
+                if (tutorial.getTeleport() == null || tutorial.getTitle() == null || tutorial.getLine() == null) {
+                    player.getInventory().setItem(slot, new ItemStack(ItemUtils.createItem(Material.EMERALD, 1, (short) 0, modules.get(stage - 1).getTitle() != null ? ChatColor.BLACK + "Left Click" + ChatColor.AQUA + " » " + ChatColor.RED + modules.get(stage - 1) + ChatColor.AQUA + " | " + ChatColor.GREEN + tutorial.getTitle() + ChatColor.AQUA + " » " + ChatColor.BLACK + "Right Click" : ChatColor.GREEN + tutorial.getTitle() + ChatColor.AQUA + " » " + ChatColor.BLACK + "Right Click")));
+                    if (tutorial.getTeleport() != null) {
+                        player.teleport(tutorial.getTeleport().getRandomPoint().getLocation());
+                    }
+                    if (tutorial.getLine() != null) {
+                        for (String line : tutorial.getLine()) {
+                            player.sendMessage(ChatColor.translateAlternateColorCodes('`', line));
+                        }
+                    }
+                }
+            }
+        } else if (event.getAction().equals(Action.LEFT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
+            if (player.getItemInHand().getType().equals(Material.EMERALD) && player.getItemInHand().hasItemMeta()) {
+                int slot = player.getInventory().getHeldItemSlot();
+                ModuleCollection<Tutorial> modules = match.getModules().getModules(Tutorial.class);
+                stage--;
+                Tutorial tutorial = modules.get(stage);
+                if (tutorial.getTeleport() == null || tutorial.getTitle() == null || tutorial.getLine() == null) {
+                    if (stage > 0) {
+                        player.getInventory().setItem(slot, new ItemStack(ItemUtils.createItem(Material.EMERALD, 1, (short) 0, modules.get(stage - 1).getTitle() != null ? ChatColor.BLACK + "Left Click" + ChatColor.AQUA + " » " + ChatColor.RED + modules.get(stage - 1) + ChatColor.AQUA + " | " + ChatColor.GREEN + tutorial.getTitle() + ChatColor.AQUA + " » " + ChatColor.BLACK + "Right Click" : ChatColor.GREEN + tutorial.getTitle() + ChatColor.AQUA + " » " + ChatColor.BLACK + "Right Click")));
+                        if (tutorial.getTeleport() != null) {
+                            player.teleport(tutorial.getTeleport().getRandomPoint().getLocation());
+                        }
+                        if (tutorial.getLine() != null) {
+                            for (String line : tutorial.getLine()) {
+                                player.sendMessage(ChatColor.translateAlternateColorCodes('`', line));
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
