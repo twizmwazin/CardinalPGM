@@ -25,7 +25,7 @@ public class SoundModule implements Module {
     public void onObjectiveComplete(ObjectiveCompleteEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (Settings.getSettingByName("Sounds") != null && Settings.getSettingByName("Sounds").getValueByPlayer(player).getValue().equalsIgnoreCase("on")) {
-                player.playSound(player.getLocation(), Sound.PORTAL_TRAVEL, 1, 1);
+                player.playSound(player.getLocation(), Sound.PORTAL_TRAVEL, 1, 2);
             }
         }
     }
