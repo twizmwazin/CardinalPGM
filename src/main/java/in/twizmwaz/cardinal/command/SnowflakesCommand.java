@@ -18,7 +18,7 @@ public class SnowflakesCommand {
             Bukkit.dispatchCommand(sender, "snowflakes " + sender.getName());
         } else {
             String name = Bukkit.getOfflinePlayer(cmd.getString(0)).getName();
-            sender.sendMessage(ChatColor.GRAY + (sender.getName().equals(name) ? "You have " : (Bukkit.getOfflinePlayer(cmd.getString(0)).isOnline() && TeamUtils.getTeamByPlayer(Bukkit.getPlayer(name)) != null ? TeamUtils.getTeamByPlayer(Bukkit.getPlayer(name)).getColor() : ChatColor.DARK_AQUA) + name + ChatColor.GRAY + " has ") + ChatColor.WHITE + (Cardinal.getCardinalDatabase().get(Bukkit.getOfflinePlayer(cmd.getString(0)), "snowflakes").equals("") ? "0" : Cardinal.getCardinalDatabase().get(Bukkit.getOfflinePlayer(cmd.getString(0)), "snowflakes")) + " snowflake" + (Cardinal.getCardinalDatabase().get(Bukkit.getOfflinePlayer(cmd.getString(0)), "snowflakes").equals("1") ? "" : "s"));
+            sender.sendMessage(ChatColor.DARK_PURPLE + (sender.getName().equals(name) ? "You have " : (Bukkit.getOfflinePlayer(cmd.getString(0)).isOnline() && TeamUtils.getTeamByPlayer(Bukkit.getPlayer(name)) != null ? TeamUtils.getTeamByPlayer(Bukkit.getPlayer(name)).getColor() : ChatColor.DARK_AQUA) + name + ChatColor.DARK_PURPLE + " has ") + ChatColor.GOLD + (Cardinal.getCardinalDatabase().get(Bukkit.getOfflinePlayer(cmd.getString(0)), "snowflakes").equals("") ? "0" : Cardinal.getCardinalDatabase().get(Bukkit.getOfflinePlayer(cmd.getString(0)), "snowflakes")) + " snowflake" + (Cardinal.getCardinalDatabase().get(Bukkit.getOfflinePlayer(cmd.getString(0)), "snowflakes").equals("1") ? "" : "s"));
         }
     }
 
