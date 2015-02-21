@@ -10,6 +10,7 @@ import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.util.ItemUtils;
 import in.twizmwaz.cardinal.util.PlayerUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
@@ -48,27 +49,16 @@ public class TeamManagerModule implements Module {
         PlayerUtils.resetPlayer(player);
         TeamUtils.getTeamById("observers").add(player, true, false);
         event.getPlayer().getInventory().setItem(0, new ItemStack(Material.COMPASS));
-        ItemStack howTo = new ItemStack(Material.WRITTEN_BOOK);
-        ItemMeta howToMeta = howTo.getItemMeta();
-        howToMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "Coming Soon");
-        howTo.setItemMeta(howToMeta);
-        BookMeta howToBookMeta = (BookMeta) howTo.getItemMeta();
-        howToBookMeta.setAuthor(ChatColor.GOLD + "CardinalPGM");
-        howTo.setItemMeta(howToBookMeta);
+        ItemStack howTo = ItemUtils.createBook(Material.WRITTEN_BOOK, 1, ChatColor.AQUA.toString() + ChatColor.BOLD + "Coming Soon", ChatColor.GOLD + "CardinalPGM");
         event.getPlayer().getInventory().setItem(1, howTo);
         if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
-            ItemStack picker = new ItemStack(Material.LEATHER_HELMET);
-            ItemMeta pickerMeta = picker.getItemMeta();
-            pickerMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(event.getPlayer().getLocale()) : new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(event.getPlayer().getLocale())));
-            pickerMeta.setLore(Arrays.asList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(event.getPlayer().getLocale())));
-            picker.setItemMeta(pickerMeta);
-            event.getPlayer().getInventory().setItem(2, picker);
+            ItemStack picker = ItemUtils.createItem(Material.LEATHER_HELMET, 1, (short)0,
+                    ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(player.getLocale()) : new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(player.getLocale())),
+                    Arrays.asList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(player.getLocale())));
+            player.getInventory().setItem(2, picker);
         }
         if (player.hasPermission("tnt.defuse")) {
-            ItemStack shears = new ItemStack(Material.SHEARS);
-            ItemMeta meta = shears.getItemMeta();
-            meta.setDisplayName(ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(event.getPlayer().getLocale()));
-            shears.setItemMeta(meta);
+            ItemStack shears = ItemUtils.createItem(Material.SHEARS, 1, (short)0, ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
             player.getInventory().setItem(4, shears);
         }
         event.setJoinMessage(null);
