@@ -74,7 +74,7 @@ public class WhitelistCommands {
     @CommandPermissions("whitelist.on")
     public static void on(final CommandContext args, final CommandSender sender) throws CommandException {
         Bukkit.getServer().setWhitelist(true);
-        sender.sendMessage(ChatColor.WHITE + "Whitelist: " + ChatColor.GREEN + "On");
+        sender.sendMessage(ChatColor.WHITE + "Whitelist " + ChatColor.GREEN + "Enabled");
     }
 
     @Command(
@@ -86,7 +86,7 @@ public class WhitelistCommands {
     @CommandPermissions("whitelist.off")
     public static void off(final CommandContext args, final CommandSender sender) throws CommandException {
         Bukkit.getServer().setWhitelist(false);
-        sender.sendMessage(ChatColor.WHITE + "Whitelist: " + ChatColor.RED + "Off");
+        sender.sendMessage(ChatColor.WHITE + "Whitelist " + ChatColor.RED + "Disabled");
     }
 
     @Command(
