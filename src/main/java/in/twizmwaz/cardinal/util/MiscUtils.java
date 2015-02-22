@@ -71,7 +71,7 @@ public class MiscUtils {
             case LIME:
                 return ChatColor.GREEN;
             case PINK:
-                return ChatColor.LIGHT_PURPLE;
+                return ChatColor.RED;
             case GRAY:
                 return ChatColor.GRAY;
             case SILVER:
