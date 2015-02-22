@@ -53,14 +53,14 @@ public class TeleportCommands {
                     throw new CommandPermissionsException();
                 }
             } else {
-                throw new CommandUsageException("Invalid arguments.", "/teleport <player> [to, x] [y] [z]");
+                throw new CommandUsageException("Invalid arguments.", "/teleport <player> [to],[x] [y] [z]");
             }
         } else {
             throw new CommandException("Console cannot use this command.");
         }
     }
 
-    @Command(aliases = {"bring", "tphere", "grab"}, desc = "Teleport a player to you.", usage = "[map]", min = 1, max = 1)
+    @Command(aliases = {"bring", "tphere", "grab"}, desc = "Teleport a player to you.", usage = "[player]", min = 1, max = 1)
     @CommandPermissions("cardinal.teleport")
     public static void teleportHere(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (sender instanceof Player) {
