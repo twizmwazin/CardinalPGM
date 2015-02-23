@@ -17,7 +17,7 @@ import org.bukkit.event.HandlerList;
 public class Snowflakes implements Module {
 
     public enum ChangeReason {
-        PLAYER_KILL(), OBJECTIVE_TOUCH(), OBJECTIVE_COMPLETE(), TEAM_WIN(), TEAM_LOYAL()
+        PLAYER_KILL(), WOOL_TOUCH()
     }
 
     public Snowflakes() {
@@ -46,6 +46,8 @@ public class Snowflakes implements Module {
         String reason;
         if (event.getChangeReason().equals(ChangeReason.PLAYER_KILL)) {
             reason = "killed " + TeamUtils.getTeamByPlayer(Bukkit.getPlayer(event.get(0))).getColor() + event.get(0);
+        } else if (event.getChangeReason().equals(ChangeReason.WOOL_TOUCH)) {
+            reason = "picked up " + event.get(0);
         } else {
             reason = "unknown reason";
         }

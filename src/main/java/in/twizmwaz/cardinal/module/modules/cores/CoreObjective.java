@@ -150,16 +150,19 @@ public class CoreObjective implements GameObjective {
         if (!event.isCancelled()) {
             if (getBlocks().contains(event.getBlock())) {
                 if (TeamUtils.getTeamByPlayer(event.getPlayer()) != team) {
+                    boolean touchMessage = false;
                     if (!playersTouched.contains(event.getPlayer().getUniqueId())) {
                         playersTouched.add(event.getPlayer().getUniqueId());
                         TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
                         TeamChannel channel = TeamUtils.getTeamChannel(teamModule);
-                        if (this.show && !this.complete) channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED, teamModule.getColor() + event.getPlayer().getDisplayName() + ChatColor.GRAY, ChatColor.RED + name));
-                        
+                        if (this.show && !this.complete) {
+                            channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED, teamModule.getColor() + event.getPlayer().getDisplayName() + ChatColor.GRAY, ChatColor.RED + name));
+                            touchMessage = true;
+                        }
                     }
                     boolean oldState = this.touched;
                     this.touched = true;
-                    ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), !oldState);
+                    ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), !oldState, touchMessage);
                     Bukkit.getServer().getPluginManager().callEvent(touchEvent);
                     event.setCancelled(false);
                 } else {
@@ -189,6 +192,7 @@ public class CoreObjective implements GameObjective {
             boolean oldState = this.touched;
             boolean blownUp = false;
             Player eventPlayer = null;
+            boolean touchMessage = false;
             for (Block block : objectiveBlownUp) {
                 if (TntTracker.getWhoPlaced(event.getEntity()) != null) {
                     UUID player = TntTracker.getWhoPlaced(event.getEntity());
@@ -196,11 +200,15 @@ public class CoreObjective implements GameObjective {
                         if (TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)) == team) {
                             event.blockList().remove(block);
                         } else {
+
                             if (!playersTouched.contains(player)) {
                                 playersTouched.add(player);
                                 TeamModule teamModule = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
                                 TeamChannel channel = TeamUtils.getTeamChannel(teamModule);
-                                if (this.show && !this.complete) channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED, teamModule.getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY, ChatColor.RED + name));
+                                if (this.show && !this.complete) {
+                                    channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED, teamModule.getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY, ChatColor.RED + name));
+                                    touchMessage = true;
+                                }
                             }
                             this.touched = true;
                             blownUp = true;
@@ -219,7 +227,7 @@ public class CoreObjective implements GameObjective {
                 }
             }
             if (!this.complete && blownUp) {
-                ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, !oldState);
+                ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, !oldState, touchMessage);
                 Bukkit.getServer().getPluginManager().callEvent(touchEvent);
             }
         }

@@ -128,10 +128,14 @@ public class DestroyableObjective implements GameObjective {
         if (!event.isCancelled()) {
             if (getBlocks().contains(event.getBlock())) {
                 if (TeamUtils.getTeamByPlayer(event.getPlayer()) != team) {
+                    boolean touchMessage = false;
                     if (!playersTouched.contains(event.getPlayer().getUniqueId())) {
                         playersTouched.add(event.getPlayer().getUniqueId());
                         TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
-                        if (this.show && !this.completed) TeamUtils.getTeamChannel(teamModule).sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED, teamModule.getColor() + event.getPlayer().getDisplayName() + ChatColor.GRAY, ChatColor.AQUA + name));
+                        if (this.show && !this.completed) {
+                            TeamUtils.getTeamChannel(teamModule).sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED, teamModule.getColor() + event.getPlayer().getDisplayName() + ChatColor.GRAY, ChatColor.AQUA + name));
+                            touchMessage = true;
+                        }
                     }
                     boolean oldState = this.isTouched();
                     this.complete++;
@@ -146,7 +150,7 @@ public class DestroyableObjective implements GameObjective {
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
                     } else if (!this.completed) {
-                        ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), !oldState || showPercent);
+                        ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), !oldState || showPercent, touchMessage);
                         Bukkit.getServer().getPluginManager().callEvent(touchEvent);
                     }
                 } else {
@@ -170,6 +174,7 @@ public class DestroyableObjective implements GameObjective {
             boolean blownUp = false;
             Player eventPlayer = null;
             int originalPercent = getPercent();
+            boolean touchMessage = false;
             for (Block block : objectiveBlownUp) {
                 boolean blockDestroyed = false;
                 if (TntTracker.getWhoPlaced(event.getEntity()) != null) {
@@ -181,7 +186,10 @@ public class DestroyableObjective implements GameObjective {
                             if (!playersTouched.contains(player)) {
                                 playersTouched.add(player);
                                 TeamModule teamModule = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
-                                if (this.show && !this.completed) TeamUtils.getTeamChannel(teamModule).sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED, teamModule.getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY, ChatColor.AQUA + name));
+                                if (this.show && !this.completed) {
+                                    TeamUtils.getTeamChannel(teamModule).sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED, teamModule.getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY, ChatColor.AQUA + name));
+                                    touchMessage = true;
+                                }
                             }
                             blockDestroyed = true;
                             blownUp = true;
@@ -214,7 +222,7 @@ public class DestroyableObjective implements GameObjective {
                 }
             }
             if (!this.completed && blownUp) {
-                ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, !oldState || (getPercent() != originalPercent));
+                ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, !oldState || (getPercent() != originalPercent), touchMessage);
                 Bukkit.getServer().getPluginManager().callEvent(touchEvent);
             }
         }
