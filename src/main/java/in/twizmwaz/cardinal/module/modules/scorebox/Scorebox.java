@@ -45,31 +45,33 @@ public class Scorebox implements Module {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (region.contains(new BlockRegion(null, event.getTo().toVector()))) {
-            if (filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW)) {
-                int points = 0;
-                if (redeemables.size() > 0) {
-                    for (ItemStack item : redeemables.keySet()) {
-                        if (event.getPlayer().getInventory().contains(item)) {
-                            for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
-                                TeamModule playerTeam = TeamUtils.getTeamByPlayer(event.getPlayer());
-                                if (playerTeam != null && score.getTeam() == playerTeam) {
-                                    event.getPlayer().getInventory().remove(item);
-                                    points += redeemables.get(item);
+        if (GameHandler.getGameHandler().getMatch().isRunning()) {
+            if (region.contains(new BlockRegion(null, event.getTo().toVector()))) {
+                if (filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW)) {
+                    int points = 0;
+                    if (redeemables.size() > 0) {
+                        for (ItemStack item : redeemables.keySet()) {
+                            if (event.getPlayer().getInventory().contains(item)) {
+                                for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
+                                    TeamModule playerTeam = TeamUtils.getTeamByPlayer(event.getPlayer());
+                                    if (playerTeam != null && score.getTeam() == playerTeam) {
+                                        event.getPlayer().getInventory().remove(item);
+                                        points += redeemables.get(item);
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                points += this.points;
-                if (points != 0) {
-                    TeamModule playerTeam = TeamUtils.getTeamByPlayer(event.getPlayer());
-                    if (playerTeam != null) {
-                        for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
-                            if (score.getTeam() == playerTeam) {
-                                score.setScore(score.getScore() + points);
-                                Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(score));
-                                ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}", new LocalizedChatMessage(ChatConstant.UI_SCORED_FOR, new UnlocalizedChatMessage(playerTeam.getColor() + event.getPlayer().getDisplayName() + ChatColor.GRAY), new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "{0}" + ChatColor.GRAY, points == 1 ? new LocalizedChatMessage(ChatConstant.UI_ONE_POINT) : new LocalizedChatMessage(ChatConstant.UI_POINTS, points + "" + ChatColor.GRAY)), new UnlocalizedChatMessage(playerTeam.getCompleteName()))));
+                    points += this.points;
+                    if (points != 0) {
+                        TeamModule playerTeam = TeamUtils.getTeamByPlayer(event.getPlayer());
+                        if (playerTeam != null) {
+                            for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
+                                if (score.getTeam() == playerTeam) {
+                                    score.setScore(score.getScore() + points);
+                                    Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(score));
+                                    ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}", new LocalizedChatMessage(ChatConstant.UI_SCORED_FOR, new UnlocalizedChatMessage(playerTeam.getColor() + event.getPlayer().getDisplayName() + ChatColor.GRAY), new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "{0}" + ChatColor.GRAY, points == 1 ? new LocalizedChatMessage(ChatConstant.UI_ONE_POINT) : new LocalizedChatMessage(ChatConstant.UI_POINTS, points + "" + ChatColor.GRAY)), new UnlocalizedChatMessage(playerTeam.getCompleteName()))));
+                                }
                             }
                         }
                     }
