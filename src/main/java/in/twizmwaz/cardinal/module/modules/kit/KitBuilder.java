@@ -96,7 +96,7 @@ public class KitBuilder implements ModuleBuilder {
                 }
                 int amplifier = 0;
                 if (potion.getAttributeValue("amplifier") != null) {
-                    amplifier = NumUtils.parseInt(potion.getAttributeValue("amplifier")) - 1;
+                    amplifier = NumUtils.parseInt(potion.getAttributeValue("amplifier"));
                 }
                 potions.add(new PotionEffect(type, duration, amplifier, true));
             }
