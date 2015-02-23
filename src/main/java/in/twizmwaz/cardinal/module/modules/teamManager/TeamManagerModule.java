@@ -83,13 +83,6 @@ public class TeamManagerModule implements Module {
         removePlayer(player);
     }
 
-    @EventHandler
-    public void onPlayerLeave(PlayerKickEvent event) {
-        Player player = event.getPlayer();
-        event.setLeaveMessage(TeamUtils.getTeamByPlayer(player).getColor() + player.getDisplayName() + ChatColor.YELLOW + " left the game");
-        removePlayer(player);
-    }
-
     private void removePlayer(Player player) {
         for (TeamModule team : match.getModules().getModules(TeamModule.class)) {
             if (team.contains(player)) {

@@ -51,12 +51,6 @@ public class PermissionModule implements Module {
         attachmentMap.remove(event.getPlayer());
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerKick(PlayerKickEvent event) {
-        event.getPlayer().removeAttachment(attachmentMap.get(event.getPlayer()));
-        attachmentMap.remove(event.getPlayer());
-    }
-    
     public PermissionAttachment getPlayerAttachment(Player player) {
         return attachmentMap.get(player);
     }

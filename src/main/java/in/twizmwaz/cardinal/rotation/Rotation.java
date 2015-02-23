@@ -61,7 +61,8 @@ public class Rotation {
                     List<Pair<String, String>> contributors = new ArrayList<>();
                     for (Element contributorsElement : xml.getRootElement().getChildren("contributors")) {
                         for (Element contributor : contributorsElement.getChildren()) {
-                            contributors.add(new ImmutablePair<>(contributor.getText(), contributor.getAttributeValue("contribution")));
+                            String contributorName = contributor.getAttributeValue("uuid") == null ? contributor.getText() : Bukkit.getOfflinePlayer(UUID.fromString(contributor.getAttributeValue("uuid"))).getName();
+                            contributors.add(new ImmutablePair<>(contributorName, contributor.getAttributeValue("contribution")));
                         }
                     }
                     List<String> rules = new ArrayList<>();

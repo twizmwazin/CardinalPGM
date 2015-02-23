@@ -50,7 +50,7 @@ public class Snowflakes implements Module {
             reason = "unknown reason";
         }
         event.getPlayer().sendMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "+" + event.getFinalAmount() + ChatColor.WHITE + " Snowflakes" + ChatColor.DARK_PURPLE + " | " + ChatColor.GOLD + "" + ChatColor.ITALIC + event.getMultiplier() + "x" + ChatColor.DARK_PURPLE + " | " + ChatColor.GRAY + reason).getMessage(event.getPlayer().getLocale()));
-        event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ORB_PICKUP, 10, 1);
+        event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.LEVEL_UP, 1, 1.5F);
         if (Cardinal.getCardinalDatabase().get(event.getPlayer(), "snowflakes").equals("")) {
             Cardinal.getCardinalDatabase().put(event.getPlayer(), "snowflakes", event.getFinalAmount() + "");
         } else {
