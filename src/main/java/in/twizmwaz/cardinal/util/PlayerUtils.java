@@ -19,7 +19,7 @@ public class PlayerUtils {
             } catch (NullPointerException e) {
             }
         }
-        player.clearIgnorantEffects();
+        player.setPotionParticles(true);
         player.setWalkSpeed(0.2F);
     }
 }

@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.command;
 
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
@@ -17,7 +18,6 @@ import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ScoreboardUtils;
 import in.twizmwaz.cardinal.util.StringUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
-import net.minecraft.util.org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

@@ -60,7 +60,7 @@ public class RespawnModule implements Module {
     
     @EventHandler(priority = EventPriority.LOW)
     public void clearIgnorantEffects(CardinalSpawnEvent event) {
-        event.getPlayer().clearIgnorantEffects();
+        event.getPlayer().setPotionParticles(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
