@@ -201,7 +201,7 @@ public class WoolObjective implements GameObjective {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (event.getBlock().getLocation().equals(place.getLocation())) {
+        if (event.getBlock().equals(place.getBlock())) {
             event.setCancelled(true);
         }
     }
