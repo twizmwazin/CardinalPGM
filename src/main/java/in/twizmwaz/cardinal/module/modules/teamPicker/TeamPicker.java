@@ -83,11 +83,11 @@ public class TeamPicker implements Module {
         Player player = (Player) event.getWhoClicked();
         if (item != null) {
             if (TeamUtils.getTeamByPlayer(player).isObserver() || !GameHandler.getGameHandler().getMatch().isRunning()) {
-                if (event.getInventory().getName().equals(ChatColor.DARK_RED + "Pick your team")) {
+                if (event.getInventory().getName().equals(ChatColor.DARK_RED + new LocalizedChatMessage(ChatConstant.UI_TEAM_PICK).getMessage(player.getLocale()))) {
                     if (item.getType().equals(Material.CHAINMAIL_HELMET)) {
                         if (item.hasItemMeta()) {
                             if (item.getItemMeta().hasDisplayName()) {
-                                if (item.getItemMeta().getDisplayName().equals(ChatColor.GRAY + "" + ChatColor.BOLD + "Auto Join")) {
+                                if (item.getItemMeta().getDisplayName().equals(ChatColor.GRAY + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_AUTO).getMessage(player.getLocale()))) {
                                     event.setCancelled(true);
                                     player.closeInventory();
                                     player.playSound(player.getLocation(), Sound.CLICK, 1, 2);
