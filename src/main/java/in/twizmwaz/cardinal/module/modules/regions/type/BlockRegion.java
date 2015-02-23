@@ -13,7 +13,7 @@ import java.util.List;
 
 public class BlockRegion extends RegionModule {
 
-    private final Vector vector;
+    protected final Vector vector;
 
     public BlockRegion(String name, Vector vector) {
         super(name);
@@ -43,6 +43,10 @@ public class BlockRegion extends RegionModule {
 
     public Vector getVector() {
         return vector.clone().add(new Vector(0.5, 0.5, 0.5));
+    }
+    
+    public Vector getBlockVector() {
+        return vector.clone().toBlockVector();
     }
 
     @Override
