@@ -8,6 +8,8 @@ import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
 import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
+import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 public class TeamUtils {
@@ -99,5 +101,11 @@ public class TeamUtils {
             if (channel.getTeam() == team) return channel;
         }
         return null;
+    }
+
+    public static ChatColor getTeamColorByPlayer(OfflinePlayer player) {
+        if (!player.isOnline()) return ChatColor.DARK_AQUA;
+        if (TeamUtils.getTeamByPlayer((Player) player) == null) return ChatColor.AQUA;
+        return TeamUtils.getTeamByPlayer((Player) player).getColor();
     }
 }

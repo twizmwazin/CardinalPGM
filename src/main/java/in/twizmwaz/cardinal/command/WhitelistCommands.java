@@ -171,7 +171,7 @@ public class WhitelistCommands {
             for (OfflinePlayer player : Bukkit.getWhitelistedPlayers()) {
                 if (player.isOnline()) {
                     if (TeamUtils.getTeamByPlayer(player.getPlayer()) != null) {
-                        onlineWhitelisted += TeamUtils.getTeamByPlayer(player.getPlayer()).getColor() + player.getName() + ChatColor.RESET + " ";
+                        onlineWhitelisted += TeamUtils.getTeamColorByPlayer(player) + player.getName() + ChatColor.RESET + " ";
                     }
                 } else {
                     offlineWhitelisted += player.getName() + " ";

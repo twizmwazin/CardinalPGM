@@ -45,7 +45,7 @@ public class Snowflakes implements Module {
     public void onSnowflakeChange(SnowflakeChangeEvent event) {
         String reason;
         if (event.getChangeReason().equals(ChangeReason.PLAYER_KILL)) {
-            reason = "killed " + TeamUtils.getTeamByPlayer(Bukkit.getPlayer(event.get(0))).getColor() + event.get(0);
+            reason = "killed " + TeamUtils.getTeamColorByPlayer(Bukkit.getOfflinePlayer(event.get(0))) + event.get(0);
         } else if (event.getChangeReason().equals(ChangeReason.WOOL_TOUCH)) {
             reason = "picked up " + event.get(0);
         } else {

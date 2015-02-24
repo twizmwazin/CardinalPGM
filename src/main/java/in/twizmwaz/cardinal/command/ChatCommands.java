@@ -21,10 +21,9 @@ public class ChatCommands {
     @CommandPermissions("cardinal.chat.global")
     public static void global(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (sender instanceof Player) {
-            TeamModule team = TeamUtils.getTeamByPlayer((Player) sender);
             String message = assembleMessage(cmd);
             if (message.trim().equals("")) return;
-            ChatUtils.getGlobalChannel().sendMessage("<" + team.getColor() + ((Player) sender).getDisplayName() + ChatColor.RESET + ">: " + message);
+            ChatUtils.getGlobalChannel().sendMessage("<" + TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() + ChatColor.RESET + ">: " + message);
         } else throw new CommandException("Console cannot use this command.");
     }
 
@@ -32,11 +31,10 @@ public class ChatCommands {
     @CommandPermissions("cardinal.chat.admin")
     public static void admin(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (sender instanceof Player) {
-            TeamModule team = TeamUtils.getTeamByPlayer((Player) sender);
             String message = assembleMessage(cmd);
             if (message.trim().equals("")) return;
-            ChatUtils.getAdminChannel().sendMessage("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + team.getColor() + ((Player) sender).getDisplayName() + ChatColor.RESET + ": " + message);
-            Bukkit.getLogger().info("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + team.getColor() + ((Player) sender).getDisplayName() + ChatColor.RESET + ":"  + message);
+            ChatUtils.getAdminChannel().sendMessage("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() + ChatColor.RESET + ": " + message);
+            Bukkit.getLogger().info("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() + ChatColor.RESET + ":"  + message);
         } else throw new CommandException("Console cannot use this command.");
     }
 

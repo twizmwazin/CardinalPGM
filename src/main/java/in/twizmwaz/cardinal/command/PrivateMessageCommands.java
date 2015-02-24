@@ -25,8 +25,8 @@ public class PrivateMessageCommands {
             throw new CommandException(ChatConstant.ERROR_PLAYER_NOT_FOUND.getMessage(((Player) sender).getLocale()));
         }
         if (Settings.getSettingByName("PrivateMessages") == null || Settings.getSettingByName("PrivateMessages").getValueByPlayer(target).getValue().equalsIgnoreCase("all")) {
-            target.sendMessage(ChatColor.GRAY + "(From " + TeamUtils.getTeamByPlayer((Player) sender).getColor() + ((Player) sender).getDisplayName() + ChatColor.GRAY + "): " + ChatColor.RESET + assembleMessage(cmd));
-            sender.sendMessage(ChatColor.GRAY + "(To " + TeamUtils.getTeamByPlayer(target).getColor() + target.getDisplayName() + ChatColor.GRAY + "): " + ChatColor.RESET + assembleMessage(cmd));
+            target.sendMessage(ChatColor.GRAY + "(From " + TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() + ChatColor.GRAY + "): " + ChatColor.RESET + assembleMessage(cmd));
+            sender.sendMessage(ChatColor.GRAY + "(To " + TeamUtils.getTeamColorByPlayer(target) + target.getDisplayName() + ChatColor.GRAY + "): " + ChatColor.RESET + assembleMessage(cmd));
         } else {
             sender.sendMessage(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_DISABLED_PMS, target.getDisplayName()).getMessage(((Player) sender).getLocale()));
         }

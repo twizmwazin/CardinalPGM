@@ -132,7 +132,7 @@ public class WoolObjective implements GameObjective {
                         if (!this.playersTouched.contains(player.getUniqueId())) {
                             this.playersTouched.add(player.getUniqueId());
                             if (this.show && !this.complete) {
-                                TeamUtils.getTeamChannel(team).sendMessage(team.getColor() + "[Team] " + player.getDisplayName() + ChatColor.GRAY + " picked up " + MiscUtils.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " "));
+                                TeamUtils.getTeamChannel(team).sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED, team.getColor() + player.getName() + ChatColor.GRAY, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.GRAY)));
                                 touchMessage = true;
                             }
                         }
@@ -159,7 +159,7 @@ public class WoolObjective implements GameObjective {
                         if (!this.playersTouched.contains(player.getUniqueId())) {
                             this.playersTouched.add(player.getUniqueId());
                             if (this.show && !this.complete) {
-                                TeamUtils.getTeamChannel(team).sendMessage(team.getColor() + "[Team] " + player.getDisplayName() + ChatColor.GRAY + " picked up " + MiscUtils.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " "));
+                                TeamUtils.getTeamChannel(team).sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED, team.getColor() + player.getName() + ChatColor.GRAY, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.GRAY)));
                                 touchMessage = true;
                             }
                         }

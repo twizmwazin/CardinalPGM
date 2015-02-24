@@ -40,7 +40,7 @@ public class DeathMessages implements Module {
                             if (event.getKiller().equals(event.getPlayer())) {
                                 deathMessage = playerName + ChatColor.GRAY + " 'sploded";
                             } else {
-                                deathMessage = playerName + ChatColor.GRAY + " was blown up by " + TeamUtils.getTeamByPlayer(event.getKiller()).getColor() + event.getKiller().getDisplayName() + ChatColor.GRAY + "'s TNT";
+                                deathMessage = playerName + ChatColor.GRAY + " was blown up by " + TeamUtils.getTeamColorByPlayer(event.getKiller()) + event.getKiller().getDisplayName() + ChatColor.GRAY + "'s TNT";
                             }
                         } else {
                             deathMessage = playerName + ChatColor.GRAY + " blew up";
@@ -52,9 +52,9 @@ public class DeathMessages implements Module {
                     } else if (cause.equals(DamageCause.ENTITY_ATTACK)) {
                         if (event.getKiller() != null) {
                             if (event.getKiller().getItemInHand().getType().equals(Material.AIR)) {
-                                deathMessage = playerName + ChatColor.GRAY + " felt the fury of " + TeamUtils.getTeamByPlayer(event.getKiller()).getColor() + event.getKiller().getDisplayName() + ChatColor.GRAY + "'s fists";
+                                deathMessage = playerName + ChatColor.GRAY + " felt the fury of " + TeamUtils.getTeamColorByPlayer(event.getKiller()) + event.getKiller().getDisplayName() + ChatColor.GRAY + "'s fists";
                             } else {
-                                deathMessage = playerName + ChatColor.GRAY + " was slain by " + TeamUtils.getTeamByPlayer(event.getKiller()).getColor() + event.getKiller().getDisplayName() + ChatColor.GRAY + "'s " + (event.getKiller().getItemInHand().getEnchantments() != null && event.getKiller().getItemInHand().getEnchantments().size() > 0 ? "enchanted " : "") + event.getKiller().getItemInHand().getType().name().replaceAll("_", " ").toLowerCase();
+                                deathMessage = playerName + ChatColor.GRAY + " was slain by " + TeamUtils.getTeamColorByPlayer(event.getKiller()) + event.getKiller().getDisplayName() + ChatColor.GRAY + "'s " + (event.getKiller().getItemInHand().getEnchantments() != null && event.getKiller().getItemInHand().getEnchantments().size() > 0 ? "enchanted " : "") + event.getKiller().getItemInHand().getType().name().replaceAll("_", " ").toLowerCase();
                             }
                         } else {
                             deathMessage = playerName + ChatColor.GRAY + " was slain";
@@ -66,15 +66,15 @@ public class DeathMessages implements Module {
                                 Player killer = (Player) damageEvent.getDamager();
                                 if (damageEvent.getDamageType().equals(DamageTracker.Type.SHOT)) {
                                     int distance = (int) Math.round(event.getPlayer().getLocation().distance(killer.getLocation()));
-                                    deathMessage = playerName + ChatColor.GRAY + " was " + damageEvent.getDamageType().name().toLowerCase() + " (" + distance + " blocks) off a high place " + "(" + Math.round(event.getPlayer().getFallDistance()) + " blocks)" + " by " + TeamUtils.getTeamByPlayer(killer).getColor() + killer.getDisplayName();
+                                    deathMessage = playerName + ChatColor.GRAY + " was " + damageEvent.getDamageType().name().toLowerCase() + " (" + distance + " blocks) off a high place " + "(" + Math.round(event.getPlayer().getFallDistance()) + " blocks)" + " by " + TeamUtils.getTeamColorByPlayer(killer) + killer.getDisplayName();
                                 } else {
-                                    deathMessage = playerName + ChatColor.GRAY + " was " + damageEvent.getDamageType().name().toLowerCase() + " off a high place " + "(" + Math.round(event.getPlayer().getFallDistance()) + " blocks)" + " by " + TeamUtils.getTeamByPlayer(killer).getColor() + killer.getDisplayName() + ChatColor.GRAY + "'s " + (damageEvent.getDamagerItem().getType().equals(Material.AIR) ? "fists of fury" : (damageEvent.getDamagerItem().getEnchantments() != null && damageEvent.getDamagerItem().getEnchantments().size() > 0 ? "enchanted " : "") + damageEvent.getDamagerItem().getType().name().replaceAll("_", " ").toLowerCase());
+                                    deathMessage = playerName + ChatColor.GRAY + " was " + damageEvent.getDamageType().name().toLowerCase() + " off a high place " + "(" + Math.round(event.getPlayer().getFallDistance()) + " blocks)" + " by " + TeamUtils.getTeamColorByPlayer(killer) + killer.getDisplayName() + ChatColor.GRAY + "'s " + (damageEvent.getDamagerItem().getType().equals(Material.AIR) ? "fists of fury" : (damageEvent.getDamagerItem().getEnchantments() != null && damageEvent.getDamagerItem().getEnchantments().size() > 0 ? "enchanted " : "") + damageEvent.getDamagerItem().getType().name().replaceAll("_", " ").toLowerCase());
                                 }
                             } catch (NullPointerException e) {
                                 deathMessage = playerName + ChatColor.GRAY + " hit the ground too hard (" + Math.round(event.getPlayer().getFallDistance()) + " blocks)";
                             }
                         } else if (event.getPlayerSpleefEvent() != null) {
-                            deathMessage = playerName + ChatColor.GRAY + " was spleefed off a high place " + "(" + Math.round(event.getPlayer().getFallDistance()) + " blocks)" + " by " + (event.getPlayerSpleefEvent().getSpleefer().isOnline() ? TeamUtils.getTeamByPlayer((Player) event.getPlayerSpleefEvent().getSpleefer()).getColor() : ChatColor.AQUA) + event.getPlayerSpleefEvent().getSpleefer().getName() + ChatColor.GRAY + "'s " + (event.getPlayerSpleefEvent().getSpleefType().equals(SpleefTracker.Type.TNT) ? "TNT" : (event.getPlayerSpleefEvent().getSpleeferItem().getType().equals(Material.AIR) ? "fists of fury" : (event.getPlayerSpleefEvent().getSpleeferItem().getEnchantments() != null && event.getPlayerSpleefEvent().getSpleeferItem().getEnchantments().size() > 0 ? "enchanted " : "") + event.getPlayerSpleefEvent().getSpleeferItem().getType().name().replaceAll("_", " ").toLowerCase()));
+                            deathMessage = playerName + ChatColor.GRAY + " was spleefed off a high place " + "(" + Math.round(event.getPlayer().getFallDistance()) + " blocks)" + " by " + TeamUtils.getTeamColorByPlayer(event.getPlayerSpleefEvent().getSpleefer()) + event.getPlayerSpleefEvent().getSpleefer().getName() + ChatColor.GRAY + "'s " + (event.getPlayerSpleefEvent().getSpleefType().equals(SpleefTracker.Type.TNT) ? "TNT" : (event.getPlayerSpleefEvent().getSpleeferItem().getType().equals(Material.AIR) ? "fists of fury" : (event.getPlayerSpleefEvent().getSpleeferItem().getEnchantments() != null && event.getPlayerSpleefEvent().getSpleeferItem().getEnchantments().size() > 0 ? "enchanted " : "") + event.getPlayerSpleefEvent().getSpleeferItem().getType().name().replaceAll("_", " ").toLowerCase()));
                         } else {
                             deathMessage = playerName + ChatColor.GRAY + " hit the ground too hard (" + Math.round(event.getPlayer().getFallDistance()) + " blocks)";
                         }
@@ -91,14 +91,14 @@ public class DeathMessages implements Module {
                     } else if (cause.equals(DamageCause.MAGIC)) {
                         if (event.getKiller() != null) {
                             int distance = (int) Math.round(event.getPlayer().getLocation().distance(event.getKiller().getLocation()));
-                            deathMessage = playerName + ChatColor.GRAY + " took " + TeamUtils.getTeamByPlayer(event.getKiller()).getColor() + event.getKiller().getDisplayName() + ChatColor.GRAY + "'s potion to the face (" + distance + " block" + (distance != 1 ? "s" : "") + ")";
+                            deathMessage = playerName + ChatColor.GRAY + " took " + TeamUtils.getTeamColorByPlayer(event.getKiller()) + event.getKiller().getDisplayName() + ChatColor.GRAY + "'s potion to the face (" + distance + " block" + (distance != 1 ? "s" : "") + ")";
                         } else {
                             deathMessage = playerName + ChatColor.GRAY + " took a potion to the face";
                         }
                     } else if (cause.equals(DamageCause.PROJECTILE)) {
                         if (event.getKiller() != null) {
                             int distance = (int) Math.round(event.getPlayer().getLocation().distance(event.getKiller().getLocation()));
-                            deathMessage = playerName + ChatColor.GRAY + " was shot by " + TeamUtils.getTeamByPlayer(event.getKiller()).getColor() + event.getKiller().getDisplayName() + ChatColor.GRAY + " (" + distance + " block" + (distance != 1 ? "s" : "") + ")";
+                            deathMessage = playerName + ChatColor.GRAY + " was shot by " + TeamUtils.getTeamColorByPlayer(event.getKiller()) + event.getKiller().getDisplayName() + ChatColor.GRAY + " (" + distance + " block" + (distance != 1 ? "s" : "") + ")";
                         } else {
                             deathMessage = playerName + ChatColor.GRAY + " was shot";
                         }
@@ -110,7 +110,7 @@ public class DeathMessages implements Module {
                         deathMessage = playerName + ChatColor.GRAY + " died";
                     } else if (cause.equals(DamageCause.THORNS)) {
                         if (event.getKiller() != null) {
-                            deathMessage = playerName + ChatColor.GRAY + " died trying to hurt " + TeamUtils.getTeamByPlayer(event.getKiller()).getColor() + event.getKiller().getDisplayName();
+                            deathMessage = playerName + ChatColor.GRAY + " died trying to hurt " + TeamUtils.getTeamColorByPlayer(event.getKiller()) + event.getKiller().getDisplayName();
                         } else {
                             deathMessage = playerName + ChatColor.GRAY + " died trying to hurt an enemy";
                         }
@@ -121,15 +121,15 @@ public class DeathMessages implements Module {
                                 Player killer = (Player) damageEvent.getDamager();
                                 if (damageEvent.getDamageType().equals(DamageTracker.Type.SHOT)) {
                                     int distance = (int) Math.round(event.getPlayer().getLocation().distance(killer.getLocation()));
-                                    deathMessage = playerName + ChatColor.GRAY + " was " + damageEvent.getDamageType().name().toLowerCase() + " (" + distance + " blocks) out of the world by " + TeamUtils.getTeamByPlayer(killer).getColor() + killer.getDisplayName();
+                                    deathMessage = playerName + ChatColor.GRAY + " was " + damageEvent.getDamageType().name().toLowerCase() + " (" + distance + " blocks) out of the world by " + TeamUtils.getTeamColorByPlayer(killer) + killer.getDisplayName();
                                 } else {
-                                    deathMessage = playerName + ChatColor.GRAY + " was " + damageEvent.getDamageType().name().toLowerCase() + " out of the world by " + TeamUtils.getTeamByPlayer(killer).getColor() + killer.getDisplayName() + ChatColor.GRAY + "'s " + (damageEvent.getDamagerItem().getType().equals(Material.AIR) ? "fists of fury" : (damageEvent.getDamagerItem().getEnchantments() != null && damageEvent.getDamagerItem().getEnchantments().size() > 0 ? "enchanted " : "") + damageEvent.getDamagerItem().getType().name().replaceAll("_", " ").toLowerCase());
+                                    deathMessage = playerName + ChatColor.GRAY + " was " + damageEvent.getDamageType().name().toLowerCase() + " out of the world by " + TeamUtils.getTeamColorByPlayer(killer) + killer.getDisplayName() + ChatColor.GRAY + "'s " + (damageEvent.getDamagerItem().getType().equals(Material.AIR) ? "fists of fury" : (damageEvent.getDamagerItem().getEnchantments() != null && damageEvent.getDamagerItem().getEnchantments().size() > 0 ? "enchanted " : "") + damageEvent.getDamagerItem().getType().name().replaceAll("_", " ").toLowerCase());
                                 }
                             } catch (NullPointerException e) {
                                 deathMessage = playerName + ChatColor.GRAY + " fell out of the world";
                             }
                         } else if (event.getPlayerSpleefEvent() != null) {
-                            deathMessage = playerName + ChatColor.GRAY + " was spleefed out of the world by " + (event.getPlayerSpleefEvent().getSpleefer().isOnline() ? TeamUtils.getTeamByPlayer((Player) event.getPlayerSpleefEvent().getSpleefer()).getColor() : ChatColor.AQUA) + event.getPlayerSpleefEvent().getSpleefer().getName() + ChatColor.GRAY + "'s " + (event.getPlayerSpleefEvent().getSpleefType().equals(SpleefTracker.Type.TNT) ? "TNT" : (event.getPlayerSpleefEvent().getSpleeferItem().getType().equals(Material.AIR) ? "fists of fury" : (event.getPlayerSpleefEvent().getSpleeferItem().getEnchantments() != null && event.getPlayerSpleefEvent().getSpleeferItem().getEnchantments().size() > 0 ? "enchanted " : "") + event.getPlayerSpleefEvent().getSpleeferItem().getType().name().replaceAll("_", " ").toLowerCase()));
+                            deathMessage = playerName + ChatColor.GRAY + " was spleefed out of the world by " + TeamUtils.getTeamColorByPlayer(event.getPlayerSpleefEvent().getSpleefer()) + event.getPlayerSpleefEvent().getSpleefer().getName() + ChatColor.GRAY + "'s " + (event.getPlayerSpleefEvent().getSpleefType().equals(SpleefTracker.Type.TNT) ? "TNT" : (event.getPlayerSpleefEvent().getSpleeferItem().getType().equals(Material.AIR) ? "fists of fury" : (event.getPlayerSpleefEvent().getSpleeferItem().getEnchantments() != null && event.getPlayerSpleefEvent().getSpleeferItem().getEnchantments().size() > 0 ? "enchanted " : "") + event.getPlayerSpleefEvent().getSpleeferItem().getType().name().replaceAll("_", " ").toLowerCase()));
                         } else {
                             deathMessage = playerName + ChatColor.GRAY + " fell out of the world";
                         }
