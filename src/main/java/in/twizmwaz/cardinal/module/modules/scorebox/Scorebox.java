@@ -70,7 +70,7 @@ public class Scorebox implements Module {
                                 if (score.getTeam() == playerTeam) {
                                     score.setScore(score.getScore() + points);
                                     Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(score));
-                                    ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}", new LocalizedChatMessage(ChatConstant.UI_SCORED_FOR, new UnlocalizedChatMessage(playerTeam.getColor() + event.getPlayer().getDisplayName() + ChatColor.GRAY), new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "{0}" + ChatColor.GRAY, points == 1 ? new LocalizedChatMessage(ChatConstant.UI_ONE_POINT) : new LocalizedChatMessage(ChatConstant.UI_POINTS, points + "" + ChatColor.GRAY)), new UnlocalizedChatMessage(playerTeam.getCompleteName()))));
+                                    ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}", new LocalizedChatMessage(ChatConstant.UI_SCORED_FOR, new UnlocalizedChatMessage(playerTeam.getColor() + event.getPlayer().getName() + ChatColor.GRAY), new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "{0}" + ChatColor.GRAY, points == 1 ? new LocalizedChatMessage(ChatConstant.UI_ONE_POINT) : new LocalizedChatMessage(ChatConstant.UI_POINTS, points + "" + ChatColor.GRAY)), new UnlocalizedChatMessage(playerTeam.getCompleteName()))));
                                 }
                             }
                         }

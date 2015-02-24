@@ -156,7 +156,7 @@ public class CoreObjective implements GameObjective {
                         TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
                         TeamChannel channel = TeamUtils.getTeamChannel(teamModule);
                         if (this.show && !this.complete) {
-                            channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED, teamModule.getColor() + event.getPlayer().getDisplayName() + ChatColor.GRAY, ChatColor.RED + name));
+                            channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED, teamModule.getColor() + event.getPlayer().getName() + ChatColor.GRAY, ChatColor.RED + name));
                             touchMessage = true;
                         }
                     }
@@ -206,7 +206,7 @@ public class CoreObjective implements GameObjective {
                                 TeamModule teamModule = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
                                 TeamChannel channel = TeamUtils.getTeamChannel(teamModule);
                                 if (this.show && !this.complete) {
-                                    channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED, teamModule.getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY, ChatColor.RED + name));
+                                    channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED, teamModule.getColor() + Bukkit.getPlayer(player).getName() + ChatColor.GRAY, ChatColor.RED + name));
                                     touchMessage = true;
                                 }
                             }

@@ -43,7 +43,7 @@ public class MatchModule implements Module {
         ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# #    " + ChatColor.GOLD + "{0}" + ChatColor.DARK_PURPLE + "    # #", new LocalizedChatMessage(ChatConstant.UI_MATCH_OVER)));
         if (event.getTeam() != null) {
             if (event.getTeam().size() == 1) {
-                ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # {0}" + ChatColor.DARK_PURPLE + " # #", new LocalizedChatMessage(ChatConstant.UI_MATCH_WIN, event.getTeam().getColor() + ((Player) event.getTeam().get(0)).getDisplayName())));
+                ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # {0}" + ChatColor.DARK_PURPLE + " # #", new LocalizedChatMessage(ChatConstant.UI_MATCH_WIN, event.getTeam().getColor() + ((Player) event.getTeam().get(0)).getName())));
             } else {
                 ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # {0}" + ChatColor.DARK_PURPLE + " # #", new LocalizedChatMessage(ChatConstant.UI_MATCH_WIN, event.getTeam().getCompleteName())));
             }

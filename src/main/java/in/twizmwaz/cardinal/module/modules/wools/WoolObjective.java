@@ -190,7 +190,7 @@ public class WoolObjective implements GameObjective {
                 if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
                     if (TeamUtils.getTeamByPlayer(event.getPlayer()) == team) {
                         this.complete = true;
-                        if (this.show) ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PLACED, team.getColor() + event.getPlayer().getDisplayName() + ChatColor.WHITE, team.getCompleteName() + ChatColor.WHITE, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.WHITE)));
+                        if (this.show) ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PLACED, team.getColor() + event.getPlayer().getName() + ChatColor.WHITE, team.getCompleteName() + ChatColor.WHITE, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.WHITE)));
                         FireworkUtil.spawnFirework(event.getPlayer().getLocation(), event.getPlayer().getWorld());
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
@@ -262,7 +262,14 @@ public class WoolObjective implements GameObjective {
     @EventHandler
     public void onWoolTouch(ObjectiveTouchEvent event) {
         if (event.getObjective().equals(this) && event.displayTouchMessage()) {
-            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getPlayer(), Snowflakes.ChangeReason.WOOL_TOUCH, 10, 1.0, WordUtils.capitalizeFully(name.replaceAll("_", " "))));
+            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getPlayer(), Snowflakes.ChangeReason.WOOL_TOUCH, 8, 1.0, WordUtils.capitalizeFully(name.replaceAll("_", " "))));
+        }
+    }
+
+    @EventHandler
+    public void onWoolPlace(ObjectiveCompleteEvent event) {
+        if (event.getObjective().equals(this) && event.getObjective().showOnScoreboard()) {
+            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getPlayer(), Snowflakes.ChangeReason.WOOL_PLACE, 15, 1.0, WordUtils.capitalizeFully(name.replaceAll("_", " "))));
         }
     }
 }

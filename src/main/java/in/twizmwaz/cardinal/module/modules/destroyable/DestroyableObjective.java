@@ -133,7 +133,7 @@ public class DestroyableObjective implements GameObjective {
                         playersTouched.add(event.getPlayer().getUniqueId());
                         TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
                         if (this.show && !this.completed) {
-                            TeamUtils.getTeamChannel(teamModule).sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED, teamModule.getColor() + event.getPlayer().getDisplayName() + ChatColor.GRAY, ChatColor.AQUA + name));
+                            TeamUtils.getTeamChannel(teamModule).sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED, teamModule.getColor() + event.getPlayer().getName() + ChatColor.GRAY, ChatColor.AQUA + name));
                             touchMessage = true;
                         }
                     }
@@ -187,7 +187,7 @@ public class DestroyableObjective implements GameObjective {
                                 playersTouched.add(player);
                                 TeamModule teamModule = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
                                 if (this.show && !this.completed) {
-                                    TeamUtils.getTeamChannel(teamModule).sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED, teamModule.getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY, ChatColor.AQUA + name));
+                                    TeamUtils.getTeamChannel(teamModule).sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED, teamModule.getColor() + Bukkit.getPlayer(player).getName() + ChatColor.GRAY, ChatColor.AQUA + name));
                                     touchMessage = true;
                                 }
                             }
@@ -301,7 +301,7 @@ public class DestroyableObjective implements GameObjective {
         List<String> toCombine = new ArrayList<>();
         for (UUID player : MiscUtils.getSortedHashMapKeyset(playerDestroyed)) {
             if (getPercentFromAmount(playerDestroyed.get(player)) > (100 / 3)) {
-                toCombine.add(TeamUtils.getTeamColorByPlayer(Bukkit.getPlayer(player)) + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " (" + getPercentFromAmount(playerDestroyed.get(player)) + "%)");
+                toCombine.add(TeamUtils.getTeamColorByPlayer(Bukkit.getPlayer(player)) + Bukkit.getPlayer(player).getName() + ChatColor.GRAY + " (" + getPercentFromAmount(playerDestroyed.get(player)) + "%)");
             }
         }
         if (toCombine.size() == 0) {
