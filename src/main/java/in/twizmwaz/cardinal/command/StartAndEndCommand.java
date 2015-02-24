@@ -8,6 +8,7 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.match.MatchState;
+import in.twizmwaz.cardinal.module.modules.startTimer.StartTimer;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.command.CommandSender;
@@ -23,17 +24,11 @@ public class StartAndEndCommand {
     @CommandPermissions("cardinal.match.start")
     public static void start(CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.WAITING)) {
-            int time = 30;
-            try {
-                time = cmd.getInteger(0);
-            } catch (IndexOutOfBoundsException ex) {
-            }
+            int time = 600;
+            if (cmd.argsLength() > 0) time = cmd.getInteger(0) * 20;
             GameHandler.getGameHandler().getMatch().start(time);
         } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
-            try {
-                GameHandler.getGameHandler().getMatch().getStartTimer().setTime(cmd.getInteger(0));
-            } catch (NullPointerException e) {
-            }
+            GameHandler.getGameHandler().getMatch().getModules().getModule(StartTimer.class).setTime(cmd.getInteger(0));
         } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_RESUME).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
         } else {

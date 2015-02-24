@@ -3,13 +3,13 @@ package in.twizmwaz.cardinal.match;
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
-import in.twizmwaz.cardinal.match.util.StartTimer;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleFactory;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
+import in.twizmwaz.cardinal.module.modules.startTimer.StartTimer;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
 import in.twizmwaz.cardinal.util.DomUtils;
@@ -34,7 +34,6 @@ public class Match {
     private int number;
     private MatchState state;
     private Document document;
-    private StartTimer startTimer;
 
     public Match(GameHandler handler, UUID id, LoadedMap map) {
         this.uuid = id;
@@ -46,7 +45,6 @@ public class Match {
         } catch (JDOMException | IOException e) {
             e.printStackTrace();
         }
-        this.startTimer = new StartTimer(this, 30);
         this.state = MatchState.WAITING;
         this.loadedMap = map;
         this.number = matchNumber;
@@ -86,15 +84,11 @@ public class Match {
         return document;
     }
 
-    public StartTimer getStartTimer() {
-        return startTimer;
-    }
-
     public void start(int time) {
         if (state == MatchState.WAITING) {
+            StartTimer startTimer = getModules().getModule(StartTimer.class);
             startTimer.setTime(time);
             startTimer.setCancelled(false);
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameHandler.getGameHandler().getPlugin(), startTimer);
             state = MatchState.STARTING;
         }
     }
