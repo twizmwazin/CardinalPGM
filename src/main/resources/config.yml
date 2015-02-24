@@ -3,6 +3,34 @@ rotation: rotation.txt
 deleteMatches: true
 custom-motd: true
 worldEditPermissions: true
+permissions:
+  Default:
+    permissions:
+    - cardinal.chat.global
+    - cardinal.chat.team
+  Moderator:
+    permissions:
+    - tnt.defuse
+    - cardinal.cancel
+    - cardinal.chat.admin
+    - cardinal.match.setnext
+    - cardinal.match.cycle
+    - cardinal.team.force
+    - cardinal.teleport
+    - whitelist.reload
+    - whitelist.toggle
+    - whitelist.on
+    - whitelist.off
+    - whitelist.status
+    - whitelist.add
+    - whitelist.remove
+    - whitelist.list
+    - whitelist.team
+    - whielist.kick
+    - cardinal.punish.warn
+    - cardinal.punish.kick
+    - cardinal.punish.ban
+    players:
 settings:
 - Blood
 - DeathMessages
