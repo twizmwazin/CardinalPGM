@@ -1,6 +1,8 @@
 package in.twizmwaz.cardinal.module.modules.permissions;
 
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
+import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -49,6 +51,24 @@ public class PermissionModule implements Module {
     public void onPlayerLeave(PlayerQuitEvent event) {
         event.getPlayer().removeAttachment(attachmentMap.get(event.getPlayer()));
         attachmentMap.remove(event.getPlayer());
+    }
+
+    @EventHandler
+    public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
+        if (Cardinal.getInstance().getConfig().getBoolean("worldEditPermissions"))
+        if (event.getNewTeam().isObserver()) {
+            attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.jumpto.tool", true);
+            attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.thru.tool", true);
+
+            attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.jumpto.command", true);
+            attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.thru.command", true);
+        } else {
+            attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.jumpto.tool", false);
+            attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.thru.tool", false);
+
+            attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.jumpto.command", false);
+            attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.thru.command", false);
+        }
     }
 
     public PermissionAttachment getPlayerAttachment(Player player) {

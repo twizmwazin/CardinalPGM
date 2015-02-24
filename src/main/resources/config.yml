@@ -2,6 +2,7 @@ repo: maps
 rotation: rotation.txt
 deleteMatches: true
 custom-motd: true
+worldEditPermissions: true
 settings:
 - Blood
 - DeathMessages
