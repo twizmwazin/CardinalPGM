@@ -78,7 +78,7 @@ public class BlockRegion extends RegionModule {
     }
 
     public Block getBlock() {
-        return this.getVector().toLocation(GameHandler.getGameHandler().getMatchWorld()).getBlock();
+        return vector.toLocation(GameHandler.getGameHandler().getMatchWorld()).getBlock();
     }
 
 }
