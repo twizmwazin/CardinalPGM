@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.rotation;
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import in.twizmwaz.cardinal.util.DomUtils;
+import in.twizmwaz.cardinal.util.MojangUtils;
 import in.twizmwaz.cardinal.util.NumUtils;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -54,7 +55,7 @@ public class Rotation {
                     List<Pair<String, String>> authors = new ArrayList<>();
                     for (Element authorsElement : xml.getRootElement().getChildren("authors")) {
                         for (Element author : authorsElement.getChildren()) {
-                            String authorName = author.getAttributeValue("uuid") == null ? author.getText() : Bukkit.getOfflinePlayer(UUID.fromString(author.getAttributeValue("uuid"))).getName();
+                            String authorName = author.getAttributeValue("uuid") == null ? author.getText() : MojangUtils.getNameByUUID(UUID.fromString(author.getAttributeValue("uuid")));
                             authors.add(new ImmutablePair<>(authorName, author.getAttributeValue("contribution")));
                         }
                     }
