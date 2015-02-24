@@ -72,16 +72,77 @@ import java.util.logging.Level;
 
 public class ModuleFactory {
 
-    private final Match match;
-    private final List<Class<? extends ModuleBuilder>> builderClasses;
     private final List<ModuleBuilder> builders;
 
+    private static Class[] builderClasses = {
+            BuildHeightBuilder.class,
+            WoolObjectiveBuilder.class,
+            CoreObjectiveBuilder.class,
+            DestroyableObjectiveBuilder.class,
+            ItemRemoveBuilder.class,
+            ToolRepairBuilder.class,
+            DisableDamageBuilder.class,
+            GamerulesBuilder.class,
+            KitBuilder.class,
+            TimeLockBuilder.class,
+            FriendlyFireBuilder.class,
+            HungerBuilder.class,
+            MapDifficultyBuilder.class,
+            HungerBuilder.class,
+            ProjectilesBuilder.class,
+            TntTrackerBuilder.class,
+            VisibilityBuilder.class,
+            MOTDBuilder.class,
+            WorldFreezeBuilder.class,
+            TeamManagerModuleBuilder.class,
+            RespawnModuleBuilder.class,
+            ObserverModuleBuilder.class,
+            KillStreakBuilder.class,
+            TeamPickerBuilder.class,
+            GameScoreboardBuilder.class,
+            TeamModuleBuilder.class,
+            SpawnModuleBuilder.class,
+            DeathMessagesBuilder.class,
+            TntDefuseBuilder.class,
+            ScoreModuleBuilder.class,
+            GameCompleteBuilder.class,
+            RegionModuleBuilder.class,
+            DoubleKillPatchBuilder.class,
+            TaskerModuleBuilder.class,
+            MatchTimerBuilder.class,
+            ItemKeepBuilder.class,
+            ArmorKeepBuilder.class,
+            BroadcastModuleBuilder.class,
+            MatchModuleBuilder.class,
+            TimeNotificationsBuilder.class,
+            HillObjectiveBuilder.class,
+            ChatModuleBuilder.class,
+            MonumentModesBuilder.class,
+            RageBuilder.class,
+            BlitzBuilder.class,
+            MapNotificationBuilder.class,
+            FilterModuleBuilder.class,
+            AppliedRegionBuilder.class,
+            KillRewardBuilder.class,
+            PortalBuilder.class,
+            ClassModuleBuilder.class,
+            TrackerBuilder.class,
+            ScoreboxBuilder.class,
+            BlockdropsBuilder.class,
+            ProximityAlarmBuilder.class,
+            PermissionModuleBuilder.class,
+            ChatChannelModuleBuilder.class,
+            TntBuilder.class,
+            MobModuleBuilder.class,
+            DeathTrackerBuilder.class,
+            SnowflakesBuilder.class,
+            SoundModuleBuilder.class,
+            StartTimerBuilder.class
+    };
+
     @SuppressWarnings("unchecked")
-    public ModuleFactory(Match match) {
-        this.match = match;
-        this.builderClasses = new ArrayList<>();
+    public ModuleFactory() {
         this.builders = new ArrayList<>();
-        registerBuilders();
         for (Class clazz : builderClasses) {
             try {
                 builders.add((ModuleBuilder) clazz.getConstructor().newInstance());
@@ -95,7 +156,7 @@ public class ModuleFactory {
     }
 
     @SuppressWarnings("unchecked")
-    public ModuleCollection<Module> build(ModuleLoadTime time) {
+    public ModuleCollection<Module> build(Match match, ModuleLoadTime time) {
         ModuleCollection results = new ModuleCollection();
         for (ModuleBuilder builder : builders) {
             try {
@@ -118,70 +179,4 @@ public class ModuleFactory {
         return results;
     }
 
-    private void registerBuilders() {
-        builderClasses.add(BuildHeightBuilder.class);
-        builderClasses.add(WoolObjectiveBuilder.class);
-        builderClasses.add(CoreObjectiveBuilder.class);
-        builderClasses.add(DestroyableObjectiveBuilder.class);
-        builderClasses.add(ItemRemoveBuilder.class);
-        builderClasses.add(ToolRepairBuilder.class);
-        builderClasses.add(DisableDamageBuilder.class);
-        builderClasses.add(GamerulesBuilder.class);
-        builderClasses.add(KitBuilder.class);
-        builderClasses.add(TimeLockBuilder.class);
-        builderClasses.add(FriendlyFireBuilder.class);
-        builderClasses.add(HungerBuilder.class);
-        builderClasses.add(MapDifficultyBuilder.class);
-        builderClasses.add(HungerBuilder.class);
-        builderClasses.add(ProjectilesBuilder.class);
-        builderClasses.add(TntTrackerBuilder.class);
-        builderClasses.add(VisibilityBuilder.class);
-        builderClasses.add(MOTDBuilder.class);
-        builderClasses.add(WorldFreezeBuilder.class);
-        builderClasses.add(TeamManagerModuleBuilder.class);
-        builderClasses.add(RespawnModuleBuilder.class);
-        builderClasses.add(ObserverModuleBuilder.class);
-        builderClasses.add(KillStreakBuilder.class);
-        builderClasses.add(TeamPickerBuilder.class);
-        builderClasses.add(GameScoreboardBuilder.class);
-        builderClasses.add(TeamModuleBuilder.class);
-        builderClasses.add(SpawnModuleBuilder.class);
-        builderClasses.add(DeathMessagesBuilder.class);
-        builderClasses.add(TntDefuseBuilder.class);
-        builderClasses.add(ScoreModuleBuilder.class);
-        builderClasses.add(GameCompleteBuilder.class);
-        builderClasses.add(RegionModuleBuilder.class);
-        builderClasses.add(DoubleKillPatchBuilder.class);
-        builderClasses.add(TaskerModuleBuilder.class);
-        builderClasses.add(MatchTimerBuilder.class);
-        builderClasses.add(ItemKeepBuilder.class);
-        builderClasses.add(ArmorKeepBuilder.class);
-        builderClasses.add(BroadcastModuleBuilder.class);
-        builderClasses.add(MatchModuleBuilder.class);
-        builderClasses.add(TimeNotificationsBuilder.class);
-        builderClasses.add(HillObjectiveBuilder.class);
-        builderClasses.add(ChatModuleBuilder.class);
-        builderClasses.add(MonumentModesBuilder.class);
-        builderClasses.add(RageBuilder.class);
-        builderClasses.add(BlitzBuilder.class);
-        builderClasses.add(MapNotificationBuilder.class);
-        builderClasses.add(FilterModuleBuilder.class);
-        builderClasses.add(AppliedRegionBuilder.class);
-        builderClasses.add(KillRewardBuilder.class);
-        builderClasses.add(PortalBuilder.class);
-        builderClasses.add(ClassModuleBuilder.class);
-        builderClasses.add(TrackerBuilder.class);
-        builderClasses.add(ScoreboxBuilder.class);
-        builderClasses.add(BlockdropsBuilder.class);
-        builderClasses.add(ProximityAlarmBuilder.class);
-        builderClasses.add(PermissionModuleBuilder.class);
-        builderClasses.add(ChatChannelModuleBuilder.class);
-        builderClasses.add(TntBuilder.class);
-        builderClasses.add(MobModuleBuilder.class);
-        builderClasses.add(DeathTrackerBuilder.class);
-        builderClasses.add(SnowflakesBuilder.class);
-        builderClasses.add(SoundModuleBuilder.class);
-        builderClasses.add(StartTimerBuilder.class);
-     // builderClasses.add(BloodBuilder.class);
-    }
 }

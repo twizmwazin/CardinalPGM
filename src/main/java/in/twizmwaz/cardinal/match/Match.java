@@ -25,21 +25,17 @@ public class Match {
 
     private static int matchNumber = 1;
 
-    private final GameHandler handler;
     private final UUID uuid;
     private final LoadedMap loadedMap;
-    private final ModuleFactory factory;
     private final ModuleCollection<Module> modules;
 
     private int number;
     private MatchState state;
     private Document document;
 
-    public Match(GameHandler handler, UUID id, LoadedMap map) {
+    public Match(UUID id, LoadedMap map) {
         this.uuid = id;
-        this.handler = handler;
         this.modules = new ModuleCollection<>();
-        this.factory = new ModuleFactory(this);
         try {
             this.document = DomUtils.parse(new File("matches/" + this.uuid.toString() + "/map.xml"));
         } catch (JDOMException | IOException e) {
@@ -53,7 +49,7 @@ public class Match {
 
     public void registerModules() {
         for (ModuleLoadTime time : ModuleLoadTime.getOrdered()) {
-            for (Module module : factory.build(time)) {
+            for (Module module : GameHandler.getGameHandler().getModuleFactory().build(this, time)) {
                 modules.add(module);
                 Cardinal.getInstance().getServer().getPluginManager().registerEvents(module, Cardinal.getInstance());
             }
