@@ -126,7 +126,7 @@ public class WhitelistCommands {
     public static void add(final CommandContext args, final CommandSender sender) throws CommandException {
         OfflinePlayer player = matchSinglePlayer(sender, args.getString(0));
         player.setWhitelisted(true);
-        sender.sendMessage(ChatColor.GOLD + player.getName() + ChatColor.GREEN + " has been added to the whitelist.");
+        sender.sendMessage(ChatColor.AQUA + player.getName() + ChatColor.WHITE + " added to whitelist");
     }
 
     @Command(
@@ -139,7 +139,7 @@ public class WhitelistCommands {
     public static void remove(final CommandContext args, final CommandSender sender) throws CommandException {
         OfflinePlayer player = matchSinglePlayer(sender, args.getString(0));
         player.setWhitelisted(false);
-        sender.sendMessage(ChatColor.GOLD + player.getName() + ChatColor.GREEN +" has been removed from the whitelist.");
+        sender.sendMessage(ChatColor.AQUA + player.getName() + ChatColor.WHITE +" removed from whitelist");
     }
 
     @Command(
@@ -153,7 +153,7 @@ public class WhitelistCommands {
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.setWhitelisted(true);
         }
-        sender.sendMessage(ChatColor.GREEN + "Added " + ChatColor.GOLD + Bukkit.getOnlinePlayers().size() + ChatColor.GREEN + " player(s) to the whitelist.");
+        sender.sendMessage(ChatColor.WHITE + Bukkit.getOnlinePlayers().size() + " players added to whitelist");
     }
 
     @Command(
@@ -198,7 +198,7 @@ public class WhitelistCommands {
             player.setWhitelisted(false);
             count ++;
         }
-        sender.sendMessage(ChatColor.GREEN + "Removed " + ChatColor.GOLD + count + ChatColor.GREEN + " player(s) from the whitelist.");
+        sender.sendMessage(ChatColor.WHITE + count + " players remove from whitelist");
     }
 
     @Command(
@@ -211,7 +211,7 @@ public class WhitelistCommands {
     public static void kick(final CommandContext args, final CommandSender sender) throws CommandException {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!player.isWhitelisted() && !player.isOp()) {
-                player.kickPlayer(ChatColor.RED + "All players who were not on the whitelist were kicked.");
+                player.kickPlayer(ChatColor.WHITE + "Kicked" + count + "players who were not whitelisted");
             }
         }
     }
