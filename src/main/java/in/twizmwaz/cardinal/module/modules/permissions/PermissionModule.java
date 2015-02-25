@@ -75,8 +75,10 @@ public class PermissionModule implements Module {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerLeave(PlayerQuitEvent event) {
-        event.getPlayer().removeAttachment(attachmentMap.get(event.getPlayer()));
-        attachmentMap.remove(event.getPlayer());
+        if (attachmentMap.get(event.getPlayer()) != null) {
+            event.getPlayer().removeAttachment(attachmentMap.get(event.getPlayer()));
+            attachmentMap.remove(event.getPlayer());
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
