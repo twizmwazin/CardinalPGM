@@ -176,7 +176,7 @@ public class ObserverModule implements Module {
         if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             if (event.getRightClicked() instanceof Player) {
                 Player viewing = (Player) event.getRightClicked();
-                Inventory toView = Bukkit.createInventory(null, 45, TeamUtils.getTeamColorByPlayer(viewing) + (event.getRightClicked()).getName());
+                Inventory toView = Bukkit.createInventory(null, 45, TeamUtils.getTeamColorByPlayer(viewing) + ((Player) event.getRightClicked()).getName());
                 toView.setItem(0, viewing.getInventory().getHelmet());
                 toView.setItem(1, viewing.getInventory().getChestplate());
                 toView.setItem(2, viewing.getInventory().getLeggings());

@@ -75,8 +75,10 @@ public class PermissionModule implements Module {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerLeave(PlayerQuitEvent event) {
-        event.getPlayer().removeAttachment(attachmentMap.get(event.getPlayer()));
-        attachmentMap.remove(event.getPlayer());
+        if (attachmentMap.get(event.getPlayer()) != null) {
+            event.getPlayer().removeAttachment(attachmentMap.get(event.getPlayer()));
+            attachmentMap.remove(event.getPlayer());
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -140,6 +142,14 @@ public class PermissionModule implements Module {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin2(PlayerJoinEvent event) {
         Bukkit.getServer().getPluginManager().callEvent(new PlayerNameUpdateEvent(event.getPlayer()));
+    }
+
+    public void disablePermission(Player player, String permission) {
+        attachmentMap.get(player).unsetPermission(permission);
+    }
+
+    public void enablePermission(Player player, String permission) {
+        attachmentMap.get(player).setPermission(permission, true);
     }
     
 }

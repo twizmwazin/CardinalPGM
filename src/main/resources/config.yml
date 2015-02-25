@@ -30,6 +30,7 @@ permissions:
     - cardinal.punish.warn
     - cardinal.punish.kick
     - cardinal.punish.ban
+    - cardinal.punish.mute
     players:
 settings:
 - Blood
