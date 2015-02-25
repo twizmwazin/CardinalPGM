@@ -7,6 +7,7 @@ import com.sk89q.minecraft.util.commands.CommandPermissions;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.chatChannels.AdminChannel;
 import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannelModule;
+import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -72,5 +73,33 @@ public class PunishmentCommands {
             Bukkit.broadcastMessage((sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " banned " + TeamUtils.getTeamColorByPlayer(banned) + banned.getName() + ChatColor.GOLD + " for " + ChatColor.DARK_AQUA + reason);
         }
         banned.setBanned(true);
+    }
+
+    @Command(aliases = {"mute"}, usage = "<player>", desc = "Prevents a player from talking", min = 1, max = 1)
+    @CommandPermissions("cardinal.punish.mute")
+    public static void mute(CommandContext cmd, CommandSender sender) throws CommandException {
+        Player player = Bukkit.getPlayer(cmd.getString(0));
+        if (player != null) {
+            if (!(PermissionModule.isMod(player.getUniqueId()) || player.isOp())) {
+                sender.sendMessage(ChatColor.RED + "You muted " + TeamUtils.getTeamColorByPlayer(player) + player.getDisplayName());
+                player.sendMessage(ChatColor.RED + "You were muted by " + (sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console"));
+                GameHandler.getGameHandler().getMatch().getModules().getModules(PermissionModule.class).get(0).disablePermission(Bukkit.getPlayer(cmd.getString(0)), "cardinal.chat.team");
+                GameHandler.getGameHandler().getMatch().getModules().getModules(PermissionModule.class).get(0).disablePermission(Bukkit.getPlayer(cmd.getString(0)), "cardinal.chat.global");
+            } else throw new CommandException("This player is not affected by the mute command");
+        } else throw new CommandException("Player must be online");
+    }
+
+    @Command(aliases = {"unmute"}, usage = "<player>", desc = "Allow a player to talk after being muted", min = 1, max = 1)
+    @CommandPermissions("cardinal.punish.mute")
+    public static void unmute(CommandContext cmd, CommandSender sender) throws CommandException {
+        Player player = Bukkit.getPlayer(cmd.getString(0));
+        if (player != null) {
+            if (!(PermissionModule.isMod(player.getUniqueId()) || player.isOp())) {
+                sender.sendMessage(ChatColor.GREEN + "You unmuted " + TeamUtils.getTeamColorByPlayer(player) + player.getDisplayName());
+                player.sendMessage(ChatColor.GREEN + "You were unmuted by " + (sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console"));
+                GameHandler.getGameHandler().getMatch().getModules().getModules(PermissionModule.class).get(0).enablePermission(Bukkit.getPlayer(cmd.getString(0)), "cardinal.chat.team");
+                GameHandler.getGameHandler().getMatch().getModules().getModules(PermissionModule.class).get(0).enablePermission(Bukkit.getPlayer(cmd.getString(0)), "cardinal.chat.global");
+            } else throw new CommandException("This player is not affected by the mute command");
+        } else throw new CommandException("Player must be online");
     }
 }

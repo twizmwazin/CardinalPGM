@@ -143,5 +143,13 @@ public class PermissionModule implements Module {
     public void onPlayerJoin2(PlayerJoinEvent event) {
         Bukkit.getServer().getPluginManager().callEvent(new PlayerNameUpdateEvent(event.getPlayer()));
     }
+
+    public void disablePermission(Player player, String permission) {
+        attachmentMap.get(player).unsetPermission(permission);
+    }
+
+    public void enablePermission(Player player, String permission) {
+        attachmentMap.get(player).setPermission(permission, true);
+    }
     
 }

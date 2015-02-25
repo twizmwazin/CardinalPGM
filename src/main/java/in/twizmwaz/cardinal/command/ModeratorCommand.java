@@ -59,7 +59,7 @@ public class ModeratorCommand {
                         Bukkit.getServer().getPluginManager().callEvent(new PlayerNameUpdateEvent((Player) moderator));
                     }
                 } else {
-                    throw new CommandException("The player specified is already not a moderator!");
+                    throw new CommandException("The player specified is not a moderator!");
                 }
             } else {
                 throw new CommandException("The player specified is already op!");
