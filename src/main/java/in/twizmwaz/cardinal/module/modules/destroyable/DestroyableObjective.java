@@ -49,7 +49,7 @@ public class DestroyableObjective implements GameObjective {
 
     private Set<UUID> playersTouched;
     private double size;
-    private HashMap<UUID, Integer> playerDestroyed;
+    private HashMap<UUID, Integer> playersCompleted;
     private List<Block> monument;
 
     private double complete;
@@ -75,7 +75,7 @@ public class DestroyableObjective implements GameObjective {
         this.proximity = Double.POSITIVE_INFINITY;
 
         this.playersTouched = new HashSet<>();
-        this.playerDestroyed = new HashMap<>();
+        this.playersCompleted = new HashMap<>();
 
         this.monument = this.getBlocks();
         this.size = this.getBlocks().size();
@@ -139,7 +139,7 @@ public class DestroyableObjective implements GameObjective {
                     }
                     boolean oldState = this.isTouched();
                     this.complete++;
-                    this.playerDestroyed.put(event.getPlayer().getUniqueId(), (playerDestroyed.containsKey(event.getPlayer().getUniqueId()) ? playerDestroyed.get(event.getPlayer().getUniqueId()) + 1 : 1));
+                    this.playersCompleted.put(event.getPlayer().getUniqueId(), (playersCompleted.containsKey(event.getPlayer().getUniqueId()) ? playersCompleted.get(event.getPlayer().getUniqueId()) + 1 : 1));
                     if ((this.complete / size) >= this.required && !this.completed) {
                         this.completed = true;
                         event.setCancelled(false);
@@ -209,7 +209,7 @@ public class DestroyableObjective implements GameObjective {
                 if (blockDestroyed) {
                     this.complete++;
                     if (eventPlayer != null)
-                        this.playerDestroyed.put(eventPlayer.getUniqueId(), (playerDestroyed.containsKey(eventPlayer.getUniqueId()) ? playerDestroyed.get(eventPlayer.getUniqueId()) + 1 : 1));
+                        this.playersCompleted.put(eventPlayer.getUniqueId(), (playersCompleted.containsKey(eventPlayer.getUniqueId()) ? playersCompleted.get(eventPlayer.getUniqueId()) + 1 : 1));
                     if ((this.complete / size) >= this.required && !this.completed) {
                         this.completed = true;
                         if (this.show) {
@@ -299,15 +299,15 @@ public class DestroyableObjective implements GameObjective {
     public String getWhoDestroyed(String locale) {
         String whoDestroyed = "";
         List<String> toCombine = new ArrayList<>();
-        for (UUID player : MiscUtils.getSortedHashMapKeyset(playerDestroyed)) {
-            if (getPercentFromAmount(playerDestroyed.get(player)) > (100 / 3)) {
-                toCombine.add(TeamUtils.getTeamColorByPlayer(Bukkit.getPlayer(player)) + Bukkit.getPlayer(player).getName() + ChatColor.GRAY + " (" + getPercentFromAmount(playerDestroyed.get(player)) + "%)");
+        for (UUID player : MiscUtils.getSortedHashMapKeyset(playersCompleted)) {
+            if (getPercentFromAmount(playersCompleted.get(player)) > (100 / 3)) {
+                toCombine.add(TeamUtils.getTeamColorByPlayer(Bukkit.getPlayer(player)) + Bukkit.getPlayer(player).getName() + ChatColor.GRAY + " (" + getPercentFromAmount(playersCompleted.get(player)) + "%)");
             }
         }
         if (toCombine.size() == 0) {
             toCombine.add(ChatColor.DARK_AQUA + new LocalizedChatMessage(ChatConstant.MISC_ENEMY).getMessage(locale));
         }
-        if (toCombine.size() < playerDestroyed.keySet().size()) {
+        if (toCombine.size() < playersCompleted.keySet().size()) {
             toCombine.add(ChatColor.DARK_AQUA + new LocalizedChatMessage(ChatConstant.MISC_OTHERS).getMessage(locale));
         }
         whoDestroyed = toCombine.get(0);

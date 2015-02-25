@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.module.modules.snowflakes;
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalDeathEvent;
+import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.SnowflakeChangeEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.util.NumUtils;
@@ -17,7 +18,7 @@ import org.bukkit.event.HandlerList;
 public class Snowflakes implements Module {
 
     public enum ChangeReason {
-        PLAYER_KILL(), WOOL_TOUCH(), WOOL_PLACE()
+        PLAYER_KILL(), WOOL_TOUCH(), WOOL_PLACE(), CORE_LEAK(), TEAM_WIN(), TEAM_LOYAL()
     }
 
     public Snowflakes() {
@@ -42,6 +43,17 @@ public class Snowflakes implements Module {
     }
 
     @EventHandler
+    public void onMatchEnd(MatchEndEvent event) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (TeamUtils.getTeamByPlayer(player) != null && !TeamUtils.getTeamByPlayer(player).isObserver() && event.getTeam() == TeamUtils.getTeamByPlayer(player)) {
+                Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.TEAM_WIN, 15, 1.0, TeamUtils.getTeamByPlayer(player).getCompleteName()));
+            } else if (TeamUtils.getTeamByPlayer(player) != null && !TeamUtils.getTeamByPlayer(player).isObserver() && event.getTeam() != TeamUtils.getTeamByPlayer(player)) {
+                Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.TEAM_LOYAL, 5, 1.0, TeamUtils.getTeamByPlayer(player).getCompleteName()));
+            }
+        }
+    }
+
+    @EventHandler
     public void onSnowflakeChange(SnowflakeChangeEvent event) {
         String reason;
         if (event.getChangeReason().equals(ChangeReason.PLAYER_KILL)) {
@@ -50,6 +62,12 @@ public class Snowflakes implements Module {
             reason = "picked up " + event.get(0);
         } else if (event.getChangeReason().equals(ChangeReason.WOOL_PLACE)) {
             reason = "placed " + event.get(0);
+        } else if (event.getChangeReason().equals(ChangeReason.CORE_LEAK)) {
+            reason = "you broke a piece of " + event.get(0);
+        } else if (event.getChangeReason().equals(ChangeReason.TEAM_WIN)) {
+            reason = "your team (" + event.get(0) + ChatColor.GRAY + ") won";
+        } else if (event.getChangeReason().equals(ChangeReason.TEAM_LOYAL)) {
+            reason = "you were loyal to your team (" + event.get(0) + ChatColor.GRAY + ")";
         } else {
             reason = "unknown reason";
         }

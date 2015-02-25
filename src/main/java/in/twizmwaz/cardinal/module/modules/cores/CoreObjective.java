@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
+import in.twizmwaz.cardinal.event.SnowflakeChangeEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
@@ -13,11 +14,13 @@ import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
 import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
+import in.twizmwaz.cardinal.module.modules.snowflakes.Snowflakes;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.FireworkUtil;
 import in.twizmwaz.cardinal.util.TeamUtils;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -50,6 +53,7 @@ public class CoreObjective implements GameObjective {
     private double proximity;
 
     private Set<UUID> playersTouched;
+    private Set<UUID> playersCompleted;
     private Material currentType;
     private int damageValue;
     private Set<Block> lava;
@@ -73,6 +77,7 @@ public class CoreObjective implements GameObjective {
         this.proximity = Double.POSITIVE_INFINITY;
 
         this.playersTouched = new HashSet<>();
+        this.playersCompleted = new HashSet<>();
         this.currentType = type;
 
         this.lava = new HashSet<>();
@@ -160,6 +165,7 @@ public class CoreObjective implements GameObjective {
                             touchMessage = true;
                         }
                     }
+                    if (!playersCompleted.contains(event.getPlayer().getUniqueId())) playersCompleted.add(event.getPlayer().getUniqueId());
                     boolean oldState = this.touched;
                     this.touched = true;
                     ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), !oldState, touchMessage);
@@ -200,7 +206,6 @@ public class CoreObjective implements GameObjective {
                         if (TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)) == team) {
                             event.blockList().remove(block);
                         } else {
-
                             if (!playersTouched.contains(player)) {
                                 playersTouched.add(player);
                                 TeamModule teamModule = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
@@ -210,6 +215,7 @@ public class CoreObjective implements GameObjective {
                                     touchMessage = true;
                                 }
                             }
+                            if (!playersCompleted.contains(Bukkit.getPlayer(player).getUniqueId())) playersCompleted.add(Bukkit.getPlayer(player).getUniqueId());
                             this.touched = true;
                             blownUp = true;
                             eventPlayer = Bukkit.getPlayer(player);
@@ -327,5 +333,14 @@ public class CoreObjective implements GameObjective {
 
     public double getProximity() {
         return proximity;
+    }
+
+    @EventHandler
+    public void onCoreLeak(ObjectiveCompleteEvent event) {
+        if (event.getObjective().equals(this) && event.getObjective().showOnScoreboard()) {
+            for (UUID player : playersCompleted) {
+                Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(Bukkit.getPlayer(player), Snowflakes.ChangeReason.CORE_LEAK, 15, 1.0, ChatColor.RED + name));
+            }
+        }
     }
 }
