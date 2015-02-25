@@ -14,8 +14,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class PunishmentCommands {
-    @Command(aliases = {"kick", "k"}, desc = "Kick a player", usage = "<player> [message]", min = 2)
-    @CommandPermissions({"cardinal.punish.kick"})
+    @Command(aliases = {"kick", "k"}, desc = "Kick a player", usage = "<player> <reason>", min = 2)
+    @CommandPermissions("cardinal.punish.kick")
     public static void kick(CommandContext cmd, CommandSender sender)
             throws CommandException {
         Player kicked = Bukkit.getPlayer(cmd.getString(0));
@@ -32,8 +32,8 @@ public class PunishmentCommands {
         }
     }
 
-    @Command(aliases = {"warn", "w"}, usage = "<player> [reason]", desc = "Warn a player", min = 2)
-    @CommandPermissions({"cardinal.punish.warn"})
+    @Command(aliases = {"warn", "w"}, usage = "<player> <reason>", desc = "Warn a player", min = 2)
+    @CommandPermissions("cardinal.punish.warn")
     public static void warn(CommandContext cmd, CommandSender sender)
             throws CommandException {
         Player warned = Bukkit.getPlayer(cmd.getString(0));
@@ -57,7 +57,7 @@ public class PunishmentCommands {
     }
 
     @Command(aliases = {"ban"}, usage = "<player> [reason]", desc = "Ban a player from the server", min = 2)
-    @CommandPermissions({"cardinal.punish.ban"})
+    @CommandPermissions("cardinal.punish.ban")
     public static void ban(CommandContext cmd, CommandSender sender)
             throws CommandException {
         Player banned = Bukkit.getPlayer(cmd.getString(0));
