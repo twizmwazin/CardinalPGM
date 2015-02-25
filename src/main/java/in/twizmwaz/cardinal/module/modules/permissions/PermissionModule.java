@@ -4,7 +4,9 @@ import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
+import in.twizmwaz.cardinal.event.PlayerNameUpdateEvent;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.MojangUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
@@ -25,19 +27,11 @@ public class PermissionModule implements Module {
     private final Plugin plugin;
     private final Map<Player, PermissionAttachment> attachmentMap;
 
-    private final String opFlair = ChatColor.GOLD + "❖";
-    private final String modFlair = ChatColor.RED + "❖";
-    private final String devFlair = ChatColor.DARK_PURPLE + "❖";
-
-    private List<UUID> devs = new ArrayList<>();
+    private List<UUID> devs = Arrays.asList(UUID.fromString("670223bb-7560-48c8-8f01-2f463549b917") /* twiz_mwazin */, UUID.fromString("33a703d0-3237-4337-9ddd-3dbf33b3d8a6") /* iEli2tyree011 */, UUID.fromString("208c84af-790a-41da-bf7e-eb184f17bdf8") /* Elly */);
 
     public PermissionModule(Plugin plugin) {
         this.plugin = plugin;
         this.attachmentMap = new HashMap<>();
-
-        devs.add(UUID.fromString("670223bb-7560-48c8-8f01-2f463549b917")); // twiz_mwazin
-        devs.add(UUID.fromString("33a703d0-3237-4337-9ddd-3dbf33b3d8a6")); // iEli2tyree011
-        devs.add(UUID.fromString("208c84af-790a-41da-bf7e-eb184f17bdf8")); // Elly
     }
 
     @Override
@@ -71,7 +65,6 @@ public class PermissionModule implements Module {
                 }
             }
         }
-
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -94,22 +87,6 @@ public class PermissionModule implements Module {
 
     @EventHandler
     public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
-        if (event.getPlayer().isOp()) {
-            event.getPlayer().setDisplayName(opFlair + event.getNewTeam().getColor() + event.getPlayer().getName());
-        }
-        if (isMod(event.getPlayer().getUniqueId())) {
-            event.getPlayer().setDisplayName(modFlair + event.getNewTeam().getColor() + event.getPlayer().getName());
-        }
-        if (devs.contains(event.getPlayer().getUniqueId())) {
-            if (event.getPlayer().isOp()) {
-                event.getPlayer().setDisplayName(devFlair + opFlair + event.getNewTeam().getColor() + event.getPlayer().getName());
-            } else if (isMod(event.getPlayer().getUniqueId())) {
-                event.getPlayer().setDisplayName(devFlair + modFlair + event.getNewTeam().getColor() + event.getPlayer().getName());
-            } else {
-                event.getPlayer().setDisplayName(devFlair + event.getNewTeam().getColor() + event.getPlayer().getName());
-            }
-        }
-
         if (Cardinal.getInstance().getConfig().getBoolean("worldEditPermissions"))
         if (event.getNewTeam().isObserver()) {
             attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.jumpto.tool", true);
@@ -131,12 +108,38 @@ public class PermissionModule implements Module {
     }
 
     public static boolean isMod(UUID player) {
-        for (String uuid : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.players")) {
+        for (String uuid : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.moderator.players")) {
             if (uuid.equals(player.toString())) {
                 return true;
             }
         }
         return false;
+    }
+
+    @EventHandler
+    public void onPlayerNameUpdate(PlayerNameUpdateEvent event) {
+        String star = "\u2756";
+        String stars = "";
+        if (event.getPlayer().isOp()) {
+            stars += ChatColor.GOLD + star;
+        } else if (isMod(event.getPlayer().getUniqueId())) {
+            stars += ChatColor.RED + star;
+        }
+        if (devs.contains(event.getPlayer().getUniqueId())) {
+            stars += ChatColor.DARK_PURPLE + star;
+        }
+        event.getPlayer().setDisplayName(stars + event.getTeam().getColor() + event.getPlayer().getName());
+        event.getPlayer().setPlayerListName(stars + event.getTeam().getColor() + event.getPlayer().getName());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerChangeTeam2(PlayerChangeTeamEvent event) {
+        Bukkit.getServer().getPluginManager().callEvent(new PlayerNameUpdateEvent(event.getPlayer(), event.getNewTeam()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerJoin2(PlayerJoinEvent event) {
+        Bukkit.getServer().getPluginManager().callEvent(new PlayerNameUpdateEvent(event.getPlayer()));
     }
     
 }
