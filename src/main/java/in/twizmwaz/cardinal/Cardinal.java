@@ -33,7 +33,7 @@ public class Cardinal extends JavaPlugin {
     private static LocaleHandler localeHandler;
     private CommandsManager<CommandSender> commands;
     private static Database database;
-    private DemographicsHandler demographicsHandler;
+    //private DemographicsHandler demographicsHandler;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -112,7 +112,7 @@ public class Cardinal extends JavaPlugin {
         } else {
             database = Database.newInstance(databaseFile);
         }
-        this.demographicsHandler = new DemographicsHandler();
+        //this.demographicsHandler = new DemographicsHandler(); //Disabled until issues can be resolved
         FileConfiguration config = getConfig();
         config.addDefault("deleteMatches", true);
         config.options().copyDefaults(true);
@@ -160,7 +160,7 @@ public class Cardinal extends JavaPlugin {
     @Override
     public void onDisable() {
         database.save(new File(getDataFolder().getAbsolutePath() + "/database.xml"));
-        demographicsHandler.saveAndReport();
+        //demographicsHandler.saveAndReport();
     }
 
     public GameHandler getGameHandler() {
