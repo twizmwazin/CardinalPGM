@@ -7,7 +7,6 @@ import com.sk89q.minecraft.util.commands.CommandPermissions;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.chatChannels.AdminChannel;
 import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannelModule;
-import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -27,8 +26,8 @@ public class PunishmentCommands {
                 reason = reason + cmd.getString(i) + " ";
             }
             reason = reason.trim();
-            Bukkit.broadcastMessage((sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " Kicked " + TeamUtils.getTeamByPlayer(kicked).getColor() + kicked.getDisplayName() + ChatColor.GOLD + " for " + ChatColor.DARK_AQUA + reason);
-            kicked.kickPlayer(ChatColor.DARK_PURPLE + "You have been " + ChatColor.YELLOW + "kicked" + ChatColor.DARK_PURPLE + "for \n" + ChatColor.YELLOW + ChatColor.BOLD + reason + "\n " + ChatColor.DARK_PURPLE + "by " + ((sender instanceof Player) ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console"));
+            Bukkit.broadcastMessage((sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.GOLD + "*" + ChatColor.AQUA + "Console") + ChatColor.GOLD + " \u00BB Kicked " + ChatColor.DARK_AQUA + TeamUtils.getTeamByPlayer(kicked).getColor() + kicked.getDisplayName() + ChatColor.GOLD + " \u00BB " + ChatColor.GOLD + reason);
+            kicked.kickPlayer(ChatColor.RED + "Kicked " + ChatColor.GOLD + "\u00BB " + ChatColor.AQUA  + reason + "\n " + " \n " + ((sender instanceof Player) ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.GOLD + "*" + ChatColor.AQUA + "Console") + ChatColor.RED + " Kicked you.");
         } else {
             throw new CommandException("Player must be online!");
         }
@@ -45,12 +44,14 @@ public class PunishmentCommands {
             }
             reason = reason.trim();
             ChatChannelModule channel = GameHandler.getGameHandler().getMatch().getModules().getModule(AdminChannel.class);
-            channel.sendMessage("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + ((sender instanceof Player) ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " Kicked " + TeamUtils.getTeamColorByPlayer(warned) + warned.getDisplayName() + ChatColor.GOLD + " for " + ChatColor.DARK_AQUA + reason);
-            warned.sendMessage(ChatColor.RED + "" + ChatColor.MAGIC + "-------" + ChatColor.YELLOW + "WARNING" + ChatColor.RED + ChatColor.MAGIC + "-------");
-            warned.sendMessage(ChatColor.GREEN + reason);
-            warned.sendMessage(ChatColor.YELLOW + reason);
-            warned.sendMessage(ChatColor.RED + reason);
-            warned.sendMessage(ChatColor.RED + "" + ChatColor.MAGIC + "-------" + ChatColor.YELLOW + "WARNING" + ChatColor.RED + ChatColor.MAGIC + "-------");
+            channel.sendMessage("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + ((sender instanceof Player) ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*" + ChatColor.AQUA + "Console") + ChatColor.GOLD + " \u00BB Warned " + TeamUtils.getTeamColorByPlayer(warned) + warned.getDisplayName() + ChatColor.GOLD + " \u00BB " + ChatColor.GOLD + reason);
+            warned.sendMessage(ChatColor.DARK_RED + "- - - - - - -" + ChatColor.RED + " WARNING " + ChatColor.DARK_RED + "- - - - - - -");
+            warned.sendMessage(ChatColor.WHITE + "" + ChatColor.MAGIC + "- - - " + ChatColor.GOLD + reason + ChatColor.WHITE + "" + ChatColor.MAGIC + " - - - ");
+            warned.sendMessage("");
+            warned.sendMessage(ChatColor.WHITE + "" + ChatColor.MAGIC + "- - - " + ChatColor.GREEN + reason + ChatColor.WHITE + "" + ChatColor.MAGIC + " - - - ");
+            warned.sendMessage("");
+            warned.sendMessage(ChatColor.WHITE + "" + ChatColor.MAGIC + "- - - " + ChatColor.YELLOW + reason + ChatColor.WHITE + "" + ChatColor.MAGIC + " - - - ");
+            warned.sendMessage(ChatColor.DARK_RED + "- - - - - - -" + ChatColor.RED + " WARNING " + ChatColor.DARK_RED + "- - - - - - -");
         } else {
             throw new CommandException("Player must be online!");
         }
@@ -67,10 +68,10 @@ public class PunishmentCommands {
         reason = reason.trim();
         if (banned.isOnline()) {
             Player onlineBanned = (Player) banned;
-            onlineBanned.kickPlayer(ChatColor.DARK_PURPLE + "You have been " + ChatColor.RED + "banned" + ChatColor.DARK_PURPLE + "for \n" + ChatColor.YELLOW + ChatColor.BOLD + reason + "\n " + ChatColor.DARK_PURPLE + "by " + ((sender instanceof Player) ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console"));
-            Bukkit.broadcastMessage((sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " banned " + TeamUtils.getTeamColorByPlayer(banned) + onlineBanned.getDisplayName() + ChatColor.GOLD + " for " + ChatColor.DARK_AQUA + reason);
+            onlineBanned.kickPlayer(ChatColor.RED + "Banned " + ChatColor.GOLD + "\u00BB " + ChatColor.AQUA + reason + "\n " + "\n" + ((sender instanceof Player) ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.GOLD + "*" + ChatColor.AQUA + "Console") + ChatColor.RED + " Banned you.");
+            Bukkit.broadcastMessage((sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.GOLD + "*" + ChatColor.AQUA + "Console") + ChatColor.GOLD + " \u00BB banned " + TeamUtils.getTeamColorByPlayer(banned) + onlineBanned.getDisplayName() + ChatColor.GOLD + " \u00BB " + ChatColor.GOLD + reason);
         } else {
-            Bukkit.broadcastMessage((sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " banned " + TeamUtils.getTeamColorByPlayer(banned) + banned.getName() + ChatColor.GOLD + " for " + ChatColor.DARK_AQUA + reason);
+            Bukkit.broadcastMessage((sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.GOLD + "*" + ChatColor.AQUA + "Console") + ChatColor.GOLD + " \u00BB banned " + TeamUtils.getTeamColorByPlayer(banned) + banned.getName() + ChatColor.GOLD + " \u00BB " + ChatColor.GOLD + reason);
         }
         banned.setBanned(true);
     }
