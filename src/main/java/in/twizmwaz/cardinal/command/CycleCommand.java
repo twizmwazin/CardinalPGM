@@ -45,7 +45,7 @@ public class CycleCommand {
     @Command(aliases = {"setnext", "sn"}, desc = "Sets the next map.", usage = "[map]", min = 1)
     @CommandPermissions("cardinal.match.setnext")
     public static void setNext(final CommandContext cmd, CommandSender sender) throws CommandException {
-        String input = cmd.getString(0);
+        String input = cmd.getJoinedStrings(0).replaceAll(" ", "");
         LoadedMap nextMap = null;
         for (LoadedMap loadedMap : GameHandler.getGameHandler().getRotation().getLoaded()) {
             if (loadedMap.getName().toLowerCase().replaceAll(" ", "").equalsIgnoreCase(input.toLowerCase())) {
