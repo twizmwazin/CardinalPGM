@@ -27,7 +27,7 @@ public class PunishmentCommands {
             }
             reason = reason.trim();
             Bukkit.broadcastMessage((sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.GOLD + "*" + ChatColor.AQUA + "Console") + ChatColor.GOLD + " >> Kicked " + TeamUtils.getTeamByPlayer(kicked).getColor() + kicked.getDisplayName() + ChatColor.GOLD + " >> " + ChatColor.GOLD + reason);
-            kicked.kickPlayer(ChatColor.RED + "Kicked " + ChatColor.GOLD + ">> " + ChatColorAQUA  + reason + "\n " + ChatColor.DARK_PURPLE + "by " + ((sender instanceof Player) ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.GOLD + "*" + ChatColor.AQUA + "Console"));
+            kicked.kickPlayer(ChatColor.RED + "Kicked " + ChatColor.GOLD + ">> " + ChatColor.AQUA  + reason + "\n " + ChatColor.DARK_PURPLE + "by " + ((sender instanceof Player) ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.GOLD + "*" + ChatColor.AQUA + "Console"));
         } else {
             throw new CommandException("Player must be online!");
         }
