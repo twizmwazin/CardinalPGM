@@ -22,7 +22,7 @@ public class VoidFilter extends FilterModule {
             if (object instanceof Block) {
                 Block check = new Location(GameHandler.getGameHandler().getMatchWorld(),
                         ((Block) object).getX(), 0, ((Block) object).getZ()).getBlock();
-                return check.getType() == Material.AIR ? ALLOW : DENY;
+                return check.getType() == Material.AIR && !check.equals(object) ? ALLOW : DENY;
             }
         }
         return ABSTAIN;
