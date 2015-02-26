@@ -6,6 +6,8 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
+import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ExperienceOrb;
@@ -14,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -68,6 +71,29 @@ public class Blockdrops implements Module {
                     }
                     event.setCancelled(true);
                     block.setType(replace);
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onExplosion(EntityExplodeEvent event) {
+        if (!event.isCancelled()) {
+            Player player = Bukkit.getPlayer(TntTracker.getWhoPlaced(event.getEntity()));
+            for (Block block : event.blockList()) {
+                if (filter == null || filter.evaluate(player, block).equals(FilterState.ALLOW)) {
+                    if (region == null || region.contains(new BlockRegion(null, block.getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
+                        if (block.getDrops() != null && block.getDrops().size() > 0) {
+                            for (ItemStack drop : this.drops) {
+                                GameHandler.getGameHandler().getMatchWorld().dropItemNaturally(block.getLocation(), drop);
+                            }
+                            if (this.experience != 0) {
+                                ExperienceOrb xp = GameHandler.getGameHandler().getMatchWorld().spawn(block.getLocation(), ExperienceOrb.class);
+                                xp.setExperience(this.experience);
+                            }
+                        }
+                        block.setType(replace);
+                    }
                 }
             }
         }
