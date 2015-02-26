@@ -59,12 +59,12 @@ public class ParseUtils {
             if (potions.contains(";")) {
                 for (String potion : potions.split(";")) {
                     String[] parse = potion.split(":");
-                    PotionEffect effect = new PotionEffect(PotionEffectType.getByName(parse[0].toUpperCase().replaceAll(" ", "_")), NumUtils.parseInt(parse[1]) * 20, NumUtils.parseInt(parse[2]) - 1);
+                    PotionEffect effect = new PotionEffect(PotionEffectType.getByName(parse[0].toUpperCase().replaceAll(" ", "_")), NumUtils.parseInt(parse[1]), NumUtils.parseInt(parse[2]));
                     ((PotionMeta) meta).addCustomEffect(effect, true);
                 }
             } else {
                 String[] parse = potions.split(":");
-                PotionEffect effect = new PotionEffect(PotionEffectType.getByName(parse[0].toUpperCase().replaceAll(" ", "_")), NumUtils.parseInt(parse[1]) * 20, NumUtils.parseInt(parse[2]) - 1);
+                PotionEffect effect = new PotionEffect(PotionEffectType.getByName(parse[0].toUpperCase().replaceAll(" ", "_")), NumUtils.parseInt(parse[1]), NumUtils.parseInt(parse[2]));
                 ((PotionMeta) meta).addCustomEffect(effect, true);
             }
         }
