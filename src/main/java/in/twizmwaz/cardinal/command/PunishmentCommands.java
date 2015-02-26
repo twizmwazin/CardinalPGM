@@ -7,6 +7,7 @@ import com.sk89q.minecraft.util.commands.CommandPermissions;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.chatChannels.AdminChannel;
 import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannelModule;
+import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
