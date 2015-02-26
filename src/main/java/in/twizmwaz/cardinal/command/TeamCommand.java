@@ -9,6 +9,7 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -35,8 +36,10 @@ public class TeamCommand {
                         msg = msg.trim();
                         if (TeamUtils.getTeamByName(msg) != null) {
                             TeamModule team = TeamUtils.getTeamByName(msg);
-                            team.add(Bukkit.getPlayer(cmd.getString(1)), true, false);
-                            sender.sendMessage(team.getColor() + Bukkit.getPlayer(cmd.getString(1)).getName() + ChatColor.GRAY + " forced to " + team.getCompleteName());
+                            if (!team.contains(Bukkit.getPlayer(cmd.getString(1)))) {
+                                team.add(Bukkit.getPlayer(cmd.getString(1)), true, false);
+                                sender.sendMessage(team.getColor() + Bukkit.getPlayer(cmd.getString(1)).getName() + ChatColor.GRAY + " forced to " + team.getCompleteName());
+                            } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_JOINED, TeamUtils.getTeamByPlayer((Player) sender).getCompleteName() + ChatColor.RED).getMessage(((Player) sender).getLocale()));
                         } else {
                             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAM_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
                         }

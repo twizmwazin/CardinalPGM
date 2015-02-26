@@ -25,6 +25,9 @@ public class JoinCommand {
                 ChatUtils.sendWarningMessage((Player) sender, ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_MATCH_OVER).getMessage(((Player) sender).getLocale()));
                 return;
             }
+            if (cmd.argsLength() == 0 && !TeamUtils.getTeamByPlayer((Player) sender).isObserver()) {
+                throw new CommandException(ChatUtils.getWarningMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_JOINED, TeamUtils.getTeamByPlayer((Player) sender).getCompleteName() + ChatColor.RED).getMessage(((Player) sender).getLocale())));
+            }
             try {
                 for (TeamModule teamModule : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
                     if (teamModule.getName().toLowerCase().startsWith(cmd.getString(0).toLowerCase())) {
