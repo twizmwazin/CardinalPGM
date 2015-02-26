@@ -217,7 +217,7 @@ public class DeathMessages implements Module {
                                 toSend = new UnlocalizedChatMessage(message);
                             }
                         }
-                        if (Settings.getSettingByName("DeathMessages") == null || Settings.getSettingByName("DeathMessages").getValueByPlayer(player).getValue().equalsIgnoreCase("all")) {
+                        if (Settings.getSettingByName("DeathMessages") == null || (Settings.getSettingByName("DeathMessages").getValueByPlayer(player).getValue().equalsIgnoreCase("all") || (Settings.getSettingByName("DeathMessages").getValueByPlayer(player).getValue().equalsIgnoreCase("own") && involved))) {
                             player.sendMessage(toSend.getMessage(player.getLocale()));
                         }
                     }
