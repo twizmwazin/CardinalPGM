@@ -83,23 +83,11 @@ public class Blockdrops implements Module {
                 for (Block block : event.blockList()) {
                     if (filter == null || filter.evaluate(player, block).equals(FilterState.ALLOW)) {
                         if (region == null || region.contains(new BlockRegion(null, block.getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
-                            if (!this.wrongTool) {
-                                if (block.getDrops() != null && block.getDrops().size() > 0) {
-                                    for (ItemStack drop : this.drops) {
-                                        GameHandler.getGameHandler().getMatchWorld().dropItemNaturally(block.getLocation(), drop);
-                                    }
-                                    if (this.experience != 0) {
-                                        ExperienceOrb xp = GameHandler.getGameHandler().getMatchWorld().spawn(block.getLocation(), ExperienceOrb.class);
-                                        xp.setExperience(this.experience);
-                                    }
-                                }
-                            } else {
-                                for (ItemStack drop : this.drops) {
-                                    GameHandler.getGameHandler().getMatchWorld().dropItemNaturally(block.getLocation(), drop);
-                                }
-                                ExperienceOrb xp = GameHandler.getGameHandler().getMatchWorld().spawn(block.getLocation(), ExperienceOrb.class);
-                                xp.setExperience(this.experience);
+                            for (ItemStack drop : this.drops) {
+                                GameHandler.getGameHandler().getMatchWorld().dropItemNaturally(block.getLocation(), drop);
                             }
+                            ExperienceOrb xp = GameHandler.getGameHandler().getMatchWorld().spawn(block.getLocation(), ExperienceOrb.class);
+                            xp.setExperience(this.experience);
                             block.setType(replace);
                         }
                     }

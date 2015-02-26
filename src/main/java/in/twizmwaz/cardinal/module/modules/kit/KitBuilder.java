@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.util.*;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -87,13 +88,7 @@ public class KitBuilder implements ModuleBuilder {
             List<PotionEffect> potions = new ArrayList<>();
             for (Element potion : element.getChildren("potion")) {
                 PotionEffectType type = PotionEffectType.getByName(StringUtils.getTechnicalName(potion.getText()));
-                int duration = 0;
-                try {
-                    duration = NumUtils.parseInt(potion.getAttributeValue("duration")) * 20;
-                } catch (NumberFormatException e) {
-                    if (potion.getAttributeValue("duration").equalsIgnoreCase("oo"))
-                        duration = Integer.MAX_VALUE;
-                }
+                int duration = NumUtils.parseInt(potion.getAttributeValue("duration")) == Integer.MAX_VALUE ? NumUtils.parseInt(potion.getAttributeValue("duration")) : NumUtils.parseInt(potion.getAttributeValue("duration")) * 20;
                 int amplifier = 0;
                 if (potion.getAttributeValue("amplifier") != null) {
                     amplifier = NumUtils.parseInt(potion.getAttributeValue("amplifier")) - 1;
