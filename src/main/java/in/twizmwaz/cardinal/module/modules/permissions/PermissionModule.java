@@ -27,7 +27,7 @@ public class PermissionModule implements Module {
     private final Plugin plugin;
     private final Map<Player, PermissionAttachment> attachmentMap;
 
-    private List<UUID> devs = Arrays.asList(UUID.fromString("670223bb-7560-48c8-8f01-2f463549b917") /* twiz_mwazin */, UUID.fromString("33a703d0-3237-4337-9ddd-3dbf33b3d8a6") /* iEli2tyree011 */, UUID.fromString("208c84af-790a-41da-bf7e-eb184f17bdf8") /* Elly */);
+    private List<UUID> devs = Arrays.asList(UUID.fromString("670223bb-7560-48c8-8f01-2f463549b917") /* twiz_mwazin */, UUID.fromString("33a703d0-3237-4337-9ddd-3dbf33b3d8a6") /* iEli2tyree011 */, UUID.fromString("208c84af-790a-41da-bf7e-eb184f17bdf8") /* Elly */, UUID.fromString("260004f0-996b-4539-ba21-df4ee6336b63") /* Elliott_ */);
 
     public PermissionModule(Plugin plugin) {
         this.plugin = plugin;
