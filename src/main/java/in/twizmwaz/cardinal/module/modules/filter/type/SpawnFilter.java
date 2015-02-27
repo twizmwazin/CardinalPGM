@@ -17,11 +17,16 @@ public class SpawnFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Object object) {
-        if (object instanceof CreatureSpawnEvent) {
-            if (((CreatureSpawnEvent) object).getSpawnReason().equals(reason)) return ALLOW;
-            else return DENY;
-        } else return ABSTAIN;
+    public FilterState evaluate(final Object... objects) {
+        for (Object object : objects) {
+            if (object instanceof CreatureSpawnEvent) {
+                if (((CreatureSpawnEvent) object).getSpawnReason().equals(reason))
+                    return ALLOW;
+                else
+                    return DENY;
+            }
+        }
+        return ABSTAIN;
     }
 
 }

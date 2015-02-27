@@ -6,7 +6,6 @@ import in.twizmwaz.cardinal.module.modules.regions.parsers.modifiers.MirrorParse
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.util.BlockVector;
@@ -45,11 +44,11 @@ public class MirroredRegion extends RegionModule {
     }
 
     @Override
-    public boolean contains(BlockRegion region) {
+    public boolean contains(Vector vector) {
         if (this.region == null) {
             updateRegion();
         }
-        return this.region.contains(region);
+        return this.region.contains(vector);
     }
 
     @Override

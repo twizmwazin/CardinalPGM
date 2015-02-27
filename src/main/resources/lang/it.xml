@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<locale lang="it">
+    <error>
+        <restartDuringMatch>Non è possibile riavviare quando una partita è cominciata. Usa -f per forzare.</restartDuringMatch>
+        <cycleDuringMatch>Non puoi ciclare quando una partita è cominciata. Usa -f per forzare</cycleDuringMatch>
+        <matchRunning>La partita è giá iniziata.</matchRunning>
+        <matchNoResume>La partita è finita e non si può continuare.</matchNoResume>
+        <matchNoStart>La partita non può finire in questo momento.</matchNoStart>
+        <matchNoEnd>La partita non può finire in questo momento.</matchNoEnd>
+        <noSetNext>Non puoi stabilire la mappa seguente quando c'è un riavvio programmato. Usa -f per forzare.</noSetNext>
+        <disabledCommand>Questo comando è disabilitato. Le mappe saranno ricaricate automaticamente se si rivela un cambiamento.</disabledCommand>
+        <rotPointInvalid>Il punto di rotazione specificato non è valido.</rotPointInvalid>
+        <invalidTime>Il tempo per il conto alla rovescia specificato non è valido.</invalidTime>
+        <teamChatDefault>La chat di squadra è già il tuo canale predefinito.</teamChatDefault>
+        <teamChannel>La chat della tua squadra non si è potuta determinare. Per favore riprova di nuovo fra pochi istanti.</teamChannel>
+        <noClass>Non si è trovata nessuna classe con questi criteri.</noClass>
+        <classRestricted>La classe {0} è riservata</classRestricted>
+        <noClassChange>Non puoi cambiare di classe perche la tua classe attuale è fissa</noClassChange>
+        <classesDisabled>Le classi non sono disponibili in questa mappa.</classesDisabled>
+        <noTeam>Non sei in una squadra</noTeam>
+        <alreadyObs>Sei già nella squadra spettatrice.</alreadyObs>
+        <alreadyJoined>You have already joined {0}</alreadyJoined>
+        <teamFull>Ci dispiace, {0} è al completo</teamFull>
+        <forceExemption>{0} è esente dall'essere obbligato a entrare nelle squadre.</forceExemption>
+        <noShuffle>Non puoi mischiare le squadre quando una partita è cominciata.</noShuffle>
+        <teamExists>La squadra con il nome {0} giá esiste</teamExists>
+        <mayNotJoin>Non puoi entrare durante una partita di {0}</mayNotJoin>
+        <matchOver>La partita è finita</matchOver>
+        <cycle>Per favore aspetta che il server cambi mappa</cycle>
+        <playerCommand>Devi essere un giocatore per usare questo commando.</playerCommand>
+        <noMapMatch>Non si è trovata nessuna mappa con questi criteri.</noMapMatch>
+        <noTeamMatch>Non si è trovata nessuna squadra con questi criteri</noTeamMatch>
+        <noRotMatch>Non si è trovata nessuna rotazione con questi criteri</noRotMatch>
+        <noPlayerMatch>Non si è trovato nessun giocatore con questi criteri.</noPlayerMatch>
+        <multiplePlayers>Più di un giocatore trovato! Utilizza {0} per una corrispondenza esatta</multiplePlayers>
+        <unknownError>Si è verificato un errore sconosciuto. Per favore fai riferimento alla console del server.</unknownError>
+        <movedForBalance>Sei stato spostato nel {0} per bilanciare le dimensioni dei team</movedForBalance>
+        <autoJoinSwitch>(non hai selezionato un team, quindi abbiamo pensato che non ti sarebbe dispiaciuto)</autoJoinSwitch>
+        <ownCore>Non puoi sabotare il tuo core.</ownCore>
+        <ownObjective>Non puoi danneggiare il tuo obiettivo.</ownObjective>
+        <enemyObjective>Non puoi riparare l'obiettivo nemico</enemyObjective>
+        <repairObjective>Questo obiettivo non puo essere riparato</repairObjective>
+        <noPotions>Non ci sono efetti di pozioni</noPotions>
+        <teamPlace>Solo un membro di {0} può posizionare {1} in questo posto!</teamPlace>
+        <blockPlace>Solo {0} può essere posizionato in questo posto!</blockPlace>
+        <noCraft>Non puoi craftare {0}.</noCraft>
+        <bedsDisabled>I letti sono disabilitati in questa mappa!</bedsDisabled>
+        <pearlOut>Non puoi usare Perle dell'Ender per uscire dalla tua base</pearlOut>
+        <laneReEnter>Non puoi rientrare nella tua base</laneReEnter>
+        <landminePlace>Esiste già una mina in questo posto!</landminePlace>
+        <landmineExists>Esiste già una mina in questo posto!</landmineExists>
+        <landmineProximity>Non puoi posizionare mine vicino ad altre!</landmineProximity>
+        <tutorialTp>ATTENZIONE: Non è possibile teletrasportarti al punto del tutorial!</tutorialTp>
+        <defuseTntWater>Non puoi disinnescare la TNT nell'acqua.</defuseTntWater>
+        <defuseTntEnemy>Non puoi disinnescare la TNT del nemico.</defuseTntEnemy>
+        <noPermission>Non hai il permesso.</noPermission>
+        <numberString>Si aspettava un numero, al suo posto si è ricevuto un testo.</numberString>
+        <errorRejoin>Oh! Abbiamo avuto un errore! Per favore cerca di rientrare.</errorRejoin>
+        <serverFull>Il server è al completo</serverFull>
+        <teamsFull>Le squadre sono al completo</teamsFull>
+        <teamsCapacity>Le squadre sono al completo</teamsCapacity>
+        <invalidMatch>Partita non valida</invalidMatch>
+        <ratingRange>Le valutazioni devono essere tra {0,number,integer} e {1,number,integer}, inclusi.</ratingRange>
+        <ratingsDisabled>Le valutazioni delle mappe non sono disponibili in questo server.</ratingsDisabled>
+        <lowParticipation>Siamo spiacenti, non hai partecipato abbastanza a questa partita per poter votare la mappa</lowParticipation>
+        <rateWhilePlaying>Per votare la mappa durante il gioco, scrivi {0}</rateWhilePlaying>
+        <noRecentPM>Non avere messaggi privati per rispondere.</noRecentPM>
+        <playerNotFound>Non trovato nessun giocatore con quel nome.</playerNotFound>
+        <playerDisabledPMs>Il tuo messaggio non è stato inviato perché {0} ha scelto di non ricevere messaggi privati.</playerDisabledPMs>
+    </error>
+    <generic>
+        <mapSet>{0} è stata stabilita come mappa successiva</mapSet>
+        <markedForReloading>{0} è stata selezionata correttamente per essere ricaricata.</markedForReloading>
+        <allMarkedReloading>Tutte le mappe sono state selezionate con successo per ricaricarsi.</allMarkedReloading>
+        <countdownCancelled>Tutti i conti alla rovescia sono stati annullati.</countdownCancelled>
+        <autoStart>Avvio automatico abilitato per questa partita</autoStart>
+        <autoStartDisabled>Avvio automatico disabilitato per questa partita</autoStartDisabled>
+        <skippedOver>Si è saltato con successo alla mappa {0}</skippedOver>
+        <skippedFromTo>Si è saltato con successo dalla mappa {0} a {1}</skippedFromTo>
+        <skippedTo>Si è saltato con successo alla mappa {0}</skippedTo>
+        <configReload>La configurazione è stata ricaricata con successo.</configReload>
+        <mapNext>Prossima mappa: {0}</mapNext>
+        <rotationSet>La rotazione attuale è stata stabilita a {0}</rotationSet>
+        <rotationReload>La rotazione è stata ricaricata con successo</rotationReload>
+        <rotationAppend>{0} è stato aggiunto con successo alla rotazione</rotationAppend>
+        <insertedIndex>{0} è stata inserita alla posizione {1}</insertedIndex>
+        <removedInstance>Tutte le apparizioni della mappa {0} nelle rotazioni sono state rimosse</removedInstance>
+        <removedMap>La mappa alla posizione {0} è stata rimossa correttamente dalla rotazione</removedMap>
+        <playerForce>Il giocatore {0} è stato forzato ad essere nel team {1} con successo</playerForce>
+        <teamShuffle>Le squadre sono state mescolate con successo.</teamShuffle>
+        <teamAlias>Il team {0} è stato rinominato in {1} correttamente</teamAlias>
+        <channelSet>La chat di squadra è già il tuo canale predefinito.</channelSet>
+        <messageSent>MIl messaggio è stato inviato.</messageSent>
+        <onTeam>Sei nella squara {0}</onTeam>
+        <haveSelected>Hai selezionato la classe {0}</haveSelected>
+        <changeOnSpawn>I cambiamenti avranno effetto alla prossima rinascita.</changeOnSpawn>
+        <classCurrent>Classe attuale:</classCurrent>
+        <classList>Per visualizzare tutte le classi devi eseguire il comando '/classes'</classList>
+        <errorsCleared>Errori eliminati!</errorsCleared>
+        <noErrors>Nessun errore!</noErrors>
+        <joined>Sei entrato nella squadra {0}</joined>
+        <worldDefuse>Hai disinnescato la TNT del mondo.</worldDefuse>
+        <defusePlayerTnt>Hai disinnescato la TNT di {0}.</defusePlayerTnt>
+        <landminePlanted>Mina piantata!</landminePlanted>
+        <ratingSaved>Il tuo voto di {0} per {1} {2} è stato salvato.</ratingSaved>
+        <ratingChange>Potrai cambiare in seguito il tuo voto usando la tramoggia o scrivendo {0}</ratingChange>
+        <mapRated>Qualcuno del {0} ha votato questa mappa {1}</mapRated>
+        <mapReRated>Qualcuno del {0} ha cambiato il voto per questa mappa da {2} a {1}</mapReRated>
+        <autoBalance>Le squadre saranno equilibrate automaticamente se {0} rimane in sovrannumero</autoBalance>
+        <youChangedRating>Hai cambiato il tuo voto per {1} {2} da {3} a {0}.</youChangedRating>
+    </generic>
+    <misc>
+        <enemy>Il nemico</enemy>
+        <fate>destino</fate>
+        <others>Gli altri</others>
+        <blocks>{0,number,integer} blocchi</blocks>
+        <ownership>{0} di {1}</ownership>
+        <and>e</and>
+        <by>da</by>
+        <team>Squadra</team>
+    </misc>
+    <userInterface>
+        <mapLoaded>Mappe caricate</mapLoaded>
+        <mapObjective>Obiettivo</mapObjective>
+        <mapAuthor>Autore</mapAuthor>
+        <mapAuthors>Autori</mapAuthors>
+        <mapContributors>Collaboratori</mapContributors>
+        <mapRules>Regole</mapRules>
+        <mapMax>Massimo di giocatori</mapMax>
+        <rotationCurrent>Rotazione attuale</rotationCurrent>
+        <rotationLoaded>Rotazioni caricate</rotationLoaded>
+        <matchInfo>Informazione sulla partita</matchInfo>
+        <time>Tempo</time>
+        <matchTime>Durazione della partita</matchTime>
+        <goals>Obiettivi</goals>
+        <classes>Classi</classes>
+        <of>{0} di {1}</of>
+        <xmlErrors>Errori nell'XML</xmlErrors>
+        <close>Chiudere</close>
+        <teamClassSelection>Seleziona la classe</teamClassSelection>
+        <teamJoinTip>Usa questo libro per selezionare facilmente la tua classe!</teamJoinTip>
+        <teamPick>Scegli la tua squadra</teamPick>
+        <teamJoinAuto>Entra in una squadra a caso</teamJoinAuto>
+        <teamJoinAutoLore>Ti fa entrare nella squadra con il minor numero di giocatori</teamJoinAutoLore>
+        <teamCapacity>La squadra è piena, non puoi entrare.</teamCapacity>
+        <teamCanPick>Puoi selezionare la tua squadra, clicca per entrare!</teamCanPick>
+        <teamSelection>Selezione squadra</teamSelection>
+        <tutorialView>Guarda il tutorial</tutorialView>
+        <tutorialLore>Impara a giocare {0}!</tutorialLore>
+        <potionEffects>Effetti di pozioni</potionEffects>
+        <hungerLevel>Livello di fame</hungerLevel>
+        <healthLevel>Livello di vita</healthLevel>
+        <oneMap>1 mappa</oneMap>
+        <maps>{0} mappe</maps>
+        <second>{0} secondo</second>
+        <seconds>{0} secondi</seconds>
+        <matchStarted>La partita è cominciata!</matchStarted>
+        <matchStartCancelled>L'inizio della partita è stato annullato</matchStartCancelled>
+        <matchOver>Partita finita!</matchOver>
+        <matchWin>{0} ha vinto!</matchWin>
+        <matchTeamWin>La tua squadra ha vinto!</matchTeamWin>
+        <matchTeamLose>La tua squadra ha perso</matchTeamLose>
+        <matchMaxScoreReached>Punteggio limite di {0} raggiunto</matchMaxScoreReached>
+        <playerJoin>{0} è entrato nella partita</playerJoin>
+        <playerLeave>{0} è uscito dalla partita</playerLeave>
+        <serverRestart>Il server si sta riavviando!</serverRestart>
+        <mapPlaying>Attualmente giocando {0}</mapPlaying>
+        <objectivePlaced>{0} ha piazzato {2} per la {1}</objectivePlaced>
+        <objectiveLeaked>{0} della {1} ha perso!</objectiveLeaked>
+        <objectiveDestroyed>Il {1} della {0} è stato distrutto da {2}</objectiveDestroyed>
+        <objectiveTouchedFor>{0} ha distrutto un pezzo del {1} per la {2}</objectiveTouchedFor>
+        <objectiveTouched>{0} ha distrutto un pezzo di {1}</objectiveTouched>
+        <objectiveDamagedFor>{0} ha danneggiato {1} per la {2}</objectiveDamagedFor>
+        <objectiveDamaged>{0} ha danneggiato {1}</objectiveDamaged>
+        <creditReceived>Riceverai il riconoscimento quando l'obiettivo sará completato.</creditReceived>
+        <objectivePickedFor>{0} ha preso {1} per la {2}</objectivePickedFor>
+        <objectivePicked>{0} ha preso {1}</objectivePicked>
+        <scoredFor>{0} ha fatto {1} punti per {2}</scoredFor>
+        <onePoint>1 punto</onePoint>
+        <points>{0} punti</points>
+        <amountRemaining>Hai {0} rimaste.</amountRemaining>
+        <oneLife>1 vita</oneLife>
+        <lives>{0} vite</lives>
+        <timer>Tempo restante:</timer>
+        <leftLane>Sei uscito dalla tua base</leftLane>
+        <scores>Punteggi</scores>
+        <typeForMapInfo>Scrivere /map per informazioni</typeForMapInfo>
+        <cyclingTimer>Ruotando da {0} a {1}</cyclingTimer>
+        <cycledTo>Ruotando a {0}</cycledTo>
+        <matchStartingIn>La partita inizia fra {0}</matchStartingIn>
+        <serverRestartingIn>Il server riavvia fra {0}</serverRestartingIn>
+        <tntDefuser>Disinnescatore di TNT</tntDefuser>
+        <tntRadiusDefuser>Clicca con il tasto destro per disinnescare la TNT in un raggio di 5 blocchi</tntRadiusDefuser>
+        <rateMap>Valuta questa mappa</rateMap>
+        <terrible>Terribile!</terrible>
+        <bad>Brutta</bad>
+        <ok>Ok</ok>
+        <good>Buona</good>
+        <amazing>Fantastica!</amazing>
+        <teamChoose>Seleziona la tua classe</teamChoose>
+    </userInterface>
+</locale>

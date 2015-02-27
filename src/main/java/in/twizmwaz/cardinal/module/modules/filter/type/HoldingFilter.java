@@ -18,10 +18,14 @@ public class HoldingFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Object object) {
-        if (object instanceof Player) {
-            if (((Player) object).getItemInHand().getType().equals(material)) return ALLOW;
-            else return DENY;
+    public FilterState evaluate(final Object... objects) {
+        for (Object object : objects) {
+            if (object instanceof Player) {
+                if (((Player) object).getItemInHand().getType().equals(material))
+                    return ALLOW;
+                else
+                    return DENY;
+            }
         }
         return ABSTAIN;
     }

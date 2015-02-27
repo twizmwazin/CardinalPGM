@@ -14,11 +14,16 @@ public class CrouchingFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Object object) {
-        if (object instanceof Player) {
-            if (((Player) object).isSneaking()) return ALLOW;
-            else return DENY;
-        } else return ABSTAIN;
+    public FilterState evaluate(final Object... objects) {
+        for (Object object : objects) {
+            if (object instanceof Player) {
+                if (((Player) object).isSneaking())
+                    return ALLOW;
+                else
+                    return DENY;
+            }
+        }
+        return ABSTAIN;
     }
 
 }

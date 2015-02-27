@@ -6,10 +6,10 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 
 public class ChatModuleBuilder implements ModuleBuilder {
 
-    @SuppressWarnings("unchecked")
     @Override
     public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
+        ModuleCollection<ChatModule> results = new ModuleCollection<ChatModule>();
+        
         results.add(new ChatModule());
         return results;
     }

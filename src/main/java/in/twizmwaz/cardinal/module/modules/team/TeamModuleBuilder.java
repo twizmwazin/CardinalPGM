@@ -1,11 +1,11 @@
 package in.twizmwaz.cardinal.module.modules.team;
 
-import in.parapengu.commons.utils.StringUtils;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
+import in.twizmwaz.cardinal.util.ParseUtils;
 import org.apache.logging.log4j.core.helpers.Integers;
 import org.bukkit.ChatColor;
 import org.jdom2.Document;
@@ -38,7 +38,7 @@ public class TeamModuleBuilder implements ModuleBuilder {
             } catch (NullPointerException ex) {
                 respawnLimit = -1;
             }
-            ChatColor color = StringUtils.convertStringToChatColor(teamNode.getAttribute("color").getValue());
+            ChatColor color = ParseUtils.parseChatColor(teamNode.getAttribute("color").getValue());
             results.add(new TeamModule(match, name, id, max, maxOverfill, respawnLimit, color, false));
         }
         results.add(new TeamModule(match, "Observers", "observers", Integer.MAX_VALUE, Integer.MAX_VALUE, -1, ChatColor.AQUA, true));

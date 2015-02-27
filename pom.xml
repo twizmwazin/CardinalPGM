@@ -6,7 +6,7 @@
 
     <groupId>in.twizmwaz.cardinal</groupId>
     <artifactId>CardinalPGM</artifactId>
-    <version>1.0-DEV</version>
+    <version>1.0-SNAPSHOT</version>
 
     <properties>
         <plugin.name>Cardinal</plugin.name>
@@ -16,24 +16,21 @@
 
     <repositories>
         <repository>
-            <id>maven-repo</id>
-            <url>http://repo1.maven.org/maven2</url>
-        </repository>
-        <repository>
             <id>overcast-repo</id>
             <url>https://repo.oc.tc/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>komp-repo</id>
-            <url>http://repo.kompking.info/nexus/content/groups/public/</url>
         </repository>
     </repositories>
 
     <dependencies>
         <dependency>
             <groupId>tc.oc</groupId>
+            <artifactId>sportbukkit-api</artifactId>
+            <version>1.8-R0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>tc.oc</groupId>
             <artifactId>sportbukkit</artifactId>
-            <version>1.7.10-R0.1-SNAPSHOT</version>
+            <version>1.8-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.sk89q</groupId>
@@ -48,29 +45,32 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>in.parapengu</groupId>
-            <artifactId>commons</artifactId>
-            <version>1.1.2</version>
-        </dependency>
-        <dependency>
             <groupId>org.jdom</groupId>
             <artifactId>jdom2</artifactId>
             <version>2.0.5</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.3.2</version>
-        </dependency>
-        <dependency>
-            <groupId>com.comphenix.protocol</groupId>
-            <artifactId>ProtocolLib</artifactId>
-            <version>3.5.1-HACK</version>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>net.md-5</groupId>
+                <artifactId>scriptus</artifactId>
+                <version>0.1</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>describe</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -94,9 +94,8 @@
                             <artifactSet>
                                 <includes>
                                     <include>com.sk89q:command-framework-bukkit</include>
-                                    <include>in.parapengu:commons</include>
                                     <include>org.jdom:jdom2</include>
-                                    <include>org.apache.commons:commons-lang3</include>
+                                    <include>commons-io:commons-io</include>
                                 </includes>
                             </artifactSet>
                         </configuration>

@@ -1,12 +1,14 @@
 package in.twizmwaz.cardinal.rotation;
 
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import in.twizmwaz.cardinal.util.DomUtils;
-import net.minecraft.util.org.apache.commons.codec.Charsets;
+import in.twizmwaz.cardinal.util.MojangUtils;
+import in.twizmwaz.cardinal.util.NumUtils;
+import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
@@ -16,20 +18,19 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 
 public class Rotation {
 
-    private JavaPlugin plugin;
     private File rotationFile;
     private List<LoadedMap> rotation;
     private List<LoadedMap> loaded;
     private int position;
     private File repo;
 
-    public Rotation(JavaPlugin plugin) throws RotationLoadException {
-        this.plugin = plugin;
-        this.rotationFile = new File(plugin.getConfig().getString("rotation"));
+    public Rotation() throws RotationLoadException {
+        this.rotationFile = new File(Cardinal.getInstance().getConfig().getString("rotation"));
         refreshRepo();
         refreshRotation();
     }
@@ -41,7 +42,7 @@ public class Rotation {
      */
     public void refreshRepo() throws RotationLoadException {
         loaded = new ArrayList<>();
-        this.repo = new File(plugin.getConfig().getString("repo"));
+        this.repo = new File(Cardinal.getInstance().getConfig().getString("repo"));
         List<String> requirements = Arrays.asList("map.xml", "region", "level.dat");
         for (File map : repo.listFiles()) {
             if (map.isFile()) continue;
@@ -54,25 +55,27 @@ public class Rotation {
                     List<Pair<String, String>> authors = new ArrayList<>();
                     for (Element authorsElement : xml.getRootElement().getChildren("authors")) {
                         for (Element author : authorsElement.getChildren()) {
-                            authors.add(new ImmutablePair<>(author.getText(), author.getAttributeValue("contribution")));
+                            String authorName = author.getAttributeValue("uuid") == null ? author.getText() : MojangUtils.getNameByUUID(UUID.fromString(author.getAttributeValue("uuid")));
+                            authors.add(new ImmutablePair<>(authorName, author.getAttributeValue("contribution")));
                         }
                     }
                     List<Pair<String, String>> contributors = new ArrayList<>();
                     for (Element contributorsElement : xml.getRootElement().getChildren("contributors")) {
                         for (Element contributor : contributorsElement.getChildren()) {
-                           contributors.add(new ImmutablePair<>(contributor.getText(), contributor.getAttributeValue("contribution")));
+                            String contributorName = contributor.getAttributeValue("uuid") == null ? contributor.getText() : Bukkit.getOfflinePlayer(UUID.fromString(contributor.getAttributeValue("uuid"))).getName();
+                            contributors.add(new ImmutablePair<>(contributorName, contributor.getAttributeValue("contribution")));
                         }
                     }
                     List<String> rules = new ArrayList<>();
                     for (Element rulesElement : xml.getRootElement().getChildren("rules")) {
                         for (Element rule : rulesElement.getChildren()) {
-                            rules.add(rule.getText());
+                            rules.add(rule.getText().trim());
                         }
                     }
                     int maxPlayers = 0;
                     for (Element teams : xml.getRootElement().getChildren("teams")) {
                         for (Element team : teams.getChildren()) {
-                            maxPlayers = maxPlayers + Integer.parseInt(team.getAttributeValue("max"));
+                            maxPlayers = maxPlayers + NumUtils.parseInt(team.getAttributeValue("max"));
                         }
                     }
                     loaded.add(new LoadedMap(name, version, objective, authors, contributors, rules, maxPlayers, map));
@@ -162,13 +165,12 @@ public class Rotation {
         }
         return null;
     }
-    
+
     public LoadedMap getCurrent() {
         try {
             return rotation.get(position - 1);
         } catch (IndexOutOfBoundsException e) {
             return rotation.get(0);
         }
-        
     }
 }

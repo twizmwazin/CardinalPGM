@@ -5,28 +5,30 @@ import in.twizmwaz.cardinal.cycle.CycleTimer;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
+import in.twizmwaz.cardinal.module.ModuleFactory;
 import in.twizmwaz.cardinal.rotation.Rotation;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.lang.ref.WeakReference;
 import java.util.UUID;
 
 public class GameHandler {
 
     private static GameHandler handler;
-    private final JavaPlugin plugin;
+    private final ModuleFactory moduleFactory;
     private Rotation rotation;
-    private World matchWorld;
+    private WeakReference<World> matchWorld;
     private Match match;
     private Cycle cycle;
     private CycleTimer cycleTimer;
 
-    public GameHandler(JavaPlugin plugin) throws RotationLoadException {
-        this.plugin = plugin;
+    public GameHandler() throws RotationLoadException {
         handler = this;
-        rotation = new Rotation(plugin);
+        this.moduleFactory = new ModuleFactory();
+        rotation = new Rotation();
         cycle = new Cycle(rotation.getNext(), UUID.randomUUID(), this);
         cycleAndMakeMatch();
     }
@@ -37,10 +39,10 @@ public class GameHandler {
 
     public void cycleAndMakeMatch() {
         rotation.move();
-        World oldMatchWorld = matchWorld;
+        World oldMatchWorld = matchWorld == null ? null: matchWorld.get();
         cycle.run();
         if (match != null) match.unregisterModules();
-        this.match = new Match(this, cycle.getUuid(), rotation.getCurrent());
+        this.match = new Match(cycle.getUuid(), cycle.getMap());
         this.match.registerModules();
         Bukkit.getLogger().info("[CardinalPGM] " + this.match.getModules().size() + " modules loaded.");
         Bukkit.getServer().getPluginManager().callEvent(new CycleCompleteEvent(match));
@@ -53,11 +55,11 @@ public class GameHandler {
     }
 
     public World getMatchWorld() {
-        return matchWorld;
+        return matchWorld.get();
     }
 
     public void setMatchWorld(World world) {
-        this.matchWorld = world;
+        matchWorld = new WeakReference<>(world);
     }
 
     public Match getMatch() {
@@ -77,7 +79,7 @@ public class GameHandler {
     }
 
     public JavaPlugin getPlugin() {
-        return plugin;
+        return Cardinal.getInstance();
     }
 
     public boolean startCycleTimer(int seconds) {
@@ -86,5 +88,9 @@ public class GameHandler {
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), cycleTimer);
             return true;
         } else return false;
+    }
+
+    public ModuleFactory getModuleFactory() {
+        return moduleFactory;
     }
 }

@@ -1,8 +1,11 @@
 package in.twizmwaz.cardinal.module.modules.blitz;
 
 
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.event.PgmSpawnEvent;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.module.Module;
@@ -15,25 +18,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.metadata.LazyMetadataValue;
-import org.bukkit.plugin.java.JavaPlugin;
 
-@SuppressWarnings("unchecked")
 public class Blitz implements Module {
-
-    /**
-     *
-     * TODO:
-     * - Make Win condition
-     * - Add countdown
-     *
-     */
 
     @Override
     public void unload() {
         HandlerList.unregisterAll(this);
     }
 
-    private final JavaPlugin plugin;
 
     private String title = null;
     private boolean broadcastLives;
@@ -45,8 +37,6 @@ public class Blitz implements Module {
         this.broadcastLives = broadcastLives;
         this.lives = lives;
         this.time = time;
-
-        this.plugin = GameHandler.getGameHandler().getPlugin();
     }
 
 
@@ -55,28 +45,32 @@ public class Blitz implements Module {
         Player player = event.getEntity();
         TeamModule team = TeamUtils.getTeamByPlayer(player);
         if (team != null && !team.isObserver()) {
-            int oldMeta = player.getMetadata("lives").get(0).asInt();
-            player.removeMetadata("lives", plugin);
-            player.setMetadata("lives", new LazyMetadataValue(plugin, LazyMetadataValue.CacheStrategy.NEVER_CACHE, new BlitzLives(oldMeta - 1)));
-            if (player.getMetadata("lives").get(0).asInt() == 0) {
+            int oldMeta = this.getLives(player);
+            player.removeMetadata("lives", Cardinal.getInstance());
+            player.setMetadata("lives", new LazyMetadataValue(Cardinal.getInstance(), LazyMetadataValue.CacheStrategy.NEVER_CACHE, new BlitzLives(oldMeta - 1)));
+            if (this.getLives(player) == 0) {
                 TeamUtils.getTeamById("observers").add(player, true);
-                player.removeMetadata("lives", plugin);
+                player.removeMetadata("lives", Cardinal.getInstance());
             }
         }
     }
 
     @EventHandler
-    public void onPgmSpawn(PgmSpawnEvent event) {
+    public void onPgmSpawn(CardinalSpawnEvent event) {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
             Player player = event.getPlayer();
             if (TeamUtils.getTeamByPlayer(player) != null) {
                 if (!TeamUtils.getTeamByPlayer(player).isObserver()) {
                     if (!player.hasMetadata("lives")) {
-                        player.setMetadata("lives", new LazyMetadataValue(plugin, LazyMetadataValue.CacheStrategy.NEVER_CACHE, new BlitzLives(this.lives)));
+                        player.setMetadata("lives", new LazyMetadataValue(Cardinal.getInstance(), LazyMetadataValue.CacheStrategy.NEVER_CACHE, new BlitzLives(this.lives)));
                     }
                     if (this.broadcastLives) {
-                        int lives = player.getMetadata("lives").get(0).asInt();
-                        player.sendMessage(ChatColor.RED + "You have " + ChatColor.AQUA + "" + ChatColor.BOLD + lives + " " + (lives == 1 ? "life" : "lives") + ChatColor.RED + " remaining.");
+                        int lives = this.getLives(player);
+                        if (lives == 1) {
+                            player.sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_AMOUNT_REMAINING, ChatColor.AQUA + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_ONE_LIFE).getMessage(player.getLocale()) + ChatColor.RED).getMessage(player.getLocale()));
+                        } else {
+                            player.sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_AMOUNT_REMAINING, ChatColor.AQUA + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_LIVES, lives + "").getMessage(player.getLocale()) + ChatColor.RED).getMessage(player.getLocale()));
+                        }
                     }
                 }
             }

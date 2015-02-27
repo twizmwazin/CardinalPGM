@@ -4,29 +4,23 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
 import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
+import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class TeamUtils {
 
     public static TeamModule getTeamWithFewestPlayers(Match match) {
         TeamModule result = null;
-        List<Integer> teamValues = new ArrayList<>();
-        for (TeamModule team : match.getModules().getModules(TeamModule.class)) {
-            if (!team.isObserver()) {
-                teamValues.add(team.size());
-            }
-        }
-        Collections.sort(teamValues);
-        for (TeamModule team : match.getModules().getModules(TeamModule.class)) {
-            if (team.size() == teamValues.get(0) && !team.isObserver()) {
+        double percent = Double.POSITIVE_INFINITY;
+        for (TeamModule team : getTeams()) {
+            if (!team.isObserver() && (team.size() / (double) team.getMax()) < percent) {
                 result = team;
+                percent = team.size() / (double) team.getMax();
             }
         }
         return result;
@@ -100,5 +94,18 @@ public class TeamUtils {
             }
         }
         return objectives;
+    }
+    
+    public static TeamChannel getTeamChannel(TeamModule team) {
+        for (TeamChannel channel : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamChannel.class)) {
+            if (channel.getTeam() == team) return channel;
+        }
+        return null;
+    }
+
+    public static ChatColor getTeamColorByPlayer(OfflinePlayer player) {
+        if (!player.isOnline()) return ChatColor.DARK_AQUA;
+        if (TeamUtils.getTeamByPlayer((Player) player) == null) return ChatColor.AQUA;
+        return TeamUtils.getTeamByPlayer((Player) player).getColor();
     }
 }

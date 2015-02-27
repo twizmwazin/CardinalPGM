@@ -10,8 +10,10 @@ public class AllBlockFilter extends AllEventFilter {
     }
 
     @Override
-    public FilterState evaluate(final Object object) {
-        if (object instanceof Block) return allow ? FilterState.ALLOW : FilterState.DENY;
-        else return FilterState.ABSTAIN;
+    public FilterState evaluate(final Object... objects) {
+        for (Object object : objects) {
+            if (object instanceof Block) return allow ? FilterState.ALLOW : FilterState.DENY;
+        }
+        return FilterState.ABSTAIN;
     }
 }

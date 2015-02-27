@@ -13,7 +13,7 @@ import java.util.List;
 
 public class BlockRegion extends RegionModule {
 
-    private final Vector vector;
+    protected final Vector vector;
 
     public BlockRegion(String name, Vector vector) {
         super(name);
@@ -30,26 +30,30 @@ public class BlockRegion extends RegionModule {
     }
 
     public double getX() {
-        return vector.getX();
+        return vector.getX() + 0.5;
     }
 
     public double getY() {
-        return vector.getY();
+        return vector.getY() + 0.5;
     }
 
     public double getZ() {
-        return vector.getZ();
+        return vector.getZ() + 0.5;
     }
 
     public Vector getVector() {
-        return vector;
+        return vector.clone().add(new Vector(0.5, 0.5, 0.5));
+    }
+    
+    public Vector getBlockVector() {
+        return vector.clone().toBlockVector();
     }
 
     @Override
-    public boolean contains(BlockRegion region) {
-        return region.getVector().getBlockX() == getVector().getBlockX() &&
-                region.getVector().getBlockY() == getVector().getBlockY() &&
-                region.getVector().getBlockZ() == getVector().getBlockZ();
+    public boolean contains(Vector vector) {
+        return vector.getBlockX() == getVector().getBlockX() &&
+                vector.getBlockY() == getVector().getBlockY() &&
+                vector.getBlockZ() == getVector().getBlockZ();
     }
 
     @Override
@@ -74,7 +78,7 @@ public class BlockRegion extends RegionModule {
     }
 
     public Block getBlock() {
-        return this.getVector().toLocation(GameHandler.getGameHandler().getMatchWorld()).getBlock();
+        return vector.toLocation(GameHandler.getGameHandler().getMatchWorld()).getBlock();
     }
 
 }

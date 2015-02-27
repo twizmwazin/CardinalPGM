@@ -1,14 +1,18 @@
 package in.twizmwaz.cardinal.module.modules.observers;
 
-import com.sk89q.minecraft.util.commands.ChatColor;
+import in.twizmwaz.cardinal.util.ItemUtils;
+import org.bukkit.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
-import in.twizmwaz.cardinal.event.PgmSpawnEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
@@ -30,8 +34,6 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
@@ -50,25 +52,29 @@ public class ObserverModule implements Module {
         HandlerList.unregisterAll(this);
     }
 
+    private void resetPlayer(Player player, boolean clear) {
+        player.setGameMode(GameMode.CREATIVE);
+        player.setAffectsSpawning(false);
+        player.setCollidesWithEntities(false);
+        player.setCanPickupItems(false);
+
+        if (clear) {
+            player.getInventory().clear();
+        }
+
+        player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
+        ItemStack howTo = ItemUtils.createBook(Material.WRITTEN_BOOK, 1, ChatColor.AQUA.toString() + ChatColor.BOLD + "Coming Soon", ChatColor.GOLD + "CardinalPGM");
+        player.getInventory().setItem(1, howTo);
+        if (player.hasPermission("tnt.defuse")) {
+            ItemStack shears = ItemUtils.createItem(Material.SHEARS, 1, (short)0, ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
+            player.getInventory().setItem(4, shears);
+        }
+    }
+
     @EventHandler
     public void onMatchEnd(MatchEndEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            player.setGameMode(GameMode.CREATIVE);
-            player.setAffectsSpawning(false);
-            player.setCollidesWithEntities(false);
-            player.setCanPickupItems(false);
-
-            player.getInventory().clear();
-
-            player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
-            ItemStack howTo = new ItemStack(Material.WRITTEN_BOOK);
-            ItemMeta howToMeta = howTo.getItemMeta();
-            howToMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "Coming Soon");
-            howTo.setItemMeta(howToMeta);
-            BookMeta howToBookMeta = (BookMeta) howTo.getItemMeta();
-            howToBookMeta.setAuthor(ChatColor.GOLD + "CardinalPGM");
-            howTo.setItemMeta(howToBookMeta);
-            player.getInventory().setItem(1, howTo);
+            resetPlayer(player, true);
         }
     }
 
@@ -77,54 +83,24 @@ public class ObserverModule implements Module {
         if (match.getState().equals(MatchState.ENDED) || match.getState().equals(MatchState.CYCLING)) {
             if (event.getPlayer().getGameMode().equals(GameMode.SURVIVAL)) {
                 Player player = event.getPlayer();
-                player.setGameMode(GameMode.CREATIVE);
-                player.setAffectsSpawning(false);
-                player.setCollidesWithEntities(false);
-                player.setCanPickupItems(false);
-
-                player.getInventory().clear();
-
-                player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
-                ItemStack howTo = new ItemStack(Material.WRITTEN_BOOK);
-                ItemMeta howToMeta = howTo.getItemMeta();
-                howToMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "Coming Soon");
-                howTo.setItemMeta(howToMeta);
-                BookMeta howToBookMeta = (BookMeta) howTo.getItemMeta();
-                howToBookMeta.setAuthor(ChatColor.GOLD + "CardinalPGM");
-                howTo.setItemMeta(howToBookMeta);
-                player.getInventory().setItem(1, howTo);
+                resetPlayer(player, true);
             }
         }
     }
 
     @EventHandler
-    public void onPlayerSpawn(PgmSpawnEvent event) {
+    public void onPlayerSpawn(CardinalSpawnEvent event) {
         if (!event.getTeam().isObserver()) {
             event.getPlayer().setGameMode(GameMode.SURVIVAL);
             event.getPlayer().setAffectsSpawning(true);
             event.getPlayer().setCollidesWithEntities(true);
             event.getPlayer().setCanPickupItems(true);
         } else {
-            event.getPlayer().setGameMode(GameMode.CREATIVE);
-            event.getPlayer().setAffectsSpawning(false);
-            event.getPlayer().setCollidesWithEntities(false);
-            event.getPlayer().setCanPickupItems(false);
-
-            event.getPlayer().getInventory().setItem(0, new ItemStack(Material.COMPASS));
-            ItemStack howTo = new ItemStack(Material.WRITTEN_BOOK);
-            ItemMeta howToMeta = howTo.getItemMeta();
-            howToMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "Coming Soon");
-            howTo.setItemMeta(howToMeta);
-            BookMeta howToBookMeta = (BookMeta) howTo.getItemMeta();
-            howToBookMeta.setAuthor(ChatColor.GOLD + "CardinalPGM");
-            howTo.setItemMeta(howToBookMeta);
-            event.getPlayer().getInventory().setItem(1, howTo);
+            resetPlayer(event.getPlayer(), false);
             if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
-                ItemStack picker = new ItemStack(Material.LEATHER_HELMET);
-                ItemMeta pickerMeta = picker.getItemMeta();
-                pickerMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "Team Selection");
-                pickerMeta.setLore(Arrays.asList(ChatColor.DARK_PURPLE + "Join the game!"));
-                picker.setItemMeta(pickerMeta);
+                ItemStack picker = ItemUtils.createItem(Material.LEATHER_HELMET, 1, (short)0,
+                        ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(event.getPlayer().getLocale()) : new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(event.getPlayer().getLocale())),
+                        Arrays.asList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(event.getPlayer().getLocale())));
                 event.getPlayer().getInventory().setItem(2, picker);
             }
         }
@@ -200,14 +176,12 @@ public class ObserverModule implements Module {
         if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             if (event.getRightClicked() instanceof Player) {
                 Player viewing = (Player) event.getRightClicked();
-                Inventory toView = Bukkit.createInventory(null, 45, TeamUtils.getTeamByPlayer(viewing).getColor() + ((Player) event.getRightClicked()).getName());
+                Inventory toView = Bukkit.createInventory(null, 45, TeamUtils.getTeamColorByPlayer(viewing) + ((Player) event.getRightClicked()).getName());
                 toView.setItem(0, viewing.getInventory().getHelmet());
                 toView.setItem(1, viewing.getInventory().getChestplate());
                 toView.setItem(2, viewing.getInventory().getLeggings());
                 toView.setItem(3, viewing.getInventory().getBoots());
-                ItemStack potion = new ItemStack(Material.POTION, 1);
-                ItemMeta potionMeta = potion.getItemMeta();
-                potionMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.ITALIC + "Potion Effects");
+
                 ArrayList<String> effects = new ArrayList<String>();
                 for (PotionEffect effect : viewing.getActivePotionEffects()) {
                     String effectType = effect.getType().getName().toLowerCase().replaceAll("_", " ");
@@ -226,18 +200,11 @@ public class ObserverModule implements Module {
                     }
                     effects.add(ChatColor.GRAY + effectType + " " + (effect.getAmplifier() + 1));
                 }
-                potionMeta.setLore(effects);
-                potion.setItemMeta(potionMeta);
+                ItemStack potion = ItemUtils.createItem(Material.POTION, 1, (short)0, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_POTION_EFFECTS).getMessage(event.getPlayer().getLocale()), effects);
                 toView.setItem(6, potion);
-                ItemStack food = new ItemStack(Material.SPECKLED_MELON, viewing.getFoodLevel());
-                ItemMeta foodMeta = food.getItemMeta();
-                foodMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.ITALIC + "Hunger Level");
-                food.setItemMeta(foodMeta);
+                ItemStack food = ItemUtils.createItem(Material.SPECKLED_MELON, viewing.getFoodLevel(), (short)0, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_HUNGER_LEVEL).getMessage(event.getPlayer().getLocale()));
                 toView.setItem(7, food);
-                ItemStack health = new ItemStack(Material.POTION, (int) Math.ceil(viewing.getHealth()), (short) 16389);
-                ItemMeta healthMeta = health.getItemMeta();
-                healthMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.ITALIC + "Health Level");
-                health.setItemMeta(healthMeta);
+                ItemStack health = ItemUtils.createItem(Material.POTION, (int) Math.ceil(viewing.getHealth()), (short)16389, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_HEALTH_LEVEL).getMessage(event.getPlayer().getLocale()));
                 toView.setItem(8, health);
                 for (int i = 36; i <= 44; i++) {
                     toView.setItem(i, viewing.getInventory().getItem(i - 36));

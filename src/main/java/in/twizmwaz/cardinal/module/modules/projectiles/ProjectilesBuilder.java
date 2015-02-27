@@ -1,9 +1,9 @@
 package in.twizmwaz.cardinal.module.modules.projectiles;
 
-import in.parapengu.commons.utils.StringUtils;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.util.StringUtils;
 import org.bukkit.entity.EntityType;
 import org.bukkit.potion.PotionEffect;
 import org.jdom2.Element;
@@ -18,10 +18,10 @@ public class ProjectilesBuilder implements ModuleBuilder {
         EntityType projectile = EntityType.ARROW;
         double velocityMod = 1.0;
         List<PotionEffect> potionEffects = new ArrayList<>();
-        ModuleCollection results = new ModuleCollection();
+        ModuleCollection<Projectiles> results = new ModuleCollection<Projectiles>();
         for (Element projectiles : match.getDocument().getRootElement().getChildren("modifybowprojectile")) {
             try {
-                projectile = EntityType.valueOf(StringUtils.technicalName(projectiles.getChild("projectile").getText()));
+                projectile = EntityType.valueOf(StringUtils.getTechnicalName(projectiles.getChild("projectile").getText()));
             } catch (NullPointerException ex) {
 
             }

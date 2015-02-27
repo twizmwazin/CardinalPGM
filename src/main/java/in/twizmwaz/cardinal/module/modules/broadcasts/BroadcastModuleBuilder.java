@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.broadcasts;
 
-import com.sk89q.minecraft.util.commands.ChatColor;
+import in.twizmwaz.cardinal.util.NumUtils;
+import org.bukkit.ChatColor;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
@@ -18,7 +19,7 @@ public class BroadcastModuleBuilder implements ModuleBuilder {
                 String message;
                 int timeAfter;
                 int every;
-                int count = 1;
+                int count = Integer.MAX_VALUE;
                 message = ChatColor.translateAlternateColorCodes('`', element.getText());
                 timeAfter = StringUtils.timeStringToSeconds(element.getAttributeValue("after"));
                 if (element.getAttributeValue("every") != null) {
@@ -27,7 +28,7 @@ public class BroadcastModuleBuilder implements ModuleBuilder {
                     every = timeAfter;
                 }
                 if (element.getAttributeValue("count") != null) {
-                    count = Integer.parseInt(element.getAttributeValue("count"));
+                    count = NumUtils.parseInt(element.getAttributeValue("count"));
                 }
                 results.add(new BroadcastModule(message, BroadcastType.TIP, timeAfter, every, count));
             }
@@ -44,7 +45,7 @@ public class BroadcastModuleBuilder implements ModuleBuilder {
                     every = timeAfter;
                 }
                 if (element.getAttributeValue("count") != null) {
-                    count = Integer.parseInt(element.getAttributeValue("count"));
+                    count = NumUtils.parseInt(element.getAttributeValue("count"));
                 }
                 results.add(new BroadcastModule(message, BroadcastType.ALERT, timeAfter, every, count));
             }

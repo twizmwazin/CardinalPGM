@@ -1,6 +1,8 @@
 package in.twizmwaz.cardinal.command;
 
-import com.sk89q.minecraft.util.commands.ChatColor;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import org.bukkit.ChatColor;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
@@ -8,10 +10,12 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public class RotationCommands {
 
@@ -22,21 +26,21 @@ public class RotationCommands {
         int pages = (int) Math.ceil((rot.size() + 7) / 8);
         if (index > pages)
             throw new CommandException("Invalid page number specified! Maximum page number is " + pages + ".");
-        sender.sendMessage(ChatColor.RED + "------------- " + ChatColor.WHITE + "Current Rotation " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + index + ChatColor.DARK_AQUA + " of " + ChatColor.AQUA + pages + ChatColor.DARK_AQUA + ") " + ChatColor.RED + "-------------");
+        sender.sendMessage(ChatColor.RED + "------------- " + ChatColor.WHITE + new LocalizedChatMessage(ChatConstant.UI_ROTATION_CURRENT).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + ChatColor.DARK_AQUA + " (" + ChatColor.AQUA + index + ChatColor.DARK_AQUA + " of " + ChatColor.AQUA + pages + ChatColor.DARK_AQUA + ") " + ChatColor.RED + "-------------");
         String[] maps = {"", "", "", "", "", "", "", ""};
         for (int i = 0; i <= maps.length - 1; i++) {
             int position = 8 * (index - 1) + i;
             try {
                 LoadedMap mapInfo = rot.get(position);
                 if (mapInfo.getAuthors().size() == 1) {
-                    maps[i] = maps[i] + ChatColor.GOLD + mapInfo.getName() + ChatColor.DARK_PURPLE + " by " + ChatColor.RED + mapInfo.getAuthors().get(0).getLeft();
+                    maps[i] = maps[i] + ChatColor.GOLD + mapInfo.getName() + ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_BY).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + " " + ChatColor.RED + mapInfo.getAuthors().get(0).getLeft();
                 } else if (mapInfo.getAuthors().size() > 1) {
-                    maps[i] = maps[i] + ChatColor.GOLD + mapInfo.getName() + ChatColor.DARK_PURPLE + " by ";
+                    maps[i] = maps[i] + ChatColor.GOLD + mapInfo.getName() + ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_BY).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + " ";
                     for (Pair<String, String> author : mapInfo.getAuthors()) {
                         if (mapInfo.getAuthors().indexOf(author) < mapInfo.getAuthors().size() - 2) {
                             maps[i] = maps[i] + ChatColor.RED + author.getLeft() + ChatColor.DARK_PURPLE + ", ";
                         } else if (mapInfo.getAuthors().indexOf(author) == mapInfo.getAuthors().size() - 2) {
-                            maps[i] = maps[i] + ChatColor.RED + author.getLeft() + ChatColor.DARK_PURPLE + " and ";
+                            maps[i] = maps[i] + ChatColor.RED + author.getLeft() + ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_AND).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + " ";
                         } else if (mapInfo.getAuthors().indexOf(author) == mapInfo.getAuthors().size() - 1) {
                             maps[i] = maps[i] + ChatColor.RED + author.getLeft();
                         }
@@ -84,21 +88,21 @@ public class RotationCommands {
         int pages = (int) Math.ceil((loadedList.size() + 7) / 8);
         if (index > pages)
             throw new CommandException("Invalid page number specified! Maximum page number is " + pages + ".");
-        sender.sendMessage(ChatColor.RED + "--------------- " + ChatColor.WHITE + "Loaded Maps " + ChatColor.DARK_AQUA + "(" + ChatColor.AQUA + index + ChatColor.DARK_AQUA + " of " + ChatColor.AQUA + pages + ChatColor.DARK_AQUA + ") " + ChatColor.RED + "---------------");
+        sender.sendMessage(ChatColor.RED + "--------------- " + ChatColor.WHITE + new LocalizedChatMessage(ChatConstant.UI_MAPLOADED).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + ChatColor.DARK_AQUA + " (" + ChatColor.AQUA + index + ChatColor.DARK_AQUA + " of " + ChatColor.AQUA + pages + ChatColor.DARK_AQUA + ") " + ChatColor.RED + "---------------");
         String[] maps = {"", "", "", "", "", "", "", ""};
         for (int i = 0; i <= maps.length - 1; i++) {
             int position = 8 * (index - 1) + i;
             if (position < ordered.size()) {
                 LoadedMap mapInfo = ordered.get(position);
                 if (mapInfo.getAuthors().size() == 1) {
-                    maps[i] = maps[i] + ChatColor.GOLD + mapInfo.getName() + ChatColor.DARK_PURPLE + " by " + ChatColor.RED + mapInfo.getAuthors().get(0).getLeft();
+                    maps[i] = maps[i] + ChatColor.GOLD + mapInfo.getName() + ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_BY).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + " " + ChatColor.RED + mapInfo.getAuthors().get(0).getLeft();
                 } else if (mapInfo.getAuthors().size() > 1) {
-                    maps[i] = maps[i] + ChatColor.GOLD + mapInfo.getName() + ChatColor.DARK_PURPLE + " by ";
+                    maps[i] = maps[i] + ChatColor.GOLD + mapInfo.getName() + ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_BY).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + " ";
                     for (Pair<String, String> author : mapInfo.getAuthors()) {
                         if (mapInfo.getAuthors().indexOf(author) < mapInfo.getAuthors().size() - 2) {
                             maps[i] = maps[i] + ChatColor.RED + author.getLeft() + ChatColor.DARK_PURPLE + ", ";
                         } else if (mapInfo.getAuthors().indexOf(author) == mapInfo.getAuthors().size() - 2) {
-                            maps[i] = maps[i] + ChatColor.RED + author.getLeft() + ChatColor.DARK_PURPLE + " and ";
+                            maps[i] = maps[i] + ChatColor.RED + author.getLeft() + ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_AND).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + " ";
                         } else if (mapInfo.getAuthors().indexOf(author) == mapInfo.getAuthors().size() - 1) {
                             maps[i] = maps[i] + ChatColor.RED + author.getLeft();
                         }

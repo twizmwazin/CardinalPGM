@@ -1,0 +1,2 @@
+mvn clean install
+cp target/Cardinal* /srv/cardinal/plugins/.

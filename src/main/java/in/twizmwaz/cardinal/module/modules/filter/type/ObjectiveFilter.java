@@ -18,7 +18,7 @@ public class ObjectiveFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Object object) {
+    public FilterState evaluate(final Object... objects) {
         if (objective.isComplete()) return ALLOW;
         else return DENY;
     }

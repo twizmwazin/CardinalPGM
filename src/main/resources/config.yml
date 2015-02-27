@@ -1,2 +1,103 @@
 repo: maps
 rotation: rotation.txt
+deleteMatches: true
+custom-motd: true
+worldEditPermissions: true
+permissions:
+  Default:
+    permissions:
+    - cardinal.chat.global
+    - cardinal.chat.team
+  Moderator:
+    permissions:
+    - tnt.defuse
+    - cardinal.cancel
+    - cardinal.chat.admin
+    - cardinal.match.setnext
+    - cardinal.match.cycle
+    - cardinal.team.force
+    - cardinal.teleport
+    - whitelist.reload
+    - whitelist.toggle
+    - whitelist.on
+    - whitelist.off
+    - whitelist.status
+    - whitelist.add
+    - whitelist.remove
+    - whitelist.list
+    - whitelist.team
+    - whielist.kick
+    - cardinal.punish.warn
+    - cardinal.punish.kick
+    - cardinal.punish.ban
+    - cardinal.punish.mute
+    players:
+settings:
+- Blood
+- DeathMessages
+- HighlightDeathMessages
+- JoinMessages
+- Observers
+- Picker
+- PrivateMessages
+- Scoreboard
+- Sounds
+setting:
+  Blood:
+    values:
+    - 'on'
+    - off[default]
+    description: See blood when players get hurt
+  DeathMessages:
+    aliases:
+    - dms
+    values:
+    - own
+    - all[default]
+    description: Death messages displayed to you
+  HighlightDeathMessages:
+    aliases:
+    - hdms
+    values:
+    - underline
+    - italics
+    - white
+    - none
+    - bold[default]
+    description: Highlight death messages that you are involved in
+  JoinMessages:
+    aliases:
+    - jms
+    values:
+    - none
+    - all[default]
+    description: Join messages displayed to you
+  Observers:
+    aliases:
+    - obs
+    values:
+    - none
+    - all[default]
+    description: See other observers while spectating
+  Picker:
+    values:
+    - 'off'
+    - on[default]
+    description: Open a helpful GUI for picking classes and teams
+  PrivateMessages:
+    aliases:
+    - pms
+    values:
+    - none
+    - all[default]
+    description: Who can send you private messages
+  Scoreboard:
+    values:
+    - 'off'
+    - on[default]
+    description: See the scoreboard with game information
+  Sounds:
+    values:
+    - 'off'
+    - on[default]
+    description: Hear sounds to alert you of the last three seconds of a countdown
