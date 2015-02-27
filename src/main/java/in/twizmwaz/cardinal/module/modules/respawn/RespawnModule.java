@@ -1,7 +1,5 @@
 package in.twizmwaz.cardinal.module.modules.respawn;
 
-import in.twizmwaz.cardinal.util.ItemUtils;
-import org.bukkit.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -16,9 +14,11 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.util.ItemUtils;
 import in.twizmwaz.cardinal.util.PlayerUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -28,8 +28,6 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerInitialSpawnEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.Arrays;
@@ -57,7 +55,7 @@ public class RespawnModule implements Module {
         } catch (NullPointerException e) {
         }
     }
-    
+
     @EventHandler(priority = EventPriority.LOW)
     public void clearIgnorantEffects(CardinalSpawnEvent event) {
         event.getPlayer().setPotionParticles(true);
@@ -132,13 +130,13 @@ public class RespawnModule implements Module {
                 ItemStack howTo = ItemUtils.createBook(Material.WRITTEN_BOOK, 1, ChatColor.AQUA.toString() + ChatColor.BOLD + "Coming Soon", ChatColor.GOLD + "CardinalPGM");
                 player.getInventory().setItem(1, howTo);
                 if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
-                    ItemStack picker = ItemUtils.createItem(Material.LEATHER_HELMET, 1, (short)0,
+                    ItemStack picker = ItemUtils.createItem(Material.LEATHER_HELMET, 1, (short) 0,
                             ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(player.getLocale()) : new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(player.getLocale())),
                             Arrays.asList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(player.getLocale())));
                     player.getInventory().setItem(2, picker);
                 }
                 if (player.hasPermission("tnt.defuse")) {
-                    ItemStack shears = ItemUtils.createItem(Material.SHEARS, 1, (short)0, ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
+                    ItemStack shears = ItemUtils.createItem(Material.SHEARS, 1, (short) 0, ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
                     player.getInventory().setItem(4, shears);
                 }
                 player.teleport(chosen.getLocation());
@@ -151,43 +149,54 @@ public class RespawnModule implements Module {
         if (match.getState().equals(MatchState.ENDED)) {
             event.setCancelled(true);
         }
-        if (match.getState().equals(MatchState.PLAYING)) {
-            try {
-                if (!event.getNewTeam().isObserver()) {
-                    if (event.getOldTeam().isObserver()) {
-                        event.getPlayer().setMaxHealth(20);
-                        PlayerUtils.resetPlayer(event.getPlayer());
-                        TeamModule teamModule = event.getNewTeam();
-                        ModuleCollection<SpawnModule> modules = new ModuleCollection<SpawnModule>();
-                        for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
-                            if (spawnModule.getTeam() == teamModule) modules.add(spawnModule);
-                        }
-                        SpawnModule chosen = modules.getRandom();
-                        CardinalSpawnEvent spawnEvent = new CardinalSpawnEvent(event.getPlayer(), chosen, event.getNewTeam());
-                        Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
-                        if (!spawnEvent.isCancelled()) {
-                            event.getPlayer().teleport(chosen.getLocation());
-                        }
-                    } else {
-                        event.getPlayer().setMetadata("teamChange", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), "teamChange"));
-                        event.getPlayer().setHealth(0);
-                    }
-                } else {
+        if (event.getOldTeam() == null ) {
+            event.getPlayer().setMaxHealth(20);
+            PlayerUtils.resetPlayer(event.getPlayer());
+            TeamModule teamModule = event.getNewTeam();
+            ModuleCollection<SpawnModule> modules = new ModuleCollection<SpawnModule>();
+            for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
+                if (spawnModule.getTeam() == teamModule) modules.add(spawnModule);
+            }
+            SpawnModule chosen = modules.getRandom();
+            CardinalSpawnEvent spawnEvent = new CardinalSpawnEvent(event.getPlayer(), chosen, event.getNewTeam());
+            Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
+            if (!spawnEvent.isCancelled()) {
+                event.getPlayer().teleport(chosen.getLocation());
+            }
+        } else if (match.getState().equals(MatchState.PLAYING)) {
+            if (!event.getNewTeam().isObserver()) {
+                if (event.getOldTeam().isObserver()) {
+                    event.getPlayer().setMaxHealth(20);
+                    PlayerUtils.resetPlayer(event.getPlayer());
                     TeamModule teamModule = event.getNewTeam();
-                    SpawnModule spawn = null;
+                    ModuleCollection<SpawnModule> modules = new ModuleCollection<SpawnModule>();
                     for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
-                        if (spawnModule.getTeam() == teamModule) spawn = spawnModule;
+                        if (spawnModule.getTeam() == teamModule) modules.add(spawnModule);
                     }
-                    CardinalSpawnEvent spawnEvent = new CardinalSpawnEvent(event.getPlayer(), spawn, event.getNewTeam());
+                    SpawnModule chosen = modules.getRandom();
+                    CardinalSpawnEvent spawnEvent = new CardinalSpawnEvent(event.getPlayer(), chosen, event.getNewTeam());
                     Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
                     if (!spawnEvent.isCancelled()) {
-                        event.getPlayer().setMetadata("teamChange", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), "teamChange"));
-                        event.getPlayer().setHealth(0);
+                        event.getPlayer().teleport(chosen.getLocation());
                     }
+                } else {
+                    event.getPlayer().setMetadata("teamChange", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), "teamChange"));
+                    event.getPlayer().setHealth(0);
                 }
-            } catch (NullPointerException e) {
-
+            } else {
+                TeamModule teamModule = event.getNewTeam();
+                SpawnModule spawn = null;
+                for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
+                    if (spawnModule.getTeam() == teamModule) spawn = spawnModule;
+                }
+                CardinalSpawnEvent spawnEvent = new CardinalSpawnEvent(event.getPlayer(), spawn, event.getNewTeam());
+                Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
+                if (!spawnEvent.isCancelled()) {
+                    event.getPlayer().setMetadata("teamChange", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), "teamChange"));
+                    event.getPlayer().setHealth(0);
+                }
             }
+
         }
 
     }
