@@ -29,7 +29,7 @@ public class ModeratorCommand {
                     GameHandler.getGameHandler().getPlugin().getConfig().set("permissions.moderator.players", players);
                     sender.sendMessage(ChatColor.GREEN + "You gave moderator permissions to " + TeamUtils.getTeamColorByPlayer(moderator) + (moderator.isOnline() ? ((Player) moderator).getDisplayName() : moderator.getName()));
                     if (moderator.isOnline()) {
-                        ((Player) moderator).sendMessage(ChatColor.GREEN + "You are no longer a moderator!");
+                        ((Player) moderator).sendMessage(ChatColor.GREEN + "You now a moderator!");
                         Bukkit.getServer().getPluginManager().callEvent(new PlayerNameUpdateEvent((Player) moderator));
                     }
                 } else {
