@@ -72,7 +72,7 @@ public class TeamCommand {
                 }
             }
         } else if (cmd.getString(0).equalsIgnoreCase("shuffle")) {
-            if (sender.hasPermission("cardinal.team.shuggle")) {
+            if (sender.hasPermission("cardinal.team.shuffle")) {
                 List<Player> playersToShuffle = new ArrayList<>();
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (TeamUtils.getTeamByPlayer(player) != null) {
