@@ -38,7 +38,7 @@ public class Snowflakes implements Module {
             killer = (Player) event.getPlayerSpleefEvent().getSpleefer();
         }
         if (killer != null && TeamUtils.getTeamByPlayer(event.getPlayer()) != TeamUtils.getTeamByPlayer(killer)) {
-            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(killer, ChangeReason.PLAYER_KILL, 1, 1.0, event.getPlayer().getName()));
+            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(killer, ChangeReason.PLAYER_KILL, 1, event.getPlayer().getName()));
         }
     }
 
@@ -46,9 +46,9 @@ public class Snowflakes implements Module {
     public void onMatchEnd(MatchEndEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (TeamUtils.getTeamByPlayer(player) != null && !TeamUtils.getTeamByPlayer(player).isObserver() && event.getTeam() == TeamUtils.getTeamByPlayer(player)) {
-                Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.TEAM_WIN, 15, 1.0, TeamUtils.getTeamByPlayer(player).getCompleteName()));
+                Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.TEAM_WIN, 15, TeamUtils.getTeamByPlayer(player).getCompleteName()));
             } else if (TeamUtils.getTeamByPlayer(player) != null && !TeamUtils.getTeamByPlayer(player).isObserver() && event.getTeam() != TeamUtils.getTeamByPlayer(player)) {
-                Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.TEAM_LOYAL, 5, 1.0, TeamUtils.getTeamByPlayer(player).getCompleteName()));
+                Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.TEAM_LOYAL, 5, TeamUtils.getTeamByPlayer(player).getCompleteName()));
             }
         }
     }

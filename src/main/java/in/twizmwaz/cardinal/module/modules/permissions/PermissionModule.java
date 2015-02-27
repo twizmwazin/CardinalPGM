@@ -43,6 +43,10 @@ public class PermissionModule implements Module {
         attachmentMap.clear();
     }
 
+    public List<UUID> getDevs() {
+        return devs;
+    }
+
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         attachmentMap.put(event.getPlayer(), event.getPlayer().addAttachment(plugin));
@@ -116,6 +120,10 @@ public class PermissionModule implements Module {
             }
         }
         return false;
+    }
+
+    public static boolean isDev(UUID player) {
+        return GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).getDevs().contains(player);
     }
 
     @EventHandler

@@ -339,7 +339,7 @@ public class CoreObjective implements GameObjective {
     public void onCoreLeak(ObjectiveCompleteEvent event) {
         if (event.getObjective().equals(this) && event.getObjective().showOnScoreboard()) {
             for (UUID player : playersCompleted) {
-                Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(Bukkit.getPlayer(player), Snowflakes.ChangeReason.CORE_LEAK, 15, 1.0, ChatColor.RED + name));
+                Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(Bukkit.getPlayer(player), Snowflakes.ChangeReason.CORE_LEAK, 15, ChatColor.RED + name));
             }
         }
     }

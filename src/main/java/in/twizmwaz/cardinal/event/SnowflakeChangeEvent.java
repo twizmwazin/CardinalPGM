@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.event;
 
 import in.twizmwaz.cardinal.module.modules.snowflakes.Snowflakes;
+import in.twizmwaz.cardinal.util.PlayerUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -16,11 +17,11 @@ public class SnowflakeChangeEvent extends Event {
     private final int finalAmount;
     private final String[] args;
 
-    public SnowflakeChangeEvent(Player player, Snowflakes.ChangeReason changeReason, int rawAmount, double multiplier, String... args) {
+    public SnowflakeChangeEvent(Player player, Snowflakes.ChangeReason changeReason, int rawAmount, String... args) {
         this.player = player;
         this.changeReason = changeReason;
         this.rawAmount = rawAmount;
-        this.multiplier = multiplier;
+        this.multiplier = PlayerUtils.getSnowflakeMultiplier(player);
         this.finalAmount = (int) (rawAmount * multiplier);
         this.args = args;
     }
