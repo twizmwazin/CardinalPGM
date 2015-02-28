@@ -16,7 +16,7 @@ import java.util.Locale;
 
 public class PrivateMessageCommands {
 
-    @Command(aliases = {"msg", "message", "pm", "privatemessage", "whisper", "tell"}, desc = "Send a private message to a player.", usage = "/{cmd} <player> <message>", min = 2)
+    @Command(aliases = {"msg", "message", "pm", "privatemessage", "whisper", "tell"}, desc = "Send a private message to a player.", usage = "<player> <message>", min = 2)
     public static void pm(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (!(sender instanceof Player)) throw new CommandException(ChatConstant.ERROR_PLAYER_COMMAND.getMessage(Locale.getDefault().toString()));
 
