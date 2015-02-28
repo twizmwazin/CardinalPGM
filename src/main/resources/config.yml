@@ -1,6 +1,7 @@
 repo: maps
 rotation: rotation.txt
 deleteMatches: true
+displayMapLoadErrors: false
 custom-motd: true
 worldEditPermissions: true
 permissions:

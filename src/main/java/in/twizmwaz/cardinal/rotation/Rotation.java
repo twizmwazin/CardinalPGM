@@ -75,6 +75,10 @@ public class Rotation {
                     loaded.add(new LoadedMap(name, version, objective, authors, contributors, rules, maxPlayers, map));
                 } catch (Exception e) {
                     Bukkit.getLogger().log(Level.WARNING, "Failed to load map at " + map.getAbsolutePath());
+                    if (Cardinal.getInstance().getConfig().getBoolean("displayMapLoadErrors")) {
+                		Bukkit.getLogger().log(Level.INFO, "Showing error, this can be disabled in the config: ");
+                		e.printStackTrace();
+                	}
                 }
             }
         }
