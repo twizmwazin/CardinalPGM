@@ -7,7 +7,7 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
-import org.apache.commons.lang3.tuple.Pair;
+import in.twizmwaz.cardinal.util.Contributor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -32,23 +32,23 @@ public class MapCommands {
         sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_MAP_OBJECTIVE).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + ": " + ChatColor.RESET + "" + ChatColor.GOLD + mapInfo.getObjective());
         if (mapInfo.getAuthors().size() > 1) {
             sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_MAP_AUTHORS).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + ":");
-            for (Pair<String, String> contributor : mapInfo.getAuthors()) {
-                if (contributor.getRight() != null) {
-                    sender.sendMessage("* " + ChatColor.RED + contributor.getLeft() + ChatColor.RESET + " " + ChatColor.GREEN + "" + ChatColor.ITALIC + "(" + contributor.getRight() + ")");
+            for (Contributor contributor : mapInfo.getAuthors()) {
+                if (contributor.getContribution() != null) {
+                    sender.sendMessage("* " + ChatColor.RED + contributor.getName() + ChatColor.RESET + " " + ChatColor.GREEN + "" + ChatColor.ITALIC + "(" + contributor.getContribution() + ")");
                 } else {
-                    sender.sendMessage("* " + ChatColor.RED + contributor.getLeft());
+                    sender.sendMessage("* " + ChatColor.RED + contributor.getName());
                 }
             }
         } else {
-            sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_MAP_AUTHOR).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + ": " + ChatColor.RESET + ChatColor.GOLD + mapInfo.getAuthors().get(0).getLeft());
+            sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_MAP_AUTHOR).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + ": " + ChatColor.RESET + ChatColor.GOLD + mapInfo.getAuthors().get(0).getName());
         }
         if (mapInfo.getContributors().size() > 0) {
             sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_MAP_CONTRIBUTORS).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + ":");
-            for (Pair<String, String> contributor : mapInfo.getContributors()) {
-                if (contributor.getRight() != null) {
-                    sender.sendMessage("* " + ChatColor.RED + contributor.getLeft() + ChatColor.RESET + ChatColor.GREEN + "" + ChatColor.ITALIC + " (" + contributor.getRight() + ")");
+            for (Contributor contributor : mapInfo.getContributors()) {
+                if (contributor.getContribution() != null) {
+                    sender.sendMessage("* " + ChatColor.RED + contributor.getName() + ChatColor.RESET + ChatColor.GREEN + "" + ChatColor.ITALIC + " (" + contributor.getContribution() + ")");
                 } else {
-                    sender.sendMessage("* " + ChatColor.RED + contributor.getLeft());
+                    sender.sendMessage("* " + ChatColor.RED + contributor.getName());
                 }
             }
         }
@@ -65,16 +65,16 @@ public class MapCommands {
     public static void next(final CommandContext cmd, CommandSender sender) {
         LoadedMap next = GameHandler.getGameHandler().getRotation().getNext();
         if (next.getAuthors().size() == 1) {
-            sender.sendMessage(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.GENERIC_MAP_NEXT, ChatColor.GOLD + next.getName() + ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_BY).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + " " + ChatColor.RED + next.getAuthors().get(0).getLeft()).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+            sender.sendMessage(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.GENERIC_MAP_NEXT, ChatColor.GOLD + next.getName() + ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_BY).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + " " + ChatColor.RED + next.getAuthors().get(0).getName()).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
         } else if (next.getAuthors().size() > 1) {
             String result = ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.GENERIC_MAP_NEXT, ChatColor.GOLD + next.getName() + ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_BY).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + " ").getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString());
-            for (Pair<String, String> author: next.getAuthors()) {
+            for (Contributor author: next.getAuthors()) {
                 if (next.getAuthors().indexOf(author) < next.getAuthors().size() - 2) {
-                    result = result + ChatColor.RED + author.getLeft() + ChatColor.DARK_PURPLE + ", ";
+                    result = result + ChatColor.RED + author.getName() + ChatColor.DARK_PURPLE + ", ";
                 } else if (next.getAuthors().indexOf(author) == next.getAuthors().size() - 2) {
-                    result = result + ChatColor.RED + author.getLeft() + ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_AND).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + " ";
+                    result = result + ChatColor.RED + author.getName() + ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_AND).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + " ";
                 } else if (next.getAuthors().indexOf(author) == next.getAuthors().size() - 1) {
-                    result = result + ChatColor.RED + author.getLeft();
+                    result = result + ChatColor.RED + author.getName();
                 }
             }
             sender.sendMessage(result);

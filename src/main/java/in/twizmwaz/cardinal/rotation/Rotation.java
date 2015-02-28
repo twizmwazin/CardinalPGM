@@ -1,24 +1,20 @@
 package in.twizmwaz.cardinal.rotation;
 
+import com.google.common.collect.Maps;
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
+import in.twizmwaz.cardinal.util.Contributor;
 import in.twizmwaz.cardinal.util.DomUtils;
 import in.twizmwaz.cardinal.util.MojangUtils;
 import in.twizmwaz.cardinal.util.NumUtils;
 import org.apache.commons.io.Charsets;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 public class Rotation {
@@ -52,18 +48,16 @@ public class Rotation {
                     String name = xml.getRootElement().getChild("name").getText();
                     String version = xml.getRootElement().getChild("version").getText();
                     String objective = xml.getRootElement().getChild("objective").getText();
-                    List<Pair<String, String>> authors = new ArrayList<>();
+                    List<Contributor> authors = new ArrayList<>();
                     for (Element authorsElement : xml.getRootElement().getChildren("authors")) {
                         for (Element author : authorsElement.getChildren()) {
-                            String authorName = author.getAttributeValue("uuid") == null ? author.getText() : MojangUtils.getNameByUUID(UUID.fromString(author.getAttributeValue("uuid")));
-                            authors.add(new ImmutablePair<>(authorName, author.getAttributeValue("contribution")));
+                            authors.add(parseContributor(author));
                         }
                     }
-                    List<Pair<String, String>> contributors = new ArrayList<>();
+                    List<Contributor> contributors = new ArrayList<>();
                     for (Element contributorsElement : xml.getRootElement().getChildren("contributors")) {
                         for (Element contributor : contributorsElement.getChildren()) {
-                            String contributorName = contributor.getAttributeValue("uuid") == null ? contributor.getText() : Bukkit.getOfflinePlayer(UUID.fromString(contributor.getAttributeValue("uuid"))).getName();
-                            contributors.add(new ImmutablePair<>(contributorName, contributor.getAttributeValue("contribution")));
+                            contributors.add(parseContributor(contributor));
                         }
                     }
                     List<String> rules = new ArrayList<>();
@@ -83,6 +77,11 @@ public class Rotation {
                     Bukkit.getLogger().log(Level.WARNING, "Failed to load map at " + map.getAbsolutePath());
                 }
             }
+        }
+        try {
+            updatePlayers();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -173,4 +172,39 @@ public class Rotation {
             return rotation.get(0);
         }
     }
+    
+    private Contributor parseContributor(Element element) {
+        if (element.getAttributeValue("uuid") != null) {
+            return new Contributor(UUID.fromString(element.getAttributeValue("uuid")), element.getAttributeValue("contribution"));
+        } else return new Contributor(element.getText(), element.getAttributeValue("contribution"));
+    }
+    
+    @SuppressWarnings("unchecked")
+    private void updatePlayers() throws IOException, ClassNotFoundException {
+        HashMap<UUID, String> names;
+        try {
+             names = (HashMap<UUID, String>) new ObjectInputStream(new FileInputStream(new File(Cardinal.getInstance().getDataFolder().getPath() + ".names.ser"))).readObject();
+        } catch (FileNotFoundException e) {
+            names = Maps.newHashMap();
+        }
+        for (LoadedMap map : loaded) {
+            for (Contributor contributor : map.getAuthors()) {
+                if (contributor.getName() == null) {
+                    String localName = Bukkit.getOfflinePlayer(contributor.getUniqueId()).getName();
+                    if (localName != null) {
+                        contributor.setName(localName);
+                    } else if (names.containsKey(contributor.getUniqueId())) {
+                        contributor.setName(names.get(contributor.getUniqueId()));
+                    } else {
+                        names.put(contributor.getUniqueId(), MojangUtils.getNameByUUID(contributor.getUniqueId()));
+                        contributor.setName(names.get(contributor.getUniqueId()));
+                    }
+                }
+            }
+        }
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(Cardinal.getInstance().getDataFolder().getPath() + "/.names.ser")));
+        out.writeObject(names);
+        out.close();
+    }
+
 }

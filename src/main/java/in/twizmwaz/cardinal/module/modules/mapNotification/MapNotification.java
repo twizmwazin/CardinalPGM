@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.mapNotification;
 
+import in.twizmwaz.cardinal.util.Contributor;
 import org.bukkit.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
@@ -8,7 +9,6 @@ import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
-import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -51,28 +51,28 @@ public class MapNotification implements TaskedModule {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 String locale = player.getLocale();
                 String result = "";
-                List<Pair<String, String>> authors = map.getAuthors();
-                for (Pair<String, String> author : authors) {
+                List<Contributor> authors = map.getAuthors();
+                for (Contributor author : authors) {
                     if (authors.indexOf(author) < authors.size() - 2) {
-                        result = result + org.bukkit.ChatColor.RED + author.getLeft() + org.bukkit.ChatColor.DARK_PURPLE + ", ";
+                        result = result + org.bukkit.ChatColor.RED + author.getName() + org.bukkit.ChatColor.DARK_PURPLE + ", ";
                     } else if (authors.indexOf(author) == authors.size() - 2) {
-                        result = result + org.bukkit.ChatColor.RED + author.getLeft() + org.bukkit.ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_AND).getMessage(locale) + " ";
+                        result = result + org.bukkit.ChatColor.RED + author.getName() + org.bukkit.ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_AND).getMessage(locale) + " ";
                     } else if (authors.indexOf(author) == authors.size() - 1) {
-                        result = result + org.bukkit.ChatColor.RED + author.getLeft();
+                        result = result + org.bukkit.ChatColor.RED + author.getName();
                     }
                 }
                 player.sendMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "{0}", new LocalizedChatMessage(ChatConstant.UI_MAP_PLAYING, ChatColor.GOLD + map.getName() + ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_BY).getMessage(locale) + " " + result)).getMessage(locale));
             }
             String locale = Locale.getDefault().toString();
             String result = "";
-            List<Pair<String, String>> authors = map.getAuthors();
-            for (Pair<String, String> author : authors) {
+            List<Contributor> authors = map.getAuthors();
+            for (Contributor author : authors) {
                 if (authors.indexOf(author) < authors.size() - 2) {
-                    result = result + org.bukkit.ChatColor.RED + author.getLeft() + org.bukkit.ChatColor.DARK_PURPLE + ", ";
+                    result = result + org.bukkit.ChatColor.RED + author.getName() + org.bukkit.ChatColor.DARK_PURPLE + ", ";
                 } else if (authors.indexOf(author) == authors.size() - 2) {
-                    result = result + org.bukkit.ChatColor.RED + author.getLeft() + org.bukkit.ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_AND).getMessage(locale) + " ";
+                    result = result + org.bukkit.ChatColor.RED + author.getName() + org.bukkit.ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_AND).getMessage(locale) + " ";
                 } else if (authors.indexOf(author) == authors.size() - 1) {
-                    result = result + org.bukkit.ChatColor.RED + author.getLeft();
+                    result = result + org.bukkit.ChatColor.RED + author.getName();
                 }
             }
             Bukkit.getLogger().info(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "{0}", new LocalizedChatMessage(ChatConstant.UI_MAP_PLAYING, ChatColor.GOLD + map.getName() + ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_BY).getMessage(locale) + " " + result)).getMessage(locale));

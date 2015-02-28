@@ -1,6 +1,6 @@
 package in.twizmwaz.cardinal.rotation;
 
-import org.apache.commons.lang3.tuple.Pair;
+import in.twizmwaz.cardinal.util.Contributor;
 
 import java.io.File;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 public class LoadedMap {
 
     private final String name, version, objective;
-    private final List<Pair<String, String>> authors, contributors;
+    private final List<Contributor> authors, contributors;
     private final List<String> rules;
     private final int maxPlayers;
     private final File folder;
@@ -18,7 +18,7 @@ public class LoadedMap {
      * @param authors The authors of the map
      * @param folder  The folder where the map can be found
      */
-    public LoadedMap(String name, String version, String objective, List<Pair<String, String>> authors, List<Pair<String, String>> contributors, List<String> rules, int maxPlayers, File folder) {
+    public LoadedMap(String name, String version, String objective, List<Contributor> authors, List<Contributor> contributors, List<String> rules, int maxPlayers, File folder) {
         this.name = name;
         this.version = version;
         this.objective = objective;
@@ -53,14 +53,14 @@ public class LoadedMap {
     /**
      * @return Returns the authors of the map with their contributions
      */
-    public List<Pair<String, String>> getAuthors() {
+    public List<Contributor> getAuthors() {
         return authors;
     }
 
     /**
      * @return Returns the contributors of the map with their contributions
      */
-    public List<Pair<String, String>> getContributors() {
+    public List<Contributor> getContributors() {
         return contributors;
     }
 
