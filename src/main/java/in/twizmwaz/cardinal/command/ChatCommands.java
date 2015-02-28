@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
 
 public class ChatCommands {
 
-    @Command(aliases = {"g"}, desc = "Talk in global chat.", usage = "/{cmd} <message>", min = 1)
+    @Command(aliases = {"g"}, desc = "Talk in global chat.", usage = "<message>", min = 1)
     @CommandPermissions("cardinal.chat.global")
     public static void global(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (sender instanceof Player) {
@@ -27,7 +27,7 @@ public class ChatCommands {
         } else throw new CommandException("Console cannot use this command.");
     }
 
-    @Command(aliases = {"a"}, desc = "Talk in admin chat.", usage = "/{cmd} <message>", min = 1)
+    @Command(aliases = {"a"}, desc = "Talk in admin chat.", usage = "<message>", min = 1)
     @CommandPermissions("cardinal.chat.admin")
     public static void admin(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (sender instanceof Player) {
@@ -38,7 +38,7 @@ public class ChatCommands {
         } else throw new CommandException("Console cannot use this command.");
     }
 
-    @Command(aliases = {"t"}, desc = "Talk in team chat.", usage = "/{cmd} <message>", min = 1)
+    @Command(aliases = {"t"}, desc = "Talk in team chat.", usage = "<message>", min = 1)
     @CommandPermissions("cardinal.chat.team")
     public static void team(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (sender instanceof Player) {
