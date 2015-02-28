@@ -79,7 +79,6 @@ public class Rotation {
                 		Bukkit.getLogger().log(Level.INFO, "Showing error, this can be disabled in the config: ");
                 		e.printStackTrace();
                 	}
-                 }
                 }
             }
         }
