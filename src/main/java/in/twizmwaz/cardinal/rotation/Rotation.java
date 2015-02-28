@@ -201,6 +201,19 @@ public class Rotation {
                     }
                 }
             }
+            for (Contributor contributor : map.getContributors()) {
+                if (contributor.getName() == null) {
+                    String localName = Bukkit.getOfflinePlayer(contributor.getUniqueId()).getName();
+                    if (localName != null) {
+                        contributor.setName(localName);
+                    } else if (names.containsKey(contributor.getUniqueId())) {
+                        contributor.setName(names.get(contributor.getUniqueId()));
+                    } else {
+                        names.put(contributor.getUniqueId(), MojangUtils.getNameByUUID(contributor.getUniqueId()));
+                        contributor.setName(names.get(contributor.getUniqueId()));
+                    }
+                }
+            }
         }
         ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(Cardinal.getInstance().getDataFolder().getPath() + "/.names.ser")));
         out.writeObject(names);
