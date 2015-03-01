@@ -91,10 +91,12 @@ public class ObserverModule implements Module {
     @EventHandler
     public void onPlayerSpawn(CardinalSpawnEvent event) {
         if (!event.getTeam().isObserver()) {
-            event.getPlayer().setGameMode(GameMode.SURVIVAL);
-            event.getPlayer().setAffectsSpawning(true);
-            event.getPlayer().setCollidesWithEntities(true);
-            event.getPlayer().setCanPickupItems(true);
+            if (match.isRunning()) {
+                event.getPlayer().setGameMode(GameMode.SURVIVAL);
+                event.getPlayer().setAffectsSpawning(true);
+                event.getPlayer().setCollidesWithEntities(true);
+                event.getPlayer().setCanPickupItems(true);
+            }
         } else {
             resetPlayer(event.getPlayer(), false);
             if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
@@ -261,7 +263,7 @@ public class ObserverModule implements Module {
         if (TeamUtils.getTeamByPlayer(event.getEntity()) == null) {
             event.getDrops().clear();
             event.setDroppedExp(0);
-        } else if (TeamUtils.getTeamByPlayer(event.getEntity()).isObserver()) {
+        } else if (TeamUtils.getTeamByPlayer(event.getEntity()).isObserver() || !match.isRunning()) {
             event.getDrops().clear();
             event.setDroppedExp(0);
         }

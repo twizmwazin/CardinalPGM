@@ -48,7 +48,7 @@ public class RespawnModule implements Module {
     @EventHandler
     public void onPgmSpawn(CardinalSpawnEvent event) {
         try {
-            if (!TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) {
+            if (!TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() && match.isRunning()) {
                 event.getPlayer().setGameMode(GameMode.SURVIVAL);
             }
             event.getPlayer().updateInventory();
@@ -79,16 +79,46 @@ public class RespawnModule implements Module {
 
     @EventHandler
     public void onMinecraftRespawn(PlayerRespawnEvent event) {
-        TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
-        ModuleCollection<SpawnModule> modules = new ModuleCollection<SpawnModule>();
-        for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
-            if (spawnModule.getTeam() == teamModule) modules.add(spawnModule);
-        }
-        SpawnModule chosen = modules.getRandom();
-        CardinalSpawnEvent spawnEvent = new CardinalSpawnEvent(event.getPlayer(), chosen, TeamUtils.getTeamByPlayer(event.getPlayer()));
-        Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
-        if (!spawnEvent.isCancelled()) {
-            event.setRespawnLocation(chosen.getLocation());
+        if (match.getState().equals(MatchState.PLAYING)) {
+            TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
+            ModuleCollection<SpawnModule> modules = new ModuleCollection<SpawnModule>();
+            for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
+                if (spawnModule.getTeam() == teamModule) modules.add(spawnModule);
+            }
+            SpawnModule chosen = modules.getRandom();
+            CardinalSpawnEvent spawnEvent = new CardinalSpawnEvent(event.getPlayer(), chosen, TeamUtils.getTeamByPlayer(event.getPlayer()));
+            Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
+            if (!spawnEvent.isCancelled()) {
+                event.setRespawnLocation(chosen.getLocation());
+            }
+        } else {
+            TeamModule teamModule = TeamUtils.getTeamById("observers");
+            ModuleCollection<SpawnModule> modules = new ModuleCollection<SpawnModule>();
+            for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
+                if (spawnModule.getTeam() == teamModule) modules.add(spawnModule);
+            }
+            SpawnModule chosen = modules.getRandom();
+            CardinalSpawnEvent spawnEvent = new CardinalSpawnEvent(event.getPlayer(), chosen, TeamUtils.getTeamById("observers"));
+            Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
+            if (!spawnEvent.isCancelled()) {
+                Player player = event.getPlayer();
+                event.setRespawnLocation(chosen.getLocation());
+                PlayerUtils.resetPlayer(player);
+                player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
+                ItemStack howTo = ItemUtils.createBook(Material.WRITTEN_BOOK, 1, ChatColor.AQUA.toString() + ChatColor.BOLD + "Coming Soon", ChatColor.GOLD + "CardinalPGM");
+                player.getInventory().setItem(1, howTo);
+                if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
+                    ItemStack picker = ItemUtils.createItem(Material.LEATHER_HELMET, 1, (short) 0,
+                            ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(player.getLocale()) : new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(player.getLocale())),
+                            Arrays.asList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(player.getLocale())));
+                    player.getInventory().setItem(2, picker);
+                }
+                if (player.hasPermission("tnt.defuse")) {
+                    ItemStack shears = ItemUtils.createItem(Material.SHEARS, 1, (short) 0, ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
+                    player.getInventory().setItem(4, shears);
+                }
+                player.teleport(chosen.getLocation());
+            }
         }
     }
 
