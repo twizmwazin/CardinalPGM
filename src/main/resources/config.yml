@@ -4,6 +4,7 @@ deleteMatches: true
 displayMapLoadErrors: false
 custom-motd: true
 worldEditPermissions: true
+broadcastStats: true
 permissions:
   Default:
     permissions:
