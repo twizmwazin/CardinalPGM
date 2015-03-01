@@ -11,6 +11,7 @@ import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.modules.startTimer.StartTimer;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -28,7 +29,7 @@ public class StartAndEndCommand {
             if (cmd.argsLength() > 0) time = cmd.getInteger(0) * 20;
             GameHandler.getGameHandler().getMatch().start(time);
         } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
-            GameHandler.getGameHandler().getMatch().getModules().getModule(StartTimer.class).setTime(cmd.getInteger(0));
+            GameHandler.getGameHandler().getMatch().getModules().getModule(StartTimer.class).setTime(cmd.getInteger(0) * 20);
         } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_RESUME).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
         } else {
