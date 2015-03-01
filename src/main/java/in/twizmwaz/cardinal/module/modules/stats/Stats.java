@@ -10,6 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.util.*;
@@ -17,12 +18,13 @@ import java.util.*;
 public class Stats implements Module {
 
 
-    private ArrayList<Tracker> stats = new ArrayList<>();
+    private List<Tracker> stats = new ArrayList<>();
     private int totalKills;
     private int totalDeaths;
 
     @Override
     public void unload() {
+        HandlerList.unregisterAll(this);
     }
 
     public void add(Tracker tracker) {
