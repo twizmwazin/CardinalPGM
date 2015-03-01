@@ -4,6 +4,8 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
+import in.twizmwaz.cardinal.event.BroadcastMatchEndEvent;
+import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.event.SnowflakeChangeEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
@@ -20,6 +22,7 @@ import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.FireworkUtil;
 import in.twizmwaz.cardinal.util.TeamUtils;
+
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -336,8 +339,8 @@ public class CoreObjective implements GameObjective {
     }
 
     @EventHandler
-    public void onCoreLeak(ObjectiveCompleteEvent event) {
-        if (event.getObjective().equals(this) && event.getObjective().showOnScoreboard()) {
+    public void onMatchEnd(BroadcastMatchEndEvent event) {
+        if (complete) {
             for (UUID player : playersCompleted) {
                 Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(Bukkit.getPlayer(player), Snowflakes.ChangeReason.CORE_LEAK, 15, ChatColor.RED + name));
             }

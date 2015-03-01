@@ -3,6 +3,8 @@ package in.twizmwaz.cardinal.module.modules.match;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
+import in.twizmwaz.cardinal.event.BroadcastMatchEndEvent;
+import in.twizmwaz.cardinal.event.BroadcastMatchStartEvent;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
@@ -10,6 +12,7 @@ import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -35,6 +38,7 @@ public class MatchModule implements Module {
         ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # #"));
         ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # " + ChatColor.GOLD + "{0}" + ChatColor.DARK_PURPLE + " # #", new LocalizedChatMessage(ChatConstant.UI_MATCH_STARTED)));
         ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # #"));
+        Bukkit.getServer().getPluginManager().callEvent(new BroadcastMatchStartEvent());
     }
 
     @EventHandler
@@ -49,6 +53,7 @@ public class MatchModule implements Module {
             }
         }
         ChatUtils.getGlobalChannel().sendMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # #");
+        Bukkit.getServer().getPluginManager().callEvent(new BroadcastMatchEndEvent());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
