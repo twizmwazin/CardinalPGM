@@ -114,7 +114,7 @@ public class PermissionModule implements Module {
     }
 
     public static boolean isMod(UUID player) {
-        for (String uuid : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.moderator.players")) {
+        for (String uuid : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.players")) {
             if (uuid.equals(player.toString())) {
                 return true;
             }

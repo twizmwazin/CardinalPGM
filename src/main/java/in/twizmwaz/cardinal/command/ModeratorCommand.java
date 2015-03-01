@@ -24,12 +24,15 @@ public class ModeratorCommand {
         if (moderator != null) {
             if (!moderator.isOp()) {
                 if (!PermissionModule.isMod(moderator.getUniqueId())) {
-                    List<String> players = GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.moderator.players");
+                    List<String> players = GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.players");
                     players.add(moderator.getUniqueId().toString());
-                    GameHandler.getGameHandler().getPlugin().getConfig().set("permissions.moderator.players", players);
+                    GameHandler.getGameHandler().getPlugin().getConfig().set("permissions.Moderator.players", players);
                     sender.sendMessage(ChatColor.GREEN + "You gave moderator permissions to " + TeamUtils.getTeamColorByPlayer(moderator) + (moderator.isOnline() ? ((Player) moderator).getDisplayName() : moderator.getName()));
                     if (moderator.isOnline()) {
-                        ((Player) moderator).sendMessage(ChatColor.GREEN + "You now a moderator!");
+                        ((Player) moderator).sendMessage(ChatColor.GREEN + "You are now a moderator!");
+                        for (String permission : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.permissions")) {
+                            GameHandler.getGameHandler().getMatch().getModules().getModules(PermissionModule.class).get(0).enablePermission((Player) moderator, permission);
+                        }
                         Bukkit.getServer().getPluginManager().callEvent(new PlayerNameUpdateEvent((Player) moderator));
                     }
                 } else {
@@ -50,12 +53,15 @@ public class ModeratorCommand {
         if (moderator != null) {
             if (!moderator.isOp()) {
                 if (PermissionModule.isMod(moderator.getUniqueId())) {
-                    List<String> players = GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.moderator.players");
+                    List<String> players = GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.players");
                     players.remove(moderator.getUniqueId().toString());
-                    GameHandler.getGameHandler().getPlugin().getConfig().set("permissions.moderator.players", players);
+                    GameHandler.getGameHandler().getPlugin().getConfig().set("permissions.Moderator.players", players);
                     sender.sendMessage(ChatColor.RED + "You removed moderator permissions from " + TeamUtils.getTeamColorByPlayer(moderator) + (moderator.isOnline() ? ((Player) moderator).getDisplayName() : moderator.getName()));
                     if (moderator.isOnline()) {
                         ((Player) moderator).sendMessage(ChatColor.RED + "You are no longer a moderator!");
+                        for (String permission : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.permissions")) {
+                            GameHandler.getGameHandler().getMatch().getModules().getModules(PermissionModule.class).get(0).disablePermission((Player) moderator, permission);
+                        }
                         Bukkit.getServer().getPluginManager().callEvent(new PlayerNameUpdateEvent((Player) moderator));
                     }
                 } else {
