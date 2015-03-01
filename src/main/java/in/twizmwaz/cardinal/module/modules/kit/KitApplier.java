@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.kit;
 
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.event.EventHandler;
@@ -14,7 +15,8 @@ public class KitApplier implements Module {
 
     @EventHandler
     public void onPgmSpawn(CardinalSpawnEvent event) {
-        if (event.getSpawn().getKit() != null) event.getSpawn().getKit().apply(event.getPlayer());
+        if (event.getSpawn().getKit() != null && GameHandler.getGameHandler().getMatch().isRunning())
+            event.getSpawn().getKit().apply(event.getPlayer());
     }
 
 }
