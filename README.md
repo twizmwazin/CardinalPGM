@@ -17,5 +17,13 @@ When creating an issue, be careful to follow the following guidelines:
 - Make sure the report uses clear and concise English.
 By following these guidelines, it will help developers to quickly and accurately resolve the issue.
 
+##Contributing
+Before submitting a Pull Request, to increase the chances of the pull request being merged, make sure to follow the following guidelines:
+- Use a formal commit messgae. Commit messages should be in the present tense. For exampe, "Add xxxxx, closes #123."
+- Have one commit per pull request. This makes it easier for the pull request to be reviewed and merged. If there is an issue with a pull request, use git to amend the commit rather than adding a second commit.
+- Maintain a formal style of code. Check the code for perfect syntax and correct spacing and indentation.
+- Make sure the code works. Pull reqests that do not work will hurt your chances of getting code merged in the future.
+- Do not use the GitHub editor to edit Java files. Use a proper IDE such as IntelliJ or Eclipse.
+
 ##Compiling
 To compile and run the latest development version of CardinalPGM, you will need [JDK7](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html) and [Maven](http://maven.apache.org/). On most Linux distributions, you can find both packages in your default repositories. To compile, simply run `mvn clean install`. The plugin should be found in `target/`.
