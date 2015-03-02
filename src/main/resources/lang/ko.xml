@@ -10,7 +10,7 @@
         <noSetNext>재시작이 대기중인 경우에는 다음맵을 세팅 할 수 없습니다. 강제로 진행하려면 -f 을 사용하십시오.</noSetNext>
         <disabledCommand>이 명령어는 비활성화 되었습니다. 맵들은 변화가 생기면 다시 로드될것입니다.</disabledCommand>
         <rotPointInvalid>선택된 로테이션 시점은 잘못되었습니다.</rotPointInvalid>
-        <invalidTime>잘못된 카운트다운 시간입니다..</invalidTime>
+        <invalidTime>잘못된 카운트다운 시간입니다.</invalidTime>
         <teamChatDefault>팀채팅이 이미 기본 채널입니다.</teamChatDefault>
         <teamChannel>지금은 팀채팅을  변경할 수 없습니다. 몇분뒤에 다시 시도하십시오.</teamChannel>
         <noClass>해당 클래스는 존재하지 않습니다.</noClass>
@@ -32,7 +32,7 @@
         <noTeamMatch>해당팀은 존재하지 않습니다.</noTeamMatch>
         <noRotMatch>해당 로테이션은 존재하지 않습니다.</noRotMatch>
         <noPlayerMatch>해당 플레이어는 존재하지 않습니다.</noPlayerMatch>
-        <multiplePlayers>한명 이상의 플레이어가 발견되었습니다. @<이름> 을 사용하시면 정확한 결과를 찾을수 있습니다.</multiplePlayers>
+        <multiplePlayers>한명 이상의 플레이어가 발견되었습니다. @이름을 사용하시면 정확한 결과를 찾을수 있습니다.</multiplePlayers>
         <unknownError>알수없는 오류가 발생했습니다. 관리자에게 문의하십시오.</unknownError>
         <movedForBalance>당신은 유료 회원을 위한 공간을 만들기 위해 {0}에서 제외되었습니다.</movedForBalance>
         <autoJoinSwitch>(팀을 선택하지 않았으므로 신경쓰지 않을거라 생각합니다)</autoJoinSwitch>
@@ -54,7 +54,7 @@
         <defuseTntWater>물 안에 있는 TNT는 제거할 수 없습니다.</defuseTntWater>
         <defuseTntEnemy>적 팀의 TNT는 제거할수 없습니다.</defuseTntEnemy>
         <noPermission>권한이 없습니다.</noPermission>
-        <numberString>숫자만 입력하실 수 있습니다..</numberString>
+        <numberString>숫자만 입력하실 수 있습니다.</numberString>
         <errorRejoin>오류가 발생했습니다. 재접속 하십시오.</errorRejoin>
         <serverFull>서버 인원이 다 찼습니다.</serverFull>
         <teamsFull>팀원 수가 다 찼습니다.</teamsFull>
