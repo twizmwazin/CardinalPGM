@@ -12,6 +12,7 @@ permissions:
     - cardinal.chat.team
   Moderator:
     permissions:
+    - cardinal.mod
     - tnt.defuse
     - cardinal.cancel
     - cardinal.chat.admin
