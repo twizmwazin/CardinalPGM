@@ -22,12 +22,8 @@ public class CycleCommand {
     public static void cycle(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
             if(cmd.hasFlag('f')){
-                try {
-                    TeamModule team = TeamUtils.getTeamByName(cmd.getString(0));
-                    GameHandler.getGameHandler().getMatch().end(team);
-                } catch (IndexOutOfBoundsException ex) {
-                    GameHandler.getGameHandler().getMatch().end(null);
-                }
+                TeamModule team = TeamUtils.getTeamByName(cmd.getFlag('f'));
+                GameHandler.getGameHandler().getMatch().end(team);
             } else {
                 throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
             }
@@ -35,11 +31,7 @@ public class CycleCommand {
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
         if (GameHandler.getGameHandler().getCycleTimer() != null)
             GameHandler.getGameHandler().getCycleTimer().setCancelled(true);
-        try {
-            GameHandler.getGameHandler().startCycleTimer(cmd.getInteger(0));
-        } catch (IndexOutOfBoundsException e) {
-            GameHandler.getGameHandler().startCycleTimer(30);
-        }
+        GameHandler.getGameHandler().startCycleTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
     }
 
     @Command(aliases = {"setnext", "sn"}, desc = "Sets the next map.", usage = "[map]", min = 1)
@@ -66,5 +58,22 @@ public class CycleCommand {
             sender.sendMessage(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.GENERIC_MAP_SET, ChatColor.GOLD + nextMap.getName() + ChatColor.DARK_PURPLE).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
         }
     }
-
+    
+    @Command(aliases = {"recycle", "rc"}, desc = "Cycles to the current map.", usage = "[time]", flags = "f")
+    @CommandPermissions("cardinal.match.cycle")
+    public static void recycle(final CommandContext cmd, CommandSender sender) throws CommandException {
+        if (GameHandler.getGameHandler().getMatch().isRunning()) {
+            if(cmd.hasFlag('f')){
+                TeamModule team = TeamUtils.getTeamByName(cmd.getFlag('f'));
+                GameHandler.getGameHandler().getMatch().end(team);
+            } else {
+                throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+            }
+        } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING))
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+        if (GameHandler.getGameHandler().getCycleTimer() != null)
+            GameHandler.getGameHandler().getCycleTimer().setCancelled(true);
+        GameHandler.getGameHandler().getCycle().setMap(GameHandler.getGameHandler().getMatch().getLoadedMap());
+        GameHandler.getGameHandler().startCycleTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
+    }
 }

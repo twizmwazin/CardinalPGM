@@ -27,6 +27,7 @@ public class TeamUtils {
     }
 
     public static TeamModule getTeamByName(String name) {
+        if (name == null) return null;
         for (TeamModule team : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
             if (team.getName().replaceAll(" ", "").toLowerCase().startsWith(name.replaceAll(" ", "").toLowerCase())) {
                 return team;
