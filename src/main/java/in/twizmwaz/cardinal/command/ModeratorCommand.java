@@ -27,6 +27,7 @@ public class ModeratorCommand {
                     List<String> players = GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.players");
                     players.add(moderator.getUniqueId().toString());
                     GameHandler.getGameHandler().getPlugin().getConfig().set("permissions.Moderator.players", players);
+                    GameHandler.getGameHandler().getPlugin().saveConfig();
                     sender.sendMessage(ChatColor.GREEN + "You gave moderator permissions to " + TeamUtils.getTeamColorByPlayer(moderator) + (moderator.isOnline() ? ((Player) moderator).getDisplayName() : moderator.getName()));
                     if (moderator.isOnline()) {
                         ((Player) moderator).sendMessage(ChatColor.GREEN + "You are now a moderator!");
