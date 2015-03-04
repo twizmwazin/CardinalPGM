@@ -22,6 +22,7 @@ import in.twizmwaz.cardinal.module.modules.friendlyFire.FriendlyFireBuilder;
 import in.twizmwaz.cardinal.module.modules.gameComplete.GameCompleteBuilder;
 import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameScoreboardBuilder;
 import in.twizmwaz.cardinal.module.modules.gamerules.GamerulesBuilder;
+import in.twizmwaz.cardinal.module.modules.header.HeaderModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.hill.HillObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.hunger.HungerBuilder;
 import in.twizmwaz.cardinal.module.modules.itemKeep.ItemKeepBuilder;
@@ -139,7 +140,8 @@ public class ModuleFactory {
             SnowflakesBuilder.class,
             SoundModuleBuilder.class,
             StartTimerBuilder.class,
-            StatsBuilder.class
+            StatsBuilder.class,
+            HeaderModuleBuilder.class
     };
 
     @SuppressWarnings("unchecked")

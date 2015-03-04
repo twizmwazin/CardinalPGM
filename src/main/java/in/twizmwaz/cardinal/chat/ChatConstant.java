@@ -216,4 +216,8 @@ public enum  ChatConstant {
         return message;
     }
     
+    public ChatMessage asMessage(ChatMessage... messages) {
+        return new LocalizedChatMessage(this, messages);
+    }
+    
 }
