@@ -4,6 +4,7 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
+import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.event.SnowflakeChangeEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
@@ -225,10 +226,10 @@ public class WoolObjective implements GameObjective {
     }
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
-        if (location != null && GameHandler.getGameHandler().getMatch().isRunning() && !this.touched && TeamUtils.getTeamByPlayer(event.getPlayer()) != null && TeamUtils.getTeamByPlayer(event.getPlayer()) == this.team) {
-            if (event.getPlayer().getLocation().toVector().distance(location) < proximity) {
-                proximity = event.getPlayer().getLocation().toVector().distance(location);
+    public void onCardinalDeath(CardinalDeathEvent event) {
+        if (event.getKiller() != null && location != null && GameHandler.getGameHandler().getMatch().isRunning() && !this.touched && TeamUtils.getTeamByPlayer(event.getKiller()) != null && TeamUtils.getTeamByPlayer(event.getKiller()) == this.team) {
+            if (event.getKiller().getLocation().toVector().distance(location) < proximity) {
+                proximity = event.getKiller().getLocation().toVector().distance(location);
                 Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent());
             }
         }
