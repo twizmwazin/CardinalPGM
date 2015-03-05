@@ -133,20 +133,22 @@ public class Stats implements Module {
                             if (TeamUtils.getTeamByPlayer(tracker.getDamaged()).equals(team)) teamDeaths++;
                         }
                         if (getPlayerWithMostKillsOnTeam(team) != null && getPlayerWithMostDeathsOnTeam(team) != null) {
-                            player.sendMessage("    " + team.getColor() + ChatColor.BOLD + team.getCompleteName() + ChatColor.GREEN + "    kills: " + ChatColor.WHITE + teamKills + ChatColor.RED + "    deaths     " + ChatColor.WHITE + teamDeaths + ChatColor.GOLD + " KD " + Math.round((double) teamKills / ((double) teamDeaths > 0 ? (double) teamDeaths : 1.0) * 100) / 100 );
+                            player.sendMessage("    " + team.getColor() + ChatColor.BOLD + team.getCompleteName() + ChatColor.GREEN + "    kills: " + ChatColor.WHITE + teamKills + ChatColor.RED + "    deaths     " + ChatColor.WHITE + teamDeaths + ChatColor.GOLD + " KD " + String.format("%.2f", (double) teamKills / ((double) teamDeaths > 0 ? (double) teamDeaths : 1.0)));
                             player.sendMessage("");
                             player.sendMessage("        " + ChatColor.GREEN + "Most Kills " + getPlayerWithMostKillsOnTeam(team).getDisplayName() + ": " + getKillsByPlayer(getPlayerWithMostKillsOnTeam(team)));
                             player.sendMessage("        " + ChatColor.RED + "Most Deaths " + getPlayerWithMostDeathsOnTeam(team).getDisplayName() + ": " + getDeathsByPlayer(getPlayerWithMostDeathsOnTeam(team)));
                             player.sendMessage("");
+                        } else {
+                            player.sendMessage(ChatColor.DARK_RED + "No Team Statistics Available for " + team.getCompleteName());
                         }
                     }
                 }
                 player.sendMessage("");
-                player.sendMessage(ChatColor.GOLD + "Most Common Weapon: " + ChatColor.WHITE + getMostCommonWeapon().toString().toLowerCase().replace('_', ' '));
+                if (getMostCommonWeapon() != null) player.sendMessage(ChatColor.GOLD + "Most Common Weapon: " + ChatColor.WHITE + (getMostCommonWeapon() != null ? getMostCommonWeapon().toString().toLowerCase().replace('_', ' ') : "None"));
                 player.sendMessage("              " + ChatColor.AQUA + "Your stats              ");
                 player.sendMessage(ChatColor.GREEN + "        Kills: " + getKillsByPlayer(player));
                 player.sendMessage(ChatColor.RED + "        Deaths: " + getDeathsByPlayer(player));
-                player.sendMessage(ChatColor.GOLD + "        KD: " +  Math.round(((double) getKillsByPlayer(player) / (double) getDeathsByPlayer(player)) * 100) / 100);
+                player.sendMessage(ChatColor.GOLD + "        KD: " +  String.format("%.2f", (double) getKillsByPlayer(player) / ((double) getDeathsByPlayer(player) > 0 ? (double) getDeathsByPlayer(player) : 1)));
             }
         }
     }
