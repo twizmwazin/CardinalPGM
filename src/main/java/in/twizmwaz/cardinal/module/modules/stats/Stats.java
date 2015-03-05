@@ -144,7 +144,7 @@ public class Stats implements Module {
                     }
                 }
                 player.sendMessage("");
-                if (getMostCommonWeapon() != null) player.sendMessage(ChatColor.GOLD + "Most Common Weapon: " + ChatColor.WHITE + (getMostCommonWeapon() != null ? getMostCommonWeapon().toString().toLowerCase().replace('_', ' ') : "None"));
+                player.sendMessage(ChatColor.GOLD + "Most Common Weapon: " + ChatColor.WHITE + (getMostCommonWeapon() != null ? getMostCommonWeapon().toString().toLowerCase().replace('_', ' ') : "None"));
                 player.sendMessage("              " + ChatColor.AQUA + "Your stats              ");
                 player.sendMessage(ChatColor.GREEN + "        Kills: " + getKillsByPlayer(player));
                 player.sendMessage(ChatColor.RED + "        Deaths: " + getDeathsByPlayer(player));
