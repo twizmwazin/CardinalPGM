@@ -49,28 +49,30 @@ public class Snowflakes implements Module {
 
     @EventHandler
     public void onSnowflakeChange(SnowflakeChangeEvent event) {
-        String reason;
-        if (event.getChangeReason().equals(ChangeReason.PLAYER_KILL)) {
-            reason = "killed " + TeamUtils.getTeamColorByPlayer(Bukkit.getOfflinePlayer(event.get(0))) + event.get(0);
-        } else if (event.getChangeReason().equals(ChangeReason.WOOL_TOUCH)) {
-            reason = "picked up " + event.get(0);
-        } else if (event.getChangeReason().equals(ChangeReason.WOOL_PLACE)) {
-            reason = "placed " + event.get(0);
-        } else if (event.getChangeReason().equals(ChangeReason.CORE_LEAK)) {
-            reason = "you broke a piece of " + event.get(0);
-        } else if (event.getChangeReason().equals(ChangeReason.TEAM_WIN)) {
-            reason = "your team (" + event.get(0) + ChatColor.GRAY + ") won";
-        } else if (event.getChangeReason().equals(ChangeReason.TEAM_LOYAL)) {
-            reason = "you were loyal to your team (" + event.get(0) + ChatColor.GRAY + ")";
-        } else {
-            reason = "unknown reason";
-        }
-        event.getPlayer().sendMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "+" + event.getFinalAmount() + ChatColor.AQUA + " Snowflakes" + ChatColor.DARK_PURPLE + " | " + ChatColor.GOLD + "" + ChatColor.ITALIC + event.getMultiplier() + "x" + ChatColor.DARK_PURPLE + " | " + ChatColor.GRAY + reason).getMessage(event.getPlayer().getLocale()));
-        event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.LEVEL_UP, 1, 1.5F);
-        if (Cardinal.getCardinalDatabase().get(event.getPlayer(), "snowflakes").equals("")) {
-            Cardinal.getCardinalDatabase().put(event.getPlayer(), "snowflakes", event.getFinalAmount() + "");
-        } else {
-            Cardinal.getCardinalDatabase().put(event.getPlayer(), "snowflakes", (NumUtils.parseInt(Cardinal.getCardinalDatabase().get(event.getPlayer(), "snowflakes")) + event.getFinalAmount()) + "");
+        if (event.getFinalAmount() != 0) {
+            String reason;
+            if (event.getChangeReason().equals(ChangeReason.PLAYER_KILL)) {
+                reason = "killed " + TeamUtils.getTeamColorByPlayer(Bukkit.getOfflinePlayer(event.get(0))) + event.get(0);
+            } else if (event.getChangeReason().equals(ChangeReason.WOOL_TOUCH)) {
+                reason = "picked up " + event.get(0);
+            } else if (event.getChangeReason().equals(ChangeReason.WOOL_PLACE)) {
+                reason = "placed " + event.get(0);
+            } else if (event.getChangeReason().equals(ChangeReason.CORE_LEAK)) {
+                reason = "you broke a piece of " + event.get(0);
+            } else if (event.getChangeReason().equals(ChangeReason.TEAM_WIN)) {
+                reason = "your team (" + event.get(0) + ChatColor.GRAY + ") won";
+            } else if (event.getChangeReason().equals(ChangeReason.TEAM_LOYAL)) {
+                reason = "you were loyal to your team (" + event.get(0) + ChatColor.GRAY + ")";
+            } else {
+                reason = "unknown reason";
+            }
+            event.getPlayer().sendMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "+" + event.getFinalAmount() + ChatColor.AQUA + " Snowflakes" + ChatColor.DARK_PURPLE + " | " + ChatColor.GOLD + "" + ChatColor.ITALIC + event.getMultiplier() + "x" + ChatColor.DARK_PURPLE + " | " + ChatColor.GRAY + reason).getMessage(event.getPlayer().getLocale()));
+            event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.LEVEL_UP, 1, 1.5F);
+            if (Cardinal.getCardinalDatabase().get(event.getPlayer(), "snowflakes").equals("")) {
+                Cardinal.getCardinalDatabase().put(event.getPlayer(), "snowflakes", event.getFinalAmount() + "");
+            } else {
+                Cardinal.getCardinalDatabase().put(event.getPlayer(), "snowflakes", (NumUtils.parseInt(Cardinal.getCardinalDatabase().get(event.getPlayer(), "snowflakes")) + event.getFinalAmount()) + "");
+            }
         }
     }
 
