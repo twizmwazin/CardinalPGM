@@ -132,8 +132,8 @@ public class BlockEventRegion extends AppliedRegion {
                 if (TntTracker.getWhoPlaced(event.getEntity()) != null) {
                     if (Bukkit.getOfflinePlayer(TntTracker.getWhoPlaced(event.getEntity())).isOnline()) {
                         if (filter.evaluate(Bukkit.getPlayer(TntTracker.getWhoPlaced(event.getEntity())), block).equals(FilterState.DENY)) blocksToRemove.add(block);
-                    } else blocksToRemove.add(block);
-                } else blocksToRemove.add(block);
+                    } else if (filter.evaluate(block).equals(FilterState.DENY)) blocksToRemove.add(block);
+                } else if (filter.evaluate(block).equals(FilterState.DENY)) blocksToRemove.add(block);
             }
         }
         for (Block block : blocksToRemove) {
