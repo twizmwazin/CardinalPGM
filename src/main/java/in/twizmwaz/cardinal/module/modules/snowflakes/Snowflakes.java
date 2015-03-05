@@ -31,14 +31,8 @@ public class Snowflakes implements Module {
 
     @EventHandler
     public void onCardinalDeath(CardinalDeathEvent event) {
-        Player killer = null;
-        if (event.getKiller() != null) {
-            killer = event.getKiller();
-        } else if (event.getPlayerSpleefEvent() != null && event.getPlayerSpleefEvent().getSpleefer().isOnline()) {
-            killer = (Player) event.getPlayerSpleefEvent().getSpleefer();
-        }
-        if (killer != null && TeamUtils.getTeamByPlayer(event.getPlayer()) != TeamUtils.getTeamByPlayer(killer)) {
-            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(killer, ChangeReason.PLAYER_KILL, 1, event.getPlayer().getName()));
+        if (event.getKiller() != null && TeamUtils.getTeamByPlayer(event.getPlayer()) != TeamUtils.getTeamByPlayer(event.getKiller())) {
+            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getKiller(), ChangeReason.PLAYER_KILL, 1, event.getPlayer().getName()));
         }
     }
 
