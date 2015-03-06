@@ -15,7 +15,6 @@ import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
-import org.bukkit.util.Vector;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -39,6 +38,7 @@ public class BlockEventRegion extends AppliedRegion {
     public void onBlockPlace(BlockPlaceEvent event) {
         if (!event.isCancelled() && filter.evaluate(event.getPlayer(), event.getBlockPlaced(), event).equals(FilterState.DENY) && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector()))) {
             event.setCancelled(true);
+            event.getPlayer().closeInventory();
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }
     }
