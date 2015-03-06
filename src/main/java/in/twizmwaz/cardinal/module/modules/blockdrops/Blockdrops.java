@@ -86,8 +86,10 @@ public class Blockdrops implements Module {
                             for (ItemStack drop : this.drops) {
                                 GameHandler.getGameHandler().getMatchWorld().dropItemNaturally(block.getLocation(), drop);
                             }
-                            ExperienceOrb xp = GameHandler.getGameHandler().getMatchWorld().spawn(block.getLocation(), ExperienceOrb.class);
-                            xp.setExperience(this.experience);
+                            if (this.experience != 0) {
+                                ExperienceOrb xp = GameHandler.getGameHandler().getMatchWorld().spawn(block.getLocation(), ExperienceOrb.class);
+                                xp.setExperience(this.experience);
+                            }
                             block.setType(replace);
                         }
                     }
