@@ -35,6 +35,7 @@ public class BuildHeight implements Module {
     public void onBlockPlace(BlockPlaceEvent event) {
         if (event.getBlock().getY() >= height && !event.isCancelled()) {
             event.setCancelled(true);
+            event.getPlayer().closeInventory();
             ChatUtils.sendWarningMessage(event.getPlayer(), "You have reached the maximum build height! " + ChatColor.GRAY + "(" + height + " blocks)");
         }
     }

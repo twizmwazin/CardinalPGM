@@ -10,7 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
-import org.bukkit.util.Vector;
 
 public class BlockPlaceAgainstRegion extends AppliedRegion {
     
@@ -22,6 +21,7 @@ public class BlockPlaceAgainstRegion extends AppliedRegion {
     public void onBlockPlace(BlockPlaceEvent event) {
         if (!event.isCancelled() && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector())) && filter.evaluate(event.getPlayer(), event.getBlockPlaced(), event).equals(FilterState.DENY)) {
             event.setCancelled(true);
+            event.getPlayer().closeInventory();
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }
     }
