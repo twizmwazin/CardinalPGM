@@ -24,12 +24,12 @@ public class ReadyCommand {
         if (!team.isObserver()) {
             if (!team.isReady()) {
                 team.setReady(true);
-                Bukkit.broadcastMessage(team.getCompleteName() + ChatColor.YELLOW + " is now ready!");
+                Bukkit.broadcastMessage(team.getCompleteName() + ChatColor.YELLOW + " is now ready");
                 if (TeamUtils.teamsReady()) {
                     GameHandler.getGameHandler().getMatch().start(30 * 20);
                 }
-            } else player.sendMessage(ChatColor.RED + "Your team is already ready!");
-        } else player.sendMessage(ChatColor.RED + "Observers cannot be ready");
+            } else player.sendMessage(ChatColor.RED + "Your team is already ready");
+        } else player.sendMessage(team.getCompleteName() + ChatColor.YELLOW + " cannot be ready");
     }
 
     @Command(aliases = {"unready"}, desc = "State that your team is not ready")
@@ -39,13 +39,14 @@ public class ReadyCommand {
         if (!team.isObserver()) {
             if (team.isReady()) {
                 team.setReady(false);
-                Bukkit.broadcastMessage(team.getCompleteName() + ChatColor.YELLOW + " is no longer ready!");
+                Bukkit.broadcastMessage(team.getCompleteName() + ChatColor.YELLOW + " is no longer ready");
                 if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
                     GameHandler.getGameHandler().getMatch().setState(MatchState.WAITING);
                     GameHandler.getGameHandler().getMatch().getModules().getModule(StartTimer.class).setCancelled(true);
+                    Bukkit.broadcastMessage(ChatColor.RED + "Match start countdown cancelled because " + team.getCompleteName() + ChatColor.RED + " became un-ready.");
                 }
-            } else player.sendMessage(ChatColor.RED + "Your team is already not ready!");
-        } else player.sendMessage(ChatColor.RED + "Observers cannot be ready");
+            } else player.sendMessage(ChatColor.RED + "Your team is already un-ready");
+        } else player.sendMessage(team.getCompleteName() + ChatColor.YELLOW + " cannot be ready");
     }
 
 }
