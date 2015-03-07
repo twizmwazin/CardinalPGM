@@ -39,9 +39,9 @@ public class TeamModuleBuilder implements ModuleBuilder {
                 respawnLimit = -1;
             }
             ChatColor color = ParseUtils.parseChatColor(teamNode.getAttribute("color").getValue());
-            results.add(new TeamModule(match, name, id, max, maxOverfill, respawnLimit, color, false));
+            results.add(new TeamModule(match, name, id, max, maxOverfill, respawnLimit, color, false, false));
         }
-        results.add(new TeamModule(match, "Observers", "observers", Integer.MAX_VALUE, Integer.MAX_VALUE, -1, ChatColor.AQUA, true));
+        results.add(new TeamModule(match, "Observers", "observers", Integer.MAX_VALUE, Integer.MAX_VALUE, -1, ChatColor.AQUA, true, true));
         return results;
     }
 }

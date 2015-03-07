@@ -109,4 +109,11 @@ public class TeamUtils {
         if (TeamUtils.getTeamByPlayer((Player) player) == null) return ChatColor.AQUA;
         return TeamUtils.getTeamByPlayer((Player) player).getColor();
     }
+
+    public static boolean teamsReady() {
+        for (TeamModule team : getTeams()) {
+            if (!team.isReady()) return false;
+        }
+        return true;
+    }
 }
