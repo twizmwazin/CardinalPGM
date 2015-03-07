@@ -5,6 +5,8 @@ import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.settings.Setting;
+import in.twizmwaz.cardinal.settings.Settings;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -113,5 +115,21 @@ public class Stats implements Module {
             }
         }
         return deaths;
+    }
+
+    public double getKdByPlayer(OfflinePlayer player) {
+        double kd;
+        if (player == null) return 0;
+        kd = (getKillsByPlayer(player) > 0 ? (double) getKillsByPlayer(player) : 1.0) / (getDeathsByPlayer(player) > 0 ? (double) getDeathsByPlayer(player) : 1.0);
+        return kd;
+    }
+
+    @EventHandler
+    public void onMatchEnd(MatchEndEvent event) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (Settings.getSettingByName("Stats") != null && Settings.getSettingByName("Stats").getValueByPlayer(player).getValue().equalsIgnoreCase("on")) {
+                player.sendMessage(ChatColor.GRAY + "Kills: " + ChatColor.GREEN + getKillsByPlayer(player) + ChatColor.AQUA + " | " + ChatColor.GRAY + "Deaths: " + ChatColor.DARK_RED + getDeathsByPlayer(player) + ChatColor.AQUA + " | " + ChatColor.GRAY + "KD: " + ChatColor.GOLD + String.format("%.2f", getKdByPlayer(player)));
+            }
+        }
     }
 }

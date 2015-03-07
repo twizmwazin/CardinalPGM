@@ -22,6 +22,7 @@ public class StatsCommand {
             sender.sendMessage(TeamUtils.getTeamColorByPlayer(player) + player.getName() + "'s " + ChatColor.GRAY + "Match Statistics");
             sender.sendMessage(ChatColor.GRAY + " Kills: " + ChatColor.GREEN + GameHandler.getGameHandler().getMatch().getModules().getModule(Stats.class).getKillsByPlayer(player));
             sender.sendMessage(ChatColor.GRAY + " Deaths: " + ChatColor.DARK_RED + GameHandler.getGameHandler().getMatch().getModules().getModule(Stats.class).getDeathsByPlayer(player));
+            sender.sendMessage(ChatColor.GRAY + " KD: " + ChatColor.GOLD + String.format("%.2f",GameHandler.getGameHandler().getMatch().getModules().getModule(Stats.class).getKdByPlayer(player)));
         }
     }
 
