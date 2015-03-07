@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.module.modules.permissions;
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
+import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.event.PlayerNameUpdateEvent;
 import in.twizmwaz.cardinal.module.Module;
@@ -106,6 +107,18 @@ public class PermissionModule implements Module {
 
             attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.jumpto.command", false);
             attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.thru.command", false);
+        }
+    }
+
+    @EventHandler
+    public void onMatchEnd(MatchEndEvent event) {
+        if (Cardinal.getInstance().getConfig().getBoolean("worldEditPermissions"))
+            for (Player player : Bukkit.getOnlinePlayers()) {
+            attachmentMap.get(player).setPermission("worldedit.navigation.jumpto.tool", true);
+            attachmentMap.get(player).setPermission("worldedit.navigation.thru.tool", true);
+
+            attachmentMap.get(player).setPermission("worldedit.navigation.jumpto.command", true);
+            attachmentMap.get(player).setPermission("worldedit.navigation.thru.command", true);
         }
     }
 
