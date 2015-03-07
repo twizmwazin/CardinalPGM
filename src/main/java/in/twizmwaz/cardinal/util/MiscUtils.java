@@ -2,10 +2,7 @@ package in.twizmwaz.cardinal.util;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.jdom2.Element;
+import org.bukkit.DyeColor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,6 +53,48 @@ public class MiscUtils {
         }
     }
 
+    /**
+     * @author ParaPenguin
+     */
+    public static ChatColor convertDyeColorToChatColor(DyeColor dye) {
+        switch (dye) {
+            case WHITE:
+                return ChatColor.WHITE;
+            case ORANGE:
+                return ChatColor.GOLD;
+            case MAGENTA:
+                return ChatColor.LIGHT_PURPLE;
+            case LIGHT_BLUE:
+                return ChatColor.AQUA;
+            case YELLOW:
+                return ChatColor.YELLOW;
+            case LIME:
+                return ChatColor.GREEN;
+            case PINK:
+                return ChatColor.RED;
+            case GRAY:
+                return ChatColor.GRAY;
+            case SILVER:
+                return ChatColor.GRAY;
+            case CYAN:
+                return ChatColor.DARK_AQUA;
+            case PURPLE:
+                return ChatColor.DARK_PURPLE;
+            case BLUE:
+                return ChatColor.BLUE;
+            case BROWN:
+                return ChatColor.GOLD;
+            case GREEN:
+                return ChatColor.DARK_GREEN;
+            case RED:
+                return ChatColor.DARK_RED;
+            case BLACK:
+                return ChatColor.BLACK;
+        }
+
+        return ChatColor.WHITE;
+    }
+
     public static Color convertHexToRGB(String color) {
         return Color.fromRGB(Integer.valueOf(color.substring(0, 2), 16), Integer.valueOf(color.substring(2, 4), 16), Integer.valueOf(color.substring(4, 6), 16));
     }
@@ -67,7 +106,7 @@ public class MiscUtils {
             clone.put(player, sorting.get(player));
         }
         for (int i = 0; i < sorting.size(); i ++) {
-            int highestNumber = -1;
+            int highestNumber = Integer.MIN_VALUE;
             T highestType = null;
             for (T player : clone.keySet()) {
                 if (clone.get(player) > highestNumber) {

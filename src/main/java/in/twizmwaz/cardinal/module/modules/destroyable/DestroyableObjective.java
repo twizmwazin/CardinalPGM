@@ -1,6 +1,10 @@
 package in.twizmwaz.cardinal.module.modules.destroyable;
 
-import in.twizmwaz.cardinal.chat.TeamChat;
+import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
+import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
@@ -9,6 +13,7 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import in.twizmwaz.cardinal.util.ChatUtils;
+import in.twizmwaz.cardinal.util.FireworkUtil;
 import in.twizmwaz.cardinal.util.MiscUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
@@ -22,6 +27,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.*;
 
@@ -39,9 +45,11 @@ public class DestroyableObjective implements GameObjective {
     private final boolean show;
     private boolean changesModes;
 
+    private double proximity;
+
     private Set<UUID> playersTouched;
     private double size;
-    private HashMap<UUID, Integer> playerDestroyed;
+    private HashMap<UUID, Integer> playersCompleted;
     private List<Block> monument;
 
     private double complete;
@@ -64,8 +72,10 @@ public class DestroyableObjective implements GameObjective {
         this.changesModes = changesModes;
         this.completed = false;
 
+        this.proximity = Double.POSITIVE_INFINITY;
+
         this.playersTouched = new HashSet<>();
-        this.playerDestroyed = new HashMap<>();
+        this.playersCompleted = new HashMap<>();
 
         this.monument = this.getBlocks();
         this.size = this.getBlocks().size();
@@ -118,27 +128,34 @@ public class DestroyableObjective implements GameObjective {
         if (!event.isCancelled()) {
             if (getBlocks().contains(event.getBlock())) {
                 if (TeamUtils.getTeamByPlayer(event.getPlayer()) != team) {
+                    boolean touchMessage = false;
                     if (!playersTouched.contains(event.getPlayer().getUniqueId())) {
                         playersTouched.add(event.getPlayer().getUniqueId());
                         TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
-                        if (this.show) TeamChat.sendToTeam(teamModule.getColor() + "[Team] " + event.getPlayer().getDisplayName() + ChatColor.GRAY + " damaged " + ChatColor.AQUA + name, teamModule);
+                        if (this.show && !this.completed) {
+                            TeamUtils.getTeamChannel(teamModule).sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED, teamModule.getColor() + event.getPlayer().getName() + ChatColor.GRAY, ChatColor.AQUA + name));
+                            touchMessage = true;
+                        }
                     }
                     boolean oldState = this.isTouched();
                     this.complete++;
-                    this.playerDestroyed.put(event.getPlayer().getUniqueId(), (playerDestroyed.containsKey(event.getPlayer().getUniqueId()) ? playerDestroyed.get(event.getPlayer().getUniqueId()) + 1 : 1));
+                    this.playersCompleted.put(event.getPlayer().getUniqueId(), (playersCompleted.containsKey(event.getPlayer().getUniqueId()) ? playersCompleted.get(event.getPlayer().getUniqueId()) + 1 : 1));
                     if ((this.complete / size) >= this.required && !this.completed) {
                         this.completed = true;
                         event.setCancelled(false);
-                        if (this.show) Bukkit.broadcastMessage(team.getCompleteName() + "'s " + ChatColor.AQUA + name + ChatColor.GRAY + " destroyed by " + getWhoDestroyed());
+                        if (this.show) {
+                            for (Player player : Bukkit.getOnlinePlayers()) player.sendMessage(ChatColor.GRAY + new UnlocalizedChatMessage("{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DESTROYED, team.getCompleteName() + ChatColor.GRAY, ChatColor.AQUA + name + ChatColor.GRAY, getWhoDestroyed(player.getLocale()))).getMessage(player.getLocale()));
+                        }
+                        FireworkUtil.spawnFirework(event.getPlayer().getLocation(), event.getPlayer().getWorld());
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
                     } else if (!this.completed) {
-                        ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), !oldState || showPercent);
+                        ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), !oldState || showPercent, touchMessage);
                         Bukkit.getServer().getPluginManager().callEvent(touchEvent);
                     }
                 } else {
                     event.setCancelled(true);
-                    if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), "You may not damage your own objective.");
+                    if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_OWN_OBJECTIVE));
                 }
             }
         }
@@ -157,6 +174,7 @@ public class DestroyableObjective implements GameObjective {
             boolean blownUp = false;
             Player eventPlayer = null;
             int originalPercent = getPercent();
+            boolean touchMessage = false;
             for (Block block : objectiveBlownUp) {
                 boolean blockDestroyed = false;
                 if (TntTracker.getWhoPlaced(event.getEntity()) != null) {
@@ -168,7 +186,10 @@ public class DestroyableObjective implements GameObjective {
                             if (!playersTouched.contains(player)) {
                                 playersTouched.add(player);
                                 TeamModule teamModule = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
-                                if (this.show) TeamChat.sendToTeam(teamModule.getColor() + "[Team] " + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " damaged " + ChatColor.AQUA + name, teamModule);
+                                if (this.show && !this.completed) {
+                                    TeamUtils.getTeamChannel(teamModule).sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED, teamModule.getColor() + Bukkit.getPlayer(player).getName() + ChatColor.GRAY, ChatColor.AQUA + name));
+                                    touchMessage = true;
+                                }
                             }
                             blockDestroyed = true;
                             blownUp = true;
@@ -188,20 +209,31 @@ public class DestroyableObjective implements GameObjective {
                 if (blockDestroyed) {
                     this.complete++;
                     if (eventPlayer != null)
-                        this.playerDestroyed.put(eventPlayer.getUniqueId(), (playerDestroyed.containsKey(eventPlayer.getUniqueId()) ? playerDestroyed.get(eventPlayer.getUniqueId()) + 1 : 1));
+                        this.playersCompleted.put(eventPlayer.getUniqueId(), (playersCompleted.containsKey(eventPlayer.getUniqueId()) ? playersCompleted.get(eventPlayer.getUniqueId()) + 1 : 1));
                     if ((this.complete / size) >= this.required && !this.completed) {
                         this.completed = true;
-                        if (this.show) Bukkit.broadcastMessage(team.getCompleteName() + ChatColor.GRAY + "'s " + ChatColor.AQUA + name + ChatColor.GRAY + " destroyed by " + getWhoDestroyed());
+                        if (this.show) {
+                            for (Player player : Bukkit.getOnlinePlayers()) player.sendMessage(ChatColor.GRAY + new UnlocalizedChatMessage("{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DESTROYED, team.getCompleteName() + ChatColor.GRAY, ChatColor.AQUA + name + ChatColor.GRAY, getWhoDestroyed(player.getLocale()))).getMessage(player.getLocale()));
+                            Bukkit.getLogger().info(ChatColor.GRAY + new UnlocalizedChatMessage("{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DESTROYED, team.getCompleteName() + ChatColor.GRAY, ChatColor.AQUA + name + ChatColor.GRAY, getWhoDestroyed(Locale.getDefault().toString()))).getMessage(Locale.getDefault().toString()));
+                        }
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, eventPlayer);
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
                     }
                 }
             }
             if (!this.completed && blownUp) {
-                ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, !oldState || (getPercent() != originalPercent));
+                ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, !oldState || (getPercent() != originalPercent), touchMessage);
                 Bukkit.getServer().getPluginManager().callEvent(touchEvent);
             }
         }
+    }
+
+    public int getBlocksRequired() {
+        return (int) Math.ceil(size * required);
+    }
+
+    public int getBlocksBroken() {
+        return (int) complete;
     }
 
     @EventHandler
@@ -243,7 +275,7 @@ public class DestroyableObjective implements GameObjective {
 
     public boolean partOfObjective(Block block) {
         for (int i = 0; i < types.size(); i++) {
-            if (types.get(i).equals(block.getType()) && damageValues.get(i) == (int) block.getState().getData().getData()) {
+            if (types.get(i).equals(block.getType()) && (damageValues.get(i) == -1 || damageValues.get(i) == (int) block.getState().getData().getData())) {
                 return true;
             }
         }
@@ -264,23 +296,23 @@ public class DestroyableObjective implements GameObjective {
         return monument;
     }
 
-    public String getWhoDestroyed() {
+    public String getWhoDestroyed(String locale) {
         String whoDestroyed = "";
         List<String> toCombine = new ArrayList<>();
-        for (UUID player : MiscUtils.getSortedHashMapKeyset(playerDestroyed)) {
-            if (Bukkit.getOfflinePlayer(player).isOnline() && getPercentFromAmount(playerDestroyed.get(player)) > (100 / 3)) {
-                toCombine.add(TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)).getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.GRAY + " (" + getPercentFromAmount(playerDestroyed.get(player)) + "%)");
+        for (UUID player : MiscUtils.getSortedHashMapKeyset(playersCompleted)) {
+            if (getPercentFromAmount(playersCompleted.get(player)) > (100 / 3)) {
+                toCombine.add(TeamUtils.getTeamColorByPlayer(Bukkit.getPlayer(player)) + Bukkit.getPlayer(player).getName() + ChatColor.GRAY + " (" + getPercentFromAmount(playersCompleted.get(player)) + "%)");
             }
         }
         if (toCombine.size() == 0) {
-            toCombine.add(ChatColor.DARK_AQUA + "the enemy");
+            toCombine.add(ChatColor.DARK_AQUA + new LocalizedChatMessage(ChatConstant.MISC_ENEMY).getMessage(locale));
         }
-        if (toCombine.size() < playerDestroyed.keySet().size()) {
-            toCombine.add(ChatColor.DARK_AQUA + "others");
+        if (toCombine.size() < playersCompleted.keySet().size()) {
+            toCombine.add(ChatColor.DARK_AQUA + new LocalizedChatMessage(ChatConstant.MISC_OTHERS).getMessage(locale));
         }
         whoDestroyed = toCombine.get(0);
         for (int i = 1; i < toCombine.size(); i ++) {
-            whoDestroyed += ChatColor.GRAY + (i == toCombine.size() - 1 ? " and " : ", ") + toCombine.get(i);
+            whoDestroyed += ChatColor.GRAY + (i == toCombine.size() - 1 ? " " + new LocalizedChatMessage(ChatConstant.MISC_AND).getMessage(locale) + " " : ", ") + toCombine.get(i);
         }
         return whoDestroyed;
     }
@@ -294,5 +326,19 @@ public class DestroyableObjective implements GameObjective {
         this.damageValues = new ArrayList<>();
         this.types.add(material);
         this.damageValues.add(damageValue);
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        if (GameHandler.getGameHandler().getMatch().isRunning() && !this.isTouched() && TeamUtils.getTeamByPlayer(event.getPlayer()) != null && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() && TeamUtils.getTeamByPlayer(event.getPlayer()) != this.team) {
+            if (event.getPlayer().getLocation().toVector().distance(region.getCenterBlock().getVector()) < proximity) {
+                proximity = event.getPlayer().getLocation().toVector().distance(region.getCenterBlock().getVector());
+                Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent());
+            }
+        }
+    }
+
+    public double getProximity() {
+        return proximity;
     }
 }

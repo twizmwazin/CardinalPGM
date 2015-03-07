@@ -13,18 +13,15 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.world.StructureGrowEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class BuildHeight implements Module {
 
-    private final JavaPlugin plugin;
     private final int height;
 
-    protected BuildHeight(JavaPlugin plugin, int height) {
-        this.plugin = plugin;
+    protected BuildHeight(int height) {
         this.height = height;
 
     }
@@ -38,6 +35,7 @@ public class BuildHeight implements Module {
     public void onBlockPlace(BlockPlaceEvent event) {
         if (event.getBlock().getY() >= height && !event.isCancelled()) {
             event.setCancelled(true);
+            event.getPlayer().closeInventory();
             ChatUtils.sendWarningMessage(event.getPlayer(), "You have reached the maximum build height! " + ChatColor.GRAY + "(" + height + " blocks)");
         }
     }

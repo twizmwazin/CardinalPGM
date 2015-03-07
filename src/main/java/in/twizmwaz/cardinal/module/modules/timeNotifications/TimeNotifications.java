@@ -1,8 +1,12 @@
 package in.twizmwaz.cardinal.module.modules.timeNotifications;
 
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
+import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,7 +32,7 @@ public class TimeNotifications implements TaskedModule {
             double timeRemaining;
             if (GameHandler.getGameHandler().getMatch().getPriorityTimeLimit() == 0) {
                 if (time >= nextTimeMessage) {
-                    Bukkit.broadcastMessage(ChatColor.AQUA + "Time Elapsed: " + ChatColor.GREEN + StringUtils.formatTime(nextTimeMessage));
+                    ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.AQUA + "Time Elapsed: " + ChatColor.GREEN + StringUtils.formatTime(nextTimeMessage)));
                     nextTimeMessage += 300;
                 }
                 return;
@@ -36,16 +40,16 @@ public class TimeNotifications implements TaskedModule {
             timeRemaining = GameHandler.getGameHandler().getMatch().getPriorityTimeLimit() - time;
             if (nextTimeMessage >= timeRemaining) {
                 if (nextTimeMessage <= 5) {
-                    Bukkit.broadcastMessage(ChatColor.AQUA + "Time Remaining: " + ChatColor.DARK_RED + StringUtils.formatTime(nextTimeMessage));
+                    ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.AQUA + "{0} " + ChatColor.DARK_RED + StringUtils.formatTime(nextTimeMessage), new LocalizedChatMessage(ChatConstant.UI_TIMER)));
                     nextTimeMessage--;
                 } else if (nextTimeMessage <= 30) {
-                    Bukkit.broadcastMessage(ChatColor.AQUA + "Time Remaining: " + ChatColor.GOLD + StringUtils.formatTime(nextTimeMessage));
+                    ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.AQUA + "{0} " + ChatColor.GOLD + StringUtils.formatTime(nextTimeMessage), new LocalizedChatMessage(ChatConstant.UI_TIMER)));
                     nextTimeMessage -= 5;
                 } else if (nextTimeMessage <= 60) {
-                    Bukkit.broadcastMessage(ChatColor.AQUA + "Time Remaining: " + ChatColor.YELLOW + StringUtils.formatTime(nextTimeMessage));
+                    ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.AQUA + "{0} " + ChatColor.YELLOW + StringUtils.formatTime(nextTimeMessage), new LocalizedChatMessage(ChatConstant.UI_TIMER)));
                     nextTimeMessage -= 15;
                 } else {
-                    Bukkit.broadcastMessage(ChatColor.AQUA + "Time Remaining: " + ChatColor.GREEN + StringUtils.formatTime(nextTimeMessage));
+                    ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.AQUA + "{0} " + ChatColor.GREEN + StringUtils.formatTime(nextTimeMessage), new LocalizedChatMessage(ChatConstant.UI_TIMER)));
                     if ((nextTimeMessage / 60) % 5 == 0 && nextTimeMessage != 300) {
                         nextTimeMessage -= 300;
                     } else if (nextTimeMessage % 60 == 0 && nextTimeMessage <= 300) {

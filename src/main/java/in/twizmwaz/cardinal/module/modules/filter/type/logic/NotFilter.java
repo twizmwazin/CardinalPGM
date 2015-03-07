@@ -20,10 +20,10 @@ public class NotFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Object object) {
-        FilterState childState = childFilter.evaluate(object);
+    public FilterState evaluate(final Object... objects) {
+        FilterState childState = childFilter.evaluate(objects);
         if (childState.equals(ALLOW)) return DENY;
         else if (childState.equals(DENY)) return ALLOW;
-        else return ABSTAIN;
+        return ABSTAIN;
     }
 }

@@ -19,14 +19,19 @@ public class TeamFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Object object) {
-        if (object instanceof Player) {
-            if (TeamUtils.getTeamByPlayer((Player) object) != null)
-                if (TeamUtils.getTeamByPlayer((Player) object) == team)
-                    return ALLOW;
-                else return DENY;
-            else return DENY;
-        } else return ABSTAIN;
+    public FilterState evaluate(final Object... objects) {
+        for (Object object : objects) {
+            if (object instanceof Player) {
+                if (TeamUtils.getTeamByPlayer((Player) object) != null)
+                    if (TeamUtils.getTeamByPlayer((Player) object) == team)
+                        return ALLOW;
+                    else
+                        return DENY;
+                else
+                    return DENY;
+            }
+        }
+        return ABSTAIN;
     }
 
 }

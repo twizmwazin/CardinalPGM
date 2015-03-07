@@ -13,7 +13,7 @@ public class AllEventFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Object object) {
+    public FilterState evaluate(final Object... objects) {
         return allow ? FilterState.ALLOW : FilterState.DENY;
     }
 

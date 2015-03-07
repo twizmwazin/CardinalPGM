@@ -1,7 +1,6 @@
 package in.twizmwaz.cardinal.event;
 
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
-import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;

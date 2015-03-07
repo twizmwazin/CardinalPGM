@@ -25,7 +25,7 @@ public class MOTD implements Module {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onServerListPing(ServerListPingEvent event) {
         try {
-            String name = match.getMapInfo().getName();
+            String name = match.getLoadedMap().getName();
             if (match.getState() == MatchState.ENDED) {
                 event.setMotd(ChatColor.RED + "\u00BB " + ChatColor.AQUA + name + ChatColor.RED + " \u00AB");
             } else if (match.getState() == MatchState.PLAYING) {

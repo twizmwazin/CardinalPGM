@@ -6,6 +6,7 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.module.modules.monumentModes.MonumentModes;
 import in.twizmwaz.cardinal.util.MiscUtils;
+import in.twizmwaz.cardinal.util.NumUtils;
 import in.twizmwaz.cardinal.util.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -59,10 +60,7 @@ public class ModesCommand {
                     if (!sender.hasPermission("cardinal.modes.push")) throw new CommandPermissionsException();
                     throw new CommandUsageException("Too few arguments.", "/modes push <time period>");
                 } else {
-                    int page;
-                    try {
-                        page = Integer.parseInt(cmd.getString(0));
-                    } catch (NumberFormatException e) { throw new CommandException("Number expected, string received instead."); }
+                    int page = cmd.getInteger(1);
                     if (page <= ((modes.size() + 7) / 8)) {
                         sender.sendMessage(ChatColor.RED + "-------------- " + ChatColor.RESET + "Monument Modes" + ChatColor.DARK_AQUA + " (" + ChatColor.AQUA + page + ChatColor.DARK_AQUA + " of " + ChatColor.AQUA + ((modes.size() + 7) / 8) + ChatColor.DARK_AQUA + ")" + ChatColor.RED + " --------------");
                         int count = 1;
@@ -72,14 +70,11 @@ public class ModesCommand {
                             }
                             count++;
                         }
-                    } else throw new CommandException("Unknown page selected! " + ((modes.size() + 7) / 8) + " total pages.");
+                    } else throw new CommandException("Invalid page number specified! " + ((modes.size() + 7) / 8) + " total pages.");
                 }
             } else {
                 if (cmd.getString(0).equalsIgnoreCase("list")) {
-                    int page;
-                    try {
-                        page = Integer.parseInt(cmd.getString(1));
-                    } catch (NumberFormatException e) { throw new CommandException("Number expected, string received instead."); }
+                    int page = cmd.getInteger(1);
                     if (page <= ((modes.size() + 7) / 8)) {
                         sender.sendMessage(ChatColor.RED + "-------------- " + ChatColor.RESET + "Monument Modes" + ChatColor.DARK_AQUA + " (" + ChatColor.AQUA + page + ChatColor.DARK_AQUA + " of " + ChatColor.AQUA + ((GameHandler.getGameHandler().getMatch().getModules().getModules(MonumentModes.class).size() + 7) / 8) + ChatColor.DARK_AQUA + ")" + ChatColor.RED + " --------------");
                         int count = 1;
@@ -89,7 +84,7 @@ public class ModesCommand {
                             }
                             count++;
                         }
-                    } else throw new CommandException("Unknown page selected! " + ((modes.size() + 7) / 8) + " total pages.");
+                    } else throw new CommandException("Invalid page number specified! " + ((modes.size() + 7) / 8) + " total pages.");
                 } else if (cmd.getString(0).equalsIgnoreCase("push")) {
                     if (!sender.hasPermission("cardinal.modes.push")) throw new CommandPermissionsException();
                     int time = StringUtils.timeStringToSeconds(cmd.getString(1));

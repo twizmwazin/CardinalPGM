@@ -76,8 +76,9 @@ public class Visibility implements Module {
     @EventHandler
     public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
         Player switched = event.getPlayer();
-        for (Player viewer : Bukkit.getOnlinePlayers()) {
+        for (Player viewer : Bukkit.getOnlinePlayers()){
             this.resetVisibility(viewer, switched, event.getNewTeam());
+            this.resetVisibility(switched, viewer, TeamUtils.getTeamByPlayer(viewer));
         }
     }
 }

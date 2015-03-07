@@ -14,10 +14,10 @@ public abstract class FilterModule implements Module {
     }
 
     /**
-     * @param object The object which will be filtered
+     * @param objects The objects which will be filtered
      * @return The state of the filter.
      */
-    public abstract FilterState evaluate(final Object object);
+    public abstract FilterState evaluate(final Object... objects);
 
     @Override
     public void unload() {

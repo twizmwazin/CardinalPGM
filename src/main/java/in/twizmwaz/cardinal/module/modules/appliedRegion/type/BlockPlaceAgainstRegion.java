@@ -10,7 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
-import org.bukkit.util.Vector;
 
 public class BlockPlaceAgainstRegion extends AppliedRegion {
     
@@ -20,8 +19,9 @@ public class BlockPlaceAgainstRegion extends AppliedRegion {
     
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (!event.isCancelled() && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector())) && (filter.evaluate(event.getPlayer()).equals(FilterState.DENY) || filter.evaluate(event.getBlockPlaced()).equals(FilterState.DENY))) {
+        if (!event.isCancelled() && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector())) && filter.evaluate(event.getPlayer(), event.getBlockPlaced(), event).equals(FilterState.DENY)) {
             event.setCancelled(true);
+            event.getPlayer().closeInventory();
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }
     }
@@ -29,9 +29,8 @@ public class BlockPlaceAgainstRegion extends AppliedRegion {
     @EventHandler
     public void onBucketEmpty(PlayerBucketEmptyEvent event) {
         Material newMaterial = (event.getBucket().equals(Material.WATER_BUCKET) ? Material.WATER : (event.getBucket().equals(Material.LAVA_BUCKET) ? Material.LAVA : Material.AIR));
-        if (!event.isCancelled() && region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))
-                && (filter.evaluate(event.getPlayer()).equals(FilterState.DENY)
-                || filter.evaluate(newMaterial).equals(FilterState.DENY))) {
+        if (!event.isCancelled() && region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector()))
+                && filter.evaluate(event.getPlayer(), newMaterial, event).equals(FilterState.DENY)) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }

@@ -16,7 +16,7 @@ import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
 import in.twizmwaz.cardinal.util.ScoreboardUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
-import net.minecraft.util.org.apache.commons.lang3.text.WordUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -112,10 +112,12 @@ public class GameScoreboard implements Module {
     }
 
     public void updateScoreboard() {
-        if (scoreboard.getObjective("scoreboard") != null) {
-            scoreboard.getObjective("scoreboard").unregister();
+        Objective objective;
+        if (scoreboard.getObjective("scoreboard-0") != null) {
+            objective = scoreboard.registerNewObjective("scoreboard-1", "dummy");
+        } else {
+            objective = scoreboard.registerNewObjective("scoreboard-0", "dummy");
         }
-        Objective objective = scoreboard.registerNewObjective("scoreboard", "dummy");
         objective.setDisplayName(getDisplayTitle());
         int slot = 0;
         int hillsSlot = -1;
@@ -151,7 +153,7 @@ public class GameScoreboard implements Module {
                         ScoreboardUtils.getNextConversion(objective, score, scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "", team.getColor() + "", used);
                     }
                     if (Blitz.matchIsBlitz() && !team.isObserver()) {
-                        ScoreboardUtils.getNextConversion(objective, team.getPlayers().size(), scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "", team.getColor() + "", used);
+                        ScoreboardUtils.getNextConversion(objective, team.size(), scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "", team.getColor() + "", used);
                     }
                 }
                 if (!team.isObserver() && TeamUtils.getShownObjectives(team).size() > 0) {
@@ -165,7 +167,7 @@ public class GameScoreboard implements Module {
                         ScoreboardUtils.getNextConversion(objective, slot, objectiveTeam, compact, "", ChatColor.RESET + "", used);
                         slot++;
                     }
-                    ScoreboardUtils.getNextConversion(objective, slot, scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "", team.getColor() + "", used);
+                    ScoreboardUtils.getNextConversion(objective, slot, scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "" + ChatColor.ITALIC, ChatColor.ITALIC + "", used);
                 }
                 if (ScoreModule.matchHasMax()) {
                     objective.getScore(ChatColor.RED + "---- MAX ----").setScore(ScoreModule.max());
@@ -203,7 +205,7 @@ public class GameScoreboard implements Module {
                     ScoreboardUtils.getNextConversion(objective, score, scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "", team.getColor() + "", used);
                 }
                 if (Blitz.matchIsBlitz() && !team.isObserver()) {
-                    ScoreboardUtils.getNextConversion(objective, team.getPlayers().size(), scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "", team.getColor() + "", used);
+                    ScoreboardUtils.getNextConversion(objective, team.size(), scoreboard.getTeam(team.getId() + "-s"), team.getName(), team.getColor() + "", team.getColor() + "", used);
                 }
             }
             if (!team.isObserver() && TeamUtils.getShownObjectives(team).size() > 0) {
@@ -226,6 +228,11 @@ public class GameScoreboard implements Module {
             }
         }
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        if (objective.getName().equals("scoreboard-0")) {
+            if (scoreboard.getObjective("scoreboard-1") != null) scoreboard.getObjective("scoreboard-1").unregister();
+        } else {
+            if (scoreboard.getObjective("scoreboard-0") != null) scoreboard.getObjective("scoreboard-0").unregister();
+        }
     }
 
     public int getSlots() {

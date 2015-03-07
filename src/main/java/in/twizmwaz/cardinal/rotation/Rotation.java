@@ -1,35 +1,32 @@
 package in.twizmwaz.cardinal.rotation;
 
+import com.google.common.collect.Maps;
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
+import in.twizmwaz.cardinal.util.Contributor;
 import in.twizmwaz.cardinal.util.DomUtils;
-import net.minecraft.util.org.apache.commons.codec.Charsets;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
+import in.twizmwaz.cardinal.util.MojangUtils;
+import in.twizmwaz.cardinal.util.NumUtils;
+import org.apache.commons.io.Charsets;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 
 public class Rotation {
 
-    private JavaPlugin plugin;
     private File rotationFile;
     private List<LoadedMap> rotation;
     private List<LoadedMap> loaded;
     private int position;
     private File repo;
 
-    public Rotation(JavaPlugin plugin) throws RotationLoadException {
-        this.plugin = plugin;
-        this.rotationFile = new File(plugin.getConfig().getString("rotation"));
+    public Rotation() throws RotationLoadException {
+        this.rotationFile = new File(Cardinal.getInstance().getConfig().getString("rotation"));
         refreshRepo();
         refreshRotation();
     }
@@ -41,7 +38,7 @@ public class Rotation {
      */
     public void refreshRepo() throws RotationLoadException {
         loaded = new ArrayList<>();
-        this.repo = new File(plugin.getConfig().getString("repo"));
+        this.repo = new File(Cardinal.getInstance().getConfig().getString("repo"));
         List<String> requirements = Arrays.asList("map.xml", "region", "level.dat");
         for (File map : repo.listFiles()) {
             if (map.isFile()) continue;
@@ -51,35 +48,44 @@ public class Rotation {
                     String name = xml.getRootElement().getChild("name").getText();
                     String version = xml.getRootElement().getChild("version").getText();
                     String objective = xml.getRootElement().getChild("objective").getText();
-                    List<Pair<String, String>> authors = new ArrayList<>();
+                    List<Contributor> authors = new ArrayList<>();
                     for (Element authorsElement : xml.getRootElement().getChildren("authors")) {
                         for (Element author : authorsElement.getChildren()) {
-                            authors.add(new ImmutablePair<>(author.getText(), author.getAttributeValue("contribution")));
+                            authors.add(parseContributor(author));
                         }
                     }
-                    List<Pair<String, String>> contributors = new ArrayList<>();
+                    List<Contributor> contributors = new ArrayList<>();
                     for (Element contributorsElement : xml.getRootElement().getChildren("contributors")) {
                         for (Element contributor : contributorsElement.getChildren()) {
-                           contributors.add(new ImmutablePair<>(contributor.getText(), contributor.getAttributeValue("contribution")));
+                            contributors.add(parseContributor(contributor));
                         }
                     }
                     List<String> rules = new ArrayList<>();
                     for (Element rulesElement : xml.getRootElement().getChildren("rules")) {
                         for (Element rule : rulesElement.getChildren()) {
-                            rules.add(rule.getText());
+                            rules.add(rule.getText().trim());
                         }
                     }
                     int maxPlayers = 0;
                     for (Element teams : xml.getRootElement().getChildren("teams")) {
                         for (Element team : teams.getChildren()) {
-                            maxPlayers = maxPlayers + Integer.parseInt(team.getAttributeValue("max"));
+                            maxPlayers = maxPlayers + NumUtils.parseInt(team.getAttributeValue("max"));
                         }
                     }
                     loaded.add(new LoadedMap(name, version, objective, authors, contributors, rules, maxPlayers, map));
                 } catch (Exception e) {
                     Bukkit.getLogger().log(Level.WARNING, "Failed to load map at " + map.getAbsolutePath());
+                    if (Cardinal.getInstance().getConfig().getBoolean("displayMapLoadErrors")) {
+                    	Bukkit.getLogger().log(Level.INFO, "Showing error, this can be disabled in the config: ");
+                    	e.printStackTrace();
+                    }
                 }
             }
+        }
+        try {
+            updatePlayers();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -162,13 +168,60 @@ public class Rotation {
         }
         return null;
     }
-    
+
     public LoadedMap getCurrent() {
         try {
             return rotation.get(position - 1);
         } catch (IndexOutOfBoundsException e) {
             return rotation.get(0);
         }
-        
     }
+    
+    private Contributor parseContributor(Element element) {
+        if (element.getAttributeValue("uuid") != null) {
+            return new Contributor(UUID.fromString(element.getAttributeValue("uuid")), element.getAttributeValue("contribution"));
+        } else return new Contributor(element.getText(), element.getAttributeValue("contribution"));
+    }
+    
+    @SuppressWarnings("unchecked")
+    private void updatePlayers() throws IOException, ClassNotFoundException {
+        HashMap<UUID, String> names;
+        try {
+             names = (HashMap<UUID, String>) new ObjectInputStream(new FileInputStream(new File(Cardinal.getInstance().getDataFolder().getPath() + ".names.ser"))).readObject();
+        } catch (FileNotFoundException e) {
+            names = Maps.newHashMap();
+        }
+        for (LoadedMap map : loaded) {
+            for (Contributor contributor : map.getAuthors()) {
+                if (contributor.getName() == null) {
+                    String localName = Bukkit.getOfflinePlayer(contributor.getUniqueId()).getName();
+                    if (localName != null) {
+                        contributor.setName(localName);
+                    } else if (names.containsKey(contributor.getUniqueId())) {
+                        contributor.setName(names.get(contributor.getUniqueId()));
+                    } else {
+                        names.put(contributor.getUniqueId(), MojangUtils.getNameByUUID(contributor.getUniqueId()));
+                        contributor.setName(names.get(contributor.getUniqueId()));
+                    }
+                }
+            }
+            for (Contributor contributor : map.getContributors()) {
+                if (contributor.getName() == null) {
+                    String localName = Bukkit.getOfflinePlayer(contributor.getUniqueId()).getName();
+                    if (localName != null) {
+                        contributor.setName(localName);
+                    } else if (names.containsKey(contributor.getUniqueId())) {
+                        contributor.setName(names.get(contributor.getUniqueId()));
+                    } else {
+                        names.put(contributor.getUniqueId(), MojangUtils.getNameByUUID(contributor.getUniqueId()));
+                        contributor.setName(names.get(contributor.getUniqueId()));
+                    }
+                }
+            }
+        }
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(Cardinal.getInstance().getDataFolder().getPath() + "/.names.ser")));
+        out.writeObject(names);
+        out.close();
+    }
+
 }

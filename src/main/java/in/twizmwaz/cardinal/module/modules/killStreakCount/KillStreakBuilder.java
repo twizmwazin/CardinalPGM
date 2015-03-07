@@ -8,8 +8,8 @@ public class KillStreakBuilder implements ModuleBuilder {
 
     @Override
     public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
-        results.add(new KillStreakCounter(match));
+        ModuleCollection<KillStreakCounter> results = new ModuleCollection<KillStreakCounter>();
+        results.add(new KillStreakCounter());
         return results;
     }
 

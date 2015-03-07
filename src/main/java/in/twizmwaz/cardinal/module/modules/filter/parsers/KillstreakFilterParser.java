@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.filter.parsers;
 
 import in.twizmwaz.cardinal.module.modules.filter.FilterParser;
+import in.twizmwaz.cardinal.util.NumUtils;
 import org.jdom2.Element;
 
 public class KillstreakFilterParser extends FilterParser {
@@ -10,26 +11,13 @@ public class KillstreakFilterParser extends FilterParser {
 
     public KillstreakFilterParser(final Element element) {
         super(element);
-        try {
-            this.min = Integer.parseInt(element.getAttributeValue("min"));
-        } catch (NumberFormatException e) {
-            this.min = -1;
-        }
-        try {
-            this.max = Integer.parseInt(element.getAttributeValue("max"));
-        } catch (NumberFormatException e) {
-            this.max = -1;
-        }
-        try {
-            this.count = Integer.parseInt(element.getAttributeValue("count"));
-        } catch (NumberFormatException e) {
-            this.count = -1;
-        }
-        try {
-            this.repeat = Boolean.parseBoolean(element.getAttributeValue("repeat"));
-        } catch (NumberFormatException e) {
-            this.repeat = false;
-        }
+        this.min = element.getAttributeValue("min") != null ? 
+                NumUtils.parseInt(element.getAttributeValue("min")) : -1;
+        this.max = element.getAttributeValue("max") != null ?
+                NumUtils.parseInt(element.getAttributeValue("max")) : -1;
+        this.count = element.getAttributeValue("count") != null ?
+                NumUtils.parseInt(element.getAttributeValue("count")) : -1;
+        this.repeat = element.getAttributeValue("repeat") != null && NumUtils.parseBoolean(element.getAttributeValue("repeat"));
     }
 
     public int getMin() {

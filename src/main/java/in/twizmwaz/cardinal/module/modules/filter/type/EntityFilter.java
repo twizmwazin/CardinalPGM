@@ -14,15 +14,20 @@ public class EntityFilter extends FilterModule {
 
     public EntityFilter(final EntityFilterParser parser) {
         super(parser.getName());
-        this.entity = parser.getMobType();
+        this.entity = parser.getEntityType();
     }
 
     @Override
-    public FilterState evaluate(final Object object) {
-        if (object instanceof Entity) {
-            if (((Entity) object).getType().equals(entity)) return ALLOW;
-            else return DENY;
-        } else return ABSTAIN;
+    public FilterState evaluate(final Object... objects) {
+        for (Object object : objects) {
+            if (object instanceof Entity) {
+                if (((Entity) object).getType().equals(entity))
+                    return ALLOW;
+                else
+                    return DENY;
+            }
+        }
+        return ABSTAIN;
     }
 
 }

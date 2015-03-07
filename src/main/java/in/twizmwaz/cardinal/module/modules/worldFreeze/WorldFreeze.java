@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.event.weather.LightningStrikeEvent;
 import org.bukkit.event.weather.ThunderChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
@@ -88,9 +89,24 @@ public class WorldFreeze implements Module {
     }
 
     @EventHandler
-    public void onExplode(EntityExplodeEvent event) {
+    public void onEntityExplode(EntityExplodeEvent event) {
         if (!match.getState().equals(MatchState.PLAYING)) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onBlockRedstone(BlockRedstoneEvent event) {
+        if (!match.getState().equals(MatchState.PLAYING)) {
+            event.setNewCurrent(event.getOldCurrent());
+        }
+    }
+
+    @EventHandler
+    public void onFurnaceBurn(FurnaceBurnEvent event) {
+        if (!match.getState().equals(MatchState.PLAYING)) {
+            event.setCancelled(true);
+            event.setBurning(true);
         }
     }
 

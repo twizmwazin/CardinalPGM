@@ -95,9 +95,9 @@ public class FilterModuleBuilder implements ModuleBuilder {
             case "one":
                 return new OneFilter(new ChildrenFilterParser(element));
             case "allow":
-                return new AllowFilter(new GenericFilterParser(element));
+                return new AllowFilter(new ChildrenFilterParser(element));
             case "deny":
-                return new DenyFilter(new GenericFilterParser(element));
+                return new DenyFilter(new ChildrenFilterParser(element));
             case "filter":
                 switch (element.getAttributeValue("name").toLowerCase()) {
                     case "allow-all":
@@ -128,6 +128,10 @@ public class FilterModuleBuilder implements ModuleBuilder {
                         return new AllMobFilter("allow-mobs", true);
                     case "deny-mobs":
                         return new AllMobFilter("deny-mobs", false);
+                    case "allow":
+                        return new AllowFilter(new ChildrenFilterParser(element));
+                    case "deny":
+                        return new DenyFilter(new ChildrenFilterParser(element));
                     default:
                         if (element.getAttributeValue("name") != null) {
                             for (Element filterElement : document.getRootElement().getChildren("filters")) {

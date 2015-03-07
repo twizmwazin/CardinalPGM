@@ -1,6 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.itemKeep;
 
-import in.twizmwaz.cardinal.event.PgmSpawnEvent;
+import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -51,7 +51,7 @@ public class ItemKeep implements Module{
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPgmSpawn(PgmSpawnEvent event){
+    public void onPgmSpawn(CardinalSpawnEvent event){
         Player player = event.getPlayer();
         Inventory inventory = player.getInventory();
         if (items.containsKey(player)) {

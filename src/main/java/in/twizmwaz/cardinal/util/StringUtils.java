@@ -1,5 +1,8 @@
 package in.twizmwaz.cardinal.util;
 
+import org.bukkit.ChatColor;
+import org.bukkit.util.ChatPaginator;
+
 import java.text.DecimalFormat;
 
 public class StringUtils {
@@ -12,19 +15,19 @@ public class StringUtils {
         for (int i = 0; i < input.length(); i ++) {
             char c = input.charAt(i);
             if (Character.isDigit(c) && !currentUnit.equals("")) {
-                time += convert(Integer.parseInt(current) * (negative ? -1 : 1), currentUnit);
+                time += convert(NumUtils.parseInt(current) * (negative ? -1 : 1), currentUnit);
                 current = "";
                 currentUnit = "";
             }
             if (c == '-') {
                 negative = true;
             } else if (Character.isDigit(c)) {
-                current += Integer.parseInt(c + "");
+                current += NumUtils.parseInt(c + "");
             } else {
                 currentUnit += c + "";
             }
         }
-        time += convert(Integer.parseInt(current) * (negative ? -1 : 1), currentUnit);
+        time += convert(NumUtils.parseInt(current) * (negative ? -1 : 1), currentUnit);
         return time;
     }
 
@@ -83,5 +86,31 @@ public class StringUtils {
             secondsString = "0" + secondsString;
         }
         return (negative ? "-" : "") + (hours == 0 ? "" : hoursString + ":") + minutesString + ":" + secondsString + "." + millisString;
+    }
+    
+    public static String getTechnicalName(String string) {
+        return string.trim().toUpperCase().replaceAll(" ", "_");
+    }
+
+    /**
+     * @author OvercastNetwork
+     * @author MonsieurApple
+     * @author Anxuiz
+     * @author Ramsey
+     *
+     * https://github.com/rmsy/Whitelister
+     *
+     */
+
+    /** Repeat character 'c' n times. */
+    public static String repeat(String c, int n) {
+        assert n >= 0;
+        return new String(new char[n]).replace("\0", c);
+    }
+
+    public static String padMessage(String message, String c, ChatColor dashColor, ChatColor messageColor) {
+        message = " " + message + " ";
+        String dashes = StringUtils.repeat(c, (ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH - ChatColor.stripColor(message).length() - 2) / (c.length() * 2));
+        return dashColor + dashes + ChatColor.RESET + messageColor + message + ChatColor.RESET + dashColor + dashes;
     }
 }

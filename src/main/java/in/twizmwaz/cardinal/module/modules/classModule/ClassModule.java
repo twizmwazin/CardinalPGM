@@ -1,11 +1,12 @@
 package in.twizmwaz.cardinal.module.modules.classModule;
 
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.event.ClassChangeEvent;
-import in.twizmwaz.cardinal.event.PgmSpawnEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.kit.Kit;
-import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -48,20 +49,20 @@ public class ClassModule implements Module {
         if (event.getClassModule().equals(this)) {
             if (sticky && TeamUtils.getTeamByPlayer(event.getPlayer()) != null && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) {
                 event.setCancelled(true);
-                ChatUtils.sendWarningMessage(event.getPlayer(), "You may not change your class during the match.");
+                event.getPlayer().sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_NO_CLASS_CHANGE).getMessage(event.getPlayer().getLocale()));
             }
             if (!restrict && !event.getPlayer().isOp()) {
                 event.setCancelled(true);
-                ChatUtils.sendWarningMessage(event.getPlayer(), "You do not have access to this class.");
+                event.getPlayer().sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_CLASS_RESTRICTED, ChatColor.AQUA + name + ChatColor.RED).getMessage(event.getPlayer().getLocale()));
             }
             if (!event.isCancelled()) {
-                event.getPlayer().sendMessage(ChatColor.GREEN + "You have selected " + ChatColor.GOLD + "" + ChatColor.UNDERLINE + name);
+                event.getPlayer().sendMessage(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.GENERIC_HAVE_SELECTED, ChatColor.GOLD + "" + ChatColor.UNDERLINE + name + ChatColor.GREEN).getMessage(event.getPlayer().getLocale()));
             }
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPgmSpawn(PgmSpawnEvent event) {
+    public void onPgmSpawn(CardinalSpawnEvent event) {
         if (!playerClass.containsKey(event.getPlayer().getUniqueId()) && (this.defaultClass || (!defaultClassPresent() && GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class).equals(this)))) playerClass.put(event.getPlayer().getUniqueId(), this);
         if (playerClass.containsKey(event.getPlayer().getUniqueId()) && playerClass.get(event.getPlayer().getUniqueId()).equals(this)) {
             if (kit != null) kit.apply(event.getPlayer());

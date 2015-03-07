@@ -1,18 +1,18 @@
 package in.twizmwaz.cardinal.module.modules.kit;
 
-import in.parapengu.commons.utils.StringUtils;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
-import in.twizmwaz.cardinal.util.ArmorType;
-import in.twizmwaz.cardinal.util.MiscUtils;
-import in.twizmwaz.cardinal.util.ParseUtils;
+import in.twizmwaz.cardinal.util.*;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -25,10 +25,9 @@ import java.util.List;
 @BuilderData(load = ModuleLoadTime.EARLIER)
 public class KitBuilder implements ModuleBuilder {
 
-    @SuppressWarnings("unchecked")
     @Override
     public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
+        ModuleCollection<in.twizmwaz.cardinal.module.Module> results = new ModuleCollection<in.twizmwaz.cardinal.module.Module>();
         for (Element kits : match.getDocument().getRootElement().getChildren("kits")) {
             for (Element element : kits.getChildren("kit")) {
                 results.add(getKit(element));
@@ -52,7 +51,7 @@ public class KitBuilder implements ModuleBuilder {
             List<KitItem> items = new ArrayList<>(36);
             for (Element item : element.getChildren("item")) {
                 ItemStack itemStack = ParseUtils.getItem(item);
-                int slot = item.getAttributeValue("slot") != null ? Integer.parseInt(item.getAttributeValue("slot")) : -1;
+                int slot = item.getAttributeValue("slot") != null ? NumUtils.parseInt(item.getAttributeValue("slot")) : -1;
                 items.add(new KitItem(itemStack, slot));
             }
             List<KitArmor> armor = new ArrayList<>(4);
@@ -62,22 +61,22 @@ public class KitBuilder implements ModuleBuilder {
             armors.addAll(element.getChildren("leggings"));
             armors.addAll(element.getChildren("boots"));
             for (Element piece : armors) {
-                ItemStack itemStack = new ItemStack(StringUtils.convertStringToMaterial(piece.getText()), 1);
+                ItemStack itemStack = new ItemStack(Material.matchMaterial(piece.getText()), 1);
                 if (piece.getAttributeValue("damage") != null) {
                     itemStack.setDurability(Short.parseShort(piece.getAttributeValue("damage")));
                 }
                 if (itemStack.getItemMeta() instanceof LeatherArmorMeta && piece.getAttributeValue("color") != null) {
                     LeatherArmorMeta meta = (LeatherArmorMeta) itemStack.getItemMeta();
-                    meta.setColor(StringUtils.convertHexStringToColor(piece.getAttributeValue("color")));
+                    meta.setColor(MiscUtils.convertHexToRGB(piece.getAttributeValue("color")));
                     itemStack.setItemMeta(meta);
                 }
                 try {
                     for (String raw : piece.getAttributeValue("enchantment").split(";")) {
                         String[] enchant = raw.split(":");
                         try {
-                            itemStack.addUnsafeEnchantment(StringUtils.convertStringToEnchantment(enchant[0]), Integer.parseInt(enchant[1]));
+                            itemStack.addUnsafeEnchantment(Enchantment.getByName(StringUtils.getTechnicalName(enchant[0])), NumUtils.parseInt(enchant[1]));
                         } catch (ArrayIndexOutOfBoundsException e) {
-                            itemStack.addUnsafeEnchantment(StringUtils.convertStringToEnchantment(enchant[0]), 1);
+                            itemStack.addUnsafeEnchantment(Enchantment.getByName(StringUtils.getTechnicalName(enchant[0])), 1);
                         }
                     }
                 } catch (NullPointerException e) {
@@ -88,19 +87,30 @@ public class KitBuilder implements ModuleBuilder {
             }
             List<PotionEffect> potions = new ArrayList<>();
             for (Element potion : element.getChildren("potion")) {
-                PotionEffectType type = StringUtils.convertStringToPotionEffectType(potion.getText());
-                int duration = 0;
-                try {
-                    duration = Integer.parseInt(potion.getAttributeValue("duration")) * 20;
-                } catch (NumberFormatException e) {
-                    if (potion.getAttributeValue("duration").equalsIgnoreCase("oo"))
-                        duration = Integer.MAX_VALUE;
-                }
+                PotionEffectType type = PotionEffectType.getByName(StringUtils.getTechnicalName(potion.getText()));
+                int duration = NumUtils.parseInt(potion.getAttributeValue("duration")) == Integer.MAX_VALUE ? NumUtils.parseInt(potion.getAttributeValue("duration")) : NumUtils.parseInt(potion.getAttributeValue("duration")) * 20;
                 int amplifier = 0;
                 if (potion.getAttributeValue("amplifier") != null) {
-                    amplifier = Integer.parseInt(potion.getAttributeValue("amplifier")) - 1;
+                    amplifier = NumUtils.parseInt(potion.getAttributeValue("amplifier")) - 1;
                 }
                 potions.add(new PotionEffect(type, duration, amplifier, true));
+            }
+            List<KitBook> books = new ArrayList<>();
+            for (Element book : element.getChildren("book")) {
+                String title = null;
+                if (book.getChildText("title") != null) {
+                    title = book.getChildText("title");
+                }
+                String author = null;
+                if (book.getChildText("author") != null) {
+                    author = book.getChildText("author");
+                }
+                int slot = book.getAttributeValue("slot") != null ? NumUtils.parseInt(book.getAttributeValue("slot")) : -1;
+                List<String> pages = new ArrayList<>();
+                for (Element page : book.getChild("pages").getChildren("page")) {
+                    pages.add(ChatColor.translateAlternateColorCodes('`', page.getText()).replace("\u0009", ""));
+                }
+                books.add(new KitBook( title, author, pages, slot));
             }
             String parent = element.getAttributeValue("parents");
             boolean force = element.getAttributeValue("force") != null && Boolean.parseBoolean(element.getAttributeValue("force"));
@@ -126,7 +136,7 @@ public class KitBuilder implements ModuleBuilder {
             }
             int health = -1;
             try {
-                health = Integer.parseInt(element.getChild("health").getText()) / 2;
+                health = NumUtils.parseInt(element.getChild("health").getText()) / 2;
             } catch (NullPointerException e) {
 
             }
@@ -138,7 +148,7 @@ public class KitBuilder implements ModuleBuilder {
             }
             int foodLevel = -1;
             try {
-                foodLevel = Integer.parseInt(element.getChild("foodlevel").getText());
+                foodLevel = NumUtils.parseInt(element.getChild("foodlevel").getText());
             } catch (NullPointerException e) {
 
             }
@@ -157,7 +167,7 @@ public class KitBuilder implements ModuleBuilder {
             boolean jump = false;
             if (element.getChildren("double-jump").size() > 0)
                 jump = true;
-            return new Kit(name, items, armor, potions, parent, force, potionParticles, resetPearls, clear, clearItems, health, saturation, foodLevel, walkSpeed, knockback, jump);
+            return new Kit(name, items, armor, potions, books ,parent, force, potionParticles, resetPearls, clear, clearItems, health, saturation, foodLevel, walkSpeed, knockback, jump);
         } else {
             return getKit(element.getParentElement(), document, true);
         }

@@ -1,15 +1,21 @@
 package in.twizmwaz.cardinal.module.modules.mapNotification;
 
-import com.sk89q.minecraft.util.commands.ChatColor;
+import in.twizmwaz.cardinal.util.Contributor;
+import org.bukkit.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.module.TaskedModule;
-import in.twizmwaz.cardinal.module.modules.mapInfo.contributor.Contributor;
+import in.twizmwaz.cardinal.rotation.LoadedMap;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 
 import java.util.List;
+import java.util.Locale;
 
 public class MapNotification implements TaskedModule {
 
@@ -41,18 +47,35 @@ public class MapNotification implements TaskedModule {
     @Override
     public void run() {
         if (getTimeInSeconds() >= this.nextMessage) {
+            LoadedMap map = GameHandler.getGameHandler().getMatch().getLoadedMap();
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                String locale = player.getLocale();
+                String result = "";
+                List<Contributor> authors = map.getAuthors();
+                for (Contributor author : authors) {
+                    if (authors.indexOf(author) < authors.size() - 2) {
+                        result = result + org.bukkit.ChatColor.RED + author.getName() + org.bukkit.ChatColor.DARK_PURPLE + ", ";
+                    } else if (authors.indexOf(author) == authors.size() - 2) {
+                        result = result + org.bukkit.ChatColor.RED + author.getName() + org.bukkit.ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_AND).getMessage(locale) + " ";
+                    } else if (authors.indexOf(author) == authors.size() - 1) {
+                        result = result + org.bukkit.ChatColor.RED + author.getName();
+                    }
+                }
+                player.sendMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "{0}", new LocalizedChatMessage(ChatConstant.UI_MAP_PLAYING, ChatColor.GOLD + map.getName() + ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_BY).getMessage(locale) + " " + result)).getMessage(locale));
+            }
+            String locale = Locale.getDefault().toString();
             String result = "";
-            List<Contributor> authors = GameHandler.getGameHandler().getMatch().getMapInfo().getAuthors();
+            List<Contributor> authors = map.getAuthors();
             for (Contributor author : authors) {
                 if (authors.indexOf(author) < authors.size() - 2) {
                     result = result + org.bukkit.ChatColor.RED + author.getName() + org.bukkit.ChatColor.DARK_PURPLE + ", ";
                 } else if (authors.indexOf(author) == authors.size() - 2) {
-                    result = result + org.bukkit.ChatColor.RED + author.getName() + org.bukkit.ChatColor.DARK_PURPLE + " and ";
+                    result = result + org.bukkit.ChatColor.RED + author.getName() + org.bukkit.ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_AND).getMessage(locale) + " ";
                 } else if (authors.indexOf(author) == authors.size() - 1) {
                     result = result + org.bukkit.ChatColor.RED + author.getName();
                 }
             }
-            Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "Currently playing " + ChatColor.GOLD + GameHandler.getGameHandler().getMatch().getMapInfo().getName() + ChatColor.DARK_PURPLE + " by " + result);
+            Bukkit.getLogger().info(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "{0}", new LocalizedChatMessage(ChatConstant.UI_MAP_PLAYING, ChatColor.GOLD + map.getName() + ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_BY).getMessage(locale) + " " + result)).getMessage(locale));
             this.nextMessage += 600;
         }
     }

@@ -10,10 +10,12 @@ public class ObjectiveTouchEvent extends ObjectiveEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
     private boolean updateScoreboard;
+    private boolean touchMessage;
 
-    public ObjectiveTouchEvent(GameObjective objective, Player player, boolean updateScoreboard) {
+    public ObjectiveTouchEvent(GameObjective objective, Player player, boolean updateScoreboard, boolean touchMessage) {
         super(objective, player);
         this.updateScoreboard = updateScoreboard;
+        this.touchMessage = touchMessage;
     }
 
     public static HandlerList getHandlerList() {
@@ -44,5 +46,9 @@ public class ObjectiveTouchEvent extends ObjectiveEvent implements Cancellable {
 
     public boolean updateScoreboard() {
         return updateScoreboard;
+    }
+
+    public boolean displayTouchMessage() {
+        return touchMessage;
     }
 }

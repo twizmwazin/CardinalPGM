@@ -8,17 +8,15 @@ import org.bukkit.util.Vector;
 
 public class PointRegion extends BlockRegion {
 
-    private final Vector vector, look;
+    private final Vector look;
 
     public PointRegion(String name, Vector vector, Vector look) {
         super(name, vector);
-        this.vector = vector;
         this.look = look;
     }
 
     public PointRegion(String name, double x, double y, double z) {
         super(name, x, y, z);
-        this.vector = new BlockVector(x, y, z);
         this.look = new BlockVector();
     }
 
@@ -28,6 +26,11 @@ public class PointRegion extends BlockRegion {
 
     public PointRegion(String name, Vector vector) {
         this(name, vector, new BlockVector());
+    }
+
+    @Override
+    public Vector getVector() {
+        return vector.clone();
     }
 
     public float getYaw() {

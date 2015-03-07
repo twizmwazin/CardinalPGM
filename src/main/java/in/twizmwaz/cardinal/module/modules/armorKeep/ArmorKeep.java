@@ -1,6 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.armorKeep;
 
-import in.twizmwaz.cardinal.event.PgmSpawnEvent;
+import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -36,6 +36,10 @@ public class ArmorKeep implements Module{
     @Override
     public void unload() {
         HandlerList.unregisterAll(this);
+        helmet.clear();
+        chestplate.clear();
+        leggings.clear();
+        boots.clear();
     }
 
     @EventHandler
@@ -66,7 +70,7 @@ public class ArmorKeep implements Module{
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPgmSpawn(PgmSpawnEvent event){
+    public void onPgmSpawn(CardinalSpawnEvent event){
         Player player = event.getPlayer();
         PlayerInventory inventory = player.getInventory();
         if (helmet.containsKey(player)) {

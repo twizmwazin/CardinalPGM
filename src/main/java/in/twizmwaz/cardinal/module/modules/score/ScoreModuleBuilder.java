@@ -6,6 +6,7 @@ import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.util.NumUtils;
 import in.twizmwaz.cardinal.util.StringUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.jdom2.Element;
@@ -23,7 +24,8 @@ public class ScoreModuleBuilder implements ModuleBuilder {
         int time = 0;
         for (Element score : match.getDocument().getRootElement().getChildren("score")) {
             if (score.getChild("limit") != null) {
-                max = Integer.parseInt(score.getChild("limit").getText());
+                max = NumUtils.parseInt(score.getChild("limit").getText());
+                if (max < 0) max = 0;
                 if (max != 0) {
                     pointsPerKill = 1;
                     pointsPerDeath = 1;
@@ -41,10 +43,10 @@ public class ScoreModuleBuilder implements ModuleBuilder {
                 pointsPerDeath = 0;
             }
             if (score.getChild("kills") != null) {
-                pointsPerKill = Integer.parseInt(score.getChild("kills").getText());
+                pointsPerKill = NumUtils.parseInt(score.getChild("kills").getText());
             }
             if (score.getChild("deaths") != null) {
-                pointsPerDeath = Integer.parseInt(score.getChild("deaths").getText());
+                pointsPerDeath = NumUtils.parseInt(score.getChild("deaths").getText());
             }
         }
         for (TeamModule team : TeamUtils.getTeams()) {

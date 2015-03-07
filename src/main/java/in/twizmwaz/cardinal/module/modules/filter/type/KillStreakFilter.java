@@ -23,20 +23,28 @@ public class KillStreakFilter extends FilterModule {
     }
 
     @Override
-    public FilterState evaluate(final Object object) {
-        if (object instanceof Player) {
-            try {
-                int killStreak = ((Player) object).getMetadata("killstreak").get(0).asInt();
-                if (this.min > -1 && this.max > -1) {
-                    if (killStreak > min && killStreak < max) return ALLOW;
-                    else return DENY;
-                } else if (killStreak == count) return ALLOW;
-                else if (repeat && killStreak % count == 0) return ALLOW;
-                else return DENY;
-            } catch (IndexOutOfBoundsException e) {
-                return ABSTAIN;
+    public FilterState evaluate(final Object... objects) {
+        for (Object object : objects) {
+            if (object instanceof Player) {
+                try {
+                    int killStreak = ((Player) object).getMetadata("killstreak").get(0).asInt();
+                    if (this.min > -1 && this.max > -1) {
+                        if (killStreak > min && killStreak < max)
+                            return ALLOW;
+                        else
+                            return DENY;
+                    } else if (killStreak == count)
+                        return ALLOW;
+                    else if (repeat && killStreak % count == 0)
+                        return ALLOW;
+                    else
+                        return DENY;
+                } catch (IndexOutOfBoundsException e) {
+                    return ABSTAIN;
+                }
             }
-        } else return ABSTAIN;
+        }
+        return ABSTAIN;
     }
 
 }

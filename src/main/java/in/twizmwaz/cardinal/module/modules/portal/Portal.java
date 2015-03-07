@@ -7,7 +7,6 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.util.TeamUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.event.EventHandler;
@@ -52,7 +51,7 @@ public class Portal implements Module {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerMove(PlayerMoveEvent event) {
         if (region.contains(new BlockRegion(null, event.getTo().toVector()))) {
-            if (filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW) || (TeamUtils.getTeamByPlayer(event.getPlayer()) != null && TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
+            if ((filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW)) || (TeamUtils.getTeamByPlayer(event.getPlayer()) != null && TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
                 if (destination != null) {
                     event.getPlayer().teleport(destination.getRandomPoint().getLocation());
                     if (sound) event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2F, 1);
