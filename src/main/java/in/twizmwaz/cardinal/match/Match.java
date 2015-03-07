@@ -37,7 +37,7 @@ public class Match {
         this.uuid = id;
         this.modules = new ModuleCollection<>();
         try {
-            this.document = DomUtils.parse(new File("matches/" + this.uuid.toString() + "/map.xml"));
+            this.document = DomUtils.parse(new File(map.getFolder() + "/map.xml"));
         } catch (JDOMException | IOException e) {
             e.printStackTrace();
         }

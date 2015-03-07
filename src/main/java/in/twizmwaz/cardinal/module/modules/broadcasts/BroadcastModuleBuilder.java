@@ -36,7 +36,7 @@ public class BroadcastModuleBuilder implements ModuleBuilder {
                 String message;
                 int timeAfter;
                 int every;
-                int count = Integer.MAX_VALUE;
+                int count = 1;
                 message = ChatColor.translateAlternateColorCodes('`', element.getText());
                 timeAfter = StringUtils.timeStringToSeconds(element.getAttributeValue("after"));
                 if (element.getAttributeValue("every") != null) {
