@@ -45,7 +45,7 @@ public class DeathTracker implements Module {
             if (killer == null && SpleefTracker.getLastSpleefEvent(event.getEntity()) != null && (System.currentTimeMillis() - SpleefTracker.getLastSpleefEvent(event.getEntity()).getTime() <= 10000) && SpleefTracker.getLastSpleefEvent(event.getEntity()).getSpleefer().isOnline())
                 killer = (Player) SpleefTracker.getLastSpleefEvent(event.getEntity()).getSpleefer();
             CardinalDeathEvent deathEvent = new CardinalDeathEvent(event.getEntity(), killer);
-            if (DamageTracker.getLastDamageEvent(event.getEntity()) != null)
+            if (DamageTracker.getLastDamageEvent(event.getEntity()) != null && event.getEntity().getKiller() != null)
                 deathEvent.setTrackerDamageEvent(DamageTracker.getLastDamageEvent(event.getEntity()));
             if (SpleefTracker.getLastSpleefEvent(event.getEntity()) != null && (System.currentTimeMillis() - SpleefTracker.getLastSpleefEvent(event.getEntity()).getTime() <= 10000))
                 deathEvent.setPlayerSpleefEvent(SpleefTracker.getLastSpleefEvent(event.getEntity()));
