@@ -17,6 +17,8 @@ permissions:
     - cardinal.cancel
     - cardinal.chat.admin
     - cardinal.match.setnext
+    - cardinal.match.end
+    - cardinal.match.start
     - cardinal.match.cycle
     - cardinal.team.force
     - cardinal.teleport
