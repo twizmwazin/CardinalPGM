@@ -263,14 +263,14 @@ public class WoolObjective implements GameObjective {
     @EventHandler
     public void onWoolTouch(ObjectiveTouchEvent event) {
         if (event.getObjective().equals(this) && event.displayTouchMessage()) {
-            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getPlayer(), Snowflakes.ChangeReason.WOOL_TOUCH, 8, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ")));
+            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getPlayer(), Snowflakes.ChangeReason.WOOL_TOUCH, 8, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.GRAY));
         }
     }
 
     @EventHandler
     public void onWoolPlace(ObjectiveCompleteEvent event) {
         if (event.getObjective().equals(this) && event.getObjective().showOnScoreboard()) {
-            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getPlayer(), Snowflakes.ChangeReason.WOOL_PLACE, 15, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ")));
+            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getPlayer(), Snowflakes.ChangeReason.WOOL_PLACE, 15, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.GRAY));
         }
     }
 }

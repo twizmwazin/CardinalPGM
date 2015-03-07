@@ -18,7 +18,7 @@ import org.bukkit.event.HandlerList;
 public class Snowflakes implements Module {
 
     public enum ChangeReason {
-        PLAYER_KILL(), WOOL_TOUCH(), WOOL_PLACE(), CORE_LEAK(), TEAM_WIN(), TEAM_LOYAL()
+        PLAYER_KILL(), WOOL_TOUCH(), WOOL_PLACE(), CORE_LEAK(), MONUMENT_DESTROY(), TEAM_WIN(), TEAM_LOYAL()
     }
 
     public Snowflakes() {
@@ -59,6 +59,8 @@ public class Snowflakes implements Module {
                 reason = "placed " + event.get(0);
             } else if (event.getChangeReason().equals(ChangeReason.CORE_LEAK)) {
                 reason = "you broke a piece of " + event.get(0);
+            } else if (event.getChangeReason().equals(ChangeReason.MONUMENT_DESTROY)) {
+                reason = "you destroyed " + event.get(0) + "% of " + event.get(1);
             } else if (event.getChangeReason().equals(ChangeReason.TEAM_WIN)) {
                 reason = "your team (" + event.get(0) + ChatColor.GRAY + ") won";
             } else if (event.getChangeReason().equals(ChangeReason.TEAM_LOYAL)) {
