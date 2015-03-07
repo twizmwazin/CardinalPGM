@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.module.modules.tnt;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.Module;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -49,9 +50,9 @@ public class Tnt implements Module {
             ItemStack tntStack = event.getPlayer().getItemInHand();
             tntStack.setAmount(tntStack.getAmount() - 1);
             event.getPlayer().setItemInHand(tntStack);
-            Entity tntPrimed = GameHandler.getGameHandler().getMatchWorld().spawnEntity(block.getLocation().add(new Vector(0.5, 0.5, 0.5)), EntityType.PRIMED_TNT);
-            Explosive tnt = (Explosive) tntPrimed;
+            TNTPrimed tnt = (TNTPrimed) GameHandler.getGameHandler().getMatchWorld().spawnEntity(block.getLocation().add(new Vector(0.5, 0.5, 0.5)), EntityType.PRIMED_TNT);
             tnt.setYield((float) power);
+            Bukkit.getServer().getPluginManager().callEvent(new ExplosionPrimeEvent(tnt, (float) power * 10, false));
         }
     }
 
