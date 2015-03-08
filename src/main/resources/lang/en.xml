@@ -198,5 +198,6 @@
         <good>Good</good>
         <amazing>Amazing!</amazing>
         <teamChoose>Choose your team/class</teamChoose>
+        <online>Online</online>
     </userInterface>
 </locale>

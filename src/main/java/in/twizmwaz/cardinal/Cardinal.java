@@ -89,6 +89,7 @@ public class Cardinal extends JavaPlugin {
         cmdRegister.register(PunishmentCommands.class);
         cmdRegister.register(StatsCommand.class);
         cmdRegister.register(ReadyCommand.class);
+        cmdRegister.register(ListCommand.class);
     }
 
     @Override
