@@ -125,7 +125,7 @@ public class WoolObjective implements GameObjective {
     @EventHandler
     public void onWoolPickup(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
-        if (!this.complete) {
+        if (!this.complete && GameHandler.getGameHandler().getMatch().isRunning()) {
             try {
                 if (event.getCurrentItem().getType() == Material.WOOL && event.getCurrentItem().getData().getData() == color.getData()) {
                     if (TeamUtils.getTeamByPlayer(player) == team) {
@@ -152,7 +152,7 @@ public class WoolObjective implements GameObjective {
     @EventHandler
     public void onWoolPickup(PlayerPickupItemEvent event) {
         Player player = event.getPlayer();
-        if (!this.complete) {
+        if (!this.complete && GameHandler.getGameHandler().getMatch().isRunning()) {
             try {
                 if (event.getItem().getItemStack().getType() == Material.WOOL && event.getItem().getItemStack().getData().getData() == color.getData()) {
                     if (TeamUtils.getTeamByPlayer(player) == team) {
