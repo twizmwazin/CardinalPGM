@@ -197,7 +197,8 @@ public enum  ChatConstant {
     UI_OK("userInterface.ok"),
     UI_GOOD("userInterface.good"),
     UI_AMAZING("userInterface.amazing"),
-    UI_TEAM_CHOOSE("userInterface.teamChoose");
+    UI_TEAM_CHOOSE("userInterface.teamChoose"),
+    UI_VIEW_TUTORIAL("userInterface.viewTutorial");
     
     private final String path;
     
