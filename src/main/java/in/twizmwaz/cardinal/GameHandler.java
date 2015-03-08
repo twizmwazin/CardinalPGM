@@ -1,19 +1,19 @@
 package in.twizmwaz.cardinal;
 
 import in.twizmwaz.cardinal.cycle.Cycle;
-import in.twizmwaz.cardinal.cycle.CycleTimer;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.ModuleFactory;
+import in.twizmwaz.cardinal.module.modules.cycleTimer.CycleTimerModule;
 import in.twizmwaz.cardinal.rotation.Rotation;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.ref.WeakReference;
 import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class GameHandler {
 
@@ -23,7 +23,7 @@ public class GameHandler {
     private WeakReference<World> matchWorld;
     private Match match;
     private Cycle cycle;
-    private CycleTimer cycleTimer;
+    private CycleTimerModule cycleTimer;
 
     public GameHandler() throws RotationLoadException {
         handler = this;
@@ -74,20 +74,12 @@ public class GameHandler {
         return cycle;
     }
 
-    public CycleTimer getCycleTimer() {
+    public CycleTimerModule getCycleTimer() {
         return cycleTimer;
     }
 
     public JavaPlugin getPlugin() {
         return Cardinal.getInstance();
-    }
-
-    public boolean startCycleTimer(int seconds) {
-        if (this.getMatch().getState() != MatchState.PLAYING) {
-            this.cycleTimer = new CycleTimer(this.getCycle(), seconds);
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.getPlugin(), cycleTimer);
-            return true;
-        } else return false;
     }
 
     public ModuleFactory getModuleFactory() {

@@ -63,7 +63,7 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
     }
 
     public boolean add(Player player, boolean force) {
-        return add(player, force, true);
+        return this.add(player, force, true);
     }
     
     public boolean add(Player player) {
