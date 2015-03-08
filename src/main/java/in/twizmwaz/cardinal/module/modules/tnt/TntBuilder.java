@@ -11,7 +11,7 @@ public class TntBuilder implements ModuleBuilder {
 
     @Override
     public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
+        ModuleCollection<Tnt> results = new ModuleCollection<>();
         for (Element element : match.getDocument().getRootElement().getChildren("tnt")) {
             boolean instantIgnite = false;
             if (element.getChild("instantignite") != null) {

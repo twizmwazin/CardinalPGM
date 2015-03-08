@@ -9,6 +9,7 @@ import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.module.modules.startTimer.StartTimer;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,36 +18,28 @@ import org.bukkit.entity.Player;
 
 public class ReadyCommand {
 
-    @Command(aliases = {"ready"}, desc = "State that your team is ready")
+    @Command(aliases = {"ready"}, desc = "Make your team ready.")
     public static void ready(final CommandContext cmd, CommandSender sender) throws CommandException {
-        Player player = (Player) sender;
-        TeamModule team = TeamUtils.getTeamByPlayer(player);
-        if (!team.isObserver()) {
-            if (!team.isReady()) {
-                team.setReady(true);
-                Bukkit.broadcastMessage(team.getCompleteName() + ChatColor.YELLOW + " is now ready");
-                if (TeamUtils.teamsReady()) {
-                    GameHandler.getGameHandler().getMatch().start(30 * 20);
-                }
-            } else player.sendMessage(ChatColor.RED + "Your team is already ready");
-        } else player.sendMessage(team.getCompleteName() + ChatColor.YELLOW + " cannot be ready");
+        TeamModule team = TeamUtils.getTeamByPlayer((Player) sender);
+        if (!team.isReady()) {
+            team.setReady(true);
+            ChatUtils.getGlobalChannel().sendMessage(team.getCompleteName() + ChatColor.YELLOW + " is now ready");
+            if (TeamUtils.teamsReady()) GameHandler.getGameHandler().getMatch().start(600);
+        } else throw new CommandException("Your team is already ready!");
     }
 
-    @Command(aliases = {"unready"}, desc = "State that your team is not ready")
+    @Command(aliases = {"unready"}, desc = "Make your team not ready.")
     public static void unready(final CommandContext cmd, CommandSender sender) throws CommandException {
-        Player player = (Player) sender;
-        TeamModule team = TeamUtils.getTeamByPlayer(player);
-        if (!team.isObserver()) {
-            if (team.isReady()) {
-                team.setReady(false);
-                Bukkit.broadcastMessage(team.getCompleteName() + ChatColor.YELLOW + " is no longer ready");
-                if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
-                    GameHandler.getGameHandler().getMatch().setState(MatchState.WAITING);
-                    GameHandler.getGameHandler().getMatch().getModules().getModule(StartTimer.class).setCancelled(true);
-                    Bukkit.broadcastMessage(ChatColor.RED + "Match start countdown cancelled because " + team.getCompleteName() + ChatColor.RED + " became un-ready.");
-                }
-            } else player.sendMessage(ChatColor.RED + "Your team is already un-ready");
-        } else player.sendMessage(team.getCompleteName() + ChatColor.YELLOW + " cannot be ready");
+        TeamModule team = TeamUtils.getTeamByPlayer((Player) sender);
+        if (team.isReady()) {
+            team.setReady(false);
+            ChatUtils.getGlobalChannel().sendMessage(team.getCompleteName() + ChatColor.YELLOW + " is no longer ready");
+            if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
+                GameHandler.getGameHandler().getMatch().setState(MatchState.WAITING);
+                GameHandler.getGameHandler().getMatch().getModules().getModule(StartTimer.class).setCancelled(true);
+                ChatUtils.getGlobalChannel().sendMessage(ChatColor.RED + "Match start countdown cancelled because " + team.getCompleteName() + ChatColor.RED + " became un-ready.");
+            }
+        } else throw new CommandException("Your team is already not ready!");
     }
 
 }
