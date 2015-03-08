@@ -1,14 +1,17 @@
 package in.twizmwaz.cardinal.command;
 
 import com.sk89q.minecraft.util.commands.*;
+
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.match.MatchState;
+import in.twizmwaz.cardinal.module.modules.cycleTimer.CycleTimerModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
 import in.twizmwaz.cardinal.util.TeamUtils;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -31,7 +34,7 @@ public class CycleCommand {
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
         if (GameHandler.getGameHandler().getCycleTimer() != null)
             GameHandler.getGameHandler().getCycleTimer().setCancelled(true);
-        GameHandler.getGameHandler().startCycleTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
+        GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimerModule.class).startTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
     }
 
     @Command(aliases = {"setnext", "sn"}, desc = "Sets the next map.", usage = "[map]", min = 1)
@@ -74,6 +77,6 @@ public class CycleCommand {
         if (GameHandler.getGameHandler().getCycleTimer() != null)
             GameHandler.getGameHandler().getCycleTimer().setCancelled(true);
         GameHandler.getGameHandler().getCycle().setMap(GameHandler.getGameHandler().getMatch().getLoadedMap());
-        GameHandler.getGameHandler().startCycleTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
+        GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimerModule.class).startTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
     }
 }

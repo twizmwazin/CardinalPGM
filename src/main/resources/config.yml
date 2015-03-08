@@ -5,6 +5,7 @@ displayMapLoadErrors: false
 custom-motd: true
 worldEditPermissions: true
 server-message: Scrimmage Server
+cycle: -1
 permissions:
   Default:
     permissions:
