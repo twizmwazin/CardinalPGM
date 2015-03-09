@@ -130,8 +130,8 @@ public class WorldFreeze implements TaskedModule {
     @Override
     public void run() {
         if (!match.getState().equals(MatchState.PLAYING) && GameHandler.getGameHandler().getMatchWorld().getTime() != lastTime) {
-            GameHandler.getGameHandler().getMatchWorld().setTime(lastTime);
+            GameHandler.getGameHandler().getMatchWorld().setFullTime(lastTime);
         }
-        lastTime = GameHandler.getGameHandler().getMatchWorld().getTime();
+        lastTime = GameHandler.getGameHandler().getMatchWorld().getFullTime();
     }
 }
