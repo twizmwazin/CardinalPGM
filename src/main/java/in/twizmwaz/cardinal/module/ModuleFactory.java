@@ -58,6 +58,7 @@ import in.twizmwaz.cardinal.module.modules.tasker.TaskerModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.team.TeamModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.teamManager.TeamManagerModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.teamPicker.TeamPickerBuilder;
+import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimitBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLock.TimeLockBuilder;
 import in.twizmwaz.cardinal.module.modules.timeNotifications.TimeNotificationsBuilder;
 import in.twizmwaz.cardinal.module.modules.tnt.TntBuilder;
@@ -146,7 +147,8 @@ public class ModuleFactory {
             StartTimerBuilder.class,
             StatsBuilder.class,
             HeaderModuleBuilder.class,
-            CycleTimerBuilder.class
+            CycleTimerBuilder.class,
+            TimeLimitBuilder.class
     };
 
     @SuppressWarnings("unchecked")

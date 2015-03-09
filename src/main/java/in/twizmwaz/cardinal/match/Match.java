@@ -8,9 +8,11 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleFactory;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
+import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.startTimer.StartTimer;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
 import in.twizmwaz.cardinal.util.DomUtils;
 import org.bukkit.Bukkit;
@@ -107,13 +109,23 @@ public class Match {
     public int getPriorityTimeLimit() {
         int scoreTime = ScoreModule.getTimeLimit();
         int blitzTime = Blitz.getTimeLimit();
-        if (scoreTime != 0)
-            if (blitzTime != 0)
-                return (scoreTime < blitzTime ? scoreTime : blitzTime);
-            else return scoreTime;
-        else if (blitzTime != 0)
-            return blitzTime;
-        return 0;
+        int timeLimit = TimeLimit.getMatchTimeLimit();
+        int smallest = Integer.MAX_VALUE;
+        boolean changed = false;
+        if (scoreTime != 0 && scoreTime < smallest) {
+            smallest = scoreTime;
+            changed = true;
+        }
+        if (blitzTime != 0 && blitzTime < smallest) {
+            smallest = blitzTime;
+            changed = true;
+        }
+        if (timeLimit != 0 && timeLimit < smallest) {
+            smallest = timeLimit;
+            changed = true;
+        }
+        if (!changed) return 0;
+        return smallest;
     }
 
     public LoadedMap getLoadedMap() {
