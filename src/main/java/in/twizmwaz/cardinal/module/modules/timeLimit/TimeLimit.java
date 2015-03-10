@@ -10,7 +10,7 @@ import org.bukkit.event.HandlerList;
 
 public class TimeLimit implements Module {
 
-    private final int timeLimit;
+    private int time;
     private final Result result;
     private final TeamModule winner;
 
@@ -18,8 +18,8 @@ public class TimeLimit implements Module {
         TEAM(), OBJECTIVES(), TIE()
     }
 
-    protected TimeLimit(final int timeLimit, final Result result, final TeamModule winner) {
-        this.timeLimit = timeLimit;
+    protected TimeLimit(int time, final Result result, final TeamModule winner) {
+        this.time = time;
         this.result = result;
         this.winner = winner;
     }
@@ -30,7 +30,7 @@ public class TimeLimit implements Module {
     }
 
     public int getTimeLimit() {
-        return timeLimit;
+        return time;
     }
 
     public Result getResult() {
@@ -75,6 +75,10 @@ public class TimeLimit implements Module {
             return module.getTimeLimit();
         }
         return 0;
+    }
+
+    public void setTimeLimit(int time) {
+        this.time = time;
     }
 
 }

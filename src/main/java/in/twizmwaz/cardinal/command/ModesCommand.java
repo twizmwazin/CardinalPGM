@@ -87,7 +87,12 @@ public class ModesCommand {
                     } else throw new CommandException("Invalid page number specified! " + ((modes.size() + 7) / 8) + " total pages.");
                 } else if (cmd.getString(0).equalsIgnoreCase("push")) {
                     if (!sender.hasPermission("cardinal.modes.push")) throw new CommandPermissionsException();
-                    int time = StringUtils.timeStringToSeconds(cmd.getString(1));
+                    int time;
+                    try {
+                        time = StringUtils.timeStringToSeconds(cmd.getString(1));
+                    } catch (NumberFormatException e) {
+                        throw new CommandException("Time format expected, string received instead.");
+                    }
                     for (MonumentModes mode : GameHandler.getGameHandler().getMatch().getModules().getModules(MonumentModes.class)) {
                         mode.setTimeAfter(mode.getTimeAfter() + time);
                     }

@@ -30,6 +30,9 @@ public class TimeLimitBuilder implements ModuleBuilder {
             }
             results.add(new TimeLimit(timeLimit, result, winner));
         }
+        if (results.size() == 0) {
+            results.add(new TimeLimit(0, TimeLimit.Result.TEAM, null));
+        }
         return results;
     }
 
