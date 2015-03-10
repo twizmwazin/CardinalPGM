@@ -22,26 +22,30 @@ public class ReadyCommand {
     public static void ready(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (!(sender instanceof Player)) throw new CommandException("Console cannot use this command!");
         TeamModule team = TeamUtils.getTeamByPlayer((Player) sender);
-        if (!team.isReady()) {
-            team.setReady(true);
-            ChatUtils.getGlobalChannel().sendMessage(team.getCompleteName() + ChatColor.YELLOW + " is now ready");
-            if (TeamUtils.teamsReady()) GameHandler.getGameHandler().getMatch().start(600);
-        } else throw new CommandException("Your team is already ready!");
++        if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING)) {
++            if (!team.isReady()) {
++                team.setReady(true);
++                ChatUtils.getGlobalChannel().sendMessage(team.getCompleteName() + ChatColor.YELLOW + " is now ready");
++                if (TeamUtils.teamsReady()) GameHandler.getGameHandler().getMatch().start(600);
++            } else throw new CommandException("Your team is already ready!");
++        } else throw new CommandException("Match has already started.");
     }
 
     @Command(aliases = {"unready"}, desc = "Make your team not ready.")
     public static void unready(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (!(sender instanceof Player)) throw new CommandException("Console cannot use this command!");
         TeamModule team = TeamUtils.getTeamByPlayer((Player) sender);
-        if (team.isReady()) {
-            team.setReady(false);
-            ChatUtils.getGlobalChannel().sendMessage(team.getCompleteName() + ChatColor.YELLOW + " is no longer ready");
-            if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
-                GameHandler.getGameHandler().getMatch().setState(MatchState.WAITING);
-                GameHandler.getGameHandler().getMatch().getModules().getModule(StartTimer.class).setCancelled(true);
-                ChatUtils.getGlobalChannel().sendMessage(ChatColor.RED + "Match start countdown cancelled because " + team.getCompleteName() + ChatColor.RED + " became un-ready.");
-            }
-        } else throw new CommandException("Your team is already not ready!");
+        if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING)) {
+            if (team.isReady()) {
+                team.setReady(false);
+                ChatUtils.getGlobalChannel().sendMessage(team.getCompleteName() + ChatColor.YELLOW + " is no longer ready");
+                if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
+                    GameHandler.getGameHandler().getMatch().setState(MatchState.WAITING);
+                    GameHandler.getGameHandler().getMatch().getModules().getModule(StartTimer.class).setCancelled(true);
+                    ChatUtils.getGlobalChannel().sendMessage(ChatColor.RED + "Match start countdown cancelled because " + team.getCompleteName() + ChatColor.RED + " became un-ready.");
+                }
+            } else throw new CommandException("Your team is already not ready!");
+        } else throw new CommandException("Match has already started.");
     }
 
 }
