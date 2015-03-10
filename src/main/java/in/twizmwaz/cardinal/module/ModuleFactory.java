@@ -41,6 +41,7 @@ import in.twizmwaz.cardinal.module.modules.monumentModes.MonumentModesBuilder;
 import in.twizmwaz.cardinal.module.modules.motd.MOTDBuilder;
 import in.twizmwaz.cardinal.module.modules.observers.ObserverModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.playable.PlayableBuilder;
 import in.twizmwaz.cardinal.module.modules.portal.PortalBuilder;
 import in.twizmwaz.cardinal.module.modules.projectiles.ProjectilesBuilder;
 import in.twizmwaz.cardinal.module.modules.proximityAlarm.ProximityAlarmBuilder;
@@ -148,7 +149,8 @@ public class ModuleFactory {
             StatsBuilder.class,
             HeaderModuleBuilder.class,
             CycleTimerBuilder.class,
-            TimeLimitBuilder.class
+            TimeLimitBuilder.class,
+            PlayableBuilder.class
     };
 
     @SuppressWarnings("unchecked")

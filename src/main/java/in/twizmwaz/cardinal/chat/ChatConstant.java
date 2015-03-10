@@ -72,6 +72,8 @@ public enum  ChatConstant {
     ERROR_NO_RECENT_PM("error.noRecentPM"),
     ERROR_PLAYER_NOT_FOUND("error.playerNotFound"),
     ERROR_PLAYER_DISABLED_PMS("error.playerDisabledPMs"),
+    ERROR_PLAYABLE_LEAVE("error.playableLeave"),
+    ERROR_PLAYABLE_INTERACT("error.playableInteract"),
     
     GENERIC_MAP_SET("generic.mapSet"),
     GENERIC_MARKED_FOR_RELOADING("generic.markedForReloading"),
