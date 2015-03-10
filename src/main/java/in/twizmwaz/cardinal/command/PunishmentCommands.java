@@ -56,7 +56,7 @@ public class PunishmentCommands {
         }
     }
 
-    @Command(aliases = {"ban", "pb"}, usage = "<player> [reason]", desc = "Ban a player from the server", min = 2)
+    @Command(aliases = {"ban", "pb"}, usage = "<player> [reason]", desc = "Ban a player from the server", min = 10)
     @CommandPermissions("cardinal.punish.ban")
     public static void ban(CommandContext cmd, CommandSender sender) throws CommandException {
         OfflinePlayer banned = Bukkit.getOfflinePlayer(cmd.getString(0));
