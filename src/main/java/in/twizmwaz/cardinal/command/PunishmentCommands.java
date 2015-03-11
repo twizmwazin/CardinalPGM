@@ -68,7 +68,7 @@ public class PunishmentCommands {
         reason = reason.trim();
         if (banned.isOnline()) {
             Player onlineBanned = (Player) banned;
-            onlineBanned.kickPlayer(ChatColor.DARK_PURPLE + "You have been " + ChatColor.RED + "banned" + ChatColor.DARK_PURPLE + " for \n" + ChatColor.YELLOW + ChatColor.BOLD + reason + "\n " + ChatColor.DARK_PURPLE + "by " + ((sender instanceof Player) ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console");
+            onlineBanned.kickPlayer(ChatColor.DARK_PURPLE + "You have been " + ChatColor.RED + "banned" + ChatColor.DARK_PURPLE + " for \n" + ChatColor.YELLOW + ChatColor.BOLD + reason + "\n " + ChatColor.DARK_PURPLE + "by " + ((sender instanceof Player) ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console"));
             Bukkit.broadcastMessage((sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " banned " + TeamUtils.getTeamColorByPlayer(banned) + onlineBanned.getDisplayName() + ChatColor.GOLD + " for " + ChatColor.DARK_AQUA + reason);
         } else {
             Bukkit.broadcastMessage((sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " banned " + TeamUtils.getTeamColorByPlayer(banned) + banned.getName() + ChatColor.GOLD + " for " + ChatColor.DARK_AQUA + reason);
