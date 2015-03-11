@@ -28,7 +28,7 @@ public class ReadyCommand {
                 ChatUtils.getGlobalChannel().sendMessage(team.getCompleteName() + ChatColor.YELLOW + " is now ready");
                 if (TeamUtils.teamsReady()) GameHandler.getGameHandler().getMatch().start(600);
             } else throw new CommandException("Your team is already ready!");
-        }
+        } else throw new CommandException("You cannot ready up during or after a match");
     }
 
     @Command(aliases = {"unready"}, desc = "Make your team not ready.")
@@ -45,7 +45,7 @@ public class ReadyCommand {
                     ChatUtils.getGlobalChannel().sendMessage(ChatColor.RED + "Match start countdown cancelled because " + team.getCompleteName() + ChatColor.RED + " became un-ready.");
                 }
             } else throw new CommandException("Your team is already not ready!");
-        }
+        } else throw new CommandException("You cannot unready during or after a match");
     }
 
 }
