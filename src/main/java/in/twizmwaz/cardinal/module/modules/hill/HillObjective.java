@@ -1,9 +1,11 @@
 package in.twizmwaz.cardinal.module.modules.hill;
 
 import in.twizmwaz.cardinal.module.GameObjective;
+import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -15,7 +17,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.HashSet;
 import java.util.Set;
 
-public class HillObjective implements GameObjective {
+public class HillObjective implements TaskedModule, GameObjective {
 
     private TeamModule team, capturingTeam;
     private final String name, id;
@@ -140,5 +142,10 @@ public class HillObjective implements GameObjective {
 
     public int getPercent() {
         return (int) ((controlTime / captureTime) * 100 > 100 ? 100 : (controlTime / captureTime) * 100);
+    }
+
+    @Override
+    public void run() {
+        // Let Twiz and Elly do this ;)
     }
 }
