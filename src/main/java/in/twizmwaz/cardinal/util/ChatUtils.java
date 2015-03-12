@@ -43,4 +43,8 @@ public class ChatUtils {
         return GameHandler.getGameHandler().getMatch().getModules().getModules(TeamChannel.class);
     }
 
+    public static enum ChannelType {
+        GLOBAL, ADMIN, TEAM
+    }
+
 }
