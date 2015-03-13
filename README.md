@@ -13,6 +13,7 @@ Before creating an issue:
 - Make sure the same issue is not already reported. Duplicate issues are not useful and will only hinder development.
 - **Make sure the topic of the issue is an issue with the plugin, not a missing or requested feature.**
 - If you cannot find a command to do the job, read the [Usage](https://github.com/twizmwazin/CardinalPGM/wiki/Using-Cardinal) page on the wiki.
+
 When creating an issue, be careful to follow the following guidelines:
 - Have a demonstration of the bug or clear instructions to produce it.
 - Include the version of the plugin the issue is found on. The version can be found by typing `/cardinal -v`.
