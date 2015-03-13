@@ -16,6 +16,7 @@ When creating an issue, be careful to follow the following guidelines:
 - Include the version of the plugin the issue is found on. The version can be found by typing `/cardinal -v`.
 - Make sure the report uses clear and concise English.
 By following these guidelines, it will help developers to quickly and accurately resolve the issue.
+- Make sure to report yourlog file on the [pastebin](http://pastebin.com) this can be found on your log folder on your server's files.
 
 ##Contributing
 Before submitting a Pull Request, to increase the chances of the pull request being merged, make sure to follow the following guidelines:
