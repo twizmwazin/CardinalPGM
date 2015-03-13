@@ -19,11 +19,10 @@ When creating an issue, be careful to follow the following guidelines:
 - Include the version of the plugin the issue is found on. The version can be found by typing `/cardinal -v`.
 - Make sure the report uses clear and concise English.
  By following these guidelines, it will help developers to quickly and accurately resolve the issue.
-- Make sure to report yourlog file on the [pastebin](http://pastebin.com) this can be found on your log folder on your server's files.
+- Make sure to report your log file in the [pastebin](http://pastebin.com) this can be found on your log folder on your server's files.
  
  ##Contributing
  Before submitting a Pull Request, to increase the chances of the pull request being merged, make sure to follow the following guidelines:
-- Before submitting a Pull Request, to increase the chances of the pull request be
 - Have one commit per pull request. This makes it easier for the pull request to be reviewed and merged. If there is an issue with a pull request, use git to amend the commit rather than adding a second commit.
 - Maintain a formal style of code. Check the code for perfect syntax and correct spacing and indentation.
 - Make sure the code works. Pull reqests that do not work will hurt your chances of getting code merged in the future.
