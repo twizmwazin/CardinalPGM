@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.command;
 import com.sk89q.minecraft.util.commands.*;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -241,7 +242,7 @@ public class WhitelistCommands {
             }
             sender.sendMessage(ChatColor.GREEN + "Added " + ChatColor.RED + count + ChatColor.GREEN + " player(s) to the whitelist.");
         } else {
-            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAM_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAM_MATCH).getMessage(ChatUtils.getLocale(sender)));
         }
     }
 

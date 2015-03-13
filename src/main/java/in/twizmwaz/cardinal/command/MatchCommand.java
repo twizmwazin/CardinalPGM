@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.command;
 
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.util.ChatUtils;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import com.sk89q.minecraft.util.commands.Command;
@@ -28,8 +29,8 @@ public class MatchCommand {
 
     @Command(aliases = {"matchinfo", "match"}, desc = "Shows information about the currently playing match.", usage = "")
     public static void match(final CommandContext args, CommandSender sender) throws CommandException {
-        sender.sendMessage(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "------" + ChatColor.DARK_AQUA + " " + new LocalizedChatMessage(ChatConstant.UI_MATCH_INFO).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + " " + ChatColor.GRAY + "(" + GameHandler.getGameHandler().getMatch().getNumber() + ")" + ChatColor.RED + " " + ChatColor.STRIKETHROUGH + "------");
-        sender.sendMessage(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TIME).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + ": " + ChatColor.GOLD + StringUtils.formatTimeWithMillis(MatchTimer.getTimeInSeconds()));
+        sender.sendMessage(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "------" + ChatColor.DARK_AQUA + " " + new LocalizedChatMessage(ChatConstant.UI_MATCH_INFO).getMessage(ChatUtils.getLocale(sender)) + " " + ChatColor.GRAY + "(" + GameHandler.getGameHandler().getMatch().getNumber() + ")" + ChatColor.RED + " " + ChatColor.STRIKETHROUGH + "------");
+        sender.sendMessage(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TIME).getMessage(ChatUtils.getLocale(sender)) + ": " + ChatColor.GOLD + StringUtils.formatTimeWithMillis(MatchTimer.getTimeInSeconds()));
         String teams = "";
         boolean hasObjectives = false;
         for (TeamModule team : TeamUtils.getTeams()) {
@@ -49,7 +50,7 @@ public class MatchCommand {
         Match match = GameHandler.getGameHandler().getMatch();
         if (match.isRunning() || match.getState().equals(MatchState.ENDED) || match.getState().equals(MatchState.CYCLING)) {
             if (hasObjectives) {
-                sender.sendMessage(ChatColor.RED + "---- " + new LocalizedChatMessage(ChatConstant.UI_GOALS).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()) + " ----");
+                sender.sendMessage(ChatColor.RED + "---- " + new LocalizedChatMessage(ChatConstant.UI_GOALS).getMessage(ChatUtils.getLocale(sender)) + " ----");
                 for (TeamModule team : TeamUtils.getTeams()) {
                     if (!team.isObserver()) {
                         if (TeamUtils.getShownObjectives(team).size() > 0 || ScoreboardUtils.getHills().size() > 0) {
