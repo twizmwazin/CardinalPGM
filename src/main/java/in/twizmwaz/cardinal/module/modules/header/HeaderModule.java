@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLocaleChangeEvent;
 
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class HeaderModule implements TaskedModule {
         if (Math.round(MatchTimer.getTimeInSeconds()) > last) {
             last = (int) Math.round(MatchTimer.getTimeInSeconds());
             for (Player player : Bukkit.getOnlinePlayers()) {
-                updatePlayer(player);
+                updatePlayer(player, player.getLocale());
             }
         }
     }
@@ -53,23 +54,28 @@ public class HeaderModule implements TaskedModule {
     @EventHandler
     public void onCycleComplete(CycleCompleteEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            updatePlayer(player);
+            updatePlayer(player, player.getLocale());
         }
     }
     
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        updatePlayer(event.getPlayer());
+        updatePlayer(event.getPlayer(), event.getPlayer().getLocale());
     }
 
     @EventHandler
     public void onMatchEnd(MatchEndEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            updatePlayer(player);
+            updatePlayer(player, player.getLocale());
         }
     }
     
-    private void updatePlayer(Player player) {
+    @EventHandler
+    public void onLangChange(PlayerLocaleChangeEvent event) {
+        updatePlayer(event.getPlayer(), event.getNewLocale());
+    }
+    
+    private void updatePlayer(Player player, String locale) {
         StringBuilder footer = new StringBuilder()
                 .append(ChatColor.BOLD)
                 .append(message)
@@ -77,7 +83,7 @@ public class HeaderModule implements TaskedModule {
                 .append(ChatColor.DARK_GRAY)
                 .append(" - ")
                 .append(ChatColor.GRAY)
-                .append(ChatConstant.UI_TIME.getMessage(player.getLocale()))
+                .append(ChatConstant.UI_TIME.getMessage(locale))
                 .append(": ")
                 .append(GameHandler.getGameHandler().getMatch().isRunning() ? ChatColor.GREEN : ChatColor.GOLD)
                 .append(StringUtils.formatTime(MatchTimer.getTimeInSeconds()))
@@ -86,7 +92,7 @@ public class HeaderModule implements TaskedModule {
                 .append(ChatColor.WHITE)
                 .append(ChatColor.BOLD)
                 .append("Cardinal");
-        player.setPlayerListHeaderFooter(new TextComponent(header.getMessage(player.getLocale())), new TextComponent(footer.toString()));
+        player.setPlayerListHeaderFooter(new TextComponent(header.getMessage(locale)), new TextComponent(footer.toString()));
     }
     
     private ChatMessage assembleAuthors(List<Contributor> authors) {

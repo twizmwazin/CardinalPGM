@@ -42,6 +42,7 @@ public class Cycle implements Runnable {
     public void run() {
         GenerateMap.copyWorldFromRepository(map.getFolder(), uuid);
         World world = new WorldCreator("matches/" + uuid.toString()).generator(new NullChunkGenerator()).createWorld();
+        world.setPVP(true);
         handler.setMatchWorld(world);
     }
 }

@@ -5,12 +5,15 @@ import in.twizmwaz.cardinal.module.modules.appliedRegion.AppliedRegionBuilder;
 import in.twizmwaz.cardinal.module.modules.armorKeep.ArmorKeepBuilder;
 import in.twizmwaz.cardinal.module.modules.blitz.BlitzBuilder;
 import in.twizmwaz.cardinal.module.modules.blockdrops.BlockdropsBuilder;
+import in.twizmwaz.cardinal.module.modules.blood.BloodBuilder;
 import in.twizmwaz.cardinal.module.modules.broadcasts.BroadcastModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.buildHeight.BuildHeightBuilder;
 import in.twizmwaz.cardinal.module.modules.chat.ChatModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannelModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.cores.CoreObjectiveBuilder;
+import in.twizmwaz.cardinal.module.modules.cycleTimer.CycleTimerBuilder;
+import in.twizmwaz.cardinal.module.modules.cycleTimer.CycleTimerModule;
 import in.twizmwaz.cardinal.module.modules.deathMessages.DeathMessagesBuilder;
 import in.twizmwaz.cardinal.module.modules.deathTracker.DeathTrackerBuilder;
 import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjectiveBuilder;
@@ -38,6 +41,7 @@ import in.twizmwaz.cardinal.module.modules.monumentModes.MonumentModesBuilder;
 import in.twizmwaz.cardinal.module.modules.motd.MOTDBuilder;
 import in.twizmwaz.cardinal.module.modules.observers.ObserverModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.playable.PlayableBuilder;
 import in.twizmwaz.cardinal.module.modules.portal.PortalBuilder;
 import in.twizmwaz.cardinal.module.modules.projectiles.ProjectilesBuilder;
 import in.twizmwaz.cardinal.module.modules.proximityAlarm.ProximityAlarmBuilder;
@@ -55,6 +59,7 @@ import in.twizmwaz.cardinal.module.modules.tasker.TaskerModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.team.TeamModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.teamManager.TeamManagerModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.teamPicker.TeamPickerBuilder;
+import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimitBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLock.TimeLockBuilder;
 import in.twizmwaz.cardinal.module.modules.timeNotifications.TimeNotificationsBuilder;
 import in.twizmwaz.cardinal.module.modules.tnt.TntBuilder;
@@ -65,6 +70,7 @@ import in.twizmwaz.cardinal.module.modules.tracker.TrackerBuilder;
 import in.twizmwaz.cardinal.module.modules.visibility.VisibilityBuilder;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.worldFreeze.WorldFreezeBuilder;
+
 import org.bukkit.Bukkit;
 
 import java.lang.reflect.InvocationTargetException;
@@ -141,7 +147,10 @@ public class ModuleFactory {
             SoundModuleBuilder.class,
             StartTimerBuilder.class,
             StatsBuilder.class,
-            HeaderModuleBuilder.class
+            HeaderModuleBuilder.class,
+            CycleTimerBuilder.class,
+            TimeLimitBuilder.class,
+            PlayableBuilder.class
     };
 
     @SuppressWarnings("unchecked")

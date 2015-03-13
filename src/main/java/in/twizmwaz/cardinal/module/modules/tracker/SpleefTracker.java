@@ -2,7 +2,7 @@ package in.twizmwaz.cardinal.module.modules.tracker;
 
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
-import in.twizmwaz.cardinal.module.modules.tracker.event.PlayerSpleefEvent;
+import in.twizmwaz.cardinal.module.modules.tracker.event.TrackerSpleefEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -19,7 +19,7 @@ import java.util.UUID;
 
 public class SpleefTracker implements Module {
 
-    private static HashMap<UUID, PlayerSpleefEvent> playerSpleefEvents = new HashMap<>();
+    private static HashMap<UUID, TrackerSpleefEvent> playerSpleefEvents = new HashMap<>();
 
     protected SpleefTracker() {
     }
@@ -33,7 +33,7 @@ public class SpleefTracker implements Module {
         PLAYER(), TNT()
     }
 
-    public static PlayerSpleefEvent getLastSpleefEvent(Player player) {
+    public static TrackerSpleefEvent getLastSpleefEvent(Player player) {
         return playerSpleefEvents.containsKey(player.getUniqueId()) ? playerSpleefEvents.get(player.getUniqueId()) : null;
     }
 
@@ -44,7 +44,7 @@ public class SpleefTracker implements Module {
             location.setY(location.getY() + 1);
             Location playerLoc = player.getLocation();
             if (playerLoc.getBlockX() == location.getBlockX() && playerLoc.getBlockY() == location.getBlockY() && playerLoc.getBlockZ() == location.getBlockZ()) {
-                Bukkit.getServer().getPluginManager().callEvent(new PlayerSpleefEvent(player, event.getPlayer(), event.getPlayer().getItemInHand(), Type.PLAYER));
+                Bukkit.getServer().getPluginManager().callEvent(new TrackerSpleefEvent(player, event.getPlayer(), event.getPlayer().getItemInHand(), Type.PLAYER));
             }
         }
     }
@@ -58,14 +58,14 @@ public class SpleefTracker implements Module {
                 Location playerLoc = player.getLocation();
                 if (playerLoc.getBlockX() == location.getBlockX() && playerLoc.getBlockY() == location.getBlockY() && playerLoc.getBlockZ() == location.getBlockZ()) {
                     OfflinePlayer damager = (TntTracker.getWhoPlaced(event.getEntity()) != null ? Bukkit.getOfflinePlayer(TntTracker.getWhoPlaced(event.getEntity())) : null);
-                    Bukkit.getServer().getPluginManager().callEvent(new PlayerSpleefEvent(player, damager, (damager != null && damager.isOnline() ? ((Player) damager).getItemInHand() : null), Type.TNT));
+                    Bukkit.getServer().getPluginManager().callEvent(new TrackerSpleefEvent(player, damager, (damager != null && damager.isOnline() ? ((Player) damager).getItemInHand() : null), Type.TNT));
                 }
             }
         }
     }
 
     @EventHandler
-    public void onSpleefEvent(PlayerSpleefEvent event) {
+    public void onSpleefEvent(TrackerSpleefEvent event) {
         playerSpleefEvents.put(event.getSpleefed().getUniqueId(), event);
     }
 

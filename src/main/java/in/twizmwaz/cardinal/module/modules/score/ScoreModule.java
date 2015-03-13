@@ -21,9 +21,9 @@ public class ScoreModule implements Module {
     private final int pointsPerKill;
     private final int pointsPerDeath;
     private final int max;
-    private final int time;
+    private int time;
 
-    public ScoreModule(final TeamModule team, final int pointsPerKill, final int pointsPerDeath, final int max, final int time) {
+    public ScoreModule(final TeamModule team, final int pointsPerKill, final int pointsPerDeath, final int max, int time) {
         this.team = team;
         this.score = 0;
         this.pointsPerKill = pointsPerKill;
@@ -167,5 +167,9 @@ public class ScoreModule implements Module {
             time = score.getTime();
         }
         return time;
+    }
+
+    public void setTimeLimit(int time) {
+        this.time = time;
     }
 }

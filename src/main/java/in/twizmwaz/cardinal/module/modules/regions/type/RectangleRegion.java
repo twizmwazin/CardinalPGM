@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.module.modules.regions.parsers.RectangleParser;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.util.BlockVector;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 public class RectangleRegion extends CuboidRegion {
 
     public RectangleRegion(String name, double xMin, double zMin, double xMax, double zMax) {
-        super(name, new BlockVector(xMin, 0, zMin), new BlockVector(xMax, 256, zMax));
+        super(name, new BlockVector(xMin, Double.MIN_VALUE, zMin), new BlockVector(xMax, Double.MAX_VALUE, zMax));
     }
 
     public RectangleRegion(RectangleParser parser) {
@@ -47,4 +48,10 @@ public class RectangleRegion extends CuboidRegion {
         }
         return results;
     }
+
+    @Override
+    public BlockRegion getCenterBlock() {
+        return new BlockRegion(null, new Vector(getXMin(), 0, getXMax()).midpoint(new Vector(getXMax(), 256, getZMax())));
+    }
+
 }

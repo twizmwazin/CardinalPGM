@@ -8,6 +8,7 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ExperienceOrb;
@@ -50,7 +51,7 @@ public class Blockdrops implements Module {
         if (!event.isCancelled()) {
             Player player = event.getPlayer();
             Block block = event.getBlock();
-            if (filter == null || filter.evaluate(player, block).equals(FilterState.ALLOW)) {
+            if ((filter == null || filter.evaluate(player, block).equals(FilterState.ALLOW)) && !player.getGameMode().equals(GameMode.CREATIVE)) {
                 if (region == null || region.contains(new BlockRegion(null, block.getLocation().toVector().add(new Vector(0.5, 0.5, 0.5))))) {
                     if (!this.wrongTool) {
                         if (block.getDrops() != null && block.getDrops().size() > 0) {
@@ -86,8 +87,10 @@ public class Blockdrops implements Module {
                             for (ItemStack drop : this.drops) {
                                 GameHandler.getGameHandler().getMatchWorld().dropItemNaturally(block.getLocation(), drop);
                             }
-                            ExperienceOrb xp = GameHandler.getGameHandler().getMatchWorld().spawn(block.getLocation(), ExperienceOrb.class);
-                            xp.setExperience(this.experience);
+                            if (this.experience != 0) {
+                                ExperienceOrb xp = GameHandler.getGameHandler().getMatchWorld().spawn(block.getLocation(), ExperienceOrb.class);
+                                xp.setExperience(this.experience);
+                            }
                             block.setType(replace);
                         }
                     }

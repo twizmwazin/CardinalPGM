@@ -27,6 +27,7 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
     private int respawnLimit;
     private ChatColor color;
     private final boolean observer;
+    private boolean ready;
 
     protected TeamModule(Match match, String name, String id, int max, int maxOverfill, int respawnLimit, ChatColor color, boolean observer) {
         this.match = match;
@@ -37,6 +38,7 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
         this.respawnLimit = respawnLimit;
         this.color = color;
         this.observer = observer;
+        this.ready = false;
     }
 
     public boolean add(Player player, boolean force, boolean message) {
@@ -61,7 +63,7 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
     }
 
     public boolean add(Player player, boolean force) {
-        return add(player, force, true);
+        return this.add(player, force, true);
     }
     
     public boolean add(Player player) {
@@ -138,6 +140,14 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
 
     public boolean isObserver() {
         return observer;
+    }
+
+    public boolean isReady() {
+        return ready;
+    }
+
+    public void setReady(boolean ready) {
+        this.ready = ready;
     }
 
 }

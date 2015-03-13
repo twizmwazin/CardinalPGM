@@ -18,7 +18,7 @@ import org.bukkit.event.HandlerList;
 public class Snowflakes implements Module {
 
     public enum ChangeReason {
-        PLAYER_KILL(), WOOL_TOUCH(), WOOL_PLACE(), CORE_LEAK(), TEAM_WIN(), TEAM_LOYAL()
+        PLAYER_KILL(), WOOL_TOUCH(), WOOL_PLACE(), CORE_LEAK(), MONUMENT_DESTROY(), TEAM_WIN(), TEAM_LOYAL()
     }
 
     public Snowflakes() {
@@ -31,14 +31,8 @@ public class Snowflakes implements Module {
 
     @EventHandler
     public void onCardinalDeath(CardinalDeathEvent event) {
-        Player killer = null;
-        if (event.getKiller() != null) {
-            killer = event.getKiller();
-        } else if (event.getPlayerSpleefEvent() != null && event.getPlayerSpleefEvent().getSpleefer().isOnline()) {
-            killer = (Player) event.getPlayerSpleefEvent().getSpleefer();
-        }
-        if (killer != null && TeamUtils.getTeamByPlayer(event.getPlayer()) != TeamUtils.getTeamByPlayer(killer)) {
-            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(killer, ChangeReason.PLAYER_KILL, 1, event.getPlayer().getName()));
+        if (event.getKiller() != null && TeamUtils.getTeamByPlayer(event.getPlayer()) != TeamUtils.getTeamByPlayer(event.getKiller())) {
+            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getKiller(), ChangeReason.PLAYER_KILL, 1, event.getPlayer().getName()));
         }
     }
 
@@ -55,28 +49,32 @@ public class Snowflakes implements Module {
 
     @EventHandler
     public void onSnowflakeChange(SnowflakeChangeEvent event) {
-        String reason;
-        if (event.getChangeReason().equals(ChangeReason.PLAYER_KILL)) {
-            reason = "killed " + TeamUtils.getTeamColorByPlayer(Bukkit.getOfflinePlayer(event.get(0))) + event.get(0);
-        } else if (event.getChangeReason().equals(ChangeReason.WOOL_TOUCH)) {
-            reason = "picked up " + event.get(0);
-        } else if (event.getChangeReason().equals(ChangeReason.WOOL_PLACE)) {
-            reason = "placed " + event.get(0);
-        } else if (event.getChangeReason().equals(ChangeReason.CORE_LEAK)) {
-            reason = "you broke a piece of " + event.get(0);
-        } else if (event.getChangeReason().equals(ChangeReason.TEAM_WIN)) {
-            reason = "your team (" + event.get(0) + ChatColor.GRAY + ") won";
-        } else if (event.getChangeReason().equals(ChangeReason.TEAM_LOYAL)) {
-            reason = "you were loyal to your team (" + event.get(0) + ChatColor.GRAY + ")";
-        } else {
-            reason = "unknown reason";
-        }
-        event.getPlayer().sendMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "+" + event.getFinalAmount() + ChatColor.AQUA + " Snowflakes" + ChatColor.DARK_PURPLE + " | " + ChatColor.GOLD + "" + ChatColor.ITALIC + event.getMultiplier() + "x" + ChatColor.DARK_PURPLE + " | " + ChatColor.GRAY + reason).getMessage(event.getPlayer().getLocale()));
-        event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.LEVEL_UP, 1, 1.5F);
-        if (Cardinal.getCardinalDatabase().get(event.getPlayer(), "snowflakes").equals("")) {
-            Cardinal.getCardinalDatabase().put(event.getPlayer(), "snowflakes", event.getFinalAmount() + "");
-        } else {
-            Cardinal.getCardinalDatabase().put(event.getPlayer(), "snowflakes", (NumUtils.parseInt(Cardinal.getCardinalDatabase().get(event.getPlayer(), "snowflakes")) + event.getFinalAmount()) + "");
+        if (event.getFinalAmount() != 0) {
+            String reason;
+            if (event.getChangeReason().equals(ChangeReason.PLAYER_KILL)) {
+                reason = "killed " + TeamUtils.getTeamColorByPlayer(Bukkit.getOfflinePlayer(event.get(0))) + event.get(0);
+            } else if (event.getChangeReason().equals(ChangeReason.WOOL_TOUCH)) {
+                reason = "picked up " + event.get(0);
+            } else if (event.getChangeReason().equals(ChangeReason.WOOL_PLACE)) {
+                reason = "placed " + event.get(0);
+            } else if (event.getChangeReason().equals(ChangeReason.CORE_LEAK)) {
+                reason = "you broke a piece of " + event.get(0);
+            } else if (event.getChangeReason().equals(ChangeReason.MONUMENT_DESTROY)) {
+                reason = "you destroyed " + event.get(0) + "% of " + event.get(1);
+            } else if (event.getChangeReason().equals(ChangeReason.TEAM_WIN)) {
+                reason = "your team (" + event.get(0) + ChatColor.GRAY + ") won";
+            } else if (event.getChangeReason().equals(ChangeReason.TEAM_LOYAL)) {
+                reason = "you were loyal to your team (" + event.get(0) + ChatColor.GRAY + ")";
+            } else {
+                reason = "unknown reason";
+            }
+            event.getPlayer().sendMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "+" + event.getFinalAmount() + ChatColor.AQUA + " Snowflakes" + ChatColor.DARK_PURPLE + " | " + ChatColor.GOLD + "" + ChatColor.ITALIC + event.getMultiplier() + "x" + ChatColor.DARK_PURPLE + " | " + ChatColor.GRAY + reason).getMessage(event.getPlayer().getLocale()));
+            event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.LEVEL_UP, 1, 1.5F);
+            if (Cardinal.getCardinalDatabase().get(event.getPlayer(), "snowflakes").equals("")) {
+                Cardinal.getCardinalDatabase().put(event.getPlayer(), "snowflakes", event.getFinalAmount() + "");
+            } else {
+                Cardinal.getCardinalDatabase().put(event.getPlayer(), "snowflakes", (NumUtils.parseInt(Cardinal.getCardinalDatabase().get(event.getPlayer(), "snowflakes")) + event.getFinalAmount()) + "");
+            }
         }
     }
 

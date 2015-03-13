@@ -4,6 +4,7 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
+import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.event.SnowflakeChangeEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
@@ -124,7 +125,7 @@ public class WoolObjective implements GameObjective {
     @EventHandler
     public void onWoolPickup(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
-        if (!this.complete) {
+        if (!this.complete && GameHandler.getGameHandler().getMatch().isRunning()) {
             try {
                 if (event.getCurrentItem().getType() == Material.WOOL && event.getCurrentItem().getData().getData() == color.getData()) {
                     if (TeamUtils.getTeamByPlayer(player) == team) {
@@ -151,7 +152,7 @@ public class WoolObjective implements GameObjective {
     @EventHandler
     public void onWoolPickup(PlayerPickupItemEvent event) {
         Player player = event.getPlayer();
-        if (!this.complete) {
+        if (!this.complete && GameHandler.getGameHandler().getMatch().isRunning()) {
             try {
                 if (event.getItem().getItemStack().getType() == Material.WOOL && event.getItem().getItemStack().getData().getData() == color.getData()) {
                     if (TeamUtils.getTeamByPlayer(player) == team) {
@@ -225,10 +226,10 @@ public class WoolObjective implements GameObjective {
     }
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
-        if (location != null && GameHandler.getGameHandler().getMatch().isRunning() && !this.touched && TeamUtils.getTeamByPlayer(event.getPlayer()) != null && TeamUtils.getTeamByPlayer(event.getPlayer()) == this.team) {
-            if (event.getPlayer().getLocation().toVector().distance(location) < proximity) {
-                proximity = event.getPlayer().getLocation().toVector().distance(location);
+    public void onCardinalDeath(CardinalDeathEvent event) {
+        if (event.getKiller() != null && location != null && GameHandler.getGameHandler().getMatch().isRunning() && !this.touched && TeamUtils.getTeamByPlayer(event.getKiller()) != null && TeamUtils.getTeamByPlayer(event.getKiller()) == this.team) {
+            if (event.getKiller().getLocation().toVector().distance(location) < proximity) {
+                proximity = event.getKiller().getLocation().toVector().distance(location);
                 Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent());
             }
         }
@@ -262,14 +263,14 @@ public class WoolObjective implements GameObjective {
     @EventHandler
     public void onWoolTouch(ObjectiveTouchEvent event) {
         if (event.getObjective().equals(this) && event.displayTouchMessage()) {
-            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getPlayer(), Snowflakes.ChangeReason.WOOL_TOUCH, 8, WordUtils.capitalizeFully(name.replaceAll("_", " "))));
+            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getPlayer(), Snowflakes.ChangeReason.WOOL_TOUCH, 8, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.GRAY));
         }
     }
 
     @EventHandler
     public void onWoolPlace(ObjectiveCompleteEvent event) {
         if (event.getObjective().equals(this) && event.getObjective().showOnScoreboard()) {
-            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getPlayer(), Snowflakes.ChangeReason.WOOL_PLACE, 15, WordUtils.capitalizeFully(name.replaceAll("_", " "))));
+            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getPlayer(), Snowflakes.ChangeReason.WOOL_PLACE, 15, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.GRAY));
         }
     }
 }

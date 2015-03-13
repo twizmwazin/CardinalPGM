@@ -11,6 +11,7 @@ import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -69,7 +70,11 @@ public class GameComplete implements TaskedModule {
 
     @Override
     public void run() {
-        if (ScoreModule.getTimeLimit() != 0) {
+        if (TimeLimit.getMatchTimeLimit() != 0 && TimeLimit.getMatchTimeLimit() == GameHandler.getGameHandler().getMatch().getPriorityTimeLimit()) {
+            if (MatchTimer.getTimeInSeconds() >= TimeLimit.getMatchTimeLimit()) {
+                GameHandler.getGameHandler().getMatch().end(TimeLimit.getMatchWinner());
+            }
+        } else if (ScoreModule.getTimeLimit() != 0 && ScoreModule.getTimeLimit() == GameHandler.getGameHandler().getMatch().getPriorityTimeLimit()) {
             if (MatchTimer.getTimeInSeconds() >= ScoreModule.getTimeLimit()) {
                 TeamModule winningTeam = null;
                 int winningScore = Integer.MIN_VALUE;
@@ -90,8 +95,7 @@ public class GameComplete implements TaskedModule {
                     match.end(winningTeam);
                 }
             }
-        }
-        if (Blitz.getTimeLimit() != 0) {
+        } else if (Blitz.getTimeLimit() != 0 && Blitz.getTimeLimit() == GameHandler.getGameHandler().getMatch().getPriorityTimeLimit()) {
             if (MatchTimer.getTimeInSeconds() >= Blitz.getTimeLimit()) {
                 TeamModule winningTeam = null;
                 int winningAmount = Integer.MIN_VALUE;

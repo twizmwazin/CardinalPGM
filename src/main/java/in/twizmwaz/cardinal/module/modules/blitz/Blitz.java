@@ -106,4 +106,8 @@ public class Blitz implements Module {
         return time;
     }
 
+    public void setTimeLimit(int time) {
+        this.time = time;
+    }
+
 }

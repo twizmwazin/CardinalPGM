@@ -61,4 +61,8 @@ public class TimeNotifications implements TaskedModule {
             }
         }
     }
+
+    public static void resetNextMessage() {
+        nextTimeMessage = GameHandler.getGameHandler().getMatch().getPriorityTimeLimit();
+    }
 }

@@ -25,6 +25,7 @@ public class ScoreModuleBuilder implements ModuleBuilder {
         for (Element score : match.getDocument().getRootElement().getChildren("score")) {
             if (score.getChild("limit") != null) {
                 max = NumUtils.parseInt(score.getChild("limit").getText());
+                if (max < 0) max = 0;
                 if (max != 0) {
                     pointsPerKill = 1;
                     pointsPerDeath = 1;

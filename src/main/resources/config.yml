@@ -4,8 +4,8 @@ deleteMatches: true
 displayMapLoadErrors: false
 custom-motd: true
 worldEditPermissions: true
-broadcastStats: true
 server-message: Scrimmage Server
+cycle: -1
 permissions:
   Default:
     permissions:
@@ -18,6 +18,8 @@ permissions:
     - cardinal.cancel
     - cardinal.chat.admin
     - cardinal.match.setnext
+    - cardinal.match.end
+    - cardinal.match.start
     - cardinal.match.cycle
     - cardinal.team.force
     - cardinal.teleport
@@ -46,6 +48,7 @@ settings:
 - PrivateMessages
 - Scoreboard
 - Sounds
+- Stats
 setting:
   Blood:
     values:
@@ -105,3 +108,8 @@ setting:
     - 'off'
     - on[default]
     description: Hear sounds to alert you of the last three seconds of a countdown
+  Stats:
+    values:
+    - 'off'
+    - on[default]
+    description: See your statistics at the end of the game

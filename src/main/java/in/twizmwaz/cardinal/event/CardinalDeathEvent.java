@@ -1,7 +1,8 @@
 package in.twizmwaz.cardinal.event;
 
-import in.twizmwaz.cardinal.module.modules.tracker.event.PlayerSpleefEvent;
+import in.twizmwaz.cardinal.module.modules.tracker.event.TrackerSpleefEvent;
 import in.twizmwaz.cardinal.module.modules.tracker.event.TrackerDamageEvent;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -14,7 +15,9 @@ public class CardinalDeathEvent extends Event {
     private Player killer;
 
     private TrackerDamageEvent trackerDamageEvent;
-    private PlayerSpleefEvent playerSpleefEvent;
+    private TrackerSpleefEvent trackerSpleefEvent;
+
+    private Location initialLocation;
 
     public CardinalDeathEvent(Player player, Player killer) {
         this.player = player;
@@ -43,13 +46,23 @@ public class CardinalDeathEvent extends Event {
 
     public void setTrackerDamageEvent(TrackerDamageEvent trackerDamageEvent) {
         this.trackerDamageEvent = trackerDamageEvent;
+        this.initialLocation = trackerDamageEvent.getInitialLocation();
     }
 
-    public PlayerSpleefEvent getPlayerSpleefEvent() {
-        return playerSpleefEvent;
+    public TrackerSpleefEvent getTrackerSpleefEvent() {
+        return trackerSpleefEvent;
     }
 
-    public void setPlayerSpleefEvent(PlayerSpleefEvent playerSpleefEvent) {
-        this.playerSpleefEvent = playerSpleefEvent;
+    public void setPlayerSpleefEvent(TrackerSpleefEvent trackerSpleefEvent) {
+        this.trackerSpleefEvent = trackerSpleefEvent;
+        this.initialLocation = trackerSpleefEvent.getInitialLocation();
+    }
+
+    public boolean hasTrackerDamageEvent() {
+        return trackerDamageEvent != null;
+    }
+
+    public boolean hasTrackerSpleefEvent() {
+        return trackerSpleefEvent != null;
     }
 }
