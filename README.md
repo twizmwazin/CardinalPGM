@@ -24,7 +24,6 @@ When creating an issue, be careful to follow the following guidelines:
  - Have one commit per pull request. This makes it easier for the pull request to be reviewed and merged. If there is an issue with a pull request, use git to amend the commit rather than adding a second commit.
  - Maintain a formal style of code. Check the code for perfect syntax and correct spacing and indentation.
  - Make sure the code works. Pull reqests that do not work will hurt your chances of getting code merged in the future.
-- Do not use the GitHub editor to edit Java files. Use a proper IDE such as IntelliJ or Eclipse.
 - Do not use the GitHub editor to edit Java files. Use a proper IDE such as [IntelliJ](https://www.jetbrains.com/idea/download/) or [Eclipse](https://eclipse.org/downloads/).
 +
  
