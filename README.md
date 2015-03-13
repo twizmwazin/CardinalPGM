@@ -9,9 +9,11 @@ This plugin is in early alpha. I make no guarantees as to what will and what wil
 Feel free to submit pull requests and/or issues to help further development. If you find an issue, please submit an issue so a developer can resolve it as soon as possible. If an issue is found with a dependency, submit your issue to the dependency's repository.
 
 ##Issue Reporting
-When creating an issue, be careful to follow the following guidelines:
+Before creating an issue:
 - Make sure the same issue is not already reported. Duplicate issues are not useful and will only hinder development.
-- Make sure the topic of the issue is an issue with the plugin, not a missing or requested feature.
+- **Make sure the topic of the issue is an issue with the plugin, not a missing or requested feature.**
+- If you cannot find a command to do the job, read the [Usage](https://github.com/twizmwazin/CardinalPGM/wiki/Using-Cardinal) page on the wiki.
+When creating an issue, be careful to follow the following guidelines:
 - Have a demonstration of the bug or clear instructions to produce it.
 - Include the version of the plugin the issue is found on. The version can be found by typing `/cardinal -v`.
 - Make sure the report uses clear and concise English.
