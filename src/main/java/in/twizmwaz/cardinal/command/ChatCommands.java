@@ -59,7 +59,7 @@ public class ChatCommands {
         if (sender instanceof Player) {
             if (cmd.argsLength() == 0) {
                 ((Player) sender).setMetadata("default-channel", new LazyMetadataValue(GameHandler.getGameHandler().getPlugin(), LazyMetadataValue.CacheStrategy.NEVER_CACHE, new Channel(ChatUtils.ChannelType.ADMIN)));
-                sender.sendMessage(ChatColor.YELLOW + "Your defult channel was changed to " + ChatColor.RED + "admin");
+                sender.sendMessage(ChatColor.YELLOW + "Your defult channel was changed to " + ChatColor.RED + "staff" + ChatColor.YELLOW + "channel");
             }
             if (cmd.argsLength() > 0) {
                 String message = assembleMessage(cmd);
