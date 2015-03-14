@@ -119,7 +119,6 @@ public class Cardinal extends JavaPlugin {
         }
         //this.demographicsHandler = new DemographicsHandler(); //Disabled until issues can be resolved
         FileConfiguration config = getConfig();
-        config.addDefault("deleteMatches", true);
         config.options().copyDefaults(true);
         saveConfig();
         if (config.getBoolean("deleteMatches")) {
