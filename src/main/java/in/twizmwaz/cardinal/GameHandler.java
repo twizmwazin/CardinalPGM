@@ -23,7 +23,6 @@ public class GameHandler {
     private WeakReference<World> matchWorld;
     private Match match;
     private Cycle cycle;
-    private CycleTimerModule cycleTimer;
 
     public GameHandler() throws RotationLoadException {
         handler = this;
@@ -72,10 +71,6 @@ public class GameHandler {
 
     public Cycle getCycle() {
         return cycle;
-    }
-
-    public CycleTimerModule getCycleTimer() {
-        return cycleTimer;
     }
 
     public JavaPlugin getPlugin() {

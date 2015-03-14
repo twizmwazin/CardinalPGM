@@ -33,9 +33,10 @@ public class CycleCommand {
             }
         } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING))
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(ChatUtils.getLocale(sender)));
-        if (GameHandler.getGameHandler().getCycleTimer() != null)
-            GameHandler.getGameHandler().getCycleTimer().setCancelled(true);
-        GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimerModule.class).startTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
+        CycleTimerModule timer = GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimerModule.class);
+        timer.setOriginalState(GameHandler.getGameHandler().getMatch().getState());
+        timer.setCancelled(true);
+        timer.startTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
     }
 
     @Command(aliases = {"setnext", "sn"}, desc = "Sets the next map.", usage = "[map]", min = 1)
@@ -75,9 +76,9 @@ public class CycleCommand {
             }
         } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING))
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(ChatUtils.getLocale(sender)));
-        if (GameHandler.getGameHandler().getCycleTimer() != null)
-            GameHandler.getGameHandler().getCycleTimer().setCancelled(true);
-        GameHandler.getGameHandler().getCycle().setMap(GameHandler.getGameHandler().getMatch().getLoadedMap());
-        GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimerModule.class).startTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
+        CycleTimerModule timer = GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimerModule.class);
+        timer.setOriginalState(GameHandler.getGameHandler().getMatch().getState());
+        timer.setCancelled(true);
+        timer.startTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
     }
 }
