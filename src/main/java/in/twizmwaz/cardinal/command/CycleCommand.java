@@ -32,18 +32,11 @@ public class CycleCommand {
                 throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(ChatUtils.getLocale(sender)));
             }
         } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING))
-<<<<<<< HEAD
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(ChatUtils.getLocale(sender)));
         CycleTimerModule timer = GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimerModule.class);
         timer.setOriginalState(GameHandler.getGameHandler().getMatch().getState());
         timer.setCancelled(true);
         timer.startTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
-=======
-            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
-        GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimerModule.class).setOriginalState(GameHandler.getGameHandler().getMatch().getState());
-        GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimerModule.class).setCancelled(true);
-        GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimerModule.class).startTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
->>>>>>> Remove old CycleTimer code, do not allow MatchState to be null, fixes #394
     }
 
     @Command(aliases = {"setnext", "sn"}, desc = "Sets the next map.", usage = "[map]", min = 1)

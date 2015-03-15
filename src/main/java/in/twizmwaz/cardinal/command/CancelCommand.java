@@ -21,8 +21,10 @@ public class CancelCommand {
     @CommandPermissions("cardinal.cancel")
     public static void cancel(final CommandContext cmd, CommandSender sender) {
         GameHandler handler = GameHandler.getGameHandler();
-        handler.getMatch().getModules().getModule(CycleTimerModule.class).setCancelled(true);
-        handler.getMatch().getModules().getModule(StartTimer.class).setCancelled(true);
+        if (!handler.getMatch().getModules().getModule(CycleTimerModule.class).isCancelled())
+            handler.getMatch().getModules().getModule(CycleTimerModule.class).setCancelled(true);
+        if (!handler.getMatch().getModules().getModule(StartTimer.class).isCancelled())
+            handler.getMatch().getModules().getModule(StartTimer.class).setCancelled(true);
         if (handler.getMatch().getState().equals(MatchState.STARTING)) handler.getMatch().setState(MatchState.WAITING);
         if (handler.getMatch().getState().equals(MatchState.CYCLING)) handler.getMatch().setState(MatchState.ENDED);
         ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "{0}", new LocalizedChatMessage(ChatConstant.GENERIC_COUNTDOWN_CANELLED)));
