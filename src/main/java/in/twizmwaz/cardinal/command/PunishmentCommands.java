@@ -47,11 +47,12 @@ public class PunishmentCommands {
             reason = reason.trim();
             ChatChannelModule channel = GameHandler.getGameHandler().getMatch().getModules().getModule(AdminChannel.class);
             channel.sendMessage("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + ((sender instanceof Player) ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " warned " + TeamUtils.getTeamColorByPlayer(warned) + warned.getDisplayName() + ChatColor.GOLD + " for " + ChatColor.DARK_AQUA + reason);
-            warned.sendMessage(ChatColor.RED + "" + ChatColor.MAGIC + "-------" + ChatColor.YELLOW + "WARNING" + ChatColor.RED + ChatColor.MAGIC + "-------");
+            warned.sendMessage(ChatColor.RED + "" + ChatColorDARK_RED + "-------" + ChatColorRED + "WARNING" + ChatColorDARK_RED + ChatColorDARK_RED + "-------");
+            warned.sendMessage(ChatColor.GOLD + reason);
             warned.sendMessage(ChatColor.GREEN + reason);
             warned.sendMessage(ChatColor.YELLOW + reason);
             warned.sendMessage(ChatColor.RED + reason);
-            warned.sendMessage(ChatColor.RED + "" + ChatColor.MAGIC + "-------" + ChatColor.YELLOW + "WARNING" + ChatColor.RED + ChatColor.MAGIC + "-------");
+            warned.sendMessage(ChatColor.RED + "" + ChatColorDARK_RED + "-------" + ChatColorRED + "WARNING" + ChatColorDARK_RED + ChatColorDARK_RED + "-------");
         } else {
             throw new CommandException("Player must be online!");
         }
