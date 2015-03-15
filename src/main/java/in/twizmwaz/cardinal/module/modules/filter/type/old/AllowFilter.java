@@ -19,12 +19,16 @@ public class AllowFilter extends FilterModule {
     @Override
     public FilterState evaluate(final Object... objects) {
         boolean abstain = true;
-        for (FilterModule child : children) {
-            if (child.evaluate(objects).equals(DENY)) return DENY;
-            if (!child.evaluate(objects).equals(ABSTAIN)) abstain = false;
+        if (children != null) {
+            for (Object object : objects) {
+                for (FilterModule child : children) {
+                    if (!child.evaluate(object).equals(ABSTAIN)) abstain = false;
+                    if (child.evaluate(object).equals(ALLOW)) return ALLOW;
+                }
+            }
         }
         if (abstain) return ABSTAIN;
-        return ALLOW;
+        return DENY;
     }
 
 }
