@@ -1,8 +1,11 @@
 package in.twizmwaz.cardinal.util;
 
+import net.minecraft.server.v1_8_R1.NBTTagCompound;
+import net.minecraft.server.v1_8_R1.NBTTagList;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_8_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -12,6 +15,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jdom2.Element;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ParseUtils {
     
@@ -69,9 +73,53 @@ public class ParseUtils {
             }
         }
         itemStack.setItemMeta(meta);
+
+        String attributes = element.getAttributeValue("attributes");
+        if (attributes != null) {
+            itemStack = setAttributes(itemStack, attributes);
+        }
         return itemStack;
     }
-    
+
+    private static ItemStack setAttributes(ItemStack itemStack, String attributes) {
+        System.out.println("Parsing attributes");
+        net.minecraft.server.v1_8_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+        if (nmsStack.getTag() == null) {
+            nmsStack.setTag(new NBTTagCompound());
+        }
+        NBTTagCompound tag = nmsStack.getTag();
+
+        NBTTagList attributeList = tag.getList("AttributeModifiers", 10);
+        for (AttributeModifier modifier: parseAttributes(attributes)) {
+            NBTTagCompound attributeTag = new NBTTagCompound();
+            attributeTag.setString("AttributeName", modifier.getAttributeType().getName());
+            attributeTag.setString("Name", modifier.getAttributeType().getName());
+            attributeTag.setDouble("Amount", modifier.getValue());
+            attributeTag.setInt("Operation", modifier.getOperationValue());
+            attributeTag.setLong("UUIDLeast", AttributeType.modifierUUID.getLeastSignificantBits());
+            attributeTag.setLong("UUIDMost", AttributeType.modifierUUID.getMostSignificantBits());
+            attributeList.add(attributeTag);
+        }
+
+        tag.set("AttributeModifiers", attributeList);
+        nmsStack.setTag(tag);
+        return CraftItemStack.asCraftMirror(nmsStack);
+    }
+
+    private static List<AttributeModifier> parseAttributes(String attributes) {
+        List<AttributeModifier> modifiers = new ArrayList<>();
+        for (String attribute: attributes.split(";")) {
+            String[] components = attribute.split(":");
+            String name = components[0];
+            String operation = components[1];
+            double value = Double.parseDouble(components[2]);
+
+            AttributeType type = AttributeType.fromName(name);
+            modifiers.add(new AttributeModifier(type, value, operation));
+        }
+        return modifiers;
+    }
+
     public static ChatColor parseChatColor(String string) {
         for (ChatColor color : ChatColor.values()) {
             if (color.name().equals(StringUtils.getTechnicalName(string))) return color;
