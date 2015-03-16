@@ -1,11 +1,16 @@
 package in.twizmwaz.cardinal.module.modules.hill;
 
+import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.event.ScoreUpdateEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameObjectiveScoreboardHandler;
+import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
+import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -31,6 +36,9 @@ public class HillObjective implements TaskedModule, GameObjective {
     private GameObjectiveScoreboardHandler scoreboardHandler;
     private final Set<Player> capturingPlayers;
 
+    private int seconds = 1;
+    private int tempPoints;
+
     protected HillObjective(final TeamModule team, final String name, final String id, final int captureTime, final int points, final double pointsGrowth, final CaptureRule captureRule, final double timeMultiplier, final boolean showProgress, final boolean neutralState, final boolean incremental, final boolean permanent, final boolean show, final RegionModule capture, final RegionModule progress, final RegionModule captured) {
         this.team = team;
         this.name = name;
@@ -54,6 +62,7 @@ public class HillObjective implements TaskedModule, GameObjective {
 
         scoreboardHandler = new GameObjectiveScoreboardHandler(this);
         this.capturingPlayers = new HashSet<>();
+        this.tempPoints = points;
     }
     
     @EventHandler
@@ -146,6 +155,24 @@ public class HillObjective implements TaskedModule, GameObjective {
 
     @Override
     public void run() {
-        // Let Twiz and Elly do this ;)
+        if (GameHandler.getGameHandler().getMatch().isRunning()) {
+            if (seconds <= MatchTimer.getTimeInSeconds()) {
+                seconds ++;
+                if (team != null) {
+                    if (seconds % pointsGrowth == 0) {
+                        tempPoints = (int) Math.pow(tempPoints, 2);
+                    }
+                    if (ScoreModule.matchHasScoring()) {
+                        for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
+                            if (score.getTeam() == team) {
+                                score.setScore(score.getScore() + tempPoints);
+                                Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(score));
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
     }
 }
