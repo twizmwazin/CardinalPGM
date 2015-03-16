@@ -1,4 +1,4 @@
-name: ${plugin.name}
+name: CardinalPGM 
 description: ${project.description}
 main: ${plugin.mainClass}
 version: ${project.version}-${describe}
