@@ -6,7 +6,6 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocaleHandler;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.command.*;
-import in.twizmwaz.cardinal.demographics.DemographicsHandler;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import in.twizmwaz.cardinal.settings.Setting;
 import in.twizmwaz.cardinal.settings.SettingValue;
@@ -97,6 +96,11 @@ public class Cardinal extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        if(!getServer().getClass().getPackage().getName().equals("v1_8_R1")) {
+            getLogger().log(Level.SEVERE, "CardinalPGM failed to load because you're running a invalid version of SportBukkit! Disabling plugin...");
+            getLogger().log(Level.INFO, "Please see wiki for more information, https://github.com/twizmwazin/CardinalPGM/wiki/Installing-CardinalPGM.");
+            getServer().getPluginManager().disablePlugin(this);
+        }
         try {
             localeHandler = new LocaleHandler(this);
         } catch (IOException | JDOMException e) {
