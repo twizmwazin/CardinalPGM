@@ -21,6 +21,8 @@ public class PlayerUtils {
             } catch (NullPointerException e) {
             }
         }
+        player.setTotalExperience(0);
+        player.setExp(0);
         player.setPotionParticles(true);
         player.setWalkSpeed(0.2F);
     }
