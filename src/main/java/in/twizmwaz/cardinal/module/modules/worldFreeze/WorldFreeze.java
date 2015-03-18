@@ -1,9 +1,12 @@
 package in.twizmwaz.cardinal.module.modules.worldFreeze;
 
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.event.CycleCompleteEvent;
+import in.twizmwaz.cardinal.event.MatchEndEvent;
+import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
-import in.twizmwaz.cardinal.module.TaskedModule;
+import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.*;
@@ -13,10 +16,10 @@ import org.bukkit.event.weather.LightningStrikeEvent;
 import org.bukkit.event.weather.ThunderChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
-public class WorldFreeze implements TaskedModule {
+public class WorldFreeze implements Module {
 
     private final Match match;
-    private long lastTime;
+    private String daylight;
 
     protected WorldFreeze(Match match) {
         this.match = match;
@@ -127,11 +130,20 @@ public class WorldFreeze implements TaskedModule {
         event.setCancelled(true);
     }
 
-    @Override
-    public void run() {
-        if (!match.getState().equals(MatchState.PLAYING) && GameHandler.getGameHandler().getMatchWorld().getTime() != lastTime) {
-            GameHandler.getGameHandler().getMatchWorld().setFullTime(lastTime);
-        }
-        lastTime = GameHandler.getGameHandler().getMatchWorld().getFullTime();
+    @EventHandler
+    public void onCycle(CycleCompleteEvent event) {
+        daylight = GameHandler.getGameHandler().getMatchWorld().getGameRuleValue("doDaylightCycle");
+        GameHandler.getGameHandler().getMatchWorld().setGameRuleValue("doDaylightCycle", "false");
     }
+
+    @EventHandler
+    public void onStart(MatchStartEvent event) {
+        GameHandler.getGameHandler().getMatchWorld().setGameRuleValue("doDaylightCycle", daylight);
+    }
+
+    @EventHandler
+    public void onEnd(MatchEndEvent event) {
+        GameHandler.getGameHandler().getMatchWorld().setGameRuleValue("doDaylightCycle", "false");
+    }
+
 }

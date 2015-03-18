@@ -8,6 +8,7 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.match.MatchState;
+import in.twizmwaz.cardinal.module.modules.cycleTimer.CycleTimerModule;
 import in.twizmwaz.cardinal.module.modules.startTimer.StartTimer;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import org.bukkit.Bukkit;
@@ -20,9 +21,10 @@ public class CancelCommand {
     @CommandPermissions("cardinal.cancel")
     public static void cancel(final CommandContext cmd, CommandSender sender) {
         GameHandler handler = GameHandler.getGameHandler();
-        if (handler.getCycleTimer() != null)
-            handler.getCycleTimer().setCancelled(true);
-        handler.getMatch().getModules().getModule(StartTimer.class).setCancelled(true);
+        if (!handler.getMatch().getModules().getModule(CycleTimerModule.class).isCancelled())
+            handler.getMatch().getModules().getModule(CycleTimerModule.class).setCancelled(true);
+        if (!handler.getMatch().getModules().getModule(StartTimer.class).isCancelled())
+            handler.getMatch().getModules().getModule(StartTimer.class).setCancelled(true);
         if (handler.getMatch().getState().equals(MatchState.STARTING)) handler.getMatch().setState(MatchState.WAITING);
         if (handler.getMatch().getState().equals(MatchState.CYCLING)) handler.getMatch().setState(MatchState.ENDED);
         ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "{0}", new LocalizedChatMessage(ChatConstant.GENERIC_COUNTDOWN_CANELLED)));

@@ -10,6 +10,7 @@ import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.modules.startTimer.StartTimer;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -31,9 +32,9 @@ public class StartAndEndCommand {
         } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
             GameHandler.getGameHandler().getMatch().getModules().getModule(StartTimer.class).setTime(cmd.getInteger(0) * 20);
         } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
-            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_RESUME).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_RESUME).getMessage(ChatUtils.getLocale(sender)));
         } else {
-            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_START).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_START).getMessage(ChatUtils.getLocale(sender)));
         }
 
     }
@@ -49,7 +50,7 @@ public class StartAndEndCommand {
                 GameHandler.getGameHandler().getMatch().end(null);
             }
 
-        } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_END).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+        } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_END).getMessage(ChatUtils.getLocale(sender)));
     }
 
 }

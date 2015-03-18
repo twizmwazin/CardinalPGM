@@ -95,7 +95,7 @@ public class HillObjectiveBuilder implements ModuleBuilder {
         boolean show = true;
         if (element.getParentElement().getAttributeValue("show") != null)
             show = NumUtils.parseBoolean(element.getParentElement().getAttributeValue("show"));
-        if (element.getAttributeValue("showl") != null)
+        if (element.getAttributeValue("show") != null)
             show = NumUtils.parseBoolean(element.getAttributeValue("show"));
         String materials = element.getAttributeValue("visual-materials") == null ? 
                 element.getParentElement().getAttributeValue("visual-materials") : 

@@ -67,7 +67,7 @@ public class Match {
     }
 
     public boolean isRunning() {
-        return state.equals(MatchState.PLAYING);
+        return getState() == MatchState.PLAYING;
     }
 
     public MatchState getState() {
@@ -75,6 +75,7 @@ public class Match {
     }
 
     public void setState(MatchState state) {
+        if (state == null) throw new IllegalArgumentException("MatchState cannot be null!");
         this.state = state;
     }
 

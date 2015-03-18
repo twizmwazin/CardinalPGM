@@ -41,10 +41,10 @@ public class TeamCommand {
                                 sender.sendMessage(team.getColor() + Bukkit.getPlayer(cmd.getString(1)).getName() + ChatColor.GRAY + " forced to " + team.getCompleteName());
                             } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_JOINED, TeamUtils.getTeamByPlayer((Player) sender).getCompleteName() + ChatColor.RED).getMessage(((Player) sender).getLocale()));
                         } else {
-                            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAM_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+                            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAM_MATCH).getMessage(ChatUtils.getLocale(sender)));
                         }
                     } else {
-                        throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+                        throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(ChatUtils.getLocale(sender)));
                     }
                 } else {
                     throw new CommandUsageException("Too few arguments.", "/team <force> <player> <force team>");
@@ -60,12 +60,12 @@ public class TeamCommand {
                         }
                         msg = msg.trim();
                         TeamModule team = TeamUtils.getTeamByName(cmd.getString(1));
-                        String locale = sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString();
+                        String locale = ChatUtils.getLocale(sender);
                         sender.sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_TEAM_ALIAS, team.getCompleteName() + ChatColor.GRAY, team.getColor() + msg + ChatColor.GRAY).getMessage(locale));
                         team.setName(msg);
                         Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent());
                     } else {
-                        throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAM_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+                        throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAM_MATCH).getMessage(ChatUtils.getLocale(sender)));
                     }
                 } else {
                     throw new CommandUsageException("Too few arguments!", "/team <alias> <old team> <new team>");
@@ -89,7 +89,7 @@ public class TeamCommand {
                     team.add(player, true);
                     playersToShuffle.remove(player);
                 }
-                String locale = sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString();
+                String locale = ChatUtils.getLocale(sender);
                 sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.GENERIC_TEAM_SHUFFLE).getMessage(locale));
             }
         } else {

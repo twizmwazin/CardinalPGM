@@ -56,7 +56,7 @@ public class Blockdrops implements Module {
                     if (!this.wrongTool) {
                         if (block.getDrops() != null && block.getDrops().size() > 0) {
                             for (ItemStack drop : this.drops) {
-                                GameHandler.getGameHandler().getMatchWorld().dropItemNaturally(block.getLocation(), drop);
+                                GameHandler.getGameHandler().getMatchWorld().dropItemNaturally(block.getLocation().clone().add(.5, .5, .5), drop);
                             }
                             if (this.experience != 0) {
                                 ExperienceOrb xp = GameHandler.getGameHandler().getMatchWorld().spawn(block.getLocation(), ExperienceOrb.class);
@@ -65,7 +65,7 @@ public class Blockdrops implements Module {
                         }
                     } else {
                         for (ItemStack drop : this.drops) {
-                            GameHandler.getGameHandler().getMatchWorld().dropItemNaturally(block.getLocation(), drop);
+                            GameHandler.getGameHandler().getMatchWorld().dropItemNaturally(block.getLocation().clone().add(.5, .5, .5), drop);
                         }
                         ExperienceOrb xp = GameHandler.getGameHandler().getMatchWorld().spawn(block.getLocation(), ExperienceOrb.class);
                         xp.setExperience(this.experience);

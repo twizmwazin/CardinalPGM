@@ -10,6 +10,7 @@ import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.modules.cycleTimer.CycleTimerModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
+import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 
 import org.bukkit.ChatColor;
@@ -28,13 +29,14 @@ public class CycleCommand {
                 TeamModule team = TeamUtils.getTeamByName(cmd.getFlag('f'));
                 GameHandler.getGameHandler().getMatch().end(team);
             } else {
-                throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+                throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(ChatUtils.getLocale(sender)));
             }
         } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING))
-            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
-        if (GameHandler.getGameHandler().getCycleTimer() != null)
-            GameHandler.getGameHandler().getCycleTimer().setCancelled(true);
-        GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimerModule.class).startTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(ChatUtils.getLocale(sender)));
+        CycleTimerModule timer = GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimerModule.class);
+        timer.setOriginalState(GameHandler.getGameHandler().getMatch().getState());
+        timer.setCancelled(true);
+        timer.startTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
     }
 
     @Command(aliases = {"setnext", "sn"}, desc = "Sets the next map.", usage = "[map]", min = 1)
@@ -55,10 +57,10 @@ public class CycleCommand {
             }
         }
         if (nextMap == null) {
-            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_MAP_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_MAP_MATCH).getMessage(ChatUtils.getLocale(sender)));
         } else {
             GameHandler.getGameHandler().getCycle().setMap(nextMap);
-            sender.sendMessage(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.GENERIC_MAP_SET, ChatColor.GOLD + nextMap.getName() + ChatColor.DARK_PURPLE).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+            sender.sendMessage(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.GENERIC_MAP_SET, ChatColor.GOLD + nextMap.getName() + ChatColor.DARK_PURPLE).getMessage(ChatUtils.getLocale(sender)));
         }
     }
     
@@ -70,13 +72,13 @@ public class CycleCommand {
                 TeamModule team = TeamUtils.getTeamByName(cmd.getFlag('f'));
                 GameHandler.getGameHandler().getMatch().end(team);
             } else {
-                throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+                throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(ChatUtils.getLocale(sender)));
             }
         } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING))
-            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
-        if (GameHandler.getGameHandler().getCycleTimer() != null)
-            GameHandler.getGameHandler().getCycleTimer().setCancelled(true);
-        GameHandler.getGameHandler().getCycle().setMap(GameHandler.getGameHandler().getMatch().getLoadedMap());
-        GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimerModule.class).startTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(ChatUtils.getLocale(sender)));
+        CycleTimerModule timer = GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimerModule.class);
+        timer.setOriginalState(GameHandler.getGameHandler().getMatch().getState());
+        timer.setCancelled(true);
+        timer.startTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
     }
 }

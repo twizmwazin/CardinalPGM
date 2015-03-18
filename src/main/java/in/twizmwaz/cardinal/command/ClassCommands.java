@@ -8,6 +8,7 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.event.ClassChangeEvent;
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
+import in.twizmwaz.cardinal.util.ChatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -25,7 +26,7 @@ public class ClassCommands {
             for (ClassModule classModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class)) {
                 sender.sendMessage(count + ". " + (sender instanceof Player && ClassModule.getClassByPlayer((Player) sender) != null && ClassModule.getClassByPlayer((Player) sender).equals(classModule) ? ChatColor.GOLD + "" + ChatColor.UNDERLINE : ChatColor.GREEN + "") + classModule.getName() + ChatColor.DARK_PURPLE + " - " + ChatColor.RESET + classModule.getDescription());
             }
-        } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CLASSES_DISABLED).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+        } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CLASSES_DISABLED).getMessage(ChatUtils.getLocale(sender)));
     }
 
     @Command(aliases = {"class"}, desc = "Allows you to change your class.")

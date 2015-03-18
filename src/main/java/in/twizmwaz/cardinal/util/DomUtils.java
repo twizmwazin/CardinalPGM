@@ -16,20 +16,43 @@ public class DomUtils {
         SAXBuilder saxBuilder = new SAXBuilder();
         Document original = saxBuilder.build(file);
         for (Element include : original.getRootElement().getChildren("include")) {
+            boolean found = false;
             File path = file.getParentFile();
             String source = include.getAttributeValue("src");
-            while (source.startsWith("../")) {
-                source = source.replace("../", "");
-                path = path.getParentFile();
-            }
             File including = new File(path, source);
-            try {
-                for (Element element : parse(including).getRootElement().getChildren()) {
-                    original.getRootElement().addContent(element.clone().detach());
+            if (including.exists()) {
+                found = true;
+                try {
+                    for (Element element : parse(including).getRootElement().getChildren()) {
+                        original.getRootElement().addContent(element.clone().detach());
+                    }
+                } catch (JDOMException | IOException ignored) {}
+            } else {
+                while (source.startsWith("../")) {
+                    source = source.replace("../", "");
                 }
-            } catch (JDOMException | IOException e) {
-                Bukkit.getLogger().log(Level.WARNING, "File '" + including.getName() + "' was not found nor included!");
+                including = new File(path, source);
+                if (including.exists()) {
+                    found = true;
+                    try {
+                        for (Element element : parse(including).getRootElement().getChildren()) {
+                            original.getRootElement().addContent(element.clone().detach());
+                        }
+                    } catch (JDOMException | IOException ignored) {
+                    }
+                }
+                including = new File(path.getParentFile(), source);
+                if (including.exists()) {
+                    found = true;
+                    try {
+                        for (Element element : parse(including).getRootElement().getChildren()) {
+                            original.getRootElement().addContent(element.clone().detach());
+                        }
+                    } catch (JDOMException | IOException ignored) {
+                    }
+                }
             }
+            if (!found) Bukkit.getLogger().log(Level.WARNING, "File '" + including.getName() + "' was not found nor included!");
         }
         return original;
     }

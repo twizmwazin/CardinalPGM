@@ -9,6 +9,7 @@ import in.twizmwaz.cardinal.module.modules.chatChannels.AdminChannel;
 import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannelModule;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
+import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -72,7 +73,7 @@ public class PunishmentCommands {
         } else {
             Bukkit.broadcastMessage((sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " banned " + TeamUtils.getTeamColorByPlayer(banned) + banned.getName() + ChatColor.GOLD + " for " + ChatColor.DARK_AQUA + reason);
         }
-        banned.setBanned(true);
+        Bukkit.getBanList(BanList.Type.NAME).addBan(cmd.getString(0), ChatColor.YELLOW + "" + ChatColor.BOLD + reason + "\n " + ChatColor.DARK_PURPLE + "by " + ((sender instanceof Player) ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console"), null, sender.getName());
     }
 
     @Command(aliases = {"mute"}, usage = "<player>", desc = "Prevents a player from talking", min = 1, max = 1)

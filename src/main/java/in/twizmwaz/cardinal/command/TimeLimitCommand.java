@@ -11,6 +11,7 @@ import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.module.modules.timeNotifications.TimeNotifications;
+import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -27,9 +28,9 @@ public class TimeLimitCommand {
     public static void timeLimit(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (cmd.argsLength() == 0) {
             if (GameHandler.getGameHandler().getMatch().getPriorityTimeLimit() != 0) {
-                sender.sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}" + " " + ChatColor.AQUA + "{1}", "The time limit is", StringUtils.formatTimeWithMillis(GameHandler.getGameHandler().getMatch().getPriorityTimeLimit())).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+                sender.sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}" + " " + ChatColor.AQUA + "{1}", "The time limit is", StringUtils.formatTimeWithMillis(GameHandler.getGameHandler().getMatch().getPriorityTimeLimit())).getMessage(ChatUtils.getLocale(sender)));
             } else {
-                sender.sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", "There is no time limit.").getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+                sender.sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", "There is no time limit.").getMessage(ChatUtils.getLocale(sender)));
             }
         } else {
             if (!sender.hasPermission("cardinal.timelimit")) throw new CommandPermissionsException();
@@ -67,9 +68,9 @@ public class TimeLimitCommand {
             }
             TimeNotifications.resetNextMessage();
             if (GameHandler.getGameHandler().getMatch().getPriorityTimeLimit() != 0) {
-                sender.sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}" + " " + ChatColor.AQUA + "{1}", "The time limit is", StringUtils.formatTimeWithMillis(GameHandler.getGameHandler().getMatch().getPriorityTimeLimit())).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+                sender.sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}" + " " + ChatColor.AQUA + "{1}", "The time limit is", StringUtils.formatTimeWithMillis(GameHandler.getGameHandler().getMatch().getPriorityTimeLimit())).getMessage(ChatUtils.getLocale(sender)));
             } else {
-                sender.sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", "Time limit cancelled").getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+                sender.sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", "Time limit cancelled").getMessage(ChatUtils.getLocale(sender)));
             }
         }
     }
