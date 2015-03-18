@@ -6,7 +6,6 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocaleHandler;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.command.*;
-import in.twizmwaz.cardinal.demographics.DemographicsHandler;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import in.twizmwaz.cardinal.settings.Setting;
 import in.twizmwaz.cardinal.settings.SettingValue;
@@ -16,7 +15,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jdom2.JDOMException;
 
@@ -97,6 +95,12 @@ public class Cardinal extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        saveDefaultConfig();
+        if(!getServer().getClass().getPackage().getName().contains("v1_8_R")) {
+            getLogger().log(Level.SEVERE, "CardinalPGM failed to load because you're running a invalid version of SportBukkit! Disabling plugin...");
+            getLogger().log(Level.INFO, "Please see wiki for more information, https://github.com/twizmwazin/CardinalPGM/wiki/Installing-CardinalPGM.");
+            getServer().getPluginManager().disablePlugin(this);
+        }
         try {
             localeHandler = new LocaleHandler(this);
         } catch (IOException | JDOMException e) {
@@ -118,10 +122,7 @@ public class Cardinal extends JavaPlugin {
             database = Database.newInstance(databaseFile);
         }
         //this.demographicsHandler = new DemographicsHandler(); //Disabled until issues can be resolved
-        FileConfiguration config = getConfig();
-        config.options().copyDefaults(true);
-        saveConfig();
-        if (config.getBoolean("deleteMatches")) {
+        if (getConfig().getBoolean("deleteMatches")) {
             Bukkit.getLogger().log(Level.INFO, "[CardinalPGM] Deleting match files, this can be disabled via the configuration");
             File matches = new File("matches/");
             try {
@@ -130,20 +131,20 @@ public class Cardinal extends JavaPlugin {
                 e.printStackTrace();
             }
         }
-        if (config.contains("settings")) {
-            for (String settingName : config.getStringList("settings")) {
+        if (getConfig().contains("settings")) {
+            for (String settingName : getConfig().getStringList("settings")) {
                 List<String> names = new ArrayList<>();
                 String description = "No description.";
                 List<SettingValue> values = new ArrayList<>();
                 names.add(settingName.trim());
-                if (config.contains("setting." + settingName + ".aliases")) {
-                    for (String alias : config.getStringList("setting." + settingName + ".aliases")) {
+                if (getConfig().contains("setting." + settingName + ".aliases")) {
+                    for (String alias : getConfig().getStringList("setting." + settingName + ".aliases")) {
                         names.add(alias.trim());
                     }
                 }
-                if (config.contains("setting." + settingName + ".description")) description = config.getString("setting." + settingName + ".description");
-                if (config.contains("setting." + settingName + ".values")) {
-                    for (String valueName : config.getStringList("setting." + settingName + ".values")) {
+                if (getConfig().contains("setting." + settingName + ".description")) description = getConfig().getString("setting." + settingName + ".description");
+                if (getConfig().contains("setting." + settingName + ".values")) {
+                    for (String valueName : getConfig().getStringList("setting." + settingName + ".values")) {
                         if (valueName.endsWith("[default]")) values.add(new SettingValue(valueName.trim().substring(0, valueName.length() - 9), true));
                         else values.add(new SettingValue(valueName.trim(), false));
                     }
