@@ -43,7 +43,7 @@ public class ChatCommands {
         if (sender instanceof Player) {
             if (cmd.argsLength() == 0) {
                 ((Player) sender).setMetadata("default-channel", new LazyMetadataValue(GameHandler.getGameHandler().getPlugin(), LazyMetadataValue.CacheStrategy.NEVER_CACHE, new Channel(ChatUtils.ChannelType.GLOBAL)));
-                sender.sendMessage(ChatColor.YELLOW + "Your defult channel was changed to " + ChatColor.RED + "global");
+                sender.sendMessage(ChatColor.YELLOW + "Your defult channel was changed to global");
             }
             if (cmd.argsLength() > 0) {
                 String message = assembleMessage(cmd);
@@ -59,7 +59,7 @@ public class ChatCommands {
         if (sender instanceof Player) {
             if (cmd.argsLength() == 0) {
                 ((Player) sender).setMetadata("default-channel", new LazyMetadataValue(GameHandler.getGameHandler().getPlugin(), LazyMetadataValue.CacheStrategy.NEVER_CACHE, new Channel(ChatUtils.ChannelType.ADMIN)));
-                sender.sendMessage(ChatColor.YELLOW + "Your defult channel was changed to " + ChatColor.RED + "admin");
+                sender.sendMessage(ChatColor.YELLOW + "Your defult channel was changed to admin");
             }
             if (cmd.argsLength() > 0) {
                 String message = assembleMessage(cmd);
@@ -76,7 +76,7 @@ public class ChatCommands {
         if (sender instanceof Player) {
             if (cmd.argsLength() == 0) {
                 ((Player) sender).setMetadata("default-channel", new LazyMetadataValue(GameHandler.getGameHandler().getPlugin(), LazyMetadataValue.CacheStrategy.NEVER_CACHE, new Channel(ChatUtils.ChannelType.TEAM)));
-                sender.sendMessage(ChatColor.YELLOW + "Your defult channel was changed to " + ChatColor.RED + "team");
+                sender.sendMessage(ChatColor.YELLOW + "Your defult channel was changed to team");
             }
             if (cmd.argsLength() > 0) {
                 TeamModule team = TeamUtils.getTeamByPlayer((Player) sender);
