@@ -6,7 +6,6 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocaleHandler;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.command.*;
-import in.twizmwaz.cardinal.demographics.DemographicsHandler;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import in.twizmwaz.cardinal.settings.Setting;
 import in.twizmwaz.cardinal.settings.SettingValue;
@@ -33,7 +32,6 @@ public class Cardinal extends JavaPlugin {
     private static LocaleHandler localeHandler;
     private CommandsManager<CommandSender> commands;
     private static Database database;
-    //private DemographicsHandler demographicsHandler;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -117,7 +115,6 @@ public class Cardinal extends JavaPlugin {
         } else {
             database = Database.newInstance(databaseFile);
         }
-        //this.demographicsHandler = new DemographicsHandler(); //Disabled until issues can be resolved
         FileConfiguration config = getConfig();
         config.options().copyDefaults(true);
         saveConfig();
@@ -163,8 +160,6 @@ public class Cardinal extends JavaPlugin {
     
     @Override
     public void onDisable() {
-        database.save(new File(getDataFolder().getAbsolutePath() + "/database.xml"));
-        //demographicsHandler.saveAndReport();
     }
 
     public GameHandler getGameHandler() {
