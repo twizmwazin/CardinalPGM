@@ -107,7 +107,9 @@ public class TeamManagerModule implements Module {
 
     private void clearHeldAttribute(Player player) {
         CraftPlayer craftPlayer = (CraftPlayer) player;
-        craftPlayer.getHandle().getAttributeMap().a(((CraftInventoryPlayer) craftPlayer.getInventory()).getInventory().getItemInHand().B());
+        if (player.getInventory().getItemInHand() != null && player.getInventory().getItemInHand().getType().equals(Material.AIR)) {
+            craftPlayer.getHandle().getAttributeMap().a(((CraftInventoryPlayer) craftPlayer.getInventory()).getInventory().getItemInHand().B());
+        }
     }
 
 }

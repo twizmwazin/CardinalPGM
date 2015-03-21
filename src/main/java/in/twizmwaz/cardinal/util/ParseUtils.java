@@ -82,7 +82,6 @@ public class ParseUtils {
     }
 
     private static ItemStack setAttributes(ItemStack itemStack, String attributes) {
-        System.out.println("Parsing attributes");
         net.minecraft.server.v1_8_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
         if (nmsStack.getTag() == null) {
             nmsStack.setTag(new NBTTagCompound());
