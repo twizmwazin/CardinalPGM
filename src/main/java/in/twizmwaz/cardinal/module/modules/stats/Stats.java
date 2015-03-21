@@ -120,7 +120,7 @@ public class Stats implements Module {
     public double getKdByPlayer(OfflinePlayer player) {
         double kd;
         if (player == null) return 0;
-        kd = (getKillsByPlayer(player) > 0 ? (double) getKillsByPlayer(player) : 1.0) / (getDeathsByPlayer(player) > 0 ? (double) getDeathsByPlayer(player) : 1.0);
+        kd = getDeathsByPlayer(player) == 0 ? (double) getKillsByPlayer(player) : (double) getKillsByPlayer(player) / (double) getDeathsByPlayer(player);
         return kd;
     }
 
