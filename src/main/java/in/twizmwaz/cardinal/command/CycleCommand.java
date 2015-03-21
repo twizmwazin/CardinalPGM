@@ -76,6 +76,7 @@ public class CycleCommand {
             }
         } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING))
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(ChatUtils.getLocale(sender)));
+        GameHandler.getGameHandler().getCycle().setMap(GameHandler.getGameHandler().getMatch().getLoadedMap());
         CycleTimerModule timer = GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimerModule.class);
         timer.setOriginalState(GameHandler.getGameHandler().getMatch().getState());
         timer.setCancelled(true);
