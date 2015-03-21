@@ -26,7 +26,6 @@ public enum AttributeType {
 
     public static AttributeType fromName(String name) {
         for (AttributeType type: AttributeType.values()) {
-            System.out.println("Type: " + type);
             if (type.getName().equalsIgnoreCase(name)) {
                 return type;
             }
