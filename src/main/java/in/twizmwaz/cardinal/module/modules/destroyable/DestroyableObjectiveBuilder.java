@@ -1,8 +1,10 @@
 package in.twizmwaz.cardinal.module.modules.destroyable;
 
 import in.twizmwaz.cardinal.match.Match;
+import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
@@ -15,6 +17,7 @@ import org.jdom2.Element;
 import java.util.ArrayList;
 import java.util.List;
 
+@BuilderData(load = ModuleLoadTime.EARLIER)
 public class DestroyableObjectiveBuilder implements ModuleBuilder {
 
     @Override

@@ -1,8 +1,10 @@
 package in.twizmwaz.cardinal.module.modules.hill;
 
 import in.twizmwaz.cardinal.match.Match;
+import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
@@ -13,6 +15,7 @@ import in.twizmwaz.cardinal.util.StringUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.jdom2.Element;
 
+@BuilderData(load = ModuleLoadTime.EARLIER)
 public class HillObjectiveBuilder implements ModuleBuilder {
 
     @Override

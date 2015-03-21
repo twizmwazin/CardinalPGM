@@ -18,7 +18,7 @@ import in.twizmwaz.cardinal.module.modules.filter.type.old.DenyFilter;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
-@BuilderData(load = ModuleLoadTime.EARLIER)
+@BuilderData(load = ModuleLoadTime.EARLY)
 public class FilterModuleBuilder implements ModuleBuilder {
     
     @Override
