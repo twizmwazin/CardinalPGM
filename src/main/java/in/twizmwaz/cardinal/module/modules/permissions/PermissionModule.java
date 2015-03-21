@@ -2,10 +2,7 @@ package in.twizmwaz.cardinal.module.modules.permissions;
 
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.event.CycleCompleteEvent;
-import in.twizmwaz.cardinal.event.MatchEndEvent;
-import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
-import in.twizmwaz.cardinal.event.PlayerNameUpdateEvent;
+import in.twizmwaz.cardinal.event.*;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.MojangUtils;
@@ -94,31 +91,54 @@ public class PermissionModule implements Module {
 
     @EventHandler
     public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
-        if (Cardinal.getInstance().getConfig().getBoolean("worldEditPermissions"))
-        if (event.getNewTeam().isObserver()) {
-            attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.jumpto.tool", true);
-            attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.thru.tool", true);
+        if (Cardinal.getInstance().getConfig().getBoolean("worldEditPermissions")) {
+            if (event.getNewTeam().isObserver() || !GameHandler.getGameHandler().getMatch().isRunning()) {
+                attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.jumpto.tool", true);
+                attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.thru.tool", true);
 
-            attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.jumpto.command", true);
-            attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.thru.command", true);
-        } else {
-            attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.jumpto.tool", false);
-            attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.thru.tool", false);
+                attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.jumpto.command", true);
+                attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.thru.command", true);
+            } else {
+                attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.jumpto.tool", false);
+                attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.thru.tool", false);
 
-            attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.jumpto.command", false);
-            attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.thru.command", false);
+                attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.jumpto.command", false);
+                attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.thru.command", false);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onMatchStart(MatchStartEvent event) {
+        if (Cardinal.getInstance().getConfig().getBoolean("worldEditPermissions")) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (TeamUtils.getTeamByPlayer(player) == null || TeamUtils.getTeamByPlayer(player).isObserver()) {
+                    attachmentMap.get(player).setPermission("worldedit.navigation.jumpto.tool", true);
+                    attachmentMap.get(player).setPermission("worldedit.navigation.thru.tool", true);
+
+                    attachmentMap.get(player).setPermission("worldedit.navigation.jumpto.command", true);
+                    attachmentMap.get(player).setPermission("worldedit.navigation.thru.command", true);
+                } else {
+                    attachmentMap.get(player).setPermission("worldedit.navigation.jumpto.tool", false);
+                    attachmentMap.get(player).setPermission("worldedit.navigation.thru.tool", false);
+
+                    attachmentMap.get(player).setPermission("worldedit.navigation.jumpto.command", false);
+                    attachmentMap.get(player).setPermission("worldedit.navigation.thru.command", false);
+                }
+            }
         }
     }
 
     @EventHandler
     public void onMatchEnd(MatchEndEvent event) {
-        if (Cardinal.getInstance().getConfig().getBoolean("worldEditPermissions"))
+        if (Cardinal.getInstance().getConfig().getBoolean("worldEditPermissions")) {
             for (Player player : Bukkit.getOnlinePlayers()) {
-            attachmentMap.get(player).setPermission("worldedit.navigation.jumpto.tool", true);
-            attachmentMap.get(player).setPermission("worldedit.navigation.thru.tool", true);
+                attachmentMap.get(player).setPermission("worldedit.navigation.jumpto.tool", true);
+                attachmentMap.get(player).setPermission("worldedit.navigation.thru.tool", true);
 
-            attachmentMap.get(player).setPermission("worldedit.navigation.jumpto.command", true);
-            attachmentMap.get(player).setPermission("worldedit.navigation.thru.command", true);
+                attachmentMap.get(player).setPermission("worldedit.navigation.jumpto.command", true);
+                attachmentMap.get(player).setPermission("worldedit.navigation.thru.command", true);
+            }
         }
     }
 
