@@ -17,7 +17,24 @@ public class ObjectiveFilterParser extends FilterParser {
         super(element);
         String name = element.getText();
         for (GameObjective objective : GameHandler.getGameHandler().getMatch().getModules().getModules(GameObjective.class)) {
-            if (objective.getName().equalsIgnoreCase(name)) this.objective = objective;
+            if (objective.getId().replaceAll(" ", "").equalsIgnoreCase(name.replaceAll(" ", ""))) {
+                this.objective = objective;
+            }
+        }
+        for (GameObjective objective : GameHandler.getGameHandler().getMatch().getModules().getModules(GameObjective.class)) {
+            if (objective.getId().replaceAll(" ", "").toLowerCase().startsWith(name.replaceAll(" ", "").toLowerCase())) {
+                this.objective = objective;
+            }
+        }
+        for (GameObjective objective : GameHandler.getGameHandler().getMatch().getModules().getModules(GameObjective.class)) {
+            if (objective.getName().replaceAll(" ", "").equalsIgnoreCase(name.replaceAll(" ", ""))) {
+                this.objective = objective;
+            }
+        }
+        for (GameObjective objective : GameHandler.getGameHandler().getMatch().getModules().getModules(GameObjective.class)) {
+            if (objective.getName().replaceAll(" ", "").toLowerCase().startsWith(name.replaceAll(" ", "").toLowerCase())) {
+                this.objective = objective;
+            }
         }
         try {
             String team = element.getAttributeValue("team");
