@@ -20,7 +20,7 @@ public class ProximityCommand {
 
     @Command(aliases = {"proximity"}, desc = "Shows the proximity of the objectives in the match.")
     public static void ready(final CommandContext cmd, CommandSender sender) throws CommandException {
-        if (!(sender instanceof Player) || TeamUtils.getTeamByPlayer((Player) sender) == null || TeamUtils.getTeamByPlayer((Player) sender).isObserver() || !GameHandler.getGameHandler().getMatch().isRunning()) {
+        if (!(sender instanceof Player) || TeamUtils.getTeamByPlayer((Player) sender) == null || TeamUtils.getTeamByPlayer((Player) sender).isObserver() || !GameHandler.getGameHandler().getMatch().isRunning() || sender.hasPermission("cardinal.proximity")) {
             for (TeamModule team : TeamUtils.getTeams()) {
                 if (!team.isObserver()) {
                     sender.sendMessage(team.getCompleteName());
@@ -41,7 +41,7 @@ public class ProximityCommand {
                     }
                 }
             }
-        } else throw new CommandException("The /proximity command is only avaible to observers");
+        } else throw new CommandPermissionsException();
     }
 
 }
