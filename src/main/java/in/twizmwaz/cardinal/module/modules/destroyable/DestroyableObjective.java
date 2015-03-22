@@ -136,7 +136,11 @@ public class DestroyableObjective implements GameObjective {
                         TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
                         if (this.show && !this.completed) {
                             TeamUtils.getTeamChannel(teamModule).sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED, teamModule.getColor() + event.getPlayer().getName() + ChatColor.GRAY, ChatColor.AQUA + name));
-                            touchMessage = true;
+                            for (Player player : Bukkit.getOnlinePlayers()) {
+                                if (TeamUtils.getTeamByPlayer(player) != null && TeamUtils.getTeamByPlayer(player).isObserver()) {
+                                    player.sendMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED_FOR, teamModule.getColor() + event.getPlayer().getName() + ChatColor.GRAY, ChatColor.AQUA + name + ChatColor.GRAY, teamModule.getCompleteName() + ChatColor.GRAY).getMessage(player.getLocale()));
+                                }
+                            }
                         }
                     }
                     boolean oldState = this.isTouched();
@@ -189,7 +193,12 @@ public class DestroyableObjective implements GameObjective {
                                 playersTouched.add(player);
                                 TeamModule teamModule = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
                                 if (this.show && !this.completed) {
-                                    TeamUtils.getTeamChannel(teamModule).sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED, teamModule.getColor() + Bukkit.getPlayer(player).getName() + ChatColor.GRAY, ChatColor.AQUA + name));
+                                    TeamUtils.getTeamChannel(teamModule).sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED, teamModule.getColor() + Bukkit.getPlayer(player).getName() + ChatColor.GRAY, ChatColor.AQUA + name + ChatColor.GRAY));
+                                    for (Player player1 : Bukkit.getOnlinePlayers()) {
+                                        if (TeamUtils.getTeamByPlayer(player1) != null && TeamUtils.getTeamByPlayer(player1).isObserver()) {
+                                            player1.sendMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED_FOR, teamModule.getColor() + player1.getName() + ChatColor.GRAY, ChatColor.AQUA + name + ChatColor.GRAY, teamModule.getCompleteName() + ChatColor.GRAY).getMessage(player1.getLocale()));
+                                        }
+                                    }
                                     touchMessage = true;
                                 }
                             }
