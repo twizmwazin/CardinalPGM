@@ -132,4 +132,20 @@ public class ParseUtils {
         }
         return DyeColor.WHITE;
     }
+
+    public static PotionEffect getPotion(Element potion) {
+        PotionEffectType type = PotionEffectType.getByName(StringUtils.getTechnicalName(potion.getText()));
+        int duration = NumUtils.parseInt(potion.getAttributeValue("duration")) == Integer.MAX_VALUE ? NumUtils.parseInt(potion.getAttributeValue("duration")) : NumUtils.parseInt(potion.getAttributeValue("duration")) * 20;
+        int amplifier = 0;
+        boolean ambient = false;
+
+        if (potion.getAttributeValue("amplifier") != null) {
+            amplifier = NumUtils.parseInt(potion.getAttributeValue("amplifier")) - 1;
+        }
+
+        if (potion.getAttributeValue("ambient") != null) {
+            ambient = Boolean.parseBoolean(potion.getAttributeValue("ambient").toUpperCase());
+        }
+        return new PotionEffect(type, duration, amplifier, ambient);
+    }
 }

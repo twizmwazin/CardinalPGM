@@ -87,13 +87,7 @@ public class KitBuilder implements ModuleBuilder {
             }
             List<PotionEffect> potions = new ArrayList<>();
             for (Element potion : element.getChildren("potion")) {
-                PotionEffectType type = PotionEffectType.getByName(StringUtils.getTechnicalName(potion.getText()));
-                int duration = NumUtils.parseInt(potion.getAttributeValue("duration")) == Integer.MAX_VALUE ? NumUtils.parseInt(potion.getAttributeValue("duration")) : NumUtils.parseInt(potion.getAttributeValue("duration")) * 20;
-                int amplifier = 0;
-                if (potion.getAttributeValue("amplifier") != null) {
-                    amplifier = NumUtils.parseInt(potion.getAttributeValue("amplifier")) - 1;
-                }
-                potions.add(new PotionEffect(type, duration, amplifier, true));
+                potions.add(ParseUtils.getPotion(potion));
             }
             List<KitBook> books = new ArrayList<>();
             for (Element book : element.getChildren("book")) {
