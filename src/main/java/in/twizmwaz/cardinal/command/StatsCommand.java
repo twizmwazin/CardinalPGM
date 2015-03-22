@@ -2,7 +2,6 @@ package in.twizmwaz.cardinal.command;
 
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
-import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.stats.Stats;
 import in.twizmwaz.cardinal.util.TeamUtils;

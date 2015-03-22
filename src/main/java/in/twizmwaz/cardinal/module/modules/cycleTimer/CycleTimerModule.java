@@ -10,7 +10,6 @@ import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.util.ChatUtils;
-
 import org.bukkit.ChatColor;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;

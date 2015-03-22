@@ -1,24 +1,18 @@
 package in.twizmwaz.cardinal.module.modules.stats;
 
-import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.settings.Setting;
 import in.twizmwaz.cardinal.settings.Settings;
-import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Stats implements Module {
 

@@ -10,7 +10,7 @@ import in.twizmwaz.cardinal.util.NumUtils;
 import in.twizmwaz.cardinal.util.StringUtils;
 import org.jdom2.Element;
 
-@BuilderData(load = ModuleLoadTime.LATER)
+@BuilderData(load = ModuleLoadTime.LATE)
 public class BlitzBuilder implements ModuleBuilder {
 
     public ModuleCollection load(Match match) {

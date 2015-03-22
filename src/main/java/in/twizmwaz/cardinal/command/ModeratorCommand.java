@@ -8,13 +8,13 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.PlayerNameUpdateEvent;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
-import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public class ModeratorCommand {
     @Command(aliases = {"mod"}, desc = "Give a player the rank of moderator", usage = "<player>", min = 1, max = 1)

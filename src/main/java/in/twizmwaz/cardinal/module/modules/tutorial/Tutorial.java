@@ -6,7 +6,6 @@ import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.util.ChatUtils;
-import in.twizmwaz.cardinal.util.PlayerUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

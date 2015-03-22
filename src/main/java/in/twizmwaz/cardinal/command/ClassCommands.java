@@ -14,8 +14,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Locale;
-
 public class ClassCommands {
 
     @Command(aliases = {"classes", "classlist"}, desc = "Lists the classes available in a map.", max = 1)

@@ -4,16 +4,14 @@ import in.twizmwaz.cardinal.cycle.Cycle;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleFactory;
-import in.twizmwaz.cardinal.module.modules.cycleTimer.CycleTimerModule;
 import in.twizmwaz.cardinal.rotation.Rotation;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
-
-import java.lang.ref.WeakReference;
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.lang.ref.WeakReference;
+import java.util.UUID;
 
 public class GameHandler {
 

@@ -113,4 +113,28 @@ public class StringUtils {
         String dashes = StringUtils.repeat(c, (ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH - ChatColor.stripColor(message).length() - 2) / (c.length() * 2));
         return dashColor + dashes + ChatColor.RESET + messageColor + message + ChatColor.RESET + dashColor + dashes;
     }
+
+    public static String trimTo(String string, int start, int end) {
+        return string.length() > start ? (string.length() > end ? string.substring(start, end) : string.substring(start)) : "";
+    }
+
+    public static String removeLastWord(String string) {
+        String word = string;
+        boolean reachedWord = false;
+        for (int i = word.length() - 1; i >= 0; i --) {
+            if (word.charAt(i) == ' ') {
+                if (reachedWord) {
+                    break;
+                } else {
+                    word = word.substring(0, i);
+                }
+            } else {
+                if (!reachedWord) {
+                    reachedWord = true;
+                }
+                word = word.substring(0, i);
+            }
+        }
+        return word;
+    }
 }

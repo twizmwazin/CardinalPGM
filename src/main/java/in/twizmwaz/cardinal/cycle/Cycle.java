@@ -2,12 +2,9 @@ package in.twizmwaz.cardinal.cycle;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
-import org.bukkit.generator.ChunkGenerator;
 
-import java.util.Random;
 import java.util.UUID;
 
 public class Cycle implements Runnable {

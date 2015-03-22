@@ -13,7 +13,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
-import org.bukkit.util.Vector;
 
 import java.util.HashSet;
 import java.util.Set;

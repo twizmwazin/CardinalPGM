@@ -1,7 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.chat;
 
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.util.ChatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;

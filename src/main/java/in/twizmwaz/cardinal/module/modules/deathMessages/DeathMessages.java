@@ -1,6 +1,5 @@
 package in.twizmwaz.cardinal.module.modules.deathMessages;
 
-import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.module.Module;

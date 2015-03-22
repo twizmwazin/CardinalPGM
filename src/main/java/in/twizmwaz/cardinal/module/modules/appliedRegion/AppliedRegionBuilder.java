@@ -1,6 +1,5 @@
 package in.twizmwaz.cardinal.module.modules.appliedRegion;
 
-import org.bukkit.ChatColor;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
@@ -15,6 +14,7 @@ import in.twizmwaz.cardinal.module.modules.portal.Portal;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
+import org.bukkit.ChatColor;
 import org.bukkit.util.Vector;
 import org.jdom2.Element;
 

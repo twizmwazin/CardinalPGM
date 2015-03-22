@@ -7,7 +7,7 @@ import com.sk89q.minecraft.util.commands.CommandUsageException;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
-import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
+import in.twizmwaz.cardinal.event.TeamNameChangeEvent;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
@@ -18,7 +18,6 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 
 public class TeamCommand {
@@ -53,17 +52,17 @@ public class TeamCommand {
         } else if (cmd.getString(0).equalsIgnoreCase("alias")) {
             if (sender.hasPermission("cardinal.team.alias")) {
                 if (cmd.argsLength() >= 3) {
-                    if (TeamUtils.getTeamByName(cmd.getString(1)) != null) {
+                    TeamModule team = TeamUtils.getTeamByName(cmd.getString(1));
+                    if (team != null) {
                         String msg = "";
                         for (int i = 2; i < cmd.argsLength(); i++) {
                             msg += cmd.getString(i) + " ";
                         }
                         msg = msg.trim();
-                        TeamModule team = TeamUtils.getTeamByName(cmd.getString(1));
                         String locale = ChatUtils.getLocale(sender);
                         sender.sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_TEAM_ALIAS, team.getCompleteName() + ChatColor.GRAY, team.getColor() + msg + ChatColor.GRAY).getMessage(locale));
                         team.setName(msg);
-                        Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent());
+                        Bukkit.getServer().getPluginManager().callEvent(new TeamNameChangeEvent(team));
                     } else {
                         throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAM_MATCH).getMessage(ChatUtils.getLocale(sender)));
                     }

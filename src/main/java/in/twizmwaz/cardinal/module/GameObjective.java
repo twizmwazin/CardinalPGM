@@ -1,6 +1,6 @@
 package in.twizmwaz.cardinal.module;
 
-import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameObjectiveScoreboardHandler;
+import in.twizmwaz.cardinal.module.modules.scoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 
 public interface GameObjective extends Module {

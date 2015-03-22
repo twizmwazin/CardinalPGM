@@ -1,7 +1,7 @@
 package in.twizmwaz.cardinal.event;
 
-import in.twizmwaz.cardinal.module.modules.tracker.event.TrackerSpleefEvent;
 import in.twizmwaz.cardinal.module.modules.tracker.event.TrackerDamageEvent;
+import in.twizmwaz.cardinal.module.modules.tracker.event.TrackerSpleefEvent;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;

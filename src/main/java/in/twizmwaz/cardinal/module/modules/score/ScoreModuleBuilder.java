@@ -11,7 +11,7 @@ import in.twizmwaz.cardinal.util.StringUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.jdom2.Element;
 
-@BuilderData(load = ModuleLoadTime.LATER)
+@BuilderData(load = ModuleLoadTime.LATE)
 public class ScoreModuleBuilder implements ModuleBuilder {
 
     @SuppressWarnings("unchecked")

@@ -1,7 +1,5 @@
 package in.twizmwaz.cardinal.module.modules.mapNotification;
 
-import in.twizmwaz.cardinal.util.Contributor;
-import org.bukkit.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -9,7 +7,9 @@ import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
+import in.twizmwaz.cardinal.util.Contributor;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;

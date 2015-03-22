@@ -5,20 +5,19 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalDeathEvent;
-import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.event.SnowflakeChangeEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
+import in.twizmwaz.cardinal.event.objective.ObjectiveProximityEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
-import in.twizmwaz.cardinal.module.modules.gameScoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
+import in.twizmwaz.cardinal.module.modules.scoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.snowflakes.Snowflakes;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.FireworkUtil;
 import in.twizmwaz.cardinal.util.MiscUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
@@ -32,7 +31,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Wool;
@@ -229,8 +227,9 @@ public class WoolObjective implements GameObjective {
     public void onCardinalDeath(CardinalDeathEvent event) {
         if (event.getKiller() != null && location != null && GameHandler.getGameHandler().getMatch().isRunning() && !this.touched && TeamUtils.getTeamByPlayer(event.getKiller()) != null && TeamUtils.getTeamByPlayer(event.getKiller()) == this.team) {
             if (event.getKiller().getLocation().toVector().distance(location) < proximity) {
+                double old = proximity;
                 proximity = event.getKiller().getLocation().toVector().distance(location);
-                Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent());
+                Bukkit.getServer().getPluginManager().callEvent(new ObjectiveProximityEvent(this, event.getKiller(), old, proximity));
             }
         }
     }
@@ -242,10 +241,10 @@ public class WoolObjective implements GameObjective {
                 if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
                     if (TeamUtils.getTeamByPlayer(event.getPlayer()) == team) {
                         if (event.getBlockPlaced().getLocation().distance(place.getLocation()) < proximity) {
+                            double old = proximity;
                             proximity = event.getBlockPlaced().getLocation().distance(place.getLocation());
-                            Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent());
+                            Bukkit.getServer().getPluginManager().callEvent(new ObjectiveProximityEvent(this, event.getPlayer(), old, proximity));
                         }
-                        Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent());
                     }
                 }
             }

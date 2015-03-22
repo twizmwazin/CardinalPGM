@@ -1,22 +1,20 @@
 package in.twizmwaz.cardinal.command;
 
-import in.twizmwaz.cardinal.chat.ChatConstant;
-import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
-import in.twizmwaz.cardinal.util.ChatUtils;
-import in.twizmwaz.cardinal.util.Contributor;
-import org.bukkit.ChatColor;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
+import in.twizmwaz.cardinal.util.ChatUtils;
+import in.twizmwaz.cardinal.util.Contributor;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 public class RotationCommands {
 

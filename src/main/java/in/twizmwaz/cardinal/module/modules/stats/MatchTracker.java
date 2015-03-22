@@ -1,7 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.stats;
 
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class MatchTracker {

@@ -1,6 +1,5 @@
 package in.twizmwaz.cardinal.module.modules.monumentModes;
 
-import org.bukkit.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.module.TaskedModule;
@@ -8,6 +7,7 @@ import in.twizmwaz.cardinal.module.modules.cores.CoreObjective;
 import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjective;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.util.ChatUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.HandlerList;
