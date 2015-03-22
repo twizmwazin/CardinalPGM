@@ -85,18 +85,6 @@ public class TeamManagerModule implements Module {
         removePlayer(player);
     }
 
-    @EventHandler
-    public void onPlayerLeave(PlayerKickEvent event) {
-        Player player = event.getPlayer();
-        for (Player player1 : Bukkit.getOnlinePlayers()) {
-            if (!player1.equals(player)) {
-                player1.sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", new LocalizedChatMessage(ChatConstant.UI_PLAYER_LEAVE, TeamUtils.getTeamColorByPlayer(player) + player.getDisplayName() + ChatColor.YELLOW)).getMessage(player1.getLocale()));
-            }
-        }
-        Bukkit.getLogger().info(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", new LocalizedChatMessage(ChatConstant.UI_PLAYER_LEAVE, TeamUtils.getTeamColorByPlayer(player) + player.getDisplayName() + ChatColor.YELLOW)).getMessage(Locale.getDefault().toString()));
-        removePlayer(player);
-    }
-
     private void removePlayer(Player player) {
         for (TeamModule team : match.getModules().getModules(TeamModule.class)) {
             if (team.contains(player)) {
