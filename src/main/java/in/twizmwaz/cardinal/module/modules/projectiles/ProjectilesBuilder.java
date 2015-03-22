@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.module.modules.projectiles;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.util.ParseUtils;
 import in.twizmwaz.cardinal.util.StringUtils;
 import org.bukkit.entity.EntityType;
 import org.bukkit.potion.PotionEffect;
@@ -30,6 +31,11 @@ public class ProjectilesBuilder implements ModuleBuilder {
             } catch (NullPointerException ex) {
 
             }
+
+            for (Element potion: projectiles.getChildren("potion")) {
+                potionEffects.add(ParseUtils.getPotion(potion));
+            }
+
         }
         results.add(new Projectiles(projectile, velocityMod, potionEffects));
         return results;
