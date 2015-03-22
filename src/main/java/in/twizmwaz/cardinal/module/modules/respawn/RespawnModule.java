@@ -14,6 +14,7 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.tutorial.Tutorial;
 import in.twizmwaz.cardinal.util.ItemUtils;
 import in.twizmwaz.cardinal.util.PlayerUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
@@ -115,7 +116,7 @@ public class RespawnModule implements Module {
                 }
                 if (player.hasPermission("tnt.defuse")) {
                     ItemStack shears = ItemUtils.createItem(Material.SHEARS, 1, (short) 0, ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
-                    player.getInventory().setItem(4, shears);
+                    player.getInventory().setItem(5, shears);
                 }
                 player.teleport(chosen.getLocation());
             }
@@ -165,9 +166,10 @@ public class RespawnModule implements Module {
                             Arrays.asList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(player.getLocale())));
                     player.getInventory().setItem(2, picker);
                 }
+                player.getInventory().setItem(3, Tutorial.getEmerald(player));
                 if (player.hasPermission("tnt.defuse")) {
                     ItemStack shears = ItemUtils.createItem(Material.SHEARS, 1, (short) 0, ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
-                    player.getInventory().setItem(4, shears);
+                    player.getInventory().setItem(5, shears);
                 }
                 player.teleport(chosen.getLocation());
             }
