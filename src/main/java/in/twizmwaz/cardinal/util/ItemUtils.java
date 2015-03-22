@@ -7,6 +7,7 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ItemUtils {
@@ -28,6 +29,7 @@ public class ItemUtils {
         ItemStack item = createItem(material, amount, (short)0, name);
         BookMeta meta = (BookMeta) item.getItemMeta();
         meta.setAuthor(author);
+        meta.setPages(Arrays.asList(""));
         item.setItemMeta(meta);
         return item;
     }
