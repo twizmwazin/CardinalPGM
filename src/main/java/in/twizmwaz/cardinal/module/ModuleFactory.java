@@ -67,6 +67,7 @@ import in.twizmwaz.cardinal.module.modules.tntDefuse.TntDefuseBuilder;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTrackerBuilder;
 import in.twizmwaz.cardinal.module.modules.toolRepair.ToolRepairBuilder;
 import in.twizmwaz.cardinal.module.modules.tracker.TrackerBuilder;
+import in.twizmwaz.cardinal.module.modules.tutorial.TutorialBuilder;
 import in.twizmwaz.cardinal.module.modules.visibility.VisibilityBuilder;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.worldFreeze.WorldFreezeBuilder;
@@ -150,7 +151,8 @@ public class ModuleFactory {
             HeaderModuleBuilder.class,
             CycleTimerBuilder.class,
             TimeLimitBuilder.class,
-            PlayableBuilder.class
+            PlayableBuilder.class,
+            TutorialBuilder.class
     };
 
     @SuppressWarnings("unchecked")

@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.observers;
 
+import in.twizmwaz.cardinal.module.modules.tutorial.Tutorial;
 import in.twizmwaz.cardinal.util.ItemUtils;
 import org.bukkit.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
@@ -65,9 +66,10 @@ public class ObserverModule implements Module {
         player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
         ItemStack howTo = ItemUtils.createBook(Material.WRITTEN_BOOK, 1, ChatColor.AQUA.toString() + ChatColor.BOLD + "Coming Soon", ChatColor.GOLD + "CardinalPGM");
         player.getInventory().setItem(1, howTo);
+        player.getInventory().setItem(3, Tutorial.getEmerald(player));
         if (player.hasPermission("tnt.defuse")) {
             ItemStack shears = ItemUtils.createItem(Material.SHEARS, 1, (short)0, ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
-            player.getInventory().setItem(4, shears);
+            player.getInventory().setItem(5, shears);
         }
     }
 
