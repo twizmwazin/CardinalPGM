@@ -69,7 +69,7 @@ public class ObserverModule implements Module {
         player.getInventory().setItem(3, Tutorial.getEmerald(player));
         if (player.hasPermission("tnt.defuse")) {
             ItemStack shears = ItemUtils.createItem(Material.SHEARS, 1, (short)0, ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
-            player.getInventory().setItem(4, shears);
+            player.getInventory().setItem(5, shears);
         }
     }
 
