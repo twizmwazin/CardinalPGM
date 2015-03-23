@@ -47,7 +47,7 @@ public class BlockdropsBuilder implements ModuleBuilder {
                 }
                 boolean wrongTool = false;
                 for (Element wrongToolElement : rule.getChildren("wrongtool")) {
-                    wrongTool = Boolean.parseBoolean(wrongToolElement.getText());
+                    wrongTool = NumUtils.parseBoolean(wrongToolElement.getText());
                 }
                 results.add(new Blockdrops(region, filter, drops, replace, experience, wrongTool));
             }
