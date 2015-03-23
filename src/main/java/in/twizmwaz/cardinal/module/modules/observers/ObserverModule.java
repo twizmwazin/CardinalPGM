@@ -145,6 +145,13 @@ public class ObserverModule implements Module {
                     }
                     event.getPlayer().openInventory(furnace);
                 }
+                if (event.getClickedBlock().getType().equals(Material.BURNING_FURNACE)) {
+                    Inventory furnace = Bukkit.createInventory(null, InventoryType.FURNACE, "Furnace");
+                    for (int i = 0; i < ((Furnace) event.getClickedBlock().getState()).getInventory().getSize(); i++) {
+                        furnace.setItem(i, ((Furnace) event.getClickedBlock().getState()).getInventory().getItem(i));
+                    }
+                    event.getPlayer().openInventory(furnace);
+                }
                 if (event.getClickedBlock().getType().equals(Material.DISPENSER)) {
                     Inventory dispenser = Bukkit.createInventory(null, InventoryType.DISPENSER, "Dispenser");
                     for (int i = 0; i < ((Dispenser) event.getClickedBlock().getState()).getInventory().getSize(); i++) {
@@ -172,6 +179,13 @@ public class ObserverModule implements Module {
                         brewingStand.setItem(i, ((BrewingStand) event.getClickedBlock().getState()).getInventory().getItem(i));
                     }
                     event.getPlayer().openInventory(brewingStand);
+                }
+                if (event.getClickedBlock().getType().equals(Material.BEACON)) {
+                    Inventory beacon = Bukkit.createInventory(null, InventoryType.BEACON, "Beacon");
+                    for (int i = 0; i < ((Beacon) event.getClickedBlock().getState()).getInventory().getSize(); i++) {
+                        beacon.setItem(i, ((Beacon) event.getClickedBlock().getState()).getInventory().getItem(i));
+                    }
+                    event.getPlayer().openInventory(beacon);
                 }
             }
         }
