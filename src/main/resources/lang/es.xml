@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <locale lang="es">
     <error>
+        <noMessages>No tienes mensajes privados por responder</noMessages>
         <restartDuringMatch>No puedes reiniciar durante una partida. Usa -f para forzar.</restartDuringMatch>
         <cycleDuringMatch>No puedes rotar durante una partida. Utiliza -f para forzar.</cycleDuringMatch>
         <matchRunning>La partida ya ha comenzado.</matchRunning>
@@ -67,6 +68,8 @@
         <noRecentPM>No tienes mensajes privados por responder</noRecentPM>
         <playerNotFound>No se ha encontrado ningún jugador con ese nombre.</playerNotFound>
         <playerDisabledPMs>Tu mensaje no fue enviado porque {0} eligió no recibir mensajes privados.</playerDisabledPMs>
+        <playableLeave>No puedes salir del terreno de juego</playableLeave>
+        <playableInteract>No puedes interactuar con bloques de fuera del terreno de juego</playableInteract>
     </error>
     <generic>
         <mapSet>El siguiente mapa ha sido establecido a {0}</mapSet>
@@ -198,5 +201,6 @@
         <good>Bueno</good>
         <amazing>¡Asombroso!</amazing>
         <teamChoose>Elige tu equipo/clase</teamChoose>
+        <online>En línea</online>
     </userInterface>
 </locale>
