@@ -33,6 +33,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
+import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -294,6 +295,11 @@ public class ObserverModule implements Module {
                 event.setCancelled(true);
             }
         }
+    }
+
+    @EventHandler
+    public void onVehicleDamage(VehicleDamageEvent event) {
+        if (!match.isRunning() || event.getAttacker() instanceof Player && TeamUtils.getTeamByPlayer((Player) event.getAttacker()).isObserver()) event.setCancelled(true);
     }
 
     @EventHandler
