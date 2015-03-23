@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.settings.Settings;
+import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -37,7 +38,12 @@ public class PrivateMessageCommands {
 
     @Command(aliases = {"reply", "r"}, desc = "Reply to a private message", min = 1)
     public static void reply(final CommandContext cmd, CommandSender sender) throws CommandException {
-        if (!(sender instanceof Player)) throw new CommandException(ChatConstant.ERROR_PLAYER_COMMAND.getMessage(Locale.getDefault().toString()));
+        if (!(sender instanceof Player)) {
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_COMMAND).getMessage(ChatUtils.getLocale(sender)));
+        }
+        if (!((Player) sender).hasMetadata("reply")) {
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_MESSAGES).getMessage(ChatUtils.getLocale(sender)));
+        }
         Player target = (Player) ((Player) sender).getMetadata("reply").get(0).value();
         if (target == null) {
             throw new CommandException(ChatConstant.ERROR_PLAYER_NOT_FOUND.getMessage(((Player) sender).getLocale()));

@@ -5,7 +5,8 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 
 public enum  ChatConstant {
-    
+
+    ERROR_NO_MESSAGES("error.noMessages"),
     ERROR_RESTART_DURING_MATCH("error.restartDuringMatch"),
     ERROR_CYCLE_DURING_MATCH("error.cycleDuringMatch"),
     ERROR_MATCH_RUNNING("error.matchRunning"),
