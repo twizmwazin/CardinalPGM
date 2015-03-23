@@ -6,6 +6,7 @@ custom-motd: true
 worldEditPermissions: true
 server-message: Scrimmage Server
 cycle: -1
+matchTimeMillis: true
 permissions:
   Default:
     permissions:
