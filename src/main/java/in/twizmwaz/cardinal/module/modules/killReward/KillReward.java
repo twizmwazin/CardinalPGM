@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.killReward;
 
+import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
@@ -30,41 +31,17 @@ public class KillReward implements Module {
     }
 
     @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent event) {
-        if (event.getEntity().getKiller() != null) {
-            Player killer = event.getEntity().getKiller();
+    public void onCardinalDeath(CardinalDeathEvent event) {
+        if (event.getKiller() != null && event.getKiller().getHealth() > 0) {
+            Player killer = event.getKiller();
             boolean proceed = true;
             for (FilterModule filter : this.filters) {
                 if (filter.evaluate(killer).equals(FilterState.DENY)) {
                     proceed = false;
                 }
             }
-            if (proceed)
+            if (proceed) {
                 this.kit.apply(killer);
-        } else {
-            try {
-                EntityDamageEvent.DamageCause cause = event.getEntity().getLastDamageCause().getCause();
-                if (cause.equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) || cause.equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
-                    if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
-                        EntityDamageByEntityEvent damageByEntityEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
-                        if (TntTracker.getWhoPlaced(damageByEntityEvent.getDamager()) != null) {
-                            if (Bukkit.getOfflinePlayer(TntTracker.getWhoPlaced(damageByEntityEvent.getDamager())).isOnline()) {
-                                Player source = Bukkit.getPlayer(TntTracker.getWhoPlaced(damageByEntityEvent.getDamager()));
-                                if (!source.equals(event.getEntity())) {
-                                    boolean proceed = true;
-                                    for (FilterModule filter : this.filters) {
-                                        if (filter.evaluate(source).equals(FilterState.DENY)) {
-                                            proceed = false;
-                                        }
-                                    }
-                                    if (proceed)
-                                        this.kit.apply(source);
-                                }
-                            }
-                        }
-                    }
-                }
-            } catch (NullPointerException e) {
             }
         }
     }
