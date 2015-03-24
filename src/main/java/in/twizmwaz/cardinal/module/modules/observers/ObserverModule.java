@@ -16,10 +16,7 @@ import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.tutorial.Tutorial;
 import in.twizmwaz.cardinal.util.ItemUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -103,7 +100,7 @@ public class ObserverModule implements Module {
         } else {
             resetPlayer(event.getPlayer(), false);
             if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
-                ItemStack picker = ItemUtils.createItem(Material.LEATHER_HELMET, 1, (short)0,
+                ItemStack picker = ItemUtils.createItem(Material.LEATHER_HELMET, 1, (short) 0,
                         ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(event.getPlayer().getLocale()) : new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(event.getPlayer().getLocale())),
                         Arrays.asList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(event.getPlayer().getLocale())));
                 event.getPlayer().getInventory().setItem(2, picker);
@@ -313,6 +310,13 @@ public class ObserverModule implements Module {
                 }
                 event.getPlayer().teleport(modules.getRandom().getLocation());
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerConnect(PlayerLoginEvent event) {
+        if (Bukkit.getBanList(BanList.Type.NAME).isBanned(event.getPlayer().getName())) {
+            event.disallow(PlayerLoginEvent.Result.KICK_BANNED, Bukkit.getBanList(BanList.Type.NAME).getBanEntry(event.getPlayer().getName()).getReason());
         }
     }
 
