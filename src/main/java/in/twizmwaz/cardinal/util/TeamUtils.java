@@ -116,4 +116,11 @@ public class TeamUtils {
         }
         return true;
     }
+
+    public static boolean teamsNoObsReady() {
+        for (TeamModule team : getTeams()) {
+            if (!team.isReady() && !team.isObserver()) return false;
+        }
+        return true;
+    }
 }

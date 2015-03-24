@@ -7,6 +7,7 @@ worldEditPermissions: true
 server-message: Scrimmage Server
 cycle: -1
 matchTimeMillis: true
+observers-ready: true
 permissions:
   Default:
     permissions:

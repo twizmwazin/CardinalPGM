@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.command;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.modules.startTimer.StartTimer;
@@ -23,7 +24,7 @@ public class ReadyCommand {
             if (!team.isReady()) {
                 team.setReady(true);
                 ChatUtils.getGlobalChannel().sendMessage(team.getCompleteName() + ChatColor.YELLOW + " is now ready");
-                if (TeamUtils.teamsReady()) GameHandler.getGameHandler().getMatch().start(600);
+                if (Cardinal.getInstance().getConfig().getBoolean("observers-ready") ? TeamUtils.teamsReady() : TeamUtils.teamsNoObsReady()) GameHandler.getGameHandler().getMatch().start(600);
             } else throw new CommandException("Your team is already ready!");
         } else throw new CommandException("You cannot ready up during or after a match");
     }
