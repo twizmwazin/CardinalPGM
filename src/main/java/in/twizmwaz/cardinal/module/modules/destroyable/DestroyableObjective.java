@@ -27,6 +27,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -235,6 +236,21 @@ public class DestroyableObjective implements GameObjective {
             if (!this.completed && blownUp) {
                 ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, !oldState || (getPercent() != originalPercent), touchMessage);
                 Bukkit.getServer().getPluginManager().callEvent(touchEvent);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent event) {
+        if (!repairable && !isComplete()) {
+            if (region.contains(event.getBlock().getLocation()) && partOfObjective(event.getBlock())) {
+                if (TeamUtils.getTeamByPlayer(event.getPlayer()).getName() != team.getName()) {
+                    ChatUtils.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_ENEMY_OBJECTIVE));
+                    event.setCancelled(true);
+                } else {
+                    ChatUtils.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_REPAIR_OBJECTIVE));
+                    event.setCancelled(true);
+                }
             }
         }
     }
