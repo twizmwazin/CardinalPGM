@@ -241,7 +241,7 @@ public class ScoreboardModule implements Module {
                 if (!team.isObserver() && team != this.team) {
                     for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
                         Team scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
-                        String raw = ChatColor.RESET + WordUtils.capitalizeFully(obj.getName());
+                        String raw = ChatColor.RESET + WordUtils.capitalizeFully(obj.getName().replaceAll("_", " "));
                         while (used.contains(raw)) {
                             raw = ChatColor.RESET + raw;
                         }
@@ -278,7 +278,7 @@ public class ScoreboardModule implements Module {
             if (!team.isObserver() && TeamUtils.getShownObjectives(team).size() > 0) {
                 for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
                     Team scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
-                    String raw = ChatColor.RESET + WordUtils.capitalizeFully(obj.getName());
+                    String raw = ChatColor.RESET + WordUtils.capitalizeFully(obj.getName().replaceAll("_", " "));
                     while (used.contains(raw)) {
                         raw = ChatColor.RESET + raw;
                     }
@@ -347,7 +347,7 @@ public class ScoreboardModule implements Module {
                 if (ScoreboardUtils.getHills().size() == getSlots()) {
                     for (HillObjective obj : ScoreboardUtils.getHills()) {
                         Team scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
-                        String raw = ChatColor.RESET + WordUtils.capitalizeFully(obj.getName());
+                        String raw = ChatColor.RESET + WordUtils.capitalizeFully(obj.getName().replaceAll("_", " "));
                         while (used.contains(raw)) {
                             raw = ChatColor.RESET + raw;
                         }
@@ -367,7 +367,7 @@ public class ScoreboardModule implements Module {
                     hills --;
                     for (HillObjective obj : ScoreboardUtils.getHills()) {
                         Team scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
-                        String raw = ChatColor.RESET + WordUtils.capitalizeFully(obj.getName());
+                        String raw = ChatColor.RESET + WordUtils.capitalizeFully(obj.getName().replaceAll("_", " "));
                         while (used.contains(raw)) {
                             raw = ChatColor.RESET + raw;
                         }
