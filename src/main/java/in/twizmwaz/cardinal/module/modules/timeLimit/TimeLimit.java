@@ -61,11 +61,13 @@ public class TimeLimit implements Module {
             } else if (timeLimit.getResult().equals(Result.MOST_OBJECTIVES)) {
                 int completed = Integer.MIN_VALUE;
                 int touched = Integer.MIN_VALUE;
+                int touchedPoints = Integer.MIN_VALUE;
                 double proximity = Double.POSITIVE_INFINITY;
                 for (TeamModule team : TeamUtils.getTeams()) {
                     if (!team.isObserver()) {
                         int teamCompleted = 0;
                         int teamTouched = 0;
+                        int teamTouchedPoints = 0;
                         double teamProximity = Double.POSITIVE_INFINITY;
                         boolean safetyProximity = false;
                         for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
@@ -74,10 +76,15 @@ public class TimeLimit implements Module {
                             } else if (obj.isTouched()) {
                                 teamTouched ++;
                                 if (obj instanceof WoolObjective) {
+                                    teamTouchedPoints += 50;
                                     if (((WoolObjective) obj).getProximity() < teamProximity || !safetyProximity) {
                                         teamProximity = ((WoolObjective) obj).getProximity();
                                         safetyProximity = true;
                                     }
+                                } else if (obj instanceof CoreObjective) {
+                                    teamTouchedPoints += 50;
+                                } else if (obj instanceof DestroyableObjective) {
+                                    teamTouchedPoints += ((DestroyableObjective) obj).getPercent();
                                 }
                             } else {
                                 if (obj instanceof WoolObjective && !safetyProximity) {
@@ -99,18 +106,26 @@ public class TimeLimit implements Module {
                             winner = team;
                             completed = teamCompleted;
                             touched = teamTouched;
+                            touchedPoints = teamTouchedPoints;
                             proximity = teamProximity;
                         } else if (teamCompleted == completed) {
                             if (teamTouched > touched) {
                                 winner = team;
                                 touched = teamTouched;
+                                touchedPoints = teamTouchedPoints;
                                 proximity = teamProximity;
                             } else if (teamTouched == touched) {
-                                if (teamProximity < proximity) {
+                                if (teamTouchedPoints > touchedPoints) {
                                     winner = team;
+                                    touchedPoints = teamTouchedPoints;
                                     proximity = teamProximity;
-                                } else if (teamProximity == proximity) {
-                                    winner = null;
+                                } else if (teamTouchedPoints == touchedPoints) {
+                                    if (teamProximity < proximity) {
+                                        winner = team;
+                                        proximity = teamProximity;
+                                    } else if (teamProximity == proximity) {
+                                        winner = null;
+                                    }
                                 }
                             }
                         }
