@@ -6,6 +6,7 @@ import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
+import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.StringUtils;
 import org.bukkit.ChatColor;
@@ -16,7 +17,7 @@ public class TimeNotifications implements TaskedModule {
     private static int nextTimeMessage;
 
     protected TimeNotifications() {
-        nextTimeMessage = GameHandler.getGameHandler().getMatch().getPriorityTimeLimit();
+        nextTimeMessage = TimeLimit.getMatchTimeLimit();
     }
 
     @Override
@@ -29,14 +30,14 @@ public class TimeNotifications implements TaskedModule {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
             double time = MatchTimer.getTimeInSeconds();
             double timeRemaining;
-            if (GameHandler.getGameHandler().getMatch().getPriorityTimeLimit() == 0) {
+            if (TimeLimit.getMatchTimeLimit() == 0) {
                 if (time >= nextTimeMessage) {
                     ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.AQUA + "Time Elapsed: " + ChatColor.GREEN + StringUtils.formatTime(nextTimeMessage)));
                     nextTimeMessage += 300;
                 }
                 return;
             }
-            timeRemaining = GameHandler.getGameHandler().getMatch().getPriorityTimeLimit() - time;
+            timeRemaining = TimeLimit.getMatchTimeLimit() - time;
             if (nextTimeMessage >= timeRemaining) {
                 if (nextTimeMessage <= 5) {
                     ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.AQUA + "{0} " + ChatColor.DARK_RED + StringUtils.formatTime(nextTimeMessage), new LocalizedChatMessage(ChatConstant.UI_TIMER)));
@@ -62,6 +63,6 @@ public class TimeNotifications implements TaskedModule {
     }
 
     public static void resetNextMessage() {
-        nextTimeMessage = GameHandler.getGameHandler().getMatch().getPriorityTimeLimit();
+        nextTimeMessage = TimeLimit.getMatchTimeLimit();
     }
 }

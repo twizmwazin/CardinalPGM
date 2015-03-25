@@ -90,14 +90,14 @@ public class ScoreboardModule implements Module {
             add(event.getNewTeam(), event.getPlayer());
 
             if (Blitz.matchIsBlitz()) {
-                if (!event.getOldTeam().isObserver()) {
+                if (event.getOldTeam() != null && !event.getOldTeam().isObserver()) {
                     TeamModule team = event.getOldTeam();
                     Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-b");
                     for (String entry : scoreboardTeam.getEntries()) {
                         setScore(scoreboard.getObjective("scoreboard"), entry, team.size());
                     }
                 }
-                if (!event.getNewTeam().isObserver()) {
+                if (event.getNewTeam() != null && !event.getNewTeam().isObserver()) {
                     TeamModule team = event.getNewTeam();
                     Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-b");
                     for (String entry : scoreboardTeam.getEntries()) {

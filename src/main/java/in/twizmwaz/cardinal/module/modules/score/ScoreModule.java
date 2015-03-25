@@ -21,15 +21,13 @@ public class ScoreModule implements Module {
     private final int pointsPerKill;
     private final int pointsPerDeath;
     private final int max;
-    private int time;
 
-    public ScoreModule(final TeamModule team, final int pointsPerKill, final int pointsPerDeath, final int max, int time) {
+    public ScoreModule(final TeamModule team, final int pointsPerKill, final int pointsPerDeath, final int max) {
         this.team = team;
         this.score = 0;
         this.pointsPerKill = pointsPerKill;
         this.pointsPerDeath = pointsPerDeath;
         this.max = max;
-        this.time = time;
     }
 
     @Override
@@ -59,10 +57,6 @@ public class ScoreModule implements Module {
 
     public TeamModule getTeam() {
         return team;
-    }
-
-    public int getTime() {
-        return time;
     }
 
     @EventHandler
@@ -123,7 +117,7 @@ public class ScoreModule implements Module {
     }
 
     public static boolean matchHasScoring() {
-        return matchHasPointsPerKill() || matchHasPointsPerDeath() || matchHasMax() || getTimeLimit() != 0;
+        return matchHasPointsPerKill() || matchHasPointsPerDeath() || matchHasMax();
     }
 
     public static boolean matchHasPointsPerKill() {
@@ -159,17 +153,5 @@ public class ScoreModule implements Module {
             max = score.getMax();
         }
         return max;
-    }
-
-    public static int getTimeLimit() {
-        int time = 0;
-        for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
-            time = score.getTime();
-        }
-        return time;
-    }
-
-    public void setTimeLimit(int time) {
-        this.time = time;
     }
 }

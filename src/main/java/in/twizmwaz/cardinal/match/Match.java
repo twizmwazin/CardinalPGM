@@ -105,28 +105,6 @@ public class Match {
         return number;
     }
 
-    public int getPriorityTimeLimit() {
-        int scoreTime = ScoreModule.getTimeLimit();
-        int blitzTime = Blitz.getTimeLimit();
-        int timeLimit = TimeLimit.getMatchTimeLimit();
-        int smallest = Integer.MAX_VALUE;
-        boolean changed = false;
-        if (scoreTime != 0 && scoreTime < smallest) {
-            smallest = scoreTime;
-            changed = true;
-        }
-        if (blitzTime != 0 && blitzTime < smallest) {
-            smallest = blitzTime;
-            changed = true;
-        }
-        if (timeLimit != 0 && timeLimit < smallest) {
-            smallest = timeLimit;
-            changed = true;
-        }
-        if (!changed) return 0;
-        return smallest;
-    }
-
     public LoadedMap getLoadedMap() {
         return loadedMap;
     }

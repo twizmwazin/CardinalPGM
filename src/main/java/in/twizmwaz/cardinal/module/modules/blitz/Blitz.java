@@ -30,13 +30,11 @@ public class Blitz implements Module {
     private String title = null;
     private boolean broadcastLives;
     private int lives;
-    private int time;
 
-    protected Blitz(final String title, final boolean broadcastLives, final int lives, final int time) {
+    protected Blitz(final String title, final boolean broadcastLives, final int lives) {
         this.title = title;
         this.broadcastLives = broadcastLives;
         this.lives = lives;
-        this.time = time;
     }
 
 
@@ -90,24 +88,9 @@ public class Blitz implements Module {
         return this.title;
     }
 
-    public int getTime() {
-        return time;
-    }
-
     public static boolean matchIsBlitz() {
         return GameHandler.getGameHandler().getMatch().getModules().getModule(Blitz.class) != null;
     }
 
-    public static int getTimeLimit() {
-        int time = 0;
-        for (Blitz blitz : GameHandler.getGameHandler().getMatch().getModules().getModules(Blitz.class)) {
-            time = blitz.getTime();
-        }
-        return time;
-    }
-
-    public void setTimeLimit(int time) {
-        this.time = time;
-    }
 
 }

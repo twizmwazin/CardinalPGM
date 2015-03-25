@@ -5,28 +5,93 @@ import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.SnowflakeChangeEvent;
+import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
 import in.twizmwaz.cardinal.util.NumUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.entity.EntityDespawnInVoidEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.material.Wool;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class Snowflakes implements Module {
 
+    private HashMap<Player, List<Item>> items;
+    private HashMap<Player, List<WoolObjective>> destroyed;
+
     public enum ChangeReason {
-        PLAYER_KILL(), WOOL_TOUCH(), WOOL_PLACE(), CORE_LEAK(), MONUMENT_DESTROY(), TEAM_WIN(), TEAM_LOYAL()
+        PLAYER_KILL(), WOOL_TOUCH(), WOOL_PLACE(), CORE_LEAK(), MONUMENT_DESTROY(), TEAM_WIN(), TEAM_LOYAL(), DESTROY_WOOL()
     }
 
     public Snowflakes() {
+        this.items = new HashMap<>();
     }
 
     @Override
     public void unload() {
         HandlerList.unregisterAll(this);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        if (!event.isCancelled() && TeamUtils.getTeamByPlayer(event.getPlayer()) != null && event.getItemDrop().getItemStack().getType().equals(Material.WOOL)) {
+            for (TeamModule team : TeamUtils.getTeams()) {
+                if (!team.isObserver() && TeamUtils.getTeamByPlayer(event.getPlayer()) != team) {
+                    for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
+                        if (obj instanceof WoolObjective && event.getItemDrop().getItemStack().getData().getData() == ((WoolObjective) obj).getColor().getData()) {
+                            if (!items.containsKey(event.getPlayer())) {
+                                items.put(event.getPlayer(), new ArrayList<Item>());
+                            }
+                            List<Item> list = items.get(event.getPlayer());
+                            list.add(event.getItemDrop());
+                            items.put(event.getPlayer(), list);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onItemDespawnInVoid(EntityDespawnInVoidEvent event) {
+        if (event.getEntity() instanceof Item) {
+            for (Player player : items.keySet()) {
+                if (player != null) {
+                    for (Item item : items.get(player)) {
+                        if (item.equals(event.getEntity())) {
+                            for (TeamModule team : TeamUtils.getTeams()) {
+                                for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
+                                    if (obj instanceof WoolObjective && item.getItemStack().getData().getData() == ((WoolObjective) obj).getColor().getData() && (!destroyed.containsKey(player) || destroyed.get(player).contains(obj))) {
+                                        if (!destroyed.containsKey(player)) {
+                                            destroyed.put(player, new ArrayList<WoolObjective>());
+                                        }
+                                        List<WoolObjective> list = destroyed.get(player);
+                                        list.add((WoolObjective) obj);
+                                        destroyed.put(player, list);
+
+                                        Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.DESTROY_WOOL, 10, ((Wool) item).getColor().name()));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @EventHandler

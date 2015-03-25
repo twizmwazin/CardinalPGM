@@ -33,7 +33,7 @@ public class ScoreModuleBuilder implements ModuleBuilder {
             }
             if (score.getChild("time") != null) {
                 time = StringUtils.timeStringToSeconds(score.getChild("time").getText());
-                if (time != 0) {
+                if (time > 0) {
                     pointsPerKill = 1;
                     pointsPerDeath = 1;
                 }
@@ -51,7 +51,7 @@ public class ScoreModuleBuilder implements ModuleBuilder {
         }
         for (TeamModule team : TeamUtils.getTeams()) {
             if (!team.isObserver()) {
-                results.add(new ScoreModule(team, pointsPerKill, pointsPerDeath, max, time));
+                results.add(new ScoreModule(team, pointsPerKill, pointsPerDeath, max));
             }
         }
         return results;

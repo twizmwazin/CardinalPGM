@@ -14,6 +14,7 @@ import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.ScoreboardUtils;
 import in.twizmwaz.cardinal.util.StringUtils;
@@ -72,16 +73,17 @@ public class MatchCommand {
                     }
                 }
             }
-            if (ScoreModule.getTimeLimit() != 0 || ScoreModule.matchHasMax()) {
+            if (TimeLimit.getMatchTimeLimit() != 0 || ScoreModule.matchHasMax()) {
                 String score = "";
                 for (ScoreModule scoreModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
                     score += scoreModule.getTeam().getColor() + "" + scoreModule.getScore() + " ";
                 }
                 score = score.trim();
-                double timeRemaining = 0.0;
-                if (ScoreModule.getTimeLimit() != 0)
-                    timeRemaining = ScoreModule.getTimeLimit() - MatchTimer.getTimeInSeconds();
-                sender.sendMessage(ChatColor.DARK_AQUA + "Score: " + score + (ScoreModule.getTimeLimit() != 0 ? ChatColor.RED + "  " + StringUtils.formatTime(timeRemaining) : "") + (ScoreModule.matchHasMax() ? ChatColor.GRAY + "  [" + ScoreModule.max() + "]" : ""));
+                double timeRemaining;
+                if (TimeLimit.getMatchTimeLimit() != 0) {
+                    timeRemaining = TimeLimit.getMatchTimeLimit() - MatchTimer.getTimeInSeconds();
+                    sender.sendMessage(ChatColor.DARK_AQUA + "Score: " + score + (TimeLimit.getMatchTimeLimit() != 0 ? ChatColor.RED + "  " + StringUtils.formatTime(timeRemaining) : "") + (ScoreModule.matchHasMax() ? ChatColor.GRAY + "  [" + ScoreModule.max() + "]" : ""));
+                }
             }
         }
     }

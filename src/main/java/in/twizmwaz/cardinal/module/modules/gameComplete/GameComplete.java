@@ -4,7 +4,6 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.ScoreUpdateEvent;
 import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
-import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
@@ -70,55 +69,8 @@ public class GameComplete implements TaskedModule {
 
     @Override
     public void run() {
-        if (TimeLimit.getMatchTimeLimit() != 0 && TimeLimit.getMatchTimeLimit() == GameHandler.getGameHandler().getMatch().getPriorityTimeLimit()) {
-            if (MatchTimer.getTimeInSeconds() >= TimeLimit.getMatchTimeLimit()) {
-                GameHandler.getGameHandler().getMatch().end(TimeLimit.getMatchWinner());
-            }
-        } else if (ScoreModule.getTimeLimit() != 0 && ScoreModule.getTimeLimit() == GameHandler.getGameHandler().getMatch().getPriorityTimeLimit()) {
-            if (MatchTimer.getTimeInSeconds() >= ScoreModule.getTimeLimit()) {
-                TeamModule winningTeam = null;
-                int winningScore = Integer.MIN_VALUE;
-                boolean tied = false;
-                Match match = GameHandler.getGameHandler().getMatch();
-                for (ScoreModule score : match.getModules().getModules(ScoreModule.class)) {
-                    if (score.getScore() > winningScore) {
-                        winningTeam = score.getTeam();
-                        winningScore = score.getScore();
-                        tied = false;
-                    } else if (score.getScore() == winningScore) {
-                        tied = true;
-                    }
-                }
-                if (tied) {
-                    match.end(null);
-                } else {
-                    match.end(winningTeam);
-                }
-            }
-        } else if (Blitz.getTimeLimit() != 0 && Blitz.getTimeLimit() == GameHandler.getGameHandler().getMatch().getPriorityTimeLimit()) {
-            if (MatchTimer.getTimeInSeconds() >= Blitz.getTimeLimit()) {
-                TeamModule winningTeam = null;
-                int winningAmount = Integer.MIN_VALUE;
-                boolean tied = false;
-                Match match = GameHandler.getGameHandler().getMatch();
-                for (TeamModule team : TeamUtils.getTeams()) {
-                    if (!team.isObserver()) {
-                        if (team.size() > winningAmount) {
-                            winningTeam = team;
-                            winningAmount = team.size();
-                            tied = false;
-                        } else if (team.size() == winningAmount) {
-                            tied = true;
-                        }
-                    }
-                }
-                if (tied) {
-                    match.end(null);
-                } else {
-                    match.end(winningTeam);
-                }
-            }
-
+        if (TimeLimit.getMatchTimeLimit() != 0 && MatchTimer.getTimeInSeconds() >= TimeLimit.getMatchTimeLimit()) {
+            GameHandler.getGameHandler().getMatch().end(TimeLimit.getMatchWinner());
         }
     }
 }
