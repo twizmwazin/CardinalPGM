@@ -18,7 +18,7 @@ public class StartAndEndCommand {
     private static int timer;
     private static boolean waiting = false;
 
-    @Command(aliases = {"start"}, desc = "Starts the match.", usage = "[time]")
+    @Command(aliases = {"start"}, desc = "Starts the match.", usage = "[team]")
     @CommandPermissions("cardinal.match.start")
     public static void start(CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.WAITING)) {
@@ -35,7 +35,7 @@ public class StartAndEndCommand {
 
     }
 
-    @Command(aliases = {"end", "finish"}, desc = "Ends the match.", usage = "[time]")
+    @Command(aliases = {"end", "finish"}, desc = "Ends the match.", usage = "[time,team]")
     @CommandPermissions("cardinal.match.end")
     public static void end(CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().getState() == MatchState.PLAYING) {
