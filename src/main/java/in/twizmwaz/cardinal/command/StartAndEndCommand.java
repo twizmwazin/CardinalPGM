@@ -35,7 +35,7 @@ public class StartAndEndCommand {
 
     }
 
-    @Command(aliases = {"end", "finish"}, desc = "Ends the match.", usage = "[time]")
+    @Command(aliases = {"end", "finish"}, desc = "Ends the match.", usage = "[team]")
     @CommandPermissions("cardinal.match.end")
     public static void end(CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().getState() == MatchState.PLAYING) {
