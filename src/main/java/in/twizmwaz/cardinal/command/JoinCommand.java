@@ -30,7 +30,7 @@ public class JoinCommand {
             }
             try {
                 for (TeamModule teamModule : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
-                    if (teamModule.getName().toLowerCase().startsWith(cmd.getString(0).toLowerCase())) {
+                    if (teamModule.getName().toLowerCase().startsWith(cmd.getJoinedStrings(0).toLowerCase())) {
                         team = teamModule;
                         break;
                     }
