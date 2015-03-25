@@ -19,7 +19,7 @@ public class ReadyCommand {
     @Command(aliases = {"ready"}, desc = "Make your team ready.")
     public static void ready(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (!(sender instanceof Player)) throw new CommandException("Console cannot use this command!");
-        if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.WAITING)) {
+        if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.WAITING) || GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
             TeamModule team = TeamUtils.getTeamByPlayer((Player) sender);
             if (!team.isReady()) {
                 team.setReady(true);
@@ -32,7 +32,7 @@ public class ReadyCommand {
     @Command(aliases = {"unready"}, desc = "Make your team not ready.")
     public static void unready(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (!(sender instanceof Player)) throw new CommandException("Console cannot use this command!");
-        if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.WAITING)) {
+        if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.WAITING) || GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
             TeamModule team = TeamUtils.getTeamByPlayer((Player) sender);
             if (team.isReady()) {
                 team.setReady(false);

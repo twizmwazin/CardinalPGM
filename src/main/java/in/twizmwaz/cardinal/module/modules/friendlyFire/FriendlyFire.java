@@ -34,7 +34,7 @@ public class FriendlyFire implements Module {
     @EventHandler
     public void onBowShootEvent(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player) {
-            event.getEntity().setMetadata("team", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), TeamUtils.getTeamByPlayer(((Player) event.getEntity()).getPlayer()).getName()));
+            event.getEntity().setMetadata("team", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), TeamUtils.getTeamByPlayer(((Player) event.getEntity()).getPlayer()).getId()));
         }
     }
 
@@ -44,8 +44,9 @@ public class FriendlyFire implements Module {
             if (((Arrow) event.getDamager()).getShooter() instanceof Player) {
                 if (event.getDamager().hasMetadata("team")) {
                     Player shooter = (Player) ((Arrow) event.getDamager()).getShooter();
-                    if (TeamUtils.getTeamByPlayer(shooter).getName().equals(event.getDamager().getMetadata("team").get(0).toString()));
-                    event.setCancelled(true);
+                    if (TeamUtils.getTeamByPlayer(shooter) == TeamUtils.getTeamById(event.getDamager().getMetadata("team").get(0).toString())) {
+                        event.setCancelled(true);
+                    }
                 }
             }
         }
