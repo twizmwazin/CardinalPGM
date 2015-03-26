@@ -105,9 +105,9 @@ public class TeamUtils {
     }
 
     public static ChatColor getTeamColorByPlayer(OfflinePlayer player) {
-        if (!player.isOnline()) return ChatColor.DARK_AQUA;
-        if (TeamUtils.getTeamByPlayer((Player) player) == null) return ChatColor.AQUA;
-        return TeamUtils.getTeamByPlayer((Player) player).getColor();
+        if (player.getPlayer() == null) return ChatColor.DARK_AQUA;
+        if (TeamUtils.getTeamByPlayer(player.getPlayer()) == null) return ChatColor.AQUA;
+        return TeamUtils.getTeamByPlayer(player.getPlayer()).getColor();
     }
 
     public static boolean teamsReady() {

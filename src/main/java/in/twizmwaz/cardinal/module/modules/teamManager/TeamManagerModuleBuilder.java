@@ -8,7 +8,7 @@ public class TeamManagerModuleBuilder implements ModuleBuilder {
 
     @Override
     public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
+        ModuleCollection<TeamManagerModule> results = new ModuleCollection<>();
         results.add(new TeamManagerModule(match));
         return results;
     }

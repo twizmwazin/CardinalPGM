@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
+import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
@@ -192,6 +193,13 @@ public class TeamManagerModule implements Module {
                 player.sendMessage(" " + line);
             }
             player.sendMessage(ChatColor.STRIKETHROUGH + "---------------------------");
+        }
+    }
+
+    @EventHandler
+    public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
+        if (event.getNewTeam() != null && !event.getNewTeam().isObserver() && GameHandler.getGameHandler().getMatch().isRunning()) {
+            Bukkit.dispatchCommand(event.getPlayer(), "match");
         }
     }
 
