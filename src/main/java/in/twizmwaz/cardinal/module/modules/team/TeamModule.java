@@ -80,6 +80,13 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
         }
     }
 
+    @EventHandler
+    public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
+        if (event.getNewTeam() != null && !event.getNewTeam().isObserver() && GameHandler.getGameHandler().getMatch().isRunning()) {
+            Bukkit.dispatchCommand(event.getPlayer(), "match");
+        }
+    }
+
 
     @Override
     public void unload() {

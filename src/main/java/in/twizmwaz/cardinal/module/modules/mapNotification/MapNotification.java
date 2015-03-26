@@ -54,11 +54,11 @@ public class MapNotification implements TaskedModule {
                 List<Contributor> authors = map.getAuthors();
                 for (Contributor author : authors) {
                     if (authors.indexOf(author) < authors.size() - 2) {
-                        result = result + org.bukkit.ChatColor.RED + author.getName() + org.bukkit.ChatColor.DARK_PURPLE + ", ";
+                        result = result + ChatColor.RED + author.getName() + ChatColor.DARK_PURPLE + ", ";
                     } else if (authors.indexOf(author) == authors.size() - 2) {
-                        result = result + org.bukkit.ChatColor.RED + author.getName() + org.bukkit.ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_AND).getMessage(locale) + " ";
+                        result = result + ChatColor.RED + author.getName() + ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_AND).getMessage(locale) + " ";
                     } else if (authors.indexOf(author) == authors.size() - 1) {
-                        result = result + org.bukkit.ChatColor.RED + author.getName();
+                        result = result + ChatColor.RED + author.getName();
                     }
                 }
                 player.sendMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "{0}", new LocalizedChatMessage(ChatConstant.UI_MAP_PLAYING, ChatColor.GOLD + map.getName() + ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_BY).getMessage(locale) + " " + result)).getMessage(locale));
@@ -68,11 +68,11 @@ public class MapNotification implements TaskedModule {
             List<Contributor> authors = map.getAuthors();
             for (Contributor author : authors) {
                 if (authors.indexOf(author) < authors.size() - 2) {
-                    result = result + org.bukkit.ChatColor.RED + author.getName() + org.bukkit.ChatColor.DARK_PURPLE + ", ";
+                    result = result + ChatColor.RED + author.getName() + ChatColor.DARK_PURPLE + ", ";
                 } else if (authors.indexOf(author) == authors.size() - 2) {
-                    result = result + org.bukkit.ChatColor.RED + author.getName() + org.bukkit.ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_AND).getMessage(locale) + " ";
+                    result = result + ChatColor.RED + author.getName() + ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_AND).getMessage(locale) + " ";
                 } else if (authors.indexOf(author) == authors.size() - 1) {
-                    result = result + org.bukkit.ChatColor.RED + author.getName();
+                    result = result + ChatColor.RED + author.getName();
                 }
             }
             Bukkit.getLogger().info(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "{0}", new LocalizedChatMessage(ChatConstant.UI_MAP_PLAYING, ChatColor.GOLD + map.getName() + ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_BY).getMessage(locale) + " " + result)).getMessage(locale));
