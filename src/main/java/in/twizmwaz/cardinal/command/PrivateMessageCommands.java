@@ -36,7 +36,7 @@ public class PrivateMessageCommands {
         }
     }
 
-    @Command(aliases = {"reply", "r"}, desc = "Reply to a private message", min = 1)
+    @Command(aliases = {"reply", "r"}, desc = "Reply to a private message", usage = "<message>", min = 1)
     public static void reply(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (!(sender instanceof Player)) {
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_COMMAND).getMessage(ChatUtils.getLocale(sender)));
