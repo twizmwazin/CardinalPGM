@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 public class TeleportCommands {
 
-    @Command(aliases = {"tp", "teleport"}, desc = "Teleport players.", usage = "<player> [to, x] [y] [z]", min = 1, max = 4)
+    @Command(aliases = {"tp", "teleport"}, desc = "Teleport players.", usage = "<player> [to], [x] [y] [z]", min = 1, max = 4)
     public static void teleport(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (sender instanceof Player) {
             if (cmd.argsLength() == 1) {
@@ -53,7 +53,7 @@ public class TeleportCommands {
                     throw new CommandPermissionsException();
                 }
             } else {
-                throw new CommandUsageException("Invalid arguments.", "/teleport <player> [to],[x] [y] [z]");
+                throw new CommandUsageException("Invalid arguments.", "/teleport <player> [to], [x] [y] [z]");
             }
         } else {
             throw new CommandException("Console cannot use this command.");

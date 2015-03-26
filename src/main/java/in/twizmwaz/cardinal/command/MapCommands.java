@@ -59,7 +59,7 @@ public class MapCommands {
         sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_MAP_MAX).getMessage(ChatUtils.getLocale(sender)) + ": " + ChatColor.RESET + "" + ChatColor.GOLD + mapInfo.getMaxPlayers());
     }
 
-    @Command(aliases = {"next", "nextmap", "nm", "mn"}, desc = "Shows next map.", usage = "")
+    @Command(aliases = {"next", "nextmap", "nm", "mn", "mapnext"}, desc = "Shows next map.", usage = "")
     public static void next(final CommandContext cmd, CommandSender sender) {
         LoadedMap next = GameHandler.getGameHandler().getRotation().getNext();
         if (next.getAuthors().size() == 1) {

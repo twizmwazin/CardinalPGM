@@ -79,7 +79,7 @@ public class PunishmentCommands {
         Bukkit.getBanList(BanList.Type.NAME).addBan(cmd.getString(0), ChatColor.RED + "Permanently Banned" + ChatColor.GOLD + "  \u00BB  " + ChatColor.AQUA + reason, null, sender.getName());
     }
 
-    @Command(aliases = {"mute"}, usage = "<player>", desc = "Prevents a player from talking.", min = 1)
+    @Command(aliases = {"mute", "m"}, usage = "<player>", desc = "Prevents a player from talking.", min = 1)
     @CommandPermissions("cardinal.punish.mute")
     public static void mute(CommandContext cmd, CommandSender sender) throws CommandException {
         Player player = Bukkit.getPlayer(cmd.getString(0));
@@ -93,7 +93,7 @@ public class PunishmentCommands {
         } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(ChatUtils.getLocale(sender)));
     }
 
-    @Command(aliases = {"unmute"}, usage = "<player>", desc = "Allows a player to talk after being muted.", min = 1)
+    @Command(aliases = {"unmute", "um"}, usage = "<player>", desc = "Allows a player to talk after being muted.", min = 1)
     @CommandPermissions("cardinal.punish.mute")
     public static void unmute(CommandContext cmd, CommandSender sender) throws CommandException {
         Player player = Bukkit.getPlayer(cmd.getString(0));
