@@ -32,6 +32,7 @@ public class Cardinal extends JavaPlugin {
     private static LocaleHandler localeHandler;
     private CommandsManager<CommandSender> commands;
     private static Database database;
+    private static UpdateHandler updateHandler;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -156,6 +157,9 @@ public class Cardinal extends JavaPlugin {
             setEnabled(false);
             return;
         }
+       getConfig().set("current-version", getPlugin().getDescription().getVersion());
+       saveConfig();
+
         setupCommands();
     }
     

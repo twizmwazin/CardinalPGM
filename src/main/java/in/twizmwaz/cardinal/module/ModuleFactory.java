@@ -66,6 +66,7 @@ import in.twizmwaz.cardinal.module.modules.tntTracker.TntTrackerBuilder;
 import in.twizmwaz.cardinal.module.modules.toolRepair.ToolRepairBuilder;
 import in.twizmwaz.cardinal.module.modules.tracker.TrackerBuilder;
 import in.twizmwaz.cardinal.module.modules.tutorial.TutorialBuilder;
+import in.twizmwaz.cardinal.module.modules.updateNotification.UpdateNotificationBuilder;
 import in.twizmwaz.cardinal.module.modules.visibility.VisibilityBuilder;
 import in.twizmwaz.cardinal.module.modules.wildcard.WildCardBuilder;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjectiveBuilder;
@@ -151,7 +152,8 @@ public class ModuleFactory {
             TimeLimitBuilder.class,
             PlayableBuilder.class,
             TutorialBuilder.class,
-            WildCardBuilder.class
+            WildCardBuilder.class,
+            UpdateNotificationBuilder.class
     };
 
     @SuppressWarnings("unchecked")

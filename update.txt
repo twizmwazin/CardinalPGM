@@ -1,0 +1,4 @@
+version: 1.1-SNAPSHOT
+link: NA
+urgent: false
+message: A new version of cardinal is now available asgdjghgh
