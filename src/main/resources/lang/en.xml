@@ -168,15 +168,15 @@
         <playerLeave>{0} left the game</playerLeave>
         <serverRestart>Server restarting!</serverRestart>
         <mapPlaying>Currently playing {0}</mapPlaying>
-        <objectivePlaced>{0} placed {2} for the {1}</objectivePlaced>
+        <objectivePlaced>{0} placed {2} for {1}</objectivePlaced>
         <objectiveLeaked>{0}'s {1} has leaked!</objectiveLeaked>
         <objectiveDestroyed>{0}'s {1} was destroyed by {2}</objectiveDestroyed>
-        <objectiveTouchedFor>{0} broke a piece of {1} for the {2}</objectiveTouchedFor>
+        <objectiveTouchedFor>{0} broke a piece of {1} for {2}</objectiveTouchedFor>
         <objectiveTouched>{0} broke a piece of {1}</objectiveTouched>
-        <objectiveDamagedFor>{0} damaged {1} for the {2}</objectiveDamagedFor>
+        <objectiveDamagedFor>{0} damaged {1} for {2}</objectiveDamagedFor>
         <objectiveDamaged>{0} damaged {1}</objectiveDamaged>
         <creditReceived>You will receive credit when this objective is completed.</creditReceived>
-        <objectivePickedFor>{0} picked up {1} for the {2}</objectivePickedFor>
+        <objectivePickedFor>{0} picked up {1} for {2}</objectivePickedFor>
         <objectivePicked>{0} picked up {1}</objectivePicked>
         <scoredFor>{0} scored {1} for {2}</scoredFor>
         <onePoint>1 point</onePoint>
