@@ -24,6 +24,7 @@ permissions:
     - cardinal.match.start
     - cardinal.match.cycle
     - cardinal.team.force
+    - cardinal.team.alias
     - cardinal.teleport
     - whitelist.reload
     - whitelist.toggle
