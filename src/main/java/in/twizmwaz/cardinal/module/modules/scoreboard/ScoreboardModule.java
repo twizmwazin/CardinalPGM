@@ -1,10 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.scoreboard;
 
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.event.CycleCompleteEvent;
-import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
-import in.twizmwaz.cardinal.event.ScoreUpdateEvent;
-import in.twizmwaz.cardinal.event.TeamNameChangeEvent;
+import in.twizmwaz.cardinal.event.*;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveProximityEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
@@ -16,6 +13,7 @@ import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjective;
 import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
 import in.twizmwaz.cardinal.util.ScoreboardUtils;
 import in.twizmwaz.cardinal.util.StringUtils;
@@ -147,6 +145,34 @@ public class ScoreboardModule implements Module {
                 }
                 scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
                 scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+            }
+        }
+    }
+
+    @EventHandler
+    public void onTimeLimitChange(TimeLimitChangeEvent event) {
+        for (GameObjective objective : GameHandler.getGameHandler().getMatch().getModules().getModules(GameObjective.class)) {
+            if (getSlots() < 16) {
+                Team scoreboardTeam = scoreboard.getTeam(objective.getScoreboardHandler().getNumber() + "-o");
+                String prefix = objective.getScoreboardHandler().getPrefix(this.team).length() > 16 ? objective.getScoreboardHandler().getPrefix(this.team).substring(0, 16) : objective.getScoreboardHandler().getPrefix(this.team);
+                scoreboardTeam.setPrefix(prefix);
+            } else {
+                Team scoreboardTeam = null;
+                for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
+                    scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
+                    break;
+                }
+                String compact = "";
+                for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
+                    compact += obj.getScoreboardHandler().getPrefix(team) + " ";
+                }
+                if (scoreboardTeam != null) {
+                    while (compact.length() > 32) {
+                        compact = StringUtils.removeLastWord(compact);
+                    }
+                    scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
+                    scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                }
             }
         }
     }

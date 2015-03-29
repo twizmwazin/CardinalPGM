@@ -6,6 +6,7 @@ import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissionsException;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
+import in.twizmwaz.cardinal.event.TimeLimitChangeEvent;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
@@ -13,6 +14,7 @@ import in.twizmwaz.cardinal.module.modules.timeNotifications.TimeNotifications;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.StringUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -47,6 +49,7 @@ public class TimeLimitCommand {
             } else {
                 sender.sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", "Time limit cancelled").getMessage(ChatUtils.getLocale(sender)));
             }
+            Bukkit.getServer().getPluginManager().callEvent(new TimeLimitChangeEvent());
         } else {
             if (!sender.hasPermission("cardinal.timelimit")) throw new CommandPermissionsException();
             int time;
@@ -85,6 +88,7 @@ public class TimeLimitCommand {
             } else {
                 sender.sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", "Time limit cancelled").getMessage(ChatUtils.getLocale(sender)));
             }
+            Bukkit.getServer().getPluginManager().callEvent(new TimeLimitChangeEvent());
         }
     }
 
