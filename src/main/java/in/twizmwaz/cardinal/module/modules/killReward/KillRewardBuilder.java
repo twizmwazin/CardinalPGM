@@ -16,17 +16,17 @@ public class KillRewardBuilder implements ModuleBuilder {
     public ModuleCollection load(Match match) {
         ModuleCollection results = new ModuleCollection();
         for (Element element : match.getDocument().getRootElement().getChildren("killreward")) {
-            Kit kit = null;
+            ModuleCollection<Kit> kits = new ModuleCollection<>();
             for (Element kitElement : element.getChildren()) {
                 if (!kitElement.getName().equalsIgnoreCase("filter")) {
-                    kit = KitBuilder.getKit(kitElement);
+                    kits.add(KitBuilder.getKit(kitElement));
                 }
             }
             ModuleCollection<FilterModule> filters = new ModuleCollection<>();
             for (Element filter : element.getChildren("filter")) {
                 filters.add(FilterModuleBuilder.getFilter(filter.getChildren().get(0)));
             }
-            results.add(new KillReward(kit, filters));
+            results.add(new KillReward(kits, filters));
         }
         return results;
     }

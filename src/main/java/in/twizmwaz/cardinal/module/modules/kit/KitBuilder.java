@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.util.*;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -158,7 +159,7 @@ public class KitBuilder implements ModuleBuilder {
             boolean jump = false;
             if (element.getChildren("double-jump").size() > 0)
                 jump = true;
-            return new Kit(name, items, armor, potions, books ,parent, force, potionParticles, resetPearls, clear, clearItems, health, saturation, foodLevel, walkSpeed, knockback, jump);
+            return new Kit(name, items, armor, potions, books, parent, force, potionParticles, resetPearls, clear, clearItems, health, saturation, foodLevel, walkSpeed, knockback, jump);
         } else {
             return getKit(element.getParentElement(), document, true);
         }

@@ -17,7 +17,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class KillReward implements Module {
 
-    private final Kit kit;
+    private final ModuleCollection<Kit> kits;
     private final ModuleCollection<FilterModule> filters;
 
     @Override
@@ -25,8 +25,8 @@ public class KillReward implements Module {
         HandlerList.unregisterAll(this);
     }
 
-    protected KillReward(final Kit kit, final ModuleCollection<FilterModule> filters) {
-        this.kit = kit;
+    protected KillReward(final ModuleCollection<Kit> kits, final ModuleCollection<FilterModule> filters) {
+        this.kits = kits;
         this.filters = filters;
     }
 
@@ -41,7 +41,9 @@ public class KillReward implements Module {
                 }
             }
             if (proceed) {
-                this.kit.apply(killer);
+                for (Kit kit : kits) {
+                    kit.apply(killer);
+                }
             }
         }
     }
