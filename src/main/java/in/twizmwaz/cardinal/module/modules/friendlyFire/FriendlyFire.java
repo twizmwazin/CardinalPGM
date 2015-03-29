@@ -6,13 +6,21 @@ import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.scoreboard.ScoreboardModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FriendlyFire implements Module {
 
@@ -47,6 +55,28 @@ public class FriendlyFire implements Module {
                     if (TeamUtils.getTeamByPlayer(shooter) == TeamUtils.getTeamById(event.getDamager().getMetadata("team").get(0).toString())) {
                         event.setCancelled(true);
                     }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPotionSplash(PotionSplashEvent event) {
+        boolean proceed = false;
+        for (PotionEffect effect : event.getPotion().getEffects()) {
+            if (effect.getType().equals(PotionEffectType.POISON) || effect.getType().equals(PotionEffectType.BLINDNESS) ||
+                    effect.getType().equals(PotionEffectType.CONFUSION) || effect.getType().equals(PotionEffectType.HARM) ||
+                    effect.getType().equals(PotionEffectType.HUNGER) || effect.getType().equals(PotionEffectType.SLOW) ||
+                    effect.getType().equals(PotionEffectType.SLOW_DIGGING) || effect.getType().equals(PotionEffectType.WITHER) ||
+                    effect.getType().equals(PotionEffectType.WEAKNESS)) {
+                proceed = true;
+            }
+        }
+        if (proceed && event.getPotion().getShooter() instanceof Player && TeamUtils.getTeamByPlayer((Player) event.getPotion().getShooter()) != null) {
+            TeamModule team = TeamUtils.getTeamByPlayer((Player) event.getPotion().getShooter());
+            for (LivingEntity affected : event.getAffectedEntities()) {
+                if (affected instanceof Player && TeamUtils.getTeamByPlayer((Player) affected) != null && TeamUtils.getTeamByPlayer((Player) affected) == team && !affected.equals((Player) event.getPotion().getShooter())) {
+                    event.setIntensity(affected, 0);
                 }
             }
         }
