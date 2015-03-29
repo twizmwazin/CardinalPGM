@@ -3,10 +3,12 @@ package in.twizmwaz.cardinal.module.modules.visibility;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
+import in.twizmwaz.cardinal.event.PlayerVisibilityChangeEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.settings.Settings;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -37,13 +39,23 @@ public class Visibility implements Module {
         try {
             if (match.getState().equals(MatchState.PLAYING)) {
                 if (TeamUtils.getTeamByPlayer(viewer).isObserver()) {
-                    viewer.showPlayer(toSee);
+                    if (TeamUtils.getTeamByPlayer(toSee) != null && TeamUtils.getTeamByPlayer(toSee).isObserver() && Settings.getSettingByName("Observers") != null && Settings.getSettingByName("Observers").getValueByPlayer(viewer).getValue().equalsIgnoreCase("none")) {
+                        viewer.hidePlayer(toSee);
+                    } else {
+                        viewer.showPlayer(toSee);
+                    }
                 } else if (newTeam.isObserver()) {
                     viewer.hidePlayer(toSee);
                 } else {
                     viewer.showPlayer(toSee);
                 }
-            } else viewer.showPlayer(toSee);
+            } else {
+                if (Settings.getSettingByName("Observers") != null && Settings.getSettingByName("Observers").getValueByPlayer(viewer).getValue().equalsIgnoreCase("none")) {
+                    viewer.hidePlayer(toSee);
+                } else {
+                    viewer.showPlayer(toSee);
+                }
+            }
         } catch (NullPointerException e) {
             viewer.showPlayer(toSee);
         }
@@ -51,8 +63,12 @@ public class Visibility implements Module {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        for (Player viewer : Bukkit.getOnlinePlayers()) this.resetVisibility(viewer, event.getPlayer(), TeamUtils.getTeamByPlayer(event.getPlayer()));
-        for (Player online : Bukkit.getOnlinePlayers()) this.resetVisibility(event.getPlayer(), online, TeamUtils.getTeamByPlayer(online));
+        for (Player viewer : Bukkit.getOnlinePlayers()) {
+            this.resetVisibility(viewer, event.getPlayer(), TeamUtils.getTeamByPlayer(event.getPlayer()));
+        }
+        for (Player online : Bukkit.getOnlinePlayers()) {
+            this.resetVisibility(event.getPlayer(), online, TeamUtils.getTeamByPlayer(online));
+        }
     }
 
     @EventHandler
@@ -79,6 +95,13 @@ public class Visibility implements Module {
         for (Player viewer : Bukkit.getOnlinePlayers()){
             this.resetVisibility(viewer, switched, event.getNewTeam());
             this.resetVisibility(switched, viewer, TeamUtils.getTeamByPlayer(viewer));
+        }
+    }
+
+    @EventHandler
+    public void onPlayerVisibilityChange(PlayerVisibilityChangeEvent event) {
+        for (Player toSee : Bukkit.getOnlinePlayers()) {
+            this.resetVisibility(event.getPlayer(), toSee, TeamUtils.getTeamByPlayer(toSee));
         }
     }
 }

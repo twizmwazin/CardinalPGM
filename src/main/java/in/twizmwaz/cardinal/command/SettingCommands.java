@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.command;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
+import in.twizmwaz.cardinal.event.PlayerVisibilityChangeEvent;
 import in.twizmwaz.cardinal.settings.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -32,6 +33,9 @@ public class SettingCommands {
                 if (Settings.getSettingByName(cmd.getString(0)).getSettingValueByName(cmd.getString(1)) != null) {
                     Settings.getSettingByName(cmd.getString(0)).setValueByPlayer((Player) sender, Settings.getSettingByName(cmd.getString(0)).getSettingValueByName(cmd.getString(1)));
                     sender.sendMessage(ChatColor.YELLOW + Settings.getSettingByName(cmd.getString(0)).getNames().get(0) + ": " + ChatColor.WHITE + Settings.getSettingByName(cmd.getString(0)).getSettingValueByName(cmd.getString(1)).getValue());
+                    if (Settings.getSettingByName("Observers") != null && Settings.getSettingByName(cmd.getString(0)).equals(Settings.getSettingByName("Observers"))) {
+                        Bukkit.getServer().getPluginManager().callEvent(new PlayerVisibilityChangeEvent((Player) sender));
+                    }
                 } else throw new CommandException("No value by this name!");
             } else throw new CommandException("No setting by this name!");
         } else throw new CommandException("Console cannot use this command.");
