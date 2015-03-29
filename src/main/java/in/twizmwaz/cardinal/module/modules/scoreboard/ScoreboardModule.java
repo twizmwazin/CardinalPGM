@@ -209,10 +209,30 @@ public class ScoreboardModule implements Module {
             Team scoreboardTeam = scoreboard.getTeam(event.getTeam().getId() + "-t");
             scoreboardTeam.setPrefix(event.getTeam().getColor() + "" + ChatColor.ITALIC + StringUtils.trimTo(event.getTeam().getName(), 0, 12));
             scoreboardTeam.setSuffix(StringUtils.trimTo(event.getTeam().getName(), 12, 28));
+            if (ScoreModule.matchHasScoring()) {
+                scoreboardTeam = scoreboard.getTeam(event.getTeam().getId() + "-s");
+                scoreboardTeam.setPrefix(event.getTeam().getColor() + StringUtils.trimTo(event.getTeam().getName(), 0, 14));
+                scoreboardTeam.setSuffix(StringUtils.trimTo(event.getTeam().getName(), 14, 30));
+            }
+            if (Blitz.matchIsBlitz()) {
+                scoreboardTeam = scoreboard.getTeam(event.getTeam().getId() + "-b");
+                scoreboardTeam.setPrefix(event.getTeam().getColor() + StringUtils.trimTo(event.getTeam().getName(), 0, 14));
+                scoreboardTeam.setSuffix(StringUtils.trimTo(event.getTeam().getName(), 14, 30));
+            }
         } else {
             Team scoreboardTeam = scoreboard.getTeam(event.getTeam().getId() + "-t");
             scoreboardTeam.setPrefix(event.getTeam().getColor() + StringUtils.trimTo(event.getTeam().getName(), 0, 14));
             scoreboardTeam.setSuffix(StringUtils.trimTo(event.getTeam().getName(), 14, 30));
+            if (ScoreModule.matchHasScoring()) {
+                scoreboardTeam = scoreboard.getTeam(event.getTeam().getId() + "-s");
+                scoreboardTeam.setPrefix(event.getTeam().getColor() + StringUtils.trimTo(event.getTeam().getName(), 0, 14));
+                scoreboardTeam.setSuffix(StringUtils.trimTo(event.getTeam().getName(), 14, 30));
+            }
+            if (Blitz.matchIsBlitz()) {
+                scoreboardTeam = scoreboard.getTeam(event.getTeam().getId() + "-b");
+                scoreboardTeam.setPrefix(event.getTeam().getColor() + StringUtils.trimTo(event.getTeam().getName(), 0, 14));
+                scoreboardTeam.setSuffix(StringUtils.trimTo(event.getTeam().getName(), 14, 30));
+            }
         }
     }
 
