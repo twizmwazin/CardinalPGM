@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.module.modules.appliedRegion.AppliedRegionBuilder;
 import in.twizmwaz.cardinal.module.modules.armorKeep.ArmorKeepBuilder;
 import in.twizmwaz.cardinal.module.modules.blitz.BlitzBuilder;
 import in.twizmwaz.cardinal.module.modules.blockdrops.BlockdropsBuilder;
+import in.twizmwaz.cardinal.module.modules.bossBar.BossBarBuilder;
 import in.twizmwaz.cardinal.module.modules.broadcasts.BroadcastModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.buildHeight.BuildHeightBuilder;
 import in.twizmwaz.cardinal.module.modules.chat.ChatModuleBuilder;
@@ -151,7 +152,8 @@ public class ModuleFactory {
             TimeLimitBuilder.class,
             PlayableBuilder.class,
             TutorialBuilder.class,
-            WildCardBuilder.class
+            WildCardBuilder.class,
+            BossBarBuilder.class
     };
 
     @SuppressWarnings("unchecked")

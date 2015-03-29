@@ -22,6 +22,14 @@ public class ModuleCollection<M extends Module> extends ArrayList<M> {
     }
 
     /**
+     * @param modules The collection to create this with
+     */
+    @SafeVarargs
+    public ModuleCollection(M... modules) {
+        Collections.addAll(this, modules);
+    }
+
+    /**
      * Used for getting a single module. If there are multiple modules of the specified type, only one will be returned.
      *
      * @param clazz Class that represents the module to be returned
