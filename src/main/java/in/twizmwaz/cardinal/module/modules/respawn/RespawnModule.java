@@ -178,9 +178,6 @@ public class RespawnModule implements Module {
 
     @EventHandler
     public void onTeamChange(PlayerChangeTeamEvent event) {
-        if (match.getState().equals(MatchState.ENDED)) {
-            event.setCancelled(true);
-        }
         if (event.getOldTeam() == null ) {
             event.getPlayer().setMaxHealth(20);
             PlayerUtils.resetPlayer(event.getPlayer());
