@@ -1,0 +1,4 @@
+version: 1.0-SNAPSHOT
+link: http://ci.twizmwaz.in/job/Cardinal/lastSuccessfulBuild/
+urgent: false
+message: A new version of cardinal is now available!

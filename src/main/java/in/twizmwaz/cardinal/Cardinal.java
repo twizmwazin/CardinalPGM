@@ -156,6 +156,9 @@ public class Cardinal extends JavaPlugin {
             setEnabled(false);
             return;
         }
+       getConfig().set("current-version", getPlugin().getDescription().getVersion());
+       saveConfig();
+
         setupCommands();
     }
     
