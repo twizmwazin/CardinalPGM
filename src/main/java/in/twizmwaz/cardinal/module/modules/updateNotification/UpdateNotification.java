@@ -28,6 +28,7 @@ public class UpdateNotification implements Module {
                 updateHandler = new UpdateHandler();
             } catch (IOException e) {
                 Bukkit.getLogger().warning("Could not retrieve updates");
+                e.printStackTrace();
             }
             if (updateHandler != null) {
                 if (updateHandler.checkUpdates())
