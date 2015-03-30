@@ -19,7 +19,7 @@ public class FakeWither {
     private boolean visible = false;
     public String name;
 
-    private EntityWither dragon;
+    private EntityWither wither;
     private int id;
 
     public FakeWither(String name, Location location, int percent) {
@@ -98,16 +98,16 @@ public class FakeWither {
     }
 
     public PacketPlayOutSpawnEntityLiving getSpawnPacket() {
-        dragon = new EntityWither(((CraftWorld) getWorld()).getHandle());
-        dragon.setLocation(location.getX(), location.getY(), location.getZ(), location.getPitch(), location.getYaw());
-        dragon.setInvisible(true);
-        dragon.setCustomName(name);
-        dragon.setHealth(health);
-        dragon.motX = getXvel();
-        dragon.motY = getYvel();
-        dragon.motZ = getZvel();
-        this.id = dragon.getId();
-        return new PacketPlayOutSpawnEntityLiving(dragon);
+        wither = new EntityWither(((CraftWorld) getWorld()).getHandle());
+        wither.setLocation(location.getX(), location.getY(), location.getZ(), location.getPitch(), location.getYaw());
+        wither.setInvisible(true);
+        wither.setCustomName(name);
+        wither.setHealth(health);
+        wither.motX = getXvel();
+        wither.motY = getYvel();
+        wither.motZ = getZvel();
+        this.id = wither.getId();
+        return new PacketPlayOutSpawnEntityLiving(wither);
     }
 
     public PacketPlayOutEntityDestroy getDestroyPacket() {
@@ -131,7 +131,7 @@ public class FakeWither {
     }
 
     public DataWatcher getWatcher() {
-        DataWatcher watcher = new DataWatcher(dragon);
+        DataWatcher watcher = new DataWatcher(wither);
         watcher.a(5, isVisible() ? (byte) 0 : (byte) 0x20);
         watcher.a(6, health);
         watcher.a(7, 0);
