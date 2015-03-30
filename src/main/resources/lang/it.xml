@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <locale lang="it">
     <error>
+        <noMessages>Non hai messaggi privati per rispondere a</noMessages>
         <restartDuringMatch>Non è possibile riavviare quando una partita è cominciata. Usa -f per forzare.</restartDuringMatch>
         <cycleDuringMatch>Non puoi ciclare quando una partita è cominciata. Usa -f per forzare</cycleDuringMatch>
         <matchRunning>La partita è giá iniziata.</matchRunning>
@@ -67,6 +68,8 @@
         <noRecentPM>Non avere messaggi privati per rispondere.</noRecentPM>
         <playerNotFound>Non trovato nessun giocatore con quel nome.</playerNotFound>
         <playerDisabledPMs>Il tuo messaggio non è stato inviato perché {0} ha scelto di non ricevere messaggi privati.</playerDisabledPMs>
+        <playableLeave>Non si può lasciare il campo di gioco</playableLeave>
+        <playableInteract>L'utente non può interagire con i blocchi al di fuori del campo di gioco</playableInteract>
     </error>
     <generic>
         <mapSet>{0} è stata stabilita come mappa successiva</mapSet>
@@ -198,5 +201,6 @@
         <good>Buona</good>
         <amazing>Fantastica!</amazing>
         <teamChoose>Seleziona la tua classe</teamChoose>
+        <online>Online</online>
     </userInterface>
 </locale>

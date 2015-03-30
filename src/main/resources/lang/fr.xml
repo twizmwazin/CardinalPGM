@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <locale lang="fr">
     <error>
+        <noMessages>Vous ne avez pas des messages privés à répondre aux</noMessages>
         <restartDuringMatch>Vous ne pouvez pas relancer la partie pendant un match. Utilisez -f pour forcer l'opération.</restartDuringMatch>
         <cycleDuringMatch>Vous ne pouvez pas passer au match suivant pendant un match. Utilisez -f pour forcer l'opération.</cycleDuringMatch>
         <matchRunning>Le match est déjà en cours.</matchRunning>
@@ -64,6 +65,11 @@
         <ratingsDisabled>Les notations de maps ne sont pas activées sur ce serveur.</ratingsDisabled>
         <lowParticipation>Désolé, vous n'avez pas assez participé à ce match pour évaluer cette map</lowParticipation>
         <rateWhilePlaying>Pour évaluer la map tout en jouant, écrivez {0}</rateWhilePlaying>
+        <noRecentPM>Vous ne avez pas des messages privés à répondre aux</noRecentPM>
+        <playerNotFound>Pas de joueurs jumelés requête.</playerNotFound>
+        <playerDisabledPMs>Votre message n'a pas été envoyé parce que {0} a choisi de ne pas recevoir des messages privés.</playerDisabledPMs>
+        <playableLeave>Vous ne pouvez pas quitter le terrain de jeu</playableLeave>
+        <playableInteract>Vous ne pouvez pas interagir avec des blocs à l'extérieur du terrain de jeu</playableInteract>
     </error>
     <generic>
         <mapSet>La map suivante sera {0}</mapSet>
@@ -195,5 +201,6 @@
         <good>Bonne</good>
         <amazing>Incroyable !</amazing>
         <teamChoose>Choisissez votre Equipe / Classe</teamChoose>
+        <online>En ligne</online>
     </userInterface>
 </locale>
