@@ -8,6 +8,7 @@ import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 
@@ -32,6 +33,13 @@ public class BlockPlaceRegion extends AppliedRegion {
         if (!event.isCancelled() && region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector())) && filter.evaluate(event.getPlayer(), newMaterial, event).equals(FilterState.DENY)) {
             event.setCancelled(true);
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
+        }
+    }
+
+    @EventHandler
+    public void onBLiquidFlow(BlockFromToEvent event) {
+        if (!event.isCancelled() && region.contains(new BlockRegion(null, event.getToBlock().getLocation().toVector())) && filter.evaluate(event.getToBlock(), event).equals(FilterState.DENY)) {
+            event.setCancelled(true);
         }
     }
 }
