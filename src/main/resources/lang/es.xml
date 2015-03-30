@@ -8,7 +8,7 @@
         <matchNoResume>La partida ha terminado y no se puede reanudar.</matchNoResume>
         <matchNoStart>La partida no se pudo iniciar en este momento.</matchNoStart>
         <matchNoEnd>La partida no pudo ser terminada en este momento.</matchNoEnd>
-        <noSetNext>No puedes establecer el siguiente mapa cuando hay un reinicio programado. Usa -f para sobreescribir.</noSetNext>
+        <noSetNext>No puedes establecer el siguiente mapa cuando hay un reinicio programado. Usa -f para forzar.</noSetNext>
         <disabledCommand>Este comando está inhabilitado. Los mapas se volverán a cargar automáticamente si se detectan cambios.</disabledCommand>
         <rotPointInvalid>El punto de rotación especificado no es válido.</rotPointInvalid>
         <invalidTime>La cuenta atrás especificada es inválida.</invalidTime>
@@ -60,7 +60,7 @@
         <serverFull>El servidor está lleno</serverFull>
         <teamsFull>Los equipos están llenos</teamsFull>
         <teamsCapacity>Los equipos están en su máxima capacidad</teamsCapacity>
-        <invalidMatch>Partida no válida</invalidMatch>
+        <invalidMatch>Partida inválida</invalidMatch>
         <ratingRange>La puntuación debe estar entre {0} y {1}, incluyéndolos.</ratingRange>
         <ratingsDisabled>Las puntuaciones de los mapas no están activadas en este servidor.</ratingsDisabled>
         <lowParticipation>Lo sentimos, no has participado lo suficiente en esta partida para puntuar el mapa</lowParticipation>
