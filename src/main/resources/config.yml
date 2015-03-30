@@ -19,6 +19,7 @@ permissions:
     - tnt.defuse
     - cardinal.cancel
     - cardinal.chat.admin
+    - cardinal.match.force
     - cardinal.match.setnext
     - cardinal.match.end
     - cardinal.match.start
@@ -40,6 +41,7 @@ permissions:
     - cardinal.punish.kick
     - cardinal.punish.ban
     - cardinal.punish.mute
+    - cardinal.punish.pardon
     players:
 settings:
 - Blood
