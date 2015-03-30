@@ -1,49 +1,51 @@
 
 package in.twizmwaz.cardinal;
 
-import in.twizmwaz.cardinal.util.ChatUtils;
+import com.google.gson.JsonParser;
 import in.twizmwaz.cardinal.util.GitUtils;
+import net.minecraft.server.v1_8_R1.ChatSerializer;
+import net.minecraft.server.v1_8_R1.EntityPlayer;
+import net.minecraft.server.v1_8_R1.IChatBaseComponent;
+import net.minecraft.server.v1_8_R1.PacketPlayOutChat;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 public class UpdateHandler {
 
-    private final String updateLocation = "https://raw.githubusercontent.com/twizmwazin/CardinalNotifications/master/update.txt";
+    private static UpdateHandler handler;
 
-    private boolean update = false;
+    private final String updateLocation = "https://raw.githubusercontent.com/twizmwazin/CardinalNotifications/master/update.json";
 
-    private String link;
-    private boolean urgent;
+    private boolean update;
     private String message;
+    private final String localGitRevision;
 
     public UpdateHandler() throws IOException {
-        BufferedReader in = new BufferedReader(new InputStreamReader(getUpdateURL().openStream()));
-        setLink(in.readLine().replace("link: ", ""));
-        setUrgent(Boolean.parseBoolean(in.readLine().replace("urgent: ", "")));
-        setMessage(in.readLine().replace("message: ", ""));
-
+        handler = this;
+        this.message = GitUtils.getUpdateMessage(updateLocation);
+        this.localGitRevision = GameHandler.getGameHandler().getPlugin().getDescription().getVersion().substring(GameHandler.getGameHandler().getPlugin().getDescription().getVersion().length() - 6, GameHandler.getGameHandler().getPlugin().getDescription().getVersion().length());
     }
 
     public void sendUpdateMessage(Player player) {
-        player.sendMessage(ChatColor.DARK_RED + "" + ChatColor.STRIKETHROUGH + "----------------" + ChatColor.BOLD + "" + ChatColor.GOLD + " Cardinal Update " + ChatColor.WHITE + "(" + GitUtils.getLatestGitRevision().substring(0, 6) + ")" + ChatColor.DARK_RED + " " + ChatColor.STRIKETHROUGH + "----------------");
-        player.sendMessage(ChatColor.DARK_RED + "" + ChatColor.BOLD + "Urgent: " + (urgent ? ChatColor.RED : ChatColor.GREEN) + urgent);
-        player.sendMessage(ChatColor.GOLD + link);
-        player.sendMessage(ChatColor.WHITE + message);
-    }
+        IChatBaseComponent chat = ChatSerializer.a(message);
+        PacketPlayOutChat packet = new PacketPlayOutChat(chat);
 
+        EntityPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
+        nmsPlayer.playerConnection.sendPacket(packet);
+    }
 
     /**
      * @return Returns true/false if an there is a new update in the update.txt file on github
      */
     public boolean checkUpdates() {
-        if (!GitUtils.getLatestGitRevision().startsWith(GameHandler.getGameHandler().getPlugin().getDescription().getVersion().substring(GameHandler.getGameHandler().getPlugin().getDescription().getVersion().length() - 6, GameHandler.getGameHandler().getPlugin().getDescription().getVersion().length()))) {
+        if (!GitUtils.getLatestGitRevision().startsWith(localGitRevision)) {
             update = true;
         }
         return update;
@@ -63,50 +65,9 @@ public class UpdateHandler {
         return new URL(updateLocation);
     }
 
-    /**
-     * @param link link to download of new update
-     */
-    public void setLink(String link) {
-        this.link = link;
+    public static UpdateHandler getUpdateHandler() {
+        return handler;
     }
 
-    /**
-     * @return Returns the link to the new download
-     */
-    public String getLink() {
-        return link;
-    }
-
-    /**
-     * @param urgent if the update is urgent
-     */
-    public void setUrgent(boolean urgent) {
-        this.urgent = urgent;
-    }
-
-    /**
-     * @return Returns weather the update is urgent
-     */
-    public boolean isUrgent() {
-        return urgent;
-    }
-
-    /**
-     * @param message sets the message of the update
-     */
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    /**
-     * @return Returns the update message
-     */
-    public String getMessage() {
-        return message;
-    }
-
-    public void setUpdate(boolean update) {
-        this.update = update;
-    }
 
 }
