@@ -201,7 +201,7 @@ public enum  ChatConstant {
     UI_GOOD("userInterface.good"),
     UI_AMAZING("userInterface.amazing"),
     UI_TEAM_CHOOSE("userInterface.teamChoose"),
-    UI_ONLINE("userInterface.online");
+    UI_ONLINE("userInterface.online"),
     TAB_PLUGIN("tab.pl_name"),
     
     private final String path;
