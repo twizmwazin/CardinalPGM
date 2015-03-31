@@ -202,5 +202,8 @@
         <amazing>Amazing!</amazing>
         <teamChoose>Choose your team/class</teamChoose>
         <online>Online</online>
+        <latestVersion>Cardinal is up-to-date!</latestVersion>
+        <updateAvailable>A newer build of Cardinal is available!</updateAvailable>
+        <version>This server is running Cardinal version {0}</version>
     </userInterface>
 </locale>
