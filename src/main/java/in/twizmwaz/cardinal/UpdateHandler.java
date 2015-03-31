@@ -16,7 +16,7 @@ public class UpdateHandler {
 
     public UpdateHandler(){
         handler = this;
-        this.localGitRevision = GameHandler.getGameHandler().getPlugin().getDescription().getVersion().substring(GameHandler.getGameHandler().getPlugin().getDescription().getVersion().length() - 6, GameHandler.getGameHandler().getPlugin().getDescription().getVersion().length());
+        this.localGitRevision = GameHandler.getGameHandler().getPlugin().getDescription().getVersion().substring(GameHandler.getGameHandler().getPlugin().getDescription().getVersion().length() - 7, GameHandler.getGameHandler().getPlugin().getDescription().getVersion().length());
     }
 
     /**
