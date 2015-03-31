@@ -195,5 +195,8 @@
         <good>Bonne</good>
         <amazing>Incroyable !</amazing>
         <teamChoose>Choisissez votre Equipe / Classe</teamChoose>
+        <latestVersion>Cardinal est à jour!</latestVersion>
+        <updateAvailable>Une nouvelle version de Cardinal est disponible!</updateAvailable>
+        <version>Ce serveur exécute la version Cardinal {0}</version>
     </userInterface>
 </locale>

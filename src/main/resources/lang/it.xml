@@ -198,5 +198,8 @@
         <good>Buona</good>
         <amazing>Fantastica!</amazing>
         <teamChoose>Seleziona la tua classe</teamChoose>
+        <latestVersion>Il Cardinal è up-to-date!</latestVersion>
+        <updateAvailable>Una nuova generazione di Cardinal è disponibile!</updateAvailable>
+        <version>Questo server è in esecuzione la versione Cardinale {0}</version>
     </userInterface>
 </locale>
