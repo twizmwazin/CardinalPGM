@@ -91,7 +91,7 @@ public class HeaderModule implements TaskedModule {
                 .append(" - ")
                 .append(ChatColor.WHITE)
                 .append(ChatColor.BOLD)
-                .append(ChatColor.AQUA + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.TAB_PLUGIN));
+                .append(Cnew LocalizedChatMessage(ChatConstant.TAB_PLUGIN));
         player.setPlayerListHeaderFooter(new TextComponent(header.getMessage(locale)), new TextComponent(footer.toString()));
     }
     
