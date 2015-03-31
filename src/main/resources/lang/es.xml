@@ -203,4 +203,7 @@
         <teamChoose>Elige tu equipo/clase</teamChoose>
         <online>En línea</online>
     </userInterface>
+    <tab>
+    <pl_name>Cardinal</pl_name>
+    </tab>
 </locale>
