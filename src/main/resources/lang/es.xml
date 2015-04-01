@@ -203,7 +203,7 @@
         <teamChoose>Elige tu equipo/clase</teamChoose>
         <online>En línea</online>
         <latestVersion>Cardinal esta actualizado!</latestVersion>
-        <updateAvailable>Una nuevo version de Cardinal esta disponible!</updateAvailable>
+        <updateAvailable>Una nueva version de Cardinal esta disponible!</updateAvailable>
         <version>Este servidor usa la version {0} de Cardinal</version>
     </userInterface>
 </locale>
