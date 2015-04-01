@@ -195,5 +195,8 @@
         <good>Bra</good>
         <amazing>Fantastisk!</amazing>
         <teamChoose>Choose your team/class</teamChoose>
+        <latestVersion>Cardinal är uppdaterad!</latestVersion>
+        <updateAvailable>En nyare build av kardinal är tillgänglig!</updateAvailable>
+        <version>Denna server kör kardinal version {0}</version>
     </userInterface>
 </locale>
