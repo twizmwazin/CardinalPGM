@@ -7,7 +7,7 @@
         <matchRunning>La partida ya ha comenzado.</matchRunning>
         <matchNoResume>La partida ha terminado y no se puede reanudar.</matchNoResume>
         <matchNoStart>La partida no se ha podido iniciar en este momento.</matchNoStart>
-        <matchNoEnd>La partida no pudo ser terminada en este momento.</matchNoEnd>
+        <matchNoEnd>La partida no ha podido ser terminada en este momento.</matchNoEnd>
         <noSetNext>No puedes establecer el siguiente mapa cuando hay un reinicio programado. Usa -f para sobreescribir.</noSetNext>
         <disabledCommand>Este comando está inhabilitado. Los mapas se volverán a cargar automáticamente si se detectan cambios.</disabledCommand>
         <rotPointInvalid>El punto de rotación especificado no es válido.</rotPointInvalid>
