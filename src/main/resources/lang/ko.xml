@@ -198,8 +198,8 @@
         <good>좋음</good>
         <amazing>아주 좋음</amazing>
         <teamChoose>팀과 클래스를 고르십시오.</teamChoose>
-        <latestVersion>추기경은 최신입니다!</latestVersion>
-        <updateAvailable>추기경의 최신 빌드를 사용할 수 있습니다!</updateAvailable>
-        <version>이 서버는 추기경 버전을 실행 {0}</version>
+        <latestVersion>Cardinal은 최신입니다!</latestVersion>
+        <updateAvailable>Cardinal의 최신 빌드를 사용할 수 있습니다!</updateAvailable>
+        <version>이 서버는 {0}버전의 Cardinal을 실행중입니다.</version>
     </userInterface>
 </locale>
