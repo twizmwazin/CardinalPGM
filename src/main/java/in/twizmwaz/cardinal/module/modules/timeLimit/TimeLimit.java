@@ -151,6 +151,8 @@ public class TimeLimit implements Module {
                     if (scoreModule.getScore() > score) {
                         winner = scoreModule.getTeam();
                         score = scoreModule.getScore();
+                    } else if (scoreModule.getScore() == score) {
+                        winner = null;
                     }
                 }
             }
