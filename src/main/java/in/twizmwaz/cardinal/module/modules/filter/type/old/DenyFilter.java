@@ -12,7 +12,7 @@ public class DenyFilter extends FilterModule {
     private final ModuleCollection<FilterModule> children;
 
     public DenyFilter(final ChildrenFilterParser parser) {
-        super(parser.getName());
+        super(parser.getName(), parser.getParent());
         this.children = parser.getChildren();
     }
 
@@ -27,7 +27,7 @@ public class DenyFilter extends FilterModule {
                 }
             }
         }
-        if (abstain) return ABSTAIN;
-        return ALLOW;
+        if (abstain) return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
+        return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
     }
 }

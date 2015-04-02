@@ -12,7 +12,7 @@ public class AllFilter extends FilterModule {
     private final ModuleCollection<FilterModule> children;
 
     public AllFilter(final String name, final ModuleCollection<FilterModule> children) {
-        super(name);
+        super(name, null);
         this.children = children;
     }
     
@@ -31,8 +31,8 @@ public class AllFilter extends FilterModule {
                     return DENY;
             }
         }
-        if (abstain) return ABSTAIN;
-        return ALLOW;
+        if (abstain) return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
+        return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
     }
 
 }

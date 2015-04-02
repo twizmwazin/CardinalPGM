@@ -14,7 +14,7 @@ public class TeamFilter extends FilterModule {
     private final TeamModule team;
 
     public TeamFilter(final TeamFilterParser parser) {
-        super(parser.getName());
+        super(parser.getName(), parser.getParent());
         this.team = parser.getTeam();
     }
 
@@ -24,14 +24,14 @@ public class TeamFilter extends FilterModule {
             if (object instanceof Player) {
                 if (TeamUtils.getTeamByPlayer((Player) object) != null)
                     if (TeamUtils.getTeamByPlayer((Player) object) == team)
-                        return ALLOW;
+                        return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
                     else
                         return DENY;
                 else
                     return DENY;
             }
         }
-        return ABSTAIN;
+        return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
     }
 
 }

@@ -12,7 +12,7 @@ public class AllowFilter extends FilterModule {
     private final ModuleCollection<FilterModule> children;
 
     public AllowFilter(final ChildrenFilterParser parser) {
-        super(parser.getName());
+        super(parser.getName(), parser.getParent());
         this.children = parser.getChildren();
     }
 
@@ -23,11 +23,11 @@ public class AllowFilter extends FilterModule {
             for (Object object : objects) {
                 for (FilterModule child : children) {
                     if (!child.evaluate(object).equals(ABSTAIN)) abstain = false;
-                    if (child.evaluate(object).equals(ALLOW)) return ALLOW;
+                    if (child.evaluate(object).equals(ALLOW) && (getParent() == null || !getParent().evaluate(objects).equals(DENY))) return ALLOW;
                 }
             }
         }
-        if (abstain) return ABSTAIN;
+        if (abstain) return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
         return DENY;
     }
 

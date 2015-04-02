@@ -11,7 +11,7 @@ public class NotFilter extends FilterModule {
     private final FilterModule childFilter;
 
     public NotFilter(final String name, final FilterModule childFilter) {
-        super(name);
+        super(name, null);
         this.childFilter = childFilter;
     }
     
@@ -23,7 +23,7 @@ public class NotFilter extends FilterModule {
     public FilterState evaluate(final Object... objects) {
         FilterState childState = childFilter.evaluate(objects);
         if (childState.equals(ALLOW)) return DENY;
-        else if (childState.equals(DENY)) return ALLOW;
-        return ABSTAIN;
+        else if (childState.equals(DENY)) return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
+        return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
     }
 }

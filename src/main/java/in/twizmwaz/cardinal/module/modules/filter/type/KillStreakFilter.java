@@ -15,7 +15,7 @@ public class KillStreakFilter extends FilterModule {
     private final boolean repeat;
 
     public KillStreakFilter(final KillstreakFilterParser parser) {
-        super(parser.getName());
+        super(parser.getName(), parser.getParent());
         this.min = parser.getMin();
         this.max = parser.getMax();
         this.count = parser.getCount();
@@ -30,21 +30,21 @@ public class KillStreakFilter extends FilterModule {
                     int killStreak = ((Player) object).getMetadata("killstreak").get(0).asInt();
                     if (this.min > -1 && this.max > -1) {
                         if (killStreak > min && killStreak < max)
-                            return ALLOW;
+                            return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
                         else
                             return DENY;
                     } else if (killStreak == count)
-                        return ALLOW;
+                        return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
                     else if (repeat && killStreak % count == 0)
-                        return ALLOW;
+                        return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
                     else
                         return DENY;
                 } catch (IndexOutOfBoundsException e) {
-                    return ABSTAIN;
+                    return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
                 }
             }
         }
-        return ABSTAIN;
+        return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
     }
 
 }

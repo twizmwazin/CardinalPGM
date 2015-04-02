@@ -14,7 +14,7 @@ public class RandomFilter extends FilterModule {
     private final double chance;
 
     public RandomFilter(final RandomFilterParser parser) {
-        super(parser.getName());
+        super(parser.getName(), parser.getParent());
         this.chance = parser.getChance();
     }
 
@@ -22,7 +22,7 @@ public class RandomFilter extends FilterModule {
     public FilterState evaluate(final Object... objects) {
         Random random = new Random();
         double working = random.nextGaussian();
-        if (working <= chance) return ALLOW;
+        if (working <= chance) return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
         else return DENY;
     }
 

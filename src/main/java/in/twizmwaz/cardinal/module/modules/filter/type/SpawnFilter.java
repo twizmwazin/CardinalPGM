@@ -12,7 +12,7 @@ public class SpawnFilter extends FilterModule {
     private final CreatureSpawnEvent.SpawnReason reason;
 
     public SpawnFilter(final SpawnFilterParser parser) {
-        super(parser.getName());
+        super(parser.getName(), parser.getParent());
         this.reason = parser.getReason();
     }
 
@@ -21,12 +21,12 @@ public class SpawnFilter extends FilterModule {
         for (Object object : objects) {
             if (object instanceof CreatureSpawnEvent) {
                 if (((CreatureSpawnEvent) object).getSpawnReason().equals(reason))
-                    return ALLOW;
+                    return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
                 else
                     return DENY;
             }
         }
-        return ABSTAIN;
+        return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
     }
 
 }

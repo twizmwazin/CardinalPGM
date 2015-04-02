@@ -12,7 +12,7 @@ public class MobFilter extends FilterModule {
     private final CreatureType mobType;
     
     public MobFilter(final MobFilterParser parser) {
-        super(parser.getName());
+        super(parser.getName(), parser.getParent());
         this.mobType = parser.getMobType();
     }
 
@@ -20,12 +20,12 @@ public class MobFilter extends FilterModule {
     public FilterState evaluate(Object... objects) {
         for (Object object : objects) {
             if (object instanceof CreatureType) {
-                if (((CreatureType) object).equals(mobType))
-                    return ALLOW;
+                if (object.equals(mobType))
+                    return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
                 else
                     return DENY;
             }
         }
-        return ABSTAIN;
+        return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
     }
 }

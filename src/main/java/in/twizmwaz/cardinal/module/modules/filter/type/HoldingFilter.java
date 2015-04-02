@@ -13,7 +13,7 @@ public class HoldingFilter extends FilterModule {
     private final Material material;
 
     public HoldingFilter(final ItemFilterParser parser) {
-        super(parser.getName());
+        super(parser.getName(), parser.getParent());
         this.material = parser.getMaterial();
     }
 
@@ -22,12 +22,12 @@ public class HoldingFilter extends FilterModule {
         for (Object object : objects) {
             if (object instanceof Player) {
                 if (((Player) object).getItemInHand().getType().equals(material))
-                    return ALLOW;
+                    return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
                 else
                     return DENY;
             }
         }
-        return ABSTAIN;
+        return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
     }
 
 }

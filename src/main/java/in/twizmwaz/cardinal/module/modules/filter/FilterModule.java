@@ -1,16 +1,19 @@
 package in.twizmwaz.cardinal.module.modules.filter;
 
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.ModuleCollection;
 
 public abstract class FilterModule implements Module {
     
     private final String name;
+    private FilterModule parent;
 
     /**
      * @param name The given name of the filter
      */
-    protected FilterModule(String name) {
+    protected FilterModule(String name, FilterModule parent) {
         this.name = name;
+        this.parent = parent;
     }
 
     /**
@@ -29,5 +32,9 @@ public abstract class FilterModule implements Module {
      */
     public String getName() {
         return name;
+    }
+
+    public FilterModule getParent() {
+        return parent;
     }
 }

@@ -13,7 +13,7 @@ public class EntityFilter extends FilterModule {
     private final EntityType entity;
 
     public EntityFilter(final EntityFilterParser parser) {
-        super(parser.getName());
+        super(parser.getName(), parser.getParent());
         this.entity = parser.getEntityType();
     }
 
@@ -22,12 +22,12 @@ public class EntityFilter extends FilterModule {
         for (Object object : objects) {
             if (object instanceof Entity) {
                 if (((Entity) object).getType().equals(entity))
-                    return ALLOW;
+                    return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
                 else
                     return DENY;
             }
         }
-        return ABSTAIN;
+        return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
     }
 
 }

@@ -14,7 +14,7 @@ public class CarryingFilter extends FilterModule {
     private final Material material;
 
     public CarryingFilter(final ItemFilterParser parser) {
-        super(parser.getName());
+        super(parser.getName(), parser.getParent());
         this.material = parser.getMaterial();
     }
 
@@ -24,12 +24,12 @@ public class CarryingFilter extends FilterModule {
             if (object instanceof Player) {
                 for (ItemStack item : ((Player) object).getInventory()) {
                     if (item.getType().equals(material))
-                        return ALLOW;
+                        return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
                 }
                 return DENY;
             }
         }
-        return ABSTAIN;
+        return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
     }
 
 }

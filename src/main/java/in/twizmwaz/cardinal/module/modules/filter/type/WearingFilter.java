@@ -14,7 +14,7 @@ public class WearingFilter extends FilterModule {
     private final Material material;
 
     public WearingFilter(final ItemFilterParser parser) {
-        super(parser.getName());
+        super(parser.getName(), parser.getParent());
         this.material = parser.getMaterial();
     }
 
@@ -24,12 +24,12 @@ public class WearingFilter extends FilterModule {
             if (object instanceof Player) {
                 for (ItemStack armor : ((Player) object).getInventory().getArmorContents()) {
                     if (armor.getType().equals(material))
-                        return ALLOW;
+                        return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
                 }
                 return DENY;
             }
         }
-        return ABSTAIN;
+        return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
     }
 
 }

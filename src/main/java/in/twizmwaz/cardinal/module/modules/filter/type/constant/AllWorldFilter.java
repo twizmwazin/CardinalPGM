@@ -5,6 +5,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ABSTAIN;
+
 public class AllWorldFilter extends AllEventFilter {
 
     public AllWorldFilter(final String name, final boolean allow) {
@@ -19,6 +21,6 @@ public class AllWorldFilter extends AllEventFilter {
                 else return allow ? FilterState.ALLOW : FilterState.DENY;
             }
         }
-        return FilterState.ABSTAIN;
+        return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
     }
 }

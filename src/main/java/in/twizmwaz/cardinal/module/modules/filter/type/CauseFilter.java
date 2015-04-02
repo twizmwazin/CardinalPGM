@@ -14,7 +14,7 @@ public class CauseFilter extends FilterModule {
     private final EventCause cause;
 
     public CauseFilter(final CauseFilterParser parser) {
-        super(parser.getName());
+        super(parser.getName(), parser.getParent());
         this.cause = parser.getCause();
     }
 
@@ -30,11 +30,11 @@ public class CauseFilter extends FilterModule {
                 }
             }
             if (cause.equals(eventCause))
-                return ALLOW;
+                return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
             else if (eventCause != null)
                 return DENY;
         }
-        return ABSTAIN;
+        return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
     }
 
     public enum EventCause {

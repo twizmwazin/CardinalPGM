@@ -10,7 +10,7 @@ import static in.twizmwaz.cardinal.module.modules.filter.FilterState.*;
 public class CrouchingFilter extends FilterModule {
 
     public CrouchingFilter(FilterParser parser) {
-        super(parser.getName());
+        super(parser.getName(), parser.getParent());
     }
 
     @Override
@@ -18,12 +18,12 @@ public class CrouchingFilter extends FilterModule {
         for (Object object : objects) {
             if (object instanceof Player) {
                 if (((Player) object).isSneaking())
-                    return ALLOW;
+                    return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
                 else
                     return DENY;
             }
         }
-        return ABSTAIN;
+        return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
     }
 
 }

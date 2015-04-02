@@ -13,7 +13,7 @@ import static in.twizmwaz.cardinal.module.modules.filter.FilterState.*;
 public class VoidFilter extends FilterModule {
     
     public VoidFilter(final GenericFilterParser parser) {
-        super(parser.getName());
+        super(parser.getName(), parser.getParent());
     }
 
     @Override
@@ -22,9 +22,9 @@ public class VoidFilter extends FilterModule {
             if (object instanceof Block) {
                 Block check = new Location(GameHandler.getGameHandler().getMatchWorld(),
                         ((Block) object).getX(), 0, ((Block) object).getZ()).getBlock();
-                return check.getType() == Material.AIR && !check.equals(object) ? ALLOW : DENY;
+                return check.getType() == Material.AIR && !check.equals(object) ? (getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW)) : DENY;
             }
         }
-        return ABSTAIN;
+        return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
     }
 }

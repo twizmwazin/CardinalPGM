@@ -14,7 +14,7 @@ public class BlockFilter extends FilterModule {
     private final int damageValue;
 
     public BlockFilter(final BlockFilterParser parser) {
-        super(parser.getName());
+        super(parser.getName(), parser.getParent());
         this.material = parser.getMaterial();
         this.damageValue = parser.getDamageValue();
     }
@@ -23,10 +23,10 @@ public class BlockFilter extends FilterModule {
     public FilterState evaluate(final Object... objects) {
         for (Object object : objects) {
             if (object instanceof Block) {
-                if (((Block) object).getType().equals(material) && (damageValue == -1 || (int) ((Block) object).getState().getData().getData() == damageValue)) return ALLOW;
+                if (((Block) object).getType().equals(material) && (damageValue == -1 || (int) ((Block) object).getState().getData().getData() == damageValue)) return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
                 else return DENY;
             }
         }
-        return ABSTAIN;
+        return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
     }
 }

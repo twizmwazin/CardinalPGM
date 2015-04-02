@@ -8,7 +8,7 @@ public class AllEventFilter extends FilterModule {
     protected final boolean allow;
 
     public AllEventFilter(final String name, final boolean allow) {
-        super(name);
+        super(name, null);
         this.allow = allow;
     }
 

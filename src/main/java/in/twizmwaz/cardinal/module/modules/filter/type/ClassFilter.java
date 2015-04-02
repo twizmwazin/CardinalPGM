@@ -13,7 +13,7 @@ public class ClassFilter extends FilterModule {
     private String classModule;
 
     public ClassFilter(ClassFilterParser parser) {
-        super(parser.getName());
+        super(parser.getName(), parser.getParent());
         this.classModule = parser.getClassModule();
     }
 
@@ -22,11 +22,11 @@ public class ClassFilter extends FilterModule {
         for (Object object : objects) {
             if (object instanceof Player) {
                 if (ClassModule.getClassByPlayer((Player) object).getName().equalsIgnoreCase(classModule))
-                    return ALLOW;
+                    return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
                 return DENY;
             }
         }
-        return ABSTAIN;
+        return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
     }
 
 }

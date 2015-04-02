@@ -42,7 +42,7 @@ public class FilterModuleBuilder implements ModuleBuilder {
                 match.getModules().add(getFilter(filter.getChildren().get(0)));
             }
         }
-        return new ModuleCollection<FilterModule>();
+        return new ModuleCollection<>();
     }
 
     /**

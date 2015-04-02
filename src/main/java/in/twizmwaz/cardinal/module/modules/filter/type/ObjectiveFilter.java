@@ -13,13 +13,13 @@ public class ObjectiveFilter extends FilterModule {
     private final GameObjective objective;
 
     public ObjectiveFilter(final ObjectiveFilterParser parser) {
-        super(parser.getName());
+        super(parser.getName(), parser.getParent());
         this.objective = parser.getObjective();
     }
 
     @Override
     public FilterState evaluate(final Object... objects) {
-        if (objective.isComplete()) return ALLOW;
+        if (objective.isComplete()) return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
         else return DENY;
     }
 

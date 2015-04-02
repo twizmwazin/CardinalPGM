@@ -12,7 +12,7 @@ public class OneFilter extends FilterModule {
     private final ModuleCollection<FilterModule> children;
 
     public OneFilter(final String name, final ModuleCollection<FilterModule> children) {
-        super(name);
+        super(name, null);
         this.children = children;
     }
     
@@ -31,8 +31,8 @@ public class OneFilter extends FilterModule {
                 else return DENY;
             }
         }
-        if (found) return ALLOW;
-        if (abstain) return ABSTAIN;
+        if (found) return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
+        if (abstain) return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
         return DENY;
     }
 
