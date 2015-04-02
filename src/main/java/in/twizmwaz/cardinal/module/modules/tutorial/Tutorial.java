@@ -66,10 +66,10 @@ public class Tutorial implements Module {
             this.displayHandlerMap.put(event.getPlayer(), new DisplayHandler(event.getPlayer(), this));
         }
 
-        if (event.getAction() == Action.RIGHT_CLICK_AIR && condition) {
+        if ((event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) && condition) {
             this.displayHandlerMap.get(event.getPlayer()).displayNext();
         }
-        if (event.getAction() == Action.LEFT_CLICK_AIR && condition) {
+        if ((event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) && condition) {
             this.displayHandlerMap.get(event.getPlayer()).displayPrev();
         }
     }
