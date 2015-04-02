@@ -65,4 +65,8 @@ public class CardinalDeathEvent extends Event {
     public boolean hasTrackerSpleefEvent() {
         return trackerSpleefEvent != null;
     }
+
+    public Location getInitialLocation() {
+        return initialLocation;
+    }
 }

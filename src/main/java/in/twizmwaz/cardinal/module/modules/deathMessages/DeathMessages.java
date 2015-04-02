@@ -63,7 +63,7 @@ public class DeathMessages implements Module {
                             TrackerDamageEvent damageEvent = event.getTrackerDamageEvent();
                             Player killer = (Player) damageEvent.getDamager();
                             if (damageEvent.getDamageType().equals(DamageTracker.Type.SHOT)) {
-                                int distance = (int) Math.round(event.getPlayer().getLocation().distance(killer.getLocation()));
+                                int distance = (int) Math.round(killer.getLocation().distance(event.getInitialLocation()));
                                 deathMessage = playerName + ChatColor.GRAY + " was " + damageEvent.getDamageType().name().toLowerCase() + " (" + distance + " blocks) off a high place " + "(" + Math.round(event.getPlayer().getFallDistance()) + " blocks)" + " by " + TeamUtils.getTeamColorByPlayer(killer) + killer.getName();
                             } else {
                                 deathMessage = playerName + ChatColor.GRAY + " was " + damageEvent.getDamageType().name().toLowerCase() + " off a high place " + "(" + Math.round(event.getPlayer().getFallDistance()) + " blocks)" + " by " + TeamUtils.getTeamColorByPlayer(killer) + killer.getName() + ChatColor.GRAY + "'s " + (damageEvent.getDamagerItem().getType().equals(Material.AIR) ? "fists of fury" : (damageEvent.getDamagerItem().getEnchantments() != null && damageEvent.getDamagerItem().getEnchantments().size() > 0 ? "enchanted " : "") + damageEvent.getDamagerItem().getType().name().replaceAll("_", " ").toLowerCase());
@@ -118,7 +118,7 @@ public class DeathMessages implements Module {
                             TrackerDamageEvent damageEvent = event.getTrackerDamageEvent();
                             Player killer = (Player) damageEvent.getDamager();
                             if (damageEvent.getDamageType().equals(DamageTracker.Type.SHOT)) {
-                                int distance = (int) Math.round(event.getPlayer().getLocation().distance(killer.getLocation()));
+                                int distance = (int) Math.round(killer.getLocation().distance(event.getInitialLocation()));
                                 deathMessage = playerName + ChatColor.GRAY + " was " + damageEvent.getDamageType().name().toLowerCase() + " (" + distance + " blocks) out of the world by " + TeamUtils.getTeamColorByPlayer(killer) + killer.getName();
                             } else {
                                 deathMessage = playerName + ChatColor.GRAY + " was " + damageEvent.getDamageType().name().toLowerCase() + " out of the world by " + TeamUtils.getTeamColorByPlayer(killer) + killer.getName() + ChatColor.GRAY + "'s " + (damageEvent.getDamagerItem().getType().equals(Material.AIR) ? "fists of fury" : (damageEvent.getDamagerItem().getEnchantments() != null && damageEvent.getDamagerItem().getEnchantments().size() > 0 ? "enchanted " : "") + damageEvent.getDamagerItem().getType().name().replaceAll("_", " ").toLowerCase());
