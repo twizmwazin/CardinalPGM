@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<locale lang="zh">
+    <error>
+        <restartDuringMatch>在比赛中，不可以重启比赛。请用-f去强制刷新。</restartDuringMatch>
+        <cycleDuringMatch>在比赛中，不可以换游戏地图。请用-f去强制。</cycleDuringMatch>
+        <matchRunning>比赛现在进行。</matchRunning>
+        <matchNoResume>比赛完了，不可恢复。</matchNoResume>
+        <matchNoStart>比赛现在不可以开始。</matchNoStart>
+        <matchNoEnd>比赛现在不可以完毕。</matchNoEnd>
+        <noSetNext>在重启时，不可安排下个游戏地图。请用-f去强制。</noSetNext>
+        <disabledCommand>这一个指令现在是停用的。如果有所更换，游戏地图会自动更新。</disabledCommand>
+        <rotPointInvalid>给的回转地方是不存在的。</rotPointInvalid>
+        <invalidTime>你给了不合理的倒计时。</invalidTime>
+        <teamChatDefault>队的论坛已经是你的缺省的论坛通道</teamChatDefault>
+        <teamChannel>找不到你队的论坛，请等一会儿，才从试一下。</teamChannel>
+        <noClass>这一个班不存在！</noClass>
+        <classRestricted>不是每个人可以加入 {0} 班。</classRestricted>
+        <noClassChange>你不可以换班因为你这一班不可换。</noClassChange>
+        <classesDisabled>这一个游戏地图没有班。</classesDisabled>
+        <noTeam>你不在班上。</noTeam>
+        <alreadyObs>你已经是个旁观者。</alreadyObs>
+        <alreadyJoined>你已经进入了 {0}</alreadyJoined>
+        <teamFull>对不起， {0} 满了</teamFull>
+        <forceExemption>{0} 不可以推上一个队</forceExemption>
+        <noShuffle>在比赛中，不可跕组</noShuffle>
+        <teamExists>一个对已经叫 {0} 。</teamExists>
+        <mayNotJoin>你不可以加入一个 {0} 比赛。</mayNotJoin>
+        <matchOver>比赛完了。</matchOver>
+        <cycle>请等一会儿，给服务器转换游戏地图。</cycle>
+        <playerCommand>只有玩家可以给这个指令。</playerCommand>
+        <noMapMatch>没有这个名字的游戏地图。</noMapMatch>
+        <noTeamMatch>没有这一个队名。</noTeamMatch>
+        <noRotMatch>没有游戏地图的安排配你的征询。</noRotMatch>
+        <noPlayerMatch>没有这个玩家。</noPlayerMatch>
+        <multiplePlayers>有很多玩着有那个名字！请用 {0} 去找这个玩家</multiplePlayers>
+        <unknownError>发生了故障，不知是为社么。请看服务器的日记擦顺。</unknownError>
+        <movedForBalance>为了让全部的队有均衡的大小，你被调去 {0} </movedForBalance>
+        <autoJoinSwitch>(你没选个队，所以我们认为你不介意。)</autoJoinSwitch>
+        <ownCore>你不可以摧毁自己的主机。</ownCore>
+        <ownObjective>你不可以摧毁自己的目标。</ownObjective>
+        <enemyObjective>你不可以修理敌人的目标。</enemyObjective>
+        <repairObjective>这一个目标是不可以修理的。</repairObjective>
+        <noPotions>没有仙丹影响</noPotions>
+        <teamPlace>只有 {0} 可以放 {1} 在这边！</teamPlace>
+        <blockPlace>这边只可以放！ {0} </blockPlace>
+        <noCraft>你不可以做 {0}.</noCraft>
+        <bedsDisabled>这一个游戏不尊睡觉！</bedsDisabled>
+        <pearlOut>你不可以转移出去！</pearlOut>
+        <laneReEnter>你不可以再次进去自己的巷！</laneReEnter>
+        <landminePlace>你不可以放一个地雷在哪儿！</landminePlace>
+        <landmineExists>那边一斤有了一个地雷！</landmineExists>
+        <landmineProximity>你不可以放滴泪那么靠近！</landmineProximity>
+        <tutorialTp>无法把你转移去下个指导课场！</tutorialTp>
+        <defuseTntWater>爆炸物在水里不可化解！</defuseTntWater>
+        <defuseTntEnemy>敌人的爆炸物不可化解。</defuseTntEnemy>
+        <noPermission>你不允许做那。</noPermission>
+        <numberString>要的是数字，不识字啊！</numberString>
+        <errorRejoin>请从新加入多一遍。</errorRejoin>
+        <serverFull>服务器满了。</serverFull>
+        <teamsFull>队满了。</teamsFull>
+        <teamsCapacity>队在最大的容量了。</teamsCapacity>
+        <invalidMatch>比赛是非的。</invalidMatch>
+        <ratingRange>登记要包容在 {0} 和 {1}。</ratingRange>
+        <ratingsDisabled>这个服务器不可给等级。</ratingsDisabled>
+        <lowParticipation>你没玩够，而不可给这个游戏地图一个等级。</lowParticipation>
+        <rateWhilePlaying>在玩时，要给这个游戏地图一个等级，输入 {0}</rateWhilePlaying>
+        <noRecentPM>你没有要回复的短讯。</noRecentPM>
+        <playerNotFound>找不到玩家！</playerNotFound>
+        <playerDisabledPMs>你的短信记不到，应为 {0} 不要受短信。</playerDisabledPMs>
+    </error>
+    <generic>
+        <mapSet>安排了下个游戏地图去 {0} 。</mapSet>
+        <markedForReloading>{0} 会被从装载。</markedForReloading>
+        <allMarkedReloading>全部的游戏地图会被从装载</allMarkedReloading>
+        <countdownCancelled>取消了所有的倒数计</countdownCancelled>
+        <autoStart>这个比赛启用制动开始</autoStart>
+        <autoStartDisabled>这个比赛不启用制动开始</autoStartDisabled>
+        <skippedOver>略过了 {0}</skippedOver>
+        <skippedFromTo>略过 {0} 到 {1}</skippedFromTo>
+        <skippedTo>掠过到 {0}</skippedTo>
+        <configReload>安排被从装载了。</configReload>
+        <mapNext>下个游戏地图： {0}</mapNext>
+        <rotationSet>现在的安排是 {0}</rotationSet>
+        <rotationReload>安排被从装载了。</rotationReload>
+        <rotationAppend>加了 {0} 去游戏地图安排</rotationAppend>
+        <insertedIndex>在 {1} 加了 {0}</insertedIndex>
+        <removedInstance>把全部的 {0} 从游戏地图安排排除了</removedInstance>
+        <removedMap>排除了在 {0} 的游戏地图从安排。</removedMap>
+        <playerForce>{0} 推进了 {1}</playerForce>
+        <teamShuffle>队都被改组了。</teamShuffle>
+        <teamAlias>{0} 被称为了 {1}</teamAlias>
+        <channelSet>换了你的论坛通道去队谈。</channelSet>
+        <messageSent>短信寄了。</messageSent>
+        <onTeam>你在 {0}</onTeam>
+        <haveSelected>你选了 {0}</haveSelected>
+        <changeOnSpawn>该换回在下一命使用。</changeOnSpawn>
+        <classCurrent>现在的班：</classCurrent>
+        <classList>输入 '/classes' 看全部的班</classList>
+        <errorsCleared>错误排除了！</errorsCleared>
+        <noErrors>没问题！</noErrors>
+        <joined>你加入了 {0}</joined>
+        <worldDefuse>你化解了世界的爆炸物。</worldDefuse>
+        <defusePlayerTnt>你化解了 {0} 的爆炸物。</defusePlayerTnt>
+        <landminePlanted>放下了地雷了！</landminePlanted>
+        <ratingSaved>你给 {1} {2} 的 {0} 等级记下来了。</ratingSaved>
+        <ratingChange>你可以用料斗或用 {1} 改你给这个游戏地图的等级</ratingChange>
+        <mapRated>有人在 {0} 给了 {1} 的等级。</mapRated>
+        <mapReRated>有人在 {0} 上改了等级从 {2} 到 {1}</mapReRated>
+        <autoBalance>如果 {0} 还是这么多人，要转一些人去另外一些组。</autoBalance>
+        <youChangedRating>你换了 {1} {2} 的等级从 {3} 到 {0}.</youChangedRating>
+    </generic>
+    <misc>
+        <enemy>敌人</enemy>
+        <fate>命运</fate>
+        <others>别人</others>
+        <blocks>{0} 方块</blocks>
+        <ownership>{0} 的 {1}</ownership>
+        <and>和</and>
+        <by>被</by>
+        <team>队</team>
+    </misc>
+    <userInterface>
+        <mapLoaded>负载的游戏地图</mapLoaded>
+        <mapObjective>目标</mapObjective>
+        <mapAuthor>作家</mapAuthor>
+        <mapAuthors>作家们</mapAuthors>
+        <mapContributors>贡献者们</mapContributors>
+        <mapRules>规定</mapRules>
+        <mapMax>最多玩着</mapMax>
+        <rotationCurrent>现在的游戏地图安排</rotationCurrent>
+        <rotationLoaded>负载的游戏地图安排</rotationLoaded>
+        <matchInfo>比赛报告</matchInfo>
+        <time>时间</time>
+        <matchTime>比赛时间</matchTime>
+        <goals>目标</goals>
+        <classes>班</classes>
+        <of>{1} 里的 {0}</of>
+        <xmlErrors>XML 问题</xmlErrors>
+        <close>关</close>
+        <teamClassSelection>选队／班</teamClassSelection>
+        <teamJoinTip>参加比赛！</teamJoinTip>
+        <teamPick>选个队</teamPick>
+        <teamJoinAuto>制动进队</teamJoinAuto>
+        <teamJoinAutoLore>放你在最少人的队</teamJoinAutoLore>
+        <teamCapacity>队满了，不应许进入。</teamCapacity>
+        <teamCanPick>你可以选你的队，按一个队吧！</teamCanPick>
+        <teamSelection>选队</teamSelection>
+        <tutorialView>参加指导课</tutorialView>
+        <tutorialLore>学这么玩 {0}!</tutorialLore>
+        <potionEffects>仙丹影响</potionEffects>
+        <hungerLevel>食物水平</hungerLevel>
+        <healthLevel>健康水平</healthLevel>
+        <oneMap>一个游戏地图</oneMap>
+        <maps>{0} 游戏地图</maps>
+        <second>{0} 秒</second>
+        <seconds>{0} 秒</seconds>
+        <matchStarted>比赛开始！</matchStarted>
+        <matchStartCancelled>即将来临的比赛被取消了</matchStartCancelled>
+        <matchOver>比赛完了</matchOver>
+        <matchWin>{0} 赢！</matchWin>
+        <matchTeamWin>你的队赢了！</matchTeamWin>
+        <matchTeamLose>你的队输了。</matchTeamLose>
+        <matchMaxScoreReached>到了分数的限制， {0} 了。</matchMaxScoreReached>
+        <playerJoin>{0} 进了游戏</playerJoin>
+        <playerLeave>{0} 离开了游戏</playerLeave>
+        <serverRestart>服务器正在重启</serverRestart>
+        <mapPlaying>正在玩 {0}</mapPlaying>
+        <objectivePlaced>{0} 让 {1} 放了 {2}</objectivePlaced>
+        <objectiveLeaked>{0} 的 {1} 泄漏了！</objectiveLeaked>
+        <objectiveDestroyed>{0}'s {1} 被 {2} 摧毁了。</objectiveDestroyed>
+        <objectiveTouchedFor>{0} 摧毁了 {1} 给 {2}</objectiveTouchedFor>
+        <objectiveTouched>{0} 摧毁了一片 {1}</objectiveTouched>
+        <objectiveDamagedFor>{0} 帮了 {2} 摧毁了 {1}</objectiveDamagedFor>
+        <objectiveDamaged>{0} 摧毁了 {1}</objectiveDamaged>
+        <creditReceived>达到目标后才会拿到荣誉</creditReceived>
+        <objectivePickedFor>{0} 帮 {2} 拿了 {1} </objectivePickedFor>
+        <objectivePicked>{0} 拿了 {1}</objectivePicked>
+        <scoredFor>{0} 帮 {2} 取得 {1}</scoredFor>
+        <onePoint>一分</onePoint>
+        <points>{0} 分</points>
+        <amountRemaining>你剩下了 {0} 。</amountRemaining>
+        <oneLife>一个命</oneLife>
+        <lives>{0} 命</lives>
+        <timer>剩下的时间：</timer>
+        <leftLane>你出了你的巷。</leftLane>
+        <scores>分数</scores>
+        <typeForMapInfo>请输入／map看信息。</typeForMapInfo>
+        <cyclingTimer>在 {1} 更换去 {0}</cyclingTimer>
+        <cycledTo>转换去 {0} 了。</cycledTo>
+        <matchStartingIn>比赛在 {0} 开始。</matchStartingIn>
+        <serverRestartingIn>服务器在 {0} 重启。</serverRestartingIn>
+        <tntDefuser>化解爆炸物工具</tntDefuser>
+        <tntRadiusDefuser>用右键化解5方块内的爆炸物</tntRadiusDefuser>
+        <rateMap>评级这个比赛地图！</rateMap>
+        <terrible>很差</terrible>
+        <bad>不好</bad>
+        <ok>还好</ok>
+        <good>很好</good>
+        <amazing>太棒了！</amazing>
+        <teamChoose>选自己的队。</teamChoose>
+    </userInterface>
+</locale>
