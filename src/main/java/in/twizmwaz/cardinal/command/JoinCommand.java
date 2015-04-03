@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
 
 public class JoinCommand {
 
-    @Command(aliases = {"join"}, desc = "Join a team.", usage = "[team]")
+    @Command(aliases = {"join", "play"}, desc = "Join a team.", usage = "[team]")
     public static void join(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (sender instanceof Player) {
             TeamModule team = null;
