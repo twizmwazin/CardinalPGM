@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <locale lang="sv">
     <error>
+        <noMessages>Du har inga privata meddelanden att besvara</noMessages>
         <restartDuringMatch>Du får inte starta om under en pågående match. Använd -f för att överskrida.</restartDuringMatch>
         <cycleDuringMatch>Du kan inte rotera under en pågående match. Använda -f för att överskrida.</cycleDuringMatch>
         <matchRunning>Matchen pågår redan.</matchRunning>
@@ -64,6 +65,11 @@
         <ratingsDisabled>Betygsättning för kartor är inte aktiverat på den här servern.</ratingsDisabled>
         <lowParticipation>Tyvärr, du har inte deltagit tillräckligt i den här matchen för att betygsätta kartan</lowParticipation>
         <rateWhilePlaying>För att betygsätta kartan medan du spelar, skriv {0}</rateWhilePlaying>
+        <noRecentPM>Du har inga privata meddelanden att besvara</noRecentPM>
+        <playerNotFound>Inga spelare matchade förfrågan.</playerNotFound>
+        <playerDisabledPMs>Ditt meddelande skickades inte eftersom {0} har valt att inte ta emot privata meddelanden.</playerDisabledPMs>
+        <playableLeave>Du kan inte lämna det leka fältet</playableLeave>
+        <playableInteract>Du kan inte interagera med kvarter utanför det leka fältet</playableInteract>
     </error>
     <generic>
         <mapSet>Nästa karta vald till {0}</mapSet>
@@ -170,7 +176,7 @@
         <objectiveDamagedFor>{0} skadade {2} för {1}</objectiveDamagedFor>
         <objectiveDamaged>{0} skadade {1}</objectiveDamaged>
         <creditReceived>Du får erkännande när målet är avklarat.</creditReceived>
-        <objectiveTouchedFor>{0} plockade upp {2} för {1}</objectiveTouchedFor>
+        <objectivePickedFor>{0} plockade upp {2} för {1}</objectivePickedFor>
         <objectiveTouched>{0} plockade upp {1}</objectiveTouched>
         <scoredFor>{0} tog {1} poäng för {2}</scoredFor>
         <onePoint>1 poäng</onePoint>
@@ -195,6 +201,7 @@
         <good>Bra</good>
         <amazing>Fantastisk!</amazing>
         <teamChoose>Choose your team/class</teamChoose>
+        <online>Inloggade:</online>
         <latestVersion>Cardinal är uppdaterad!</latestVersion>
         <updateAvailable>En nyare build av kardinal är tillgänglig!</updateAvailable>
         <version>Denna server kör kardinal version {0}</version>
