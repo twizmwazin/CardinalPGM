@@ -1,21 +1,16 @@
 package in.twizmwaz.cardinal.module.modules.filter.type.constant;
 
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ABSTAIN;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
-import org.bukkit.Bukkit;
+
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-
-import java.util.Arrays;
-
-import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ABSTAIN;
 
 public class AllWorldFilter extends AllEventFilter {
 
     public AllWorldFilter(final String name, final boolean allow) {
         super(name, allow);
-        Bukkit.getLogger().info("ayy 1");
     }
 
     @Override
