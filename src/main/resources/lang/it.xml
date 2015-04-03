@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <locale lang="it">
     <error>
+        <noMessages>Non avete messaggi privati a rispondere a</noMessages>
         <restartDuringMatch>Non è possibile riavviare quando una partita è cominciata. Usa -f per forzare.</restartDuringMatch>
         <cycleDuringMatch>Non puoi ciclare quando una partita è cominciata. Usa -f per forzare</cycleDuringMatch>
         <matchRunning>La partita è giá iniziata.</matchRunning>
@@ -67,6 +68,8 @@
         <noRecentPM>Non avere messaggi privati per rispondere.</noRecentPM>
         <playerNotFound>Non trovato nessun giocatore con quel nome.</playerNotFound>
         <playerDisabledPMs>Il tuo messaggio non è stato inviato perché {0} ha scelto di non ricevere messaggi privati.</playerDisabledPMs>
+        <playableLeave>Lei non può lasciare il campo di gioco</playableLeave>
+        <playableInteract>Lei non può interagire fuori con blocchi del campo di gioco</playableInteract>
     </error>
     <generic>
         <mapSet>{0} è stata stabilita come mappa successiva</mapSet>
@@ -198,6 +201,7 @@
         <good>Buona</good>
         <amazing>Fantastica!</amazing>
         <teamChoose>Seleziona la tua classe</teamChoose>
+        <online>Connessi:</online>
         <latestVersion>Il Cardinal è up-to-date!</latestVersion>
         <updateAvailable>Una nuova generazione di Cardinal è disponibile!</updateAvailable>
         <version>Questo server è in esecuzione la versione Cardinale {0}</version>
