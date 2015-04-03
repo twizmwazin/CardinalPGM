@@ -91,7 +91,7 @@ public class FilterModuleBuilder implements ModuleBuilder {
             case "any":
                 return new AnyFilter(new ChildrenFilterParser(element));
             case "not":
-                return new NotFilter(new ChildFilterParser(element));
+                return new NotFilter(new ChildrenFilterParser(element));
             case "one":
                 return new OneFilter(new ChildrenFilterParser(element));
             case "allow":

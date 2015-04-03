@@ -15,12 +15,18 @@ public class AllMobFilter extends AllEventFilter {
 
     @Override
     public FilterState evaluate(final Object... objects) {
+        boolean abstain = true;
         for (Object object : objects) {
             if (object instanceof Entity) {
-                if (object instanceof LivingEntity && !(object instanceof Player)) return allow ? FilterState.ALLOW : FilterState.DENY;
-                else return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
+                if (object instanceof LivingEntity && !(object instanceof Player)) {
+                    return allow ? FilterState.ALLOW : FilterState.DENY;
+                }
+                abstain = false;
             }
         }
-        return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
+        if (abstain) {
+            return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
+        }
+        return allow ? FilterState.DENY : FilterState.ALLOW;
     }
 }

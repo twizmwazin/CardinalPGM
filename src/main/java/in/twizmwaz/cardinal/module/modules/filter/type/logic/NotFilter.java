@@ -1,29 +1,37 @@
 package in.twizmwaz.cardinal.module.modules.filter.type.logic;
 
+import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
-import in.twizmwaz.cardinal.module.modules.filter.parsers.ChildFilterParser;
+import in.twizmwaz.cardinal.module.modules.filter.parsers.ChildrenFilterParser;
 
 import static in.twizmwaz.cardinal.module.modules.filter.FilterState.*;
 
 public class NotFilter extends FilterModule {
 
-    private final FilterModule childFilter;
+    private final ModuleCollection<FilterModule> children;
 
-    public NotFilter(final String name, final FilterModule childFilter) {
+    public NotFilter(final String name, final ModuleCollection<FilterModule> children) {
         super(name, null);
-        this.childFilter = childFilter;
+        this.children = children;
     }
     
-    public NotFilter(final ChildFilterParser parser) {
-        this(parser.getName(), parser.getChild());
+    public NotFilter(final ChildrenFilterParser parser) {
+        this(parser.getName(), parser.getChildren());
     }
 
     @Override
     public FilterState evaluate(final Object... objects) {
-        FilterState childState = childFilter.evaluate(objects);
-        if (childState.equals(ALLOW)) return DENY;
-        else if (childState.equals(DENY)) return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
-        return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
+        boolean abstain = true;
+        for (Object object : objects) {
+            for (FilterModule child : children) {
+                if (!child.evaluate(object).equals(ABSTAIN))
+                    abstain = false;
+                if (child.evaluate(object).equals(ALLOW))
+                    return DENY;
+            }
+        }
+        if (abstain) return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
+        return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
     }
 }

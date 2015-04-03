@@ -46,7 +46,9 @@ public class BlockBreakRegion extends AppliedRegion {
             if (region.contains(new BlockRegion(null, block.getLocation().toVector()))) {
                 if (TntTracker.getWhoPlaced(event.getEntity()) != null) {
                     if (Bukkit.getOfflinePlayer(TntTracker.getWhoPlaced(event.getEntity())).isOnline()) {
-                        if (filter.evaluate(Bukkit.getPlayer(TntTracker.getWhoPlaced(event.getEntity())), block, event).equals(FilterState.DENY)) blocksToRemove.add(block);
+                        if (filter.evaluate(Bukkit.getPlayer(TntTracker.getWhoPlaced(event.getEntity())), block, event).equals(FilterState.DENY)) {
+                            blocksToRemove.add(block);
+                        }
                     } else if (filter.evaluate(block, event).equals(FilterState.DENY)) blocksToRemove.add(block);
                 } else if (filter.evaluate(block, event).equals(FilterState.DENY)) blocksToRemove.add(block);
             }

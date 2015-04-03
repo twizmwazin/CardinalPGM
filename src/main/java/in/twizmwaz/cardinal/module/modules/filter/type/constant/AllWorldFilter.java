@@ -1,9 +1,13 @@
 package in.twizmwaz.cardinal.module.modules.filter.type.constant;
 
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
+import org.bukkit.Bukkit;
+import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+
+import java.util.Arrays;
 
 import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ABSTAIN;
 
@@ -11,16 +15,23 @@ public class AllWorldFilter extends AllEventFilter {
 
     public AllWorldFilter(final String name, final boolean allow) {
         super(name, allow);
+        Bukkit.getLogger().info("ayy 1");
     }
 
     @Override
     public FilterState evaluate(final Object... objects) {
+        boolean abstain = true;
         for (Object object : objects) {
-            if (object instanceof BlockEvent) {
-                if (object instanceof BlockPlaceEvent || object instanceof BlockBreakEvent) return FilterState.ABSTAIN;
-                else return allow ? FilterState.ALLOW : FilterState.DENY;
+            if (object instanceof Event) {
+                if (!(object instanceof BlockPlaceEvent) && !(object instanceof BlockBreakEvent)) {
+                    return allow ? FilterState.ALLOW : FilterState.DENY;
+                }
+                abstain = false;
             }
         }
-        return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
+        if (abstain) {
+            return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
+        }
+        return allow ? FilterState.DENY : FilterState.ALLOW;
     }
 }
