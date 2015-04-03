@@ -176,7 +176,7 @@
         <objectiveDamagedFor>{0} skadade {2} för {1}</objectiveDamagedFor>
         <objectiveDamaged>{0} skadade {1}</objectiveDamaged>
         <creditReceived>Du får erkännande när målet är avklarat.</creditReceived>
-        <objectiveTouchedFor>{0} plockade upp {2} för {1}</objectiveTouchedFor>
+        <objectivePickedFor>{0} plockade upp {2} för {1}</objectivePickedFor>
         <objectiveTouched>{0} plockade upp {1}</objectiveTouched>
         <scoredFor>{0} tog {1} poäng för {2}</scoredFor>
         <onePoint>1 poäng</onePoint>
