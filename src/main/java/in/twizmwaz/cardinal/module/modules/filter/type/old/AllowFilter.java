@@ -20,11 +20,9 @@ public class AllowFilter extends FilterModule {
     public FilterState evaluate(final Object... objects) {
         boolean abstain = true;
         if (children != null) {
-            for (Object object : objects) {
-                for (FilterModule child : children) {
-                    if (!child.evaluate(object).equals(ABSTAIN)) abstain = false;
-                    if (child.evaluate(object).equals(ALLOW) && (getParent() == null || !getParent().evaluate(objects).equals(DENY))) return ALLOW;
-                }
+            for (FilterModule child : children) {
+                if (!child.evaluate(objects).equals(ABSTAIN)) abstain = false;
+                if (child.evaluate(objects).equals(ALLOW)) return ALLOW;
             }
         }
         if (abstain) return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));

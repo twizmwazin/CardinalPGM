@@ -20,11 +20,9 @@ public class DenyFilter extends FilterModule {
     public FilterState evaluate(final Object... objects) {
         boolean abstain = true;
         if (children != null) {
-            for (Object object : objects) {
-                for (FilterModule child : children) {
-                    if (!child.evaluate(object).equals(ABSTAIN)) abstain = false;
-                    if (child.evaluate(object).equals(ALLOW)) return DENY;
-                }
+            for (FilterModule child : children) {
+                if (!child.evaluate(objects).equals(ABSTAIN)) abstain = false;
+                if (child.evaluate(objects).equals(ALLOW)) return DENY;
             }
         }
         if (abstain) return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
