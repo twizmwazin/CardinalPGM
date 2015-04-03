@@ -14,7 +14,7 @@ public class NotFilter extends FilterModule {
         super(name);
         this.childFilter = childFilter;
     }
-    
+
     public NotFilter(final ChildFilterParser parser) {
         this(parser.getName(), parser.getChild());
     }

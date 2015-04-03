@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.UUID;
 
@@ -21,6 +22,7 @@ public class GameHandler {
     private WeakReference<World> matchWorld;
     private Match match;
     private Cycle cycle;
+    private File matchFile;
 
     public GameHandler() throws RotationLoadException {
         handler = this;
@@ -77,5 +79,13 @@ public class GameHandler {
 
     public ModuleFactory getModuleFactory() {
         return moduleFactory;
+    }
+
+    public File getMatchFile() {
+        return matchFile;
+    }
+
+    public void setMatchFile(File file) {
+        matchFile = file;
     }
 }

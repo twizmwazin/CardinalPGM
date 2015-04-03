@@ -1,7 +1,10 @@
 package in.twizmwaz.cardinal.module.modules.chatChannels;
 
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatMessage;
+import in.twizmwaz.cardinal.module.modules.matchTranscript.MatchTranscript;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
@@ -12,6 +15,7 @@ public class GlobalChannel implements ChatChannelModule {
     @Override
     public void sendMessage(String string) {
         Bukkit.broadcastMessage(string);
+        GameHandler.getGameHandler().getMatch().getModules().getModule(MatchTranscript.class).log(ChatColor.stripColor(string));
     }
 
     @Override
@@ -20,6 +24,7 @@ public class GlobalChannel implements ChatChannelModule {
             player.sendMessage(message.getMessage(player.getLocale()));
         }
         Bukkit.getServer().getConsoleSender().sendMessage(message.getMessage(message.getMessage(Locale.getDefault().toString())));
+        GameHandler.getGameHandler().getMatch().getModules().getModule(MatchTranscript.class).log(ChatColor.stripColor(message.getMessage(Locale.getDefault().toString())));
     }
 
     @Override
