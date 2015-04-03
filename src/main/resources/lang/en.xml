@@ -205,5 +205,8 @@
         <latestVersion>Cardinal is up-to-date!</latestVersion>
         <updateAvailable>A newer build of Cardinal is available!</updateAvailable>
         <version>This server is running Cardinal version {0}</version>
+        <matchReportUpload>Uploading match report...</matchReportUpload>
+        <matchReportSuccess>Match report successfully uploaded! You can view it at {0}</matchReportSuccess>
+        <matchReportFaied>An error occurred while uploading the match report</matchReportFaied>
     </userInterface>
 </locale>

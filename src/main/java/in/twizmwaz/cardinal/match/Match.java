@@ -108,4 +108,8 @@ public class Match {
     public LoadedMap getLoadedMap() {
         return loadedMap;
     }
+
+    public UUID getUuid() {
+        return uuid;
+    }
 }

@@ -204,7 +204,10 @@ public enum  ChatConstant {
     UI_ONLINE("userInterface.online"),
     UI_LATEST_VERSION("userInterface.latestVersion"),
     UI_UPDATE_AVAILABLE("userInterface.updateAvailable"),
-    UI_VERSION("userInterface.version");
+    UI_VERSION("userInterface.version"),
+    UI_MATCH_REPORT_UPLOAD("userInterface.matchReportUpload"),
+    UI_MATCH_REPORT_SUCCESS("userInterface.matchReportSuccess"),
+    UI_MATCH_REPORT_FAILED("userInterface.matchReportFailed");
     
     private final String path;
     
