@@ -73,7 +73,7 @@ public class MatchCommand {
                     }
                 }
             }
-            if (TimeLimit.getMatchTimeLimit() != 0 || ScoreModule.matchHasMax()) {
+            if (ScoreModule.matchHasScoring()) {
                 String score = "";
                 for (ScoreModule scoreModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
                     score += scoreModule.getTeam().getColor() + "" + scoreModule.getScore() + " ";
