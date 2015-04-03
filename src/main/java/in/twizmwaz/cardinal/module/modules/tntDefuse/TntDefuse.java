@@ -38,7 +38,7 @@ public class TntDefuse implements Module {
                 UUID player = TntTracker.getWhoPlaced(event.getLeftClicked());
                 TeamModule playerTeam = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
                 if (Bukkit.getOfflinePlayer(player).isOnline()) {
-                    if (TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)) == TeamUtils.getTeamByPlayer(event.getPlayer())) {
+                    if (TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)) == TeamUtils.getTeamByPlayer(event.getPlayer()) && TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)) != null && !TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)).isObserver()) {
                         if (!event.getLeftClicked().getLocation().getBlock().isLiquid()) {
                             if (!Bukkit.getPlayer(player).equals(event.getPlayer())) {
                                 event.getLeftClicked().remove();
@@ -62,16 +62,28 @@ public class TntDefuse implements Module {
 
     @EventHandler
     public void onPlayerRightClick(PlayerInteractEntityEvent event) {
-        UUID player = TntTracker.getWhoPlaced(event.getRightClicked());
-        TeamModule playerTeam = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
-        if (event.getPlayer().hasPermission("tnt.defuse") && event.getRightClicked() instanceof TNTPrimed && event.getPlayer().getItemInHand().getType().equals(Material.SHEARS)) {
-            if (!event.getRightClicked().getLocation().getBlock().isLiquid()) {
-                event.getRightClicked().remove();
-                event.getPlayer().sendMessage(ChatColor.RED + "You defused " + (TntTracker.getWhoPlaced(event.getRightClicked()) != null ? TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)).getColor() + Bukkit.getPlayer(player).getDisplayName() : "world") + ChatColor.RED + "'s TNT");
-                ChatChannelModule channel = GameHandler.getGameHandler().getMatch().getModules().getModule(AdminChannel.class);
-                channel.sendMessage("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + TeamUtils.getTeamByPlayer(event.getPlayer()).getColor() + event.getPlayer().getDisplayName() + ChatColor.RESET + " defused " + playerTeam.getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.RESET + "'s TNT");
-            } else {
-                ChatUtils.sendWarningMessage(Bukkit.getPlayer(player), "You may not defuse TNT in water!");
+        if (event.getRightClicked() instanceof TNTPrimed && event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType().equals(Material.SHEARS)) {
+            if (TntTracker.getWhoPlaced(event.getRightClicked()) != null) {
+                UUID player = TntTracker.getWhoPlaced(event.getRightClicked());
+                TeamModule playerTeam = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
+                if (Bukkit.getOfflinePlayer(player).isOnline()) {
+                    if (event.getPlayer().hasPermission("tnt.defuse") || TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)) == TeamUtils.getTeamByPlayer(event.getPlayer())) {
+                        if (!event.getRightClicked().getLocation().getBlock().isLiquid()) {
+                            if (!Bukkit.getPlayer(player).equals(event.getPlayer())) {
+                                event.getRightClicked().remove();
+                                event.getPlayer().sendMessage(ChatColor.RED + "You defused " + playerTeam.getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.RED + "'s TNT.");
+                                ChatChannelModule channel = GameHandler.getGameHandler().getMatch().getModules().getModule(AdminChannel.class);
+                                channel.sendMessage("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + TeamUtils.getTeamByPlayer(event.getPlayer()).getColor() + event.getPlayer().getDisplayName() + ChatColor.RESET + " defused " + playerTeam.getColor() + Bukkit.getPlayer(player).getDisplayName() + ChatColor.RESET + "'s " + ChatColor.DARK_RED + "TNT");
+                            }
+                        } else {
+                            ChatUtils.sendWarningMessage(event.getPlayer(), "You may not defuse TNT in water!");
+                        }
+                    } else {
+                        ChatUtils.sendWarningMessage(event.getPlayer(), "You may not defuse enemy TNT.");
+                    }
+                } else {
+                    ChatUtils.sendWarningMessage(event.getPlayer(), "You may not defuse enemy TNT.");
+                }
             }
         }
     }
