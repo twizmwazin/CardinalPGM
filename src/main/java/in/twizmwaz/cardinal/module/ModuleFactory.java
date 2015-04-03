@@ -197,4 +197,12 @@ public class ModuleFactory {
         return results;
     }
 
+    public void registerBuilder(ModuleBuilder builder) {
+        builders.add(builder);
+    }
+
+    public void unregisterBuilder(ModuleBuilder builder) {
+        builders.remove(builder);
+    }
+
 }

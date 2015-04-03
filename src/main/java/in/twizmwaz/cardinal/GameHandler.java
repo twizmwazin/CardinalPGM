@@ -27,7 +27,13 @@ public class GameHandler {
         this.moduleFactory = new ModuleFactory();
         rotation = new Rotation();
         cycle = new Cycle(rotation.getNext(), UUID.randomUUID(), this);
-        cycleAndMakeMatch();
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                cycleAndMakeMatch();
+            }
+        });
+
     }
 
     public static GameHandler getGameHandler() {
