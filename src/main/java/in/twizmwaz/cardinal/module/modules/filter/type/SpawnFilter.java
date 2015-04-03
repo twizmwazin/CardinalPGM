@@ -21,7 +21,7 @@ public class SpawnFilter extends FilterModule {
         for (Object object : objects) {
             if (object instanceof CreatureSpawnEvent) {
                 if (((CreatureSpawnEvent) object).getSpawnReason().equals(reason))
-                    return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
+                    return ALLOW;
                 else
                     return DENY;
             }

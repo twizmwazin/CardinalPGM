@@ -25,7 +25,7 @@ public class AnyFilter extends FilterModule {
         boolean abstain = true;
         for (FilterModule child : children) {
             if (!child.evaluate(objects).equals(ABSTAIN)) abstain = false;
-            if (child.evaluate(objects).equals(ALLOW)) return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
+            if (child.evaluate(objects).equals(ALLOW)) return ALLOW;
         }
         if (abstain) return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
         return DENY;

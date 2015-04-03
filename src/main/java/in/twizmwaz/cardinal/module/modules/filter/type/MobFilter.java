@@ -21,7 +21,7 @@ public class MobFilter extends FilterModule {
         for (Object object : objects) {
             if (object instanceof CreatureType) {
                 if (object.equals(mobType))
-                    return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
+                    return ALLOW;
                 else
                     return DENY;
             }

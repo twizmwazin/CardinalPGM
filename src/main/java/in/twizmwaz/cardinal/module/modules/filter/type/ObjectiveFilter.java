@@ -19,7 +19,7 @@ public class ObjectiveFilter extends FilterModule {
 
     @Override
     public FilterState evaluate(final Object... objects) {
-        if (objective.isComplete()) return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
+        if (objective.isComplete()) return ALLOW;
         else return DENY;
     }
 

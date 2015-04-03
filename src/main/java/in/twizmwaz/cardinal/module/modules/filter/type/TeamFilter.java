@@ -24,7 +24,7 @@ public class TeamFilter extends FilterModule {
             if (object instanceof Player) {
                 if (TeamUtils.getTeamByPlayer((Player) object) != null)
                     if (TeamUtils.getTeamByPlayer((Player) object) == team)
-                        return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
+                        return ALLOW;
                     else
                         return DENY;
                 else

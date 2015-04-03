@@ -24,7 +24,7 @@ public class CarryingFilter extends FilterModule {
             if (object instanceof Player) {
                 for (ItemStack item : ((Player) object).getInventory()) {
                     if (item.getType().equals(material))
-                        return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
+                        return ALLOW;
                 }
                 return DENY;
             }

@@ -22,7 +22,7 @@ public class HoldingFilter extends FilterModule {
         for (Object object : objects) {
             if (object instanceof Player) {
                 if (((Player) object).getItemInHand().getType().equals(material))
-                    return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
+                    return ALLOW;
                 else
                     return DENY;
             }

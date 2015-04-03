@@ -22,8 +22,8 @@ public class VoidFilter extends FilterModule {
         for (Object object : objects) {
             if (object instanceof Block) {
                 Block check = new Location(GameHandler.getGameHandler().getMatchWorld(), ((Block) object).getX(), 0, ((Block) object).getZ()).getBlock();
-                if (object.equals(check)) return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
-                return check.getType() == Material.AIR ? (getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW)) : DENY;
+                if (object.equals(check)) return ALLOW;
+                return check.getType() == Material.AIR ? (ALLOW) : DENY;
             }
         }
         return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));

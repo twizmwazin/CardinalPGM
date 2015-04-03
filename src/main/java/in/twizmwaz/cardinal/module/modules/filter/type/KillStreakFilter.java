@@ -30,13 +30,13 @@ public class KillStreakFilter extends FilterModule {
                     int killStreak = ((Player) object).getMetadata("killstreak").get(0).asInt();
                     if (this.min > -1 && this.max > -1) {
                         if (killStreak > min && killStreak < max)
-                            return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
+                            return ALLOW;
                         else
                             return DENY;
                     } else if (killStreak == count)
-                        return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
+                        return ALLOW;
                     else if (repeat && killStreak % count == 0)
-                        return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
+                        return ALLOW;
                     else
                         return DENY;
                 } catch (IndexOutOfBoundsException e) {

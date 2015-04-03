@@ -22,7 +22,7 @@ public class RandomFilter extends FilterModule {
     public FilterState evaluate(final Object... objects) {
         Random random = new Random();
         double working = random.nextGaussian();
-        if (working <= chance) return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
+        if (working <= chance) return ALLOW;
         else return DENY;
     }
 

@@ -18,7 +18,7 @@ public class FlyingFilter extends FilterModule {
         for (Object object : objects) {
             if (object instanceof Player) {
                 if (((Player) object).isFlying())
-                    return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
+                    return ALLOW;
                 else
                     return DENY;
             }

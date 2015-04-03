@@ -22,7 +22,7 @@ public class ClassFilter extends FilterModule {
         for (Object object : objects) {
             if (object instanceof Player) {
                 if (ClassModule.getClassByPlayer((Player) object).getName().equalsIgnoreCase(classModule))
-                    return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
+                    return ALLOW;
                 return DENY;
             }
         }

@@ -22,7 +22,7 @@ public class EntityFilter extends FilterModule {
         for (Object object : objects) {
             if (object instanceof Entity) {
                 if (((Entity) object).getType().equals(entity))
-                    return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
+                    return ALLOW;
                 else
                     return DENY;
             }

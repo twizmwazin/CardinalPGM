@@ -24,7 +24,7 @@ public class WearingFilter extends FilterModule {
             if (object instanceof Player) {
                 for (ItemStack armor : ((Player) object).getInventory().getArmorContents()) {
                     if (armor.getType().equals(material))
-                        return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
+                        return ALLOW;
                 }
                 return DENY;
             }

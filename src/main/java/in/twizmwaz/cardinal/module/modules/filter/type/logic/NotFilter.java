@@ -32,6 +32,6 @@ public class NotFilter extends FilterModule {
             }
         }
         if (abstain) return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
-        return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
+        return ALLOW;
     }
 }

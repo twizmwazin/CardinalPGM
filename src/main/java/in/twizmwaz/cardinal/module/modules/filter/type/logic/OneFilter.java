@@ -31,7 +31,7 @@ public class OneFilter extends FilterModule {
                 else return DENY;
             }
         }
-        if (found) return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
+        if (found) return ALLOW;
         if (abstain) return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
         return DENY;
     }

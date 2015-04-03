@@ -30,7 +30,7 @@ public class CauseFilter extends FilterModule {
                 }
             }
             if (cause.equals(eventCause))
-                return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
+                return ALLOW;
             else if (eventCause != null)
                 return DENY;
         }

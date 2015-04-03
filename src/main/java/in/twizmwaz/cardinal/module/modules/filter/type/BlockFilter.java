@@ -23,7 +23,7 @@ public class BlockFilter extends FilterModule {
     public FilterState evaluate(final Object... objects) {
         for (Object object : objects) {
             if (object instanceof Block) {
-                if (((Block) object).getType().equals(material) && (damageValue == -1 || (int) ((Block) object).getState().getData().getData() == damageValue)) return getParent() == null ? ALLOW : (getParent().evaluate(objects).equals(DENY) ? DENY : ALLOW);
+                if (((Block) object).getType().equals(material) && (damageValue == -1 || (int) ((Block) object).getState().getData().getData() == damageValue)) return ALLOW;
                 else return DENY;
             }
         }
