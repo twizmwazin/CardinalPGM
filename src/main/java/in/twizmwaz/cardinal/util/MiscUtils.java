@@ -65,7 +65,7 @@ public class MiscUtils {
             case MAGENTA:
                 return ChatColor.LIGHT_PURPLE;
             case LIGHT_BLUE:
-                return ChatColor.AQUA;
+                return ChatColor.BLUE;
             case YELLOW:
                 return ChatColor.YELLOW;
             case LIME:
@@ -81,7 +81,7 @@ public class MiscUtils {
             case PURPLE:
                 return ChatColor.DARK_PURPLE;
             case BLUE:
-                return ChatColor.BLUE;
+                return ChatColor.DARK_BLUE;
             case BROWN:
                 return ChatColor.GOLD;
             case GREEN:
