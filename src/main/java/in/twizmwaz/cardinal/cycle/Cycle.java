@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.rotation.LoadedMap;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 
+import java.io.File;
 import java.util.UUID;
 
 public class Cycle implements Runnable {
@@ -41,5 +42,6 @@ public class Cycle implements Runnable {
         World world = new WorldCreator("matches/" + uuid.toString()).generator(new NullChunkGenerator()).createWorld();
         world.setPVP(true);
         handler.setMatchWorld(world);
+        handler.setMatchFile(new File("matches/" + uuid.toString() + "/"));
     }
 }

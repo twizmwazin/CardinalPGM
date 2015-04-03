@@ -18,6 +18,7 @@ public class NotFilter extends FilterModule {
     
     public NotFilter(final ChildrenFilterParser parser) {
         this(parser.getName(), parser.getChildren());
+
     }
 
     @Override

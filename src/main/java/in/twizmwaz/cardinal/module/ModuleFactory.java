@@ -34,6 +34,7 @@ import in.twizmwaz.cardinal.module.modules.kit.KitBuilder;
 import in.twizmwaz.cardinal.module.modules.mapNotification.MapNotificationBuilder;
 import in.twizmwaz.cardinal.module.modules.match.MatchModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimerBuilder;
+import in.twizmwaz.cardinal.module.modules.matchTranscript.MatchTranscriptBuilder;
 import in.twizmwaz.cardinal.module.modules.mob.MobModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.monumentModes.MonumentModesBuilder;
 import in.twizmwaz.cardinal.module.modules.motd.MOTDBuilder;
@@ -155,7 +156,8 @@ public class ModuleFactory {
             TutorialBuilder.class,
             WildCardBuilder.class,
             BossBarBuilder.class,
-            UpdateNotificationBuilder.class
+            UpdateNotificationBuilder.class,
+            MatchTranscriptBuilder.class
     };
 
     @SuppressWarnings("unchecked")
