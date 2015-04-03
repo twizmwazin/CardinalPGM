@@ -96,6 +96,18 @@ public class Cardinal extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        if (Bukkit.getName().equals("SportBukkit")) {
+            if (!getServer().getClass().getPackage().getName().contains("v1_8_R")) {
+                getLogger().log(Level.SEVERE, "Failed to load because you're running a invalid version of SportBukkit, disabling plugin...");
+                getLogger().log(Level.INFO, "Please see wiki for more information, https://github.com/twizmwazin/CardinalPGM/wiki/Installing-CardinalPGM.");
+                setEnabled(false);
+                return;
+            }
+        } else {
+            getLogger().log(Level.SEVERE, "Dependency SportBukkit not found, disabling plugin...");
+            setEnabled(false);
+            return;
+        }
         try {
             localeHandler = new LocaleHandler(this);
         } catch (IOException | JDOMException e) {
