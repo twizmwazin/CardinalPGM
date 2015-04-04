@@ -17,7 +17,7 @@ public class BlockRegion extends RegionModule {
 
     public BlockRegion(String name, Vector vector) {
         super(name);
-        this.vector = vector;
+        this.vector = new FlooredVector(vector);
     }
     
     public BlockRegion(String name, double x, double y, double z) {

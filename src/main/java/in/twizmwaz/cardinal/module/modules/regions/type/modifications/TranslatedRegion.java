@@ -20,7 +20,6 @@ public class TranslatedRegion extends RegionModule {
         super(name);
         this.base = base;
         this.offset = offset;
-        Bukkit.getLogger().info(name + ": " + base.getCenterBlock().getBlock().toString() + " translated to " + getCenterBlock().getBlock() + " with offset of " + offset);
     }
 
     public TranslatedRegion(TranslateParser parser) {
@@ -55,20 +54,20 @@ public class TranslatedRegion extends RegionModule {
     @Override
     public PointRegion getRandomPoint() {
         BlockRegion baseRandom = base.getCenterBlock();
-        return new PointRegion(null, baseRandom.getVector().add(getOffset().add(new Vector(0.5, 0.5, 0.5))));
+        return new PointRegion(null, baseRandom.getVector().add(getOffset()));
     }
 
     @Override
     public BlockRegion getCenterBlock() {
         BlockRegion baseCenter = base.getCenterBlock();
-        return new BlockRegion(null, baseCenter.getVector().add(getOffset().add(new Vector(0.5, 0.5, 0.5))));
+        return new BlockRegion(null, baseCenter.getVector().add(getOffset()));
     }
 
     @Override
     public List<Block> getBlocks() {
         List<Block> results = new ArrayList<>();
-        for (Block block : getBase().getBlocks()) {
-            results.add(new BlockRegion(null, block.getLocation().toVector().add(getOffset().add(new Vector(0.5, 0.5, 0.5)))).getBlock());
+        for (Block block : base.getBlocks()) {
+            results.add(block.getRelative((int) Math.floor(getOffset().getX()), (int) Math.floor(getOffset().getY()), (int) Math.floor(getOffset().getZ())));
         }
         return results;
     }

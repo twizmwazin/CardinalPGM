@@ -4,8 +4,10 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.modifiers.MirrorParser;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
+import in.twizmwaz.cardinal.module.modules.regions.type.CuboidRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import in.twizmwaz.cardinal.util.FlooredVector;
@@ -77,23 +79,20 @@ public class MirroredRegion extends RegionModule {
 
     public void updateRegion() {
         ModuleCollection<RegionModule> blocks = new ModuleCollection<>();
-        Vector translation = new Vector(origin.getX() * normal.getX(), origin.getY() * normal.getY(), origin.getZ() * normal.getZ());
         for (Block block : base.getBlocks()) {
-            Location location = block.getLocation();
-            int xRelative = 0;
-            int yRelative = 0;
-            int zRelative = 0;
+            int x = 0;
+            int y = 0;
+            int z = 0;
             if (normal.getX() != 0) {
-                xRelative = (int) Math.floor((location.getX() - translation.getX()) * -2);
+                x = (int) Math.floor((block.getX() - origin.getX()) * -2.0);
             }
-            if (normal.getX() != 0) {
-                yRelative = (int) Math.floor((location.getY() - translation.getY()) * -2);
+            if (normal.getY() != 0) {
+                y = (int) Math.floor((block.getY() - origin.getY()) * -2.0);
             }
             if (normal.getZ() != 0) {
-                zRelative = (int) Math.floor((location.getZ() - translation.getZ()) * -2);
+                z = (int) Math.floor((block.getZ() - origin.getZ()) * -2.0);
             }
-            Block newBlock = block.getRelative(xRelative, yRelative, zRelative);
-            blocks.add(new BlockRegion(null, newBlock.getX(), newBlock.getY(), newBlock.getZ()));
+            blocks.add(new CuboidRegion(null, block.getX() + x, block.getY() + y, block.getZ() + z, block.getX() + x, block.getY() + y, block.getZ() + z));
         }
         this.region = new UnionRegion(null, blocks);
     }

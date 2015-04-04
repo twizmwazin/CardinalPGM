@@ -320,14 +320,14 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (TeamUtils.getTeamById("observers").contains(event.getPlayer()) || match.getState() != MatchState.PLAYING) {
+        if ((TeamUtils.getTeamByPlayer(event.getPlayer()) != null && TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) || !match.isRunning()) {
             if (event.getTo().getY() <= -64) {
                 TeamModule teamModule = TeamUtils.getTeamById("observers");
-                ModuleCollection<SpawnModule> modules = new ModuleCollection<SpawnModule>();
+                ModuleCollection<SpawnModule> modules = new ModuleCollection<>();
                 for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
                     if (spawnModule.getTeam() == teamModule) modules.add(spawnModule);
                 }
-                event.getPlayer().teleport(modules.getRandom().getLocation());
+                event.setTo(modules.getRandom().getLocation());
             }
         }
     }
