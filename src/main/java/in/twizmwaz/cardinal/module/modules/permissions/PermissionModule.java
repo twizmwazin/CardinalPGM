@@ -25,6 +25,22 @@ public class PermissionModule implements Module {
 
     private List<UUID> devs = Arrays.asList(UUID.fromString("670223bb-7560-48c8-8f01-2f463549b917") /* twiz_mwazin */, UUID.fromString("33a703d0-3237-4337-9ddd-3dbf33b3d8a6") /* iEli2tyree011 */, UUID.fromString("208c84af-790a-41da-bf7e-eb184f17bdf8") /* Elly */, UUID.fromString("260004f0-996b-4539-ba21-df4ee6336b63") /* Elliott_ */);
 
+    private List<UUID> contributors = Arrays.asList(UUID.fromString("2a2c4c30-ecf6-4e4a-b5bc-be8cf033563e"), /* felipu_feliu */
+            UUID.fromString("1c2589cb-9ea6-4c44-892a-d75bc0162f8c"), /* Alfalik */
+            UUID.fromString("30401f63-f5bb-4f24-9a5a-0ecd5f706115"), /* dentmaged */
+            UUID.fromString("44df6b20-168f-4389-b7ac-434518207c2f"), /* ParaPenguin */
+            UUID.fromString("a9e76277-c453-4ff0-98a0-9461fe81e458"), /* Aaron1011 */
+            UUID.fromString("8d02e486-66d5-46bf-8e6b-81e18ef9e6c7"), /* TiTo_418 */
+            UUID.fromString("28889c74-f739-4372-87a8-b965cd5f9d65"), /* javipepe */
+            UUID.fromString("56dcd959-b969-4dea-801c-ac5d8e91bf39"), /* SungMatt */
+            UUID.fromString("e08d2055-c537-4675-b703-67dcb84ae96a"), /* SuHoney-iF___-For_TNT */
+            UUID.fromString("50b1121e-ffe1-4798-b382-e3390d53bbff"), /* Eudaldca */
+            UUID.fromString("f97f1394-38c3-468b-885d-e8b39dc40919"), /* RubeGamerV */
+            UUID.fromString("1c885878-caf9-4886-9e78-766a18caccbe"), /* ShakeThatAss-G61 */
+            UUID.fromString("091a98d4-71de-4dde-918b-e7986d89e3b7"), /* iJorGeZz-Madrilenio */
+            UUID.fromString("17feaec5-9616-49d8-a507-83026050dd8f"), /* ShinyDialga45 */
+            UUID.fromString("6804b597-93f0-4011-ac77-5bccad8e7b1d")); /* Vixo1 */
+
     public PermissionModule(Plugin plugin) {
         this.plugin = plugin;
         this.attachmentMap = new HashMap<>();
@@ -41,6 +57,10 @@ public class PermissionModule implements Module {
 
     public List<UUID> getDevs() {
         return devs;
+    }
+
+    public List<UUID> getContributors() {
+        return contributors;
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -157,10 +177,17 @@ public class PermissionModule implements Module {
         return GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).getDevs().contains(player);
     }
 
+    public static boolean isContributor(UUID player) {
+        return GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).getContributors().contains(player);
+    }
+
     @EventHandler
     public void onPlayerNameUpdate(PlayerNameUpdateEvent event) {
         String star = "\u2756";
         String stars = "";
+        if (contributors.contains(event.getPlayer().getUniqueId())) {
+            stars += ChatColor.DARK_PURPLE + "*";
+        }
         if (event.getPlayer().isOp()) {
             stars += ChatColor.GOLD + star;
         } else if (isMod(event.getPlayer().getUniqueId())) {
