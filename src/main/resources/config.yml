@@ -8,6 +8,7 @@ server-message: Scrimmage Server
 cycle: -1
 matchTimeMillis: true
 observers-ready: true
+enableHTML: true
 permissions:
   Default:
     permissions:
