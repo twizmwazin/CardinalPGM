@@ -312,7 +312,7 @@ public class ScoreboardModule implements Module {
                         setScore(objective, name, slot);
                         used.add(name);
                         slot++;
-                        if (slot < getSlots()) {
+                        if (slot < getObjectiveSlots()) {
                             String blank = getNextBlankSlot(used);
                             setScore(objective, blank, slot);
                             used.add(blank);
@@ -348,7 +348,7 @@ public class ScoreboardModule implements Module {
                 setScore(objective, name, slot);
                 used.add(name);
                 slot++;
-                if (slot < getSlots()) {
+                if (slot < getObjectiveSlots()) {
                     String blank = getNextBlankSlot(used);
                     setScore(objective, blank, slot);
                     used.add(blank);
@@ -478,7 +478,7 @@ public class ScoreboardModule implements Module {
                         setScore(objective, name, slot);
                         used.add(name);
                         slot++;
-                        if (slot < getCompactSlots()) {
+                        if (slot < getObjectiveSlots()) {
                             String blank = getNextBlankSlot(used);
                             setScore(objective, blank, slot);
                             used.add(blank);
@@ -523,7 +523,7 @@ public class ScoreboardModule implements Module {
                     setScore(objective, name, slot);
                     used.add(name);
                     slot++;
-                    if (slot < getCompactSlots()) {
+                    if (slot < getObjectiveSlots()) {
                         String blank = getNextBlankSlot(used);
                         setScore(objective, blank, slot);
                         used.add(blank);
@@ -683,6 +683,28 @@ public class ScoreboardModule implements Module {
             slots ++;
         }
         slots --;
+        return slots;
+    }
+
+    public int getObjectiveSlots() {
+        int slots = 0;
+        if (getSlots() < 16) {
+            for (TeamModule team : TeamUtils.getTeams()) {
+                if (!team.isObserver() && TeamUtils.getShownObjectives(team).size() > 0) {
+                    slots += 2;
+                    slots += TeamUtils.getShownObjectives(team).size();
+                }
+            }
+            slots --;
+        } else if (getCompactSlots() < 16) {
+            for (TeamModule team : TeamUtils.getTeams()) {
+                if (!team.isObserver() && TeamUtils.getShownObjectives(team).size() > 0) {
+                    slots += 2;
+                    if (TeamUtils.getShownObjectives(team).size() > 0) slots ++;
+                }
+            }
+            slots --;
+        }
         return slots;
     }
 
