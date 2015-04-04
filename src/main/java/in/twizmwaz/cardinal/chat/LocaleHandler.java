@@ -20,6 +20,9 @@ public class LocaleHandler {
         documents.add(saxBuilder.build(plugin.getResource("lang/es.xml")));
         documents.add(saxBuilder.build(plugin.getResource("lang/fr.xml")));
         documents.add(saxBuilder.build(plugin.getResource("lang/it.xml")));
+        documents.add(saxBuilder.build(plugin.getResource("lang/ko.xml")));
+        documents.add(saxBuilder.build(plugin.getResource("lang/sv.xml")));
+        documents.add(saxBuilder.build(plugin.getResource("lang/zh.xml")));
     }
     
     public Document getLocaleDocument(String locale) {
