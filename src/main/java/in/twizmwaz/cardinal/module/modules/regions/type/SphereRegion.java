@@ -24,15 +24,15 @@ public class SphereRegion extends RegionModule {
         this(parser.getName(), parser.getOrigin(), parser.getRadius());
     }
 
-    public double getOriginx() {
+    public double getOriginX() {
         return origin.getX();
     }
 
-    public double getOriginy() {
+    public double getOriginY() {
         return origin.getY();
     }
 
-    public double getOriginz() {
+    public double getOriginZ() {
         return origin.getZ();
     }
 
@@ -57,7 +57,7 @@ public class SphereRegion extends RegionModule {
         double d = NumUtils.getRandom(0, 360);
         double e = NumUtils.getRandom(0, radius);
         double f = NumUtils.getRandom(0, 360);
-        return new PointRegion(null, getOriginx() + a * Math.sin(b), getOriginy() + c * Math.sin(d), getOriginz() + e * Math.sin(f));
+        return new PointRegion(null, getOriginX() + a * Math.sin(b), getOriginY() + c * Math.sin(d), getOriginZ() + e * Math.sin(f));
     }
 
     @Override
@@ -68,7 +68,7 @@ public class SphereRegion extends RegionModule {
     @Override
     public List<Block> getBlocks() {
         List<Block> results = new ArrayList<>();
-        CuboidRegion bound = new CuboidRegion(null, getOriginx() - radius, getOriginy() - radius, getOriginz() - radius, getOriginx() + radius, getOriginy() + radius, getOriginz() + radius);
+        CuboidRegion bound = new CuboidRegion(null, getOriginX() - radius, getOriginY() - radius, getOriginZ() - radius, getOriginX() + radius, getOriginY() + radius, getOriginZ() + radius);
         for (Block block : bound.getBlocks()) {
             if (contains(new BlockRegion(null, block.getX(), block.getY(), block.getZ()))) results.add(block);
         }
