@@ -19,7 +19,7 @@ public class LeaveRegion extends AppliedRegion {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (!region.contains(new BlockRegion(null, event.getTo().toVector())) && region.contains(new BlockRegion(null, event.getFrom().toVector())) && filter.evaluate(event.getPlayer(), event).equals(FilterState.DENY) && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() && GameHandler.getGameHandler().getMatch().isRunning()) {
+        if (!region.contains(event.getTo().toVector()) && region.contains(event.getFrom().toVector()) && filter.evaluate(event.getPlayer(), event).equals(FilterState.DENY) && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() && GameHandler.getGameHandler().getMatch().isRunning()) {
             event.setTo(event.getFrom());
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }

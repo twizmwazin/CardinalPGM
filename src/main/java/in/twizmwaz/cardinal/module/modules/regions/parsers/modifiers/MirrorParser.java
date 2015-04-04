@@ -4,7 +4,8 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionParser;
-import org.bukkit.util.BlockVector;
+import org.bukkit.Bukkit;
+import in.twizmwaz.cardinal.util.FlooredVector;
 import org.bukkit.util.Vector;
 import org.jdom2.Element;
 
@@ -25,12 +26,12 @@ public class MirrorParser extends RegionParser {
         if (element.getAttributeValue("origin") != null) {
             String[] origin = element.getAttributeValue("origin").contains(",") ? element.getAttributeValue("origin").split(",") :
                     element.getAttributeValue("origin").trim().replaceAll(" ", ",").split(",");
-            this.origin = new BlockVector(Double.parseDouble(origin[0]), Double.parseDouble(origin[1]), Double.parseDouble(origin[2]));
+            this.origin = new Vector(Double.parseDouble(origin[0]), Double.parseDouble(origin[1]), Double.parseDouble(origin[2]));
         } else {
             this.origin = new Vector(0, 0, 0);
         }
         String[] normal = element.getAttributeValue("normal").trim().replaceAll(" ", ",").split(",");
-        this.normal = new BlockVector(Double.parseDouble(normal[0]), Double.parseDouble(normal[1]), Double.parseDouble(normal[2]));
+        this.normal = new Vector(Double.parseDouble(normal[0]), Double.parseDouble(normal[1]), Double.parseDouble(normal[2]));
     }
     
     public RegionModule getBase() {

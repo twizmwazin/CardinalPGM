@@ -50,7 +50,7 @@ public class Portal implements Module {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (region.contains(new BlockRegion(null, event.getTo().toVector()))) {
+        if (region.contains(event.getTo().toVector()) && !region.contains(event.getFrom().toVector())) {
             if ((filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW)) || (TeamUtils.getTeamByPlayer(event.getPlayer()) != null && TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
                 if (destination != null) {
                     event.getPlayer().teleport(destination.getRandomPoint().getLocation());
@@ -82,7 +82,7 @@ public class Portal implements Module {
                 }
             }
         }
-        if (destination != null && destination.contains(new BlockRegion(null, event.getTo().toVector())) && this.bidirectional) {
+        if (destination != null && destination.contains(event.getTo().toVector()) && !destination.contains(event.getFrom().toVector()) && this.bidirectional) {
             if (filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW) || (TeamUtils.getTeamByPlayer(event.getPlayer()) != null && TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
                 event.getPlayer().teleport(region.getRandomPoint().getLocation());
                 if (sound) event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2F, 1);

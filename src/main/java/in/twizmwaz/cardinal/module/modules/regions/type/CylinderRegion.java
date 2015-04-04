@@ -4,7 +4,7 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.CylinderParser;
 import in.twizmwaz.cardinal.util.NumUtils;
 import org.bukkit.block.Block;
-import org.bukkit.util.BlockVector;
+import in.twizmwaz.cardinal.util.FlooredVector;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public class CylinderRegion extends RegionModule {
 
     @Override
     public BlockRegion getCenterBlock() {
-        return (new BlockRegion(null, new BlockVector(getBaseX(), getBaseY() + .5 * height, getBaseZ())));
+        return (new BlockRegion(null, new FlooredVector(getBaseX(), getBaseY() + .5 * height, getBaseZ())));
     }
 
     @Override

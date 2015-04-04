@@ -2,7 +2,7 @@ package in.twizmwaz.cardinal.module.modules.regions.parsers;
 
 import in.twizmwaz.cardinal.module.modules.regions.RegionParser;
 import in.twizmwaz.cardinal.util.NumUtils;
-import org.bukkit.util.BlockVector;
+import in.twizmwaz.cardinal.util.FlooredVector;
 import org.bukkit.util.Vector;
 import org.jdom2.Element;
 
@@ -23,7 +23,7 @@ public class BlockParser extends RegionParser{
             y = NumUtils.parseDouble(working.trim().replaceAll(" ", ",").split(",")[1]);
             z = NumUtils.parseDouble(working.trim().replaceAll(" ", ",").split(",")[2]);
         }
-        this.vector = new BlockVector(x, y, z);
+        this.vector = new FlooredVector(x, y, z);
     }
 
     public Vector getVector() {

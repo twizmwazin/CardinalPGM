@@ -4,6 +4,7 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.modifiers.TranslateParser;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
@@ -19,6 +20,7 @@ public class TranslatedRegion extends RegionModule {
         super(name);
         this.base = base;
         this.offset = offset;
+        Bukkit.getLogger().info(name + ": " + base.getCenterBlock().getBlock().toString() + " translated to " + getCenterBlock().getBlock() + " with offset of " + offset);
     }
 
     public TranslatedRegion(TranslateParser parser) {
@@ -42,31 +44,31 @@ public class TranslatedRegion extends RegionModule {
     }
 
     public Vector getOffset() {
-        return offset.clone().add(new Vector(-0.5, -0.5, -0.5));
+        return offset.clone();
     }
 
     @Override
     public boolean contains(Vector vector) {
-        return base.contains(new BlockRegion(null, vector.subtract(getOffset())));
+        return base.contains(vector.clone().subtract(getOffset()));
     }
 
     @Override
     public PointRegion getRandomPoint() {
         BlockRegion baseRandom = base.getCenterBlock();
-        return new PointRegion(null, baseRandom.getVector().add(getOffset()));
+        return new PointRegion(null, baseRandom.getVector().add(getOffset().add(new Vector(0.5, 0.5, 0.5))));
     }
 
     @Override
     public BlockRegion getCenterBlock() {
         BlockRegion baseCenter = base.getCenterBlock();
-        return new BlockRegion(null, baseCenter.getVector().add(getOffset()));
+        return new BlockRegion(null, baseCenter.getVector().add(getOffset().add(new Vector(0.5, 0.5, 0.5))));
     }
 
     @Override
     public List<Block> getBlocks() {
         List<Block> results = new ArrayList<>();
         for (Block block : getBase().getBlocks()) {
-            results.add(new BlockRegion(null, block.getLocation().toVector().add(getOffset())).getBlock());
+            results.add(new BlockRegion(null, block.getLocation().toVector().add(getOffset().add(new Vector(0.5, 0.5, 0.5)))).getBlock());
         }
         return results;
     }

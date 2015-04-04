@@ -20,7 +20,7 @@ public class VelocityRegion extends AppliedRegion {
     
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (region.contains(new BlockRegion(null, event.getTo().toVector())) && (filter == null || filter.evaluate(event.getPlayer(), event).equals(FilterState.ALLOW))) {
+        if (region.contains(event.getTo().toVector()) && (filter == null || filter.evaluate(event.getPlayer(), event).equals(FilterState.ALLOW))) {
             event.getPlayer().setVelocity(velocity);
         }
     }

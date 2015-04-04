@@ -5,7 +5,7 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.BlockParser;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.util.BlockVector;
+import in.twizmwaz.cardinal.util.FlooredVector;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class BlockRegion extends RegionModule {
     
     public BlockRegion(String name, double x, double y, double z) {
         super(name);
-        this.vector = new BlockVector(x, y, z);
+        this.vector = new FlooredVector(x, y, z);
     }
 
     public BlockRegion(BlockParser parser) {
@@ -45,8 +45,8 @@ public class BlockRegion extends RegionModule {
         return vector.clone().add(new Vector(0.5, 0.5, 0.5));
     }
     
-    public Vector getBlockVector() {
-        return vector.clone().toBlockVector();
+    public Vector getFlooredVector() {
+        return new FlooredVector(vector);
     }
 
     @Override

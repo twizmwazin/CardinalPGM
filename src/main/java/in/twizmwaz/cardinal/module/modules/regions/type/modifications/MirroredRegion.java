@@ -8,7 +8,7 @@ import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.util.BlockVector;
+import in.twizmwaz.cardinal.util.FlooredVector;
 import org.bukkit.util.Vector;
 
 import java.util.List;
@@ -77,20 +77,20 @@ public class MirroredRegion extends RegionModule {
 
     public void updateRegion() {
         ModuleCollection<RegionModule> blocks = new ModuleCollection<>();
-        Vector translation = new BlockVector(origin.getBlockX() * (normal.getBlockX() != 0 ? 1: 0), origin.getBlockY() * (normal.getBlockY() != 0 ? 1: 0), origin.getBlockZ() * (normal.getBlockZ() != 0 ? 1: 0));
+        Vector translation = new Vector(origin.getX() * normal.getX(), origin.getY() * normal.getY(), origin.getZ() * normal.getZ());
         for (Block block : base.getBlocks()) {
             Location location = block.getLocation();
             int xRelative = 0;
             int yRelative = 0;
             int zRelative = 0;
-            if (normal.getBlockX() != 0) {
-                xRelative = (location.getBlockX() - translation.getBlockX()) * -2;
+            if (normal.getX() != 0) {
+                xRelative = (int) Math.floor((location.getX() - translation.getX()) * -2);
             }
-            if (normal.getBlockY() != 0) {
-                yRelative = (location.getBlockY() - translation.getBlockY()) * -2;
+            if (normal.getX() != 0) {
+                yRelative = (int) Math.floor((location.getY() - translation.getY()) * -2);
             }
-            if (normal.getBlockZ() != 0) {
-                zRelative = (location.getBlockZ() - translation.getBlockZ()) * -2;
+            if (normal.getZ() != 0) {
+                zRelative = (int) Math.floor((location.getZ() - translation.getZ()) * -2);
             }
             Block newBlock = block.getRelative(xRelative, yRelative, zRelative);
             blocks.add(new BlockRegion(null, newBlock.getX(), newBlock.getY(), newBlock.getZ()));

@@ -41,7 +41,7 @@ public class ProximityAlarm implements Module {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (region.contains(new BlockRegion(null, event.getTo().toVector())) && !region.contains(new BlockRegion(null, event.getFrom().toVector())) && detect.evaluate(event.getPlayer()).equals(FilterState.ALLOW) && TeamUtils.getTeamByPlayer(event.getPlayer()) != null && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() && GameHandler.getGameHandler().getMatch().isRunning()) {
+        if (region.contains(event.getTo().toVector()) && !region.contains(event.getFrom().toVector()) && detect.evaluate(event.getPlayer()).equals(FilterState.ALLOW) && TeamUtils.getTeamByPlayer(event.getPlayer()) != null && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() && GameHandler.getGameHandler().getMatch().isRunning()) {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (notify.evaluate(player).equals(FilterState.ALLOW)) {
                     player.sendMessage(ChatColor.RED + message);

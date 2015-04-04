@@ -22,7 +22,7 @@ public class KitRegion extends AppliedRegion {
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerMove(PlayerMoveEvent event) {
         if (event.isCancelled()) return;
-        if (region.contains(new BlockRegion(null, event.getTo().toVector())) && !region.contains(new BlockRegion(null, event.getFrom().toVector())) && (filter == null || filter.evaluate(event.getPlayer(), event.getTo(), event).equals(FilterState.ALLOW))) {
+        if (region.contains(event.getTo().toVector()) && !region.contains(event.getFrom().toVector()) && (filter == null || filter.evaluate(event.getPlayer(), event.getTo(), event).equals(FilterState.ALLOW))) {
             kit.apply(event.getPlayer());
         }
     }
