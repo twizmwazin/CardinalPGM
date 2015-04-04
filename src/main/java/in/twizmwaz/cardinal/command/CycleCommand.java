@@ -30,6 +30,14 @@ public class CycleCommand {
             }
         } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING))
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(ChatUtils.getLocale(sender)));
+        if (cmd.argsLength() > 1) {
+            LoadedMap next = getMap(cmd.getJoinedStrings(1));
+            if (next == null) {
+                throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_MAP_MATCH).getMessage(ChatUtils.getLocale(sender)));
+            } else {
+                setCycleMap(next);
+            }
+        }
         CycleTimerModule timer = GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimerModule.class);
         timer.setOriginalState(GameHandler.getGameHandler().getMatch().getState());
         timer.setCancelled(true);
@@ -40,23 +48,11 @@ public class CycleCommand {
     @CommandPermissions("cardinal.match.setnext")
     public static void setNext(final CommandContext cmd, CommandSender sender) throws CommandException {
         String input = cmd.getJoinedStrings(0).replaceAll(" ", "");
-        LoadedMap nextMap = null;
-        for (LoadedMap loadedMap : GameHandler.getGameHandler().getRotation().getLoaded()) {
-            if (loadedMap.getName().toLowerCase().replaceAll(" ", "").equalsIgnoreCase(input.toLowerCase())) {
-                nextMap = loadedMap;
-            }
-        }
-        if (nextMap == null) {
-            for (LoadedMap loadedMap : GameHandler.getGameHandler().getRotation().getLoaded()) {
-                if (loadedMap.getName().toLowerCase().replaceAll(" ", "").startsWith(input.toLowerCase())) {
-                    nextMap = loadedMap;
-                }
-            }
-        }
+        LoadedMap nextMap = getMap(cmd.getJoinedStrings(0));
         if (nextMap == null) {
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_MAP_MATCH).getMessage(ChatUtils.getLocale(sender)));
         } else {
-            GameHandler.getGameHandler().getCycle().setMap(nextMap);
+            setCycleMap(nextMap);
             sender.sendMessage(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.GENERIC_MAP_SET, ChatColor.GOLD + nextMap.getName() + ChatColor.DARK_PURPLE).getMessage(ChatUtils.getLocale(sender)));
         }
     }
@@ -73,10 +69,31 @@ public class CycleCommand {
             }
         } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING))
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(ChatUtils.getLocale(sender)));
-        GameHandler.getGameHandler().getCycle().setMap(GameHandler.getGameHandler().getMatch().getLoadedMap());
+        setCycleMap(GameHandler.getGameHandler().getMatch().getLoadedMap());
         CycleTimerModule timer = GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimerModule.class);
         timer.setOriginalState(GameHandler.getGameHandler().getMatch().getState());
         timer.setCancelled(true);
         timer.startTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
+    }
+
+    private static LoadedMap getMap(String input) {
+        LoadedMap result = null;
+        for (LoadedMap loadedMap : GameHandler.getGameHandler().getRotation().getLoaded()) {
+            if (loadedMap.getName().toLowerCase().replaceAll(" ", "").equalsIgnoreCase(input.toLowerCase())) {
+                result = loadedMap;
+            }
+        }
+        if (result == null) {
+            for (LoadedMap loadedMap : GameHandler.getGameHandler().getRotation().getLoaded()) {
+                if (loadedMap.getName().toLowerCase().replaceAll(" ", "").startsWith(input.toLowerCase())) {
+                    result = loadedMap;
+                }
+            }
+        }
+        return result;
+    }
+
+    private static void setCycleMap(LoadedMap map) {
+        GameHandler.getGameHandler().getCycle().setMap(map);
     }
 }
