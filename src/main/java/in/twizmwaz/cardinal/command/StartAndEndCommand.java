@@ -18,7 +18,7 @@ public class StartAndEndCommand {
     private static int timer;
     private static boolean waiting = false;
 
-    @Command(aliases = {"start"}, desc = "Starts the match.", usage = "[time]")
+    @Command(aliases = {"start", "begin"}, desc = "Starts the match.", usage = "[time]")
     @CommandPermissions("cardinal.match.start")
     public static void start(CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.WAITING)) {
