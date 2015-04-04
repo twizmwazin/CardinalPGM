@@ -77,6 +77,7 @@ public class CycleCommand {
     }
 
     private static LoadedMap getMap(String input) {
+        input = input.toLowerCase().replaceAll(" ", "");
         LoadedMap result = null;
         for (LoadedMap loadedMap : GameHandler.getGameHandler().getRotation().getLoaded()) {
             if (loadedMap.getName().toLowerCase().replaceAll(" ", "").equalsIgnoreCase(input.toLowerCase())) {
