@@ -210,8 +210,8 @@ public enum  ChatConstant {
     UI_MATCH_REPORT_FAILED("userInterface.matchReportFailed");
     
     private final String path;
-    
-    private ChatConstant(String path) {
+
+    ChatConstant(String path) {
         this.path = path;
     }
     
@@ -219,9 +219,13 @@ public enum  ChatConstant {
         Document localized = Cardinal.getLocaleHandler().getLocaleDocument(locale.split("_")[0]);
         String message = null;
         Element work = localized.getRootElement();
-        for (String element : this.path.split("\\.")) {
-            work = work.getChild(element);
-            message = work.getText();
+        try {
+            for (String element : this.path.split("\\.")) {
+                work = work.getChild(element);
+                message = work.getText();
+            }
+        } catch (NullPointerException e) {
+            message = getMessage("en");
         }
         return message;
     }
