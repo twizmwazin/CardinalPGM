@@ -6,8 +6,8 @@
         <cycleDuringMatch>No puedes rotar durante una partida. Utiliza -f para forzar.</cycleDuringMatch>
         <matchRunning>La partida ya ha comenzado.</matchRunning>
         <matchNoResume>La partida ha terminado y no se puede reanudar.</matchNoResume>
-        <matchNoStart>La partida no se puede iniciar en este momento.</matchNoStart>
-        <matchNoEnd>La partida no puede ser terminada en este momento.</matchNoEnd>
+        <matchNoStart>La partida no se puede iniciar en estos momentos.</matchNoStart>
+        <matchNoEnd>La partida no puede ser terminada en estos momentos.</matchNoEnd>
         <noSetNext>No puedes establecer el siguiente mapa cuando hay un reinicio programado. Usa -f para forzar.</noSetNext>
         <disabledCommand>Este comando está inhabilitado. Los mapas se volverán a cargar automáticamente si se detectan cambios.</disabledCommand>
         <rotPointInvalid>El punto de rotación especificado no es válido.</rotPointInvalid>
