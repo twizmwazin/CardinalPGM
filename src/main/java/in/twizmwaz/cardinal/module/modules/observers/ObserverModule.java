@@ -27,12 +27,13 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
-import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -336,6 +337,20 @@ public class ObserverModule implements Module {
     public void onPlayerConnect(PlayerLoginEvent event) {
         if (Bukkit.getBanList(BanList.Type.NAME).isBanned(event.getPlayer().getName())) {
             event.disallow(PlayerLoginEvent.Result.KICK_BANNED, Bukkit.getBanList(BanList.Type.NAME).getBanEntry(event.getPlayer().getName()).getReason());
+        }
+    }
+
+    @EventHandler
+    public void onHangingPlace(HangingPlaceEvent event) {
+        if (!match.isRunning() || TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onHangingBreak(HangingBreakByEntityEvent event) {
+        if (!match.isRunning() || event.getEntity() instanceof Player && TeamUtils.getTeamByPlayer((Player) event.getEntity()).isObserver()) {
+            event.setCancelled(true);
         }
     }
 
