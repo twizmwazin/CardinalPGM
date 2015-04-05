@@ -129,21 +129,27 @@ public class ScoreboardModule implements Module {
             String prefix = event.getObjective().getScoreboardHandler().getPrefix(this.team).length() > 16 ? event.getObjective().getScoreboardHandler().getPrefix(this.team).substring(0, 16) : event.getObjective().getScoreboardHandler().getPrefix(this.team);
             scoreboardTeam.setPrefix(prefix);
         } else {
-            Team scoreboardTeam = null;
-            for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
-                scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
-                break;
-            }
-            String compact = "";
-            for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
-                compact += obj.getScoreboardHandler().getPrefix(team) + " ";
-            }
-            if (scoreboardTeam != null) {
-                while (compact.length() > 32) {
-                    compact = StringUtils.removeLastWord(compact);
+            if (getCompactSlots() < 16) {
+                for (TeamModule team : TeamUtils.getTeams()) {
+                    if (!team.isObserver() && TeamUtils.getShownObjectives(team).contains(event.getObjective())) {
+                        Team scoreboardTeam = null;
+                        for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
+                            scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
+                            break;
+                        }
+                        String compact = "";
+                        for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
+                            compact += obj.getScoreboardHandler().getPrefix(this.team) + " ";
+                        }
+                        if (scoreboardTeam != null) {
+                            while (compact.length() > 32) {
+                                compact = StringUtils.removeLastWord(compact);
+                            }
+                            scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
+                            scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                        }
+                    }
                 }
-                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
             }
         }
     }
@@ -156,21 +162,27 @@ public class ScoreboardModule implements Module {
                 String prefix = objective.getScoreboardHandler().getPrefix(this.team).length() > 16 ? objective.getScoreboardHandler().getPrefix(this.team).substring(0, 16) : objective.getScoreboardHandler().getPrefix(this.team);
                 scoreboardTeam.setPrefix(prefix);
             } else {
-                Team scoreboardTeam = null;
-                for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
-                    scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
-                    break;
-                }
-                String compact = "";
-                for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
-                    compact += obj.getScoreboardHandler().getPrefix(team) + " ";
-                }
-                if (scoreboardTeam != null) {
-                    while (compact.length() > 32) {
-                        compact = StringUtils.removeLastWord(compact);
+                if (getCompactSlots() < 16) {
+                    for (TeamModule team : TeamUtils.getTeams()) {
+                        if (!team.isObserver() && TeamUtils.getShownObjectives(team).contains(objective)) {
+                            Team scoreboardTeam = null;
+                            for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
+                                scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
+                                break;
+                            }
+                            String compact = "";
+                            for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
+                                compact += obj.getScoreboardHandler().getPrefix(this.team) + " ";
+                            }
+                            if (scoreboardTeam != null) {
+                                while (compact.length() > 32) {
+                                    compact = StringUtils.removeLastWord(compact);
+                                }
+                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
+                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                            }
+                        }
                     }
-                    scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                    scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
                 }
             }
         }
@@ -183,21 +195,27 @@ public class ScoreboardModule implements Module {
             String prefix = event.getObjective().getScoreboardHandler().getPrefix(this.team).length() > 16 ? event.getObjective().getScoreboardHandler().getPrefix(this.team).substring(0, 16) : event.getObjective().getScoreboardHandler().getPrefix(this.team);
             scoreboardTeam.setPrefix(prefix);
         } else {
-            Team scoreboardTeam = null;
-            for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
-                scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
-                break;
-            }
-            String compact = "";
-            for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
-                compact += obj.getScoreboardHandler().getPrefix(team) + " ";
-            }
-            if (scoreboardTeam != null) {
-                while (compact.length() > 32) {
-                    compact = StringUtils.removeLastWord(compact);
+            if (getCompactSlots() < 16) {
+                for (TeamModule team : TeamUtils.getTeams()) {
+                    if (!team.isObserver() && TeamUtils.getShownObjectives(team).contains(event.getObjective())) {
+                        Team scoreboardTeam = null;
+                        for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
+                            scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
+                            break;
+                        }
+                        String compact = "";
+                        for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
+                            compact += obj.getScoreboardHandler().getPrefix(this.team) + " ";
+                        }
+                        if (scoreboardTeam != null) {
+                            while (compact.length() > 32) {
+                                compact = StringUtils.removeLastWord(compact);
+                            }
+                            scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
+                            scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                        }
+                    }
                 }
-                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
             }
         }
     }
@@ -209,21 +227,27 @@ public class ScoreboardModule implements Module {
             String prefix = event.getObjective().getScoreboardHandler().getPrefix(this.team).length() > 16 ? event.getObjective().getScoreboardHandler().getPrefix(this.team).substring(0, 16) : event.getObjective().getScoreboardHandler().getPrefix(this.team);
             scoreboardTeam.setPrefix(prefix);
         } else {
-            Team scoreboardTeam = null;
-            for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
-                scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
-                break;
-            }
-            String compact = "";
-            for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
-                compact += obj.getScoreboardHandler().getPrefix(team) + " ";
-            }
-            if (scoreboardTeam != null) {
-                while (compact.length() > 32) {
-                    compact = StringUtils.removeLastWord(compact);
+            if (getCompactSlots() < 16) {
+                for (TeamModule team : TeamUtils.getTeams()) {
+                    if (!team.isObserver() && TeamUtils.getShownObjectives(team).contains(event.getObjective())) {
+                        Team scoreboardTeam = null;
+                        for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
+                            scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
+                            break;
+                        }
+                        String compact = "";
+                        for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
+                            compact += obj.getScoreboardHandler().getPrefix(this.team) + " ";
+                        }
+                        if (scoreboardTeam != null) {
+                            while (compact.length() > 32) {
+                                compact = StringUtils.removeLastWord(compact);
+                            }
+                            scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
+                            scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                        }
+                    }
                 }
-                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
             }
         }
     }
