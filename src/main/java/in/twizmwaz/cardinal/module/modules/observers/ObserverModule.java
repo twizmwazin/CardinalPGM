@@ -16,8 +16,10 @@ import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.tutorial.Tutorial;
 import in.twizmwaz.cardinal.util.ItemUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
+
 import org.bukkit.*;
 import org.bukkit.block.*;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -235,8 +237,8 @@ public class ObserverModule implements Module {
                     toView.setItem(i, viewing.getInventory().getItem(i));
                 }
                 event.getPlayer().openInventory(toView);
-
-
+            } else if (event.getRightClicked() instanceof ItemFrame) {
+            	event.setCancelled(true);
             }
         }
     }
