@@ -4,7 +4,8 @@ deleteMatches: true
 displayMapLoadErrors: false
 custom-motd: true
 worldEditPermissions: true
-server-message: Scrimmage Server
+tab-message: Scrimmage Server
+tab-prefix: Cardinal
 cycle: -1
 matchTimeMillis: true
 observers-ready: true
@@ -16,6 +17,11 @@ permissions:
     permissions:
     - cardinal.chat.global
     - cardinal.chat.team
+  Observers:
+    permissions:
+    - cardinal.chat.global
+    - cardinal.chat.team
+    - minecraft.command.tp
   Moderator:
     permissions:
     - cardinal.mod
@@ -38,6 +44,8 @@ permissions:
     - whitelist.remove
     - whitelist.list
     - whitelist.team
+    - whitelist.clear
+    - whitelist.all
     - whielist.kick
     - cardinal.punish.warn
     - cardinal.punish.kick
