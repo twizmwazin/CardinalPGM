@@ -42,10 +42,6 @@ public class MatchTranscript implements Module {
         }
     }
 
-    public File getLogFile() {
-        return logFile;
-    }
-
     public String getLog() {
         return log;
     }
@@ -57,41 +53,20 @@ public class MatchTranscript implements Module {
     	} else {
     		format = new SimpleDateFormat("HH:mm:ss");
     	}
-    		
-        writer.println("[" + format.format(new Date()) + "] " + string);
+        log += "[" + format.format(new Date()) + "] " + string + "\n";
     }
 
     @EventHandler
      public void onObjectiveComplete(ObjectiveCompleteEvent event) {
-        if (event.getObjective() != null)
+        if (event.getObjective().showOnScoreboard()) {
             log(event.getPlayer().getName() + " completed " + event.getObjective().getName() + " for " + TeamUtils.getTeamByPlayer(event.getPlayer()).getName());
+        }
     }
 
     @EventHandler
     public void onObjectiveTouch(ObjectiveTouchEvent event) {
-        log(event.getPlayer().getName() + " touched " + event.getObjective().getName() + " for " + TeamUtils.getTeamByPlayer(event.getPlayer()).getName());
-    }
-
-    @EventHandler
-    public void onMatchStart(MatchStartEvent event) {
-        log("Match has started on " + GameHandler.getGameHandler().getMatch().getLoadedMap().getName());
-    }
-
-    @EventHandler
-    public void onMatchEnd(MatchEndEvent event) {
-        log(event.getTeam() != null ? event.getTeam().getName() + " won the match!" : "Match ended with no winner" );
-        writer.close();
-        try {
-            FileInputStream in = new FileInputStream(logFile);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            String lines = "";
-            String line;
-            while ((line = reader.readLine()) != null) {
-                lines += line + "\n";
-            }
-            log = lines;
-        } catch (IOException e) {
-            Bukkit.getLogger().warning("Error when logging to transcript");
+        if (event.getObjective().showOnScoreboard() && event.displayTouchMessage()) {
+            log(event.getPlayer().getName() + " touched " + event.getObjective().getName() + " for " + TeamUtils.getTeamByPlayer(event.getPlayer()).getName());
         }
     }
 }

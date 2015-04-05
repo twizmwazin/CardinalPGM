@@ -48,7 +48,6 @@ public class Stats implements Module {
 
     private List<MatchTracker> stats;
     private Map<OfflinePlayer, TeamModule> playerTeams = Maps.newHashMap();
-    private File transcript;
 
     protected Stats() {
         stats = Lists.newArrayList();
@@ -147,14 +146,13 @@ public class Stats implements Module {
 
     @EventHandler
     public void onMatchStart(MatchStartEvent event) {
-        transcript = GameHandler.getGameHandler().getMatch().getModules().getModule(MatchTranscript.class).getLogFile();
         try {
             File template = new File(GameHandler.getGameHandler().getMatchFile() + "/statistics.html");
             OutputStream out = new FileOutputStream(template);
             IOUtils.copy(GameHandler.getGameHandler().getPlugin().getResource("statistics.html"), out);
             out.close();
         } catch (IOException e) {
-            Bukkit.getLogger().warning("Unable to copy template statistics file");
+            Bukkit.getLogger().warning("Unable to copy template statistics file!");
             e.printStackTrace();
         }
     }

@@ -16,7 +16,7 @@ public class BlockRegion extends RegionModule {
 
     public BlockRegion(String name, Vector vector) {
         super(name);
-        this.vector = new Vector(vector);
+        this.vector = vector;
     }
     
     public BlockRegion(String name, double x, double y, double z) {
@@ -44,10 +44,6 @@ public class BlockRegion extends RegionModule {
         return vector.clone().add(new Vector(0.5, 0.5, 0.5));
     }
     
-    public Vector getVector() {
-        return new Vector(vector);
-    }
-
     @Override
     public boolean contains(Vector vector) {
         return vector.getBlockX() == getVector().getBlockX() &&
