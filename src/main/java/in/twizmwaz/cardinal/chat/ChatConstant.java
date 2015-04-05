@@ -38,6 +38,7 @@ public enum  ChatConstant {
     ERROR_NO_TEAM_MATCH("error.noTeamMatch"),
     ERROR_NO_ROT_MATCH("error.noRotMatch"),
     ERROR_NO_PLAYER_MATCH("error.noPlayerMatch"),
+    ERROR_NOT_ENOUGH_PLAYERS("error.notEnoughPlayers"),
     ERROR_MULTIPLE_PLAYERS("error.multiplePlayers"),
     ERROR_UNKNOWN_ERROR("error.unknownError"),
     ERROR_MOVED_FOR_BALANCE("error.movedForBalance"),
@@ -225,7 +226,7 @@ public enum  ChatConstant {
                 message = work.getText();
             }
         } catch (NullPointerException e) {
-            message = getMessage("en");
+            message = getMessage("en_US");
         }
         return message;
     }

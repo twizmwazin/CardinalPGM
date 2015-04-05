@@ -8,6 +8,7 @@
         <matchNoResume>Match has finished and may not be resumed.</matchNoResume>
         <matchNoStart>Match could not be started at this time.</matchNoStart>
         <matchNoEnd>Match could not be ended at this time.</matchNoEnd>
+        <notEnoughPlayers>There are not enough players to start the match.</notEnoughPlayers>
         <noSetNext>You may not set the next map when a restart is queued. Use -f to override.</noSetNext>
         <disabledCommand>This command is disabled. Maps will reload automatically if changes are detected.</disabledCommand>
         <rotPointInvalid>Specified rotation point is not valid.</rotPointInvalid>

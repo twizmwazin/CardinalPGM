@@ -7,7 +7,6 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
-import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
@@ -73,11 +72,6 @@ public class Blitz implements Module {
                 }
             }
         }
-    }
-
-    @EventHandler
-    public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
-        Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent());
     }
 
     private int getLives(Player player){

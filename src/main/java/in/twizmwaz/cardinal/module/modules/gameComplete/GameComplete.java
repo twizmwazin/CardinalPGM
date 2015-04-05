@@ -1,8 +1,8 @@
 package in.twizmwaz.cardinal.module.modules.gameComplete;
 
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.event.ScoreUpdateEvent;
-import in.twizmwaz.cardinal.event.ScoreboardUpdateEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.TaskedModule;
@@ -48,7 +48,7 @@ public class GameComplete implements TaskedModule {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerDeath(ScoreboardUpdateEvent event) {
+    public void onCardinalDeath(CardinalDeathEvent event) {
         if (Blitz.matchIsBlitz()) {
             boolean win = true;
             TeamModule winner = null;

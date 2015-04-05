@@ -8,8 +8,11 @@ import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.TaskedModule;
+import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.settings.Settings;
 import in.twizmwaz.cardinal.util.ChatUtils;
+import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -39,6 +42,19 @@ public class StartTimer implements TaskedModule, Cancellable {
                 if (match.getState() != MatchState.STARTING) {
                     return;
                 } else {
+                    if (Blitz.matchIsBlitz()) {
+                        int count = 0;
+                        for (TeamModule team : TeamUtils.getTeams()) {
+                            if (!team.isObserver() && team.size() > 0) {
+                                count ++;
+                            }
+                        }
+                        if (count <= 1) {
+                            ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.ERROR_NOT_ENOUGH_PLAYERS)));
+                            this.setCancelled(true);
+                            return;
+                        }
+                    }
                     match.setState(MatchState.PLAYING);
                     ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "{0}", new LocalizedChatMessage(ChatConstant.UI_MATCH_STARTED)));
                     Bukkit.getServer().getPluginManager().callEvent(new MatchStartEvent());
