@@ -3,44 +3,30 @@ package in.twizmwaz.cardinal.module.modules.stats;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.chat.ChatConstant;
-import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannelModule;
-import in.twizmwaz.cardinal.module.modules.chatChannels.GlobalChannel;
-import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.module.modules.matchTranscript.MatchTranscript;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.settings.Settings;
+import in.twizmwaz.cardinal.util.Contributor;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Attributes;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.parser.Tag;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 import java.io.*;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -126,8 +112,13 @@ public class Stats implements Module {
                 player.sendMessage(ChatColor.GRAY + "Kills: " + ChatColor.GREEN + getKillsByPlayer(player) + ChatColor.AQUA + " | " + ChatColor.GRAY + "Deaths: " + ChatColor.DARK_RED + getDeathsByPlayer(player) + ChatColor.AQUA + " | " + ChatColor.GRAY + "KD: " + ChatColor.GOLD + String.format("%.2f", getKdByPlayer(player)));
             }
         }
+        try {
+            generate();
+        } catch (JDOMException | IOException e) {
+            e.printStackTrace();
+        }
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(GameHandler.getGameHandler().getPlugin(), new Runnable() {
+     /* Bukkit.getScheduler().scheduleSyncDelayedTask(GameHandler.getGameHandler().getPlugin(), new Runnable() {
             public void run() {
                 ChatChannelModule global = GameHandler.getGameHandler().getMatch().getModules().getModule(GlobalChannel.class);
                 global.sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GOLD + "{0}", ChatConstant.UI_MATCH_REPORT_UPLOAD.asMessage()));
@@ -136,7 +127,7 @@ public class Stats implements Module {
                     global.sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", ChatConstant.UI_MATCH_REPORT_FAILED.asMessage()));
                 else global.sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "{0}", ChatConstant.UI_MATCH_REPORT_SUCCESS.asMessage(new UnlocalizedChatMessage(result))));
             }
-        }, 20);
+        }, 20); */
     }
 
     @EventHandler
@@ -144,22 +135,7 @@ public class Stats implements Module {
         this.playerTeams.put(event.getPlayer(), event.getNewTeam());
     }
 
-    @EventHandler
-    public void onMatchStart(MatchStartEvent event) {
-        transcript = GameHandler.getGameHandler().getMatch().getModules().getModule(MatchTranscript.class).getLogFile();
-        try {
-            File template = new File(GameHandler.getGameHandler().getMatchFile() + "/statistics.html");
-            OutputStream out = new FileOutputStream(template);
-            IOUtils.copy(GameHandler.getGameHandler().getPlugin().getResource("statistics.html"), out);
-            out.close();
-        } catch (IOException e) {
-            Bukkit.getLogger().warning("Unable to copy template statistics file");
-            e.printStackTrace();
-        }
-    }
-
-
-    private File generateStats() throws IOException {
+    /* private File generateStats() throws IOException {
         File file = new File(GameHandler.getGameHandler().getMatchFile() + "/statistics.html");
         Document document = Jsoup.parse(file, "utf-8");
         for (Element element : document.getElementsContainingOwnText("%mapName")) {
@@ -190,8 +166,9 @@ public class Stats implements Module {
             }
         }
         Element transcript = document.getElementById("transcript");
-        if (GameHandler.getGameHandler().getMatch().getModules().getModule(MatchTranscript.class).getLog() != null)
+        if (GameHandler.getGameHandler().getMatch().getModules().getModule(MatchTranscript.class).getLog() != null) {
             transcript.appendElement("pre").text(GameHandler.getGameHandler().getMatch().getModules().getModule(MatchTranscript.class).getLog());
+        }
         Writer writer = new PrintWriter(file);
         writer.write(document.html());
         writer.close();
@@ -206,11 +183,63 @@ public class Stats implements Module {
             fileBuilder.addPart(id.getName(), new StringBody(id.getValue(), ContentType.TEXT_HTML));
             post.setEntity(fileBuilder.build());
             HttpClient client = HttpClientBuilder.create().build();
+
             return EntityUtils.toString(client.execute(post).getEntity());
-        } catch (Exception e) {
+        } catch (JDOMException | IOException e) {
             Bukkit.getLogger().warning("Unable to upload statistics");
             e.printStackTrace();
             return null;
         }
+    } */
+
+    public static Document generate() throws JDOMException, IOException {
+        Document report = new Document();
+        report.setRootElement(new Element("report"));
+        Element root = report.getRootElement();
+
+        Element server = new Element("server");
+        Element ip = new Element("ip").setText(Bukkit.getServer().getIp());
+        Element port = new Element("port").setText(Bukkit.getServer().getPort() + "");
+        server.addContent(ip);
+        server.addContent(port);
+        root.addContent(server);
+
+        Element map = new Element("map");
+        Element name = new Element("name").setText(GameHandler.getGameHandler().getMatch().getLoadedMap().getName());
+        Element version = new Element("version").setText(GameHandler.getGameHandler().getMatch().getLoadedMap().getVersion());
+        Element objective = new Element("objective").setText(GameHandler.getGameHandler().getMatch().getLoadedMap().getObjective());
+        Element authors = new Element("authors");
+        for (Contributor author : GameHandler.getGameHandler().getMatch().getLoadedMap().getAuthors()) {
+            authors.addContent(new Element("author").setText(author.getName()).setAttribute("contribution", author.getContribution()));
+        }
+        Element contributors = new Element("contributors");
+        for (Contributor contributor : GameHandler.getGameHandler().getMatch().getLoadedMap().getContributors()) {
+            contributors.addContent(new Element("contributor").setText(contributor.getName()).setAttribute("contribution", contributor.getContribution()));
+        }
+        map.addContent(name);
+        map.addContent(version);
+        map.addContent(objective);
+        map.addContent(authors);
+        map.addContent(contributors);
+        root.addContent(map);
+
+        Element teams = new Element("teams");
+        for (TeamModule team : TeamUtils.getTeams()) {
+            teams.addContent(new Element("team").setText(team.getName()).setAttribute("id", team.getId()).setAttribute("color", team.getColor().name()));
+        }
+        root.addContent(teams);
+
+        Element transcript = new Element("transcript");
+        if (GameHandler.getGameHandler().getMatch().getModules().getModule(MatchTranscript.class).getLog() != null) {
+            transcript.setText(GameHandler.getGameHandler().getMatch().getModules().getModule(MatchTranscript.class).getLog());
+        }
+        root.addContent(transcript);
+
+        File file = new File(GameHandler.getGameHandler().getMatchFile(), "report.xml");
+        file.createNewFile();
+        XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+        outputter.output(report, new FileWriter(file));
+
+        return report;
     }
 }

@@ -10,6 +10,7 @@ import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 
 import java.io.*;
@@ -24,27 +25,11 @@ public class MatchTranscript implements Module {
         HandlerList.unregisterAll(this);
     }
 
-    private final File logFile = new File(GameHandler.getGameHandler().getMatchFile() + "/log.txt");
-    private PrintWriter writer;
     private String log;
 
 
     protected MatchTranscript() {
-        if (!logFile.exists())
-            try {
-                logFile.createNewFile();
-            } catch (IOException e) {
-                Bukkit.getLogger().warning("unable to create match transcript file");
-            }
-        try {
-            writer = new PrintWriter(logFile);
-        } catch (FileNotFoundException e) {
-                Bukkit.getLogger().warning("unable to find match transcript file");
-        }
-    }
-
-    public File getLogFile() {
-        return logFile;
+        log = "";
     }
 
     public String getLog() {
@@ -52,8 +37,7 @@ public class MatchTranscript implements Module {
     }
 
     public void log(String string) {
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss.SSS");
-        writer.println("[" + format.format(new Date()) + "] " + string);
+        log += "[" + new SimpleDateFormat("HH:mm:ss.SSS").format(new Date()) + "] " + string + "\n";
     }
 
     @EventHandler
@@ -72,21 +56,8 @@ public class MatchTranscript implements Module {
         log("Match has started on " + GameHandler.getGameHandler().getMatch().getLoadedMap().getName());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onMatchEnd(MatchEndEvent event) {
-        log(event.getTeam() != null ? event.getTeam().getName() + " won the match!" : "Match ended with no winner" );
-        writer.close();
-        try {
-            FileInputStream in = new FileInputStream(logFile);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            String lines = "";
-            String line;
-            while ((line = reader.readLine()) != null) {
-                lines += line + "\n";
-            }
-            log = lines;
-        } catch (IOException e) {
-            Bukkit.getLogger().warning("Error when logging to transcript");
-        }
+        log(event.getTeam() != null ? event.getTeam().getName() + " won the match!" : "Match ended with no winner");
     }
 }

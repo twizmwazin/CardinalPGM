@@ -8,7 +8,7 @@ public class MatchTranscriptBuilder implements ModuleBuilder {
 
     @Override
     public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
+        ModuleCollection<MatchTranscript> results = new ModuleCollection<>();
         results.add(new MatchTranscript());
         return results;
     }

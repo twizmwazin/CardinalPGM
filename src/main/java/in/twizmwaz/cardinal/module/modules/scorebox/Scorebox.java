@@ -46,7 +46,7 @@ public class Scorebox implements Module {
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerMove(PlayerMoveEvent event) {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
-            if (region.contains(new BlockRegion(null, event.getTo().toVector()))) {
+            if (region.contains(event.getTo().toVector()) && !region.contains(event.getFrom().toVector())) {
                 if (filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW)) {
                     if (event.getPlayer().getHealth() > 0) {
                         int points = 0;

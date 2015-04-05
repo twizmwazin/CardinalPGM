@@ -225,7 +225,7 @@ public enum  ChatConstant {
                 message = work.getText();
             }
         } catch (NullPointerException e) {
-            message = getMessage("en");
+            message = getMessage("en_US");
         }
         return message;
     }
