@@ -1,6 +1,5 @@
 package in.twizmwaz.cardinal.module.modules.filter;
 
-import org.bukkit.Bukkit;
 import org.jdom2.Element;
 
 public class FilterParser {

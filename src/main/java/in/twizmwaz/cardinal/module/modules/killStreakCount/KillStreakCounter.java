@@ -4,10 +4,8 @@ import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.module.Module;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.metadata.LazyMetadataValue;
 
 public class KillStreakCounter implements Module {

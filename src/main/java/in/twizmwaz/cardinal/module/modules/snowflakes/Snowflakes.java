@@ -20,7 +20,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDespawnInVoidEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.material.Wool;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,11 +1,11 @@
 package in.twizmwaz.cardinal.module.modules.filter.type.constant;
 
-import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ABSTAIN;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
-
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ABSTAIN;
 
 public class AllWorldFilter extends AllEventFilter {
 

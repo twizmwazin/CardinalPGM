@@ -3,7 +3,6 @@ package in.twizmwaz.cardinal.module.modules.updateNotification;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
-import in.twizmwaz.cardinal.module.modules.visibility.Visibility;
 
 public class UpdateNotificationBuilder implements ModuleBuilder {
 

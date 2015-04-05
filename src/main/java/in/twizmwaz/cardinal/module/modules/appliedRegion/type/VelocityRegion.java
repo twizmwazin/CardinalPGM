@@ -4,7 +4,6 @@ import in.twizmwaz.cardinal.module.modules.appliedRegion.AppliedRegion;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
-import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;

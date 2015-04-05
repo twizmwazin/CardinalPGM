@@ -3,8 +3,8 @@ package in.twizmwaz.cardinal.module.modules.regions.parsers;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionParser;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
-import in.twizmwaz.cardinal.util.NumUtils;
 import in.twizmwaz.cardinal.util.FlooredVector;
+import in.twizmwaz.cardinal.util.NumUtils;
 import org.bukkit.util.Vector;
 import org.jdom2.Element;
 

@@ -1,9 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.updateNotification;
 
 import in.twizmwaz.cardinal.Cardinal;
-import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.UpdateHandler;
-import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.util.GitUtils;
 import net.minecraft.server.v1_8_R1.ChatSerializer;

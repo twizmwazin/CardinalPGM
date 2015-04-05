@@ -2,9 +2,9 @@ package in.twizmwaz.cardinal.module.modules.regions.type;
 
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.CylinderParser;
+import in.twizmwaz.cardinal.util.FlooredVector;
 import in.twizmwaz.cardinal.util.NumUtils;
 import org.bukkit.block.Block;
-import in.twizmwaz.cardinal.util.FlooredVector;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;

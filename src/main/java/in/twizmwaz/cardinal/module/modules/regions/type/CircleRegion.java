@@ -1,8 +1,8 @@
 package in.twizmwaz.cardinal.module.modules.regions.type;
 
 import in.twizmwaz.cardinal.module.modules.regions.parsers.CircleParser;
-import org.bukkit.block.Block;
 import in.twizmwaz.cardinal.util.FlooredVector;
+import org.bukkit.block.Block;
 
 import java.util.ArrayList;
 import java.util.List;

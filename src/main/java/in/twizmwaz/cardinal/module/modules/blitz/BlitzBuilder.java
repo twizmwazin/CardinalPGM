@@ -7,7 +7,6 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.rage.Rage;
 import in.twizmwaz.cardinal.util.NumUtils;
-import in.twizmwaz.cardinal.util.StringUtils;
 import org.jdom2.Element;
 
 @BuilderData(load = ModuleLoadTime.LATE)
