@@ -349,7 +349,7 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onHangingBreak(HangingBreakByEntityEvent event) {
-        if (!match.isRunning() || event.getEntity() instanceof Player && TeamUtils.getTeamByPlayer((Player) event.getEntity()).isObserver()) {
+        if (!match.isRunning() || (event.getEntity() instanceof Player && TeamUtils.getTeamByPlayer((Player) event.getEntity()).isObserver())) {
             event.setCancelled(true);
         }
     }
