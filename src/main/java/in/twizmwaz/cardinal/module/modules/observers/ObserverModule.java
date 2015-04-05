@@ -253,23 +253,21 @@ public class ObserverModule implements Module {
     }
 
     @EventHandler
-    public void onPickupXP(PlayerPickupExperienceEvent event) {
+    public void onPlayerPickupExperience(PlayerPickupExperienceEvent event) {
         if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onDropItem(PlayerDropItemEvent event) {
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
         if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
-            ItemStack dropped = event.getItemDrop().getItemStack();
-            event.getPlayer().getItemInHand().setAmount(event.getPlayer().getItemInHand().getAmount() - dropped.getAmount());
-            event.setCancelled(true);
+            event.getItemDrop().remove();
         }
     }
 
     @EventHandler
-    public void onTeamChange(PlayerChangeTeamEvent event) {
+    public void onPlayerTeamChange(PlayerChangeTeamEvent event) {
         if (event.getNewTeam().isObserver() || match.getState() != MatchState.PLAYING) {
             event.getPlayer().setGameMode(GameMode.CREATIVE);
             event.getPlayer().setAffectsSpawning(false);
