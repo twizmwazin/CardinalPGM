@@ -3,7 +3,6 @@ package in.twizmwaz.cardinal.module.modules.regions.type;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.CuboidParser;
-import in.twizmwaz.cardinal.util.FlooredVector;
 import in.twizmwaz.cardinal.util.NumUtils;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -24,7 +23,7 @@ public class CuboidRegion extends RegionModule {
     }
 
     public CuboidRegion(String name, double xMin, double yMin, double zMin, double xMax, double yMax, double zMax) {
-        this(name, new FlooredVector(xMin, yMin, zMin), new FlooredVector(xMax, yMax, zMax));
+        this(name, new Vector(xMin, yMin, zMin), new Vector(xMax, yMax, zMax));
     }
 
     public CuboidRegion(CuboidParser parser) {

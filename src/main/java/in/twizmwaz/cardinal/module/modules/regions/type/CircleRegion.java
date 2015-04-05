@@ -1,8 +1,8 @@
 package in.twizmwaz.cardinal.module.modules.regions.type;
 
 import in.twizmwaz.cardinal.module.modules.regions.parsers.CircleParser;
-import in.twizmwaz.cardinal.util.FlooredVector;
 import org.bukkit.block.Block;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,11 +10,11 @@ import java.util.List;
 public class CircleRegion extends CylinderRegion {
 
     public CircleRegion(String name, double centerx, double centerz, double radius) {
-        super(name, new FlooredVector(centerx, 0, centerz), radius, 256);
+        super(name, new Vector(centerx, 0, centerz), radius, 256);
     }
 
     public CircleRegion(CircleParser parser) {
-        super(parser.getName(), new FlooredVector(parser.getCenterX(), 0, parser.getCenterZ()), parser.getRadius(), 256);
+        super(parser.getName(), new Vector(parser.getCenterX(), 0, parser.getCenterZ()), parser.getRadius(), 256);
     }
 
     @Override

@@ -2,7 +2,6 @@ package in.twizmwaz.cardinal.module.modules.regions.type;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.RectangleParser;
-import in.twizmwaz.cardinal.util.FlooredVector;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
@@ -13,7 +12,7 @@ import java.util.List;
 public class RectangleRegion extends CuboidRegion {
 
     public RectangleRegion(String name, double xMin, double zMin, double xMax, double zMax) {
-        super(name, new FlooredVector(xMin, Double.NEGATIVE_INFINITY, zMin), new FlooredVector(xMax, Double.POSITIVE_INFINITY, zMax));
+        super(name, new Vector(xMin, Double.NEGATIVE_INFINITY, zMin), new Vector(xMax, Double.POSITIVE_INFINITY, zMax));
     }
 
     public RectangleRegion(RectangleParser parser) {

@@ -3,7 +3,6 @@ package in.twizmwaz.cardinal.module.modules.regions.type;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.BlockParser;
-import in.twizmwaz.cardinal.util.FlooredVector;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
@@ -17,12 +16,12 @@ public class BlockRegion extends RegionModule {
 
     public BlockRegion(String name, Vector vector) {
         super(name);
-        this.vector = new FlooredVector(vector);
+        this.vector = new Vector(vector);
     }
     
     public BlockRegion(String name, double x, double y, double z) {
         super(name);
-        this.vector = new FlooredVector(x, y, z);
+        this.vector = new Vector(x, y, z);
     }
 
     public BlockRegion(BlockParser parser) {
@@ -45,8 +44,8 @@ public class BlockRegion extends RegionModule {
         return vector.clone().add(new Vector(0.5, 0.5, 0.5));
     }
     
-    public Vector getFlooredVector() {
-        return new FlooredVector(vector);
+    public Vector getVector() {
+        return new Vector(vector);
     }
 
     @Override
