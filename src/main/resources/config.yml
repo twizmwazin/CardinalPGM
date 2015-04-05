@@ -8,6 +8,9 @@ server-message: Scrimmage Server
 cycle: -1
 matchTimeMillis: true
 observers-ready: true
+html:
+  upload: true
+  transcriptMilliseconds: true
 permissions:
   Default:
     permissions:
