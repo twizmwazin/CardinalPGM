@@ -1,12 +1,18 @@
 package in.twizmwaz.cardinal.module.modules.matchTranscript;
 
+import com.sk89q.minecraft.util.commands.ChatColor;
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.cores.CoreObjective;
+import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjective;
+import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -15,6 +21,7 @@ import org.bukkit.event.HandlerList;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class MatchTranscript implements Module {
 
@@ -23,23 +30,10 @@ public class MatchTranscript implements Module {
         HandlerList.unregisterAll(this);
     }
 
-    private final File logFile = new File(GameHandler.getGameHandler().getMatchFile() + "/log.txt");
-    private PrintWriter writer;
     private String log;
 
-
     protected MatchTranscript() {
-        if (!logFile.exists())
-            try {
-                logFile.createNewFile();
-            } catch (IOException e) {
-                Bukkit.getLogger().warning("Unable to create a match transcript file");
-            }
-        try {
-            writer = new PrintWriter(logFile);
-        } catch (FileNotFoundException e) {
-                Bukkit.getLogger().warning("Unable to find the match transcript file");
-        }
+        log = "";
     }
 
     public String getLog() {
@@ -53,20 +47,28 @@ public class MatchTranscript implements Module {
     	} else {
     		format = new SimpleDateFormat("HH:mm:ss");
     	}
-        log += "[" + format.format(new Date()) + "] " + string + "\n";
+        log += "[" + format.format(new Date()) + "] " + ChatColor.stripColor(string) + "\n";
     }
 
     @EventHandler
      public void onObjectiveComplete(ObjectiveCompleteEvent event) {
         if (event.getObjective().showOnScoreboard()) {
-            log(event.getPlayer().getName() + " completed " + event.getObjective().getName() + " for " + TeamUtils.getTeamByPlayer(event.getPlayer()).getName());
+            if (event.getObjective() instanceof DestroyableObjective) {
+                log(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DESTROYED, event.getObjective().getTeam().getName(), event.getObjective().getName(), ((DestroyableObjective) event.getObjective()).getWhoDestroyed(Locale.getDefault().toString())).getMessage(Locale.getDefault().toString()));
+            }
         }
     }
 
     @EventHandler
     public void onObjectiveTouch(ObjectiveTouchEvent event) {
         if (event.getObjective().showOnScoreboard() && event.displayTouchMessage()) {
-            log(event.getPlayer().getName() + " touched " + event.getObjective().getName() + " for " + TeamUtils.getTeamByPlayer(event.getPlayer()).getName());
+            if (event.getObjective() instanceof WoolObjective) {
+                log(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED_FOR, event.getPlayer().getName(), event.getObjective().getName().toUpperCase().replaceAll("_", " "), TeamUtils.getTeamByPlayer(event.getPlayer()).getName()).getMessage(Locale.getDefault().toString()));
+            } else if (event.getObjective() instanceof CoreObjective) {
+                log(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED_FOR, event.getPlayer().getName(), event.getObjective().getName(), TeamUtils.getTeamByPlayer(event.getPlayer()).getName()).getMessage(Locale.getDefault().toString()));
+            } else if (event.getObjective() instanceof DestroyableObjective) {
+                log(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED_FOR, event.getPlayer().getName(), event.getObjective().getName(), TeamUtils.getTeamByPlayer(event.getPlayer()).getName()).getMessage(Locale.getDefault().toString()));
+            }
         }
     }
 }

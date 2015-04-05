@@ -121,7 +121,7 @@ public class Stats implements Module {
     public void onMatchEnd(MatchEndEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (Settings.getSettingByName("Stats") != null && Settings.getSettingByName("Stats").getValueByPlayer(player).getValue().equalsIgnoreCase("on")) {
-                player.sendMessage(ChatColor.GRAY + "Kills: " + ChatColor.GREEN + getKillsByPlayer(player) + ChatColor.AQUA + " | " + ChatColor.GRAY + "Deaths: " + ChatColor.DARK_RED + getDeathsByPlayer(player) + ChatColor.AQUA + " | " + ChatColor.GRAY + "KD: " + ChatColor.GOLD + String.format("%.2f", getKdByPlayer(player)));
+                player.sendMessage(ChatColor.GRAY + "Kills: " + ChatColor.GREEN + getKillsByPlayer(player) + ChatColor.AQUA + " | " + ChatColor.GRAY + "Deaths: " + ChatColor.DARK_RED + getDeathsByPlayer(player) + ChatColor.AQUA + " | " + ChatColor.GRAY + "KD: " + ChatColor.GOLD + (Math.round(getKdByPlayer(player) / 100.0) * 100.0));
             }
         }
 
@@ -182,7 +182,7 @@ public class Stats implements Module {
             for (Map.Entry<OfflinePlayer, TeamModule> entry : playerTeams.entrySet()) {
                 if (entry.getValue() == team) {
                     if (!team.isObserver()) {
-                        teams.appendElement("p").text(entry.getKey().getName() + ": Kills: " + getKillsByPlayer(entry.getKey()) + ", Deaths: " + getDeathsByPlayer(entry.getKey()) + ", KD: " + Math.round(getKdByPlayer(entry.getKey()))).attr("class", "media-body");
+                        teams.appendElement("p").text(entry.getKey().getName() + ": Kills: " + getKillsByPlayer(entry.getKey()) + ", Deaths: " + getDeathsByPlayer(entry.getKey()) + ", KD: " + (Math.round(getKdByPlayer(entry.getKey()) / 100.0) * 100.0)).attr("class", "media-body");
                     }
                     else teams.appendElement("p").text(entry.getKey().getName());
                 }
