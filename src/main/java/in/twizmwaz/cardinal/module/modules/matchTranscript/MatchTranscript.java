@@ -1,21 +1,27 @@
 package in.twizmwaz.cardinal.module.modules.matchTranscript;
 
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
-import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.util.TeamUtils;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-
-import java.io.*;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
 
 public class MatchTranscript implements Module {
 
@@ -34,12 +40,12 @@ public class MatchTranscript implements Module {
             try {
                 logFile.createNewFile();
             } catch (IOException e) {
-                Bukkit.getLogger().warning("unable to create match transcript file");
+                Bukkit.getLogger().warning("Unable to create a match transcript file");
             }
         try {
             writer = new PrintWriter(logFile);
         } catch (FileNotFoundException e) {
-                Bukkit.getLogger().warning("unable to find match transcript file");
+                Bukkit.getLogger().warning("Unable to find the match transcript file");
         }
     }
 
@@ -52,7 +58,13 @@ public class MatchTranscript implements Module {
     }
 
     public void log(String string) {
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss.SSS");
+    	SimpleDateFormat format;
+    	if (Cardinal.getInstance().getConfig().getBoolean("html.transcriptMilliseconds")) {
+    		format = new SimpleDateFormat("HH:mm:ss.SSS");
+    	} else {
+    		format = new SimpleDateFormat("HH:mm:ss");
+    	}
+    		
         writer.println("[" + format.format(new Date()) + "] " + string);
     }
 
