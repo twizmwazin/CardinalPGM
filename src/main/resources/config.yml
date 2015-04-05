@@ -22,7 +22,7 @@ permissions:
     - cardinal.chat.global
     - cardinal.chat.team
     - minecraft.command.tp
-  oderator:
+  Moderator:
     permissions:
     - cardinal.mod
     - tnt.defuse
