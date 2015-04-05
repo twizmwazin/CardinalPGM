@@ -8,10 +8,12 @@ import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.module.modules.matchTranscript.MatchTranscript;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.settings.Settings;
 import in.twizmwaz.cardinal.util.Contributor;
+import in.twizmwaz.cardinal.util.StringUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.apache.commons.io.IOUtils;
 import org.bukkit.Bukkit;
@@ -27,6 +29,7 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
 import java.io.*;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -197,6 +200,10 @@ public class Stats implements Module {
         report.setRootElement(new Element("report"));
         Element root = report.getRootElement();
 
+        Element date = new Element("date");
+        date.setText(new Date() + "");
+        root.addContent(date);
+
         Element server = new Element("server");
         Element ip = new Element("ip").setText(Bukkit.getServer().getIp());
         Element port = new Element("port").setText(Bukkit.getServer().getPort() + "");
@@ -223,17 +230,21 @@ public class Stats implements Module {
         map.addContent(contributors);
         root.addContent(map);
 
+        Element match = new Element("match");
         Element teams = new Element("teams");
         for (TeamModule team : TeamUtils.getTeams()) {
             teams.addContent(new Element("team").setText(team.getName()).setAttribute("id", team.getId()).setAttribute("color", team.getColor().name()));
         }
-        root.addContent(teams);
-
+        match.addContent(teams);
         Element transcript = new Element("transcript");
         if (GameHandler.getGameHandler().getMatch().getModules().getModule(MatchTranscript.class).getLog() != null) {
             transcript.setText(GameHandler.getGameHandler().getMatch().getModules().getModule(MatchTranscript.class).getLog());
         }
-        root.addContent(transcript);
+        match.addContent(transcript);
+        Element time = new Element("time");
+        time.setText(StringUtils.formatTimeWithMillis(MatchTimer.getTimeInSeconds()));
+        match.addContent(time);
+        root.addContent(match);
 
         File file = new File(GameHandler.getGameHandler().getMatchFile(), "report.xml");
         file.createNewFile();
