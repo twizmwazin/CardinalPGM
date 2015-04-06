@@ -82,6 +82,8 @@ public class FilterModuleBuilder implements ModuleBuilder {
                 return new SpawnFilter(new SpawnFilterParser(element));
             case "team":
                 return new TeamFilter((new TeamFilterParser(element)));
+            case "time":
+                return new TimeFilter(new TimeFilterParser(element));
             case "void":
                 return new VoidFilter(new GenericFilterParser(element));
             case "wearing":
