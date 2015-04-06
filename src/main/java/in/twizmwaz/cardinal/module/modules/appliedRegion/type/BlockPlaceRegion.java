@@ -25,6 +25,11 @@ public class BlockPlaceRegion extends AppliedRegion {
             event.getPlayer().closeInventory();
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }
+        if ((event.getBlock().getType().equals(Material.ACACIA_DOOR) || event.getBlock().getType().equals(Material.BIRCH_DOOR) || event.getBlock().getType().equals(Material.DARK_OAK_DOOR) || event.getBlock().getType().equals(Material.IRON_DOOR) || event.getBlock().getType().equals(Material.JUNGLE_DOOR) || event.getBlock().getType().equals(Material.SPRUCE_DOOR) || event.getBlock().getType().equals(Material.WOOD_DOOR) || event.getBlock().getType().equals(Material.WOODEN_DOOR) || event.getBlock().getType().equals(Material.LONG_GRASS)) && region.contains(new BlockRegion(null, event.getBlock().getLocation().add(0, 1, 0).toVector())) && !event.isCancelled() && filter.evaluate(event.getPlayer(), event.getBlockPlaced(), event).equals(FilterState.DENY)) {
+            event.setCancelled(true);
+            event.getPlayer().closeInventory();
+            ChatUtils.sendWarningMessage(event.getPlayer(), message);
+        }
     }
     
     @EventHandler
