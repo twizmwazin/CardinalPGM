@@ -30,6 +30,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -349,7 +350,7 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onHangingBreak(HangingBreakByEntityEvent event) {
-        if (!match.isRunning() || (event.getEntity() instanceof Player && TeamUtils.getTeamByPlayer((Player) event.getEntity()).isObserver())) {
+        if (!match.isRunning() || (event.getRemover() instanceof Player && TeamUtils.getTeamByPlayer((Player) event.getRemover()).isObserver())) {
             event.setCancelled(true);
         }
     }

@@ -8,11 +8,16 @@ import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.hanging.HangingBreakEvent;
+import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -134,6 +139,33 @@ public class BlockEventRegion extends AppliedRegion {
         }
         for (Block block : blocksToRemove) {
             event.blockList().remove(block);
+        }
+    }
+
+    @EventHandler
+    public void onItemFrameRotate(PlayerInteractEntityEvent event) {
+        if (region.contains(event.getRightClicked().getLocation().toVector()) && event.getRightClicked() instanceof ItemFrame && filter.evaluate(event.getPlayer(), event.getRightClicked(), event).equals(FilterState.DENY)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onHangingBreak(HangingBreakEvent event) {
+        if (event instanceof HangingBreakByEntityEvent) {
+            if (region.contains(event.getEntity().getLocation().toVector()) && filter.evaluate(event.getEntity(), ((HangingBreakByEntityEvent) event).getRemover(), event).equals(FilterState.DENY)) {
+                event.setCancelled(true);
+            }
+        } else {
+            if (region.contains(event.getEntity().getLocation().toVector()) && filter.evaluate(event.getEntity(), event).equals(FilterState.DENY)) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onHangingPlace(HangingPlaceEvent event) {
+        if (region.contains(event.getEntity().getLocation().toVector()) && filter.evaluate(event.getEntity(), event).equals(FilterState.DENY)) {
+            event.setCancelled(true);
         }
     }
 }

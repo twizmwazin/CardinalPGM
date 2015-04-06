@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.event.weather.LightningStrikeEvent;
 import org.bukkit.event.weather.ThunderChangeEvent;
@@ -144,6 +145,13 @@ public class WorldFreeze implements Module {
     @EventHandler
     public void onEnd(MatchEndEvent event) {
         GameHandler.getGameHandler().getMatchWorld().setGameRuleValue("doDaylightCycle", "false");
+    }
+
+    @EventHandler
+    public void onHangingBreak(HangingBreakEvent event) {
+        if (!match.isRunning()) {
+            event.setCancelled(true);
+        }
     }
 
 }

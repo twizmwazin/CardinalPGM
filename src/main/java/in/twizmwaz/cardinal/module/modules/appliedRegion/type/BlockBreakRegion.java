@@ -10,6 +10,8 @@ import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 
 import java.util.HashSet;
@@ -49,6 +51,19 @@ public class BlockBreakRegion extends AppliedRegion {
         }
         for (Block block : blocksToRemove) {
             event.blockList().remove(block);
+        }
+    }
+
+    @EventHandler
+    public void onHangingBreak(HangingBreakEvent event) {
+        if (event instanceof HangingBreakByEntityEvent) {
+            if (region.contains(event.getEntity().getLocation().toVector()) && filter.evaluate(event.getEntity(), ((HangingBreakByEntityEvent) event).getRemover(), event).equals(FilterState.DENY)) {
+                event.setCancelled(true);
+            }
+        } else {
+            if (region.contains(event.getEntity().getLocation().toVector()) && filter.evaluate(event.getEntity(), event).equals(FilterState.DENY)) {
+                event.setCancelled(true);
+            }
         }
     }
 }
