@@ -1,6 +1,9 @@
 package in.twizmwaz.cardinal.module.modules.tracker.event;
 
+import in.twizmwaz.cardinal.module.modules.tracker.Cause;
 import in.twizmwaz.cardinal.module.modules.tracker.DamageTracker;
+import in.twizmwaz.cardinal.module.modules.tracker.Description;
+import in.twizmwaz.cardinal.module.modules.tracker.Type;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -13,19 +16,27 @@ public class TrackerDamageEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     private final Player player;
     private final OfflinePlayer damager;
-    private final ItemStack damagerItem;
-    private final DamageTracker.Type damageType;
-    private DamageTracker.SpecificType specificType = null;
+    private final ItemStack item;
+    private final Cause cause;
+    private final Description description;
+    private final Type type;
+    private final int distance;
+    private final long time;
 
-    private Location initialLocation;
-
-    public TrackerDamageEvent(Player player, OfflinePlayer damager, ItemStack damagerItem, DamageTracker.Type damageType) {
+    public TrackerDamageEvent(Player player, OfflinePlayer damager, ItemStack item, Cause cause, Description description, Type type) {
         this.player = player;
         this.damager = damager;
-        this.damagerItem = damagerItem;
-        this.damageType = damageType;
+        this.item = item;
+        this.cause = cause;
+        this.description = description;
+        this.type = type;
+        this.time = System.currentTimeMillis();
 
-        if (damager != null && damager.isOnline()) initialLocation = ((Player) damager).getLocation();
+        if (damager instanceof Player) {
+            this.distance = (int) Math.round(player.getLocation().distance(((Player) damager).getLocation()));
+        } else {
+            this.distance = -1;
+        }
     }
 
     public static HandlerList getHandlerList() {
@@ -44,27 +55,27 @@ public class TrackerDamageEvent extends Event {
         return damager;
     }
 
-    public DamageTracker.Type getDamageType() {
-        return damageType;
+    public Type getType() {
+        return type;
     }
 
-    public ItemStack getDamagerItem() {
-        return damagerItem;
+    public ItemStack getItem() {
+        return item;
     }
 
-    public DamageTracker.SpecificType getSpecificType() {
-        return specificType;
+    public int getDistance() {
+        return distance;
     }
 
-    public boolean hasSpecificType() {
-        return specificType != null;
+    public Cause getCause() {
+        return cause;
     }
 
-    public void setSpecificType(DamageTracker.SpecificType specificType) {
-        this.specificType = specificType;
+    public Description getDescription() {
+        return description;
     }
 
-    public Location getInitialLocation() {
-        return initialLocation;
+    public long getTime() {
+        return time;
     }
 }

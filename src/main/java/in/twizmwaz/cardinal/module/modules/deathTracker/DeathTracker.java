@@ -27,8 +27,12 @@ public class DeathTracker implements Module {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         if (!event.getEntity().hasMetadata("teamChange")) {
-            Player killer = event.getEntity().getKiller();
-            try {
+            Player killer = null;
+            boolean time = DamageTracker.getEvent(event.getEntity()) != null && System.currentTimeMillis() - DamageTracker.getEvent(event.getEntity()).getTime() <= 7500;
+            if (time && DamageTracker.getEvent(event.getEntity()).getDamager().getPlayer() != null) {
+                killer = DamageTracker.getEvent(event.getEntity()).getDamager().getPlayer();
+            }
+            /* try {
                 EntityDamageEvent.DamageCause cause = event.getEntity().getLastDamageCause().getCause();
                 if (cause.equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) || cause.equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
                     if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
@@ -41,14 +45,11 @@ public class DeathTracker implements Module {
                     }
                 }
             } catch (NullPointerException e) {
-            }
-            if (killer == null && SpleefTracker.getLastSpleefEvent(event.getEntity()) != null && (System.currentTimeMillis() - SpleefTracker.getLastSpleefEvent(event.getEntity()).getTime() <= 10000) && SpleefTracker.getLastSpleefEvent(event.getEntity()).getSpleefer().isOnline())
-                killer = (Player) SpleefTracker.getLastSpleefEvent(event.getEntity()).getSpleefer();
+            } */
             CardinalDeathEvent deathEvent = new CardinalDeathEvent(event.getEntity(), killer);
-            if (DamageTracker.getLastDamageEvent(event.getEntity()) != null && event.getEntity().getKiller() != null)
-                deathEvent.setTrackerDamageEvent(DamageTracker.getLastDamageEvent(event.getEntity()));
-            if (SpleefTracker.getLastSpleefEvent(event.getEntity()) != null && (System.currentTimeMillis() - SpleefTracker.getLastSpleefEvent(event.getEntity()).getTime() <= 10000))
-                deathEvent.setPlayerSpleefEvent(SpleefTracker.getLastSpleefEvent(event.getEntity()));
+            if (time && DamageTracker.getEvent(event.getEntity()).getDamager().getPlayer() != null) {
+                deathEvent.setTrackerDamageEvent(DamageTracker.getEvent(event.getEntity()));
+            }
             Bukkit.getServer().getPluginManager().callEvent(deathEvent);
         } else {
             event.getEntity().removeMetadata("teamChange", GameHandler.getGameHandler().getPlugin());
