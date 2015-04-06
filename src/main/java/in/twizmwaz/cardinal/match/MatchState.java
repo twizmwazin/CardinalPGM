@@ -6,7 +6,8 @@ public enum MatchState {
     STARTING(),
     PLAYING(),
     ENDED(),
-    CYCLING();
+    CYCLING(),
+    CLOSING();
 
     public String toString() {
         switch (this) {
@@ -20,6 +21,8 @@ public enum MatchState {
                 return "Ended";
             case CYCLING:
                 return "Cycling";
+            case CLOSING:
+                return "Shutting down";
             default:
                 return "";
         }

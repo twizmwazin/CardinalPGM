@@ -50,6 +50,7 @@ import in.twizmwaz.cardinal.module.modules.respawn.RespawnModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.scoreboard.ScoreboardModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.scorebox.ScoreboxBuilder;
+import in.twizmwaz.cardinal.module.modules.shutdown.ShutdownBuilder;
 import in.twizmwaz.cardinal.module.modules.snowflakes.SnowflakesBuilder;
 import in.twizmwaz.cardinal.module.modules.sound.SoundModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModuleBuilder;
@@ -73,6 +74,7 @@ import in.twizmwaz.cardinal.module.modules.visibility.VisibilityBuilder;
 import in.twizmwaz.cardinal.module.modules.wildcard.WildCardBuilder;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.worldFreeze.WorldFreezeBuilder;
+
 import org.bukkit.Bukkit;
 
 import java.lang.reflect.InvocationTargetException;
@@ -157,7 +159,8 @@ public class ModuleFactory {
             WildCardBuilder.class,
             BossBarBuilder.class,
             UpdateNotificationBuilder.class,
-            MatchTranscriptBuilder.class
+            MatchTranscriptBuilder.class,
+            ShutdownBuilder.class
     };
 
     @SuppressWarnings("unchecked")
