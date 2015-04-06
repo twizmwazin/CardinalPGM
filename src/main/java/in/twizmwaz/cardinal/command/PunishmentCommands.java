@@ -25,13 +25,18 @@ public class PunishmentCommands {
     @CommandPermissions("cardinal.punish.kick")
     public static void kick(CommandContext cmd, CommandSender sender) throws CommandException {
         Player kicked = Bukkit.getPlayer(cmd.getString(0));
+        if (sender instanceof Player) {
+            if (PermissionModule.isMod(((Player) sender).getUniqueId()) && kicked.isOp()) {
+                throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_AFFECTED).getMessage(ChatUtils.getLocale(sender)));
+            }
+        }
         if (kicked != null) {
             String reason = "";
             for (int i = 1; i < cmd.argsLength(); i++) {
                 reason = reason + cmd.getString(i) + " ";
             }
             reason = reason.trim();
-            Bukkit.broadcastMessage((sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " \u00BB Kicked \u00BB " + TeamUtils.getTeamByPlayer(kicked).getColor() + kicked.getDisplayName() + ChatColor.GOLD + " \u00BB " + reason);
+            Bukkit.broadcastMessage((sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " \u00BB Kicked \u00BB " + TeamUtils.getTeamByPlayer(kicked).getColor() + kicked.getDisplayName() + ChatColor.GOLD + " \u00BB " + ChatColor.DARK_AQUA + reason);
             kicked.kickPlayer(ChatColor.RED + "Kicked" + ChatColor.GOLD + "  \u00BB  " + ChatColor.AQUA + reason);
         } else {
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(ChatUtils.getLocale(sender)));
@@ -64,6 +69,11 @@ public class PunishmentCommands {
     @CommandPermissions("cardinal.punish.ban")
     public static void ban(CommandContext cmd, CommandSender sender) throws CommandException {
         OfflinePlayer banned = Bukkit.getOfflinePlayer(cmd.getString(0));
+        if (sender instanceof Player) {
+            if (PermissionModule.isMod(((Player) sender).getUniqueId()) && banned.isOp()) {
+                throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_AFFECTED).getMessage(ChatUtils.getLocale(sender)));
+            }
+        }
         String reason = "";
         for (int i = 1; i < cmd.argsLength(); i++) {
             reason = reason + cmd.getString(i) + " ";
@@ -72,11 +82,13 @@ public class PunishmentCommands {
         if (banned.isOnline()) {
             Player onlineBanned = (Player) banned;
             onlineBanned.kickPlayer(ChatColor.RED + "Permanently Banned" + ChatColor.GOLD + "  \u00BB  " + ChatColor.AQUA + reason);
-            Bukkit.broadcastMessage((sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " \u00BB Permanent Ban \u00BB " + TeamUtils.getTeamColorByPlayer(banned) + onlineBanned.getDisplayName() + ChatColor.GOLD + " \u00BB " + reason);
-        } else {
-            Bukkit.broadcastMessage((sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " \u00BB Permanent Ban \u00BB " + TeamUtils.getTeamColorByPlayer(banned) + banned.getName() + ChatColor.GOLD + " \u00BB " + reason);
-        }
-        Bukkit.getBanList(BanList.Type.NAME).addBan(cmd.getString(0), ChatColor.RED + "Permanently Banned" + ChatColor.GOLD + "  \u00BB  " + ChatColor.AQUA + reason, null, sender.getName());
+            Bukkit.broadcastMessage((sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " \u00BB Permanent Ban \u00BB " + TeamUtils.getTeamColorByPlayer(banned) + onlineBanned.getDisplayName() + ChatColor.GOLD + " \u00BB " + ChatColor.DARK_AQUA + reason);
+            Bukkit.getBanList(BanList.Type.NAME).addBan(cmd.getString(0), ChatColor.RED + "Permanently Banned" + ChatColor.GOLD + "  \u00BB  " + ChatColor.AQUA + reason, null, sender.getName());
+        } else if (!Bukkit.getBanList(BanList.Type.NAME).isBanned(banned.getName())){
+            Bukkit.broadcastMessage((sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " \u00BB Permanent Ban \u00BB " + TeamUtils.getTeamColorByPlayer(banned) + banned.getName() + ChatColor.GOLD + " \u00BB " + ChatColor.DARK_AQUA + reason);
+            Bukkit.getBanList(BanList.Type.NAME).addBan(cmd.getString(0), ChatColor.RED + "Permanently Banned" + ChatColor.GOLD + "  \u00BB  " + ChatColor.AQUA + reason, null, sender.getName());
+        } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_ALREADY_BANNED).getMessage(ChatUtils.getLocale(sender)));
+
     }
 
     @Command(aliases = {"mute"}, usage = "<player>", desc = "Prevents a player from talking.", min = 1)
@@ -85,11 +97,12 @@ public class PunishmentCommands {
         Player player = Bukkit.getPlayer(cmd.getString(0));
         if (player != null) {
             if (!(PermissionModule.isMod(player.getUniqueId()) || player.isOp())) {
-                sender.sendMessage(ChatColor.RED + "You muted " + TeamUtils.getTeamColorByPlayer(player) + player.getDisplayName());
-                player.sendMessage(ChatColor.RED + "You were muted by " + (sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console"));
-                GameHandler.getGameHandler().getMatch().getModules().getModules(PermissionModule.class).get(0).disablePermission(Bukkit.getPlayer(cmd.getString(0)), "cardinal.chat.team");
-                GameHandler.getGameHandler().getMatch().getModules().getModules(PermissionModule.class).get(0).disablePermission(Bukkit.getPlayer(cmd.getString(0)), "cardinal.chat.global");
-            } else throw new CommandException("This player is not affected by the mute command");
+                if (!GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).isMuted(player)) {
+                    sender.sendMessage(ChatColor.RED + "You muted " + TeamUtils.getTeamColorByPlayer(player) + player.getDisplayName());
+                    player.sendMessage(ChatColor.RED + "You were muted by " + (sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console"));
+                    GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).mute(player);
+                } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_ALREADY_MUTED).getMessage(ChatUtils.getLocale(sender)));
+            } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_AFFECTED).getMessage(ChatUtils.getLocale(sender)));
         } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(ChatUtils.getLocale(sender)));
     }
 
@@ -99,11 +112,12 @@ public class PunishmentCommands {
         Player player = Bukkit.getPlayer(cmd.getString(0));
         if (player != null) {
             if (!(PermissionModule.isMod(player.getUniqueId()) || player.isOp())) {
-                sender.sendMessage(ChatColor.GREEN + "You unmuted " + TeamUtils.getTeamColorByPlayer(player) + player.getDisplayName());
-                player.sendMessage(ChatColor.GREEN + "You were unmuted by " + (sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console"));
-                GameHandler.getGameHandler().getMatch().getModules().getModules(PermissionModule.class).get(0).enablePermission(Bukkit.getPlayer(cmd.getString(0)), "cardinal.chat.team");
-                GameHandler.getGameHandler().getMatch().getModules().getModules(PermissionModule.class).get(0).enablePermission(Bukkit.getPlayer(cmd.getString(0)), "cardinal.chat.global");
-            } else throw new CommandException("This player is not affected by the mute command");
-        } else throw new CommandException("Player must be online");
+                if (GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).isMuted(player)) {
+                    sender.sendMessage(ChatColor.GREEN + "You unmuted " + TeamUtils.getTeamColorByPlayer(player) + player.getDisplayName());
+                    player.sendMessage(ChatColor.GREEN + "You were unmuted by " + (sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console"));
+                    GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).unmute(player);
+                } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_MUTED).getMessage(ChatUtils.getLocale(sender)));
+            } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_AFFECTED).getMessage(ChatUtils.getLocale(sender)));
+        } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_FOUND).getMessage(ChatUtils.getLocale(sender)));
     }
 }

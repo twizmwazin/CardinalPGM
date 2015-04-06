@@ -38,11 +38,12 @@ permissions:
     - whitelist.remove
     - whitelist.list
     - whitelist.team
-    - whielist.kick
+    - whitelist.kick
     - cardinal.punish.warn
     - cardinal.punish.kick
     - cardinal.punish.ban
     - cardinal.punish.mute
+    - minecraft.command.pardon
     players:
 settings:
 - Blood

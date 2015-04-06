@@ -68,6 +68,10 @@
         <rateWhilePlaying>To rate the map while playing, type {0}</rateWhilePlaying>
         <noRecentPM>You have no private messages to reply to</noRecentPM>
         <playerNotFound>No players matched query.</playerNotFound>
+        <playerAlreadyBanned>Player is already banned</playerAlreadyBanned>
+        <playerAlreadyMuted>Player is already muted</playerAlreadyMuted>
+        <PlayerNotMuted>Player is not muted</PlayerNotMuted>
+        <playerNotAffected>Player is not affected by this command</playerNotAffected>
         <playerDisabledPMs>Your message was not sent because {0} has chosen not to receive private messages.</playerDisabledPMs>
         <playableLeave>You may not leave the playing field</playableLeave>
         <playableInteract>You may not interact with blocks outside of the playing field</playableInteract>
