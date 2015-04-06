@@ -10,9 +10,13 @@ import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.util.ChatUtils;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 
 public class CycleTimerModule implements TaskedModule, Cancellable {
@@ -22,6 +26,8 @@ public class CycleTimerModule implements TaskedModule, Cancellable {
     private int time;
 
     private Match match;
+
+    private boolean shuttingDown;
 
     public CycleTimerModule(Match match) {
         this.match = match;
@@ -35,19 +41,33 @@ public class CycleTimerModule implements TaskedModule, Cancellable {
     @Override
     public void run() {
         if (!isCancelled()) {
-            match.setState(MatchState.CYCLING);
-            if ((time % 100 == 0 && time > 0) || (time < 100 && time > 0 && time % 20 == 0)) {
-                ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "{0}", new LocalizedChatMessage(ChatConstant.UI_CYCLING_TIMER, new UnlocalizedChatMessage(ChatColor.AQUA + GameHandler.getGameHandler().getCycle().getMap().getName() + ChatColor.DARK_AQUA), (this.time == 1 ? new LocalizedChatMessage(ChatConstant.UI_SECOND, ChatColor.DARK_RED + "1" + ChatColor.DARK_AQUA) : new LocalizedChatMessage(ChatConstant.UI_SECONDS, ChatColor.DARK_RED + (time / 20 + "") + ChatColor.DARK_AQUA)))));
-            }
-            if (time == 0 && match.getState() == MatchState.CYCLING) {
-                cancelled = true;
-                GameHandler.getGameHandler().cycleAndMakeMatch();
+            if (!shuttingDown) {
+                match.setState(MatchState.CYCLING);
+                if ((time % 100 == 0 && time > 0) || (time < 100 && time > 0 && time % 20 == 0)) {
+                    ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "{0}", new LocalizedChatMessage(ChatConstant.UI_CYCLING_TIMER, new UnlocalizedChatMessage(ChatColor.AQUA + GameHandler.getGameHandler().getCycle().getMap().getName() + ChatColor.DARK_AQUA), (this.time == 1 ? new LocalizedChatMessage(ChatConstant.UI_SECOND, ChatColor.DARK_RED + "1" + ChatColor.DARK_AQUA) : new LocalizedChatMessage(ChatConstant.UI_SECONDS, ChatColor.DARK_RED + (time / 20 + "") + ChatColor.DARK_AQUA)))));
+                }
+                if (time == 0 && match.getState() == MatchState.CYCLING) {
+                    cancelled = true;
+                    GameHandler.getGameHandler().cycleAndMakeMatch();
+                }
+            } else {
+                match.setState(MatchState.CLOSING);
+                if ((time % 100 == 0 && time > 0) || (time < 100 && time > 0 && time % 20 == 0)) {
+                    ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.AQUA + "{0}", new LocalizedChatMessage(ChatConstant.UI_SERVER_RESTARTING_IN, (this.time == 1 ? new LocalizedChatMessage(ChatConstant.UI_SECOND, ChatColor.DARK_RED + "1" + ChatColor.DARK_AQUA) : new LocalizedChatMessage(ChatConstant.UI_SECONDS, ChatColor.DARK_RED + (time / 20 + "") + ChatColor.DARK_AQUA)))));
+                }
+                if (time == 0 && match.getState() == MatchState.CLOSING) {
+                    cancelled = true;
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        p.kickPlayer("Server shutting down");
+                    }
+                    Bukkit.shutdown();
+                }
             }
             time--;
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onMatchEnd(MatchEndEvent event) {
         int time = Cardinal.getInstance().getConfig().getInt("cycle");
         if (time < 0) {
@@ -93,5 +113,14 @@ public class CycleTimerModule implements TaskedModule, Cancellable {
             return true;
         } else return false;
     }
+
+    public void setShuttingDown(boolean shuttingDown) {
+        this.shuttingDown = shuttingDown;
+    }
+
+    public boolean isShuttingDown() {
+        return shuttingDown;
+    }
+
 
 }
