@@ -42,6 +42,7 @@ import in.twizmwaz.cardinal.module.modules.observers.ObserverModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.playable.PlayableBuilder;
 import in.twizmwaz.cardinal.module.modules.portal.PortalBuilder;
+import in.twizmwaz.cardinal.module.modules.potionRemover.PotionRemoverBuilder;
 import in.twizmwaz.cardinal.module.modules.projectiles.ProjectilesBuilder;
 import in.twizmwaz.cardinal.module.modules.proximityAlarm.ProximityAlarmBuilder;
 import in.twizmwaz.cardinal.module.modules.rage.RageBuilder;
@@ -157,7 +158,8 @@ public class ModuleFactory {
             WildCardBuilder.class,
             BossBarBuilder.class,
             UpdateNotificationBuilder.class,
-            MatchTranscriptBuilder.class
+            MatchTranscriptBuilder.class,
+            PotionRemoverBuilder.class
     };
 
     @SuppressWarnings("unchecked")
