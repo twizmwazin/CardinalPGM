@@ -54,6 +54,10 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
             player.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.ERROR_MAY_NOT_JOIN, ChatColor.ITALIC + "" + ChatColor.AQUA + title + ChatColor.RESET + ChatColor.RED)).getMessage(player.getLocale()));
             return false;
         }
+        if (!force && size() >= maxOverfill) {
+            player.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.ERROR_TEAM_FULL, getCompleteName() + ChatColor.RED)).getMessage(player.getLocale()));
+            return false;
+        }
         PlayerChangeTeamEvent event = new PlayerChangeTeamEvent(player, force, this, old);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (message) {
