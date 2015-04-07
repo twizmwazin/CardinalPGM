@@ -12,45 +12,18 @@ import java.util.Random;
 public class FireworkUtil {
 
     public static void spawnFirework(Location location, World world) {
-        Firework firework = (Firework) world.spawn(location, Firework.class);
-        FireworkMeta fireworkMeta = firework.getFireworkMeta();
         Random random = new Random();
-        FireworkEffect effect = FireworkEffect.builder().withColor(getColor(random.nextInt(17))).with(FireworkEffect.Type.BALL).trail(true).build();
-        fireworkMeta.addEffect(effect);
-        fireworkMeta.setPower(1);
-        firework.setFireworkMeta(fireworkMeta);
+        int r = random.nextInt(256), g = random.nextInt(256), b = random.nextInt(256);
+        spawnFirework(location, world, Color.fromRGB(r, g, b));
     }
 
     public static void spawnFirework(Location location, World world, Color color) {
-        Firework firework = (Firework) world.spawn(location, Firework.class);
+        Firework firework = world.spawn(location, Firework.class);
         FireworkMeta fireworkMeta = firework.getFireworkMeta();
         FireworkEffect effect = FireworkEffect.builder().withColor(color).with(FireworkEffect.Type.BALL).trail(true).build();
         fireworkMeta.addEffect(effect);
         fireworkMeta.setPower(1);
         firework.setFireworkMeta(fireworkMeta);
-    }
-
-    private static Color getColor(int c) {
-        switch (c) {
-            default:
-            case 1: return Color.AQUA;
-            case 2: return Color.BLACK;
-            case 3: return Color.BLUE;
-            case 4: return Color.FUCHSIA;
-            case 5: return Color.GRAY;
-            case 6: return Color.GREEN;
-            case 7: return Color.LIME;
-            case 8: return Color.MAROON;
-            case 9: return Color.NAVY;
-            case 10: return Color.OLIVE;
-            case 11: return Color.ORANGE;
-            case 12: return Color.PURPLE;
-            case 13: return Color.RED;
-            case 14: return Color.SILVER;
-            case 15: return Color.TEAL;
-            case 16: return Color.WHITE;
-            case 17: return Color.YELLOW;
-        }
     }
 
 }
