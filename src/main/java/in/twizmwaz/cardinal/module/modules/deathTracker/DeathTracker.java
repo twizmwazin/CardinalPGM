@@ -32,14 +32,14 @@ public class DeathTracker implements Module {
             Player killer = null;
             TrackerDamageEvent tracker = DamageTracker.getEvent(event.getEntity());
             boolean time = tracker != null && System.currentTimeMillis() - tracker.getTime() <= 7500;
-            if ((tracker.getType().equals(Type.KNOCKED) || tracker.getType().equals(Type.SHOT)) && event.getEntity().getKiller() != null && event.getEntity().getKiller().equals(tracker.getDamager())) {
+            if (tracker != null && (tracker.getType().equals(Type.KNOCKED) || tracker.getType().equals(Type.SHOT)) && event.getEntity().getKiller() != null && event.getEntity().getKiller().equals(tracker.getDamager())) {
                 killer = tracker.getDamager().getPlayer();
             } else if (time) {
                 killer = tracker.getDamager().getPlayer();
             }
             CardinalDeathEvent deathEvent = new CardinalDeathEvent(event.getEntity(), killer);
             if (time && DamageTracker.getEvent(event.getEntity()).getDamager().getPlayer() != null) {
-                deathEvent.setTrackerDamageEvent(DamageTracker.getEvent(event.getEntity()));
+                deathEvent.setTrackerDamageEvent(tracker);
             }
             Bukkit.getServer().getPluginManager().callEvent(deathEvent);
         } else {
