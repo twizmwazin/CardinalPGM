@@ -26,7 +26,7 @@ public class ProximityCommand {
                     sender.sendMessage(team.getCompleteName());
                     for (GameObjective objective : TeamUtils.getShownObjectives(team)) {
                         if (objective.isComplete()) {
-                            sender.sendMessage("  " + WordUtils.capitalizeFully(objective.getName().replaceAll("_", " ")) + " " + ChatColor.GREEN + "COMPLETE");
+                            sender.sendMessage("  " + WordUtils.capitalizeFully(objective.getName().replaceAll("_", " ")) + "  " + ChatColor.GREEN + "COMPLETE");
                         } else if (objective.isTouched()) {
                             if (objective instanceof WoolObjective) {
                                 double proximity = ((WoolObjective) objective).getProximity();
