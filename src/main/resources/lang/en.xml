@@ -213,6 +213,7 @@
         <matchReportUpload>Uploading match report...</matchReportUpload>
         <matchReportSuccess>Match report successfully uploaded! You can view it at {0}</matchReportSuccess>
         <matchReportFaied>An error occurred while uploading the match report</matchReportFaied>
+        <coreMode>> > > {0} < < <</coreMode>
     </userInterface>
     <deathMsg>
         <explosionSelf>{0} 'sploded</explosionSelf>
