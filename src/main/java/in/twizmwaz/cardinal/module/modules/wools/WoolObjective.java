@@ -143,7 +143,13 @@ public class WoolObjective implements GameObjective {
                         }
                         boolean oldState = this.touched;
                         this.touched = true;
-                        if (!oldState && location != null) proximity = location.distance(place.getVector());
+                        if (!oldState) {
+                            if (location != null) {
+                                proximity = location.distance(place.getVector());
+                            } else {
+                                proximity = player.getLocation().toVector().distance(place.getVector());
+                            }
+                        }
                         ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !oldState, touchMessage);
                         Bukkit.getServer().getPluginManager().callEvent(touchEvent);
                     }
@@ -175,8 +181,13 @@ public class WoolObjective implements GameObjective {
                         }
                         boolean oldState = this.touched;
                         this.touched = true;
-                        if (!oldState && location != null) proximity = location.distance(place.getVector());
-                        else if (!oldState) proximity = player.getLocation().toVector().distance(place.getVector());
+                        if (!oldState) {
+                            if (location != null) {
+                                proximity = location.distance(place.getVector());
+                            } else {
+                                proximity = player.getLocation().toVector().distance(place.getVector());
+                            }
+                        }
                         ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !oldState, touchMessage);
                         Bukkit.getServer().getPluginManager().callEvent(touchEvent);
                     }
