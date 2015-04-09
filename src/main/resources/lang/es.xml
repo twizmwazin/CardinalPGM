@@ -249,6 +249,6 @@
         <voidPlayerBlown>{0} ha sido {1} fuera del mundo por la TNT de {3}</voidPlayerBlown>
         <void>{0} ha caído fuera del mundo</void>
         <wither>{0} sufrió la ira del wither</wither>
-        <unknown>{0} ha muerto por causas desconicidas</unknown>
+        <unknown>{0} ha muerto por una causa desconocida</unknown>
     </deathMsg>
 </locale>
