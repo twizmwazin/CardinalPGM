@@ -88,10 +88,9 @@ public class BuildHeight implements Module {
     @EventHandler
     public void onBlockPistonExtend(BlockPistonExtendEvent event) {
         for (Block block : event.getBlocks()) {
-            if (block.getY() - 1 >= height) {
+            if (block.getRelative(event.getDirection()).getY() >= height) {
                 event.setCancelled(true);
             }
         }
-
     }
 }

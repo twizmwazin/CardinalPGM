@@ -29,7 +29,7 @@ public class DeathMessages implements Module {
     public void onCardinalDeath(CardinalDeathEvent event) {
         try {
             if (TeamUtils.getTeamByPlayer(event.getPlayer()) != null) {
-                String playerName = TeamUtils.getTeamByPlayer(event.getPlayer()).getColor() + event.getPlayer().getName();
+                String playerName = TeamUtils.getTeamColorByPlayer(event.getPlayer()) + event.getPlayer().getName();
                 String deathMessage;
                 DamageCause cause = event.getPlayer().getLastDamageCause().getCause();
                 if (cause.equals(DamageCause.BLOCK_EXPLOSION) || cause.equals(DamageCause.ENTITY_EXPLOSION)) {

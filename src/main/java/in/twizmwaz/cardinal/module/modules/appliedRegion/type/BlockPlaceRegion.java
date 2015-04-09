@@ -7,8 +7,11 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 
@@ -45,6 +48,24 @@ public class BlockPlaceRegion extends AppliedRegion {
     public void onBLiquidFlow(BlockFromToEvent event) {
         if (!event.isCancelled() && region.contains(new BlockRegion(null, event.getToBlock().getLocation().toVector())) && filter.evaluate(event.getToBlock(), event).equals(FilterState.DENY)) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onBlockPistonExtend(BlockPistonExtendEvent event) {
+        for (Block block : event.getBlocks()) {
+            if (region.contains(block.getRelative(event.getDirection()).getLocation().toVector()) && filter.evaluate(block, event).equals(FilterState.DENY)) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onBlockPistonRetract(BlockPistonRetractEvent event) {
+        for (Block block : event.getBlocks()) {
+            if (region.contains(block.getRelative(event.getDirection()).getLocation().toVector()) && filter.evaluate(block, event).equals(FilterState.DENY)) {
+                event.setCancelled(true);
+            }
         }
     }
 }

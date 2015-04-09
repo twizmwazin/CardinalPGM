@@ -9,6 +9,7 @@ import in.twizmwaz.cardinal.util.ChatUtils;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
@@ -62,6 +63,15 @@ public class BlockBreakRegion extends AppliedRegion {
             }
         } else {
             if (region.contains(event.getEntity().getLocation().toVector()) && filter.evaluate(event.getEntity(), event).equals(FilterState.DENY)) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onBlockPistonRetract(BlockPistonRetractEvent event) {
+        for (Block block : event.getBlocks()) {
+            if (region.contains(block.getRelative(event.getDirection()).getLocation().toVector()) && filter.evaluate(block, event).equals(FilterState.DENY)) {
                 event.setCancelled(true);
             }
         }

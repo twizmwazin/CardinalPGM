@@ -173,5 +173,14 @@ public class BlockEventRegion extends AppliedRegion {
             event.setCancelled(true);
         }
     }
+
+    @EventHandler
+    public void onBlockPistonExtend(BlockPistonExtendEvent event) {
+        for (Block block : event.getBlocks()) {
+            if (region.contains(block.getRelative(event.getDirection()).getLocation().toVector()) && filter.evaluate(block, event).equals(FilterState.DENY)) {
+                event.setCancelled(true);
+            }
+        }
+    }
 }
 
