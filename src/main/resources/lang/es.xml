@@ -207,40 +207,40 @@
         <version>Este servidor usa la versión {0} de Cardinal</version>
     </userInterface>
     <deathMsg>
-        <explosionSelf>{0} exploto</explosionSelf>
+        <explosionSelf>{0} explotó</explosionSelf>
         <explosionPlayer>{0} fue explotado por la TNT de {1}</explosionPlayer>
-        <explosion>{0} exploto</explosion>
-        <contact>{0} fue pichado hasta la muerte</contact>
-        <drowning>{0} olvido respiriar</drowning>
+        <explosion>{0} explotó</explosion>
+        <contact>{0} fue pinchado hasta la muerte</contact>
+        <drowning>{0} olvido respirar</drowning>
         <attackPlayerFists>{0} sintio la furia de {1}</attackPlayerFists>
         <attackPlayer>{0} fue asesinado por {1} {2}</attackPlayer>
         <attack>{0} fue asesinado</attack>
-        <fallPlayerKnocked>{0} fue {1} tirado desde un lugar alto ({2}) por {3} {4}</fallPlayerKnocked>
-        <fallPlayerShot>{0} fue {1} tirado desde un lugar alto ({2}) por el flechazo de {3} ({4})</fallPlayerShot>
-        <fallPlayerBlown>{0} fue {1} tirado desde un lugar alto ({2})por la TNT de {3}</fallPlayerBlown>
-        <shot>tiro</shot>
+        <fallPlayerKnocked>{0} fue {1} tiradó desde un lugar alto ({2}) por {3} {4}E</fallPlayerKnocked>
+        <fallPlayerShot>{0} fue {1} tiradó desde un lugar alto ({2}) por el flechazo de {3} ({4})</fallPlayerShot>
+        <fallPlayerBlown>{0} fue {1} tiradó desde un lugar alto ({2}) por la TNT de {3}</fallPlayerBlown>
+        <shot>tiró</shot>
         <knocked>empujado</knocked>
-        <blown>explocion</blown>
+        <blown>explosión</blown>
         <spleefed>spleefed</spleefed>
-        <fall>0} se callo muy alto</fall>
+        <fall>0} se calló muy alto</fall>
         <fallingBlock>{0} fue aplastado por un yunque</fallingBlock>
         <fire>{0} se quemo hasta morir</fire>
         <lava>{0} intento nadar en lava</lava>
         <lightning>{0} se atasco en la luz</lightning>
-        <potionPlayer>{0} cogio la pocion de {1}</potionPlayer>
-        <potion>{0} le cayo una pocion en la cara</potion>
-        <projectilePlayer>{0} fue tirado por el proyectil de {1}</projectilePlayer>
-        <projectile>{0} fue tirado</projectile>
-        <starvation>{0} murio de hambre</starvation>
-        <suffocation>{0} se sofoco</suffocation>
-        <suicide>{0} murio</suicide>
-        <thornsPlayer>{0} murio intentando matar {1}</thornsPlayer>
-        <thorns>{0} murio intentando tocar al enemigo</thorns>
-        <voidPlayerKnocked>{0} fue  {1} tirado fuera del mundo por{3} {4}</voidPlayerKnocked>
+        <potionPlayer>{0} cogio la poción de {1}</potionPlayer>
+        <potion>{0} le calló una poción en la cara</potion>
+        <projectilePlayer>{0} fue tiradó por el proyectil de {1}</projectilePlayer>
+        <projectile>{0} fue tiradó</projectile>
+        <starvation>{0} murió de hambre</starvation>
+        <suffocation>{0} se sofocó</suffocation>
+        <suicide>{0} murió</suicide>
+        <thornsPlayer>{0} murió intentando matar {1}</thornsPlayer>
+        <thorns>{0} murió intentando tocar al enemigo</thorns>
+        <voidPlayerKnocked>{0} fue  {1} tirado fuera del mundo por {3} {4}</voidPlayerKnocked>
         <voidPlayerShot>{0} fue {1} fue tirado del mundo por {3} ({4})</voidPlayerShot>
         <voidPlayerBlown>{0} fue {1} fue tirado con la TNT de {3}</voidPlayerBlown>
-        <void>{0} se cayo del mundo</void>
-        <wither>{0} murio envenenado</wither>
+        <void>{0} se calló del mundo</void>
+        <wither>{0} murió envenenado</wither>
         <unknown>{0} murio por causas desconocidas</unknown>
     </deathMsg>
 </locale>
