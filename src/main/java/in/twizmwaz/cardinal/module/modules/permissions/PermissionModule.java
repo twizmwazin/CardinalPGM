@@ -49,8 +49,8 @@ public class PermissionModule implements Module {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         attachmentMap.put(event.getPlayer(), event.getPlayer().addAttachment(plugin));
-        for (String permisson : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Default.permissions")) {
-            attachmentMap.get(event.getPlayer()).setPermission(permisson, true);
+        for (String permission : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Default.permissions")) {
+            attachmentMap.get(event.getPlayer()).setPermission(permission, true);
         }
         if (event.getPlayer().isOp() && GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.players").contains(event.getPlayer().getUniqueId().toString())) {
             List<String> players = new ArrayList<>();
@@ -154,6 +154,10 @@ public class PermissionModule implements Module {
             }
         }
         return false;
+    }
+
+    public static boolean isStaff(OfflinePlayer player) {
+        return isMod(player.getUniqueId()) || player.isOp();
     }
 
     public static boolean isDev(UUID player) {

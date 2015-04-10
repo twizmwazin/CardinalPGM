@@ -75,6 +75,7 @@
         <playerDisabledPMs>Your message was not sent because {0} has chosen not to receive private messages.</playerDisabledPMs>
         <playableLeave>You may not leave the playing field</playableLeave>
         <playableInteract>You may not interact with blocks outside of the playing field</playableInteract>
+        <globalMuteEnabled>You cannot talk in chat while global mute is enabled.</globalMuteEnabled>
     </error>
     <generic>
         <mapSet>Next map set to {0}</mapSet>
@@ -213,6 +214,8 @@
         <matchReportUpload>Uploading match report...</matchReportUpload>
         <matchReportSuccess>Match report successfully uploaded! You can view it at {0}</matchReportSuccess>
         <matchReportFaied>An error occurred while uploading the match report</matchReportFaied>
+        <globalMuteEnabled>Global mute enabled</globalMuteEnabled>
+        <globalMuteDisabled>Global mute disabled</globalMuteDisabled>
     </userInterface>
     <deathMsg>
         <explosionSelf>{0} 'sploded</explosionSelf>

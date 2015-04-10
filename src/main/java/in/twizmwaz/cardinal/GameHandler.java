@@ -23,6 +23,7 @@ public class GameHandler {
     private Match match;
     private Cycle cycle;
     private File matchFile;
+    private boolean globalMute;
 
     public GameHandler() throws RotationLoadException {
         handler = this;
@@ -93,5 +94,18 @@ public class GameHandler {
 
     public void setMatchFile(File file) {
         matchFile = file;
+    }
+
+    public boolean getGlobalMute() {
+        return globalMute;
+    }
+
+    public void setGlobalMute(boolean globalMute) {
+        this.globalMute = globalMute;
+    }
+
+    public boolean toggleGlobalMute() {
+        globalMute = !globalMute;
+        return globalMute;
     }
 }

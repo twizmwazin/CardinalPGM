@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.chat;
 
 import in.twizmwaz.cardinal.Cardinal;
+import org.bukkit.ChatColor;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
@@ -80,6 +81,7 @@ public enum  ChatConstant {
     ERROR_PLAYER_DISABLED_PMS("error.playerDisabledPMs"),
     ERROR_PLAYABLE_LEAVE("error.playableLeave"),
     ERROR_PLAYABLE_INTERACT("error.playableInteract"),
+    ERROR_GLOBAL_MUTE_ENABLED("error.globalMuteEnabled"),
     
     GENERIC_MAP_SET("generic.mapSet"),
     GENERIC_MARKED_FOR_RELOADING("generic.markedForReloading"),
@@ -212,7 +214,9 @@ public enum  ChatConstant {
     UI_VERSION("userInterface.version"),
     UI_MATCH_REPORT_UPLOAD("userInterface.matchReportUpload"),
     UI_MATCH_REPORT_SUCCESS("userInterface.matchReportSuccess"),
-    UI_MATCH_REPORT_FAILED("userInterface.matchReportFailed");
+    UI_MATCH_REPORT_FAILED("userInterface.matchReportFailed"),
+    UI_GLOBAL_MUTE_ENABLED("userInterface.globalMuteEnabled"),
+    UI_GLOBAL_MUTE_DISABLED("userInterface.globalMuteDisabled");
     
     private final String path;
 
@@ -237,6 +241,10 @@ public enum  ChatConstant {
     
     public ChatMessage asMessage(ChatMessage... messages) {
         return new LocalizedChatMessage(this, messages);
+    }
+
+    public ChatMessage asMessage(ChatColor color, ChatMessage... messages) {
+        return new UnlocalizedChatMessage(color + "{0}", asMessage(messages));
     }
     
 }

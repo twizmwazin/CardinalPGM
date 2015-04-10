@@ -5,8 +5,10 @@ import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
+import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
@@ -16,6 +18,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.LazyMetadataValue;
 
+import java.lang.ref.WeakReference;
 import java.util.concurrent.Callable;
 
 public class ChatCommands {
@@ -32,10 +35,7 @@ public class ChatCommands {
         public Object call() throws Exception {
             return channel;
         }
-
     }
-
-
 
     @Command(aliases = {"g"}, desc = "Talk in global chat.", usage = "<message>")
     @CommandPermissions("cardinal.chat.global")
@@ -46,6 +46,8 @@ public class ChatCommands {
                 sender.sendMessage(ChatColor.YELLOW + "Your default channel was changed to " + ChatColor.RED + "global");
             }
             if (cmd.argsLength() > 0) {
+                if (GameHandler.getGameHandler().getGlobalMute() && !PermissionModule.isStaff(((Player) sender)))
+                    throw new CommandException(ChatConstant.ERROR_GLOBAL_MUTE_ENABLED.asMessage().getMessage(ChatUtils.getLocale(sender)));
                 String message = assembleMessage(cmd);
                 if (message.trim().equals("")) return;
                 ChatUtils.getGlobalChannel().sendMessage("<" + TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() + ChatColor.RESET + ">: " + message);
@@ -79,6 +81,8 @@ public class ChatCommands {
                 sender.sendMessage(ChatColor.YELLOW + "Your default channel was changed to " + ChatColor.RED + "team");
             }
             if (cmd.argsLength() > 0) {
+                if (GameHandler.getGameHandler().getGlobalMute() && !PermissionModule.isStaff(((Player) sender)))
+                    throw new CommandException(ChatConstant.ERROR_GLOBAL_MUTE_ENABLED.asMessage().getMessage(ChatUtils.getLocale(sender)));
                 TeamModule team = TeamUtils.getTeamByPlayer((Player) sender);
                 TeamChannel channel = TeamUtils.getTeamChannel(team);
                 String message = assembleMessage(cmd);

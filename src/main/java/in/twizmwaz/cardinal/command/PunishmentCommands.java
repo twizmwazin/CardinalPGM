@@ -7,8 +7,10 @@ import com.sk89q.minecraft.util.commands.CommandPermissions;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.module.modules.chatChannels.AdminChannel;
 import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannelModule;
+import in.twizmwaz.cardinal.module.modules.chatChannels.GlobalChannel;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
@@ -119,5 +121,16 @@ public class PunishmentCommands {
                 } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_MUTED).getMessage(ChatUtils.getLocale(sender)));
             } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_AFFECTED).getMessage(ChatUtils.getLocale(sender)));
         } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_FOUND).getMessage(ChatUtils.getLocale(sender)));
+    }
+
+    @Command(aliases = {"gmute"}, desc = "Enable/disable global mute.")
+    @CommandPermissions("cardinal.punish.mute")
+    public static void gmute(CommandContext cmd, CommandSender sender) {
+        boolean state = GameHandler.getGameHandler().toggleGlobalMute();
+        if (state) {
+            ChatUtils.getGlobalChannel().sendLocalizedMessage(ChatConstant.UI_GLOBAL_MUTE_ENABLED.asMessage(ChatColor.AQUA));
+        } else {
+            ChatUtils.getGlobalChannel().sendLocalizedMessage(ChatConstant.UI_GLOBAL_MUTE_DISABLED.asMessage(ChatColor.AQUA));
+        }
     }
 }

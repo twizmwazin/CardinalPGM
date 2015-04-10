@@ -15,11 +15,10 @@ public class ChatModule implements Module {
 
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
+        event.setCancelled(true);
         if (event.getPlayer().hasMetadata("default-channel")) {
-            event.setCancelled(true);
             Bukkit.dispatchCommand(event.getPlayer(), String.valueOf(event.getPlayer().getMetadata("default-channel").get(0).asString().charAt(0)) + " " + event.getMessage());
         } else {
-            event.setCancelled(true);
             Bukkit.dispatchCommand(event.getPlayer(), "t " + event.getMessage());
         }
     }
