@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.module.modules.regions.type;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.PointParser;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
@@ -31,6 +32,16 @@ public class PointRegion extends BlockRegion {
     @Override
     public Vector getVector() {
         return vector.clone();
+    }
+
+    @Override
+    public PointRegion getRandomPoint() {
+        return this;
+    }
+
+    @Override
+    public Location getLocation() {
+        return new Location(GameHandler.getGameHandler().getMatchWorld(), getX(), getY(), getZ(), getYaw(), getPitch());
     }
 
     public float getYaw() {
