@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ParseUtils {
-    
+
     public static ItemStack getItem(Element element) {
         int amount = 1;
         if (element.getAttributeValue("amount") != null) {
@@ -28,8 +28,20 @@ public class ParseUtils {
             }
         }
         ItemStack itemStack;
-        if (element.getText().contains(":")) itemStack = new ItemStack(Material.matchMaterial(element.getText().split(":")[0]), amount, (short) NumUtils.parseInt(element.getText().split(":")[1]));
+        if (element.getText().contains(":"))
+            itemStack = new ItemStack(Material.matchMaterial(element.getText().split(":")[0]), amount, (short) NumUtils.parseInt(element.getText().split(":")[1]));
         else itemStack = new ItemStack(Material.matchMaterial(element.getText()), amount);
+        if (element.getAttributeValue("unbreakable") != null && Boolean.parseBoolean(element.getAttributeValue("unbreakable"))) {
+            try {
+                net.minecraft.server.v1_8_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+                NBTTagCompound tag = new NBTTagCompound();
+                tag.setBoolean("Unbreakable", true);
+                nmsStack.setTag(tag);
+                itemStack = CraftItemStack.asBukkitCopy(nmsStack);
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+        }
         if (element.getAttributeValue("damage") != null) {
             itemStack.setDurability(Short.parseShort(element.getAttributeValue("damage")));
         }
@@ -57,7 +69,6 @@ public class ParseUtils {
             }
             meta.setLore(lore);
         }
-        int slot = element.getAttributeValue("slot") != null ? NumUtils.parseInt(element.getAttributeValue("slot")) : -1;
         if (element.getAttributeValue("potions") != null) {
             String potions = element.getAttributeValue("potions");
             if (potions.contains(";")) {
@@ -89,7 +100,7 @@ public class ParseUtils {
         NBTTagCompound tag = nmsStack.getTag();
 
         NBTTagList attributeList = tag.getList("AttributeModifiers", 10);
-        for (AttributeModifier modifier: parseAttributes(attributes)) {
+        for (AttributeModifier modifier : parseAttributes(attributes)) {
             NBTTagCompound attributeTag = new NBTTagCompound();
             attributeTag.setString("AttributeName", modifier.getAttributeType().getName());
             attributeTag.setString("Name", modifier.getAttributeType().getName());
@@ -107,7 +118,7 @@ public class ParseUtils {
 
     private static List<AttributeModifier> parseAttributes(String attributes) {
         List<AttributeModifier> modifiers = new ArrayList<>();
-        for (String attribute: attributes.split(";")) {
+        for (String attribute : attributes.split(";")) {
             String[] components = attribute.split(":");
             String name = components[0];
             String operation = components[1];
