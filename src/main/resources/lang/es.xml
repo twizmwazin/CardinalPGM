@@ -75,6 +75,7 @@
         <playerDisabledPMs>Tu mensaje no fue enviado porque {0} eligió no recibir mensajes privados.</playerDisabledPMs>
         <playableLeave>No puedes salir del terreno de juego</playableLeave>
         <playableInteract>No puedes interactuar con bloques de fuera del terreno de juego</playableInteract>
+        <globalMuteEnabled>No puedes hablar en el chat mientras el silenciado global está habilitado.</globalMuteEnabled>
     </error>
     <generic>
         <mapSet>El siguiente mapa ha sido establecido a {0}</mapSet>
@@ -213,6 +214,8 @@
         <matchReportUpload>Subiendo el reporte de la partida...</matchReportUpload>
         <matchReportSuccess>Reporte de la partida subido correctamente! Lo puedes ver en {0}</matchReportSuccess>
         <matchReportFaied>Un error ha ocurrido al subir el reporte de la partida</matchReportFaied>
+        <globalMuteEnabled>Silenciado global activado</globalMuteEnabled>
+        <globalMuteDisabled>Silenciado global desactivado</globalMuteDisabled>
     </userInterface>
     <deathMsg>
         <explosionSelf>{0} se ha explotado</explosionSelf>
