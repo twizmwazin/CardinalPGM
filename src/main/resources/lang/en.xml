@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <locale lang="en">
     <error>
+        <notEnoughArgsSay>You must have a message to say.</notEnoughArgsSay>
+        <notEnoughArgsBroadcast>You must have a message to broadcast.</notEnoughArgsBroadcast>
         <noMessages>You have no private messages to reply to</noMessages>
         <restartDuringMatch>You may not restart during a match. Use -f to override.</restartDuringMatch>
         <cycleDuringMatch>You may not cycle during a match. Use -f to override.</cycleDuringMatch>
