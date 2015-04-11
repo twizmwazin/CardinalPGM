@@ -18,6 +18,8 @@ permissions:
     - cardinal.chat.team
   Moderator:
     permissions:
+    - cardinal.say
+    - cardinal.broadcast
     - cardinal.mod
     - tnt.defuse
     - cardinal.cancel
