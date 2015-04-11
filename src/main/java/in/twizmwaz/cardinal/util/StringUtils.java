@@ -8,6 +8,10 @@ import java.text.DecimalFormat;
 public class StringUtils {
 
     public static int timeStringToSeconds(String input) {
+        if (input == "oo")
+            return (int) Double.POSITIVE_INFINITY;
+        if (input == "-oo")
+            return (int) Double.NEGATIVE_INFINITY;
         int time = 0;
         String currentUnit = "";
         String current = "";

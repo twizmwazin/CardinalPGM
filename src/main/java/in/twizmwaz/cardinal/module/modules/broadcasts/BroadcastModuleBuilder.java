@@ -18,34 +18,34 @@ public class BroadcastModuleBuilder implements ModuleBuilder {
             for (Element element : broadcast.getChildren("tip")) {
                 String message;
                 int timeAfter;
-                int every;
+                int every = -1;
                 int count = 1;
                 message = ChatColor.translateAlternateColorCodes('`', element.getText());
                 timeAfter = StringUtils.timeStringToSeconds(element.getAttributeValue("after"));
                 if (element.getAttributeValue("every") != null) {
                     every = StringUtils.timeStringToSeconds(element.getAttributeValue("every"));
-                } else {
-                    every = timeAfter;
                 }
                 if (element.getAttributeValue("count") != null) {
                     count = NumUtils.parseInt(element.getAttributeValue("count"));
+                } else if (every >= 1) {
+                    count = (int) Double.POSITIVE_INFINITY;
                 }
                 results.add(new BroadcastModule(message, BroadcastType.TIP, timeAfter, every, count));
             }
             for (Element element : broadcast.getChildren("alert")) {
                 String message;
                 int timeAfter;
-                int every;
+                int every = -1;
                 int count = 1;
                 message = ChatColor.translateAlternateColorCodes('`', element.getText());
                 timeAfter = StringUtils.timeStringToSeconds(element.getAttributeValue("after"));
                 if (element.getAttributeValue("every") != null) {
                     every = StringUtils.timeStringToSeconds(element.getAttributeValue("every"));
-                } else {
-                    every = timeAfter;
                 }
                 if (element.getAttributeValue("count") != null) {
                     count = NumUtils.parseInt(element.getAttributeValue("count"));
+                } if (every >= 1) {
+                    count = (int) Double.POSITIVE_INFINITY;
                 }
                 results.add(new BroadcastModule(message, BroadcastType.ALERT, timeAfter, every, count));
             }
