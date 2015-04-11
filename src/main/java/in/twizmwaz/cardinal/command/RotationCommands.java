@@ -61,7 +61,7 @@ public class RotationCommands {
         }
     }
 
-    @Command(aliases = {"maps"}, desc = "Shows all currently loaded maps.", usage = "[page]")
+    @Command(aliases = {"maps", "maplist", "ml"}, desc = "Shows all currently loaded maps.", usage = "[page]")
     public static void maps(final CommandContext cmd, CommandSender sender) throws CommandException {
         int index;
         try {
