@@ -18,7 +18,7 @@ public class BroadcastCommands {
         ChatUtils.getGlobalChannel().sendMessage(ChatColor.WHITE + "<" + ChatColor.GOLD + "\u2756" + ChatColor.DARK_AQUA + "Console" + ChatColor.WHITE + "> " + cmd.getJoinedStrings(0));
     }
 
-    @Command(aliases = {"broadcast"}, desc = "Broadcasts a message to all players.", min = 1)
+    @Command(aliases = {"broadcast", "bc"}, desc = "Broadcasts a message to all players.", min = 1)
     @CommandPermissions("cardinal.broadcast")
     public static void broadcast(final CommandContext cmd, CommandSender sender) throws CommandException {
         ChatUtils.getGlobalChannel().sendMessage(ChatColor.RED + "[Broadcast] " + cmd.getJoinedStrings(0));
