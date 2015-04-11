@@ -82,6 +82,8 @@ public enum  ChatConstant {
     ERROR_PLAYABLE_LEAVE("error.playableLeave"),
     ERROR_PLAYABLE_INTERACT("error.playableInteract"),
     ERROR_GLOBAL_MUTE_ENABLED("error.globalMuteEnabled"),
+    ERROR_NOT_ENOUGH_ARGS_BROADCAST("error.notEnoughArgsBroadcast"),
+    ERROR_NOT_ENOUGH_ARGS_SAY("error.notEnoughArgsSay"),
     
     GENERIC_MAP_SET("generic.mapSet"),
     GENERIC_MARKED_FOR_RELOADING("generic.markedForReloading"),
