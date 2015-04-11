@@ -22,8 +22,7 @@ public class Kit implements Module {
     private String parent;
     private boolean force;
     private boolean potionParticles;
-    //unimplemented
-    private boolean resetPearls;
+    private boolean resetPearls; //unimplemented
     private boolean clear;
     private boolean clearItems;
     private int health;
@@ -31,10 +30,10 @@ public class Kit implements Module {
     private int foodLevel;
     private float walkSpeed;
     private float knockback;
-    //unimplemented
-    private boolean jump;
+    private boolean jump; //unimplemented
+    private float flySpeed;
 
-    protected Kit(String name, List<KitItem> items, List<KitArmor> armor, List<PotionEffect> effects, List<KitBook> books ,String parent, boolean force, boolean potionParticles, boolean resetPearls, boolean clear, boolean clearItems, int health, float saturation, int foodLevel, float walkSpeed, float knockback, boolean jump) {
+    protected Kit(String name, List<KitItem> items, List<KitArmor> armor, List<PotionEffect> effects, List<KitBook> books, String parent, boolean force, boolean potionParticles, boolean resetPearls, boolean clear, boolean clearItems, int health, float saturation, int foodLevel, float walkSpeed, float knockback, boolean jump, float flySpeed) {
         this.name = name;
         this.items = items;
         this.armor = armor;
@@ -52,7 +51,7 @@ public class Kit implements Module {
         this.walkSpeed = walkSpeed;
         this.knockback = knockback;
         this.jump = jump;
-
+        this.flySpeed = flySpeed;
     }
 
     public static Kit getKitByName(String name) {

@@ -25,6 +25,7 @@ public class PlayerUtils {
         player.setExp(0);
         player.setPotionParticles(true);
         player.setWalkSpeed(0.2F);
+        player.setFlySpeed(0.2F);
     }
 
     public static double getSnowflakeMultiplier(OfflinePlayer player) {

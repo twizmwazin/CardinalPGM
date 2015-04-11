@@ -105,60 +105,19 @@ public class KitBuilder implements ModuleBuilder {
             }
             String parent = element.getAttributeValue("parents");
             boolean force = element.getAttributeValue("force") != null && Boolean.parseBoolean(element.getAttributeValue("force"));
-            boolean potionParticles;
-            try {
-                potionParticles = Boolean.parseBoolean(element.getAttributeValue("potion-particles"));
-            } catch (NumberFormatException e) {
-                potionParticles = true;
-            }
-            boolean resetPearls;
-            try {
-                resetPearls = Boolean.parseBoolean(element.getAttributeValue("reset-ender-pearls"));
-            } catch (NumberFormatException e) {
-                resetPearls = true;
-            }
-            boolean clear = false;
-            if (element.getChildren("clear").size() > 0) {
-                clear = true;
-            }
-            boolean clearItems = false;
-            if (element.getChildren("clear-items").size() > 0) {
-                clearItems = true;
-            }
-            int health = -1;
-            try {
-                health = NumUtils.parseInt(element.getChild("health").getText()) / 2;
-            } catch (NullPointerException e) {
-
-            }
-            float saturation = 0;
-            try {
-                saturation = Float.parseFloat(element.getChild("saturation").getText());
-            } catch (NullPointerException e) {
-
-            }
-            int foodLevel = -1;
-            try {
-                foodLevel = NumUtils.parseInt(element.getChild("foodlevel").getText());
-            } catch (NullPointerException e) {
-
-            }
-            float walkSpeed = 0.2F;
-            try {
-                walkSpeed = Float.parseFloat(element.getChild("walk-speed").getText()) / 5;
-            } catch (NullPointerException e) {
-
-            }
-            float knockback = 0F;
-            try {
-                knockback = Float.parseFloat(element.getChild("knockback-reduction").getText());
-            } catch (NullPointerException e) {
-
-            }
+            boolean potionParticles = element.getAttributeValue("potion-particles") != null && NumUtils.parseBoolean(element.getAttributeValue("potion-particles"));
+            boolean resetPearls = element.getAttributeValue("reset-ender-pearls") != null && NumUtils.parseBoolean(element.getAttributeValue("reset-ender-pearls"));
+            boolean clear = element.getChildren("clear").size() > 0;
+            boolean clearItems = element.getChildren("clear-items").size() > 0;
+            int health = element.getChildText("health") == null ? -1 : NumUtils.parseInt(element.getChild("health").getText()) / 2;
+            float saturation = element.getChildText("saturation") == null ? 0: Float.parseFloat(element.getChildText("saturation"));
+            int foodLevel = element.getChildText("foodlevel") == null ? -1 : NumUtils.parseInt(element.getChildText("foodlevel"));
+            float walkSpeed = element.getChildText("walk-speed") == null ? 0.2F : Float.parseFloat(element.getChildText("walk-speed")) / 5;
+            float knockback = element.getChildText("knockback-reduction") == null ? 0F : Float.parseFloat(element.getChildText("knockback-reduction"));
             boolean jump = false;
-            if (element.getChildren("double-jump").size() > 0)
-                jump = true;
-            return new Kit(name, items, armor, potions, books, parent, force, potionParticles, resetPearls, clear, clearItems, health, saturation, foodLevel, walkSpeed, knockback, jump);
+            if (element.getChildren("double-jump").size() > 0) jump = true;
+            float flySpeed = element.getChildText("fly-speed") == null ? 0.2F : Float.parseFloat(element.getChildText("fly-speed")) / 5;
+            return new Kit(name, items, armor, potions, books, parent, force, potionParticles, resetPearls, clear, clearItems, health, saturation, foodLevel, walkSpeed, knockback, jump, flySpeed);
         } else {
             return getKit(element.getParentElement(), document, true);
         }
