@@ -37,7 +37,7 @@ public class ChatCommands {
         }
     }
 
-    @Command(aliases = {"g"}, desc = "Talk in global chat.", usage = "<message>")
+    @Command(aliases = {"g", "global", "shout"}, desc = "Talk in global chat.", usage = "<message>")
     @CommandPermissions("cardinal.chat.global")
     public static void global(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (sender instanceof Player) {
@@ -55,7 +55,7 @@ public class ChatCommands {
         } else throw new CommandException("Console cannot use this command.");
     }
 
-    @Command(aliases = {"a"}, desc = "Talk in admin chat.", usage = "<message>")
+    @Command(aliases = {"a", "admin"}, desc = "Talk in admin chat.", usage = "<message>")
     @CommandPermissions("cardinal.chat.admin")
     public static void admin(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (sender instanceof Player) {
