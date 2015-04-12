@@ -1,15 +1,12 @@
 package in.twizmwaz.cardinal.module.modules.filter.type;
 
-import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
-import in.twizmwaz.cardinal.module.modules.filter.FilterParser;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.TimeFilterParser;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
-import static in.twizmwaz.cardinal.module.modules.filter.FilterState.*;
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ALLOW;
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.DENY;
 
 public class TimeFilter extends FilterModule {
 

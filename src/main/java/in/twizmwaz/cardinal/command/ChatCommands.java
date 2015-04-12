@@ -6,6 +6,7 @@ import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
@@ -18,7 +19,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.LazyMetadataValue;
 
-import java.lang.ref.WeakReference;
 import java.util.concurrent.Callable;
 
 public class ChatCommands {
@@ -40,10 +40,11 @@ public class ChatCommands {
     @Command(aliases = {"g", "global", "shout"}, desc = "Talk in global chat.", usage = "<message>")
     @CommandPermissions("cardinal.chat.global")
     public static void global(final CommandContext cmd, CommandSender sender) throws CommandException {
+        String locale = ChatUtils.getLocale(sender);
         if (sender instanceof Player) {
             if (cmd.argsLength() == 0) {
                 ((Player) sender).setMetadata("default-channel", new LazyMetadataValue(GameHandler.getGameHandler().getPlugin(), LazyMetadataValue.CacheStrategy.NEVER_CACHE, new Channel(ChatUtils.ChannelType.GLOBAL)));
-                sender.sendMessage(ChatColor.YELLOW + "Your default channel was changed to " + ChatColor.RED + "global");
+                sender.sendMessage(ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.UI_DEFAULT_CHANNEL_GLOBAL).getMessage(locale));
             }
             if (cmd.argsLength() > 0) {
                 if (GameHandler.getGameHandler().getGlobalMute() && !PermissionModule.isStaff(((Player) sender)))
@@ -58,16 +59,17 @@ public class ChatCommands {
     @Command(aliases = {"a", "admin"}, desc = "Talk in admin chat.", usage = "<message>")
     @CommandPermissions("cardinal.chat.admin")
     public static void admin(final CommandContext cmd, CommandSender sender) throws CommandException {
+        String locale = ChatUtils.getLocale(sender);
         if (sender instanceof Player) {
             if (cmd.argsLength() == 0) {
                 ((Player) sender).setMetadata("default-channel", new LazyMetadataValue(GameHandler.getGameHandler().getPlugin(), LazyMetadataValue.CacheStrategy.NEVER_CACHE, new Channel(ChatUtils.ChannelType.ADMIN)));
-                sender.sendMessage(ChatColor.YELLOW + "Your default channel was changed to " + ChatColor.RED + "admin");
+                sender.sendMessage(ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.UI_DEFAULT_CHANNEL_ADMIN).getMessage(locale));
             }
             if (cmd.argsLength() > 0) {
                 String message = assembleMessage(cmd);
                 if (message.trim().equals("")) return;
                 ChatUtils.getAdminChannel().sendMessage("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() + ChatColor.RESET + ": " + message);
-                Bukkit.getLogger().info("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() + ChatColor.RESET + ":" + message);
+                Bukkit.getLogger().info("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() + ChatColor.RESET + ": " + message);
             }
         } else throw new CommandException("Console cannot use this command.");
     }
@@ -75,10 +77,11 @@ public class ChatCommands {
     @Command(aliases = {"t"}, desc = "Talk in team chat.", usage = "<message>")
     @CommandPermissions("cardinal.chat.team")
     public static void team(final CommandContext cmd, CommandSender sender) throws CommandException {
+        String locale = ChatUtils.getLocale(sender);
         if (sender instanceof Player) {
             if (cmd.argsLength() == 0) {
                 ((Player) sender).setMetadata("default-channel", new LazyMetadataValue(GameHandler.getGameHandler().getPlugin(), LazyMetadataValue.CacheStrategy.NEVER_CACHE, new Channel(ChatUtils.ChannelType.TEAM)));
-                sender.sendMessage(ChatColor.YELLOW + "Your default channel was changed to " + ChatColor.RED + "team");
+                sender.sendMessage(ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.UI_DEFAULT_CHANNEL_TEAM).getMessage(locale));
             }
             if (cmd.argsLength() > 0) {
                 if (GameHandler.getGameHandler().getGlobalMute() && !PermissionModule.isStaff(((Player) sender)))

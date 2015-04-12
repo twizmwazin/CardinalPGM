@@ -1,10 +1,8 @@
 package in.twizmwaz.cardinal.module.modules.tracker.event;
 
 import in.twizmwaz.cardinal.module.modules.tracker.Cause;
-import in.twizmwaz.cardinal.module.modules.tracker.DamageTracker;
 import in.twizmwaz.cardinal.module.modules.tracker.Description;
 import in.twizmwaz.cardinal.module.modules.tracker.Type;
-import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;

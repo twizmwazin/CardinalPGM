@@ -3,7 +3,6 @@ package in.twizmwaz.cardinal.module.modules.potionRemover;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
-import org.jdom2.Element;
 
 public class PotionRemoverBuilder implements ModuleBuilder {
 

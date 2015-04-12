@@ -3,17 +3,13 @@ package in.twizmwaz.cardinal.module.modules.deathTracker;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import in.twizmwaz.cardinal.module.modules.tracker.DamageTracker;
-import in.twizmwaz.cardinal.module.modules.tracker.SpleefTracker;
 import in.twizmwaz.cardinal.module.modules.tracker.Type;
 import in.twizmwaz.cardinal.module.modules.tracker.event.TrackerDamageEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class DeathTracker implements Module {

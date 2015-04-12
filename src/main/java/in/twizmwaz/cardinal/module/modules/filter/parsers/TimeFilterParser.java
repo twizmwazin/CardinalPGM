@@ -1,9 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.filter.parsers;
 
 import in.twizmwaz.cardinal.module.modules.filter.FilterParser;
-import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.StringUtils;
-import in.twizmwaz.cardinal.util.TeamUtils;
 import org.jdom2.Element;
 
 public class TimeFilterParser extends FilterParser {
