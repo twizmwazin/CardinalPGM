@@ -218,6 +218,9 @@
         <matchReportFaied>An error occurred while uploading the match report</matchReportFaied>
         <globalMuteEnabled>Global mute enabled</globalMuteEnabled>
         <globalMuteDisabled>Global mute disabled</globalMuteDisabled>
+        <defaultChannelGlobal>Changed default channel to global chat.</defaultChannelGlobal>
+        <defaultChannelAdmin>Changed default channel to administrator chat.</defaultChannelAdmin>
+        <defaultChannelTeam>Changed default channel to team chat.</defaultChannelTeam>
     </userInterface>
     <deathMsg>
         <explosionSelf>{0} 'sploded</explosionSelf>

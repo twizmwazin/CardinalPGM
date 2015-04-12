@@ -218,7 +218,10 @@ public enum  ChatConstant {
     UI_MATCH_REPORT_SUCCESS("userInterface.matchReportSuccess"),
     UI_MATCH_REPORT_FAILED("userInterface.matchReportFailed"),
     UI_GLOBAL_MUTE_ENABLED("userInterface.globalMuteEnabled"),
-    UI_GLOBAL_MUTE_DISABLED("userInterface.globalMuteDisabled");
+    UI_GLOBAL_MUTE_DISABLED("userInterface.globalMuteDisabled"),
+    UI_DEFAULT_CHANNEL_GLOBAL("userInterface.defaultChannelGlobal"),
+    UI_DEFAULT_CHANNEL_ADMIN("userInterface.defaultChannelAdmin"),
+    UI_DEFAULT_CHANNEL_TEAM("userInterface.defaultChannelTeam");
     
     private final String path;
 
