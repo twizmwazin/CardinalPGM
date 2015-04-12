@@ -51,7 +51,7 @@
         <landminePlace>당신은 그곳에 지뢰를 설치할 수 없습니다.</landminePlace>
         <landmineExists>이미 지뢰가 설치되어 있습니다.</landmineExists>
         <landmineProximity>다른 지뢰 근처에는 지뢰를 설치할 수 없습니다.</landmineProximity>
-        <tutorialTp>경고: 튜토리얼 장소에는 텔레포트할 수 없습니다!</tutorialTp>
+        <tutorialTp>경고: 튜토리얼 장소에 텔레포트할 수 없습니다!</tutorialTp>
         <defuseTntWater>물 안에 있는 TNT는 제거할 수 없습니다.</defuseTntWater>
         <defuseTntEnemy>적 팀의 TNT는 제거할수 없습니다.</defuseTntEnemy>
         <noPermission>권한이 없습니다.</noPermission>
@@ -67,9 +67,14 @@
         <rateWhilePlaying>플레이하는 동안 이 맵을 평가하려면, {0} 을 쳐주세요.</rateWhilePlaying>
         <noRecentPM>당신은 답장할 메시지를 가지고 있지않습니다.</noRecentPM>
         <playerNotFound>플레이어가 발견되지 않았습니다.</playerNotFound>
+        <playerAlreadyBanned>플레이어는 이미 밴 되었습니다</playerAlreadyBanned>
+        <playerAlreadyMuted>플레이어는 이미 뮤트가 되어 있습니다</playerAlreadyMuted>
+        <PlayerNotMuted>플레이어는 뮤트가 되지 않았습니다</PlayerNotMuted>
+        <playerNotAffected>당신이 선택한 플레이어는 이 명령어에 영향을 받지 않습니다</playerNotAffected>
         <playerDisabledPMs>{0}가 개인메시지를 받지않도록 설정하였기때문에 메시지가 전달되지 않았습니다.</playerDisabledPMs>
-        <playableLeave>당신은 경기장 을 떠나지 않을 수 있습니다</playableLeave>
-        <playableInteract>당신은 공정한 경쟁의 바깥쪽 블록을 가진 상호 작용하지 않을 수 있</playableInteract>
+        <playableLeave>당신은 경기장을 떠날 수 없습니다</playableLeave>
+        <playableInteract>당신은 경기장 밖에 있는 블럭을 이용할 수 없습니다</playableInteract>
+        <globalMuteEnabled>당신은 전체 뮤트가 활성화되어있는동안에는 채팅을 하실 수 없습니다</globalMuteEnabled>
     </error>
     <generic>
         <mapSet>다음맵이 {0} 로 설정되었습니다.</mapSet>
@@ -205,5 +210,50 @@
         <latestVersion>Cardinal은 최신입니다!</latestVersion>
         <updateAvailable>Cardinal의 최신 빌드를 사용할 수 있습니다!</updateAvailable>
         <version>이 서버는 {0}버전의 Cardinal을 실행중입니다.</version>
+        <matchReportUpload>경기 정보를 업로드하는 중입니다...</matchReportUpload>
+        <matchReportSuccess>경기 정보가 업로드 되었습니다 {0}에서 보실 수 있습니다</matchReportSuccess>
+        <matchReportFaied>경기 정보를 업로드하는 도중 오류가 발생했습니다</matchReportFaied>
+        <globalMuteEnabled>전체 뮤트가 활성화 되었습니다</globalMuteEnabled>
+        <globalMuteDisabled>전체 뮤트가 비활성화 되었습니다</globalMuteDisabled>
+        <defaultChannelGlobal>기본 채팅이 전체 채팅으로 변경되었습니다</defaultChannelGlobal>
+        <defaultChannelAdmin>기본 채팅이 관리자 채팅으로 변경되었습니다</defaultChannelAdmin>
+        <defaultChannelTeam>기본 채팅이 팀 채팅으로 변경되었습니다</defaultChannelTeam>
     </userInterface>
+    <deathMsg>
+        <explosionSelf>{0}이(가) 터졌습니다</explosionSelf>
+        <explosionPlayer>{0}이(가) {1}의 TNT에 폭파당했습니다</explosionPlayer>
+        <explosion>{0}이(가) 폭파했습니다</explosion>
+        <contact>{0}이(가) 찔려죽었습니다</contact>
+        <drowning>{0}이(가) 익사했습니다</drowning>
+        <attackPlayerFists>{0}이(가) {1}의 손에 의해 죽었습니다</attackPlayerFists>
+        <attackPlayer>{0}이(가) {1}의 {2}에 의해 죽었습니다</attackPlayer>
+        <attack>{0}이(가) 죽었습니다</attack>
+        <fallPlayerKnocked>{0}이(가) {3}의 {4}에 의해 떨어졌습니다 ({2})</fallPlayerKnocked>
+        <fallPlayerShot>{0}이(가) {3}에 의해 저격당해 떨어졌습니다 ({2})</fallPlayerShot>
+        <fallPlayerBlown>{0}이(가) {3}의 TNT에 의해 떨어졌습니다 ({2})</fallPlayerBlown>
+        <shot>중복</shot>
+        <knocked>중복</knocked>
+        <blown>중복</blown>
+        <spleefed>필요없음</spleefed>
+        <fall>{0}이(가) 땅에 너무 세게 떨어졌습니다</fall>
+        <fallingBlock>{0}이(가) 떨어지는 모루에 깔렸습니다</fallingBlock>
+        <fire>{0}이(가) 타죽었습니다</fire>
+        <lava>{0}이(가) 용암에 빠졌습니다</lava>
+        <lightning>{0}이(가) 번개를 맞았습니다</lightning>
+        <potionPlayer>{0}이(가) {1}의 물약을 맞았습니다</potionPlayer>
+        <potion>{0}이(가) 물약을 맞고 쓰러졌습니다</potion>
+        <projectilePlayer>{0}이(가) {1}에 의해 저격당했습니다</projectilePlayer>
+        <projectile>{0}이(가) 저격당했습니다</projectile>
+        <starvation>{0}이(가) 아사했습니다</starvation>
+        <suffocation>{0}이(가) 벽 속에서 질식사했습니다</suffocation>
+        <suicide>{0}이(가) 죽었습니다</suicide>
+        <thornsPlayer>{0}이(가) {1}을 죽이려다 죽었습니다</thornsPlayer>
+        <thorns>{0}이(가) 적에게 죽었습니다</thorns>
+        <voidPlayerKnocked>{0}이(가) {3}의 {4}에 의해 세계 밖으로 떨어졌습니다</voidPlayerKnocked>
+        <voidPlayerShot>{0}이(가) {3}의 활에 의해 세계 밖으로 떨어졌습니다 ({4})</voidPlayerShot>
+        <voidPlayerBlown>{0}이(가) {3}의 TNT에 의해 세계 밖으로 떨어졌습니다</voidPlayerBlown>
+        <void>{0}이(가) 세계 밖으로 떨어졌습니다</void>
+        <wither>{0}이(가) 사그라들었습니다</wither>
+        <unknown>{0}이(가) 알 수 없는 이유로 죽었습니다</unknown>
+    </deathMsg>
 </locale>
