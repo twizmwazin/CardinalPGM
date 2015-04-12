@@ -8,6 +8,7 @@
         <matchNoResume>La partida ha terminado y no se puede reanudar.</matchNoResume>
         <matchNoStart>La partida no se puede iniciar en este momento.</matchNoStart>
         <matchNoEnd>La partida no puede ser terminada en este momento.</matchNoEnd>
+        <notEnoughPlayers>No hay los suficientes jugadores para empezar la partida.</notEnoughPlayers>
         <noSetNext>No puedes establecer el siguiente mapa cuando hay un reinicio programado. Usa -f para forzar.</noSetNext>
         <disabledCommand>Este comando está inhabilitado. Los mapas se volverán a cargar automáticamente si se detectan cambios.</disabledCommand>
         <rotPointInvalid>El punto de rotación especificado no es válido.</rotPointInvalid>
@@ -43,7 +44,7 @@
         <repairObjective>Este objetivo no puede ser reparado.</repairObjective>
         <noPotions>Sin efectos de pociones</noPotions>
         <teamPlace>¡Solo un miembro de {0} puede colocar {1} aquí!</teamPlace>
-        <blockPlace>¡Sólo se puede colocar {0} aquí!</blockPlace>
+        <blockPlace>¡Solo se puede colocar {0} aquí!</blockPlace>
         <noCraft>No puedes craftear {0}.</noCraft>
         <bedsDisabled>¡Las camas están deshabilitadas en este mapa!</bedsDisabled>
         <pearlOut>No puedes usar Perlas de Ender para salir de tu base</pearlOut>
@@ -67,9 +68,14 @@
         <rateWhilePlaying>Para puntuar el mapa mientras juegas, escribe {0}</rateWhilePlaying>
         <noRecentPM>No tienes mensajes privados por responder</noRecentPM>
         <playerNotFound>No se ha encontrado ningún jugador con ese nombre.</playerNotFound>
+        <playerAlreadyBanned>Este jugador ya está baneado</playerAlreadyBanned>
+        <playerAlreadyMuted>Este jugador ya está silenciado</playerAlreadyMuted>
+        <PlayerNotMuted>Este jugador no está silenciado</PlayerNotMuted>
+        <playerNotAffected>Este jugador no está afectado por este comando</playerNotAffected>
         <playerDisabledPMs>Tu mensaje no fue enviado porque {0} eligió no recibir mensajes privados.</playerDisabledPMs>
         <playableLeave>No puedes salir del terreno de juego</playableLeave>
         <playableInteract>No puedes interactuar con bloques de fuera del terreno de juego</playableInteract>
+        <globalMuteEnabled>No puedes hablar en el chat mientras el silenciado global está habilitado.</globalMuteEnabled>
     </error>
     <generic>
         <mapSet>El siguiente mapa ha sido establecido a {0}</mapSet>
@@ -205,5 +211,47 @@
         <latestVersion>¡Cardinal está actualizado!</latestVersion>
         <updateAvailable>¡Una nueva version de Cardinal está disponible!</updateAvailable>
         <version>Este servidor usa la versión {0} de Cardinal</version>
+        <matchReportUpload>Subiendo el reporte de la partida...</matchReportUpload>
+        <matchReportSuccess>Reporte de la partida subido correctamente! Lo puedes ver en {0}</matchReportSuccess>
+        <matchReportFaied>Un error ha ocurrido al subir el reporte de la partida</matchReportFaied>
+        <globalMuteEnabled>Silenciado global activado</globalMuteEnabled>
+        <globalMuteDisabled>Silenciado global desactivado</globalMuteDisabled>
     </userInterface>
+    <deathMsg>
+        <explosionSelf>{0} se ha explotado</explosionSelf>
+        <explosionPlayer>{0} ha sido explotado por la TNT de {1}</explosionPlayer>
+        <explosion>{0} ha explotado</explosion>
+        <contact>{0} ha muerto entre espinas</contact>
+        <drowning>{0} se ha olvidado de respirar</drowning>
+        <attackPlayerFists>{0} ha sentido la furia de los puños de {1}</attackPlayerFists>
+        <attackPlayer>{0} ha sido asesinado por la {2} de {1}</attackPlayer>
+        <attack>{0} ha sido asesinado</attack>
+        <fallPlayerKnocked>{0} ha sido {1} de un sitio alto ({2}) por el {4} de {3}</fallPlayerKnocked>
+        <fallPlayerShot>{0} ha sido {1} de un sitio alto ({2}) por {3} ({4})</fallPlayerShot>
+        <fallPlayerBlown>{0} ha sido {1} de un sitio alto ({2}) por la TNT de {3}</fallPlayerBlown>
+        <shot>disparado</shot>
+        <knocked>empujado</knocked>
+        <blown>explotado</blown>
+        <spleefed>spleefeado</spleefed>
+        <fall>{0} se ha estampado contra el suelo</fall>
+        <fallingBlock>{0} ha sido aplastado por un yunque</fallingBlock>
+        <fire>{0} ha muerto entre llamas</fire>
+        <lava>{0} ha intentado nadar en lava</lava>
+        <lightning>{0} ha sido alcanzado por un rayo</lightning>
+        <potionPlayer>{0} ha muerto por la poción de {1}</potionPlayer>
+        <potion>{0} ha muerto por una poción</potion>
+        <projectilePlayer>{0} ha sido disparado por {1}</projectilePlayer>
+        <projectile>{0} ha sido disparado</projectile>
+        <starvation>{0} ha muerto de hambre</starvation>
+        <suffocation>{0} se ha asfixiado en una pared</suffocation>
+        <suicide>{0} ha muerto</suicide>
+        <thornsPlayer>{0} ha muerto intentando herir a {1}</thornsPlayer>
+        <thorns>{0} ha muerto intentando herir un enemigo</thorns>
+        <voidPlayerKnocked>{0} ha sido {1} fuera del mundo por la {3} de {4}</voidPlayerKnocked>
+        <voidPlayerShot>{0} ha sido {1} fuera del mundo {3} ({4})</voidPlayerShot>
+        <voidPlayerBlown>{0} ha sido {1} fuera del mundo por la TNT de {3}</voidPlayerBlown>
+        <void>{0} ha caído fuera del mundo</void>
+        <wither>{0} sufrió la ira del wither</wither>
+        <unknown>{0} ha muerto por una causa desconocida</unknown>
+    </deathMsg>
 </locale>
