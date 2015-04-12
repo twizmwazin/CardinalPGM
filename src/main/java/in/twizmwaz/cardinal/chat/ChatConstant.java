@@ -221,7 +221,20 @@ public enum  ChatConstant {
     UI_GLOBAL_MUTE_DISABLED("userInterface.globalMuteDisabled"),
     UI_DEFAULT_CHANNEL_GLOBAL("userInterface.defaultChannelGlobal"),
     UI_DEFAULT_CHANNEL_ADMIN("userInterface.defaultChannelAdmin"),
-    UI_DEFAULT_CHANNEL_TEAM("userInterface.defaultChannelTeam");
+    UI_DEFAULT_CHANNEL_TEAM("userInterface.defaultChannelTeam"),
+    
+    BOOK_PAGE_1("book.page1"),
+    BOOK_PAGE_2("book.page2"),
+    BOOK_PAGE_3("book.page3"),
+    BOOK_PAGE_4("book.page4"),
+    BOOK_PAGE_5("book.page5"),
+    BOOK_PAGE_6("book.page6"),
+    BOOK_PAGE_7("book.page7"),
+    BOOK_PAGE_8("book.page8"),
+    BOOK_PAGE_9("book.page9"),
+    BOOK_PAGE_10("book.page10"),
+    BOOK_TITLE("book.title"),
+    BOOK_AUTHOR("book.author");
     
     private final String path;
 

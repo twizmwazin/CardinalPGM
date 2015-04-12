@@ -52,8 +52,7 @@ public class TeamManagerModule implements Module {
         PlayerUtils.resetPlayer(player);
         TeamUtils.getTeamById("observers").add(player, true, false);
         event.getPlayer().getInventory().setItem(0, new ItemStack(Material.COMPASS));
-        ItemStack howTo = ItemUtils.createBook(Material.WRITTEN_BOOK, 1, ChatColor.AQUA.toString() + ChatColor.BOLD + "Coming Soon", ChatColor.GOLD + "CardinalPGM");
-        event.getPlayer().getInventory().setItem(1, howTo);
+        ItemUtils.giveObserversBook(player, 1);
         if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
             ItemStack picker = ItemUtils.createItem(Material.LEATHER_HELMET, 1, (short)0,
                     ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(player.getLocale()) : new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(player.getLocale())),

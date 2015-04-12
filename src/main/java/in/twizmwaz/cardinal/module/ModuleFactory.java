@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.module.modules.appliedRegion.AppliedRegionBuilder;
 import in.twizmwaz.cardinal.module.modules.armorKeep.ArmorKeepBuilder;
 import in.twizmwaz.cardinal.module.modules.blitz.BlitzBuilder;
 import in.twizmwaz.cardinal.module.modules.blockdrops.BlockdropsBuilder;
+import in.twizmwaz.cardinal.module.modules.bookModule.BookBuilder;
 import in.twizmwaz.cardinal.module.modules.bossBar.BossBarBuilder;
 import in.twizmwaz.cardinal.module.modules.broadcasts.BroadcastModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.buildHeight.BuildHeightBuilder;
@@ -74,6 +75,7 @@ import in.twizmwaz.cardinal.module.modules.visibility.VisibilityBuilder;
 import in.twizmwaz.cardinal.module.modules.wildcard.WildCardBuilder;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.worldFreeze.WorldFreezeBuilder;
+
 import org.bukkit.Bukkit;
 
 import java.lang.reflect.InvocationTargetException;
@@ -159,7 +161,8 @@ public class ModuleFactory {
             BossBarBuilder.class,
             UpdateNotificationBuilder.class,
             MatchTranscriptBuilder.class,
-            PotionRemoverBuilder.class
+            PotionRemoverBuilder.class,
+            BookBuilder.class
     };
 
     @SuppressWarnings("unchecked")
