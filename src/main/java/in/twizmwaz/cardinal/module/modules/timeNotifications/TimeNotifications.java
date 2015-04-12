@@ -9,6 +9,7 @@ import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.StringUtils;
+
 import org.bukkit.ChatColor;
 import org.bukkit.event.HandlerList;
 
@@ -32,7 +33,7 @@ public class TimeNotifications implements TaskedModule {
             double timeRemaining;
             if (TimeLimit.getMatchTimeLimit() == 0) {
                 if (time >= nextTimeMessage) {
-                    ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.AQUA + "Time Elapsed: " + ChatColor.GREEN + StringUtils.formatTime(nextTimeMessage)));
+                    ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.AQUA + "{0}", new LocalizedChatMessage(ChatConstant.UI_TIME_ELAPSED, new UnlocalizedChatMessage(ChatColor.GREEN + StringUtils.formatTime(nextTimeMessage)))));
                     nextTimeMessage += 300;
                 }
                 return;
