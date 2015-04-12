@@ -259,4 +259,18 @@
         <wither>{0} withered away</wither>
         <unknown>{0} died from unknown causes</unknown>
     </deathMsg>
+    <book>
+        <page1>Hello world! `6 This works! `l So does this!</page1>
+        <page2></page2>
+        <page3></page3>
+        <page4></page4>
+        <page5></page5>
+        <page6></page6>
+        <page7></page7>
+        <page8></page8>
+        <page9></page9>
+        <page10></page10>
+        <title>`bHow to use CardinalPGM</title>
+        <author>`6CardinalPGM</author>
+    </book>
 </locale>

@@ -67,8 +67,7 @@ public class ObserverModule implements Module {
         }
 
         player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
-        ItemStack howTo = ItemUtils.createBook(Material.WRITTEN_BOOK, 1, ChatColor.AQUA + "" + ChatColor.BOLD + "Coming Soon", ChatColor.GOLD + "CardinalPGM");
-        player.getInventory().setItem(1, howTo);
+        ItemUtils.giveObserversBook(player, 1);
         player.getInventory().setItem(3, Tutorial.getEmerald(player));
         if (player.hasPermission("tnt.defuse")) {
             ItemStack shears = ItemUtils.createItem(Material.SHEARS, 1, (short)0, ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
@@ -130,7 +129,7 @@ public class ObserverModule implements Module {
     @EventHandler
     public void onInteraction(PlayerInteractEvent event) {
         if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
-            if (!(event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType().equals(Material.WRITTEN_BOOK) && event.getPlayer().getItemInHand().hasItemMeta() && event.getPlayer().getItemInHand().getItemMeta().hasDisplayName() && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().equals(ChatColor.AQUA + "" + ChatColor.BOLD + "Coming Soon"))) {
+            if (!(event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType().equals(Material.WRITTEN_BOOK) && event.getPlayer().getItemInHand().hasItemMeta() && event.getPlayer().getItemInHand().getItemMeta().hasDisplayName() && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('`', ChatConstant.BOOK_TITLE.getMessage(event.getPlayer().getLocale()))))) {
                 event.setCancelled(true);
             }
             if (event.getClickedBlock() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
