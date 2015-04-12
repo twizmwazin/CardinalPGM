@@ -205,5 +205,8 @@
         <latestVersion>¡Cardinal está actualizado!</latestVersion>
         <updateAvailable>¡Una nueva version de Cardinal está disponible!</updateAvailable>
         <version>Este servidor usa la versión {0} de Cardinal</version>
+        <defaultChannelGlobal>El chat ha sido cambiado al global.</defaultChannelGlobal>
+         <defaultChannelAdmin>El chat ha sido cambiado al administrador.</defaultChannelAdmin>
+         <defaultChannelTeam>El chat ha sido cambiado al de tu equipo.</defaultChannelTeam>
     </userInterface>
 </locale>
