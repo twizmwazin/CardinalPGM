@@ -106,7 +106,7 @@ public class RespawnModule implements Module {
                 event.setRespawnLocation(chosen.getLocation());
                 PlayerUtils.resetPlayer(player);
                 player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
-                ItemStack howTo = ItemUtils.createBook(Material.WRITTEN_BOOK, 1, ChatColor.AQUA.toString() + ChatColor.BOLD + "Coming Soon", ChatColor.GOLD + "CardinalPGM");
+                ItemStack howTo = ItemUtils.getObserverBook(player.getLocale());
                 player.getInventory().setItem(1, howTo);
                 if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
                     ItemStack picker = ItemUtils.createItem(Material.LEATHER_HELMET, 1, (short) 0,
@@ -158,7 +158,7 @@ public class RespawnModule implements Module {
             if (!spawnEvent.isCancelled()) {
                 PlayerUtils.resetPlayer(player);
                 player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
-                ItemStack howTo = ItemUtils.createBook(Material.WRITTEN_BOOK, 1, ChatColor.AQUA.toString() + ChatColor.BOLD + "Coming Soon", ChatColor.GOLD + "CardinalPGM");
+                ItemStack howTo = ItemUtils.getObserverBook(player.getLocale());
                 player.getInventory().setItem(1, howTo);
                 if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
                     ItemStack picker = ItemUtils.createItem(Material.LEATHER_HELMET, 1, (short) 0,
