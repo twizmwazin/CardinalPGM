@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module;
 
 import in.twizmwaz.cardinal.match.Match;
+import in.twizmwaz.cardinal.module.modules.antimob.AntiMobBuilder;
 import in.twizmwaz.cardinal.module.modules.appliedRegion.AppliedRegionBuilder;
 import in.twizmwaz.cardinal.module.modules.armorKeep.ArmorKeepBuilder;
 import in.twizmwaz.cardinal.module.modules.blitz.BlitzBuilder;
@@ -74,6 +75,7 @@ import in.twizmwaz.cardinal.module.modules.visibility.VisibilityBuilder;
 import in.twizmwaz.cardinal.module.modules.wildcard.WildCardBuilder;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.worldFreeze.WorldFreezeBuilder;
+
 import org.bukkit.Bukkit;
 
 import java.lang.reflect.InvocationTargetException;
@@ -159,7 +161,8 @@ public class ModuleFactory {
             BossBarBuilder.class,
             UpdateNotificationBuilder.class,
             MatchTranscriptBuilder.class,
-            PotionRemoverBuilder.class
+            PotionRemoverBuilder.class,
+            AntiMobBuilder.class
     };
 
     @SuppressWarnings("unchecked")
