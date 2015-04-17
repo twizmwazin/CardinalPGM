@@ -44,7 +44,7 @@ public class BroadcastModuleBuilder implements ModuleBuilder {
                 }
                 if (element.getAttributeValue("count") != null) {
                     count = NumUtils.parseInt(element.getAttributeValue("count"));
-                } if (every >= 1) {
+                } else if (every >= 1) {
                     count = (int) Double.POSITIVE_INFINITY;
                 }
                 results.add(new BroadcastModule(message, BroadcastType.ALERT, timeAfter, every, count));
