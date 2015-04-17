@@ -3,12 +3,16 @@ package in.twizmwaz.cardinal.command;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
+
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.ClassChangeEvent;
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
+import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import in.twizmwaz.cardinal.util.ChatUtils;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -30,6 +34,12 @@ public class ClassCommands {
     @Command(aliases = {"class"}, desc = "Allows you to change your class.")
     public static void classCommand(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (sender instanceof Player) {
+            Player player = (Player) sender;
+            if (PermissionModule.isLivestreamer(player.getUniqueId()) && !player.hasPermission("cardinal.livestreamer.bypass")) {
+                player.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.ERROR_LIVESTREAMER_NO_CLASS)).getMessage(player.getLocale()));
+                return;
+            }
+
             if (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null) {
                 if (cmd.argsLength() == 0) {
                     if (ClassModule.getClassByPlayer((Player) sender) != null) {

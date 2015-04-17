@@ -78,6 +78,8 @@
         <playableLeave>You may not leave the playing field</playableLeave>
         <playableInteract>You may not interact with blocks outside of the playing field</playableInteract>
         <globalMuteEnabled>You cannot talk in chat while global mute is enabled.</globalMuteEnabled>
+        <livestreamerNoJoin>Livestreamers may not join a team!</livestreamerNoJoin>
+        <livestreamerNoClass>Livestreamers may not pick a class!</livestreamerNoClass>
     </error>
     <generic>
         <mapSet>Next map set to {0}</mapSet>

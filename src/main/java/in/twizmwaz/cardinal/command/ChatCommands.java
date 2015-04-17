@@ -42,6 +42,11 @@ public class ChatCommands {
     public static void global(final CommandContext cmd, CommandSender sender) throws CommandException {
         String locale = ChatUtils.getLocale(sender);
         if (sender instanceof Player) {
+            Player player = (Player) sender;
+            if (PermissionModule.isLivestreamer(player.getUniqueId()) && !player.hasPermission("cardinal.livestreamer.bypass") && GameHandler.getGameHandler().getMatch().isRunning()) {
+                player.sendMessage(ChatColor.RED + "Livestreamers may not use this command whilst the match is running!");
+                return;
+            }
             if (cmd.argsLength() == 0) {
                 ((Player) sender).setMetadata("default-channel", new LazyMetadataValue(GameHandler.getGameHandler().getPlugin(), LazyMetadataValue.CacheStrategy.NEVER_CACHE, new Channel(ChatUtils.ChannelType.GLOBAL)));
                 sender.sendMessage(ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.UI_DEFAULT_CHANNEL_GLOBAL).getMessage(locale));

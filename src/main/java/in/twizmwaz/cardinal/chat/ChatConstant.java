@@ -84,6 +84,8 @@ public enum  ChatConstant {
     ERROR_GLOBAL_MUTE_ENABLED("error.globalMuteEnabled"),
     ERROR_NOT_ENOUGH_ARGS_BROADCAST("error.notEnoughArgsBroadcast"),
     ERROR_NOT_ENOUGH_ARGS_SAY("error.notEnoughArgsSay"),
+    ERROR_LIVESTREAMER_NO_JOIN("error.livestreamerNoJoin"),
+    ERROR_LIVESTREAMER_NO_CLASS("error.livestreamerNoClass"),
     
     GENERIC_MAP_SET("generic.mapSet"),
     GENERIC_MARKED_FOR_RELOADING("generic.markedForReloading"),

@@ -3,12 +3,15 @@ package in.twizmwaz.cardinal.module.modules.teamPicker;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
+import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ItemUtils;
 import in.twizmwaz.cardinal.util.MiscUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -52,12 +55,20 @@ public class TeamPicker implements Module {
                 totalPlayers += team.size();
             }
         }
-        ItemStack autoJoin = ItemUtils.createItem(Material.CHAINMAIL_HELMET, 1, (short)0, ChatColor.GRAY + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_AUTO).getMessage(player.getLocale()), Arrays.asList((totalPlayers >= maxPlayers ? ChatColor.RED + "" : ChatColor.GREEN + "") + totalPlayers + ChatColor.GOLD + " / " + ChatColor.RED + "" + maxPlayers, ChatColor.AQUA + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_AUTO_LORE).getMessage(player.getLocale())));
+        String autoMessage = ChatColor.AQUA + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_AUTO_LORE).getMessage(player.getLocale());
+        if (PermissionModule.isLivestreamer(player.getUniqueId()) && !player.hasPermission("cardinal.livestreamer.bypass")) {
+            autoMessage = ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_LIVESTREAMER_NO_JOIN).getMessage(player.getLocale()); 
+        }
+        ItemStack autoJoin = ItemUtils.createItem(Material.CHAINMAIL_HELMET, 1, (short) 0, ChatColor.GRAY + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_AUTO).getMessage(player.getLocale()), Arrays.asList((totalPlayers >= maxPlayers ? ChatColor.RED + "" : ChatColor.GREEN + "") + totalPlayers + ChatColor.GOLD + " / " + ChatColor.RED + "" + maxPlayers, autoMessage));
         picker.setItem(item, autoJoin);
         item++;
         for (TeamModule team : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
             if (!team.isObserver()) {
-                ItemStack teamStack = ItemUtils.createLeatherArmor(Material.LEATHER_HELMET, 1, team.getColor() + "" + ChatColor.BOLD + team.getName(), Arrays.asList((team.size() >= team.getMax() ? ChatColor.RED + "" : ChatColor.GREEN + "") + team.size() + ChatColor.GOLD + " / " + ChatColor.RED + "" + team.getMax(), ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.UI_TEAM_CAN_PICK).getMessage(player.getLocale())), MiscUtils.convertChatColorToColor(team.getColor()));
+                String message = ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.UI_TEAM_CAN_PICK).getMessage(player.getLocale());
+                if (PermissionModule.isLivestreamer(player.getUniqueId()) && !player.hasPermission("cardinal.livestreamer.bypass")) {
+                    message = ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_LIVESTREAMER_NO_JOIN).getMessage(player.getLocale()); 
+                }
+                ItemStack teamStack = ItemUtils.createLeatherArmor(Material.LEATHER_HELMET, 1, team.getColor() + "" + ChatColor.BOLD + team.getName(), Arrays.asList((team.size() >= team.getMax() ? ChatColor.RED + "" : ChatColor.GREEN + "") + team.size() + ChatColor.GOLD + " / " + ChatColor.RED + "" + team.getMax(), message), MiscUtils.convertChatColorToColor(team.getColor()));
                 picker.setItem(item, teamStack);
                 item++;
             }
@@ -66,6 +77,10 @@ public class TeamPicker implements Module {
         for (ClassModule classModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class)) {
             ItemStack classStack = ItemUtils.createItem(classModule.getIcon(), 1, (short)0, ChatColor.GREEN + classModule.getName(), Arrays.asList(ChatColor.GOLD + classModule.getLongDescription()));
             ItemMeta classMeta = classStack.getItemMeta();
+            if (PermissionModule.isLivestreamer(player.getUniqueId()) && !player.hasPermission("cardinal.livestreamer.bypass")) {
+                classMeta.setLore(Arrays.asList(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.ERROR_LIVESTREAMER_NO_CLASS)).getMessage(player.getLocale()))); 
+            }
+
             if (classModule.equals(ClassModule.getClassByPlayer(player))) {
                 classStack.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
             }
