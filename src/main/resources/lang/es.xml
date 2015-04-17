@@ -228,7 +228,7 @@
         <explosionPlayer>{0} ha sido explotado por la TNT de {1}</explosionPlayer>
         <explosion>{0} ha explotado</explosion>
         <contact>{0} ha muerto entre espinas</contact>
-        <drowning>{0} se ha olvidado de respirar</drowning>
+        <drowning>{0} ha olvidado respirar</drowning>
         <attackPlayerFists>{0} ha sentido la furia de los puños de {1}</attackPlayerFists>
         <attackPlayer>{0} ha sido asesinado por la {2} de {1}</attackPlayer>
         <attack>{0} ha sido asesinado</attack>
