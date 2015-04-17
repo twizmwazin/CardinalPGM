@@ -3,13 +3,17 @@ package in.twizmwaz.cardinal.command;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
+
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.match.MatchState;
+import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -20,6 +24,8 @@ public class JoinCommand {
     @Command(aliases = {"join", "play"}, desc = "Join a team.", usage = "[team]")
     public static void join(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (sender instanceof Player) {
+            Player player = (Player) sender;
+
             TeamModule team = null;
             if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) || GameHandler.getGameHandler().getMatch().getState().equals(MatchState.CYCLING)) {
                 ChatUtils.sendWarningMessage((Player) sender, ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_MATCH_OVER).getMessage(((Player) sender).getLocale()));
@@ -36,6 +42,11 @@ public class JoinCommand {
                     }
                 }
                 if (team != null) {
+                    if (PermissionModule.isLivestreamer(player.getUniqueId()) && !player.hasPermission("cardinal.livestreamer.bypass") && !team.isObserver()) {
+                        player.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.ERROR_LIVESTREAMER_NO_JOIN)).getMessage(player.getLocale()));
+                        return;
+                    }
+
                     if (!team.contains(sender)) {
                         team.add((Player) sender, false);
                     } else {

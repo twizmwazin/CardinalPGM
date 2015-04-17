@@ -59,10 +59,27 @@ public class PermissionModule implements Module {
             GameHandler.getGameHandler().getPlugin().getConfig().set("permissions.Moderator.players", players);
             GameHandler.getGameHandler().getPlugin().saveConfig();
         }
+        if (event.getPlayer().isOp() && GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Livestreamer.players").contains(event.getPlayer().getUniqueId().toString())) {
+            List<String> players = new ArrayList<>();
+            players.addAll(GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Livestreamer.players"));
+            players.remove(event.getPlayer().getUniqueId().toString());
+            GameHandler.getGameHandler().getPlugin().getConfig().set("permissions.Livestreamer.players", players);
+            GameHandler.getGameHandler().getPlugin().saveConfig();
+        }
+
         if (GameHandler.getGameHandler().getPlugin().getConfig().get("permissions.Moderator.players") != null) {
             for (String uuid : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.players")) {
                 if (event.getPlayer().getUniqueId().toString().equals(uuid)) {
                     for (String permission : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.permissions")) {
+                        attachmentMap.get(event.getPlayer()).setPermission(permission, true);
+                    }
+                }
+            }
+        }
+        if (GameHandler.getGameHandler().getPlugin().getConfig().get("permissions.Livestreamer.players") != null) {
+            for (String uuid : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Livestreamer.players")) {
+                if (event.getPlayer().getUniqueId().toString().equals(uuid)) {
+                    for (String permission : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Livestreamer.permissions")) {
                         attachmentMap.get(event.getPlayer()).setPermission(permission, true);
                     }
                 }
@@ -156,6 +173,10 @@ public class PermissionModule implements Module {
         return false;
     }
 
+    public static boolean isLivestreamer(UUID player) {
+        return GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Livestreamer.players").contains(player.toString());
+    }
+
     public static boolean isStaff(OfflinePlayer player) {
         return isMod(player.getUniqueId()) || player.isOp();
     }
@@ -172,7 +193,10 @@ public class PermissionModule implements Module {
             stars += ChatColor.GOLD + star;
         } else if (isMod(event.getPlayer().getUniqueId())) {
             stars += ChatColor.RED + star;
+        } else if (isLivestreamer(event.getPlayer().getUniqueId())) {
+            stars += ChatColor.WHITE + "*";
         }
+
         if (devs.contains(event.getPlayer().getUniqueId())) {
             stars += ChatColor.DARK_PURPLE + star;
         }

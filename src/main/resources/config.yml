@@ -16,6 +16,11 @@ permissions:
     permissions:
     - cardinal.chat.global
     - cardinal.chat.team
+  Livestreamer:
+    permissions:
+    - cardinal.chat.team
+    - cardinal.punish.warn
+    players:
   Moderator:
     permissions:
     - cardinal.say
