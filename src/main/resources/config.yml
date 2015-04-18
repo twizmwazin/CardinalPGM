@@ -13,10 +13,16 @@ html:
   transcriptMilliseconds: true
 permissions:
   Default:
+    staff: false
+    default: true
+    prefix: ''
     permissions:
     - cardinal.chat.global
     - cardinal.chat.team
   Moderator:
+    default: false
+    staff: true
+    prefix: '&c(star)'
     permissions:
     - cardinal.say
     - cardinal.broadcast

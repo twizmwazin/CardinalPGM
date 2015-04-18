@@ -5,9 +5,11 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.*;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.util.TeamUtils;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -49,22 +51,16 @@ public class PermissionModule implements Module {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         attachmentMap.put(event.getPlayer(), event.getPlayer().addAttachment(plugin));
-        for (String permission : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Default.permissions")) {
+        for (String permission : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions." + getDefaultRank() + ".permissions")) {
             attachmentMap.get(event.getPlayer()).setPermission(permission, true);
         }
-        if (event.getPlayer().isOp() && GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.players").contains(event.getPlayer().getUniqueId().toString())) {
-            List<String> players = new ArrayList<>();
-            players.addAll(GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.players"));
-            players.remove(event.getPlayer().getUniqueId().toString());
-            GameHandler.getGameHandler().getPlugin().getConfig().set("permissions.Moderator.players", players);
-            GameHandler.getGameHandler().getPlugin().saveConfig();
-        }
-        if (GameHandler.getGameHandler().getPlugin().getConfig().get("permissions.Moderator.players") != null) {
-            for (String uuid : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.players")) {
-                if (event.getPlayer().getUniqueId().toString().equals(uuid)) {
-                    for (String permission : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.permissions")) {
-                        attachmentMap.get(event.getPlayer()).setPermission(permission, true);
-                    }
+
+        for (String rank : getRanks(event.getPlayer().getUniqueId())) {
+            for (String permission : Cardinal.getInstance().getConfig().getStringList("permissions." + rank + ".permissions")) {
+                if (permission.startsWith("-")) {
+                    GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).attachmentMap.get(event.getPlayer()).setPermission(permission.substring(1), true);
+                } else {
+                    GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).attachmentMap.get(event.getPlayer()).setPermission(permission, false);
                 }
             }
         }
@@ -148,20 +144,109 @@ public class PermissionModule implements Module {
     }
 
     public static boolean isMod(UUID player) {
-        for (String uuid : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.players")) {
-            if (uuid.equals(player.toString())) {
+        return hasRank(player, "Moderator");
+    }
+
+    public static boolean isStaff(OfflinePlayer player) {
+        if (player.isOp()) {
+            return true;
+        }
+        for (String rank : getRanks(player.getUniqueId())) {
+            if (isStaffRank(rank)) {
                 return true;
             }
         }
         return false;
     }
 
-    public static boolean isStaff(OfflinePlayer player) {
-        return isMod(player.getUniqueId()) || player.isOp();
-    }
-
     public static boolean isDev(UUID player) {
         return GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).getDevs().contains(player);
+    }
+
+    public static boolean hasRank(UUID player, String rank) {
+        if (!rankExists(rank)) {
+            return false;
+        }
+        return Cardinal.getInstance().getConfig().getStringList("permissions." + rank + ".players").contains(player.toString());
+    }
+
+    public static boolean rankExists(String rank) {
+        return Cardinal.getInstance().getConfig().getStringList("permissions." + rank + ".permissions") != null;
+    }
+
+    public static void giveRank(UUID player, String rank) {
+        if (!rankExists(rank)) {
+            return;
+        }
+        List<String> players = Cardinal.getInstance().getConfig().getStringList("permissions." + rank + ".players"); 
+        players.add(player.toString());
+        Cardinal.getInstance().getConfig().set("permissions." + rank + ".players", players);
+        for (String permission : Cardinal.getInstance().getConfig().getStringList("permissions." + rank + ".permissions")) {
+            if (permission.startsWith("-")) {
+                GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).attachmentMap.get(Bukkit.getPlayer(player)).setPermission(permission.substring(1), false);
+            } else {
+                GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).attachmentMap.get(Bukkit.getPlayer(player)).setPermission(permission, true);
+            }
+        }
+        Bukkit.getPlayer(player).sendMessage(ChatColor.YELLOW + "You were given " + rank + "!");
+        Cardinal.getInstance().saveConfig();
+    }
+
+    public static void takeRank(UUID player, String rank) {
+        if (!rankExists(rank)) {
+            return;
+        }
+        List<String> players = Cardinal.getInstance().getConfig().getStringList("permissions." + rank + ".players"); 
+        players.remove(player.toString());
+        Cardinal.getInstance().getConfig().set("permissions." + rank + ".players", players);
+        for (String permission : Cardinal.getInstance().getConfig().getStringList("permissions." + rank + ".permissions")) {
+            if (permission.startsWith("-")) {
+                GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).attachmentMap.get(Bukkit.getPlayer(player)).setPermission(permission.substring(1), true);
+            } else {
+                GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).attachmentMap.get(Bukkit.getPlayer(player)).setPermission(permission, false);
+            }
+        }
+        Bukkit.getPlayer(player).sendMessage(ChatColor.RED + "Your " + rank + " rank was removed!");
+        Cardinal.getInstance().saveConfig();
+    }
+
+    public static List<String> getRanks(UUID player) {
+        List<String> ranks = new ArrayList<String>();
+        for (String rank : listRanks()) {
+            if (Cardinal.getInstance().getConfig().getStringList("permissions." + rank + ".players").contains(player.toString())) {
+                ranks.add(rank);
+            }
+        }
+        return ranks;
+    }
+
+    public static List<String> listRanks() {
+        List<String> ranks = new ArrayList<String>();
+        ConfigurationSection perms = Cardinal.getInstance().getConfig().getConfigurationSection("permissions");
+        for (String rank : perms.getKeys(false)) {
+            ranks.add(rank);
+        }
+        return ranks;
+    }
+
+    public static boolean isStaffRank(String rank) {
+        return Cardinal.getInstance().getConfig().getBoolean("permissions." + rank + ".staff");
+    }
+
+    public String getDefaultRank() {
+        String foundRank = "";
+        boolean found = false;
+        for (String rank : listRanks()) {
+            if (Cardinal.getInstance().getConfig().getBoolean("permissions." + rank + ".default")) {
+                if (found) {
+                    throw new IllegalArgumentException("There cannot be two default ranks!");
+                }
+
+                found = true;
+                foundRank = rank;
+            }
+        }
+        return foundRank;
     }
 
     @EventHandler
@@ -170,9 +255,12 @@ public class PermissionModule implements Module {
         String stars = "";
         if (event.getPlayer().isOp()) {
             stars += ChatColor.GOLD + star;
-        } else if (isMod(event.getPlayer().getUniqueId())) {
-            stars += ChatColor.RED + star;
         }
+
+        for (String rank : getRanks(event.getPlayer().getUniqueId())) {
+            stars += ChatColor.translateAlternateColorCodes('&', Cardinal.getInstance().getConfig().getString("permissions." + rank + ".prefix").replace("(star)", star));
+        }
+
         if (devs.contains(event.getPlayer().getUniqueId())) {
             stars += ChatColor.DARK_PURPLE + star;
         }
@@ -217,5 +305,5 @@ public class PermissionModule implements Module {
     public boolean isMuted(Player player) {
         return muted.contains(player);
     }
-    
+
 }
