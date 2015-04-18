@@ -260,4 +260,15 @@
         <wither>{0} withered away</wither>
         <unknown>{0} died from unknown causes</unknown>
     </deathMsg>
+    <book>
+        <title>`b`lHow-to use CardinalPGM!</title>
+        <author>`6CardinalPGM</author>
+        <pages>
+            <page>Welcome to CardinalPGM! It is a scrimmage plugin created by twizmwazin, CaptainElliott, iEli2tyree011</page>
+            <page>The following works: `6Wooo! `lSo does this!</page>
+            <page>Commands</page>
+            <page>Contributors</page>
+            <page>...</page>
+        </pages>
+    </book>
 </locale>
