@@ -24,6 +24,7 @@
         <noTeam>You are not on a team.</noTeam>
         <alreadyObs>You are already on the observing team.</alreadyObs>
         <alreadyJoined>You have already joined {0}</alreadyJoined>
+        <alreadyOnTeam>{0} is already on {1}</alreadyOnTeam>
         <teamFull>Sorry, {0} is completely full</teamFull>
         <forceExemption>{0} is exempt from being forced on to teams.</forceExemption>
         <noShuffle>You may not shuffle teams during a match.</noShuffle>

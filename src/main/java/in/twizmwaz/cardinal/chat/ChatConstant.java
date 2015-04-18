@@ -27,6 +27,7 @@ public enum  ChatConstant {
     ERROR_NO_TEAM("error.noTeam"),
     ERROR_ALREADY_OBSERVER("error.alreadyObs"),
     ERROR_ALREADY_JOINED("error.alreadyJoined"),
+    ERROR_ALREADY_ON_TEAM("error.alreadyOnTeam"),
     ERROR_TEAM_FULL("error.teamFull"),
     ERROR_FORCE_EXEMPTION("error.forceExemption"),
     ERROR_NO_SHUFFLE("error.noShuffle"),
