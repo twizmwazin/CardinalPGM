@@ -27,6 +27,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
@@ -328,6 +329,29 @@ public class ObserverModule implements Module {
                     if (spawnModule.getTeam() == teamModule) modules.add(spawnModule);
                 }
                 event.setTo(modules.getRandom().getLocation());
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        if ((TeamUtils.getTeamByPlayer(event.getPlayer()) != null && TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) || !match.isRunning()) {
+            if (event.getTo().getY() <= -64) {
+                TeamModule teamModule = TeamUtils.getTeamById("observers");
+                ModuleCollection<SpawnModule> modules = new ModuleCollection<>();
+                for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
+                    if (spawnModule.getTeam() == teamModule) modules.add(spawnModule);
+                }
+                event.setTo(modules.getRandom().getLocation());
+            }
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player) {
+            if ((TeamUtils.getTeamByPlayer((Player) event.getEntity()) != null && TeamUtils.getTeamByPlayer((Player) event.getEntity()).isObserver()) || !match.isRunning()) {
+                event.setCancelled(true);
             }
         }
     }
