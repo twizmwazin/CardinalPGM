@@ -96,13 +96,9 @@ public class TeamCommand {
             }
         } else if(cmd.getString(0).equalsIgnoreCase("size")) {
           if (sender.hasPermission("cardinal.team.size")) {
-              try {
-                  TeamUtils.getTeamByName(cmd.getString(1)).setMaxOverfill(Integer.parseInt(cmd.getString(2)));
-                  TeamUtils.getTeamByName(cmd.getString(1)).setMax(Integer.parseInt(cmd.getString(2)));
-                  sender.sendMessage(TeamUtils.getTeamByName(cmd.getString(1)).getCompleteName() + ChatColor.WHITE + " max-overfill was set to " + ChatColor.AQUA + cmd.getString(2));
-              } catch (NumberFormatException e) {
-                  throw new CommandException("Team size is not a valid integer");
-              }
+              TeamUtils.getTeamByName(cmd.getString(1)).setMaxOverfill(Integer.parseInt(cmd.getString(2)));
+              TeamUtils.getTeamByName(cmd.getString(1)).setMax(Integer.parseInt(cmd.getString(2)));
+              sender.sendMessage(new LocalizedChatMessage(ChatConstant.GENERIC_TEAM_SIZE_CHANGED, TeamUtils.getTeamByName(cmd.getString(1)).getCompleteName() + ChatColor.WHITE, ChatColor.AQUA + cmd.getString(2)).getMessage(ChatUtils.getLocale(sender)));
           }
         } else {
             throw new CommandUsageException("Invalid arguments.", "/team <force, alias, shuffle> [player, old team] [force team, new team]");

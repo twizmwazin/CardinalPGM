@@ -120,6 +120,7 @@
         <mapReRated>Someone on {0} re-rated this map from {2} to {1}</mapReRated>
         <autoBalance>Teams will be auto-balanced if {0} remains stacked</autoBalance>
         <youChangedRating>You changed your rating for {1} {2} from {3} to {0}.</youChangedRating>
+        <teamSizeChanged>{0} max-overfill was set to {1}</teamSizeChanged>
     </generic>
     <misc>
         <enemy>the enemy</enemy>
