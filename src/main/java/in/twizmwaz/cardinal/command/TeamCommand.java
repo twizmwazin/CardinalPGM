@@ -4,6 +4,7 @@ import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandUsageException;
+import com.sk89q.util.StringUtil;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -12,6 +13,7 @@ import in.twizmwaz.cardinal.event.TeamNameChangeEvent;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
+import org.apache.commons.lang.CharUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -92,6 +94,16 @@ public class TeamCommand {
                 String locale = ChatUtils.getLocale(sender);
                 sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.GENERIC_TEAM_SHUFFLE).getMessage(locale));
             }
+        } else if(cmd.getString(0).equalsIgnoreCase("size")) {
+          if (sender.hasPermission("cardinal.team.size")) {
+              try {
+                  TeamUtils.getTeamByName(cmd.getString(1)).setMaxOverfill(Integer.parseInt(cmd.getString(2)));
+                  TeamUtils.getTeamByName(cmd.getString(1)).setMax(Integer.parseInt(cmd.getString(2)));
+                  sender.sendMessage(TeamUtils.getTeamByName(cmd.getString(1)).getCompleteName() + ChatColor.WHITE + " max-overfill was set to " + ChatColor.AQUA + cmd.getString(2));
+              } catch (NumberFormatException e) {
+                  throw new CommandException("Team size is not a valid integer");
+              }
+          }
         } else {
             throw new CommandUsageException("Invalid arguments.", "/team <force, alias, shuffle> [player, old team] [force team, new team]");
         }
