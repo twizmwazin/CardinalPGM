@@ -145,8 +145,13 @@ public class ScoreboardModule implements Module {
                             while (compact.length() > 32) {
                                 compact = StringUtils.removeLastWord(compact);
                             }
-                            scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                            scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                            if (compact.charAt(15) == '\u00A7') {
+                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
+                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 15, 31));
+                            } else {
+                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
+                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                            }
                         }
                     }
                 }
@@ -178,8 +183,13 @@ public class ScoreboardModule implements Module {
                                 while (compact.length() > 32) {
                                     compact = StringUtils.removeLastWord(compact);
                                 }
-                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                                if (compact.charAt(15) == '\u00A7') {
+                                    scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
+                                    scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 15, 31));
+                                } else {
+                                    scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
+                                    scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                                }
                             }
                         }
                     }
@@ -211,8 +221,13 @@ public class ScoreboardModule implements Module {
                             while (compact.length() > 32) {
                                 compact = StringUtils.removeLastWord(compact);
                             }
-                            scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                            scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                            if (compact.charAt(15) == '\u00A7') {
+                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
+                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 15, 31));
+                            } else {
+                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
+                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                            }
                         }
                     }
                 }
@@ -243,8 +258,13 @@ public class ScoreboardModule implements Module {
                             while (compact.length() > 32) {
                                 compact = StringUtils.removeLastWord(compact);
                             }
-                            scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                            scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                            if (compact.charAt(15) == '\u00A7') {
+                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
+                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 15, 31));
+                            } else {
+                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
+                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                            }
                         }
                     }
                 }
@@ -482,9 +502,14 @@ public class ScoreboardModule implements Module {
                             while (compact.length() > 32) {
                                 compact = StringUtils.removeLastWord(compact);
                             }
-                            scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
                             scoreboardTeam.add(name);
-                            scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                            if (compact.charAt(15) == '\u00A7') {
+                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
+                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 15, 31));
+                            } else {
+                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
+                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                            }
                             setScore(objective, name, slot);
                             used.add(name);
                             slot ++;
@@ -527,9 +552,14 @@ public class ScoreboardModule implements Module {
                         while (compact.length() > 32) {
                             compact = StringUtils.removeLastWord(compact);
                         }
-                        scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
                         scoreboardTeam.add(name);
-                        scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                        if (compact.charAt(15) == '\u00A7') {
+                            scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
+                            scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 15, 31));
+                        } else {
+                            scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
+                            scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                        }
                         setScore(objective, name, slot);
                         used.add(name);
                         slot ++;
@@ -606,9 +636,14 @@ public class ScoreboardModule implements Module {
                             while (compact.length() > 32) {
                                 compact = StringUtils.removeLastWord(compact);
                             }
-                            scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
                             scoreboardTeam.add(name);
-                            scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                            if (compact.charAt(15) == '\u00A7') {
+                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
+                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 15, 31));
+                            } else {
+                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
+                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                            }
                             setScore(objective, name, slot);
                             used.add(name);
                         }
@@ -634,9 +669,14 @@ public class ScoreboardModule implements Module {
                             while (compact.length() > 32) {
                                 compact = StringUtils.removeLastWord(compact);
                             }
-                            scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
                             scoreboardTeam.add(name);
-                            scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                            if (compact.charAt(15) == '\u00A7') {
+                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
+                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 15, 31));
+                            } else {
+                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
+                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                            }
                             setScore(objective, name, hills);
                             used.add(name);
                         }
