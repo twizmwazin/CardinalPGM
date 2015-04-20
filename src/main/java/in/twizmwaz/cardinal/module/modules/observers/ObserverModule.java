@@ -26,10 +26,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -242,6 +239,13 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onViewingEntityDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player) {
+            refreshView(event.getEntity().getUniqueId());
+        }
+    }
+
+    @EventHandler
+    public void onViewingEntityRegainHealth(EntityRegainHealthEvent event) {
         if (event.getEntity() instanceof Player) {
             refreshView(event.getEntity().getUniqueId());
         }
