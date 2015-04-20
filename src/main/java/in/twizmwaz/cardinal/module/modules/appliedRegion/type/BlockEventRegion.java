@@ -15,6 +15,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
+import org.bukkit.event.player.PlayerAttackEntityEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -162,6 +163,15 @@ public class BlockEventRegion extends AppliedRegion {
             }
         } else {
             if (region.contains(event.getEntity().getLocation().toVector()) && filter.evaluate(event.getEntity(), event).equals(FilterState.DENY)) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerAttackEntity(PlayerAttackEntityEvent event) {
+        if (event.getLeftClicked() instanceof ItemFrame) {
+            if (region.contains(event.getLeftClicked().getLocation().toVector()) && filter.evaluate(event.getLeftClicked(), event.getPlayer(), event).equals(FilterState.DENY)) {
                 event.setCancelled(true);
             }
         }

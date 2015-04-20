@@ -7,12 +7,14 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import org.bukkit.block.Block;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
+import org.bukkit.event.player.PlayerAttackEntityEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 
 import java.util.HashSet;
@@ -63,6 +65,15 @@ public class BlockBreakRegion extends AppliedRegion {
             }
         } else {
             if (region.contains(event.getEntity().getLocation().toVector()) && filter.evaluate(event.getEntity(), event).equals(FilterState.DENY)) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerAttackEntity(PlayerAttackEntityEvent event) {
+        if (event.getLeftClicked() instanceof ItemFrame) {
+            if (region.contains(event.getLeftClicked().getLocation().toVector()) && filter.evaluate(event.getLeftClicked(), event.getPlayer(), event).equals(FilterState.DENY)) {
                 event.setCancelled(true);
             }
         }
