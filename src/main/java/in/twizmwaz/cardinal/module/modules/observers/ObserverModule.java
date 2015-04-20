@@ -28,10 +28,12 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
@@ -41,12 +43,12 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 public class ObserverModule implements Module {
 
     private final Match match;
+    private HashMap<UUID, List<UUID>> viewing = new HashMap<>();
 
     protected ObserverModule(Match match) {
         this.match = match;
@@ -116,21 +118,21 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onBlockChange(BlockPlaceEvent event) {
-        if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
+        if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || !match.isRunning()) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockChange(BlockBreakEvent event) {
-        if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
+        if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || !match.isRunning()) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onInteraction(PlayerInteractEvent event) {
-        if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
+        if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || !match.isRunning()) {
             if (!(event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType().equals(Material.WRITTEN_BOOK) && event.getPlayer().getItemInHand().hasItemMeta() && event.getPlayer().getItemInHand().getItemMeta().hasDisplayName() && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().equals(ChatColor.AQUA + "" + ChatColor.BOLD + "Coming Soon"))) {
                 event.setCancelled(true);
             }
@@ -196,47 +198,11 @@ public class ObserverModule implements Module {
     }
 
     @EventHandler
-    public void onPlayerClick(PlayerInteractEntityEvent event) {
-        if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+        if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || !match.isRunning()) {
             if (event.getRightClicked() instanceof Player) {
-                Player viewing = (Player) event.getRightClicked();
-                Inventory toView = Bukkit.createInventory(null, 45, TeamUtils.getTeamColorByPlayer(viewing) + ((Player) event.getRightClicked()).getName());
-                toView.setItem(0, viewing.getInventory().getHelmet());
-                toView.setItem(1, viewing.getInventory().getChestplate());
-                toView.setItem(2, viewing.getInventory().getLeggings());
-                toView.setItem(3, viewing.getInventory().getBoots());
-
-                ArrayList<String> effects = new ArrayList<String>();
-                for (PotionEffect effect : viewing.getActivePotionEffects()) {
-                    String effectType = effect.getType().getName().toLowerCase().replaceAll("_", " ");
-                    if (effectType.contains(" ")) {
-                        String temp = "";
-                        String[] parts = effectType.split(" ");
-                        for (String part : parts) {
-                            temp += Character.toUpperCase(part.charAt(0)) + part.substring(1) + " ";
-                        }
-                        temp = temp.trim();
-                        effectType = temp;
-                    } else {
-                        String temp = "";
-                        temp += Character.toUpperCase(effectType.charAt(0)) + effectType.substring(1);
-                        effectType = temp;
-                    }
-                    effects.add(ChatColor.GRAY + effectType + " " + (effect.getAmplifier() + 1));
-                }
-                ItemStack potion = ItemUtils.createItem(Material.POTION, 1, (short)0, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_POTION_EFFECTS).getMessage(event.getPlayer().getLocale()), effects);
-                toView.setItem(6, potion);
-                ItemStack food = ItemUtils.createItem(Material.SPECKLED_MELON, viewing.getFoodLevel(), (short)0, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_HUNGER_LEVEL).getMessage(event.getPlayer().getLocale()));
-                toView.setItem(7, food);
-                ItemStack health = ItemUtils.createItem(Material.POTION, (int) Math.ceil(viewing.getHealth()), (short)16389, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_HEALTH_LEVEL).getMessage(event.getPlayer().getLocale()));
-                toView.setItem(8, health);
-                for (int i = 36; i <= 44; i++) {
-                    toView.setItem(i, viewing.getInventory().getItem(i - 36));
-                }
-                for (int i = 9; i <= 35; i++) {
-                    toView.setItem(i, viewing.getInventory().getItem(i));
-                }
-                event.getPlayer().openInventory(toView);
+                event.getPlayer().openInventory(getFakeInventory((Player) event.getRightClicked(), event.getPlayer().getLocale()));
+                setViewing(event.getPlayer().getUniqueId(), event.getRightClicked().getUniqueId());
             } else if (event.getRightClicked() instanceof ItemFrame) {
             	event.setCancelled(true);
             }
@@ -244,9 +210,134 @@ public class ObserverModule implements Module {
     }
 
     @EventHandler
+    public void onInventoryClose(InventoryCloseEvent event) {
+        for (UUID uuid : viewing.keySet()) {
+            if (viewing.get(uuid).contains(event.getPlayer().getUniqueId())) {
+                List<UUID> viewingList = viewing.get(uuid);
+                viewingList.remove(event.getPlayer().getUniqueId());
+                viewing.put(uuid, viewingList);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onViewingInventoryClick(InventoryClickEvent event) {
+        refreshView(event.getWhoClicked().getUniqueId());
+    }
+
+    @EventHandler
+    public void onViewingPlayerPickupItem(PlayerPickupItemEvent event) {
+        refreshView(event.getPlayer().getUniqueId());
+    }
+
+    @EventHandler
+    public void onViewingPlayerDropItem(PlayerDropItemEvent event) {
+        refreshView(event.getPlayer().getUniqueId());
+    }
+
+    @EventHandler
+    public void onViewingFoodLevelChange(FoodLevelChangeEvent event) {
+        refreshView(event.getEntity().getUniqueId());
+    }
+
+    @EventHandler
+    public void onViewingEntityDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player) {
+            refreshView(event.getEntity().getUniqueId());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onViewingPlayerRespawn(PlayerRespawnEvent event) {
+        refreshView(event.getPlayer().getUniqueId());
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        if (viewing.containsKey(event.getPlayer().getUniqueId())) {
+            List<UUID> toClose = new ArrayList<>();
+            for (UUID uuid : viewing.get(event.getPlayer().getUniqueId())) {
+                if (Bukkit.getPlayer(uuid) != null) {
+                    toClose.add(uuid);
+                }
+            }
+            for (UUID uuid : toClose) {
+                Bukkit.getPlayer(uuid).closeInventory();
+            }
+        }
+    }
+
+    public void setViewing(UUID uuid, UUID view) {
+        if (!viewing.containsKey(view)) {
+            viewing.put(view, new ArrayList<UUID>());
+        }
+        viewing.get(view).add(uuid);
+    }
+
+    public void refreshView(final UUID view) {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(GameHandler.getGameHandler().getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                if (Bukkit.getPlayer(view) != null && viewing.containsKey(view)) {
+                    List<UUID> toOpen = new ArrayList<>();
+                    for (UUID uuid : viewing.get(view)) {
+                        if (Bukkit.getPlayer(uuid) != null) {
+                            toOpen.add(uuid);
+                        }
+                    }
+                    for (UUID uuid : toOpen) {
+                        Bukkit.getPlayer(uuid).openInventory(getFakeInventory(Bukkit.getPlayer(view), Bukkit.getPlayer(uuid).getLocale()));
+                        setViewing(uuid, view);
+                    }
+                }
+            }
+        }, 0);
+    }
+
+    public Inventory getFakeInventory(Player player, String locale) {
+        Inventory inventory = Bukkit.createInventory(null, 45, TeamUtils.getTeamColorByPlayer(player) + player.getName());
+        inventory.setItem(0, player.getInventory().getHelmet());
+        inventory.setItem(1, player.getInventory().getChestplate());
+        inventory.setItem(2, player.getInventory().getLeggings());
+        inventory.setItem(3, player.getInventory().getBoots());
+
+        ArrayList<String> effects = new ArrayList<>();
+        for (PotionEffect effect : player.getActivePotionEffects()) {
+            String effectType = effect.getType().getName().toLowerCase().replaceAll("_", " ");
+            if (effectType.contains(" ")) {
+                String temp = "";
+                String[] parts = effectType.split(" ");
+                for (String part : parts) {
+                    temp += Character.toUpperCase(part.charAt(0)) + part.substring(1) + " ";
+                }
+                temp = temp.trim();
+                effectType = temp;
+            } else {
+                String temp = "";
+                temp += Character.toUpperCase(effectType.charAt(0)) + effectType.substring(1);
+                effectType = temp;
+            }
+            effects.add(ChatColor.GRAY + effectType + " " + (effect.getAmplifier() + 1));
+        }
+        ItemStack potion = ItemUtils.createItem(Material.POTION, 1, (short)0, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_POTION_EFFECTS).getMessage(locale), effects);
+        inventory.setItem(6, potion);
+        ItemStack food = ItemUtils.createItem(Material.SPECKLED_MELON, player.getFoodLevel(), (short)0, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_HUNGER_LEVEL).getMessage(locale));
+        inventory.setItem(7, food);
+        ItemStack health = ItemUtils.createItem(Material.POTION, (int) Math.ceil(player.getHealth()), (short)16389, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_HEALTH_LEVEL).getMessage(locale));
+        inventory.setItem(8, health);
+        for (int i = 36; i <= 44; i++) {
+            inventory.setItem(i, player.getInventory().getItem(i - 36));
+        }
+        for (int i = 9; i <= 35; i++) {
+            inventory.setItem(i, player.getInventory().getItem(i));
+        }
+        return inventory;
+    }
+
+    @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getWhoClicked() instanceof Player) {
-            if (TeamUtils.getTeamByPlayer((Player) event.getWhoClicked()).isObserver() || match.getState() != MatchState.PLAYING) {
+            if (TeamUtils.getTeamByPlayer((Player) event.getWhoClicked()).isObserver() || !match.isRunning()) {
                 if (event.getInventory().getType() != InventoryType.PLAYER) {
                     event.setCancelled(true);
                 }
@@ -256,21 +347,21 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onPlayerPickupExperience(PlayerPickupExperienceEvent event) {
-        if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
+        if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || !match.isRunning()) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
-        if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || match.getState() != MatchState.PLAYING) {
+        if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || !match.isRunning()) {
             event.getItemDrop().remove();
         }
     }
 
     @EventHandler
     public void onPlayerTeamChange(PlayerChangeTeamEvent event) {
-        if (event.getNewTeam().isObserver() || match.getState() != MatchState.PLAYING) {
+        if (event.getNewTeam().isObserver() || !match.isRunning()) {
             event.getPlayer().setGameMode(GameMode.CREATIVE);
             event.getPlayer().setAffectsSpawning(false);
         } else {
