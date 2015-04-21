@@ -9,24 +9,28 @@ import org.bukkit.util.Vector;
 
 public class PointRegion extends BlockRegion {
 
-    private final Vector look;
+    private final float yaw, pitch;
 
-    public PointRegion(String name, Vector vector, Vector look) {
-        super(name, vector);
-        this.look = look;
+    public PointRegion(String name, double x, double y, double z, float yaw, float pitch) {
+        super(name, x, y, z);
+        this.yaw = yaw;
+        this.pitch = pitch;
     }
 
     public PointRegion(String name, double x, double y, double z) {
-        super(name, x, y, z);
-        this.look = new BlockVector();
+        this (name, x, y, z, 0F, 0F);
     }
 
-    public PointRegion(PointParser parser) {
-        this(parser.getName(), parser.getVector(), parser.getLook());
+    public PointRegion(String name, Vector vector, float yaw, float pitch) {
+        this(name, vector.getX(), vector.getY(), vector.getZ(), yaw, pitch);
     }
 
     public PointRegion(String name, Vector vector) {
-        this(name, vector, new BlockVector());
+        this(name, vector.getX(), vector.getY(), vector.getZ());
+    }
+
+    public PointRegion(PointParser parser) {
+        this(parser.getName(), parser.getVector(), parser.getYaw(), parser.getPitch());
     }
 
     @Override
@@ -45,18 +49,15 @@ public class PointRegion extends BlockRegion {
     }
 
     public float getYaw() {
-        return vector.toLocation(null).getYaw();
+        return yaw;
     }
 
     public float getPitch() {
-        return vector.toLocation(null).getPitch();
+        return pitch;
     }
 
     public Block getBlock() {
         return vector.toLocation(GameHandler.getGameHandler().getMatchWorld()).getBlock();
     }
 
-    public Vector getLook() {
-        return look;
-    }
 }

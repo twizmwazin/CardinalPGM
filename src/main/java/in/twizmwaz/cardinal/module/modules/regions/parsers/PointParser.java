@@ -10,7 +10,7 @@ import org.jdom2.Element;
 public class PointParser extends RegionParser {
 
     private final Vector vector;
-    private final Vector look;
+    private float yaw, pitch;
 
     public PointParser(Element element) {
         super(element.getAttributeValue("name"));
@@ -32,7 +32,6 @@ public class PointParser extends RegionParser {
             }
         }
         this.vector = new Vector(x, y, z);
-        double yaw, pitch;
         try {
             yaw = Float.parseFloat(element.getAttributeValue("yaw").trim());
         } catch (Exception e) {
@@ -43,7 +42,6 @@ public class PointParser extends RegionParser {
         } catch (Exception e) {
             pitch = 0F;
         }
-        look = new Vector(Math.cos(pitch) * Math.cos(yaw), Math.sin(pitch), Math.cos(pitch) * Math.sin(-yaw));
     }
 
     public double getX() {
@@ -58,19 +56,15 @@ public class PointParser extends RegionParser {
         return vector.getZ();
     }
 
-    public float getYaw() {
-        return (float) (1 / Math.acos(Math.cos(getPitch()) / getX()));
-    }
-
-    public float getPitch() {
-        return (float) Math.asin(getY());
-    }
-
     public Vector getVector() {
         return vector;
     }
 
-    public Vector getLook() {
-        return look;
+    public float getYaw() {
+        return yaw;
+    }
+
+    public float getPitch() {
+        return pitch;
     }
 }
