@@ -1,5 +1,7 @@
 package in.twizmwaz.cardinal.chat;
 
+import java.util.Locale;
+
 public class LocalizedChatMessage implements ChatMessage {
     
     private final ChatConstant message;
@@ -30,5 +32,10 @@ public class LocalizedChatMessage implements ChatMessage {
             message = message.replaceAll("\\{" + i + "\\}", this.strings[i]);
         }
         return message;
+    }
+
+    @Override
+    public String toString() {
+        return getMessage(Locale.getDefault().toString());
     }
 }
