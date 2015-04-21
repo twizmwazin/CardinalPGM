@@ -28,7 +28,11 @@ public class GameHandler {
     public GameHandler() throws RotationLoadException {
         handler = this;
         this.moduleFactory = new ModuleFactory();
-        rotation = new Rotation();
+        try {
+            rotation = new Rotation();
+        } catch (Exception e) {
+            throw new RotationLoadException("There was an error loading the maps repository. Is it properly configured?");
+        }
         cycle = new Cycle(rotation.getNext(), UUID.randomUUID(), this);
         Bukkit.getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(), new Runnable() {
             @Override
