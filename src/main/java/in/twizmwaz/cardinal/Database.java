@@ -38,11 +38,13 @@ public final class Database {
     }
     
     public boolean save(File file) {
-        XMLOutputter outputter = new XMLOutputter();
-        outputter.setFormat(Format.getPrettyFormat());
+        XMLOutputter out = new XMLOutputter();
+        out.setFormat(Format.getPrettyFormat());
         try {
-            outputter.output(document, new FileWriter(file));
-            return true;
+            if (file.createNewFile()) {
+                out.output(document, new FileWriter(file));
+                return true;
+            } else return false;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
