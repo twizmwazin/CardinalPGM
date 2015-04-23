@@ -24,6 +24,7 @@
         <noTeam>No estás en un equipo.</noTeam>
         <alreadyObs>Ya estás en el equipo observador.</alreadyObs>
         <alreadyJoined>Ya estás en {0}</alreadyJoined>
+        <alreadyOnTeam>{0} ya está en {1}</alreadyOnTeam>
         <teamFull>Lo sentimos, {0} está completamente lleno</teamFull>
         <forceExemption>{0} está exento de ser forzado a los equipos.</forceExemption>
         <noShuffle>No debes mezclar los equipos durante una partida.</noShuffle>
@@ -119,6 +120,7 @@
         <mapReRated>Alguien en {0} puntuó de nuevo este mapa de {2} a {1}</mapReRated>
         <autoBalance>Los equipos serán automáticamente balanceados si {0} continúa stackeado</autoBalance>
         <youChangedRating>Has cambiado tu puntuación para {1} {2} de {3} a {0}.</youChangedRating>
+        <teamSizeChanged>{0} máxima capacidad establecida a {1}</teamSizeChanged>
     </generic>
     <misc>
         <enemy>el enemigo</enemy>
