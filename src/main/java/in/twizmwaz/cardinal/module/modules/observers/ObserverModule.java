@@ -257,6 +257,33 @@ public class ObserverModule implements Module {
     }
 
     @EventHandler
+    public void onEntityShootBow(EntityShootBowEvent event) {
+        if (event.getEntity() instanceof Player) {
+            refreshView(event.getEntity().getUniqueId());
+        }
+    }
+
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent event) {
+        refreshView(event.getPlayer().getUniqueId());
+    }
+
+    @EventHandler
+    public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
+        refreshView(event.getPlayer().getUniqueId());
+    }
+
+    @EventHandler
+    public void onPlayerItemBreak(PlayerItemBreakEvent event) {
+        refreshView(event.getPlayer().getUniqueId());
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        refreshView(event.getPlayer().getUniqueId());
+    }
+
+    @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         if (viewing.containsKey(event.getPlayer().getUniqueId())) {
             List<UUID> toClose = new ArrayList<>();
@@ -294,6 +321,21 @@ public class ObserverModule implements Module {
                         setViewing(uuid, view);
                     }
                 }
+
+                /* if (Bukkit.getPlayer(view) != null && viewing.containsKey(view)) {
+                    for (UUID uuid : viewing.get(view)) {
+                        Player player = Bukkit.getPlayer(uuid);
+                        if (player != null && player.getOpenInventory().getTitle().equals(TeamUtils.getTeamColorByPlayer(Bukkit.getPlayer(view)) + Bukkit.getPlayer(view).getName())) {
+                            Inventory fake = getFakeInventory(Bukkit.getPlayer(view), player.getLocale());
+                            for (int i = 0; i < 36; i ++) {
+                                try {
+                                    player.getOpenInventory().setItem(i, fake.getItem(i));
+                                } catch (NullPointerException e) {
+                                }
+                            }
+                        }
+                    }
+                } */
             }
         }, 0);
     }
