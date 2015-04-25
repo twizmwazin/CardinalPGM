@@ -55,7 +55,7 @@ public class Rotation {
     public void refreshRepo() throws RotationLoadException, IOException {
         loaded = new ArrayList<>();
         this.repo = new File(Cardinal.getInstance().getConfig().getString("repo"));
-        if (!repo.exists()) repo.createNewFile();
+        if (!repo.exists()) repo.mkdir();
         List<String> requirements = Arrays.asList("map.xml", "region", "level.dat");
         if (repo.listFiles() != null) {
             for (File map : repo.listFiles()) {
