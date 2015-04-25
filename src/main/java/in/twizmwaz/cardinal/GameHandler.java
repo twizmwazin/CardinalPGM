@@ -28,11 +28,7 @@ public class GameHandler {
     public GameHandler() throws RotationLoadException {
         handler = this;
         this.moduleFactory = new ModuleFactory();
-        try {
-            rotation = new Rotation();
-        } catch (Exception e) {
-            throw new RotationLoadException("There was an error loading the maps repository. Is it properly configured?");
-        }
+        rotation = new Rotation();
         cycle = new Cycle(rotation.getNext(), UUID.randomUUID(), this);
         Bukkit.getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(), new Runnable() {
             @Override
@@ -54,7 +50,7 @@ public class GameHandler {
         if (match != null) match.unregisterModules();
         this.match = new Match(cycle.getUuid(), cycle.getMap());
         this.match.registerModules();
-        Bukkit.getLogger().info("[CardinalPGM] " + this.match.getModules().size() + " modules loaded.");
+        Cardinal.getInstance().getLogger().info(this.match.getModules().size() + " modules loaded.");
         Bukkit.getServer().getPluginManager().callEvent(new CycleCompleteEvent(match));
         cycle = new Cycle(rotation.getNext(), UUID.randomUUID(), this);
         Bukkit.unloadWorld(oldMatchWorld, true);
