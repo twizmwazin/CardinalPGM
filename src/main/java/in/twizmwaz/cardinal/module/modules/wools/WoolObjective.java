@@ -144,10 +144,14 @@ public class WoolObjective implements GameObjective {
                         boolean oldState = this.touched;
                         this.touched = true;
                         if (touchMessage) {
+                            double newProx;
                             if (location != null) {
-                                proximity = location.distance(place.getVector());
+                                newProx = location.distance(place.getVector());
                             } else {
-                                proximity = player.getLocation().toVector().distance(place.getVector());
+                                newProx = player.getLocation().toVector().distance(place.getVector());
+                            }
+                            if (!oldState || newProx < proximity) {
+                                proximity = newProx;
                             }
                         }
                         ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !oldState, touchMessage);
@@ -182,10 +186,14 @@ public class WoolObjective implements GameObjective {
                         boolean oldState = this.touched;
                         this.touched = true;
                         if (touchMessage) {
+                            double newProx;
                             if (location != null) {
-                                proximity = location.distance(place.getVector());
+                                newProx = location.distance(place.getVector());
                             } else {
-                                proximity = player.getLocation().toVector().distance(place.getVector());
+                                newProx = player.getLocation().toVector().distance(place.getVector());
+                            }
+                            if (!oldState || newProx < proximity) {
+                                proximity = newProx;
                             }
                         }
                         ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !oldState, touchMessage);
