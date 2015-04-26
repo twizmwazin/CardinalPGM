@@ -223,7 +223,7 @@
         <defaultChannelGlobal>Changed default channel to global chat.</defaultChannelGlobal>
         <defaultChannelAdmin>Changed default channel to administrator chat.</defaultChannelAdmin>
         <defaultChannelTeam>Changed default channel to team chat.</defaultChannelTeam>
-        <timeElapsed>Time elapsed: {0}</timeElapsed>
+        <timeElapsed>Time Elapsed: {0}</timeElapsed>
     </userInterface>
     <deathMsg>
         <explosionSelf>{0} 'sploded</explosionSelf>
