@@ -39,6 +39,11 @@ public class MonumentModes implements TaskedModule {
     public void run() {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
             if (!this.ran && MatchTimer.getTimeInSeconds() >= this.after) {
+                for (MonumentModes mode : GameHandler.getGameHandler().getMatch().getModules().getModules(MonumentModes.class)) {
+                    if (mode.getTimeAfter() < this.after && !mode.hasRan()) {
+                        return;
+                    }
+                }
                 for (CoreObjective core : GameHandler.getGameHandler().getMatch().getModules().getModules(CoreObjective.class)) {
                     if (core.changesModes()) {
                         for (Block block : core.getCore()) {
