@@ -25,7 +25,7 @@ import java.util.Random;
 
 public class TeamCommand {
 
-    @Command(aliases = {"team"}, desc = "Manage the teams in the match.", usage = "<force, alias, shuffle> [player, old team] [force team, new team]", min = 1)
+    @Command(aliases = {"team"}, desc = "Manage the teams in the match.", usage = "<force <player> <team>, alias <old team> <new team>, size <team> <size>, shuffle>", min = 1)
     public static void team(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (cmd.getString(0).equalsIgnoreCase("force")) {
             if (sender.hasPermission("cardinal.team.force")) {
@@ -49,7 +49,7 @@ public class TeamCommand {
                         throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(ChatUtils.getLocale(sender)));
                     }
                 } else {
-                    throw new CommandUsageException("Too few arguments.", "/team <force> <player> <force team>");
+                    throw new CommandUsageException("Too few arguments.", "/team force <player> <team>");
                 }
             }
         } else if (cmd.getString(0).equalsIgnoreCase("alias")) {
@@ -70,7 +70,7 @@ public class TeamCommand {
                         throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAM_MATCH).getMessage(ChatUtils.getLocale(sender)));
                     }
                 } else {
-                    throw new CommandUsageException("Too few arguments!", "/team <alias> <old team> <new team>");
+                    throw new CommandUsageException("Too few arguments!", "/team alias <old team> <new team>");
                 }
             }
         } else if (cmd.getString(0).equalsIgnoreCase("shuffle")) {
@@ -95,13 +95,17 @@ public class TeamCommand {
                 sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.GENERIC_TEAM_SHUFFLE).getMessage(locale));
             }
         } else if(cmd.getString(0).equalsIgnoreCase("size")) {
-          if (sender.hasPermission("cardinal.team.size")) {
-              TeamUtils.getTeamByName(cmd.getString(1)).setMaxOverfill(Integer.parseInt(cmd.getString(2)));
-              TeamUtils.getTeamByName(cmd.getString(1)).setMax(Integer.parseInt(cmd.getString(2)));
-              sender.sendMessage(new LocalizedChatMessage(ChatConstant.GENERIC_TEAM_SIZE_CHANGED, TeamUtils.getTeamByName(cmd.getString(1)).getCompleteName() + ChatColor.WHITE, ChatColor.AQUA + cmd.getString(2)).getMessage(ChatUtils.getLocale(sender)));
-          }
+            if (cmd.argsLength() >= 2) {
+                if (sender.hasPermission("cardinal.team.size")) {
+                    TeamUtils.getTeamByName(cmd.getString(1)).setMaxOverfill(Integer.parseInt(cmd.getString(2)));
+                    TeamUtils.getTeamByName(cmd.getString(1)).setMax(Integer.parseInt(cmd.getString(2)));
+                    sender.sendMessage(new LocalizedChatMessage(ChatConstant.GENERIC_TEAM_SIZE_CHANGED, TeamUtils.getTeamByName(cmd.getString(1)).getCompleteName() + ChatColor.WHITE, ChatColor.AQUA + cmd.getString(2)).getMessage(ChatUtils.getLocale(sender)));
+                }
+            } else {
+                throw new CommandUsageException("Too few arguments!", "/team size <team> <size>");
+            }
         } else {
-            throw new CommandUsageException("Invalid arguments.", "/team <force, alias, shuffle> [player, old team] [force team, new team]");
+            throw new CommandUsageException("Invalid arguments.", "/team <force <player> <team>, alias <old team> <new team>, size <team> <size>, shuffle>");
         }
     }
 
