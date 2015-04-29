@@ -64,6 +64,10 @@ public class TimeNotifications implements TaskedModule {
     }
 
     public static void resetNextMessage() {
-        nextTimeMessage = TimeLimit.getMatchTimeLimit();
+        if (TimeLimit.getMatchTimeLimit() == 0) {
+            nextTimeMessage = (int) Math.round(MatchTimer.getTimeInSeconds());
+        } else {
+            nextTimeMessage = (int) Math.round(TimeLimit.getMatchTimeLimit() - MatchTimer.getTimeInSeconds());
+        }
     }
 }
