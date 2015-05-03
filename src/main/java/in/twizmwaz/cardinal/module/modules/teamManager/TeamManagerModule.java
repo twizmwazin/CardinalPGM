@@ -110,17 +110,17 @@ public class TeamManagerModule implements Module {
                 line += word + " ";
                 if (line.trim().length() > 32) {
                     line = line.trim();
-                    player.sendMessage(" " + line);
+                    player.sendMessage(ChatColor.DARK_GRAY + " " + line);
                     line = "";
                 }
             }
             if (!line.trim().equals("")) {
                 line = line.trim();
-                player.sendMessage(" " + line);
+                player.sendMessage(ChatColor.DARK_GRAY + " " + line);
             }
         } else {
             line = result;
-            player.sendMessage(" " + line);
+            player.sendMessage(ChatColor.DARK_GRAY + " " + line);
         }
         player.sendMessage(ChatColor.STRIKETHROUGH + "---------------------------");
     }
@@ -178,17 +178,17 @@ public class TeamManagerModule implements Module {
                     line += word + " ";
                     if (line.trim().length() > 32) {
                         line = line.trim();
-                        player.sendMessage(" " + line);
+                        player.sendMessage(ChatColor.DARK_GRAY + " " + line);
                         line = "";
                     }
                 }
                 if (!line.trim().equals("")) {
                     line = line.trim();
-                    player.sendMessage(" " + line);
+                    player.sendMessage(ChatColor.DARK_GRAY + " " + line);
                 }
             } else {
                 line = result;
-                player.sendMessage(" " + line);
+                player.sendMessage(ChatColor.DARK_GRAY + " " + line);
             }
             player.sendMessage(ChatColor.STRIKETHROUGH + "---------------------------");
         }
