@@ -4,6 +4,7 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.GenericFilterParser;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -22,7 +23,7 @@ public class VoidFilter extends FilterModule {
             if (object instanceof Block) {
                 Block check = new Location(GameHandler.getGameHandler().getMatchWorld(), ((Block) object).getX(), 0, ((Block) object).getZ()).getBlock();
                 if (object.equals(check)) return ALLOW;
-                return check.getType() == Material.AIR ? (ALLOW) : DENY;
+                return check.getType() == Material.AIR && !check.hasMetadata("block36") ? ALLOW : DENY;
             }
         }
         return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));

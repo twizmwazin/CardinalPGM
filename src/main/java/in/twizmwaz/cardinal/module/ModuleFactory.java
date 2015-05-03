@@ -26,6 +26,7 @@ import in.twizmwaz.cardinal.module.modules.gamerules.GamerulesBuilder;
 import in.twizmwaz.cardinal.module.modules.header.HeaderModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.hill.HillObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.hunger.HungerBuilder;
+import in.twizmwaz.cardinal.module.modules.invisibleBlock.InvisibleBlockBuilder;
 import in.twizmwaz.cardinal.module.modules.itemKeep.ItemKeepBuilder;
 import in.twizmwaz.cardinal.module.modules.itemRemove.ItemRemoveBuilder;
 import in.twizmwaz.cardinal.module.modules.killReward.KillRewardBuilder;
@@ -159,7 +160,8 @@ public class ModuleFactory {
             BossBarBuilder.class,
             UpdateNotificationBuilder.class,
             MatchTranscriptBuilder.class,
-            PotionRemoverBuilder.class
+            PotionRemoverBuilder.class,
+            InvisibleBlockBuilder.class
     };
 
     @SuppressWarnings("unchecked")
