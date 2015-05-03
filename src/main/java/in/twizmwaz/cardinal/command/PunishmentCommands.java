@@ -21,7 +21,7 @@ import org.bukkit.entity.Player;
 
 public class PunishmentCommands {
 
-    @Command(aliases = {"kick", "k"}, desc = "Kick a player.", usage = "<player> <reason>", min = 2)
+    @Command(aliases = {"kick", "k"}, desc = "Kick a player.", usage = "<player> <reason>", min = 1)
     @CommandPermissions("cardinal.punish.kick")
     public static void kick(CommandContext cmd, CommandSender sender) throws CommandException {
         Player kicked = Bukkit.getPlayer(cmd.getString(0));
@@ -31,11 +31,7 @@ public class PunishmentCommands {
             }
         }
         if (kicked != null) {
-            String reason = "";
-            for (int i = 1; i < cmd.argsLength(); i++) {
-                reason = reason + cmd.getString(i) + " ";
-            }
-            reason = reason.trim();
+            String reason = cmd.argsLength() > 1 ? cmd.getJoinedStrings(1) : "You have been kicked!";
             Bukkit.broadcastMessage((sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " \u00BB Kicked \u00BB " + TeamUtils.getTeamByPlayer(kicked).getColor() + kicked.getDisplayName() + ChatColor.GOLD + " \u00BB " + reason);
             kicked.kickPlayer(ChatColor.RED + "Kicked" + ChatColor.GOLD + "  \u00BB  " + ChatColor.AQUA + reason);
         } else {
@@ -43,16 +39,12 @@ public class PunishmentCommands {
         }
     }
 
-    @Command(aliases = {"warn", "w"}, usage = "<player> <reason>", desc = "Warn a player.", min = 2)
+    @Command(aliases = {"warn", "w"}, usage = "<player> <reason>", desc = "Warn a player.", min = 1)
     @CommandPermissions("cardinal.punish.warn")
     public static void warn(CommandContext cmd, CommandSender sender) throws CommandException {
         Player warned = Bukkit.getPlayer(cmd.getString(0));
         if (warned != null) {
-            String reason = "";
-            for (int i = 1; i < cmd.argsLength(); i++) {
-                reason = reason + cmd.getString(i) + " ";
-            }
-            reason = reason.trim();
+            String reason = cmd.argsLength() > 1 ? cmd.getJoinedStrings(1) : "You have been warned!";
             ChatChannelModule channel = GameHandler.getGameHandler().getMatch().getModules().getModule(AdminChannel.class);
             channel.sendMessage("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + ((sender instanceof Player) ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " warned " + TeamUtils.getTeamColorByPlayer(warned) + warned.getDisplayName() + ChatColor.GOLD + " for " + reason);
             warned.sendMessage(ChatColor.RED + "" + ChatColor.MAGIC + "-------" + ChatColor.YELLOW + "WARNING" + ChatColor.RED + ChatColor.MAGIC + "-------");
@@ -65,7 +57,7 @@ public class PunishmentCommands {
         }
     }
 
-    @Command(aliases = {"ban", "pb"}, usage = "<player> <reason>", desc = "Ban a player.", min = 2)
+    @Command(aliases = {"ban", "pb"}, usage = "<player> <reason>", desc = "Ban a player.", min = 1)
     @CommandPermissions("cardinal.punish.ban")
     public static void ban(CommandContext cmd, CommandSender sender) throws CommandException {
         OfflinePlayer banned = Bukkit.getOfflinePlayer(cmd.getString(0));
@@ -74,11 +66,7 @@ public class PunishmentCommands {
                 throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_AFFECTED).getMessage(ChatUtils.getLocale(sender)));
             }
         }
-        String reason = "";
-        for (int i = 1; i < cmd.argsLength(); i++) {
-            reason = reason + cmd.getString(i) + " ";
-        }
-        reason = reason.trim();
+        String reason = cmd.argsLength() > 1 ? cmd.getJoinedStrings(1) : "You have been banned!";
         if (banned.isOnline()) {
             Player onlineBanned = (Player) banned;
             onlineBanned.kickPlayer(ChatColor.RED + "Permanently Banned" + ChatColor.GOLD + "  \u00BB  " + ChatColor.AQUA + reason);
