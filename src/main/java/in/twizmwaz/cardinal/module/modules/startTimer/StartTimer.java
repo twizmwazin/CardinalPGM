@@ -24,7 +24,7 @@ public class StartTimer implements TaskedModule, Cancellable {
 
     private int time;
     private Match match;
-    private boolean cancelled;
+    private boolean cancelled, forced;
 
     public StartTimer(Match match, int ticks) {
         this.time = ticks;
@@ -49,7 +49,7 @@ public class StartTimer implements TaskedModule, Cancellable {
                                 count ++;
                             }
                         }
-                        if (count <= 1) {
+                        if (count <= 1 && !forced) {
                             ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.ERROR_NOT_ENOUGH_PLAYERS)));
                             this.setCancelled(true);
                             return;
@@ -96,8 +96,13 @@ public class StartTimer implements TaskedModule, Cancellable {
         this.time = time;
     }
 
+    public void setForced(boolean forced) {
+        this.forced = forced;
+    }
+
     @Override
     public void unload() {
         HandlerList.unregisterAll(this);
     }
+
 }

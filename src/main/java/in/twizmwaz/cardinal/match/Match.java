@@ -79,9 +79,14 @@ public class Match {
     }
 
     public void start(int time) {
+        start(time, false);
+    }
+
+    public void start(int time, boolean forced) {
         if (state == MatchState.WAITING) {
             StartTimer startTimer = getModules().getModule(StartTimer.class);
             startTimer.setTime(time);
+            startTimer.setForced(forced);
             startTimer.setCancelled(false);
             state = MatchState.STARTING;
         }

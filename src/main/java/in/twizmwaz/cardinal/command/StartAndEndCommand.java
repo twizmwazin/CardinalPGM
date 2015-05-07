@@ -18,15 +18,16 @@ public class StartAndEndCommand {
     private static int timer;
     private static boolean waiting = false;
 
-    @Command(aliases = {"start", "begin"}, desc = "Starts the match.", usage = "[time]")
+    @Command(aliases = {"start", "begin"}, desc = "Starts the match.", usage = "[time]", flags = "f")
     @CommandPermissions("cardinal.match.start")
     public static void start(CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.WAITING)) {
             int time = 600;
             if (cmd.argsLength() > 0) time = cmd.getInteger(0) * 20;
-            GameHandler.getGameHandler().getMatch().start(time);
+            GameHandler.getGameHandler().getMatch().start(time, cmd.hasFlag('f'));
         } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
             GameHandler.getGameHandler().getMatch().getModules().getModule(StartTimer.class).setTime(cmd.argsLength() > 0 ? cmd.getInteger(0) * 20 : 30 * 20);
+            GameHandler.getGameHandler().getMatch().getModules().getModule(StartTimer.class).setForced(cmd.hasFlag('f'));
         } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_RESUME).getMessage(ChatUtils.getLocale(sender)));
         } else {
