@@ -782,7 +782,7 @@ public class ScoreboardModule implements Module {
         if (hasObjectives) {
             if (objective != null) {
                 if (objective.equals(WoolObjective.class)) {
-                    return ChatColor.GOLD + "Wools";
+                    return ChatColor.AQUA + "Objetives";
                 } else if (objective.equals(CoreObjective.class)) {
                     return ChatColor.GOLD + "Cores";
                 } else if (objective.equals(DestroyableObjective.class)) {
