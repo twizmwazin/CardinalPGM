@@ -20,6 +20,8 @@ public class Rank {
         this.isStaff = isStaff;
         this.isDefault = isDefault;
         this.players = new ArrayList<>();
+        
+        Rank.ranks.add(this);
     }
 
     public static List<Rank> getRanks() {
