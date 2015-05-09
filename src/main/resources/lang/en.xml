@@ -217,7 +217,7 @@
         <version>This server is running Cardinal version {0}</version>
         <matchReportUpload>Uploading match report...</matchReportUpload>
         <matchReportSuccess>Match report successfully uploaded! You can view it at {0}</matchReportSuccess>
-        <matchReportFaied>An error occurred while uploading the match report</matchReportFaied>
+        <matchReportFailed>An error occurred while uploading the match report</matchReportFailed>
         <globalMuteEnabled>Global mute enabled</globalMuteEnabled>
         <globalMuteDisabled>Global mute disabled</globalMuteDisabled>
         <defaultChannelGlobal>Changed default channel to global chat.</defaultChannelGlobal>
