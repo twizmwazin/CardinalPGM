@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.module.modules.appliedRegion.AppliedRegionBuilder;
 import in.twizmwaz.cardinal.module.modules.armorKeep.ArmorKeepBuilder;
 import in.twizmwaz.cardinal.module.modules.blitz.BlitzBuilder;
 import in.twizmwaz.cardinal.module.modules.blockdrops.BlockdropsBuilder;
+import in.twizmwaz.cardinal.module.modules.blood.BloodBuilder;
 import in.twizmwaz.cardinal.module.modules.bossBar.BossBarBuilder;
 import in.twizmwaz.cardinal.module.modules.broadcasts.BroadcastModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.buildHeight.BuildHeightBuilder;
@@ -142,6 +143,7 @@ public class ModuleFactory {
             ScoreboxBuilder.class,
             BlockdropsBuilder.class,
             ProximityAlarmBuilder.class,
+            /* BloodBuilder.class, */
             PermissionModuleBuilder.class,
             ChatChannelModuleBuilder.class,
             TntBuilder.class,

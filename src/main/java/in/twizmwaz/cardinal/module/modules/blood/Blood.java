@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 public class Blood implements Module {
@@ -23,10 +24,10 @@ public class Blood implements Module {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBloodShow(EntityDamageEvent event) {
-        if (!event.isCancelled() && Settings.getSettingByName("blood") != null) {
+        if (!event.isCancelled() && Settings.getSettingByName("Blood") != null) {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                if (Settings.getSettingByName("blood").getValueByPlayer(player).getValue().equalsIgnoreCase("on")) {
-                    player.playEffect(event.getEntity().getLocation(), /*event instanceof EntityDamageByEntityEvent ? */Effect.SMOKE/* : */, Material.REDSTONE.getId());
+                if (Settings.getSettingByName("Blood").getValueByPlayer(player).getValue().equalsIgnoreCase("on")) {
+                    player.playEffect(event.getEntity().getLocation(), event instanceof EntityDamageByEntityEvent ? Effect.STEP_SOUND : Effect.STEP_SOUND, Material.REDSTONE_WIRE);
                 }
             }
         }
