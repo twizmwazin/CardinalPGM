@@ -29,97 +29,97 @@ public class DeathMessages implements Module {
     public void onCardinalDeath(CardinalDeathEvent event) {
         try {
             if (TeamUtils.getTeamByPlayer(event.getPlayer()) != null) {
-                String playerName = TeamUtils.getTeamColorByPlayer(event.getPlayer()) + event.getPlayer().getName();
-                String deathMessage;
+                String name = TeamUtils.getTeamColorByPlayer(event.getPlayer()) + event.getPlayer().getName(), deathMessage;
                 DamageCause cause = event.getPlayer().getLastDamageCause().getCause();
+                int fallDistance = Math.round(event.getPlayer().isInsideVehicle() ? event.getPlayer().getVehicle().getFallDistance() : event.getPlayer().getFallDistance());
                 if (cause.equals(DamageCause.BLOCK_EXPLOSION) || cause.equals(DamageCause.ENTITY_EXPLOSION)) {
                     if (event.getKiller() != null) {
                         if (event.getKiller().equals(event.getPlayer())) {
-                            deathMessage = playerName + ChatColor.GRAY + " 'sploded";
+                            deathMessage = name + ChatColor.GRAY + " 'sploded";
                         } else {
-                            deathMessage = playerName + ChatColor.GRAY + " was blown up by " + TeamUtils.getTeamColorByPlayer(event.getKiller()) + event.getKiller().getName() + ChatColor.GRAY + "'s TNT";
+                            deathMessage = name + ChatColor.GRAY + " was blown up by " + TeamUtils.getTeamColorByPlayer(event.getKiller()) + event.getKiller().getName() + ChatColor.GRAY + "'s TNT";
                         }
                     } else {
-                        deathMessage = playerName + ChatColor.GRAY + " blew up";
+                        deathMessage = name + ChatColor.GRAY + " blew up";
                     }
                 } else if (cause.equals(DamageCause.CONTACT)) {
-                    deathMessage = playerName + ChatColor.GRAY + " was pricked to death";
+                    deathMessage = name + ChatColor.GRAY + " was pricked to death";
                 } else if (cause.equals(DamageCause.DROWNING)) {
-                    deathMessage = playerName + ChatColor.GRAY + " forgot to breathe";
+                    deathMessage = name + ChatColor.GRAY + " forgot to breathe";
                 } else if (cause.equals(DamageCause.ENTITY_ATTACK)) {
                     if (event.getKiller() != null) {
                         if (event.getKiller().getItemInHand().getType().equals(Material.AIR)) {
-                            deathMessage = playerName + ChatColor.GRAY + " felt the fury of " + TeamUtils.getTeamColorByPlayer(event.getKiller()) + event.getKiller().getName() + ChatColor.GRAY + "'s fists";
+                            deathMessage = name + ChatColor.GRAY + " felt the fury of " + TeamUtils.getTeamColorByPlayer(event.getKiller()) + event.getKiller().getName() + ChatColor.GRAY + "'s fists";
                         } else {
-                            deathMessage = playerName + ChatColor.GRAY + " was slain by " + TeamUtils.getTeamColorByPlayer(event.getKiller()) + event.getKiller().getName() + ChatColor.GRAY + "'s " + (event.getKiller().getItemInHand().getEnchantments() != null && event.getKiller().getItemInHand().getEnchantments().size() > 0 ? "enchanted " : "") + event.getKiller().getItemInHand().getType().name().replaceAll("_", " ").toLowerCase();
+                            deathMessage = name + ChatColor.GRAY + " was slain by " + TeamUtils.getTeamColorByPlayer(event.getKiller()) + event.getKiller().getName() + ChatColor.GRAY + "'s " + (event.getKiller().getItemInHand().getEnchantments() != null && event.getKiller().getItemInHand().getEnchantments().size() > 0 ? "enchanted " : "") + event.getKiller().getItemInHand().getType().name().replaceAll("_", " ").toLowerCase();
                         }
                     } else {
-                        deathMessage = playerName + ChatColor.GRAY + " was slain";
+                        deathMessage = name + ChatColor.GRAY + " was slain";
                     }
                 } else if (cause.equals(DamageCause.FALL)) {
                     if (event.getTrackerDamageEvent() != null) {
                         TrackerDamageEvent damageEvent = event.getTrackerDamageEvent();
                         Player killer = event.getKiller();
                         if (damageEvent.getType().equals(Type.SHOT)) {
-                            deathMessage = playerName + ChatColor.GRAY + " was " + damageEvent.getType().name().toLowerCase() + (damageEvent.getDistance() == -1 ? "" : " (" + damageEvent.getDistance() + " blocks)") + " off a high place " + "(" + Math.round(event.getPlayer().getFallDistance()) + " blocks)" + " by " + TeamUtils.getTeamColorByPlayer(killer) + killer.getName();
+                            deathMessage = name + ChatColor.GRAY + " was " + damageEvent.getType().name().toLowerCase() + (damageEvent.getDistance() == -1 ? "" : " (" + damageEvent.getDistance() + " blocks)") + " off a high place " + "(" + fallDistance + " blocks)" + " by " + TeamUtils.getTeamColorByPlayer(killer) + killer.getName();
                         } else {
-                            deathMessage = playerName + ChatColor.GRAY + " was " + damageEvent.getType().name().toLowerCase() + " off a high place " + "(" + Math.round(event.getPlayer().getFallDistance()) + " blocks)" + " by " + TeamUtils.getTeamColorByPlayer(killer) + killer.getName() + ChatColor.GRAY + "'s " + (damageEvent.getItem().getType().equals(Material.AIR) ? "fists of fury" : (damageEvent.getItem().getEnchantments() != null && damageEvent.getItem().getEnchantments().size() > 0 ? "enchanted " : "") + damageEvent.getItem().getType().name().replaceAll("_", " ").toLowerCase());
+                            deathMessage = name + ChatColor.GRAY + " was " + damageEvent.getType().name().toLowerCase() + " off a high place " + "(" + fallDistance + " blocks)" + " by " + TeamUtils.getTeamColorByPlayer(killer) + killer.getName() + ChatColor.GRAY + "'s " + (damageEvent.getItem().getType().equals(Material.AIR) ? "fists of fury" : (damageEvent.getItem().getEnchantments() != null && damageEvent.getItem().getEnchantments().size() > 0 ? "enchanted " : "") + damageEvent.getItem().getType().name().replaceAll("_", " ").toLowerCase());
                         }
                     } else {
-                        deathMessage = playerName + ChatColor.GRAY + " hit the ground too hard (" + Math.round(event.getPlayer().getFallDistance()) + " blocks)";
+                        deathMessage = name + ChatColor.GRAY + " hit the ground too hard (" + fallDistance + " blocks)";
                     }
                 } else if (cause.equals(DamageCause.FALLING_BLOCK)) {
-                    deathMessage = playerName + ChatColor.GRAY + " was squashed by a falling anvil";
+                    deathMessage = name + ChatColor.GRAY + " was squashed by a falling anvil";
                 } else if (cause.equals(DamageCause.FIRE)) {
-                    deathMessage = playerName + ChatColor.GRAY + " burned to death";
+                    deathMessage = name + ChatColor.GRAY + " burned to death";
                 } else if (cause.equals(DamageCause.FIRE_TICK)) {
-                    deathMessage = playerName + ChatColor.GRAY + " burned to death";
+                    deathMessage = name + ChatColor.GRAY + " burned to death";
                 } else if (cause.equals(DamageCause.LAVA)) {
-                    deathMessage = playerName + ChatColor.GRAY + " tried to swim in lava";
+                    deathMessage = name + ChatColor.GRAY + " tried to swim in lava";
                 } else if (cause.equals(DamageCause.LIGHTNING)) {
-                    deathMessage = playerName + ChatColor.GRAY + " was struck by lightning";
+                    deathMessage = name + ChatColor.GRAY + " was struck by lightning";
                 } else if (cause.equals(DamageCause.MAGIC)) {
                     if (event.getKiller() != null) {
                         int distance = (int) Math.round(event.getPlayer().getLocation().distance(event.getKiller().getLocation()));
-                        deathMessage = playerName + ChatColor.GRAY + " took " + TeamUtils.getTeamColorByPlayer(event.getKiller()) + event.getKiller().getName() + ChatColor.GRAY + "'s potion to the face (" + distance + " blocks)";
+                        deathMessage = name + ChatColor.GRAY + " took " + TeamUtils.getTeamColorByPlayer(event.getKiller()) + event.getKiller().getName() + ChatColor.GRAY + "'s potion to the face (" + distance + " blocks)";
                     } else {
-                        deathMessage = playerName + ChatColor.GRAY + " took a potion to the face";
+                        deathMessage = name + ChatColor.GRAY + " took a potion to the face";
                     }
                 } else if (cause.equals(DamageCause.PROJECTILE)) {
                     if (event.getKiller() != null) {
                         int distance = (int) Math.round(event.getPlayer().getLocation().distance(event.getKiller().getLocation()));
-                        deathMessage = playerName + ChatColor.GRAY + " was shot by " + TeamUtils.getTeamColorByPlayer(event.getKiller()) + event.getKiller().getName() + ChatColor.GRAY + " (" + distance + " blocks)";
+                        deathMessage = name + ChatColor.GRAY + " was shot by " + TeamUtils.getTeamColorByPlayer(event.getKiller()) + event.getKiller().getName() + ChatColor.GRAY + " (" + distance + " blocks)";
                     } else {
-                        deathMessage = playerName + ChatColor.GRAY + " was shot";
+                        deathMessage = name + ChatColor.GRAY + " was shot";
                     }
                 } else if (cause.equals(DamageCause.STARVATION)) {
-                    deathMessage = playerName + ChatColor.GRAY + " starved to death";
+                    deathMessage = name + ChatColor.GRAY + " starved to death";
                 } else if (cause.equals(DamageCause.SUFFOCATION)) {
-                    deathMessage = playerName + ChatColor.GRAY + " suffocated in a wall";
+                    deathMessage = name + ChatColor.GRAY + " suffocated in a wall";
                 } else if (cause.equals(DamageCause.SUICIDE)) {
-                    deathMessage = playerName + ChatColor.GRAY + " died";
+                    deathMessage = name + ChatColor.GRAY + " died";
                 } else if (cause.equals(DamageCause.THORNS)) {
                     if (event.getKiller() != null) {
-                        deathMessage = playerName + ChatColor.GRAY + " died trying to hurt " + TeamUtils.getTeamColorByPlayer(event.getKiller()) + event.getKiller().getName();
+                        deathMessage = name + ChatColor.GRAY + " died trying to hurt " + TeamUtils.getTeamColorByPlayer(event.getKiller()) + event.getKiller().getName();
                     } else {
-                        deathMessage = playerName + ChatColor.GRAY + " died trying to hurt an enemy";
+                        deathMessage = name + ChatColor.GRAY + " died trying to hurt an enemy";
                     }
                 } else if (cause.equals(DamageCause.VOID)) {
                     if (event.getTrackerDamageEvent() != null) {
                         TrackerDamageEvent damageEvent = event.getTrackerDamageEvent();
                         Player killer = event.getKiller();
                         if (damageEvent.getType().equals(Type.SHOT)) {
-                            deathMessage = playerName + ChatColor.GRAY + " was " + damageEvent.getType().name().toLowerCase() + (damageEvent.getDistance() == -1 ? "" : " (" + damageEvent.getDistance() + " blocks)") + " out of the world by " + TeamUtils.getTeamColorByPlayer(killer) + killer.getName();
+                            deathMessage = name + ChatColor.GRAY + " was " + damageEvent.getType().name().toLowerCase() + (damageEvent.getDistance() == -1 ? "" : " (" + damageEvent.getDistance() + " blocks)") + " out of the world by " + TeamUtils.getTeamColorByPlayer(killer) + killer.getName();
                         } else {
-                            deathMessage = playerName + ChatColor.GRAY + " was " + damageEvent.getType().name().toLowerCase() + " out of the world by " + TeamUtils.getTeamColorByPlayer(killer) + killer.getName() + ChatColor.GRAY + "'s " + (damageEvent.getCause().equals(Cause.TNT) ? "TNT" : (damageEvent.getItem().getType().equals(Material.AIR) ? "fists of fury" : (damageEvent.getItem().getEnchantments() != null && damageEvent.getItem().getEnchantments().size() > 0 ? "enchanted " : "") + damageEvent.getItem().getType().name().replaceAll("_", " ").toLowerCase()));
+                            deathMessage = name + ChatColor.GRAY + " was " + damageEvent.getType().name().toLowerCase() + " out of the world by " + TeamUtils.getTeamColorByPlayer(killer) + killer.getName() + ChatColor.GRAY + "'s " + (damageEvent.getCause().equals(Cause.TNT) ? "TNT" : (damageEvent.getItem().getType().equals(Material.AIR) ? "fists of fury" : (damageEvent.getItem().getEnchantments() != null && damageEvent.getItem().getEnchantments().size() > 0 ? "enchanted " : "") + damageEvent.getItem().getType().name().replaceAll("_", " ").toLowerCase()));
                         }
                     } else {
-                        deathMessage = playerName + ChatColor.GRAY + " fell out of the world";
+                        deathMessage = name + ChatColor.GRAY + " fell out of the world";
                     }
                 } else if (cause.equals(DamageCause.WITHER)) {
-                    deathMessage = playerName + ChatColor.GRAY + " withered away";
+                    deathMessage = name + ChatColor.GRAY + " withered away";
                 } else {
-                    deathMessage = playerName + ChatColor.GRAY + " died";
+                    deathMessage = name + ChatColor.GRAY + " died";
                 }
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     boolean involved = false;
