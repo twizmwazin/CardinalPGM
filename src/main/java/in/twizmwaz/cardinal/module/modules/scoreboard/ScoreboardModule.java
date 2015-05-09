@@ -147,10 +147,10 @@ public class ScoreboardModule implements Module {
                             }
                             if (compact.charAt(15) == '\u00A7') {
                                 scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
-                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 15, 31));
+                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 15) + StringUtils.trimTo(compact, 15, 29));
                             } else {
                                 scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 16) + StringUtils.trimTo(compact, 16, 30));
                             }
                         }
                     }
@@ -185,10 +185,10 @@ public class ScoreboardModule implements Module {
                                 }
                                 if (compact.charAt(15) == '\u00A7') {
                                     scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
-                                    scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 15, 31));
+                                    scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 15) + StringUtils.trimTo(compact, 15, 29));
                                 } else {
                                     scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                                    scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                                    scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 16) + StringUtils.trimTo(compact, 16, 30));
                                 }
                             }
                         }
@@ -223,10 +223,10 @@ public class ScoreboardModule implements Module {
                             }
                             if (compact.charAt(15) == '\u00A7') {
                                 scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
-                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 15, 31));
+                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 15) + StringUtils.trimTo(compact, 15, 29));
                             } else {
                                 scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 16) + StringUtils.trimTo(compact, 16, 30));
                             }
                         }
                     }
@@ -260,10 +260,10 @@ public class ScoreboardModule implements Module {
                             }
                             if (compact.charAt(15) == '\u00A7') {
                                 scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
-                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 15, 31));
+                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 15) + StringUtils.trimTo(compact, 15, 29));
                             } else {
                                 scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 16) + StringUtils.trimTo(compact, 16, 30));
                             }
                         }
                     }
@@ -505,10 +505,10 @@ public class ScoreboardModule implements Module {
                             scoreboardTeam.add(name);
                             if (compact.charAt(15) == '\u00A7') {
                                 scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
-                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 15, 31));
+                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 15) + StringUtils.trimTo(compact, 15, 29));
                             } else {
                                 scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 16) + StringUtils.trimTo(compact, 16, 30));
                             }
                             setScore(objective, name, slot);
                             used.add(name);
@@ -555,10 +555,10 @@ public class ScoreboardModule implements Module {
                         scoreboardTeam.add(name);
                         if (compact.charAt(15) == '\u00A7') {
                             scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
-                            scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 15, 31));
+                            scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 15) + StringUtils.trimTo(compact, 15, 29));
                         } else {
                             scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                            scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                            scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 16) + StringUtils.trimTo(compact, 16, 30));
                         }
                         setScore(objective, name, slot);
                         used.add(name);
@@ -639,10 +639,10 @@ public class ScoreboardModule implements Module {
                             scoreboardTeam.add(name);
                             if (compact.charAt(15) == '\u00A7') {
                                 scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
-                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 15, 31));
+                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 15) + StringUtils.trimTo(compact, 15, 29));
                             } else {
                                 scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 16) + StringUtils.trimTo(compact, 16, 30));
                             }
                             setScore(objective, name, slot);
                             used.add(name);
@@ -672,10 +672,10 @@ public class ScoreboardModule implements Module {
                             scoreboardTeam.add(name);
                             if (compact.charAt(15) == '\u00A7') {
                                 scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
-                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 15, 31));
+                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 15) + StringUtils.trimTo(compact, 15, 29));
                             } else {
                                 scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                                scoreboardTeam.setSuffix(StringUtils.trimTo(compact, 16, 32));
+                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 16) + StringUtils.trimTo(compact, 16, 30));
                             }
                             setScore(objective, name, hills);
                             used.add(name);

@@ -141,4 +141,15 @@ public class StringUtils {
         }
         return word;
     }
+
+    public static String getCurrentChatColor(String str, int index) {
+        String color = "\u00A7r";
+        for (int i = index - 1; i > 0; i --) {
+            if (str.charAt(i - 1) == '\u00A7') {
+                color = "\u00A7" + str.charAt(i);
+                break;
+            }
+        }
+        return color;
+    }
 }
