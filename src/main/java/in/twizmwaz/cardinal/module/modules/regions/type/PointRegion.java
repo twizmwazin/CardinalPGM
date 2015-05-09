@@ -45,7 +45,7 @@ public class PointRegion extends BlockRegion {
 
     @Override
     public Location getLocation() {
-        return new Location(GameHandler.getGameHandler().getMatchWorld(), getX(), getY(), getZ(), getYaw(), getPitch());
+        return new Location(GameHandler.getGameHandler().getMatchWorld(), vector.getX(), vector.getY(), vector.getZ(), getYaw(), getPitch());
     }
 
     public float getYaw() {

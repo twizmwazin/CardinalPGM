@@ -22,7 +22,7 @@ public class BlockParser extends RegionParser{
             y = NumUtils.parseDouble(working.trim().replaceAll(" ", ",").split(",")[1]);
             z = NumUtils.parseDouble(working.trim().replaceAll(" ", ",").split(",")[2]);
         }
-        this.vector = new Vector(x, y, z);
+        this.vector = new Vector(Math.floor(x), Math.floor(y), Math.floor(z));
     }
 
     public Vector getVector() {

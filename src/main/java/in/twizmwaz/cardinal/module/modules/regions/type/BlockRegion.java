@@ -29,21 +29,21 @@ public class BlockRegion extends RegionModule {
     }
 
     public double getX() {
-        return vector.getX() + 0.5;
+        return getVector().getX();
     }
 
     public double getY() {
-        return vector.getY() + 0.5;
+        return getVector().getY();
     }
 
     public double getZ() {
-        return vector.getZ() + 0.5;
+        return getVector().getZ();
     }
 
     public Vector getVector() {
         return vector.clone().add(new Vector(0.5, 0.5, 0.5));
     }
-    
+
     @Override
     public boolean contains(Vector vector) {
         return vector.getBlockX() == getVector().getBlockX() &&
