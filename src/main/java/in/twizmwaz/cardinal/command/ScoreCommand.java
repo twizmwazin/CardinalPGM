@@ -21,8 +21,8 @@ import org.bukkit.entity.Player;
 public class ScoreCommand {
 
     @Command(aliases = {"score"}, desc = "Shows the score of the current match.", usage = "")
-    public static void map(final CommandContext args, CommandSender sender) throws CommandException {
-        if (sender.hasPermission("cardinal.score") || (sender instanceof Player && TeamUtils.getTeamByPlayer((Player) sender) != null && TeamUtils.getTeamByPlayer((Player) sender).isObserver())) {
+    public static void score(final CommandContext args, CommandSender sender) throws CommandException {
+        if (!(sender instanceof Player) || TeamUtils.getTeamByPlayer((Player) sender) == null || TeamUtils.getTeamByPlayer((Player) sender).isObserver() || !GameHandler.getGameHandler().getMatch().isRunning() || sender.hasPermission("cardinal.score")) {
             TimeLimit.Result result = GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getResult();
             if (result.equals(TimeLimit.Result.HIGHEST_SCORE)) {
                 int score = 0;

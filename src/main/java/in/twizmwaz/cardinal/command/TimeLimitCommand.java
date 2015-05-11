@@ -4,6 +4,9 @@ import com.sk89q.minecraft.util.commands.*;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.TimeLimitChangeEvent;
+import in.twizmwaz.cardinal.match.Match;
+import in.twizmwaz.cardinal.match.MatchState;
+import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.module.modules.timeNotifications.TimeNotifications;
 import in.twizmwaz.cardinal.util.ChatUtils;
@@ -18,8 +21,13 @@ public class TimeLimitCommand {
     @Command(aliases = {"timelimit", "tl"}, desc = "Modify the time limit of the current match.", usage = "<add, set> <time> [result]")
     public static void timeLimit(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (cmd.argsLength() == 0) {
-            if (TimeLimit.getMatchTimeLimit() != 0) {
+            Match match = GameHandler.getGameHandler().getMatch();
+            if ((TimeLimit.getMatchTimeLimit() != 0) && (!((match.getState().equals(MatchState.ENDED))  || (match.getState().equals(MatchState.CYCLING))))) {
                 sender.sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}" + " " + ChatColor.AQUA + "{1}" + ChatColor.YELLOW + " with the result " + ChatColor.WHITE + "{2}", "The time limit is", StringUtils.formatTimeWithMillis(TimeLimit.getMatchTimeLimit()), GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getResult().equals(TimeLimit.Result.TEAM) ? GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getTeam().getCompleteName() + " wins" : GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getResult().name().toLowerCase().replaceAll("_", " ")).getMessage(ChatUtils.getLocale(sender)));
+            } else if (match.getState().equals(MatchState.ENDED) || (match.getState().equals(MatchState.CYCLING))) {
+                sender.sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "The match ended with " + ChatColor.AQUA + StringUtils.formatTimeWithMillis(GameHandler.getGameHandler().getMatch().getModules().getModule(MatchTimer.class).getEndTime()) + ChatColor.YELLOW + " remaining").getMessage(ChatUtils.getLocale(sender)));
+            } else if (TimeLimit.getMatchTimeLimit() == 0) {
+                sender.sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", "There is no time limit.").getMessage(ChatUtils.getLocale(sender)));
             } else {
                 sender.sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", "There is no time limit.").getMessage(ChatUtils.getLocale(sender)));
             }
