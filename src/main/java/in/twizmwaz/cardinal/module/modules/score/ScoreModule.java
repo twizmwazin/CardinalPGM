@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.score;
 
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.event.ScoreUpdateEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
@@ -60,57 +61,17 @@ public class ScoreModule implements Module {
     }
 
     @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent event) {
+    public void onCardinalDeath(CardinalDeathEvent event) {
         if (matchHasScoring()) {
-            if (event.getEntity().getKiller() != null) {
-                if (TeamUtils.getTeamByPlayer(event.getEntity().getKiller()) != null) {
-                    if (TeamUtils.getTeamByPlayer(event.getEntity().getKiller()) == team) {
-                        score += pointsPerKill;
-                        Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
-                    }
+            if (event.getKiller() != null) {
+                if (TeamUtils.getTeamByPlayer(event.getKiller()) != null && TeamUtils.getTeamByPlayer(event.getKiller()) == team) {
+                    score += pointsPerKill;
+                    Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
                 }
             } else {
-                if (TeamUtils.getTeamByPlayer(event.getEntity()) != null) {
-                    if (TeamUtils.getTeamByPlayer(event.getEntity()) == team) {
-                        try {
-                            EntityDamageEvent.DamageCause cause = event.getEntity().getLastDamageCause().getCause();
-                            if (cause.equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) || cause.equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
-                                if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
-                                    EntityDamageByEntityEvent damageByEntityEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
-                                    if (TntTracker.getWhoPlaced(damageByEntityEvent.getDamager()) != null) {
-                                        if (Bukkit.getOfflinePlayer(TntTracker.getWhoPlaced(damageByEntityEvent.getDamager())).isOnline()) {
-                                            Player source = Bukkit.getPlayer(TntTracker.getWhoPlaced(damageByEntityEvent.getDamager()));
-                                            if (TeamUtils.getTeamByPlayer(source) != team) {
-                                                return;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            score -= pointsPerDeath;
-                            Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
-                        } catch (NullPointerException e) {
-                        }
-                    } else {
-                        try {
-                            EntityDamageEvent.DamageCause cause = event.getEntity().getLastDamageCause().getCause();
-                            if (cause.equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) || cause.equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
-                                if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
-                                    EntityDamageByEntityEvent damageByEntityEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
-                                    if (TntTracker.getWhoPlaced(damageByEntityEvent.getDamager()) != null) {
-                                        if (Bukkit.getOfflinePlayer(TntTracker.getWhoPlaced(damageByEntityEvent.getDamager())).isOnline()) {
-                                            Player source = Bukkit.getPlayer(TntTracker.getWhoPlaced(damageByEntityEvent.getDamager()));
-                                            if (TeamUtils.getTeamByPlayer(source) != team) {
-                                                score += pointsPerKill;
-                                                Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } catch (NullPointerException e) {
-                        }
-                    }
+                if (TeamUtils.getTeamByPlayer(event.getPlayer()) != null && TeamUtils.getTeamByPlayer(event.getPlayer()) == team) {
+                    score -= pointsPerKill;
+                    Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
                 }
             }
         }
