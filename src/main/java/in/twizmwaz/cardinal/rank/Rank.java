@@ -1,6 +1,12 @@
 package in.twizmwaz.cardinal.rank;
 
+import in.twizmwaz.cardinal.event.RankChangeEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerJoinEvent;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,20 +14,19 @@ public class Rank {
 
     private String name;
     private String flair;
-    private boolean isStaff;
-    private boolean isDefault;
-    private List<UUID> players;
+    private boolean staffRank;
+    private boolean defaultRank;
 
     private static List<Rank> ranks = new ArrayList<>();
+    private static HashMap<UUID, List<Rank>> playerRanks = new HashMap<>();
 
-    public Rank(String name, String flair, boolean isStaff, boolean isDefault) {
+    public Rank(String name, String flair, boolean staffRank, boolean defaultRank) {
         this.name = name;
         this.flair = flair;
-        this.isStaff = isStaff;
-        this.isDefault = isDefault;
-        this.players = new ArrayList<>();
-        
-        Rank.ranks.add(this);
+        this.staffRank = staffRank;
+        this.defaultRank = defaultRank;
+
+        ranks.add(this);
     }
 
     public static List<Rank> getRanks() {
@@ -36,30 +41,32 @@ public class Rank {
         return flair;
     }
 
-    public boolean isStaff() {
-        return isStaff;
+    public boolean isStaffRank() {
+        return staffRank;
     }
 
-    public boolean isDefault() {
-        return isDefault;
-    }
-
-    public List<UUID> getPlayers() {
-        return players;
+    public boolean isDefaultRank() {
+        return defaultRank;
     }
 
     public void addPlayer(UUID player) {
-        players.add(player);
+        if (!playerRanks.containsKey(player)) {
+            playerRanks.put(player, new ArrayList<Rank>());
+        }
+        playerRanks.get(player).add(this);
     }
 
     public void removePlayer(UUID player) {
-        players.remove(player);
+        if (!playerRanks.containsKey(player)) {
+            playerRanks.put(player, new ArrayList<Rank>());
+        }
+        playerRanks.get(player).remove(this);
     }
 
     public static List<Rank> getDefaultRanks() {
         List<Rank> results = new ArrayList<>();
         for (Rank rank : ranks) {
-            if (rank.isDefault()) {
+            if (rank.isDefaultRank()) {
                 results.add(rank);
             }
         }
@@ -67,13 +74,23 @@ public class Rank {
     }
 
     public static List<Rank> getRanksByPlayer(UUID player) {
-        List<Rank> results = new ArrayList<>();
-        for (Rank rank : ranks) {
-            if (rank.getPlayers().contains(player)) {
-                results.add(rank);
-            }
+        return playerRanks.containsKey(player) ? playerRanks.get(player) : new ArrayList<Rank>();
+    }
+
+    public static String getPlayerPrefix(UUID player) {
+        String prefixes = "";
+        if (Bukkit.getOfflinePlayer(player).isOp()) {
+
         }
-        return results;
+        return prefixes;
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        for (Rank rank : getDefaultRanks()) {
+            rank.addPlayer(event.getPlayer().getUniqueId());
+        }
+//        Bukkit.getPluginManager().callEvent(new RankChangeEvent());
     }
 
 }

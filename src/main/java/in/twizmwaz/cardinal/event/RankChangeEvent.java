@@ -6,18 +6,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class PlayerNameUpdateEvent extends Event {
+public class RankChangeEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
     private final Player player;
     private final TeamModule team;
 
-    public PlayerNameUpdateEvent(Player player, TeamModule team) {
+    public RankChangeEvent(Player player, TeamModule team) {
         this.player = player;
         this.team = team;
     }
 
-    public PlayerNameUpdateEvent(Player player) {
+    public RankChangeEvent(Player player) {
         this.player = player;
         this.team = TeamUtils.getTeamByPlayer(player);
     }

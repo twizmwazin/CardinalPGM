@@ -5,7 +5,7 @@ import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.event.PlayerNameUpdateEvent;
+import in.twizmwaz.cardinal.event.RankChangeEvent;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
@@ -34,7 +34,7 @@ public class ModeratorCommand {
                         for (String permission : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.permissions")) {
                             GameHandler.getGameHandler().getMatch().getModules().getModules(PermissionModule.class).get(0).enablePermission((Player) moderator, permission);
                         }
-                        Bukkit.getServer().getPluginManager().callEvent(new PlayerNameUpdateEvent((Player) moderator));
+                        Bukkit.getServer().getPluginManager().callEvent(new RankChangeEvent((Player) moderator));
                     }
                 } else {
                     throw new CommandException("The player specified is already a moderator!");
@@ -63,7 +63,7 @@ public class ModeratorCommand {
                         for (String permission : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.permissions")) {
                             GameHandler.getGameHandler().getMatch().getModules().getModules(PermissionModule.class).get(0).disablePermission((Player) moderator, permission);
                         }
-                        Bukkit.getServer().getPluginManager().callEvent(new PlayerNameUpdateEvent((Player) moderator));
+                        Bukkit.getServer().getPluginManager().callEvent(new RankChangeEvent((Player) moderator));
                     }
                 } else {
                     throw new CommandException("The player specified is not a moderator!");

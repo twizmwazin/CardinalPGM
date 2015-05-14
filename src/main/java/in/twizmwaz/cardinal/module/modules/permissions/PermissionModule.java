@@ -24,8 +24,7 @@ public class PermissionModule implements Module {
     private final Plugin plugin;
     private final Map<Player, PermissionAttachment> attachmentMap;
 
-    private List<UUID> devs = Arrays.asList(UUID.fromString("670223bb-7560-48c8-8f01-2f463549b917") /* twiz_mwazin */, UUID.fromString("33a703d0-3237-4337-9ddd-3dbf33b3d8a6") /* iEli2tyree011 */, UUID.fromString("208c84af-790a-41da-bf7e-eb184f17bdf8") /* Elly */, UUID.fromString("260004f0-996b-4539-ba21-df4ee6336b63") /* Elliott_ */);
-
+    private List<UUID> developers = Arrays.asList(UUID.fromString("670223bb-7560-48c8-8f01-2f463549b917") /* twiz_mwazin */, UUID.fromString("33a703d0-3237-4337-9ddd-3dbf33b3d8a6") /* iEli2tyree011 */, UUID.fromString("208c84af-790a-41da-bf7e-eb184f17bdf8") /* Elly */, UUID.fromString("260004f0-996b-4539-ba21-df4ee6336b63") /* Elliott_ */);
     private List<OfflinePlayer> muted = new ArrayList<>();
 
     public PermissionModule(Plugin plugin) {
@@ -42,8 +41,8 @@ public class PermissionModule implements Module {
         attachmentMap.clear();
     }
 
-    public List<UUID> getDevs() {
-        return devs;
+    public List<UUID> getDevelopers() {
+        return developers;
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -160,34 +159,26 @@ public class PermissionModule implements Module {
         return isMod(player.getUniqueId()) || player.isOp();
     }
 
-    public static boolean isDev(UUID player) {
-        return GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).getDevs().contains(player);
+    public static boolean isDeveloper(UUID player) {
+        return GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).getDevelopers().contains(player);
     }
 
     @EventHandler
-    public void onPlayerNameUpdate(PlayerNameUpdateEvent event) {
+    public void onPlayerNameUpdate(RankChangeEvent event) {
         String star = "\u2756";
         String stars = "";
-        if (event.getPlayer().isOp()) {
-            stars += ChatColor.GOLD + star;
-        } else if (isMod(event.getPlayer().getUniqueId())) {
-            stars += ChatColor.RED + star;
-        }
-        if (devs.contains(event.getPlayer().getUniqueId())) {
-            stars += ChatColor.DARK_PURPLE + star;
-        }
         event.getPlayer().setDisplayName(stars + event.getTeam().getColor() + event.getPlayer().getName());
         event.getPlayer().setPlayerListName(stars + event.getTeam().getColor() + event.getPlayer().getName());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerChangeTeam2(PlayerChangeTeamEvent event) {
-        Bukkit.getServer().getPluginManager().callEvent(new PlayerNameUpdateEvent(event.getPlayer(), event.getNewTeam()));
+        Bukkit.getServer().getPluginManager().callEvent(new RankChangeEvent(event.getPlayer(), event.getNewTeam()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin2(PlayerJoinEvent event) {
-        Bukkit.getServer().getPluginManager().callEvent(new PlayerNameUpdateEvent(event.getPlayer()));
+        Bukkit.getServer().getPluginManager().callEvent(new RankChangeEvent(event.getPlayer()));
     }
 
     public void disablePermission(Player player, String permission) {

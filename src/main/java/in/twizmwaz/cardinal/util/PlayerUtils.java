@@ -30,7 +30,7 @@ public class PlayerUtils {
 
     public static double getSnowflakeMultiplier(OfflinePlayer player) {
         if (player.isOp()) return 2.5;
-        if (PermissionModule.isDev(player.getUniqueId())) return 2.0;
+        if (PermissionModule.isDeveloper(player.getUniqueId())) return 2.0;
         if (PermissionModule.isMod(player.getUniqueId())) return 1.5;
         return 1.0;
     }
