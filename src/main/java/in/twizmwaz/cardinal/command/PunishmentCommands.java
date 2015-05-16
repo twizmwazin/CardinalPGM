@@ -45,6 +45,7 @@ public class PunishmentCommands {
         Player warned = Bukkit.getPlayer(cmd.getString(0));
         if (warned != null) {
             String reason = cmd.argsLength() > 1 ? cmd.getJoinedStrings(1) : "You have been warned!";
+            warned.playSound(warned.getLocation(), Sound.ENDERDRAGON_GROWL, 1.0F, 2.0F);
             ChatChannelModule channel = GameHandler.getGameHandler().getMatch().getModules().getModule(AdminChannel.class);
             channel.sendMessage("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + ((sender instanceof Player) ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " warned " + TeamUtils.getTeamColorByPlayer(warned) + warned.getDisplayName() + ChatColor.GOLD + " for " + reason);
             warned.sendMessage(ChatColor.RED + "" + ChatColor.MAGIC + "-------" + ChatColor.YELLOW + "WARNING" + ChatColor.RED + ChatColor.MAGIC + "-------");
