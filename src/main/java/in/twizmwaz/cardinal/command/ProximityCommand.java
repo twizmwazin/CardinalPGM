@@ -36,7 +36,7 @@ public class ProximityCommand {
                             }
                         } else {
                             double proximity = objective instanceof WoolObjective ? ((WoolObjective) objective).getProximity() : (objective instanceof CoreObjective ? ((CoreObjective) objective).getProximity() : (objective instanceof DestroyableObjective ? ((DestroyableObjective) objective).getProximity() : 0.0));
-                            sender.sendMessage("  " + WordUtils.capitalizeFully(objective.getName().replaceAll("_", " ")) + "  " + ChatColor.RED + "UNTOUCHED" + ChatColor.GRAY + "  closest player: " + ChatColor.AQUA + (proximity == Double.POSITIVE_INFINITY ? "\u221E" : (Math.round(proximity * 100.0) / 100.0)));
+                            sender.sendMessage("  " + WordUtils.capitalizeFully(objective.getName().replaceAll("_", " ")) + "  " + ChatColor.RED + "UNTOUCHED" + ChatColor.GRAY + "  closest kill: " + ChatColor.AQUA + (proximity == Double.POSITIVE_INFINITY ? "\u221E" : (Math.round(proximity * 100.0) / 100.0)));
                         }
                     }
                 }
