@@ -1,7 +1,9 @@
 package in.twizmwaz.cardinal.rank;
 
 import in.twizmwaz.cardinal.event.RankChangeEvent;
+import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -78,11 +80,17 @@ public class Rank {
     }
 
     public static String getPlayerPrefix(UUID player) {
-        String prefixes = "";
+        String prefix = "";
+        String staffChar = "\u2756";
         if (Bukkit.getOfflinePlayer(player).isOp()) {
-
+            prefix += ChatColor.GOLD + staffChar;
+        } else if (PermissionModule.isMod(player)) {
+            prefix += ChatColor.RED + staffChar;
         }
-        return prefixes;
+        if (PermissionModule.isDeveloper(player)) {
+            prefix += ChatColor.DARK_PURPLE + staffChar;
+        }
+        return prefix;
     }
 
     @EventHandler

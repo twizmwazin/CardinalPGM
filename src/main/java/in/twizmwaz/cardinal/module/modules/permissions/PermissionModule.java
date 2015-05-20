@@ -4,6 +4,7 @@ import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.*;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.rank.Rank;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -164,20 +165,19 @@ public class PermissionModule implements Module {
     }
 
     @EventHandler
-    public void onPlayerNameUpdate(RankChangeEvent event) {
-        String star = "\u2756";
-        String stars = "";
-        event.getPlayer().setDisplayName(stars + event.getTeam().getColor() + event.getPlayer().getName());
-        event.getPlayer().setPlayerListName(stars + event.getTeam().getColor() + event.getPlayer().getName());
+    public void onRankChange(RankChangeEvent event) {
+        String prefix = Rank.getPlayerPrefix(event.getPlayer().getUniqueId());
+        event.getPlayer().setDisplayName(prefix + event.getTeam().getColor() + event.getPlayer().getName());
+        event.getPlayer().setPlayerListName(prefix + event.getTeam().getColor() + event.getPlayer().getName());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerChangeTeam2(PlayerChangeTeamEvent event) {
+    public void onPlayerChangeTeamRank(PlayerChangeTeamEvent event) {
         Bukkit.getServer().getPluginManager().callEvent(new RankChangeEvent(event.getPlayer(), event.getNewTeam()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerJoin2(PlayerJoinEvent event) {
+    public void onPlayerJoinRank(PlayerJoinEvent event) {
         Bukkit.getServer().getPluginManager().callEvent(new RankChangeEvent(event.getPlayer()));
     }
 
