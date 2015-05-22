@@ -18,7 +18,7 @@ import java.util.List;
 
 public class RotationCommands {
 
-    @Command(aliases = {"rotation", "rot"}, desc = "Shows the current rotation.", usage = "[page]")
+    @Command(aliases = {"rotation", "rot", "rota", "maprot", "maprotation"}, desc = "Shows the current rotation.", usage = "[page]")
     public static void rotation(final CommandContext cmd, CommandSender sender) throws CommandException {
         int index = cmd.argsLength() == 0 ? 1 : cmd.getInteger(0);
         List<LoadedMap> rot = GameHandler.getGameHandler().getRotation().getRotation();
