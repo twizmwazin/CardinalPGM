@@ -7,12 +7,14 @@ import in.twizmwaz.cardinal.event.objective.ObjectiveProximityEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
 import in.twizmwaz.cardinal.module.modules.cores.CoreObjective;
 import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjective;
 import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
 import in.twizmwaz.cardinal.util.ScoreboardUtils;
 import in.twizmwaz.cardinal.util.StringUtils;
@@ -36,6 +38,10 @@ public class ScoreboardModule implements Module {
 
     private TeamModule team;
     private Scoreboard scoreboard;
+
+    private Objective objective;
+    private int currentScore, currentHillScore;
+    private List<String> used;
 
     public ScoreboardModule(final TeamModule team) {
         this.team = team;
@@ -119,298 +125,86 @@ public class ScoreboardModule implements Module {
 
     @EventHandler
     public void onCycleComplete(CycleCompleteEvent event) {
-        create();
+        update();
     }
 
     @EventHandler
     public void onObjectiveProximity(ObjectiveProximityEvent event) {
-        if (getSlots() < 16) {
-            Team scoreboardTeam = scoreboard.getTeam(event.getObjective().getScoreboardHandler().getNumber() + "-o");
-            String prefix = event.getObjective().getScoreboardHandler().getPrefix(this.team).length() > 16 ? event.getObjective().getScoreboardHandler().getPrefix(this.team).substring(0, 16) : event.getObjective().getScoreboardHandler().getPrefix(this.team);
-            scoreboardTeam.setPrefix(prefix);
-        } else {
-            if (getCompactSlots() < 16) {
-                for (TeamModule team : TeamUtils.getTeams()) {
-                    if (!team.isObserver() && TeamUtils.getShownObjectives(team).contains(event.getObjective())) {
-                        Team scoreboardTeam = null;
-                        for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
-                            scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
-                            break;
-                        }
-                        String compact = "";
-                        for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
-                            compact += obj.getScoreboardHandler().getPrefix(this.team) + " ";
-                        }
-                        if (scoreboardTeam != null) {
-                            while (compact.length() > 32) {
-                                compact = StringUtils.removeLastWord(compact);
-                            }
-                            if (compact.charAt(15) == '\u00A7') {
-                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
-                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 15) + StringUtils.trimTo(compact, 15, 29));
-                            } else {
-                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 16) + StringUtils.trimTo(compact, 16, 30));
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        update();
     }
 
     @EventHandler
     public void onTimeLimitChange(TimeLimitChangeEvent event) {
-        for (GameObjective objective : GameHandler.getGameHandler().getMatch().getModules().getModules(GameObjective.class)) {
-            if (getSlots() < 16) {
-                Team scoreboardTeam = scoreboard.getTeam(objective.getScoreboardHandler().getNumber() + "-o");
-                String prefix = objective.getScoreboardHandler().getPrefix(this.team).length() > 16 ? objective.getScoreboardHandler().getPrefix(this.team).substring(0, 16) : objective.getScoreboardHandler().getPrefix(this.team);
-                scoreboardTeam.setPrefix(prefix);
-            } else {
-                if (getCompactSlots() < 16) {
-                    for (TeamModule team : TeamUtils.getTeams()) {
-                        if (!team.isObserver() && TeamUtils.getShownObjectives(team).contains(objective)) {
-                            Team scoreboardTeam = null;
-                            for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
-                                scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
-                                break;
-                            }
-                            String compact = "";
-                            for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
-                                compact += obj.getScoreboardHandler().getPrefix(this.team) + " ";
-                            }
-                            if (scoreboardTeam != null) {
-                                while (compact.length() > 32) {
-                                    compact = StringUtils.removeLastWord(compact);
-                                }
-                                if (compact.charAt(15) == '\u00A7') {
-                                    scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
-                                    scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 15) + StringUtils.trimTo(compact, 15, 29));
-                                } else {
-                                    scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                                    scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 16) + StringUtils.trimTo(compact, 16, 30));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        update();
     }
 
     @EventHandler
     public void onObjectiveTouch(ObjectiveTouchEvent event) {
-        if (getSlots() < 16) {
-            Team scoreboardTeam = scoreboard.getTeam(event.getObjective().getScoreboardHandler().getNumber() + "-o");
-            String prefix = event.getObjective().getScoreboardHandler().getPrefix(this.team).length() > 16 ? event.getObjective().getScoreboardHandler().getPrefix(this.team).substring(0, 16) : event.getObjective().getScoreboardHandler().getPrefix(this.team);
-            scoreboardTeam.setPrefix(prefix);
-        } else {
-            if (getCompactSlots() < 16) {
-                for (TeamModule team : TeamUtils.getTeams()) {
-                    if (!team.isObserver() && TeamUtils.getShownObjectives(team).contains(event.getObjective())) {
-                        Team scoreboardTeam = null;
-                        for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
-                            scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
-                            break;
-                        }
-                        String compact = "";
-                        for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
-                            compact += obj.getScoreboardHandler().getPrefix(this.team) + " ";
-                        }
-                        if (scoreboardTeam != null) {
-                            while (compact.length() > 32) {
-                                compact = StringUtils.removeLastWord(compact);
-                            }
-                            if (compact.charAt(15) == '\u00A7') {
-                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
-                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 15) + StringUtils.trimTo(compact, 15, 29));
-                            } else {
-                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 16) + StringUtils.trimTo(compact, 16, 30));
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        update();
     }
 
     @EventHandler
     public void onObjectiveComplete(ObjectiveCompleteEvent event) {
-        if (getSlots() < 16) {
-            Team scoreboardTeam = scoreboard.getTeam(event.getObjective().getScoreboardHandler().getNumber() + "-o");
-            String prefix = event.getObjective().getScoreboardHandler().getPrefix(this.team).length() > 16 ? event.getObjective().getScoreboardHandler().getPrefix(this.team).substring(0, 16) : event.getObjective().getScoreboardHandler().getPrefix(this.team);
-            scoreboardTeam.setPrefix(prefix);
-        } else {
-            if (getCompactSlots() < 16) {
-                for (TeamModule team : TeamUtils.getTeams()) {
-                    if (!team.isObserver() && TeamUtils.getShownObjectives(team).contains(event.getObjective())) {
-                        Team scoreboardTeam = null;
-                        for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
-                            scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
-                            break;
-                        }
-                        String compact = "";
-                        for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
-                            compact += obj.getScoreboardHandler().getPrefix(this.team) + " ";
-                        }
-                        if (scoreboardTeam != null) {
-                            while (compact.length() > 32) {
-                                compact = StringUtils.removeLastWord(compact);
-                            }
-                            if (compact.charAt(15) == '\u00A7') {
-                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
-                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 15) + StringUtils.trimTo(compact, 15, 29));
-                            } else {
-                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 16) + StringUtils.trimTo(compact, 16, 30));
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        update();
     }
 
     @EventHandler
     public void onTeamNameChange(TeamNameChangeEvent event) {
-        if (event.getTeam() == team) {
-            Team scoreboardTeam = scoreboard.getTeam(event.getTeam().getId() + "-t");
-            scoreboardTeam.setPrefix(event.getTeam().getColor() + "" + ChatColor.ITALIC + StringUtils.trimTo(event.getTeam().getName(), 0, 12));
-            scoreboardTeam.setSuffix(StringUtils.trimTo(event.getTeam().getName(), 12, 28));
-            if (ScoreModule.matchHasScoring()) {
-                scoreboardTeam = scoreboard.getTeam(event.getTeam().getId() + "-s");
-                scoreboardTeam.setPrefix(event.getTeam().getColor() + StringUtils.trimTo(event.getTeam().getName(), 0, 14));
-                scoreboardTeam.setSuffix(StringUtils.trimTo(event.getTeam().getName(), 14, 30));
-            }
-            if (Blitz.matchIsBlitz()) {
-                scoreboardTeam = scoreboard.getTeam(event.getTeam().getId() + "-b");
-                scoreboardTeam.setPrefix(event.getTeam().getColor() + StringUtils.trimTo(event.getTeam().getName(), 0, 14));
-                scoreboardTeam.setSuffix(StringUtils.trimTo(event.getTeam().getName(), 14, 30));
-            }
-        } else {
-            Team scoreboardTeam = scoreboard.getTeam(event.getTeam().getId() + "-t");
-            scoreboardTeam.setPrefix(event.getTeam().getColor() + StringUtils.trimTo(event.getTeam().getName(), 0, 14));
-            scoreboardTeam.setSuffix(StringUtils.trimTo(event.getTeam().getName(), 14, 30));
-            if (ScoreModule.matchHasScoring()) {
-                scoreboardTeam = scoreboard.getTeam(event.getTeam().getId() + "-s");
-                scoreboardTeam.setPrefix(event.getTeam().getColor() + StringUtils.trimTo(event.getTeam().getName(), 0, 14));
-                scoreboardTeam.setSuffix(StringUtils.trimTo(event.getTeam().getName(), 14, 30));
-            }
-            if (Blitz.matchIsBlitz()) {
-                scoreboardTeam = scoreboard.getTeam(event.getTeam().getId() + "-b");
-                scoreboardTeam.setPrefix(event.getTeam().getColor() + StringUtils.trimTo(event.getTeam().getName(), 0, 14));
-                scoreboardTeam.setSuffix(StringUtils.trimTo(event.getTeam().getName(), 14, 30));
-            }
-        }
+        update();
     }
 
     @EventHandler
     public void onScoreUpdate(ScoreUpdateEvent event) {
-        TeamModule team = event.getScoreModule().getTeam();
-        Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-s");
-        for (String entry : scoreboardTeam.getEntries()) {
-            setScore(scoreboard.getObjective("scoreboard"), entry, event.getScoreModule().getScore());
-        }
+        update();
     }
 
-    public void create() {
-        Objective objective = scoreboard.registerNewObjective("scoreboard", "dummy");
+    public void update() {
+        TeamModule prioritized = team.isObserver() ? TimeLimit.getMatchWinner() : team;
+
+        objective = scoreboard.getObjective("scoreboard") == null ? scoreboard.registerNewObjective("scoreboard", "dummy") : scoreboard.getObjective("scoreboard");
         objective.setDisplayName(getDisplayTitle());
-        int slot = 0;
-        int hills = (getSpecificObjective() != null && getSpecificObjective().equals(HillObjective.class)) && !ScoreModule.matchHasScoring() ? 0 : -1;
-        List<String> used = new ArrayList<>();
-        if (getSlots() < 16) {
+        currentScore = 0;
+        currentHillScore = (getSpecificObjective() != null && getSpecificObjective().equals(HillObjective.class)) && !ScoreModule.matchHasScoring() ? 0 : -1;
+        used = new ArrayList<>();
 
-
-
-
-
+        if (getCompactSlots() < 16) {
             for (TeamModule team : TeamUtils.getTeams()) {
-                if (!team.isObserver() && team != this.team) {
-                    for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
-                        Team scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
-                        String raw = ChatColor.RESET + WordUtils.capitalizeFully(obj.getName().replaceAll("_", " "));
-                        while (used.contains(raw)) {
-                            raw = ChatColor.RESET + raw;
+                if (!team.isObserver() && team != prioritized && TeamUtils.getShownObjectives(team).size() > 0) {
+                    if (getSlots() < 16) {
+                        for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
+                            renderObjective(obj);
                         }
-                        String prefix = obj.getScoreboardHandler().getPrefix(this.team).length() > 16 ? obj.getScoreboardHandler().getPrefix(this.team).substring(0, 16) : obj.getScoreboardHandler().getPrefix(this.team);
-                        String name = StringUtils.trimTo(raw, 0, 16);
-                        scoreboardTeam.setPrefix(prefix);
-                        scoreboardTeam.add(name);
-                        scoreboardTeam.setSuffix(StringUtils.trimTo(raw, 16, 32));
-                        setScore(objective, name, slot);
-                        used.add(raw);
-                        slot ++;
+                    } else {
+                        renderCompactObjectives(TeamUtils.getShownObjectives(team));
                     }
-                    if (TeamUtils.getShownObjectives(team).size() > 0) {
-                        Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-t");
-                        String name = team.getColor() + "";
-                        while (used.contains(name)) {
-                            name = team.getColor() + name;
-                        }
-                        scoreboardTeam.setPrefix(team.getColor() + StringUtils.trimTo(team.getName(), 0, 14));
-                        scoreboardTeam.add(name);
-                        scoreboardTeam.setSuffix(StringUtils.trimTo(team.getName(), 14, 30));
-                        setScore(objective, name, slot);
-                        used.add(name);
-                        slot++;
-                        if (slot < getObjectiveSlots()) {
-                            String blank = getNextBlankSlot(used);
-                            setScore(objective, blank, slot);
-                            used.add(blank);
-                            slot ++;
-                        }
+                    renderTeamTitle(team);
+                    if (currentScore < getObjectiveSlots()) {
+                        String blank = getNextBlankSlot(used);
+                        setScore(objective, blank, currentScore);
+                        used.add(blank);
+                        currentScore ++;
                     }
                 }
             }
-            if (!team.isObserver() && TeamUtils.getShownObjectives(team).size() > 0) {
-                for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
-                    Team scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
-                    String raw = ChatColor.RESET + WordUtils.capitalizeFully(obj.getName().replaceAll("_", " "));
-                    while (used.contains(raw)) {
-                        raw = ChatColor.RESET + raw;
+            if (prioritized != null && !prioritized.isObserver() && TeamUtils.getShownObjectives(prioritized).size() > 0) {
+                if (getSlots() < 16) {
+                    for (GameObjective obj : TeamUtils.getShownObjectives(prioritized)) {
+                        renderObjective(obj);
                     }
-                    String prefix = obj.getScoreboardHandler().getPrefix(team).length() > 16 ? obj.getScoreboardHandler().getPrefix(team).substring(0, 16) : obj.getScoreboardHandler().getPrefix(team);
-                    String name = StringUtils.trimTo(raw, 0, 16);
-                    scoreboardTeam.setPrefix(prefix);
-                    scoreboardTeam.add(name);
-                    scoreboardTeam.setSuffix(StringUtils.trimTo(raw, 16, 32));
-                    setScore(objective, name, slot);
-                    used.add(raw);
-                    slot++;
+                } else {
+                    renderCompactObjectives(TeamUtils.getShownObjectives(prioritized));
                 }
-                Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-t");
-                String name = ChatColor.ITALIC + "";
-                while (used.contains(name)) {
-                    name = ChatColor.ITALIC + name;
-                }
-                scoreboardTeam.setPrefix(team.getColor() + "" + ChatColor.ITALIC + StringUtils.trimTo(team.getName(), 0, 12));
-                scoreboardTeam.add(name);
-                scoreboardTeam.setSuffix(StringUtils.trimTo(team.getName(), 12, 28));
-                setScore(objective, name, slot);
-                used.add(name);
-                slot++;
-                if (slot < getObjectiveSlots()) {
+                renderTeamTitle(prioritized);
+                if (currentScore < getObjectiveSlots()) {
                     String blank = getNextBlankSlot(used);
-                    setScore(objective, blank, slot);
+                    setScore(objective, blank, currentScore);
                     used.add(blank);
-                    slot ++;
+                    currentScore ++;
                 }
             }
             if (ScoreModule.matchHasScoring()) {
                 for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
-                    TeamModule team = score.getTeam();
-                    Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-s");
-                    String name = team.getColor() + "";
-                    while (used.contains(name)) {
-                        name = team.getColor() + name;
-                    }
-                    scoreboardTeam.setPrefix(team.getColor() + StringUtils.trimTo(team.getName(), 0, 14));
-                    scoreboardTeam.add(name);
-                    scoreboardTeam.setSuffix(StringUtils.trimTo(team.getName(), 14, 30));
-                    setScore(objective, name, score.getScore());
-                    used.add(name);
+                    renderTeamScore(score);
                 }
             }
             if (ScoreModule.matchHasMax()) {
@@ -419,276 +213,31 @@ public class ScoreboardModule implements Module {
             if (Blitz.matchIsBlitz()) {
                 for (TeamModule team : TeamUtils.getTeams()) {
                     if (!team.isObserver()) {
-                        Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-b");
-                        String name = team.getColor() + "";
-                        while (used.contains(name)) {
-                            name = team.getColor() + name;
-                        }
-                        scoreboardTeam.setPrefix(team.getColor() + StringUtils.trimTo(team.getName(), 0, 14));
-                        scoreboardTeam.add(name);
-                        scoreboardTeam.setSuffix(StringUtils.trimTo(team.getName(), 14, 30));
-                        setScore(objective, name, team.size());
-                        used.add(name);
+                        renderTeamBlitz(team);
                     }
                 }
             }
             if (ScoreboardUtils.getHills().size() > 0) {
-                if (ScoreboardUtils.getHills().size() == getSlots()) {
+                if (!((getSpecificObjective() != null && getSpecificObjective().equals(HillObjective.class)) && !ScoreModule.matchHasScoring())) {
+                    String blank = getNextBlankSlot(used);
+                    setScore(objective, blank, currentHillScore);
+                    used.add(blank);
+                    currentHillScore --;
+                }
+                if (getSlots() < 16) {
                     for (HillObjective obj : ScoreboardUtils.getHills()) {
-                        Team scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
-                        String raw = ChatColor.RESET + WordUtils.capitalizeFully(obj.getName().replaceAll("_", " "));
-                        while (used.contains(raw)) {
-                            raw = ChatColor.RESET + raw;
-                        }
-                        String prefix = obj.getScoreboardHandler().getPrefix(team).length() > 16 ? obj.getScoreboardHandler().getPrefix(team).substring(0, 16) : obj.getScoreboardHandler().getPrefix(team);
-                        String name = StringUtils.trimTo(raw, 0, 16);
-                        scoreboardTeam.setPrefix(prefix);
-                        scoreboardTeam.add(name);
-                        scoreboardTeam.setSuffix(StringUtils.trimTo(raw, 16, 32));
-                        setScore(objective, name, slot);
-                        used.add(raw);
-                        slot++;
+                        renderObjective(obj);
                     }
                 } else {
-                    String blank = getNextBlankSlot(used);
-                    setScore(objective, blank, hills);
-                    used.add(blank);
-                    hills --;
+                    ModuleCollection<GameObjective> objectives = new ModuleCollection<>();
                     for (HillObjective obj : ScoreboardUtils.getHills()) {
-                        Team scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
-                        String raw = ChatColor.RESET + WordUtils.capitalizeFully(obj.getName().replaceAll("_", " "));
-                        while (used.contains(raw)) {
-                            raw = ChatColor.RESET + raw;
-                        }
-                        String prefix = obj.getScoreboardHandler().getPrefix(team).length() > 16 ? obj.getScoreboardHandler().getPrefix(team).substring(0, 16) : obj.getScoreboardHandler().getPrefix(team);
-                        String name = StringUtils.trimTo(raw, 0, 16);
-                        scoreboardTeam.setPrefix(prefix);
-                        scoreboardTeam.add(name);
-                        scoreboardTeam.setSuffix(StringUtils.trimTo(raw, 16, 32));
-                        setScore(objective, name, hills);
-                        used.add(raw);
-                        hills --;
+                        objectives.add(obj);
                     }
+                    renderCompactObjectives(objectives);
                 }
-            }
-
-
-
-
-
-        } else {
-            if (getCompactSlots() < 16) {
-
-
-
-
-
-                for (TeamModule team : TeamUtils.getTeams()) {
-                    if (!team.isObserver() && team != this.team && TeamUtils.getShownObjectives(team).size() > 0) {
-                        Team scoreboardTeam = null;
-                        for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
-                            scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
-                            break;
-                        }
-                        String compact = "";
-                        for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
-                            compact += obj.getScoreboardHandler().getPrefix(team) + " ";
-                        }
-                        if (scoreboardTeam != null) {
-                            String name = ChatColor.RESET + "";
-                            while (used.contains(name)) {
-                                name = ChatColor.RESET + name;
-                            }
-                            while (compact.length() > 32) {
-                                compact = StringUtils.removeLastWord(compact);
-                            }
-                            scoreboardTeam.add(name);
-                            if (compact.charAt(15) == '\u00A7') {
-                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
-                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 15) + StringUtils.trimTo(compact, 15, 29));
-                            } else {
-                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 16) + StringUtils.trimTo(compact, 16, 30));
-                            }
-                            setScore(objective, name, slot);
-                            used.add(name);
-                            slot ++;
-                        }
-
-                        scoreboardTeam = scoreboard.getTeam(team.getId() + "-t");
-                        String name = team.getColor() + "";
-                        while (used.contains(name)) {
-                            name = team.getColor() + name;
-                        }
-                        scoreboardTeam.setPrefix(team.getColor() + StringUtils.trimTo(team.getName(), 0, 14));
-                        scoreboardTeam.add(name);
-                        scoreboardTeam.setSuffix(StringUtils.trimTo(team.getName(), 14, 30));
-                        setScore(objective, name, slot);
-                        used.add(name);
-                        slot++;
-                        if (slot < getObjectiveSlots()) {
-                            String blank = getNextBlankSlot(used);
-                            setScore(objective, blank, slot);
-                            used.add(blank);
-                            slot ++;
-                        }
-                    }
-                }
-                if (!team.isObserver() && TeamUtils.getShownObjectives(team).size() > 0) {
-                    Team scoreboardTeam = null;
-                    for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
-                        scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
-                        break;
-                    }
-                    String compact = "";
-                    for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
-                        compact += obj.getScoreboardHandler().getPrefix(team) + " ";
-                    }
-                    if (scoreboardTeam != null) {
-                        String name = ChatColor.RESET + "";
-                        while (used.contains(name)) {
-                            name = ChatColor.RESET + name;
-                        }
-                        while (compact.length() > 32) {
-                            compact = StringUtils.removeLastWord(compact);
-                        }
-                        scoreboardTeam.add(name);
-                        if (compact.charAt(15) == '\u00A7') {
-                            scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
-                            scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 15) + StringUtils.trimTo(compact, 15, 29));
-                        } else {
-                            scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                            scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 16) + StringUtils.trimTo(compact, 16, 30));
-                        }
-                        setScore(objective, name, slot);
-                        used.add(name);
-                        slot ++;
-                    }
-
-                    scoreboardTeam = scoreboard.getTeam(team.getId() + "-t");
-                    String name = ChatColor.ITALIC + "";
-                    while (used.contains(name)) {
-                        name = ChatColor.ITALIC + name;
-                    }
-                    scoreboardTeam.setPrefix(team.getColor() + "" + ChatColor.ITALIC + StringUtils.trimTo(team.getName(), 0, 12));
-                    scoreboardTeam.add(name);
-                    scoreboardTeam.setSuffix(StringUtils.trimTo(team.getName(), 12, 28));
-                    setScore(objective, name, slot);
-                    used.add(name);
-                    slot++;
-                    if (slot < getObjectiveSlots()) {
-                        String blank = getNextBlankSlot(used);
-                        setScore(objective, blank, slot);
-                        used.add(blank);
-                        slot ++;
-                    }
-                }
-                if (ScoreModule.matchHasScoring()) {
-                    for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
-                        TeamModule team = score.getTeam();
-                        Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-s");
-                        String name = team.getColor() + "";
-                        while (used.contains(name)) {
-                            name = team.getColor() + name;
-                        }
-                        scoreboardTeam.setPrefix(team.getColor() + StringUtils.trimTo(team.getName(), 0, 14));
-                        scoreboardTeam.add(name);
-                        scoreboardTeam.setSuffix(StringUtils.trimTo(team.getName(), 14, 30));
-                        setScore(objective, name, score.getScore());
-                        used.add(name);
-                    }
-                }
-                if (ScoreModule.matchHasMax()) {
-                    setScore(objective, ChatColor.RED + "---- MAX ----", ScoreModule.max());
-                }
-                if (Blitz.matchIsBlitz()) {
-                    for (TeamModule team : TeamUtils.getTeams()) {
-                        if (!team.isObserver()) {
-                            Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-b");
-                            String name = team.getColor() + "";
-                            while (used.contains(name)) {
-                                name = team.getColor() + name;
-                            }
-                            scoreboardTeam.setPrefix(team.getColor() + StringUtils.trimTo(team.getName(), 0, 14));
-                            scoreboardTeam.add(name);
-                            scoreboardTeam.setSuffix(StringUtils.trimTo(team.getName(), 14, 30));
-                            setScore(objective, name, team.size());
-                            used.add(name);
-                        }
-                    }
-                }
-                if (ScoreboardUtils.getHills().size() > 0) {
-                    if (ScoreboardUtils.getHills().size() == getSlots()) {
-                        Team scoreboardTeam = null;
-                        for (HillObjective obj : ScoreboardUtils.getHills()) {
-                            scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
-                            break;
-                        }
-                        String compact = "";
-                        for (HillObjective obj : ScoreboardUtils.getHills()) {
-                            compact += obj.getScoreboardHandler().getPrefix(team) + " ";
-                        }
-                        if (scoreboardTeam != null) {
-                            String name = ChatColor.RESET + "";
-                            while (used.contains(name)) {
-                                name = ChatColor.RESET + name;
-                            }
-                            while (compact.length() > 32) {
-                                compact = StringUtils.removeLastWord(compact);
-                            }
-                            scoreboardTeam.add(name);
-                            if (compact.charAt(15) == '\u00A7') {
-                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
-                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 15) + StringUtils.trimTo(compact, 15, 29));
-                            } else {
-                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 16) + StringUtils.trimTo(compact, 16, 30));
-                            }
-                            setScore(objective, name, slot);
-                            used.add(name);
-                        }
-                    } else {
-                        String blank = getNextBlankSlot(used);
-                        setScore(objective, blank, hills);
-                        used.add(blank);
-                        hills --;
-                        Team scoreboardTeam = null;
-                        for (HillObjective obj : ScoreboardUtils.getHills()) {
-                            scoreboardTeam = scoreboard.getTeam(obj.getScoreboardHandler().getNumber() + "-o");
-                            break;
-                        }
-                        String compact = "";
-                        for (HillObjective obj : ScoreboardUtils.getHills()) {
-                            compact += obj.getScoreboardHandler().getPrefix(team) + " ";
-                        }
-                        if (scoreboardTeam != null) {
-                            String name = ChatColor.RESET + "";
-                            while (used.contains(name)) {
-                                name = ChatColor.RESET + name;
-                            }
-                            while (compact.length() > 32) {
-                                compact = StringUtils.removeLastWord(compact);
-                            }
-                            scoreboardTeam.add(name);
-                            if (compact.charAt(15) == '\u00A7') {
-                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 15));
-                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 15) + StringUtils.trimTo(compact, 15, 29));
-                            } else {
-                                scoreboardTeam.setPrefix(StringUtils.trimTo(compact, 0, 16));
-                                scoreboardTeam.setSuffix(StringUtils.getCurrentChatColor(compact, 16) + StringUtils.trimTo(compact, 16, 30));
-                            }
-                            setScore(objective, name, hills);
-                            used.add(name);
-                        }
-                    }
-                }
-
-
-
-
-
             }
         }
+
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
     }
 
@@ -782,21 +331,21 @@ public class ScoreboardModule implements Module {
         if (hasObjectives) {
             if (objective != null) {
                 if (objective.equals(WoolObjective.class)) {
-                    return ChatColor.GOLD + "Wools";
+                    return ChatColor.AQUA + "Wools";
                 } else if (objective.equals(CoreObjective.class)) {
-                    return ChatColor.GOLD + "Cores";
+                    return ChatColor.AQUA + "Cores";
                 } else if (objective.equals(DestroyableObjective.class)) {
-                    return ChatColor.GOLD + "Monuments";
+                    return ChatColor.AQUA + "Monuments";
                 } else if (objective.equals(HillObjective.class)) {
-                    return ChatColor.GOLD + "Hills";
+                    return ChatColor.AQUA + "Hills";
                 }
             } else {
-                return ChatColor.GOLD + "Objectives";
+                return ChatColor.AQUA + "Objectives";
             }
         } else if (GameHandler.getGameHandler().getMatch().getModules().getModule(Blitz.class) != null) {
-            return ChatColor.GOLD + GameHandler.getGameHandler().getMatch().getModules().getModule(Blitz.class).getTitle();
+            return ChatColor.AQUA + GameHandler.getGameHandler().getMatch().getModules().getModule(Blitz.class).getTitle();
         } else if (ScoreModule.matchHasScoring()) {
-            return ChatColor.GOLD + "Scores";
+            return ChatColor.AQUA + "Scores";
         }
         return ChatColor.RED + "" + ChatColor.BOLD + "Invalid";
     }
@@ -825,6 +374,134 @@ public class ScoreboardModule implements Module {
             }
         }
         return objective;
+    }
+
+    public void renderObjective(GameObjective objective) {
+        int score = objective instanceof HillObjective ? currentHillScore : currentScore;
+        Team team = scoreboard.getTeam(objective.getScoreboardHandler().getNumber() + "-o");
+        String prefix = objective.getScoreboardHandler().getPrefix(this.team).length() > 16 ? objective.getScoreboardHandler().getPrefix(this.team).substring(0, 16) : objective.getScoreboardHandler().getPrefix(this.team);
+        team.setPrefix(prefix);
+        if (team.getEntries().size() > 0) {
+            setScore(this.objective, StringUtils.trimTo(new ArrayList<>(team.getEntries()).get(0), 0, 16), score);
+        } else {
+            String raw = ChatColor.RESET + WordUtils.capitalizeFully(objective.getName().replaceAll("_", " "));
+            while (used.contains(StringUtils.trimTo(raw, 0, 16))) {
+                raw = ChatColor.RESET + raw;
+            }
+            team.add(StringUtils.trimTo(raw, 0, 16));
+            team.setSuffix(StringUtils.trimTo(raw, 16, 32));
+            setScore(this.objective, StringUtils.trimTo(raw, 0, 16), score);
+            used.add(raw);
+        }
+        if (objective instanceof HillObjective) {
+            if (currentHillScore < 0) {
+                currentHillScore--;
+            } else {
+                currentHillScore++;
+            }
+        } else {
+            currentScore ++;
+        }
+    }
+
+    public void renderCompactObjectives(ModuleCollection<GameObjective> objectives) {
+        boolean hills = true;
+        for (GameObjective objective : objectives) {
+            if (!(objective instanceof HillObjective)) {
+                hills = false;
+            }
+        }
+        int score = hills ? currentHillScore : currentScore;
+        Team team = scoreboard.getTeam(objectives.get(0).getScoreboardHandler().getNumber() + "-o");
+        if (team != null) {
+            String compact = "";
+            for (GameObjective obj : TeamUtils.getShownObjectives(this.team)) {
+                compact += obj.getScoreboardHandler().getPrefix(this.team) + " ";
+            }
+            while (compact.length() > 32) {
+                compact = StringUtils.removeLastWord(compact);
+            }
+            if (compact.charAt(15) == '\u00A7') {
+                team.setPrefix(StringUtils.trimTo(compact, 0, 15));
+                team.setSuffix(StringUtils.getCurrentChatColor(compact, 15) + StringUtils.trimTo(compact, 15, 29));
+            } else {
+                team.setPrefix(StringUtils.trimTo(compact, 0, 16));
+                team.setSuffix(StringUtils.getCurrentChatColor(compact, 16) + StringUtils.trimTo(compact, 16, 30));
+            }
+            if (team.getEntries().size() > 0) {
+                setScore(objective, new ArrayList<>(team.getEntries()).get(0), currentScore);
+            } else {
+                String name = ChatColor.RESET + "";
+                while (used.contains(name)) {
+                    name = ChatColor.RESET + name;
+                }
+                team.add(name);
+                setScore(objective, name, score);
+                used.add(name);
+            }
+            if (hills) {
+                if (currentHillScore < 0) {
+                    currentHillScore--;
+                } else {
+                    currentHillScore++;
+                }
+            } else {
+                currentScore ++;
+            }
+        }
+    }
+
+    public void renderTeamTitle(TeamModule teamModule) {
+        Team team = scoreboard.getTeam(teamModule.getId() + "-t");
+        team.setPrefix(teamModule.getColor() + StringUtils.trimTo(teamModule.getName(), 0, 14));
+        team.setSuffix(StringUtils.trimTo(teamModule.getName(), 14, 30));
+        if (team.getEntries().size() > 0) {
+            setScore(objective, new ArrayList<>(team.getEntries()).get(0), currentScore);
+        } else {
+            String name = teamModule.getColor() + "";
+            while (used.contains(name)) {
+                name = teamModule.getColor() + name;
+            }
+            team.add(name);
+            setScore(objective, name, currentScore);
+            used.add(name);
+        }
+        currentScore ++;
+    }
+
+    public void renderTeamScore(ScoreModule score) {
+        TeamModule teamModule = score.getTeam();
+        Team team = scoreboard.getTeam(teamModule.getId() + "-s");
+        team.setPrefix(teamModule.getColor() + StringUtils.trimTo(teamModule.getName(), 0, 14));
+        team.setSuffix(StringUtils.trimTo(teamModule.getName(), 14, 30));
+        if (team.getEntries().size() > 0) {
+            setScore(objective, new ArrayList<>(team.getEntries()).get(0), score.getScore());
+        } else {
+            String name = teamModule.getColor() + "";
+            while (used.contains(name)) {
+                name = teamModule.getColor() + name;
+            }
+            team.add(name);
+            setScore(objective, name, score.getScore());
+            used.add(name);
+        }
+    }
+
+    public void renderTeamBlitz(TeamModule teamModule) {
+        Team team = scoreboard.getTeam(teamModule.getId() + "-b");
+        team.setPrefix(teamModule.getColor() + StringUtils.trimTo(teamModule.getName(), 0, 14));
+        team.setSuffix(StringUtils.trimTo(teamModule.getName(), 14, 30));
+        if (team.getEntries().size() > 0) {
+            setScore(objective, new ArrayList<>(team.getEntries()).get(0), teamModule.size());
+        } else {
+            String name = teamModule.getColor() + "";
+            while (used.contains(name)) {
+                name = teamModule.getColor() + name;
+            }
+            team.add(name);
+            setScore(objective, name, teamModule.size());
+            used.add(name);
+        }
     }
 
 }
