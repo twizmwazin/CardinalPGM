@@ -62,6 +62,7 @@ public class BlockEventRegion extends AppliedRegion {
         }
     }
 
+    @EventHandler
     public void onBucketFill(PlayerBucketFillEvent event) {
         if (!event.isCancelled() && filter.evaluate(event.getPlayer(), event.getBlockClicked().getRelative(event.getBlockFace()), event).equals(FilterState.DENY)
                 && region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector()))) {
