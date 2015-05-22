@@ -238,7 +238,9 @@ public class ScoreboardModule implements Module {
             }
         }
 
-        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        if (objective.getDisplaySlot() == null || !objective.getDisplaySlot().equals(DisplaySlot.SIDEBAR)) {
+            objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        }
     }
 
     public String getNextBlankSlot(List<String> used) {
