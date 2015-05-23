@@ -15,6 +15,7 @@ import in.twizmwaz.cardinal.module.modules.filter.type.logic.NotFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.logic.OneFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.old.AllowFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.old.DenyFilter;
+import org.bukkit.Bukkit;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
@@ -39,7 +40,11 @@ public class FilterModuleBuilder implements ModuleBuilder {
         match.getModules().add(new AllMobFilter("deny-mobs", false));
         for(Element element : match.getDocument().getRootElement().getChildren("filters")) {
             for (Element filter : element.getChildren("filter")) {
-                match.getModules().add(getFilter(filter.getChildren().get(0)));
+                if (filter.getChildren().size() > 1) {
+                    match.getModules().add(new AllFilter(new ChildrenFilterParser(filter)));
+                } else {
+                    match.getModules().add(getFilter(filter.getChildren().get(0)));
+                }
             }
         }
         return new ModuleCollection<>();

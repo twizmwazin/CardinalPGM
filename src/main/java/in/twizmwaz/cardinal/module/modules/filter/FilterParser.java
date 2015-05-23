@@ -8,7 +8,7 @@ public class FilterParser {
     private FilterModule parent;
     
     public FilterParser(final Element element) {
-        this.name = element.getParentElement().getAttributeValue("name");
+        this.name = element.getAttributeValue("name") == null ? element.getParentElement().getAttributeValue("name") : element.getAttributeValue("name");
         parent = null;
         if (element.getAttributeValue("parents") != null) {
             parent = FilterModuleBuilder.getFilter(element.getAttributeValue("parents"));
