@@ -6,6 +6,7 @@ import in.twizmwaz.cardinal.event.*;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.rank.Rank;
 import in.twizmwaz.cardinal.util.TeamUtils;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -167,8 +168,8 @@ public class PermissionModule implements Module {
     @EventHandler
     public void onRankChange(RankChangeEvent event) {
         String prefix = Rank.getPlayerPrefix(event.getPlayer().getUniqueId());
-        event.getPlayer().setDisplayName(prefix + event.getTeam().getColor() + event.getPlayer().getName());
-        event.getPlayer().setPlayerListName(prefix + event.getTeam().getColor() + event.getPlayer().getName());
+        event.getPlayer().setDisplayName(prefix + event.getTeam().getColor() + event.getPlayer().getDisplayName().replaceAll("\\P{Print}", "").replaceAll("\\*", ""));
+        event.getPlayer().setPlayerListName(prefix + event.getTeam().getColor() + event.getPlayer().getPlayerListName().replaceAll("\\P{Print}", "").replaceAll("\\*", ""));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
