@@ -11,7 +11,9 @@ public class MobModuleBuilder implements ModuleBuilder {
         ModuleCollection<MobModule> results = new ModuleCollection<MobModule>();
         if (match.getDocument().getRootElement().getChild("mobs") != null) {
             results.add(new MobModule(FilterModuleBuilder.getFilter(match.getDocument().getRootElement().getChild("mobs").getChild("filter"))));
-        } else results.add(new MobModule(FilterModuleBuilder.getFilter("deny-all")));
+        } else {
+            results.add(new MobModule(FilterModuleBuilder.getFilter("deny-all")));
+        }
         return results;
     }
 }
