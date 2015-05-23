@@ -40,7 +40,7 @@ public class TeamCommands {
                 TeamModule team = TeamUtils.getTeamByName(msg);
                 if (!team.contains(Bukkit.getPlayer(cmd.getString(0)))) {
                     team.add(Bukkit.getPlayer(cmd.getString(0)), true, false);
-                    sender.sendMessage(team.getColor() + Bukkit.getPlayer(cmd.getString(1)).getName() + ChatColor.GRAY + " forced to " + team.getCompleteName());
+                    sender.sendMessage(team.getColor() + Bukkit.getPlayer(cmd.getString(0)).getName() + ChatColor.GRAY + " forced to " + team.getCompleteName());
                 } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_ON_TEAM, TeamUtils.getTeamByPlayer(Bukkit.getPlayer(cmd.getString(0))).getColor() + Bukkit.getPlayer(cmd.getString(0)).getName() + ChatColor.RED, TeamUtils.getTeamByPlayer(Bukkit.getPlayer(cmd.getString(0))).getCompleteName()).getMessage(((Player) sender).getLocale()));
             } else {
                 throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAM_MATCH).getMessage(ChatUtils.getLocale(sender)));
