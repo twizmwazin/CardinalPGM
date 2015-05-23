@@ -6,9 +6,11 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
+import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,6 +18,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.metadata.LazyMetadataValue;
 
+@SuppressWarnings({"unchecked"})
 public class Blitz implements Module {
 
     @Override
@@ -69,6 +72,13 @@ public class Blitz implements Module {
                     }
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onMatchEnd(MatchEndEvent event) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.removeMetadata("lives", Cardinal.getInstance());
         }
     }
 
