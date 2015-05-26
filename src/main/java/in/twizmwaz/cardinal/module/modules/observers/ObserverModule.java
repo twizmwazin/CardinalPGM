@@ -16,6 +16,7 @@ import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.tutorial.Tutorial;
 import in.twizmwaz.cardinal.util.ItemUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
+
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.entity.ItemFrame;
@@ -74,6 +75,8 @@ public class ObserverModule implements Module {
             ItemStack shears = ItemUtils.createItem(Material.SHEARS, 1, (short)0, ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
             player.getInventory().setItem(5, shears);
         }
+        
+        player.updateInventory();
     }
 
     @EventHandler
