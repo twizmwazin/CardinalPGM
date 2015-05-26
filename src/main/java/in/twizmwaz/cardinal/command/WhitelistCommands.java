@@ -62,7 +62,7 @@ public class WhitelistCommands {
     @CommandPermissions("whitelist.toggle")
     public static void toggle(final CommandContext args, final CommandSender sender) throws CommandException {
         Bukkit.getServer().setWhitelist(!Bukkit.getServer().hasWhitelist());
-        sender.sendMessage(ChatColor.WHITE + "Whitelist: " + (Bukkit.getServer().hasWhitelist() ? ChatColor.GREEN + "On" : ChatColor.RED + "Off"));
+        sender.sendMessage(ChatColor.WHITE + "Whitelist: " + (Bukkit.getServer().hasWhitelist() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"));
     }
 
     @Command(
