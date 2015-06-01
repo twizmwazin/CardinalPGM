@@ -212,7 +212,7 @@
         <version>이 서버는 {0}버전의 Cardinal을 실행중입니다.</version>
         <matchReportUpload>경기 정보를 업로드하는 중입니다...</matchReportUpload>
         <matchReportSuccess>경기 정보가 업로드 되었습니다 {0}에서 보실 수 있습니다</matchReportSuccess>
-        <matchReportFaied>경기 정보를 업로드하는 도중 오류가 발생했습니다</matchReportFaied>
+        <matchReportFailed>경기 정보를 업로드하는 도중 오류가 발생했습니다</matchReportFailed>
         <globalMuteEnabled>전체 뮤트가 활성화 되었습니다</globalMuteEnabled>
         <globalMuteDisabled>전체 뮤트가 비활성화 되었습니다</globalMuteDisabled>
         <defaultChannelGlobal>기본 채팅이 전체 채팅으로 변경되었습니다</defaultChannelGlobal>
