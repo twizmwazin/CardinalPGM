@@ -32,9 +32,16 @@ public class ChatModule implements Module {
     @EventHandler
     public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
         PermissionModule module = GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class);
-        if (module.isMuted(event.getPlayer()) && (event.getMessage().startsWith("/me ") || event.getMessage().startsWith("/minecraft:me "))) {
-            event.getPlayer().sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_NO_PERMISSION).getMessage(event.getPlayer().getLocale()));
-            event.setCancelled(true);
+        if (!GameHandler.getGameHandler().getGlobalMute()) {
+            if (module.isMuted(event.getPlayer()) && (event.getMessage().startsWith("/me ") || event.getMessage().startsWith("/minecraft:me "))) {
+                event.getPlayer().sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_NO_PERMISSION).getMessage(event.getPlayer().getLocale()));
+                event.setCancelled(true);
+            }
+        } else {
+            if (event.getMessage().startsWith("/me ") || event.getMessage().startsWith("/minecraft:me ")) {
+                event.getPlayer().sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_NO_PERMISSION).getMessage(event.getPlayer().getLocale()));
+                event.setCancelled(true);
+            }
         }
     }
 }
