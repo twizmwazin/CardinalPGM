@@ -275,7 +275,7 @@ public class CoreObjective implements GameObjective {
                 }
             }
             if ((to.getMaterial().equals(Material.LAVA) || to.getMaterial().equals(Material.STATIONARY_LAVA)) && to.hasMetadata(LAVA_METADATA) && !this.complete && lavaMinLevel - to.getY() >= leak) {
-                for (MetadataValue data : to.getMetadata()) {
+                for (MetadataValue data : to.getMetadata(LAVA_METADATA)) {
                     if (data.getOwningPlugin().equals(Cardinal.getInstance()) && data.value().equals(id)) {
                         this.complete = true;
                         event.setCancelled(false);
