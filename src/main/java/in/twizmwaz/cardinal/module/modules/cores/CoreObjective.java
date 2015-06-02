@@ -37,11 +37,14 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
 import java.util.*;
 
 public class CoreObjective implements GameObjective {
+
+    private static final String LAVA_METADATA = "cardinal.core.lava";
 
     private final TeamModule team;
     private final String name;
@@ -49,6 +52,7 @@ public class CoreObjective implements GameObjective {
     private final RegionModule region;
     private final int leak;
     private final boolean show;
+    private final int lavaMinLevel;
     private boolean changesModes;
 
     private double proximity;
@@ -89,6 +93,13 @@ public class CoreObjective implements GameObjective {
             }
             if (block.getType().equals(Material.STATIONARY_LAVA) || block.getType().equals(Material.LAVA)) {
                 lava.add(block);
+                block.setMetadata(LAVA_METADATA, new FixedMetadataValue(Cardinal.getInstance(), id));
+            }
+        }
+        this.lavaMinLevel = 256;
+        for (Block block : lava) {
+            if (block.getY() < lavaMinLevel) {
+                lavaMinLevel = block.getY();
             }
         }
 
@@ -255,20 +266,24 @@ public class CoreObjective implements GameObjective {
         if (!event.isCancelled()) {
             Block to = event.getToBlock();
             Block from = event.getBlock();
-            if (CoreObjective.getClosestCore(to.getX(), to.getY(), to.getZ()).equals(this)) {
-                if ((from.getType().equals(Material.LAVA) || from.getType().equals(Material.STATIONARY_LAVA)) && to.getType().equals(Material.AIR)) {
-                    double minY = 256;
-                    for (Block block : getBlocks()) {
-                        if (block.getY() < minY)
-                            minY = block.getY();
+            if (lava.contains(from) || from.hasMetadata(LAVA_METADATA)) {
+                for (MetadataValue metadata : from.getMetadata(LAVA_METADATA)) {
+                    if (metadata.getOwningPlugin().equals(Cardinal.getInstance()) && metadata.value().equals(id)) {
+                        to.setMetadata(LAVA_METADATA, new FixedMetadataValue(Cardinal.getInstance(), id));
+                        break;
                     }
-                    if (minY - to.getY() >= leak && !this.complete) {
+                }
+            }
+            if ((to.getMaterial().equals(Material.LAVA) || to.getMaterial().equals(Material.STATIONARY_LAVA)) && to.hasMetadata(LAVA_METADATA) && !this.complete && lavaMinLevel - to.getY() >= leak) {
+                for (MetadataValue data : to.getMetadata()) {
+                    if (data.getOwningPlugin().equals(Cardinal.getInstance()) && data.value().equals(id)) {
                         this.complete = true;
                         event.setCancelled(false);
                         if (this.show) ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_LEAKED, team.getCompleteName() + ChatColor.RED, ChatColor.DARK_AQUA + name + ChatColor.RED)));
                         FireworkUtil.spawnFirework(event.getBlock().getLocation(), event.getBlock().getWorld(), MiscUtils.convertChatColorToColor(team.getColor()));
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, null);
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
+                        break;
                     }
                 }
             }
