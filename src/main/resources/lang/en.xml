@@ -79,6 +79,8 @@
         <playableLeave>You may not leave the playing field</playableLeave>
         <playableInteract>You may not interact with blocks outside of the playing field</playableInteract>
         <globalMuteEnabled>You cannot talk in chat while global mute is enabled.</globalMuteEnabled>
+        <matchReportNotEnabled>Match reports are not enabled, enable it in the config (html.upload).</matchReportNotEnabled>
+        <statsNotUploaded>The stats have not been uploaded!</statsNotUploaded>
     </error>
     <generic>
         <mapSet>Next map set to {0}</mapSet>

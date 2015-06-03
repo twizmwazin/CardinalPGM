@@ -85,6 +85,8 @@ public enum  ChatConstant {
     ERROR_GLOBAL_MUTE_ENABLED("error.globalMuteEnabled"),
     ERROR_NOT_ENOUGH_ARGS_BROADCAST("error.notEnoughArgsBroadcast"),
     ERROR_NOT_ENOUGH_ARGS_SAY("error.notEnoughArgsSay"),
+    ERROR_MATCH_REPORT_NOT_ENABLED("error.matchReportNotEnabled"),
+    ERROR_STATS_NOT_UPLOADED("error.statsNotUploaded"),
     
     GENERIC_MAP_SET("generic.mapSet"),
     GENERIC_MARKED_FOR_RELOADING("generic.markedForReloading"),
