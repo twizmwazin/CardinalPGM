@@ -99,8 +99,6 @@ public class Cardinal extends JavaPlugin {
 
     private void checkCraftVersion() {
         String craftVer = Bukkit.getServer().getClass().getPackage().getName();
-        getLogger().info("org.bukkit.craftbukkit." + CRAFTBUKKIT_VERSION);
-        getLogger().info(craftVer);
         if (!("org.bukkit.craftbukkit." + CRAFTBUKKIT_VERSION).equals(craftVer)) {
             getLogger().warning("########################################");
             getLogger().warning("#####  YOUR VERSION OF SPORTBUKKIT #####");
