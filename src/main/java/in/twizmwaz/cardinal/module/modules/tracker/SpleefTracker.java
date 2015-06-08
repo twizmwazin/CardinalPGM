@@ -27,13 +27,13 @@ public class SpleefTracker implements Module {
     protected SpleefTracker() {
     }
 
+    public static TrackerDamageEvent getLastSpleefEvent(Player player) {
+        return events.containsKey(player.getUniqueId()) ? events.get(player.getUniqueId()) : null;
+    }
+
     @Override
     public void unload() {
         HandlerList.unregisterAll(this);
-    }
-
-    public static TrackerDamageEvent getLastSpleefEvent(Player player) {
-        return events.containsKey(player.getUniqueId()) ? events.get(player.getUniqueId()) : null;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

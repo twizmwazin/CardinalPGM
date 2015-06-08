@@ -11,7 +11,8 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 
 public class PotionRemover implements Module {
 
-    protected PotionRemover() { }
+    protected PotionRemover() {
+    }
 
     @Override
     public void unload() {

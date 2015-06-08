@@ -21,11 +21,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class BlockBreakRegion extends AppliedRegion {
-    
+
     public BlockBreakRegion(RegionModule region, FilterModule filter, String message) {
         super(region, filter, message);
     }
-    
+
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         if (!event.isCancelled() && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector())) && filter.evaluate(event.getPlayer(), event.getBlock(), event).equals(FilterState.DENY)) {

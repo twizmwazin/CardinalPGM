@@ -38,7 +38,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -126,16 +131,17 @@ public class Stats implements Module {
         }
 
         if (Cardinal.getInstance().getConfig().getBoolean("html.upload")) {
-        	Bukkit.getScheduler().scheduleSyncDelayedTask(GameHandler.getGameHandler().getPlugin(), new Runnable() {
-            	public void run() {
-                	ChatChannelModule global = GameHandler.getGameHandler().getMatch().getModules().getModule(GlobalChannel.class);
-                	global.sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GOLD + "{0}", ChatConstant.UI_MATCH_REPORT_UPLOAD.asMessage()));
-                	String result = uploadStats();
-                	if (result == null || result.contains("error"))
-                    	global.sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", ChatConstant.UI_MATCH_REPORT_FAILED.asMessage()));
-                	else global.sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "{0}", ChatConstant.UI_MATCH_REPORT_SUCCESS.asMessage(new UnlocalizedChatMessage(result))));
-            	}
-        	}, 20);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(GameHandler.getGameHandler().getPlugin(), new Runnable() {
+                public void run() {
+                    ChatChannelModule global = GameHandler.getGameHandler().getMatch().getModules().getModule(GlobalChannel.class);
+                    global.sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GOLD + "{0}", ChatConstant.UI_MATCH_REPORT_UPLOAD.asMessage()));
+                    String result = uploadStats();
+                    if (result == null || result.contains("error"))
+                        global.sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", ChatConstant.UI_MATCH_REPORT_FAILED.asMessage()));
+                    else
+                        global.sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "{0}", ChatConstant.UI_MATCH_REPORT_SUCCESS.asMessage(new UnlocalizedChatMessage(result))));
+                }
+            }, 20);
         }
     }
 
@@ -183,8 +189,7 @@ public class Stats implements Module {
                 if (entry.getValue() == team) {
                     if (!team.isObserver()) {
                         teams.appendElement("p").text(entry.getKey().getName() + ": Kills: " + getKillsByPlayer(entry.getKey()) + ", Deaths: " + getDeathsByPlayer(entry.getKey()) + ", KD: " + (Math.round(getKdByPlayer(entry.getKey()) / 100.0) * 100.0)).attr("class", "media-body");
-                    }
-                    else teams.appendElement("p").text(entry.getKey().getName());
+                    } else teams.appendElement("p").text(entry.getKey().getName());
                 }
             }
         }

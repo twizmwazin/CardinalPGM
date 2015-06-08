@@ -9,7 +9,6 @@ import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.StringUtils;
-
 import org.bukkit.ChatColor;
 import org.bukkit.event.HandlerList;
 
@@ -19,6 +18,14 @@ public class TimeNotifications implements TaskedModule {
 
     protected TimeNotifications() {
         nextTimeMessage = TimeLimit.getMatchTimeLimit();
+    }
+
+    public static void resetNextMessage() {
+        if (TimeLimit.getMatchTimeLimit() == 0) {
+            nextTimeMessage = (int) Math.round(MatchTimer.getTimeInSeconds());
+        } else {
+            nextTimeMessage = (int) Math.round(TimeLimit.getMatchTimeLimit() - MatchTimer.getTimeInSeconds());
+        }
     }
 
     @Override
@@ -60,14 +67,6 @@ public class TimeNotifications implements TaskedModule {
                     }
                 }
             }
-        }
-    }
-
-    public static void resetNextMessage() {
-        if (TimeLimit.getMatchTimeLimit() == 0) {
-            nextTimeMessage = (int) Math.round(MatchTimer.getTimeInSeconds());
-        } else {
-            nextTimeMessage = (int) Math.round(TimeLimit.getMatchTimeLimit() - MatchTimer.getTimeInSeconds());
         }
     }
 }

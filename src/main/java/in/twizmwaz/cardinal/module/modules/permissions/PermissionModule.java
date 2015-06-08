@@ -2,12 +2,15 @@ package in.twizmwaz.cardinal.module.modules.permissions;
 
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.event.*;
+import in.twizmwaz.cardinal.event.CycleCompleteEvent;
+import in.twizmwaz.cardinal.event.MatchEndEvent;
+import in.twizmwaz.cardinal.event.MatchStartEvent;
+import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
+import in.twizmwaz.cardinal.event.RankChangeEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.rank.Rank;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,7 +21,12 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.Plugin;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class PermissionModule implements Module {
 
@@ -31,6 +39,23 @@ public class PermissionModule implements Module {
     public PermissionModule(Plugin plugin) {
         this.plugin = plugin;
         this.attachmentMap = new HashMap<>();
+    }
+
+    public static boolean isMod(UUID player) {
+        for (String uuid : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.players")) {
+            if (uuid.equals(player.toString())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isStaff(OfflinePlayer player) {
+        return isMod(player.getUniqueId()) || player.isOp();
+    }
+
+    public static boolean isDeveloper(UUID player) {
+        return GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).getDevelopers().contains(player);
     }
 
     @Override
@@ -147,23 +172,6 @@ public class PermissionModule implements Module {
         return attachmentMap.get(player);
     }
 
-    public static boolean isMod(UUID player) {
-        for (String uuid : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.players")) {
-            if (uuid.equals(player.toString())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean isStaff(OfflinePlayer player) {
-        return isMod(player.getUniqueId()) || player.isOp();
-    }
-
-    public static boolean isDeveloper(UUID player) {
-        return GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).getDevelopers().contains(player);
-    }
-
     @EventHandler
     public void onRankChange(RankChangeEvent event) {
         String prefix = Rank.getPlayerPrefix(event.getPlayer().getUniqueId());
@@ -208,5 +216,5 @@ public class PermissionModule implements Module {
     public boolean isMuted(Player player) {
         return muted.contains(player);
     }
-    
+
 }

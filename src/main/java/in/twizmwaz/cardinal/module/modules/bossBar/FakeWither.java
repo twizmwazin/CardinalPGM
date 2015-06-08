@@ -1,6 +1,11 @@
 package in.twizmwaz.cardinal.module.modules.bossBar;
 
-import net.minecraft.server.v1_8_R1.*;
+import net.minecraft.server.v1_8_R1.DataWatcher;
+import net.minecraft.server.v1_8_R1.EntityWither;
+import net.minecraft.server.v1_8_R1.PacketPlayOutEntityDestroy;
+import net.minecraft.server.v1_8_R1.PacketPlayOutEntityMetadata;
+import net.minecraft.server.v1_8_R1.PacketPlayOutEntityTeleport;
+import net.minecraft.server.v1_8_R1.PacketPlayOutSpawnEntityLiving;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_8_R1.CraftWorld;
@@ -9,16 +14,14 @@ import java.lang.reflect.Field;
 
 public class FakeWither {
 
+    public float health = 0;
+    public String name;
     private float maxHealth = 200;
-
     private Location location;
     private byte xvel = 0;
     private byte yvel = 0;
     private byte zvel = 0;
-    public float health = 0;
     private boolean visible = false;
-    public String name;
-
     private EntityWither wither;
     private int id;
 
@@ -35,6 +38,10 @@ public class FakeWither {
 
     public float getMaxHealth() {
         return maxHealth;
+    }
+
+    public void setMaxHealth(float max) {
+        maxHealth = max;
     }
 
     public void setHealth(int percent) {
@@ -91,10 +98,6 @@ public class FakeWither {
 
     public void setWorld(World world) {
         this.location.setWorld(world);
-    }
-
-    public void setMaxHealth(float max) {
-        maxHealth = max;
     }
 
     public PacketPlayOutSpawnEntityLiving getSpawnPacket() {

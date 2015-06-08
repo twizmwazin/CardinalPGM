@@ -14,7 +14,7 @@ public class RageBuilder implements ModuleBuilder {
     @Override
     public ModuleCollection load(Match match) {
         ModuleCollection results = new ModuleCollection();
-        for (Element element : match.getDocument().getRootElement().getChildren("rage")){
+        for (Element element : match.getDocument().getRootElement().getChildren("rage")) {
             results.add(new Rage());
         }
         return results;

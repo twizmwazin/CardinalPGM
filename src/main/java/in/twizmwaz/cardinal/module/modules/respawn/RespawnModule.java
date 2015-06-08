@@ -178,7 +178,7 @@ public class RespawnModule implements Module {
 
     @EventHandler
     public void onTeamChange(PlayerChangeTeamEvent event) {
-        if (event.getOldTeam() == null ) {
+        if (event.getOldTeam() == null) {
             event.getPlayer().setMaxHealth(20);
             PlayerUtils.resetPlayer(event.getPlayer());
             TeamModule teamModule = event.getNewTeam();

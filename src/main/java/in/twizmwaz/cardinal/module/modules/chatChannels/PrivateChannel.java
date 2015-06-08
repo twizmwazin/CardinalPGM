@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 public abstract class PrivateChannel implements ChatChannelModule {
-    
+
     protected final Permission permission;
     protected final PermissionModule permissionModule;
 

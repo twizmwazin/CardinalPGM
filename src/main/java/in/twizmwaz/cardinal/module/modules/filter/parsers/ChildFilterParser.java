@@ -6,9 +6,9 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterParser;
 import org.jdom2.Element;
 
 public class ChildFilterParser extends FilterParser {
-    
+
     private final FilterModule child;
-    
+
     public ChildFilterParser(Element element) {
         super(element);
         this.child = FilterModuleBuilder.getFilter(element.getChildren().get(0));

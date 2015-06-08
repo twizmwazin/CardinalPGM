@@ -7,9 +7,9 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterParser;
 import org.jdom2.Element;
 
 public class ChildrenFilterParser extends FilterParser {
-    
+
     private final ModuleCollection<FilterModule> children;
-    
+
     public ChildrenFilterParser(Element element) {
         super(element);
         this.children = new ModuleCollection<>();
@@ -17,7 +17,7 @@ public class ChildrenFilterParser extends FilterParser {
             this.children.add(FilterModuleBuilder.getFilter(child));
         }
     }
-    
+
     public ModuleCollection<FilterModule> getChildren() {
         return children;
     }

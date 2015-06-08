@@ -5,7 +5,6 @@ import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
-import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -22,16 +21,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class Blockdrops implements Module {
-
-    @Override
-    public void unload() {
-        HandlerList.unregisterAll(this);
-    }
 
     private final RegionModule region;
     private final FilterModule filter;
@@ -39,7 +32,6 @@ public class Blockdrops implements Module {
     private final Material replace;
     private final int experience;
     private final boolean wrongTool;
-
     protected Blockdrops(final RegionModule region, final FilterModule filter, final Set<ItemStack> drops, final Material replace, final int experience, final boolean wrongTool) {
         this.region = region;
         this.filter = filter;
@@ -47,6 +39,11 @@ public class Blockdrops implements Module {
         this.replace = replace;
         this.experience = experience;
         this.wrongTool = wrongTool;
+    }
+
+    @Override
+    public void unload() {
+        HandlerList.unregisterAll(this);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

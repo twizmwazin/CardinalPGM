@@ -3,10 +3,10 @@ package in.twizmwaz.cardinal.module.modules.filter;
 import org.jdom2.Element;
 
 public class FilterParser {
-    
+
     private final String name;
     private FilterModule parent;
-    
+
     public FilterParser(final Element element) {
         this.name = element.getAttributeValue("name") == null ? element.getParentElement().getAttributeValue("name") : element.getAttributeValue("name");
         parent = null;

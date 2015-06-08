@@ -18,11 +18,22 @@ public class MatchTimer implements Module {
         this.endTime = 0;
     }
 
+    public static double getTimeInSeconds() {
+        Match match = GameHandler.getGameHandler().getMatch();
+        if (match.isRunning()) {
+            return ((double) System.currentTimeMillis() - (GameHandler.getGameHandler().getMatch().getModules().getModule(MatchTimer.class)).getTime()) / 1000.0;
+        }
+        if (match.getState().equals(MatchState.ENDED) || match.getState().equals(MatchState.CYCLING)) {
+            return GameHandler.getGameHandler().getMatch().getModules().getModule(MatchTimer.class).getEndTime();
+        }
+        return 0;
+    }
+
     @Override
     public void unload() {
         HandlerList.unregisterAll(this);
     }
-    
+
     @EventHandler
     public void onMatchStart(MatchStartEvent event) {
         this.startTime = System.currentTimeMillis();
@@ -42,16 +53,5 @@ public class MatchTimer implements Module {
 
     public double getEndTime() {
         return endTime;
-    }
-
-    public static double getTimeInSeconds() {
-        Match match = GameHandler.getGameHandler().getMatch();
-        if (match.isRunning()) {
-            return ((double) System.currentTimeMillis() - (GameHandler.getGameHandler().getMatch().getModules().getModule(MatchTimer.class)).getTime()) / 1000.0;
-        }
-        if (match.getState().equals(MatchState.ENDED) || match.getState().equals(MatchState.CYCLING)) {
-            return GameHandler.getGameHandler().getMatch().getModules().getModule(MatchTimer.class).getEndTime();
-        }
-        return 0;
     }
 }

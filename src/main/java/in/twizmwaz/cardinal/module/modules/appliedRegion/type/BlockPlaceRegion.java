@@ -16,11 +16,11 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 
 public class BlockPlaceRegion extends AppliedRegion {
-    
+
     public BlockPlaceRegion(RegionModule region, FilterModule filter, String message) {
         super(region, filter, message);
     }
-    
+
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         if (!event.isCancelled() && region.contains(new BlockRegion(null, event.getBlockPlaced().getLocation().toVector())) && filter.evaluate(event.getPlayer(), event.getBlockPlaced(), event).equals(FilterState.DENY)) {
@@ -34,7 +34,7 @@ public class BlockPlaceRegion extends AppliedRegion {
             ChatUtils.sendWarningMessage(event.getPlayer(), message);
         }
     }
-    
+
     @EventHandler
     public void onBucketEmpty(PlayerBucketEmptyEvent event) {
         Material newMaterial = (event.getBucket().equals(Material.WATER_BUCKET) ? Material.WATER : (event.getBucket().equals(Material.LAVA_BUCKET) ? Material.LAVA : Material.AIR));

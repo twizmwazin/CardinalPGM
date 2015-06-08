@@ -20,15 +20,15 @@ import java.util.Locale;
 
 public class MatchTranscript implements Module {
 
-    @Override
-    public void unload() {
-        HandlerList.unregisterAll(this);
-    }
-
     private String log;
 
     protected MatchTranscript() {
         log = "";
+    }
+
+    @Override
+    public void unload() {
+        HandlerList.unregisterAll(this);
     }
 
     public String getLog() {
@@ -36,17 +36,17 @@ public class MatchTranscript implements Module {
     }
 
     public void log(String string) {
-    	SimpleDateFormat format;
-    	if (Cardinal.getInstance().getConfig().getBoolean("html.transcriptMilliseconds")) {
-    		format = new SimpleDateFormat("HH:mm:ss.SSS");
-    	} else {
-    		format = new SimpleDateFormat("HH:mm:ss");
-    	}
+        SimpleDateFormat format;
+        if (Cardinal.getInstance().getConfig().getBoolean("html.transcriptMilliseconds")) {
+            format = new SimpleDateFormat("HH:mm:ss.SSS");
+        } else {
+            format = new SimpleDateFormat("HH:mm:ss");
+        }
         log += "[" + format.format(new Date()) + "] " + ChatColor.stripColor(string) + "\n";
     }
 
     @EventHandler
-     public void onObjectiveComplete(ObjectiveCompleteEvent event) {
+    public void onObjectiveComplete(ObjectiveCompleteEvent event) {
         if (event.getObjective().showOnScoreboard()) {
             if (event.getObjective() instanceof DestroyableObjective) {
                 log(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DESTROYED, event.getObjective().getTeam().getName(), event.getObjective().getName(), ((DestroyableObjective) event.getObjective()).getWhoDestroyed(Locale.getDefault().toString())).getMessage(Locale.getDefault().toString()));

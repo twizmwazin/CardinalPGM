@@ -5,7 +5,7 @@ import in.twizmwaz.cardinal.util.NumUtils;
 import org.bukkit.util.Vector;
 import org.jdom2.Element;
 
-public class BlockParser extends RegionParser{
+public class BlockParser extends RegionParser {
 
     private final Vector vector;
 

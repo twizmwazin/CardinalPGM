@@ -26,13 +26,13 @@ public class DamageTracker implements Module {
     protected DamageTracker() {
     }
 
+    public static TrackerDamageEvent getEvent(Player player) {
+        return events.containsKey(player.getUniqueId()) ? events.get(player.getUniqueId()) : null;
+    }
+
     @Override
     public void unload() {
         HandlerList.unregisterAll(this);
-    }
-
-    public static TrackerDamageEvent getEvent(Player player) {
-        return events.containsKey(player.getUniqueId()) ? events.get(player.getUniqueId()) : null;
     }
 
     @EventHandler

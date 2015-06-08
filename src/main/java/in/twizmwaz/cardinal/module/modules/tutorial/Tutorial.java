@@ -32,6 +32,27 @@ public class Tutorial implements Module {
 
     private Map<Player, DisplayHandler> displayHandlerMap = new HashMap<>();
 
+    public Tutorial(Stage prefix, List<Stage> stages, Stage suffix) {
+        this.prefix = prefix;
+        this.stages = stages;
+        this.suffix = suffix;
+
+        this.allStages.add(prefix);
+        this.allStages.addAll(stages);
+        this.allStages.add(suffix);
+    }
+
+    public static ItemStack getEmerald(Player player) {
+        if (GameHandler.getGameHandler().getMatch().getModules().getModules(Tutorial.class).size() > 0) {
+            ItemStack emerald = new ItemStack(Material.EMERALD);
+            ItemMeta meta = emerald.getItemMeta();
+            meta.setDisplayName(ChatColor.GOLD + new LocalizedChatMessage(ChatConstant.UI_TUTORIAL_VIEW).getMessage(ChatUtils.getLocale(player)));
+            emerald.setItemMeta(meta);
+            return emerald;
+        }
+        return new ItemStack(Material.AIR);
+    }
+
     public Stage getPrefix() {
         return prefix;
     }
@@ -46,16 +67,6 @@ public class Tutorial implements Module {
 
     public Stage getSuffix() {
         return suffix;
-    }
-
-    public Tutorial(Stage prefix, List<Stage> stages, Stage suffix) {
-        this.prefix = prefix;
-        this.stages = stages;
-        this.suffix = suffix;
-
-        this.allStages.add(prefix);
-        this.allStages.addAll(stages);
-        this.allStages.add(suffix);
     }
 
     @EventHandler
@@ -84,16 +95,5 @@ public class Tutorial implements Module {
     @Override
     public void unload() {
         HandlerList.unregisterAll(this);
-    }
-
-    public static ItemStack getEmerald(Player player) {
-        if (GameHandler.getGameHandler().getMatch().getModules().getModules(Tutorial.class).size() > 0) {
-            ItemStack emerald = new ItemStack(Material.EMERALD);
-            ItemMeta meta = emerald.getItemMeta();
-            meta.setDisplayName(ChatColor.GOLD + new LocalizedChatMessage(ChatConstant.UI_TUTORIAL_VIEW).getMessage(ChatUtils.getLocale(player)));
-            emerald.setItemMeta(meta);
-            return emerald;
-        }
-        return new ItemStack(Material.AIR);
     }
 }

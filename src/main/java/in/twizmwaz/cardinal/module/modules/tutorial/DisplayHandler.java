@@ -53,7 +53,7 @@ public class DisplayHandler {
         this.player.sendMessage("");
         this.player.sendMessage(stage.getFormattedTitle());
 
-        for (String line: stage.getLines()) {
+        for (String line : stage.getLines()) {
             this.player.sendMessage(line);
         }
         this.player.sendMessage("");
@@ -105,7 +105,7 @@ public class DisplayHandler {
         meta.setDisplayName(name.toString());
         emerald.setItemMeta(meta);
 
-        for (int pos: player.getInventory().all(Material.EMERALD).keySet()) {
+        for (int pos : player.getInventory().all(Material.EMERALD).keySet()) {
             player.getInventory().setItem(pos, emerald);
         }
     }

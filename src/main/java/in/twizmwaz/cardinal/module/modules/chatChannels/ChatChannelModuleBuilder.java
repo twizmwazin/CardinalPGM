@@ -7,7 +7,7 @@ import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 
 public class ChatChannelModuleBuilder implements ModuleBuilder {
-    
+
     @Override
     public ModuleCollection load(Match match) {
         ModuleCollection<ChatChannelModule> results = new ModuleCollection<ChatChannelModule>();

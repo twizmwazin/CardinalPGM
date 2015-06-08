@@ -8,7 +8,7 @@ import in.twizmwaz.cardinal.module.ModuleLoadTime;
 
 @BuilderData(load = ModuleLoadTime.LATEST)
 public class HeaderModuleBuilder implements ModuleBuilder {
-    
+
     @Override
     public ModuleCollection load(Match match) {
         ModuleCollection<HeaderModule> results = new ModuleCollection<HeaderModule>();

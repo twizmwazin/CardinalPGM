@@ -6,7 +6,9 @@ import in.twizmwaz.cardinal.module.modules.filter.parsers.EntityFilterParser;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
-import static in.twizmwaz.cardinal.module.modules.filter.FilterState.*;
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ABSTAIN;
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ALLOW;
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.DENY;
 
 public class EntityFilter extends FilterModule {
 

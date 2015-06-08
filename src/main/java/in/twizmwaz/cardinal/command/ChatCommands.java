@@ -23,20 +23,6 @@ import java.util.concurrent.Callable;
 
 public class ChatCommands {
 
-    public static class Channel implements Callable {
-
-        private final ChatUtils.ChannelType channel;
-
-        protected Channel(final ChatUtils.ChannelType channel){
-            this.channel = channel;
-        }
-
-        @Override
-        public Object call() throws Exception {
-            return channel;
-        }
-    }
-
     @Command(aliases = {"g", "global", "shout"}, desc = "Talk in global chat.", usage = "<message>")
     @CommandPermissions("cardinal.chat.global")
     public static void global(final CommandContext cmd, CommandSender sender) throws CommandException {
@@ -95,9 +81,23 @@ public class ChatCommands {
             }
         } else throw new CommandException("Console cannot use this command.");
     }
-    
+
     private static String assembleMessage(CommandContext context) {
         return context.getJoinedStrings(0);
     }
-    
+
+    public static class Channel implements Callable {
+
+        private final ChatUtils.ChannelType channel;
+
+        protected Channel(final ChatUtils.ChannelType channel) {
+            this.channel = channel;
+        }
+
+        @Override
+        public Object call() throws Exception {
+            return channel;
+        }
+    }
+
 }

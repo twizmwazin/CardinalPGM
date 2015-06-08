@@ -43,14 +43,14 @@ public class HillObjectiveBuilder implements ModuleBuilder {
         }
         return results;
     }
-    
+
     private HillObjective parseHill(Element element) {
         String id = element.getAttributeValue("id");
         String name = element.getAttributeValue("name");
         int capturetime = 30;
-        if (element.getParentElement().getAttributeValue("capture-time") != null) 
+        if (element.getParentElement().getAttributeValue("capture-time") != null)
             capturetime = StringUtils.timeStringToSeconds(element.getParentElement().getAttributeValue("capture-time"));
-        if (element.getAttributeValue("capture-time") != null) 
+        if (element.getAttributeValue("capture-time") != null)
             capturetime = StringUtils.timeStringToSeconds(element.getAttributeValue("capture-time"));
         int points = 1;
         if (element.getParentElement().getAttributeValue("points") != null)
@@ -63,8 +63,10 @@ public class HillObjectiveBuilder implements ModuleBuilder {
         if (element.getAttributeValue("points-growth") != null)
             pointsGrowth = Double.parseDouble(element.getAttributeValue("points-growth"));
         CaptureRule captureRule = CaptureRule.EXCLUSIVE;
-        if (element.getAttributeValue("capture-rule") != null) CaptureRule.parseCaptureRule(element.getAttributeValue("capture-rule"));
-        if (element.getParentElement().getAttributeValue("capture-rule") != null) CaptureRule.parseCaptureRule(element.getParentElement().getAttributeValue("capture-rule"));
+        if (element.getAttributeValue("capture-rule") != null)
+            CaptureRule.parseCaptureRule(element.getAttributeValue("capture-rule"));
+        if (element.getParentElement().getAttributeValue("capture-rule") != null)
+            CaptureRule.parseCaptureRule(element.getParentElement().getAttributeValue("capture-rule"));
         double timeMultiplier = 0;
         if (element.getParentElement().getAttributeValue("time-multiplier") != null)
             timeMultiplier = Double.parseDouble(element.getParentElement().getAttributeValue("time-multiplier"));
@@ -100,8 +102,8 @@ public class HillObjectiveBuilder implements ModuleBuilder {
             show = NumUtils.parseBoolean(element.getParentElement().getAttributeValue("show"));
         if (element.getAttributeValue("show") != null)
             show = NumUtils.parseBoolean(element.getAttributeValue("show"));
-        String materials = element.getAttributeValue("visual-materials") == null ? 
-                element.getParentElement().getAttributeValue("visual-materials") : 
+        String materials = element.getAttributeValue("visual-materials") == null ?
+                element.getParentElement().getAttributeValue("visual-materials") :
                 element.getAttributeValue("visual-materials");
         FilterModule visualMaterials = FilterModuleBuilder.getFilter(materials);
         RegionModule capture = element.getAttributeValue("capture") == null ?

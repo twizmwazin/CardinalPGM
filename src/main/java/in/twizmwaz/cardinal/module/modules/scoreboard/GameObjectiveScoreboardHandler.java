@@ -13,17 +13,16 @@ import org.bukkit.ChatColor;
 
 public class GameObjectiveScoreboardHandler {
 
+    private static int num = 1;
     private GameObjective objective;
     private TeamModule team;
-
-    private static int num = 1;
     private int number;
 
     public GameObjectiveScoreboardHandler(GameObjective objective) {
         this.objective = objective;
         this.team = objective.getTeam();
         this.number = num;
-        num ++;
+        num++;
     }
 
     public int getNumber() {

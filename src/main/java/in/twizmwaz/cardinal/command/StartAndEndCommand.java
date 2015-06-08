@@ -47,7 +47,8 @@ public class StartAndEndCommand {
                 GameHandler.getGameHandler().getMatch().end(null);
             }
 
-        } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_END).getMessage(ChatUtils.getLocale(sender)));
+        } else
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_END).getMessage(ChatUtils.getLocale(sender)));
     }
 
 }

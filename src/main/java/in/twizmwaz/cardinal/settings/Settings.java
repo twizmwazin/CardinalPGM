@@ -22,7 +22,8 @@ public class Settings {
             for (String settingName : setting.getNames()) if (settingName.equalsIgnoreCase(name)) return setting;
         }
         for (Setting setting : settings) {
-            for (String settingName : setting.getNames()) if (settingName.toLowerCase().startsWith(name.toLowerCase())) return setting;
+            for (String settingName : setting.getNames())
+                if (settingName.toLowerCase().startsWith(name.toLowerCase())) return setting;
         }
         return null;
     }

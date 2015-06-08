@@ -23,18 +23,16 @@ import java.util.Set;
 
 public class HillObjective implements TaskedModule, GameObjective {
 
-    private TeamModule team, capturingTeam;
     private final String name, id;
     private final int captureTime, points;
     private final double pointsGrowth, timeMultiplier;
     private final CaptureRule captureRule;
-    private final boolean showProgress ,neutralState, incremental, permanent, show;
+    private final boolean showProgress, neutralState, incremental, permanent, show;
     private final RegionModule capture, progress, captured;
-    private double controlTime;
-
-    private GameObjectiveScoreboardHandler scoreboardHandler;
     private final Set<Player> capturingPlayers;
-
+    private TeamModule team, capturingTeam;
+    private double controlTime;
+    private GameObjectiveScoreboardHandler scoreboardHandler;
     private int seconds = 1;
     private int tempPoints;
 
@@ -63,7 +61,7 @@ public class HillObjective implements TaskedModule, GameObjective {
         this.capturingPlayers = new HashSet<>();
         this.tempPoints = points;
     }
-    
+
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         if (capture.contains(event.getTo()) && !capturingPlayers.contains(event.getPlayer()))
@@ -71,12 +69,12 @@ public class HillObjective implements TaskedModule, GameObjective {
         if (!capture.contains(event.getTo()) && capturingPlayers.contains(event.getPlayer()))
             capturingPlayers.remove(event.getPlayer());
     }
-    
+
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         if (capturingPlayers.contains(event.getEntity())) capturingPlayers.remove(event.getEntity());
     }
-    
+
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
         if (capturingPlayers.contains(event.getPlayer())) capturingPlayers.remove(event.getPlayer());
@@ -156,7 +154,7 @@ public class HillObjective implements TaskedModule, GameObjective {
     public void run() {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
             if (seconds <= MatchTimer.getTimeInSeconds()) {
-                seconds ++;
+                seconds++;
                 if (team != null) {
                     if (seconds % pointsGrowth == 0) {
                         tempPoints = (int) Math.pow(tempPoints, 2);

@@ -6,49 +6,56 @@ import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
-import in.twizmwaz.cardinal.module.modules.filter.parsers.*;
-import in.twizmwaz.cardinal.module.modules.filter.type.*;
-import in.twizmwaz.cardinal.module.modules.filter.type.constant.*;
+import in.twizmwaz.cardinal.module.modules.filter.parsers.BlockFilterParser;
+import in.twizmwaz.cardinal.module.modules.filter.parsers.CauseFilterParser;
+import in.twizmwaz.cardinal.module.modules.filter.parsers.ChildrenFilterParser;
+import in.twizmwaz.cardinal.module.modules.filter.parsers.ClassFilterParser;
+import in.twizmwaz.cardinal.module.modules.filter.parsers.EntityFilterParser;
+import in.twizmwaz.cardinal.module.modules.filter.parsers.GenericFilterParser;
+import in.twizmwaz.cardinal.module.modules.filter.parsers.ItemFilterParser;
+import in.twizmwaz.cardinal.module.modules.filter.parsers.KillstreakFilterParser;
+import in.twizmwaz.cardinal.module.modules.filter.parsers.MobFilterParser;
+import in.twizmwaz.cardinal.module.modules.filter.parsers.ObjectiveFilterParser;
+import in.twizmwaz.cardinal.module.modules.filter.parsers.RandomFilterParser;
+import in.twizmwaz.cardinal.module.modules.filter.parsers.SpawnFilterParser;
+import in.twizmwaz.cardinal.module.modules.filter.parsers.TeamFilterParser;
+import in.twizmwaz.cardinal.module.modules.filter.parsers.TimeFilterParser;
+import in.twizmwaz.cardinal.module.modules.filter.type.BlockFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.CarryingFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.CauseFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.ClassFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.CrouchingFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.EntityFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.FlyingAbilityFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.FlyingFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.HoldingFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.KillStreakFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.MobFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.ObjectiveFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.RandomFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.SpawnFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.TeamFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.TimeFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.VoidFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.WearingFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.constant.AllBlockFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.constant.AllEntitiesFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.constant.AllEventFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.constant.AllMobFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.constant.AllPlayerFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.constant.AllSpawnFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.constant.AllWorldFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.logic.AllFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.logic.AnyFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.logic.NotFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.logic.OneFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.old.AllowFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.old.DenyFilter;
-import org.bukkit.Bukkit;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
 @BuilderData(load = ModuleLoadTime.EARLY)
 public class FilterModuleBuilder implements ModuleBuilder {
-    
-    @Override
-    public ModuleCollection load(Match match) {
-        match.getModules().add(new AllEventFilter("allow-all", true));
-        match.getModules().add(new AllEventFilter("deny-all", false));
-        match.getModules().add(new AllPlayerFilter("allow-players", true));
-        match.getModules().add(new AllPlayerFilter("deny-players", false));
-        match.getModules().add(new AllBlockFilter("allow-blocks", true));
-        match.getModules().add(new AllBlockFilter("deny-blocks", false));
-        match.getModules().add(new AllWorldFilter("allow-world", true));
-        match.getModules().add(new AllWorldFilter("deny-world", false));
-        match.getModules().add(new AllSpawnFilter("allow-spawns", true));
-        match.getModules().add(new AllSpawnFilter("deny-spawns", false));
-        match.getModules().add(new AllEntitiesFilter("allow-entities", true));
-        match.getModules().add(new AllEntitiesFilter("deny-entities", false));
-        match.getModules().add(new AllMobFilter("allow-mobs", true));
-        match.getModules().add(new AllMobFilter("deny-mobs", false));
-        for(Element element : match.getDocument().getRootElement().getChildren("filters")) {
-            for (Element filter : element.getChildren("filter")) {
-                if (filter.getChildren().size() > 1) {
-                    match.getModules().add(new AllFilter(new ChildrenFilterParser(filter)));
-                } else {
-                    match.getModules().add(getFilter(filter.getChildren().get(0)));
-                }
-            }
-        }
-        return new ModuleCollection<>();
-    }
 
     /**
      * @param element  Element to parse
@@ -176,6 +183,7 @@ public class FilterModuleBuilder implements ModuleBuilder {
 
     /**
      * Gets a loaded filter by the given name
+     *
      * @param string
      * @return
      */
@@ -184,5 +192,33 @@ public class FilterModuleBuilder implements ModuleBuilder {
             if (string.equalsIgnoreCase(filterModule.getName())) return filterModule;
         }
         return null;
+    }
+
+    @Override
+    public ModuleCollection load(Match match) {
+        match.getModules().add(new AllEventFilter("allow-all", true));
+        match.getModules().add(new AllEventFilter("deny-all", false));
+        match.getModules().add(new AllPlayerFilter("allow-players", true));
+        match.getModules().add(new AllPlayerFilter("deny-players", false));
+        match.getModules().add(new AllBlockFilter("allow-blocks", true));
+        match.getModules().add(new AllBlockFilter("deny-blocks", false));
+        match.getModules().add(new AllWorldFilter("allow-world", true));
+        match.getModules().add(new AllWorldFilter("deny-world", false));
+        match.getModules().add(new AllSpawnFilter("allow-spawns", true));
+        match.getModules().add(new AllSpawnFilter("deny-spawns", false));
+        match.getModules().add(new AllEntitiesFilter("allow-entities", true));
+        match.getModules().add(new AllEntitiesFilter("deny-entities", false));
+        match.getModules().add(new AllMobFilter("allow-mobs", true));
+        match.getModules().add(new AllMobFilter("deny-mobs", false));
+        for (Element element : match.getDocument().getRootElement().getChildren("filters")) {
+            for (Element filter : element.getChildren("filter")) {
+                if (filter.getChildren().size() > 1) {
+                    match.getModules().add(new AllFilter(new ChildrenFilterParser(filter)));
+                } else {
+                    match.getModules().add(getFilter(filter.getChildren().get(0)));
+                }
+            }
+        }
+        return new ModuleCollection<>();
     }
 }

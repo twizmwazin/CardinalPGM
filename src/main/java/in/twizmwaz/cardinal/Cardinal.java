@@ -1,7 +1,13 @@
 package in.twizmwaz.cardinal;
 
 import com.sk89q.bukkit.util.CommandsManagerRegistration;
-import com.sk89q.minecraft.util.commands.*;
+import com.sk89q.minecraft.util.commands.ChatColor;
+import com.sk89q.minecraft.util.commands.CommandException;
+import com.sk89q.minecraft.util.commands.CommandPermissionsException;
+import com.sk89q.minecraft.util.commands.CommandUsageException;
+import com.sk89q.minecraft.util.commands.CommandsManager;
+import com.sk89q.minecraft.util.commands.MissingNestedCommandException;
+import com.sk89q.minecraft.util.commands.WrappedCommandException;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocaleHandler;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -33,8 +39,20 @@ public class Cardinal extends JavaPlugin {
     private static Cardinal instance;
     private static GameHandler gameHandler;
     private static LocaleHandler localeHandler;
-    private CommandsManager<CommandSender> commands;
     private static Database database;
+    private CommandsManager<CommandSender> commands;
+
+    public static LocaleHandler getLocaleHandler() {
+        return localeHandler;
+    }
+
+    public static Cardinal getInstance() {
+        return instance;
+    }
+
+    public static Database getCardinalDatabase() {
+        return database;
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -155,10 +173,12 @@ public class Cardinal extends JavaPlugin {
                         names.add(alias.trim());
                     }
                 }
-                if (config.contains("setting." + settingName + ".description")) description = config.getString("setting." + settingName + ".description");
+                if (config.contains("setting." + settingName + ".description"))
+                    description = config.getString("setting." + settingName + ".description");
                 if (config.contains("setting." + settingName + ".values")) {
                     for (String valueName : config.getStringList("setting." + settingName + ".values")) {
-                        if (valueName.endsWith("[default]")) values.add(new SettingValue(valueName.trim().substring(0, valueName.length() - 9), true));
+                        if (valueName.endsWith("[default]"))
+                            values.add(new SettingValue(valueName.trim().substring(0, valueName.length() - 9), true));
                         else values.add(new SettingValue(valueName.trim(), false));
                     }
                 }
@@ -174,7 +194,7 @@ public class Cardinal extends JavaPlugin {
         }
         setupCommands();
     }
-    
+
     @Override
     public void onDisable() {
     }
@@ -183,19 +203,7 @@ public class Cardinal extends JavaPlugin {
         return gameHandler;
     }
 
-    public static LocaleHandler getLocaleHandler() {
-        return localeHandler;
-    }
-
     public JavaPlugin getPlugin() {
         return this;
-    }
-
-    public static Cardinal getInstance() {
-        return instance;
-    }
-    
-    public static Database getCardinalDatabase() {
-        return database;
     }
 }

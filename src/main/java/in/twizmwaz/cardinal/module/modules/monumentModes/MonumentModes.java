@@ -14,11 +14,10 @@ import org.bukkit.event.HandlerList;
 
 public class MonumentModes implements TaskedModule {
 
-    private int after;
     private final Material material;
     private final int damageValue;
     private final String name;
-
+    private int after;
     private boolean ran;
 
     public MonumentModes(int after, final Material material, final int damageValue, final String name) {

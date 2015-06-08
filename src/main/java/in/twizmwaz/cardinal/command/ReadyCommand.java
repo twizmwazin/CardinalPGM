@@ -24,7 +24,8 @@ public class ReadyCommand {
             if (!team.isReady()) {
                 team.setReady(true);
                 ChatUtils.getGlobalChannel().sendMessage(team.getCompleteName() + ChatColor.YELLOW + " is now ready");
-                if (Cardinal.getInstance().getConfig().getBoolean("observers-ready") ? TeamUtils.teamsReady() : TeamUtils.teamsNoObsReady()) GameHandler.getGameHandler().getMatch().start(600);
+                if (Cardinal.getInstance().getConfig().getBoolean("observers-ready") ? TeamUtils.teamsReady() : TeamUtils.teamsNoObsReady())
+                    GameHandler.getGameHandler().getMatch().start(600);
             } else throw new CommandException("Your team is already ready!");
         } else throw new CommandException("You cannot ready up during or after a match");
     }

@@ -22,7 +22,7 @@ public class CycleCommand {
     @CommandPermissions("cardinal.match.cycle")
     public static void cycle(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
-            if(cmd.hasFlag('f')){
+            if (cmd.hasFlag('f')) {
                 TeamModule team = TeamUtils.getTeamByName(cmd.getFlag('f'));
                 GameHandler.getGameHandler().getMatch().end(team);
             } else {
@@ -56,12 +56,12 @@ public class CycleCommand {
             sender.sendMessage(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.GENERIC_MAP_SET, ChatColor.GOLD + nextMap.getName() + ChatColor.DARK_PURPLE).getMessage(ChatUtils.getLocale(sender)));
         }
     }
-    
+
     @Command(aliases = {"recycle", "rc"}, desc = "Cycles to the current map.", usage = "[time]", flags = "f")
     @CommandPermissions("cardinal.match.cycle")
     public static void recycle(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
-            if(cmd.hasFlag('f')){
+            if (cmd.hasFlag('f')) {
                 TeamModule team = TeamUtils.getTeamByName(cmd.getFlag('f'));
                 GameHandler.getGameHandler().getMatch().end(team);
             } else {

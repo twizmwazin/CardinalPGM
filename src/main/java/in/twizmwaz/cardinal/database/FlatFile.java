@@ -7,7 +7,12 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonWriter;
 import org.bukkit.Bukkit;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Map;
 
 public class FlatFile implements Database {

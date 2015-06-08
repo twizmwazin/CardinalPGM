@@ -6,7 +6,9 @@ import in.twizmwaz.cardinal.module.modules.filter.parsers.ItemFilterParser;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import static in.twizmwaz.cardinal.module.modules.filter.FilterState.*;
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ABSTAIN;
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ALLOW;
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.DENY;
 
 public class HoldingFilter extends FilterModule {
 

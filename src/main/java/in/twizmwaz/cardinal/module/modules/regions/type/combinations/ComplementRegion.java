@@ -32,7 +32,7 @@ public class ComplementRegion extends RegionModule {
     @Override
     public boolean contains(Vector vector) {
         if (!regions.get(0).contains(vector)) return false;
-        for (int i = 1; i < regions.size(); i ++) {
+        for (int i = 1; i < regions.size(); i++) {
             if (regions.get(i).contains(vector)) return false;
         }
         return true;

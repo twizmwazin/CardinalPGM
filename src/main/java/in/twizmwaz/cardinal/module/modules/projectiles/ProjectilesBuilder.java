@@ -32,7 +32,7 @@ public class ProjectilesBuilder implements ModuleBuilder {
 
             }
 
-            for (Element potion: projectiles.getChildren("potion")) {
+            for (Element potion : projectiles.getChildren("potion")) {
                 potionEffects.add(ParseUtils.getPotion(potion));
             }
 

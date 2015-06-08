@@ -24,7 +24,8 @@ public class ClassCommands {
             for (ClassModule classModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class)) {
                 sender.sendMessage(count + ". " + (sender instanceof Player && ClassModule.getClassByPlayer((Player) sender) != null && ClassModule.getClassByPlayer((Player) sender).equals(classModule) ? ChatColor.GOLD + "" + ChatColor.UNDERLINE : ChatColor.GREEN + "") + classModule.getName() + ChatColor.DARK_PURPLE + " - " + ChatColor.RESET + classModule.getDescription());
             }
-        } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CLASSES_DISABLED).getMessage(ChatUtils.getLocale(sender)));
+        } else
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CLASSES_DISABLED).getMessage(ChatUtils.getLocale(sender)));
     }
 
     @Command(aliases = {"class"}, desc = "Allows you to change your class.")
@@ -36,7 +37,7 @@ public class ClassCommands {
                         sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.GENERIC_CLASS_CURRENT).getMessage(((Player) sender).getLocale()) + " " + ChatColor.GOLD + "" + ChatColor.UNDERLINE + ClassModule.getClassByPlayer((Player) sender).getName());
                         String classMessage = new LocalizedChatMessage(ChatConstant.GENERIC_CLASS_LIST).getMessage(((Player) sender).getLocale());
                         String newClassMessage = "";
-                        for (int i = 0; i < classMessage.split("'").length; i ++) {
+                        for (int i = 0; i < classMessage.split("'").length; i++) {
                             newClassMessage += (i == 1 ? ChatColor.GOLD : ChatColor.DARK_PURPLE) + (i > 0 ? "'" : "") + classMessage.split("'")[i];
                         }
                         sender.sendMessage(newClassMessage);
@@ -50,7 +51,8 @@ public class ClassCommands {
                     } else
                         throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_CLASS).getMessage(((Player) sender).getLocale()));
                 }
-            } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CLASSES_DISABLED).getMessage(((Player) sender).getLocale()));
+            } else
+                throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CLASSES_DISABLED).getMessage(((Player) sender).getLocale()));
         } else throw new CommandException("Console cannot use this command.");
     }
 }

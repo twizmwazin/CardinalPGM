@@ -31,8 +31,8 @@ public class IntersectRegion extends RegionModule {
 
     @Override
     public boolean contains(Vector vector) {
-        for (int i = 0; i < regions.size(); i ++) {
-            for (int k = 0; k < regions.size(); k ++) {
+        for (int i = 0; i < regions.size(); i++) {
+            for (int k = 0; k < regions.size(); k++) {
                 if (i != k) {
                     if (regions.get(i).contains(vector) && regions.get(k).contains(vector)) return true;
                 }
@@ -67,8 +67,8 @@ public class IntersectRegion extends RegionModule {
     public List<Block> getBlocks() {
         List<Block> results = new ArrayList<>();
         try {
-            for (int i = 0; i < regions.size(); i ++) {
-                for (int k = 0; k < regions.size(); k ++) {
+            for (int i = 0; i < regions.size(); i++) {
+                for (int k = 0; k < regions.size(); k++) {
                     if (i != k) {
                         for (Block block : regions.get(i).getBlocks()) {
                             if (regions.get(k).contains(new BlockRegion(null, block.getLocation().toVector())) && !results.contains(block)) {

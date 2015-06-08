@@ -96,7 +96,7 @@ public class TeamUtils {
         }
         return objectives;
     }
-    
+
     public static TeamChannel getTeamChannel(TeamModule team) {
         for (TeamChannel channel : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamChannel.class)) {
             if (channel.getTeam() == team) return channel;

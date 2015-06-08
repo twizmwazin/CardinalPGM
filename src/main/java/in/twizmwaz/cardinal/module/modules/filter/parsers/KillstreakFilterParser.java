@@ -11,7 +11,7 @@ public class KillstreakFilterParser extends FilterParser {
 
     public KillstreakFilterParser(final Element element) {
         super(element);
-        this.min = element.getAttributeValue("min") != null ? 
+        this.min = element.getAttributeValue("min") != null ?
                 NumUtils.parseInt(element.getAttributeValue("min")) : -1;
         this.max = element.getAttributeValue("max") != null ?
                 NumUtils.parseInt(element.getAttributeValue("max")) : -1;

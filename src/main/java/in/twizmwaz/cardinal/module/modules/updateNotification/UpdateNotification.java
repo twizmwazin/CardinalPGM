@@ -32,7 +32,8 @@ public class UpdateNotification implements Module {
                     IChatBaseComponent chat = ChatSerializer.a(GitUtils.getUpdateMessage(notification));
                     PacketPlayOutChat packet = new PacketPlayOutChat(chat);
                     ((CraftPlayer) event.getPlayer()).getHandle().playerConnection.sendPacket(packet);
-                } catch (IOException ignored) {}
+                } catch (IOException ignored) {
+                }
             }
         });
     }

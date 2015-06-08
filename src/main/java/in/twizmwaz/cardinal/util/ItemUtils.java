@@ -26,7 +26,7 @@ public class ItemUtils {
     }
 
     public static ItemStack createBook(Material material, int amount, String name, String author) {
-        ItemStack item = createItem(material, amount, (short)0, name);
+        ItemStack item = createItem(material, amount, (short) 0, name);
         BookMeta meta = (BookMeta) item.getItemMeta();
         meta.setAuthor(author);
         meta.setPages(Arrays.asList(""));
@@ -35,7 +35,7 @@ public class ItemUtils {
     }
 
     public static ItemStack createLeatherArmor(Material material, int amount, String name, List<String> lore, Color color) {
-        ItemStack item = createItem(material, amount, (short)0, name, lore);
+        ItemStack item = createItem(material, amount, (short) 0, name, lore);
         LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
         meta.setColor(color);
         item.setItemMeta(meta);

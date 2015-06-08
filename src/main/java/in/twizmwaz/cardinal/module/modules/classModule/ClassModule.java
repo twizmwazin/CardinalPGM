@@ -44,6 +44,26 @@ public class ClassModule implements Module {
         this.kit = kit;
     }
 
+    public static ClassModule getClassByPlayer(Player player) {
+        if (playerClass.containsKey(player.getUniqueId())) return playerClass.get(player.getUniqueId());
+        return null;
+    }
+
+    public static ClassModule getClassByName(String name) {
+        for (ClassModule classModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class)) {
+            if (classModule.getName().equalsIgnoreCase(name) || classModule.getName().toLowerCase().startsWith(name.toLowerCase()))
+                return classModule;
+        }
+        return null;
+    }
+
+    public static boolean defaultClassPresent() {
+        for (ClassModule classModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class)) {
+            if (classModule.isDefaultClass()) return true;
+        }
+        return false;
+    }
+
     @EventHandler
     public void onClassChange(ClassChangeEvent event) {
         if (event.getClassModule().equals(this)) {
@@ -63,7 +83,8 @@ public class ClassModule implements Module {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPgmSpawn(CardinalSpawnEvent event) {
-        if (!playerClass.containsKey(event.getPlayer().getUniqueId()) && (this.defaultClass || (!defaultClassPresent() && GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class).equals(this)))) playerClass.put(event.getPlayer().getUniqueId(), this);
+        if (!playerClass.containsKey(event.getPlayer().getUniqueId()) && (this.defaultClass || (!defaultClassPresent() && GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class).equals(this))))
+            playerClass.put(event.getPlayer().getUniqueId(), this);
         if (playerClass.containsKey(event.getPlayer().getUniqueId()) && playerClass.get(event.getPlayer().getUniqueId()).equals(this)) {
             if (kit != null) kit.apply(event.getPlayer());
         }
@@ -88,25 +109,6 @@ public class ClassModule implements Module {
 
     public boolean isDefaultClass() {
         return defaultClass;
-    }
-
-    public static ClassModule getClassByPlayer(Player player) {
-        if (playerClass.containsKey(player.getUniqueId())) return playerClass.get(player.getUniqueId());
-        return null;
-    }
-
-    public static ClassModule getClassByName(String name) {
-        for (ClassModule classModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class)) {
-            if (classModule.getName().equalsIgnoreCase(name) || classModule.getName().toLowerCase().startsWith(name.toLowerCase())) return classModule;
-        }
-        return null;
-    }
-
-    public static boolean defaultClassPresent() {
-        for (ClassModule classModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class)) {
-            if (classModule.isDefaultClass()) return true;
-        }
-        return false;
     }
 
     public String getDescription() {

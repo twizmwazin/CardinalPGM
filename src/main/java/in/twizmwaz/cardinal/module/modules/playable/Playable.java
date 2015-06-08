@@ -16,15 +16,15 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 public class Playable implements Module {
 
-    @Override
-    public void unload() {
-        HandlerList.unregisterAll(this);
-    }
-
     private final RegionModule region;
 
     public Playable(RegionModule region) {
         this.region = region;
+    }
+
+    @Override
+    public void unload() {
+        HandlerList.unregisterAll(this);
     }
 
     @EventHandler

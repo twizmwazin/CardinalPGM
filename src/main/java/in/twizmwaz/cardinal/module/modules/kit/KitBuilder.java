@@ -6,7 +6,11 @@ import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
-import in.twizmwaz.cardinal.util.*;
+import in.twizmwaz.cardinal.util.ArmorType;
+import in.twizmwaz.cardinal.util.MiscUtils;
+import in.twizmwaz.cardinal.util.NumUtils;
+import in.twizmwaz.cardinal.util.ParseUtils;
+import in.twizmwaz.cardinal.util.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -21,18 +25,6 @@ import java.util.List;
 
 @BuilderData(load = ModuleLoadTime.EARLIER)
 public class KitBuilder implements ModuleBuilder {
-
-    @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection<in.twizmwaz.cardinal.module.Module> results = new ModuleCollection<in.twizmwaz.cardinal.module.Module>();
-        for (Element kits : match.getDocument().getRootElement().getChildren("kits")) {
-            for (Element element : kits.getChildren("kit")) {
-                results.add(getKit(element));
-            }
-        }
-        results.add(new KitApplier());
-        return results;
-    }
 
     public static Kit getKit(Element element, Document document, boolean proceed) {
         if (element.getName().equalsIgnoreCase("kit") || proceed) {
@@ -101,7 +93,7 @@ public class KitBuilder implements ModuleBuilder {
                 for (Element page : book.getChild("pages").getChildren("page")) {
                     pages.add(ChatColor.translateAlternateColorCodes('`', page.getText()).replace("\u0009", ""));
                 }
-                books.add(new KitBook( title, author, pages, slot));
+                books.add(new KitBook(title, author, pages, slot));
             }
             String parent = element.getAttributeValue("parents");
             boolean force = element.getAttributeValue("force") != null && Boolean.parseBoolean(element.getAttributeValue("force"));
@@ -110,7 +102,7 @@ public class KitBuilder implements ModuleBuilder {
             boolean clear = element.getChildren("clear").size() > 0;
             boolean clearItems = element.getChildren("clear-items").size() > 0;
             int health = element.getChildText("health") == null ? -1 : NumUtils.parseInt(element.getChild("health").getText()) / 2;
-            float saturation = element.getChildText("saturation") == null ? 0: Float.parseFloat(element.getChildText("saturation"));
+            float saturation = element.getChildText("saturation") == null ? 0 : Float.parseFloat(element.getChildText("saturation"));
             int foodLevel = element.getChildText("foodlevel") == null ? -1 : NumUtils.parseInt(element.getChildText("foodlevel"));
             float walkSpeed = element.getChildText("walk-speed") == null ? 0.2F : Float.parseFloat(element.getChildText("walk-speed")) / 5;
             float knockback = element.getChildText("knockback-reduction") == null ? 0F : Float.parseFloat(element.getChildText("knockback-reduction"));
@@ -125,6 +117,18 @@ public class KitBuilder implements ModuleBuilder {
 
     public static Kit getKit(Element element) {
         return getKit(element, GameHandler.getGameHandler().getMatch().getDocument(), false);
+    }
+
+    @Override
+    public ModuleCollection load(Match match) {
+        ModuleCollection<in.twizmwaz.cardinal.module.Module> results = new ModuleCollection<in.twizmwaz.cardinal.module.Module>();
+        for (Element kits : match.getDocument().getRootElement().getChildren("kits")) {
+            for (Element element : kits.getChildren("kit")) {
+                results.add(getKit(element));
+            }
+        }
+        results.add(new KitApplier());
+        return results;
     }
 
 }

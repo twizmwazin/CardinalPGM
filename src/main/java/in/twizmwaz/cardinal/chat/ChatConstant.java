@@ -5,7 +5,7 @@ import org.bukkit.ChatColor;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
-public enum  ChatConstant {
+public enum ChatConstant {
 
     ERROR_NO_MESSAGES("error.noMessages"),
     ERROR_RESTART_DURING_MATCH("error.restartDuringMatch"),
@@ -85,7 +85,7 @@ public enum  ChatConstant {
     ERROR_GLOBAL_MUTE_ENABLED("error.globalMuteEnabled"),
     ERROR_NOT_ENOUGH_ARGS_BROADCAST("error.notEnoughArgsBroadcast"),
     ERROR_NOT_ENOUGH_ARGS_SAY("error.notEnoughArgsSay"),
-    
+
     GENERIC_MAP_SET("generic.mapSet"),
     GENERIC_MARKED_FOR_RELOADING("generic.markedForReloading"),
     GENERIC_ALL_MARKED_RELOADING("generic.allMarkedReloading"),
@@ -125,7 +125,7 @@ public enum  ChatConstant {
     GENERIC_AUTO_BALANCE("generic.autoBalance"),
     GENERIC_YOU_CHANGED_RATING("generic.youChangedRating"),
     GENERIC_TEAM_SIZE_CHANGED("generic.teamSizeChanged"),
-    
+
     MISC_ENEMY("misc.enemy"),
     MISC_FATE("misc.fate"),
     MISC_OTHERS("misc.others"),
@@ -134,7 +134,7 @@ public enum  ChatConstant {
     MISC_AND("misc.and"),
     MISC_BY("misc.by"),
     MISC_TEAM("misc.team"),
-    
+
     UI_MAPLOADED("userInterface.mapLoaded"),
     UI_MAP_OBJECTIVE("userInterface.mapObjective"),
     UI_MAP_AUTHOR("userInterface.mapAuthor"),
@@ -225,13 +225,13 @@ public enum  ChatConstant {
     UI_DEFAULT_CHANNEL_ADMIN("userInterface.defaultChannelAdmin"),
     UI_DEFAULT_CHANNEL_TEAM("userInterface.defaultChannelTeam"),
     UI_TIME_ELAPSED("userInterface.timeElapsed");
-    
+
     private final String path;
 
     ChatConstant(String path) {
         this.path = path;
     }
-    
+
     public String getMessage(String locale) {
         Document localized = Cardinal.getLocaleHandler().getLocaleDocument(locale.split("_")[0]);
         String message = null;
@@ -246,7 +246,7 @@ public enum  ChatConstant {
         }
         return message;
     }
-    
+
     public ChatMessage asMessage(ChatMessage... messages) {
         return new LocalizedChatMessage(this, messages);
     }
@@ -254,5 +254,5 @@ public enum  ChatConstant {
     public ChatMessage asMessage(ChatColor color, ChatMessage... messages) {
         return new UnlocalizedChatMessage(color + "{0}", asMessage(messages));
     }
-    
+
 }

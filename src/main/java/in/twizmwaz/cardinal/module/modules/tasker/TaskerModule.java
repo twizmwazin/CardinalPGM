@@ -10,13 +10,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 
 public class TaskerModule implements TaskedModule {
-    
+
     private final Match match;
-    
+
     protected TaskerModule(Match match) {
         this.match = match;
     }
-    
+
     @Override
     public void unload() {
         HandlerList.unregisterAll(this);
@@ -30,7 +30,7 @@ public class TaskerModule implements TaskedModule {
             }
         }
     }
-    
+
     @EventHandler
     public void onCycleComplete(CycleCompleteEvent event) {
         run();

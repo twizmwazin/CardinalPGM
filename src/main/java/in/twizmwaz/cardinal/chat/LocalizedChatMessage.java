@@ -3,7 +3,7 @@ package in.twizmwaz.cardinal.chat;
 import java.util.Locale;
 
 public class LocalizedChatMessage implements ChatMessage {
-    
+
     private final ChatConstant message;
     private ChatMessage[] messages = {};
     private String[] strings = {};

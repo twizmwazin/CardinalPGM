@@ -12,11 +12,10 @@ public enum AttributeType {
 
     HORSE_JUMP_STRENGTH("horse.jumpStrength", 0, 2);
 
+    public static UUID modifierUUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
     private String name;
     private double minValue;
     private double maxValue;
-
-    public static UUID modifierUUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
 
     AttributeType(String name, double minValue, double maxValue) {
         this.name = name;
@@ -25,7 +24,7 @@ public enum AttributeType {
     }
 
     public static AttributeType fromName(String name) {
-        for (AttributeType type: AttributeType.values()) {
+        for (AttributeType type : AttributeType.values()) {
             if (type.getName().equalsIgnoreCase(name)) {
                 return type;
             }

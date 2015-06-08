@@ -25,17 +25,17 @@ public class ProximityAlarm implements Module {
     private final FilterModule detect;
     private final FilterModule notify;
 
-    @Override
-    public void unload() {
-        HandlerList.unregisterAll(this);
-    }
-
     protected ProximityAlarm(final String message, final int flareRadius, final RegionModule region, final FilterModule detect, final FilterModule notify) {
         this.message = message;
         this.flareRadius = flareRadius;
         this.region = region;
         this.detect = detect;
         this.notify = notify;
+    }
+
+    @Override
+    public void unload() {
+        HandlerList.unregisterAll(this);
     }
 
     @EventHandler

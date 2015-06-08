@@ -27,17 +27,17 @@ public class Tnt implements Module {
     private final double power;
     private final int fuse;
 
-    @Override
-    public void unload() {
-        HandlerList.unregisterAll(this);
-    }
-
     protected Tnt(final boolean instantIgnite, final boolean blockDamage, final double yield, final double power, final int fuse) {
         this.instantIgnite = instantIgnite;
         this.blockDamage = blockDamage;
         this.yield = yield;
         this.power = power;
         this.fuse = fuse;
+    }
+
+    @Override
+    public void unload() {
+        HandlerList.unregisterAll(this);
     }
 
     @EventHandler

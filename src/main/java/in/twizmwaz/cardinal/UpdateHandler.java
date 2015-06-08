@@ -1,4 +1,3 @@
-
 package in.twizmwaz.cardinal;
 
 import in.twizmwaz.cardinal.chat.ChatConstant;
@@ -9,18 +8,22 @@ import org.bukkit.command.CommandSender;
 
 public class UpdateHandler {
 
+    private static UpdateHandler handler;
+
     static {
         handler = new UpdateHandler();
     }
 
-    private static UpdateHandler handler;
-
-    private boolean update;
     private final String localGitRevision;
+    private boolean update;
 
-    public UpdateHandler(){
+    public UpdateHandler() {
         handler = this;
         this.localGitRevision = GameHandler.getGameHandler().getPlugin().getDescription().getVersion().substring(GameHandler.getGameHandler().getPlugin().getDescription().getVersion().length() - 7, GameHandler.getGameHandler().getPlugin().getDescription().getVersion().length());
+    }
+
+    public static UpdateHandler getUpdateHandler() {
+        return handler;
     }
 
     /**
@@ -38,10 +41,6 @@ public class UpdateHandler {
         return new NotificationTask(sender);
     }
 
-    public static UpdateHandler getUpdateHandler() {
-        return handler;
-    }
-
     public class NotificationTask implements Runnable {
 
         private final CommandSender sender;
@@ -52,8 +51,10 @@ public class UpdateHandler {
 
         @Override
         public void run() {
-            if (UpdateHandler.getUpdateHandler().checkUpdates()) sender.sendMessage(ChatColor.GOLD + ChatConstant.UI_UPDATE_AVAILABLE.asMessage().getMessage(ChatUtils.getLocale(sender)));
-            else sender.sendMessage(ChatColor.GOLD + ChatConstant.UI_LATEST_VERSION.asMessage().getMessage(ChatUtils.getLocale(sender)));
+            if (UpdateHandler.getUpdateHandler().checkUpdates())
+                sender.sendMessage(ChatColor.GOLD + ChatConstant.UI_UPDATE_AVAILABLE.asMessage().getMessage(ChatUtils.getLocale(sender)));
+            else
+                sender.sendMessage(ChatColor.GOLD + ChatConstant.UI_LATEST_VERSION.asMessage().getMessage(ChatUtils.getLocale(sender)));
         }
     }
 

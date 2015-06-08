@@ -5,7 +5,9 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.ChildrenFilterParser;
 
-import static in.twizmwaz.cardinal.module.modules.filter.FilterState.*;
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ABSTAIN;
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ALLOW;
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.DENY;
 
 public class AnyFilter extends FilterModule {
 
@@ -15,7 +17,7 @@ public class AnyFilter extends FilterModule {
         super(name, null);
         this.children = children;
     }
-    
+
     public AnyFilter(final ChildrenFilterParser parser) {
         this(parser.getName(), parser.getChildren());
     }

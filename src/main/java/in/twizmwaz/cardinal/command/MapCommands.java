@@ -66,7 +66,7 @@ public class MapCommands {
             sender.sendMessage(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.GENERIC_MAP_NEXT, ChatColor.GOLD + next.getName() + ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_BY).getMessage(ChatUtils.getLocale(sender)) + " " + ChatColor.RED + next.getAuthors().get(0).getName()).getMessage(ChatUtils.getLocale(sender)));
         } else if (next.getAuthors().size() > 1) {
             String result = ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.GENERIC_MAP_NEXT, ChatColor.GOLD + next.getName() + ChatColor.DARK_PURPLE + " " + new LocalizedChatMessage(ChatConstant.MISC_BY).getMessage(ChatUtils.getLocale(sender)) + " ").getMessage(ChatUtils.getLocale(sender));
-            for (Contributor author: next.getAuthors()) {
+            for (Contributor author : next.getAuthors()) {
                 if (next.getAuthors().indexOf(author) < next.getAuthors().size() - 2) {
                     result = result + ChatColor.RED + author.getName() + ChatColor.DARK_PURPLE + ", ";
                 } else if (next.getAuthors().indexOf(author) == next.getAuthors().size() - 2) {

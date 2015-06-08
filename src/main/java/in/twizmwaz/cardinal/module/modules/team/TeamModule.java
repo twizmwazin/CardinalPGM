@@ -20,13 +20,13 @@ import java.util.ArrayList;
 public class TeamModule<P extends Player> extends ArrayList<Player> implements Module {
 
     private final Match match;
-    private String name;
     private final String id;
+    private final boolean observer;
+    private String name;
     private int max;
     private int maxOverfill;
     private int respawnLimit;
     private ChatColor color;
-    private final boolean observer;
     private boolean ready;
 
     protected TeamModule(Match match, String name, String id, int max, int maxOverfill, int respawnLimit, ChatColor color, boolean observer) {
@@ -69,11 +69,11 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
     public boolean add(Player player, boolean force) {
         return this.add(player, force, true);
     }
-    
+
     public boolean add(Player player) {
         return this.add(player, false);
     }
-    
+
     @EventHandler(priority = EventPriority.LOW)
     public void onTeamSwitch(PlayerChangeTeamEvent event) {
         if (!event.isCancelled()) {

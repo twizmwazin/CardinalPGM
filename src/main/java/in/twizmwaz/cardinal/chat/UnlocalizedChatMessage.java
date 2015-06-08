@@ -2,8 +2,8 @@ package in.twizmwaz.cardinal.chat;
 
 import java.util.Locale;
 
-public class UnlocalizedChatMessage implements ChatMessage  {
-    
+public class UnlocalizedChatMessage implements ChatMessage {
+
     private final String message;
     private ChatMessage[] messages = {};
     private String[] strings = {};

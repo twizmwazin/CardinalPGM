@@ -1,6 +1,10 @@
 package in.twizmwaz.cardinal.command;
 
-import com.sk89q.minecraft.util.commands.*;
+import com.sk89q.minecraft.util.commands.Command;
+import com.sk89q.minecraft.util.commands.CommandContext;
+import com.sk89q.minecraft.util.commands.CommandException;
+import com.sk89q.minecraft.util.commands.CommandPermissionsException;
+import com.sk89q.minecraft.util.commands.CommandUsageException;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
@@ -34,7 +38,7 @@ public class ModesCommand {
                     if ((count + 7) / 8 == page) {
                         sender.sendMessage(ChatColor.GOLD + (mode.hasRan() ? ChatColor.STRIKETHROUGH + "" : "") + count + ". " + ChatColor.LIGHT_PURPLE + (mode.hasRan() ? ChatColor.STRIKETHROUGH + "" : "") + mode.getType().name().replaceAll("_", " ") + " - " + ChatColor.AQUA + (mode.hasRan() ? ChatColor.STRIKETHROUGH + "" : "") + StringUtils.formatTime(mode.getTimeAfter()) + ChatColor.DARK_AQUA + (mode.hasRan() ? ChatColor.STRIKETHROUGH + "" : "") + (GameHandler.getGameHandler().getMatch().isRunning() ? " (" + StringUtils.formatTime((mode.getTimeAfter() - MatchTimer.getTimeInSeconds() < 0) ? 0 : mode.getTimeAfter() - MatchTimer.getTimeInSeconds()) + " left)" : ""));
                     }
-                    count ++;
+                    count++;
                 }
             } else if (cmd.argsLength() == 1) {
                 if (cmd.getString(0).equalsIgnoreCase("list")) {
@@ -45,7 +49,7 @@ public class ModesCommand {
                         if ((count + 7) / 8 == page) {
                             sender.sendMessage(ChatColor.GOLD + (mode.hasRan() ? ChatColor.STRIKETHROUGH + "" : "") + count + ". " + ChatColor.LIGHT_PURPLE + (mode.hasRan() ? ChatColor.STRIKETHROUGH + "" : "") + mode.getType().name().replaceAll("_", " ") + " - " + ChatColor.AQUA + (mode.hasRan() ? ChatColor.STRIKETHROUGH + "" : "") + StringUtils.formatTime(mode.getTimeAfter()) + ChatColor.DARK_AQUA + (mode.hasRan() ? ChatColor.STRIKETHROUGH + "" : "") + (GameHandler.getGameHandler().getMatch().isRunning() ? " (" + StringUtils.formatTime((mode.getTimeAfter() - MatchTimer.getTimeInSeconds() < 0) ? 0 : mode.getTimeAfter() - MatchTimer.getTimeInSeconds()) + " left)" : ""));
                         }
-                        count ++;
+                        count++;
                     }
                 } else if (cmd.getString(0).equalsIgnoreCase("next")) {
                     for (MonumentModes mode : sortedModes) {
@@ -69,7 +73,8 @@ public class ModesCommand {
                             }
                             count++;
                         }
-                    } else throw new CommandException("Invalid page number specified! " + ((modes.size() + 7) / 8) + " total pages.");
+                    } else
+                        throw new CommandException("Invalid page number specified! " + ((modes.size() + 7) / 8) + " total pages.");
                 }
             } else {
                 if (cmd.getString(0).equalsIgnoreCase("list")) {
@@ -83,7 +88,8 @@ public class ModesCommand {
                             }
                             count++;
                         }
-                    } else throw new CommandException("Invalid page number specified! " + ((modes.size() + 7) / 8) + " total pages.");
+                    } else
+                        throw new CommandException("Invalid page number specified! " + ((modes.size() + 7) / 8) + " total pages.");
                 } else if (cmd.getString(0).equalsIgnoreCase("push")) {
                     if (!sender.hasPermission("cardinal.modes.push")) throw new CommandPermissionsException();
                     int time;

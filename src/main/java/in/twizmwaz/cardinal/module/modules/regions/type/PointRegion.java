@@ -4,7 +4,6 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.PointParser;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
 
 public class PointRegion extends BlockRegion {
@@ -18,7 +17,7 @@ public class PointRegion extends BlockRegion {
     }
 
     public PointRegion(String name, double x, double y, double z) {
-        this (name, x, y, z, 0F, 0F);
+        this(name, x, y, z, 0F, 0F);
     }
 
     public PointRegion(String name, Vector vector, float yaw, float pitch) {

@@ -52,7 +52,7 @@ public class TeamPicker implements Module {
                 totalPlayers += team.size();
             }
         }
-        ItemStack autoJoin = ItemUtils.createItem(Material.CHAINMAIL_HELMET, 1, (short)0, ChatColor.GRAY + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_AUTO).getMessage(player.getLocale()), Arrays.asList((totalPlayers >= maxPlayers ? ChatColor.RED + "" : ChatColor.GREEN + "") + totalPlayers + ChatColor.GOLD + " / " + ChatColor.RED + "" + maxPlayers, ChatColor.AQUA + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_AUTO_LORE).getMessage(player.getLocale())));
+        ItemStack autoJoin = ItemUtils.createItem(Material.CHAINMAIL_HELMET, 1, (short) 0, ChatColor.GRAY + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_AUTO).getMessage(player.getLocale()), Arrays.asList((totalPlayers >= maxPlayers ? ChatColor.RED + "" : ChatColor.GREEN + "") + totalPlayers + ChatColor.GOLD + " / " + ChatColor.RED + "" + maxPlayers, ChatColor.AQUA + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_AUTO_LORE).getMessage(player.getLocale())));
         picker.setItem(item, autoJoin);
         item++;
         for (TeamModule team : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
@@ -64,7 +64,7 @@ public class TeamPicker implements Module {
         }
         item = size;
         for (ClassModule classModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class)) {
-            ItemStack classStack = ItemUtils.createItem(classModule.getIcon(), 1, (short)0, ChatColor.GREEN + classModule.getName(), Arrays.asList(ChatColor.GOLD + classModule.getLongDescription()));
+            ItemStack classStack = ItemUtils.createItem(classModule.getIcon(), 1, (short) 0, ChatColor.GREEN + classModule.getName(), Arrays.asList(ChatColor.GOLD + classModule.getLongDescription()));
             ItemMeta classMeta = classStack.getItemMeta();
             if (classModule.equals(ClassModule.getClassByPlayer(player))) {
                 classStack.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);

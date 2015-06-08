@@ -46,7 +46,7 @@ public class StartTimer implements TaskedModule, Cancellable {
                         int count = 0;
                         for (TeamModule team : TeamUtils.getTeams()) {
                             if (!team.isObserver() && team.size() > 0) {
-                                count ++;
+                                count++;
                             }
                         }
                         if (count <= 1 && !forced) {
