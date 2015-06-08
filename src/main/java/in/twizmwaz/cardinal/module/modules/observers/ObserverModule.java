@@ -105,7 +105,10 @@ public class ObserverModule implements Module {
             player.getInventory().setItem(5, shears);
         }
 
-        player.updateInventory();
+        try {
+            player.updateInventory();
+        } catch (NullPointerException ignored) {
+        }
     }
 
     @EventHandler
