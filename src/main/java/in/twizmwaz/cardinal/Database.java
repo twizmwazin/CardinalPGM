@@ -42,9 +42,13 @@ public final class Database {
         out.setFormat(Format.getPrettyFormat());
         try {
             if (file.createNewFile()) {
+                Cardinal.getInstance().getLogger().info("Database file not found, creating...");
                 out.output(document, new FileWriter(file));
                 return true;
-            } else return false;
+            } else {
+                out.output(document, new FileWriter(file));
+                return true;
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return false;
