@@ -27,6 +27,9 @@ import java.util.logging.Level;
 
 public class Cardinal extends JavaPlugin {
 
+    private final static String CRAFTBUKKIT_VERSION = "v1_8_R1";
+    private final static String MINECRAFT_VERSION = "1.8.0";
+
     private static Cardinal instance;
     private static GameHandler gameHandler;
     private static LocaleHandler localeHandler;
@@ -94,9 +97,23 @@ public class Cardinal extends JavaPlugin {
         cmdRegister.register(BroadcastCommands.class);
     }
 
+    private void checkCraftVersion() {
+        String craftVer = Bukkit.getServer().getClass().getPackage().getName();
+        getLogger().info("org.bukkit.craftbukkit." + CRAFTBUKKIT_VERSION);
+        getLogger().info(craftVer);
+        if (!("org.bukkit.craftbukkit." + CRAFTBUKKIT_VERSION).equals(craftVer)) {
+            getLogger().warning("########################################");
+            getLogger().warning("#####  YOUR VERSION OF SPORTBUKKIT #####");
+            getLogger().warning("#####  IS NOT SUPPORTED. PLEASE    #####");
+            getLogger().warning("#####  USE  SPORTBUKKIT " + MINECRAFT_VERSION + "      #####");
+            getLogger().warning("########################################");
+        }
+    }
+
     @Override
     public void onEnable() {
         instance = this;
+        checkCraftVersion();
         try {
             localeHandler = new LocaleHandler(this);
         } catch (IOException | JDOMException e) {
