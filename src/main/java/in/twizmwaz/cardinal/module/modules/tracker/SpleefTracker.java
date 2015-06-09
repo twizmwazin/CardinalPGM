@@ -38,6 +38,7 @@ public class SpleefTracker implements Module {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockBreak(BlockBreakEvent event) {
+        if (event.isCancelled()) return;
         for (Player player : Bukkit.getOnlinePlayers()) {
             Location location = event.getBlock().getLocation();
             location.setY(location.getY() + 1);
@@ -60,6 +61,7 @@ public class SpleefTracker implements Module {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEntityExplode(EntityExplodeEvent event) {
+        if (event.isCancelled()) return;
         for (Block block : event.blockList()) {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 Location location = block.getLocation();
