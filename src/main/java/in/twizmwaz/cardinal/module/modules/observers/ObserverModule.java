@@ -233,8 +233,10 @@ public class ObserverModule implements Module {
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || !match.isRunning()) {
             if (event.getRightClicked() instanceof Player) {
-                event.getPlayer().openInventory(getFakeInventory((Player) event.getRightClicked(), event.getPlayer().getLocale()));
-                setViewing(event.getPlayer().getUniqueId(), event.getRightClicked().getUniqueId());
+                if (!TeamUtils.getTeamByPlayer((Player)event.getRightClicked()).isObserver()) {
+                    event.getPlayer().openInventory(getFakeInventory((Player) event.getRightClicked(), event.getPlayer().getLocale()));
+                    setViewing(event.getPlayer().getUniqueId(), event.getRightClicked().getUniqueId());
+                }
             } else if (event.getRightClicked() instanceof ItemFrame) {
                 event.setCancelled(true);
             }
