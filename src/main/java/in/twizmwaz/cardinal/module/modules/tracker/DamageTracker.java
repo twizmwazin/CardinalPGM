@@ -35,6 +35,7 @@ public class DamageTracker implements Module {
         HandlerList.unregisterAll(this);
     }
 
+    @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.isCancelled()) return;
         if (event.getEntity() instanceof Player) {
