@@ -3,11 +3,9 @@ package in.twizmwaz.cardinal.module.modules.updateNotification;
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.util.GitUtils;
-import net.minecraft.server.v1_8_R1.ChatSerializer;
-import net.minecraft.server.v1_8_R1.IChatBaseComponent;
-import net.minecraft.server.v1_8_R1.PacketPlayOutChat;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -29,9 +27,8 @@ public class UpdateNotification implements Module {
             @Override
             public void run() {
                 try {
-                    IChatBaseComponent chat = ChatSerializer.a(GitUtils.getUpdateMessage(notification));
-                    PacketPlayOutChat packet = new PacketPlayOutChat(chat);
-                    ((CraftPlayer) event.getPlayer()).getHandle().playerConnection.sendPacket(packet);
+                    BaseComponent[] chat = ComponentSerializer.parse(GitUtils.getUpdateMessage(notification));
+                    event.getPlayer().sendMessage(chat);
                 } catch (IOException ignored) {
                 }
             }

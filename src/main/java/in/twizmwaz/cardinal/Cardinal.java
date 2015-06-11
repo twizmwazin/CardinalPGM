@@ -33,8 +33,8 @@ import java.util.logging.Level;
 
 public class Cardinal extends JavaPlugin {
 
-    private final static String CRAFTBUKKIT_VERSION = "v1_8_R1";
-    private final static String MINECRAFT_VERSION = "1.8.0";
+    private final static String CRAFTBUKKIT_VERSION = "v1_8_R3";
+    private final static String MINECRAFT_VERSION = "1.8.7";
 
     private static Cardinal instance;
     private static GameHandler gameHandler;

@@ -394,7 +394,7 @@ public class ScoreboardModule implements Module {
             while (used.contains(StringUtils.trimTo(raw, 0, 16))) {
                 raw = ChatColor.RESET + raw;
             }
-            team.add(StringUtils.trimTo(raw, 0, 16));
+            team.addEntry(StringUtils.trimTo(raw, 0, 16));
             team.setSuffix(StringUtils.trimTo(raw, 16, 32));
             setScore(this.objective, StringUtils.trimTo(raw, 0, 16), score);
             used.add(raw);
@@ -441,7 +441,7 @@ public class ScoreboardModule implements Module {
                 while (used.contains(name)) {
                     name = ChatColor.RESET + name;
                 }
-                team.add(name);
+                team.addEntry(name);
                 setScore(objective, name, score);
                 used.add(name);
             }
@@ -468,7 +468,7 @@ public class ScoreboardModule implements Module {
             while (used.contains(name)) {
                 name = teamModule.getColor() + name;
             }
-            team.add(name);
+            team.addEntry(name);
             setScore(objective, name, currentScore);
             used.add(name);
         }
@@ -487,7 +487,7 @@ public class ScoreboardModule implements Module {
             while (used.contains(name)) {
                 name = teamModule.getColor() + name;
             }
-            team.add(name);
+            team.addEntry(name);
             setScore(objective, name, score.getScore());
             used.add(name);
         }
@@ -504,7 +504,7 @@ public class ScoreboardModule implements Module {
             while (used.contains(name)) {
                 name = teamModule.getColor() + name;
             }
-            team.add(name);
+            team.addEntry(name);
             setScore(objective, name, teamModule.size());
             used.add(name);
         }

@@ -1,11 +1,11 @@
 package in.twizmwaz.cardinal.util;
 
-import net.minecraft.server.v1_8_R1.NBTTagCompound;
-import net.minecraft.server.v1_8_R1.NBTTagList;
+import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import net.minecraft.server.v1_8_R3.NBTTagList;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -33,7 +33,7 @@ public class ParseUtils {
         else itemStack = new ItemStack(Material.matchMaterial(element.getText()), amount);
         if (element.getAttributeValue("unbreakable") != null && Boolean.parseBoolean(element.getAttributeValue("unbreakable"))) {
             try {
-                net.minecraft.server.v1_8_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+                net.minecraft.server.v1_8_R3.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
                 NBTTagCompound tag = new NBTTagCompound();
                 tag.setBoolean("Unbreakable", true);
                 nmsStack.setTag(tag);
@@ -93,7 +93,7 @@ public class ParseUtils {
     }
 
     private static ItemStack setAttributes(ItemStack itemStack, String attributes) {
-        net.minecraft.server.v1_8_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+        net.minecraft.server.v1_8_R3.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
         if (nmsStack.getTag() == null) {
             nmsStack.setTag(new NBTTagCompound());
         }

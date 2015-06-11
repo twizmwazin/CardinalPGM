@@ -58,17 +58,17 @@ public class ScoreboardUtils {
         }
         if (string.length() <= max1) {
             team.setPrefix("");
-            team.add(insertColor + string);
+            team.addEntry(insertColor + string);
             team.setSuffix("");
             return insertColor + string;
         } else if (string.length() <= max2) {
             team.setPrefix(insertColor + string.substring(0, max1));
-            team.add(insertColor + string.substring(max1));
+            team.addEntry(insertColor + string.substring(max1));
             team.setSuffix("");
             return insertColor + string.substring(max1);
         } else if (string.length() <= max3) {
             team.setPrefix(insertColor + string.substring(0, max1));
-            team.add(insertColor + string.substring(max1, max2));
+            team.addEntry(insertColor + string.substring(max1, max2));
             team.setSuffix(string.substring(max2));
             return insertColor + string.substring(max1, max2);
         }

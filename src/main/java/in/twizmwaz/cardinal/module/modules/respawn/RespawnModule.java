@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.respawn;
 
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -27,6 +28,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerInitialSpawnEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -70,12 +72,15 @@ public class RespawnModule implements Module {
             if (spawnModule.getTeam() == teamModule) modules.add(spawnModule);
         }
         SpawnModule chosen = modules.getRandom();
-        CardinalSpawnEvent spawnEvent = new CardinalSpawnEvent(event.getPlayer(), chosen, TeamUtils.getTeamById("observers"));
+        event.setSpawnLocation(chosen.getLocation());
+        event.getPlayer().setMetadata("initSpawn", new FixedMetadataValue(Cardinal.getInstance(), chosen));
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        PlayerUtils.resetPlayer(event.getPlayer());
+        CardinalSpawnEvent spawnEvent = new CardinalSpawnEvent(event.getPlayer(), (SpawnModule) event.getPlayer().getMetadata("initSpawn").get(0).value(), TeamUtils.getTeamById("observers"));
         Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
-        if (!spawnEvent.isCancelled()) {
-            event.setSpawnLocation(chosen.getLocation());
-            PlayerUtils.resetPlayer(event.getPlayer());
-        }
     }
 
     @EventHandler

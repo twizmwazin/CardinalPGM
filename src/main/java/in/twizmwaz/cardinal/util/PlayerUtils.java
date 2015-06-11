@@ -18,7 +18,7 @@ public class PlayerUtils {
         for (PotionEffect effect : player.getActivePotionEffects()) {
             try {
                 player.removePotionEffect(effect.getType());
-            } catch (NullPointerException e) {
+            } catch (NullPointerException ignored) {
             }
         }
         player.setTotalExperience(0);
