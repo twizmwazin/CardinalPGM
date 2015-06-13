@@ -6,7 +6,7 @@ public class BlitzLives implements Callable {
 
     private final int lives;
 
-    protected  BlitzLives(final int lives){
+    protected BlitzLives(final int lives) {
         this.lives = lives;
     }
 

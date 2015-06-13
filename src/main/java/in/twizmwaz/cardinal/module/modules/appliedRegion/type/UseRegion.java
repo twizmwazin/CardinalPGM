@@ -11,11 +11,11 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class UseRegion extends AppliedRegion {
-    
+
     public UseRegion(RegionModule region, FilterModule filter, String message) {
         super(region, filter, message);
     }
-    
+
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getClickedBlock() == null || (event.getItem() != null && event.getItem().getType().isBlock())) return;

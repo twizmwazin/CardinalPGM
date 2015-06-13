@@ -5,23 +5,18 @@ import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.event.ScoreUpdateEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class ScoreModule implements Module {
 
     private final TeamModule team;
-    private int score;
     private final int pointsPerKill;
     private final int pointsPerDeath;
     private final int max;
+    private int score;
 
     public ScoreModule(final TeamModule team, final int pointsPerKill, final int pointsPerDeath, final int max) {
         this.team = team;
@@ -29,6 +24,45 @@ public class ScoreModule implements Module {
         this.pointsPerKill = pointsPerKill;
         this.pointsPerDeath = pointsPerDeath;
         this.max = max;
+    }
+
+    public static boolean matchHasScoring() {
+        return matchHasPointsPerKill() || matchHasPointsPerDeath() || matchHasMax();
+    }
+
+    public static boolean matchHasPointsPerKill() {
+        for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
+            if (score.getPointsPerKill() != 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean matchHasPointsPerDeath() {
+        for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
+            if (score.getPointsPerDeath() != 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean matchHasMax() {
+        for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
+            if (score.getMax() != 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static int max() {
+        int max = 0;
+        for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
+            max = score.getMax();
+        }
+        return max;
     }
 
     @Override
@@ -75,44 +109,5 @@ public class ScoreModule implements Module {
                 }
             }
         }
-    }
-
-    public static boolean matchHasScoring() {
-        return matchHasPointsPerKill() || matchHasPointsPerDeath() || matchHasMax();
-    }
-
-    public static boolean matchHasPointsPerKill() {
-        for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
-            if (score.getPointsPerKill() != 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean matchHasPointsPerDeath() {
-        for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
-            if (score.getPointsPerDeath() != 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean matchHasMax() {
-        for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
-            if (score.getMax() != 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static int max() {
-        int max = 0;
-        for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
-            max = score.getMax();
-        }
-        return max;
     }
 }

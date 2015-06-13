@@ -21,22 +21,23 @@ import org.bukkit.metadata.LazyMetadataValue;
 @SuppressWarnings({"unchecked"})
 public class Blitz implements Module {
 
-    @Override
-    public void unload() {
-        HandlerList.unregisterAll(this);
-    }
-
-
     private String title = null;
     private boolean broadcastLives;
     private int lives;
-
     protected Blitz(final String title, final boolean broadcastLives, final int lives) {
         this.title = title;
         this.broadcastLives = broadcastLives;
         this.lives = lives;
     }
 
+    public static boolean matchIsBlitz() {
+        return GameHandler.getGameHandler().getMatch().getModules().getModule(Blitz.class) != null;
+    }
+
+    @Override
+    public void unload() {
+        HandlerList.unregisterAll(this);
+    }
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
@@ -82,16 +83,12 @@ public class Blitz implements Module {
         }
     }
 
-    private int getLives(Player player){
+    private int getLives(Player player) {
         return player.getMetadata("lives").get(0).asInt();
     }
 
-    public String getTitle(){
+    public String getTitle() {
         return this.title;
-    }
-
-    public static boolean matchIsBlitz() {
-        return GameHandler.getGameHandler().getMatch().getModules().getModule(Blitz.class) != null;
     }
 
 

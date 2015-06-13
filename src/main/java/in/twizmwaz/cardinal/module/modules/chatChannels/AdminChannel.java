@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
 public class AdminChannel extends PrivateChannel {
-    
+
     public AdminChannel(PermissionModule permissionModule) {
         super(new Permission("cardinal.mod"), permissionModule);
     }

@@ -216,12 +216,12 @@
         <updateAvailable>¡Una nueva version de Cardinal está disponible!</updateAvailable>
         <version>Este servidor usa la versión {0} de Cardinal</version>
         <defaultChannelGlobal>El chat ha sido cambiado al global.</defaultChannelGlobal>
-         <defaultChannelAdmin>El chat ha sido cambiado al administrador.</defaultChannelAdmin>
-         <defaultChannelTeam>El chat ha sido cambiado al de tu equipo.</defaultChannelTeam>
+        <defaultChannelAdmin>El chat ha sido cambiado al administrador.</defaultChannelAdmin>
+        <defaultChannelTeam>El chat ha sido cambiado al de tu equipo.</defaultChannelTeam>
         <timeElapsed>Tiempo transcurrido: {0}</timeElapsed>
         <matchReportUpload>Subiendo el reporte de la partida...</matchReportUpload>
         <matchReportSuccess>Reporte de la partida subido correctamente! Lo puedes ver en {0}</matchReportSuccess>
-        <matchReportFaied>Un error ha ocurrido al subir el reporte de la partida</matchReportFaied>
+        <matchReportFailed>Un error ha ocurrido al subir el reporte de la partida</matchReportFailed>
         <globalMuteEnabled>Silenciado global activado</globalMuteEnabled>
         <globalMuteDisabled>Silenciado global desactivado</globalMuteDisabled>
     </userInterface>

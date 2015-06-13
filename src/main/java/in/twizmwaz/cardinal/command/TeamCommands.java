@@ -1,6 +1,10 @@
 package in.twizmwaz.cardinal.command;
 
-import com.sk89q.minecraft.util.commands.*;
+import com.sk89q.minecraft.util.commands.Command;
+import com.sk89q.minecraft.util.commands.CommandContext;
+import com.sk89q.minecraft.util.commands.CommandException;
+import com.sk89q.minecraft.util.commands.CommandPermissions;
+import com.sk89q.minecraft.util.commands.NestedCommand;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -20,17 +24,6 @@ import java.util.Random;
 
 public class TeamCommands {
 
-    public static class TeamParentCommand {
-        @Command(
-                aliases = { "team" },
-                desc = "Manage the teams in the match."
-        )
-        @NestedCommand({TeamCommands.class})
-        public static void team(final CommandContext args, CommandSender sender) throws CommandException {
-            
-        }
-    }
-
     @Command(aliases = {"force"}, desc = "Forces a player onto the team specified.", usage = "<player> <team>", min = 2)
     @CommandPermissions("cardinal.team.force")
     public static void force(final CommandContext cmd, CommandSender sender) throws CommandException {
@@ -41,7 +34,8 @@ public class TeamCommands {
                 if (!team.contains(Bukkit.getPlayer(cmd.getString(0)))) {
                     team.add(Bukkit.getPlayer(cmd.getString(0)), true, false);
                     sender.sendMessage(team.getColor() + Bukkit.getPlayer(cmd.getString(0)).getName() + ChatColor.GRAY + " forced to " + team.getCompleteName());
-                } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_ON_TEAM, TeamUtils.getTeamByPlayer(Bukkit.getPlayer(cmd.getString(0))).getColor() + Bukkit.getPlayer(cmd.getString(0)).getName() + ChatColor.RED, TeamUtils.getTeamByPlayer(Bukkit.getPlayer(cmd.getString(0))).getCompleteName()).getMessage(((Player) sender).getLocale()));
+                } else
+                    throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_ON_TEAM, TeamUtils.getTeamByPlayer(Bukkit.getPlayer(cmd.getString(0))).getColor() + Bukkit.getPlayer(cmd.getString(0)).getName() + ChatColor.RED, TeamUtils.getTeamByPlayer(Bukkit.getPlayer(cmd.getString(0))).getCompleteName()).getMessage(((Player) sender).getLocale()));
             } else {
                 throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAM_MATCH).getMessage(ChatUtils.getLocale(sender)));
             }
@@ -108,6 +102,17 @@ public class TeamCommands {
         }
         Player player = (Player) sender;
         player.sendMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}", new LocalizedChatMessage(ChatConstant.GENERIC_ON_TEAM, TeamUtils.getTeamByPlayer(player).getCompleteName())).getMessage(player.getLocale()));
+    }
+
+    public static class TeamParentCommand {
+        @Command(
+                aliases = {"team"},
+                desc = "Manage the teams in the match."
+        )
+        @NestedCommand({TeamCommands.class})
+        public static void team(final CommandContext args, CommandSender sender) throws CommandException {
+
+        }
     }
 
 }

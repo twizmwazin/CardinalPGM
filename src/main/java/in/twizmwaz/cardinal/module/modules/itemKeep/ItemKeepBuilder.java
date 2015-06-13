@@ -27,6 +27,9 @@ public class ItemKeepBuilder implements ModuleBuilder {
                 } else {
                     material = Material.matchMaterial(item.getText());
                 }
+                if (item.getAttributeValue("damage") != null) {
+                    damageValue = NumUtils.parseInt(item.getAttributeValue("damage"));
+                }
                 results.add(new ItemKeep(material, damageValue));
             }
         }

@@ -15,14 +15,14 @@ public class KillReward implements Module {
     private final ModuleCollection<Kit> kits;
     private final ModuleCollection<FilterModule> filters;
 
-    @Override
-    public void unload() {
-        HandlerList.unregisterAll(this);
-    }
-
     protected KillReward(final ModuleCollection<Kit> kits, final ModuleCollection<FilterModule> filters) {
         this.kits = kits;
         this.filters = filters;
+    }
+
+    @Override
+    public void unload() {
+        HandlerList.unregisterAll(this);
     }
 
     @EventHandler

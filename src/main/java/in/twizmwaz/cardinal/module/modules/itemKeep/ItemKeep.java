@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
-public class ItemKeep implements Module{
+public class ItemKeep implements Module {
 
     private final Material type;
     private final int damageValue;
@@ -33,12 +33,12 @@ public class ItemKeep implements Module{
     }
 
     @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent event){
+    public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         Inventory inventory = player.getInventory();
         HashMap<Integer, ItemStack> itemsToKeep = new HashMap<>();
         if (inventory.getContents() != null) {
-            for (int i = 0; i < inventory.getSize(); i ++) {
+            for (int i = 0; i < inventory.getSize(); i++) {
                 if (inventory.getItem(i) != null) {
                     ItemStack item = inventory.getItem(i);
                     if (item.getType().equals(type) && item.getDurability() == damageValue) {
@@ -51,7 +51,7 @@ public class ItemKeep implements Module{
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPgmSpawn(CardinalSpawnEvent event){
+    public void onPgmSpawn(CardinalSpawnEvent event) {
         Player player = event.getPlayer();
         Inventory inventory = player.getInventory();
         if (items.containsKey(player)) {

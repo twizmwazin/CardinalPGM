@@ -12,11 +12,11 @@ import java.util.List;
 public class CuboidParser extends RegionParser {
 
     private final Vector min, max;
-    
+
     public CuboidParser(Element element) {
         super(element.getAttributeValue("name"));
         List<String> values = new ArrayList<>();
-        values.addAll(Arrays.asList(element.getAttributeValue("min").contains(",") ? 
+        values.addAll(Arrays.asList(element.getAttributeValue("min").contains(",") ?
                 element.getAttributeValue("min").trim().split(",") : element.getAttributeValue("min").trim().split(" ")));
         values.addAll(Arrays.asList(element.getAttributeValue("max").trim().replaceAll(" ", ",").split(",")));
         for (String string : values) {

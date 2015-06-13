@@ -1,7 +1,13 @@
 package in.twizmwaz.cardinal;
 
 import com.sk89q.bukkit.util.CommandsManagerRegistration;
-import com.sk89q.minecraft.util.commands.*;
+import com.sk89q.minecraft.util.commands.ChatColor;
+import com.sk89q.minecraft.util.commands.CommandException;
+import com.sk89q.minecraft.util.commands.CommandPermissionsException;
+import com.sk89q.minecraft.util.commands.CommandUsageException;
+import com.sk89q.minecraft.util.commands.CommandsManager;
+import com.sk89q.minecraft.util.commands.MissingNestedCommandException;
+import com.sk89q.minecraft.util.commands.WrappedCommandException;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocaleHandler;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -27,11 +33,27 @@ import java.util.logging.Level;
 
 public class Cardinal extends JavaPlugin {
 
+    private final static String CRAFTBUKKIT_VERSION = "v1_8_R3";
+    private final static String MINECRAFT_VERSION = "1.8.7";
+
     private static Cardinal instance;
     private static GameHandler gameHandler;
     private static LocaleHandler localeHandler;
-    private CommandsManager<CommandSender> commands;
     private static Database database;
+    private CommandsManager<CommandSender> commands;
+    private File databaseFile;
+
+    public static LocaleHandler getLocaleHandler() {
+        return localeHandler;
+    }
+
+    public static Cardinal getInstance() {
+        return instance;
+    }
+
+    public static Database getCardinalDatabase() {
+        return database;
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -94,9 +116,21 @@ public class Cardinal extends JavaPlugin {
         cmdRegister.register(BroadcastCommands.class);
     }
 
+    private void checkCraftVersion() {
+        String craftVer = Bukkit.getServer().getClass().getPackage().getName();
+        if (!("org.bukkit.craftbukkit." + CRAFTBUKKIT_VERSION).equals(craftVer)) {
+            getLogger().warning("########################################");
+            getLogger().warning("#####  YOUR VERSION OF SPORTBUKKIT #####");
+            getLogger().warning("#####  IS NOT SUPPORTED. PLEASE    #####");
+            getLogger().warning("#####  USE  SPORTBUKKIT " + MINECRAFT_VERSION + "      #####");
+            getLogger().warning("########################################");
+        }
+    }
+
     @Override
     public void onEnable() {
         instance = this;
+        checkCraftVersion();
         try {
             localeHandler = new LocaleHandler(this);
         } catch (IOException | JDOMException e) {
@@ -104,7 +138,7 @@ public class Cardinal extends JavaPlugin {
             this.setEnabled(false);
             return;
         }
-        File databaseFile = new File(getDataFolder(), "database.xml");
+        databaseFile = new File(getDataFolder(), "database.xml");
         if (databaseFile.exists()) {
             try {
                 database = Database.loadFromFile(databaseFile);
@@ -140,10 +174,12 @@ public class Cardinal extends JavaPlugin {
                         names.add(alias.trim());
                     }
                 }
-                if (config.contains("setting." + settingName + ".description")) description = config.getString("setting." + settingName + ".description");
+                if (config.contains("setting." + settingName + ".description"))
+                    description = config.getString("setting." + settingName + ".description");
                 if (config.contains("setting." + settingName + ".values")) {
                     for (String valueName : config.getStringList("setting." + settingName + ".values")) {
-                        if (valueName.endsWith("[default]")) values.add(new SettingValue(valueName.trim().substring(0, valueName.length() - 9), true));
+                        if (valueName.endsWith("[default]"))
+                            values.add(new SettingValue(valueName.trim().substring(0, valueName.length() - 9), true));
                         else values.add(new SettingValue(valueName.trim(), false));
                     }
                 }
@@ -159,28 +195,17 @@ public class Cardinal extends JavaPlugin {
         }
         setupCommands();
     }
-    
+
     @Override
     public void onDisable() {
+        database.save(databaseFile);
     }
 
     public GameHandler getGameHandler() {
         return gameHandler;
     }
 
-    public static LocaleHandler getLocaleHandler() {
-        return localeHandler;
-    }
-
     public JavaPlugin getPlugin() {
         return this;
-    }
-
-    public static Cardinal getInstance() {
-        return instance;
-    }
-    
-    public static Database getCardinalDatabase() {
-        return database;
     }
 }

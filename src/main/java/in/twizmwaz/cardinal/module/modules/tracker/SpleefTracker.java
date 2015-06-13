@@ -27,17 +27,18 @@ public class SpleefTracker implements Module {
     protected SpleefTracker() {
     }
 
+    public static TrackerDamageEvent getLastSpleefEvent(Player player) {
+        return events.containsKey(player.getUniqueId()) ? events.get(player.getUniqueId()) : null;
+    }
+
     @Override
     public void unload() {
         HandlerList.unregisterAll(this);
     }
 
-    public static TrackerDamageEvent getLastSpleefEvent(Player player) {
-        return events.containsKey(player.getUniqueId()) ? events.get(player.getUniqueId()) : null;
-    }
-
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockBreak(BlockBreakEvent event) {
+        if (event.isCancelled()) return;
         for (Player player : Bukkit.getOnlinePlayers()) {
             Location location = event.getBlock().getLocation();
             location.setY(location.getY() + 1);
@@ -60,6 +61,7 @@ public class SpleefTracker implements Module {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEntityExplode(EntityExplodeEvent event) {
+        if (event.isCancelled()) return;
         for (Block block : event.blockList()) {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 Location location = block.getLocation();

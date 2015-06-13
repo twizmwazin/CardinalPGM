@@ -1,7 +1,11 @@
 package in.twizmwaz.cardinal.module.modules.scoreboard;
 
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.event.*;
+import in.twizmwaz.cardinal.event.CycleCompleteEvent;
+import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
+import in.twizmwaz.cardinal.event.ScoreUpdateEvent;
+import in.twizmwaz.cardinal.event.TeamNameChangeEvent;
+import in.twizmwaz.cardinal.event.TimeLimitChangeEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveProximityEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
@@ -68,6 +72,18 @@ public class ScoreboardModule implements Module {
         }
     }
 
+    public static void add(TeamModule team, Player player) {
+        for (ScoreboardModule scoreboard : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreboardModule.class)) {
+            scoreboard.getScoreboard().getTeam(team.getId()).addPlayer(player);
+        }
+    }
+
+    public static void remove(TeamModule team, Player player) {
+        for (ScoreboardModule scoreboard : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreboardModule.class)) {
+            scoreboard.getScoreboard().getTeam(team.getId()).removePlayer(player);
+        }
+    }
+
     public TeamModule getTeam() {
         return team;
     }
@@ -108,18 +124,6 @@ public class ScoreboardModule implements Module {
                     }
                 }
             }
-        }
-    }
-
-    public static void add(TeamModule team, Player player) {
-        for (ScoreboardModule scoreboard : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreboardModule.class)) {
-            scoreboard.getScoreboard().getTeam(team.getId()).addPlayer(player);
-        }
-    }
-
-    public static void remove(TeamModule team, Player player) {
-        for (ScoreboardModule scoreboard : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreboardModule.class)) {
-            scoreboard.getScoreboard().getTeam(team.getId()).removePlayer(player);
         }
     }
 
@@ -182,7 +186,7 @@ public class ScoreboardModule implements Module {
                         String blank = getNextBlankSlot(used);
                         setScore(objective, blank, currentScore);
                         used.add(blank);
-                        currentScore ++;
+                        currentScore++;
                     }
                 }
             }
@@ -199,7 +203,7 @@ public class ScoreboardModule implements Module {
                     String blank = getNextBlankSlot(used);
                     setScore(objective, blank, currentScore);
                     used.add(blank);
-                    currentScore ++;
+                    currentScore++;
                 }
             }
             if (ScoreModule.matchHasScoring()) {
@@ -222,7 +226,7 @@ public class ScoreboardModule implements Module {
                     String blank = getNextBlankSlot(used);
                     setScore(objective, blank, currentHillScore);
                     used.add(blank);
-                    currentHillScore --;
+                    currentHillScore--;
                 }
                 if (getSlots() < 16) {
                     for (HillObjective obj : ScoreboardUtils.getHills()) {
@@ -268,14 +272,14 @@ public class ScoreboardModule implements Module {
         }
         if (ScoreModule.matchHasScoring()) slots += (TeamUtils.getTeams().size() - 1);
         if (Blitz.matchIsBlitz()) slots += (TeamUtils.getTeams().size() - 1);
-        if (ScoreModule.matchHasMax()) slots ++;
+        if (ScoreModule.matchHasMax()) slots++;
         if (ScoreboardUtils.getHills().size() > 0) {
             if (slots != 0) {
-                slots ++;
+                slots++;
             }
             slots += ScoreboardUtils.getHills().size();
         }
-        slots --;
+        slots--;
         return slots;
     }
 
@@ -284,19 +288,19 @@ public class ScoreboardModule implements Module {
         for (TeamModule team : TeamUtils.getTeams()) {
             if (!team.isObserver() && TeamUtils.getShownObjectives(team).size() > 0) {
                 slots += 2;
-                if (TeamUtils.getShownObjectives(team).size() > 0) slots ++;
+                if (TeamUtils.getShownObjectives(team).size() > 0) slots++;
             }
         }
         if (ScoreModule.matchHasScoring()) slots += (TeamUtils.getTeams().size() - 1);
         if (Blitz.matchIsBlitz()) slots += (TeamUtils.getTeams().size() - 1);
-        if (ScoreModule.matchHasMax()) slots ++;
+        if (ScoreModule.matchHasMax()) slots++;
         if (ScoreboardUtils.getHills().size() > 0) {
             if (slots != 0) {
-                slots ++;
+                slots++;
             }
-            slots ++;
+            slots++;
         }
-        slots --;
+        slots--;
         return slots;
     }
 
@@ -309,15 +313,15 @@ public class ScoreboardModule implements Module {
                     slots += TeamUtils.getShownObjectives(team).size();
                 }
             }
-            slots --;
+            slots--;
         } else if (getCompactSlots() < 16) {
             for (TeamModule team : TeamUtils.getTeams()) {
                 if (!team.isObserver() && TeamUtils.getShownObjectives(team).size() > 0) {
                     slots += 2;
-                    if (TeamUtils.getShownObjectives(team).size() > 0) slots ++;
+                    if (TeamUtils.getShownObjectives(team).size() > 0) slots++;
                 }
             }
-            slots --;
+            slots--;
         }
         return slots;
     }
@@ -390,7 +394,7 @@ public class ScoreboardModule implements Module {
             while (used.contains(StringUtils.trimTo(raw, 0, 16))) {
                 raw = ChatColor.RESET + raw;
             }
-            team.add(StringUtils.trimTo(raw, 0, 16));
+            team.addEntry(StringUtils.trimTo(raw, 0, 16));
             team.setSuffix(StringUtils.trimTo(raw, 16, 32));
             setScore(this.objective, StringUtils.trimTo(raw, 0, 16), score);
             used.add(raw);
@@ -402,7 +406,7 @@ public class ScoreboardModule implements Module {
                 currentHillScore++;
             }
         } else {
-            currentScore ++;
+            currentScore++;
         }
     }
 
@@ -437,7 +441,7 @@ public class ScoreboardModule implements Module {
                 while (used.contains(name)) {
                     name = ChatColor.RESET + name;
                 }
-                team.add(name);
+                team.addEntry(name);
                 setScore(objective, name, score);
                 used.add(name);
             }
@@ -448,7 +452,7 @@ public class ScoreboardModule implements Module {
                     currentHillScore++;
                 }
             } else {
-                currentScore ++;
+                currentScore++;
             }
         }
     }
@@ -464,11 +468,11 @@ public class ScoreboardModule implements Module {
             while (used.contains(name)) {
                 name = teamModule.getColor() + name;
             }
-            team.add(name);
+            team.addEntry(name);
             setScore(objective, name, currentScore);
             used.add(name);
         }
-        currentScore ++;
+        currentScore++;
     }
 
     public void renderTeamScore(ScoreModule score) {
@@ -483,7 +487,7 @@ public class ScoreboardModule implements Module {
             while (used.contains(name)) {
                 name = teamModule.getColor() + name;
             }
-            team.add(name);
+            team.addEntry(name);
             setScore(objective, name, score.getScore());
             used.add(name);
         }
@@ -500,7 +504,7 @@ public class ScoreboardModule implements Module {
             while (used.contains(name)) {
                 name = teamModule.getColor() + name;
             }
-            team.add(name);
+            team.addEntry(name);
             setScore(objective, name, teamModule.size());
             used.add(name);
         }

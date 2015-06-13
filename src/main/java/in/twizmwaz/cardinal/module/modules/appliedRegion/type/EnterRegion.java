@@ -11,11 +11,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 public class EnterRegion extends AppliedRegion {
-    
+
     public EnterRegion(RegionModule region, FilterModule filter, String message) {
         super(region, filter, message);
     }
-    
+
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         if (region.contains(event.getTo().toVector()) && !region.contains(event.getFrom().toVector()) && filter.evaluate(event.getPlayer(), event).equals(FilterState.DENY) && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() && GameHandler.getGameHandler().getMatch().isRunning()) {

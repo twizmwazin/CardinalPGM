@@ -1,6 +1,5 @@
 package in.twizmwaz.cardinal.module.modules.chatChannels;
 
-import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.ChatMessage;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
@@ -12,9 +11,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.permissions.Permission;
 
 public class TeamChannel extends PrivateChannel {
-    
+
     private final TeamModule team;
-    
+
     public TeamChannel(TeamModule team, PermissionModule permissionModule) {
         super(new Permission("cardinal." + team.getId()), permissionModule);
         this.team = team;
@@ -30,7 +29,8 @@ public class TeamChannel extends PrivateChannel {
     @Override
     public void sendLocalizedMessage(ChatMessage message) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.hasPermission(permission)) player.sendMessage(team.getColor() + "[" + team.getName() + "] " + message.getMessage(player.getLocale()));
+            if (player.hasPermission(permission))
+                player.sendMessage(team.getColor() + "[" + team.getName() + "] " + message.getMessage(player.getLocale()));
         }
     }
 
@@ -38,7 +38,7 @@ public class TeamChannel extends PrivateChannel {
     public void unload() {
         resetMembers();
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
         if (team.equals(event.getNewTeam())) addMember(event.getPlayer());

@@ -11,7 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 public class LeaveRegion extends AppliedRegion {
-    
+
     public LeaveRegion(RegionModule region, FilterModule filter, String message) {
         super(region, filter, message);
     }

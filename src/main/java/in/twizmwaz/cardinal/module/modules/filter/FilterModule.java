@@ -3,7 +3,7 @@ package in.twizmwaz.cardinal.module.modules.filter;
 import in.twizmwaz.cardinal.module.Module;
 
 public abstract class FilterModule implements Module {
-    
+
     private final String name;
     private FilterModule parent;
 

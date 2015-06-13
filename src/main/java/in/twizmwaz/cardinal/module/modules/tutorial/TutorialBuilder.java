@@ -20,8 +20,8 @@ public class TutorialBuilder implements ModuleBuilder {
         Stage suffix = null;
 
         List<Stage> stages = new ArrayList<>();
-        for (Element tutorial: match.getDocument().getRootElement().getChildren("tutorial")) {
-            for (Element stage: tutorial.getChildren("stage")) {
+        for (Element tutorial : match.getDocument().getRootElement().getChildren("tutorial")) {
+            for (Element stage : tutorial.getChildren("stage")) {
                 stages.add(parseStage(stage));
             }
 
@@ -43,7 +43,7 @@ public class TutorialBuilder implements ModuleBuilder {
         String title = ChatColor.translateAlternateColorCodes('`', stage.getAttributeValue("title"));
         List<String> lines = new ArrayList<>();
         RegionModule region = null;
-        for (Element line: stage.getChild("message").getChildren("line")) {
+        for (Element line : stage.getChild("message").getChildren("line")) {
             lines.add(ChatColor.translateAlternateColorCodes('`', line.getValue()));
         }
         Element teleport = stage.getChild("teleport");

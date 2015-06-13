@@ -37,14 +37,15 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 public class CoreObjective implements GameObjective {
-
-    private static final String LAVA_METADATA = "cardinal.core.lava";
 
     private final TeamModule team;
     private final String name;
@@ -52,7 +53,6 @@ public class CoreObjective implements GameObjective {
     private final RegionModule region;
     private final int leak;
     private final boolean show;
-    private final int lavaMinLevel;
     private boolean changesModes;
 
     private double proximity;
@@ -93,17 +93,25 @@ public class CoreObjective implements GameObjective {
             }
             if (block.getType().equals(Material.STATIONARY_LAVA) || block.getType().equals(Material.LAVA)) {
                 lava.add(block);
-                block.setMetadata(LAVA_METADATA, new FixedMetadataValue(Cardinal.getInstance(), id));
-            }
-        }
-        this.lavaMinLevel = 256;
-        for (Block block : lava) {
-            if (block.getY() < lavaMinLevel) {
-                lavaMinLevel = block.getY();
             }
         }
 
         this.scoreboardHandler = new GameObjectiveScoreboardHandler(this);
+    }
+
+    public static CoreObjective getClosestCore(double x, double y, double z) {
+        CoreObjective core = null;
+        double closestDistance = Double.POSITIVE_INFINITY;
+        for (Module module : GameHandler.getGameHandler().getMatch().getModules()) {
+            if (module instanceof CoreObjective) {
+                BlockRegion center = ((CoreObjective) module).getRegion().getCenterBlock();
+                if (new Vector(x, y, z).distance(new Vector(center.getX(), center.getY(), center.getZ())) < closestDistance) {
+                    core = (CoreObjective) module;
+                    closestDistance = new Vector(x, y, z).distance(new Vector(center.getX(), center.getY(), center.getZ()));
+                }
+            }
+        }
+        return core;
     }
 
     @Override
@@ -182,7 +190,8 @@ public class CoreObjective implements GameObjective {
                             touchMessage = true;
                         }
                     }
-                    if (!playersCompleted.contains(event.getPlayer().getUniqueId())) playersCompleted.add(event.getPlayer().getUniqueId());
+                    if (!playersCompleted.contains(event.getPlayer().getUniqueId()))
+                        playersCompleted.add(event.getPlayer().getUniqueId());
                     boolean oldState = this.touched;
                     this.touched = true;
                     ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), !oldState, touchMessage);
@@ -190,14 +199,16 @@ public class CoreObjective implements GameObjective {
                     event.setCancelled(false);
                 } else {
                     event.setCancelled(true);
-                    if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_OWN_CORE));
+                    if (this.show)
+                        ChatUtils.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_OWN_CORE));
                     return;
                 }
             }
             if (core.contains(event.getBlock())) {
                 if (TeamUtils.getTeamByPlayer(event.getPlayer()) == team) {
                     event.setCancelled(true);
-                    if (this.show) ChatUtils.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_OWN_CORE));
+                    if (this.show)
+                        ChatUtils.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_OWN_CORE));
                 }
             }
         }
@@ -237,7 +248,8 @@ public class CoreObjective implements GameObjective {
                                     touchMessage = true;
                                 }
                             }
-                            if (!playersCompleted.contains(Bukkit.getPlayer(player).getUniqueId())) playersCompleted.add(Bukkit.getPlayer(player).getUniqueId());
+                            if (!playersCompleted.contains(Bukkit.getPlayer(player).getUniqueId()))
+                                playersCompleted.add(Bukkit.getPlayer(player).getUniqueId());
                             this.touched = true;
                             blownUp = true;
                             eventPlayer = Bukkit.getPlayer(player);
@@ -266,24 +278,21 @@ public class CoreObjective implements GameObjective {
         if (!event.isCancelled()) {
             Block to = event.getToBlock();
             Block from = event.getBlock();
-            if (lava.contains(from) || from.hasMetadata(LAVA_METADATA)) {
-                for (MetadataValue metadata : from.getMetadata(LAVA_METADATA)) {
-                    if (metadata.getOwningPlugin().equals(Cardinal.getInstance()) && metadata.value().equals(id)) {
-                        to.setMetadata(LAVA_METADATA, new FixedMetadataValue(Cardinal.getInstance(), id));
-                        break;
+            if (CoreObjective.getClosestCore(to.getX(), to.getY(), to.getZ()).equals(this)) {
+                if ((from.getType().equals(Material.LAVA) || from.getType().equals(Material.STATIONARY_LAVA)) && to.getType().equals(Material.AIR)) {
+                    double minY = 256;
+                    for (Block block : getBlocks()) {
+                        if (block.getY() < minY)
+                            minY = block.getY();
                     }
-                }
-            }
-            if ((to.getMaterial().equals(Material.LAVA) || to.getMaterial().equals(Material.STATIONARY_LAVA)) && to.hasMetadata(LAVA_METADATA) && !this.complete && lavaMinLevel - to.getY() >= leak) {
-                for (MetadataValue data : to.getMetadata(LAVA_METADATA)) {
-                    if (data.getOwningPlugin().equals(Cardinal.getInstance()) && data.value().equals(id)) {
+                    if (minY - to.getY() >= leak && !this.complete) {
                         this.complete = true;
                         event.setCancelled(false);
-                        if (this.show) ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_LEAKED, team.getCompleteName() + ChatColor.RED, ChatColor.DARK_AQUA + name + ChatColor.RED)));
+                        if (this.show)
+                            ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_LEAKED, team.getCompleteName() + ChatColor.RED, ChatColor.DARK_AQUA + name + ChatColor.RED)));
                         FireworkUtil.spawnFirework(event.getBlock().getLocation(), event.getBlock().getWorld(), MiscUtils.convertChatColorToColor(team.getColor()));
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, null);
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
-                        break;
                     }
                 }
             }
@@ -317,21 +326,6 @@ public class CoreObjective implements GameObjective {
             }
         }
         return blocks;
-    }
-
-    public static CoreObjective getClosestCore(double x, double y, double z) {
-        CoreObjective core = null;
-        double closestDistance = Double.POSITIVE_INFINITY;
-        for (Module module : GameHandler.getGameHandler().getMatch().getModules()) {
-            if (module instanceof CoreObjective) {
-                BlockRegion center = ((CoreObjective) module).getRegion().getCenterBlock();
-                if (new Vector(x, y, z).distance(new Vector(center.getX(), center.getY(), center.getZ())) < closestDistance) {
-                    core = (CoreObjective) module;
-                    closestDistance = new Vector(x, y, z).distance(new Vector(center.getX(), center.getY(), center.getZ()));
-                }
-            }
-        }
-        return core;
     }
 
     public boolean showProximity() {

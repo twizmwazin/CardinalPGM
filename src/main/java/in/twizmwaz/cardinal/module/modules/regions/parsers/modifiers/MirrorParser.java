@@ -9,8 +9,8 @@ import org.jdom2.Element;
 
 public class MirrorParser extends RegionParser {
 
-    private RegionModule base;
     private final Vector origin, normal;
+    private RegionModule base;
 
     public MirrorParser(Element element) {
         super(element.getAttributeValue("name"));
@@ -18,7 +18,8 @@ public class MirrorParser extends RegionParser {
             this.base = RegionModuleBuilder.getRegion(element.getChildren().get(0));
         } catch (IndexOutOfBoundsException e) {
             for (RegionModule regionModule : GameHandler.getGameHandler().getMatch().getModules().getModules(RegionModule.class)) {
-                if (regionModule.getName() != null && regionModule.getName().equalsIgnoreCase(element.getAttributeValue("region"))) this.base = regionModule;
+                if (regionModule.getName() != null && regionModule.getName().equalsIgnoreCase(element.getAttributeValue("region")))
+                    this.base = regionModule;
             }
         }
         if (element.getAttributeValue("origin") != null) {
@@ -31,7 +32,7 @@ public class MirrorParser extends RegionParser {
         String[] normal = element.getAttributeValue("normal").trim().replaceAll(" ", ",").split(",");
         this.normal = new Vector(Double.parseDouble(normal[0]), Double.parseDouble(normal[1]), Double.parseDouble(normal[2]));
     }
-    
+
     public RegionModule getBase() {
         return base;
     }

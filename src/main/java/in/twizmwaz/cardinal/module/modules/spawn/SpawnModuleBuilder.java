@@ -24,7 +24,7 @@ import java.util.List;
 
 @BuilderData(load = ModuleLoadTime.EARLY)
 public class SpawnModuleBuilder implements ModuleBuilder {
-    
+
     @Override
     public ModuleCollection load(Match match) {
         ModuleCollection<SpawnModule> results = new ModuleCollection<SpawnModule>();
@@ -43,11 +43,11 @@ public class SpawnModuleBuilder implements ModuleBuilder {
                         location.setYaw(Float.parseFloat(region.getParentElement().getAttributeValue("yaw")));
                     if (region.getAttributeValue("yaw") != null)
                         location.setYaw(Float.parseFloat(region.getAttributeValue("yaw")));
-                    if (region.getParentElement().getParentElement().getParentElement().getAttributeValue("angle") != null) 
+                    if (region.getParentElement().getParentElement().getParentElement().getAttributeValue("angle") != null)
                         location.setDirection(parseAngle(region.getParentElement().getParentElement().getParentElement().getAttributeValue("angle")).subtract(current.getCenterBlock().getVector()));
                     if (region.getParentElement().getParentElement().getAttributeValue("angle") != null)
                         location.setDirection(parseAngle(region.getParentElement().getParentElement().getAttributeValue("angle")).subtract(current.getCenterBlock().getVector()));
-                    if (region.getParentElement().getAttributeValue("angle") != null) 
+                    if (region.getParentElement().getAttributeValue("angle") != null)
                         location.setDirection(parseAngle(region.getParentElement().getAttributeValue("angle")).subtract(current.getCenterBlock().getVector()));
                     regions.add(new ImmutablePair<>(current, location.getDirection()));
                 }
@@ -65,19 +65,20 @@ public class SpawnModuleBuilder implements ModuleBuilder {
             for (Element spawn : spawns.getChildren("default")) {
                 TeamModule team = TeamUtils.getTeamById("observers");
                 List<Pair<RegionModule, Vector>> regions = new ArrayList<>();
-                if (spawn.getChildren().size() > 0) 
+                if (spawn.getChildren().size() > 0)
                     for (Element region : spawn.getChildren()) {
-                    Location location = new Location(GameHandler.getGameHandler().getMatchWorld(), 0, 0, 0);
-                    if (region.getParentElement().getParentElement().getParentElement().getAttributeValue("yaw") != null)
-                        location.setYaw(Float.parseFloat(region.getParentElement().getParentElement().getParentElement().getAttributeValue("yaw")));
-                    if (region.getParentElement().getParentElement().getAttributeValue("yaw") != null)
-                        location.setYaw(Float.parseFloat(region.getParentElement().getParentElement().getAttributeValue("yaw")));
-                    if (region.getParentElement().getAttributeValue("yaw") != null)
-                        location.setYaw(Float.parseFloat(region.getParentElement().getAttributeValue("yaw")));
-                    if (region.getAttributeValue("yaw") != null)
-                        location.setYaw(Float.parseFloat(region.getAttributeValue("yaw")));
-                    regions.add(new ImmutablePair<>(RegionModuleBuilder.getRegion(region), location.getDirection()));
-                } else {
+                        Location location = new Location(GameHandler.getGameHandler().getMatchWorld(), 0, 0, 0);
+                        if (region.getParentElement().getParentElement().getParentElement().getAttributeValue("yaw") != null)
+                            location.setYaw(Float.parseFloat(region.getParentElement().getParentElement().getParentElement().getAttributeValue("yaw")));
+                        if (region.getParentElement().getParentElement().getAttributeValue("yaw") != null)
+                            location.setYaw(Float.parseFloat(region.getParentElement().getParentElement().getAttributeValue("yaw")));
+                        if (region.getParentElement().getAttributeValue("yaw") != null)
+                            location.setYaw(Float.parseFloat(region.getParentElement().getAttributeValue("yaw")));
+                        if (region.getAttributeValue("yaw") != null)
+                            location.setYaw(Float.parseFloat(region.getAttributeValue("yaw")));
+                        regions.add(new ImmutablePair<>(RegionModuleBuilder.getRegion(region), location.getDirection()));
+                    }
+                else {
                     PointRegion point = new PointRegion(new PointParser(spawn));
                     regions.add(new ImmutablePair<RegionModule, Vector>(point, point.getLocation().getDirection()));
                 }
@@ -95,9 +96,12 @@ public class SpawnModuleBuilder implements ModuleBuilder {
             for (Element element : spawns.getChildren("spawns")) {
                 for (Element spawn : element.getChildren("spawn")) {
                     TeamModule team = null;
-                    if (spawns.getAttributeValue("team") != null) team = TeamUtils.getTeamById(spawns.getAttributeValue("team"));
-                    if (element.getAttributeValue("team") != null) team = TeamUtils.getTeamById(element.getAttributeValue("team"));
-                    if (spawn.getAttributeValue("team") != null) team = TeamUtils.getTeamById(spawn.getAttributeValue("team"));
+                    if (spawns.getAttributeValue("team") != null)
+                        team = TeamUtils.getTeamById(spawns.getAttributeValue("team"));
+                    if (element.getAttributeValue("team") != null)
+                        team = TeamUtils.getTeamById(element.getAttributeValue("team"));
+                    if (spawn.getAttributeValue("team") != null)
+                        team = TeamUtils.getTeamById(spawn.getAttributeValue("team"));
                     List<Pair<RegionModule, Vector>> regions = new ArrayList<>();
                     for (Element region : spawn.getChildren()) {
                         RegionModule current = RegionModuleBuilder.getRegion(region);
@@ -135,9 +139,9 @@ public class SpawnModuleBuilder implements ModuleBuilder {
         }
         return results;
     }
-    
+
     private Vector parseAngle(String string) {
         String[] loc = string.split(",");
-        return new Vector(Double.parseDouble(loc[0].trim()), Double.parseDouble(loc[1].trim()),Double.parseDouble(loc[2].trim()));
+        return new Vector(Double.parseDouble(loc[0].trim()), Double.parseDouble(loc[1].trim()), Double.parseDouble(loc[2].trim()));
     }
 }

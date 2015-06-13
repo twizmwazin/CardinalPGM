@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.killReward;
 
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
@@ -17,11 +18,7 @@ public class KillRewardBuilder implements ModuleBuilder {
         ModuleCollection results = new ModuleCollection();
         for (Element element : match.getDocument().getRootElement().getChildren("killreward")) {
             ModuleCollection<Kit> kits = new ModuleCollection<>();
-            for (Element kitElement : element.getChildren()) {
-                if (!kitElement.getName().equalsIgnoreCase("filter")) {
-                    kits.add(KitBuilder.getKit(kitElement));
-                }
-            }
+            kits.add(KitBuilder.getKit(element, GameHandler.getGameHandler().getMatch().getDocument(), true));
             ModuleCollection<FilterModule> filters = new ModuleCollection<>();
             for (Element filter : element.getChildren("filter")) {
                 filters.add(FilterModuleBuilder.getFilter(filter.getChildren().get(0)));

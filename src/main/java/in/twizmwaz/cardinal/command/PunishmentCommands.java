@@ -72,10 +72,11 @@ public class PunishmentCommands {
             onlineBanned.kickPlayer(ChatColor.RED + "Permanently Banned" + ChatColor.GOLD + "  \u00BB  " + ChatColor.AQUA + reason);
             Bukkit.broadcastMessage((sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " \u00BB Permanent Ban \u00BB " + TeamUtils.getTeamColorByPlayer(banned) + onlineBanned.getDisplayName() + ChatColor.GOLD + " \u00BB " + reason);
             Bukkit.getBanList(BanList.Type.NAME).addBan(cmd.getString(0), ChatColor.RED + "Permanently Banned" + ChatColor.GOLD + "  \u00BB  " + reason, null, sender.getName());
-        } else if (!Bukkit.getBanList(BanList.Type.NAME).isBanned(banned.getName())){
+        } else if (!Bukkit.getBanList(BanList.Type.NAME).isBanned(banned.getName())) {
             Bukkit.broadcastMessage((sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " \u00BB Permanent Ban \u00BB " + TeamUtils.getTeamColorByPlayer(banned) + banned.getName() + ChatColor.GOLD + " \u00BB " + reason);
             Bukkit.getBanList(BanList.Type.NAME).addBan(cmd.getString(0), ChatColor.RED + "Permanently Banned" + ChatColor.GOLD + "  \u00BB  " + reason, null, sender.getName());
-        } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_ALREADY_BANNED).getMessage(ChatUtils.getLocale(sender)));
+        } else
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_ALREADY_BANNED).getMessage(ChatUtils.getLocale(sender)));
 
     }
 
@@ -89,9 +90,12 @@ public class PunishmentCommands {
                     sender.sendMessage(ChatColor.RED + "You muted " + TeamUtils.getTeamColorByPlayer(player) + player.getDisplayName());
                     player.sendMessage(ChatColor.RED + "You were muted by " + (sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console"));
                     GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).mute(player);
-                } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_ALREADY_MUTED).getMessage(ChatUtils.getLocale(sender)));
-            } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_AFFECTED).getMessage(ChatUtils.getLocale(sender)));
-        } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(ChatUtils.getLocale(sender)));
+                } else
+                    throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_ALREADY_MUTED).getMessage(ChatUtils.getLocale(sender)));
+            } else
+                throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_AFFECTED).getMessage(ChatUtils.getLocale(sender)));
+        } else
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(ChatUtils.getLocale(sender)));
     }
 
     @Command(aliases = {"unmute"}, usage = "<player>", desc = "Allows a player to talk after being muted.", min = 1)
@@ -104,9 +108,12 @@ public class PunishmentCommands {
                     sender.sendMessage(ChatColor.GREEN + "You unmuted " + TeamUtils.getTeamColorByPlayer(player) + player.getDisplayName());
                     player.sendMessage(ChatColor.GREEN + "You were unmuted by " + (sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console"));
                     GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).unmute(player);
-                } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_MUTED).getMessage(ChatUtils.getLocale(sender)));
-            } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_AFFECTED).getMessage(ChatUtils.getLocale(sender)));
-        } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_FOUND).getMessage(ChatUtils.getLocale(sender)));
+                } else
+                    throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_MUTED).getMessage(ChatUtils.getLocale(sender)));
+            } else
+                throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_AFFECTED).getMessage(ChatUtils.getLocale(sender)));
+        } else
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_FOUND).getMessage(ChatUtils.getLocale(sender)));
     }
 
     @Command(aliases = {"gmute"}, desc = "Enable/disable global mute.")

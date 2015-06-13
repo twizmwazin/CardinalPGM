@@ -16,7 +16,7 @@ public class StringUtils {
         String currentUnit = "";
         String current = "";
         boolean negative = false;
-        for (int i = 0; i < input.length(); i ++) {
+        for (int i = 0; i < input.length(); i++) {
             char c = input.charAt(i);
             if (Character.isDigit(c) && !currentUnit.equals("")) {
                 time += convert(NumUtils.parseInt(current) * (negative ? -1 : 1), currentUnit);
@@ -37,12 +37,18 @@ public class StringUtils {
 
     private static int convert(int value, String unit) {
         switch (unit) {
-            case "y": return value * 365 * 60 * 60 * 24;
-            case "mo": return value * 31 * 60 * 60 * 24;
-            case "d": return value * 60 * 60 * 24;
-            case "h": return value * 60 * 60;
-            case "m": return value * 60;
-            case "s": return value;
+            case "y":
+                return value * 365 * 60 * 60 * 24;
+            case "mo":
+                return value * 31 * 60 * 60 * 24;
+            case "d":
+                return value * 60 * 60 * 24;
+            case "h":
+                return value * 60 * 60;
+            case "m":
+                return value * 60;
+            case "s":
+                return value;
         }
         return value;
     }
@@ -91,7 +97,7 @@ public class StringUtils {
         }
         return (negative ? "-" : "") + (hours == 0 ? "" : hoursString + ":") + minutesString + ":" + secondsString + "." + millisString;
     }
-    
+
     public static String getTechnicalName(String string) {
         return string.trim().toUpperCase().replaceAll(" ", "_");
     }
@@ -106,7 +112,9 @@ public class StringUtils {
      *
      */
 
-    /** Repeat character 'c' n times. */
+    /**
+     * Repeat character 'c' n times.
+     */
     public static String repeat(String c, int n) {
         assert n >= 0;
         return new String(new char[n]).replace("\0", c);
@@ -125,7 +133,7 @@ public class StringUtils {
     public static String removeLastWord(String string) {
         String word = string;
         boolean reachedWord = false;
-        for (int i = word.length() - 1; i >= 0; i --) {
+        for (int i = word.length() - 1; i >= 0; i--) {
             if (word.charAt(i) == ' ') {
                 if (reachedWord) {
                     break;
@@ -144,7 +152,7 @@ public class StringUtils {
 
     public static String getCurrentChatColor(String str, int index) {
         String color = "\u00A7r";
-        for (int i = index - 1; i > 0; i --) {
+        for (int i = index - 1; i > 0; i--) {
             if (str.charAt(i - 1) == '\u00A7') {
                 color = "\u00A7" + str.charAt(i);
                 break;

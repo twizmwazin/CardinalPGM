@@ -5,7 +5,15 @@ import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
-import in.twizmwaz.cardinal.module.modules.appliedRegion.type.*;
+import in.twizmwaz.cardinal.module.modules.appliedRegion.type.BlockBreakRegion;
+import in.twizmwaz.cardinal.module.modules.appliedRegion.type.BlockEventRegion;
+import in.twizmwaz.cardinal.module.modules.appliedRegion.type.BlockPlaceAgainstRegion;
+import in.twizmwaz.cardinal.module.modules.appliedRegion.type.BlockPlaceRegion;
+import in.twizmwaz.cardinal.module.modules.appliedRegion.type.EnterRegion;
+import in.twizmwaz.cardinal.module.modules.appliedRegion.type.KitRegion;
+import in.twizmwaz.cardinal.module.modules.appliedRegion.type.LeaveRegion;
+import in.twizmwaz.cardinal.module.modules.appliedRegion.type.UseRegion;
+import in.twizmwaz.cardinal.module.modules.appliedRegion.type.VelocityRegion;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.filter.type.logic.AllFilter;
@@ -19,7 +27,7 @@ import org.bukkit.util.Vector;
 import org.jdom2.Element;
 
 @BuilderData(load = ModuleLoadTime.LATE)
-public class AppliedRegionBuilder  implements ModuleBuilder {
+public class AppliedRegionBuilder implements ModuleBuilder {
 
     @Override
     public ModuleCollection load(Match match) {
@@ -35,7 +43,7 @@ public class AppliedRegionBuilder  implements ModuleBuilder {
                     region = new UnionRegion(null, regions);
                 }
                 String message = (applied.getAttributeValue("message") != null ? ChatColor.translateAlternateColorCodes('`', applied.getAttributeValue("message")) : null);
-                if (applied.getAttributeValue("velocity") != null)  {
+                if (applied.getAttributeValue("velocity") != null) {
                     String[] values = applied.getAttributeValue("velocity").replaceAll("@", "").split(",");
                     FilterModule filter = applied.getAttributeValue("filter") == null ? null : getFilter(applied.getAttributeValue("filter"));
                     Vector velocity = new Vector(Double.parseDouble(values[0]), Double.parseDouble(values[1]), Double.parseDouble(values[2]));
@@ -77,7 +85,7 @@ public class AppliedRegionBuilder  implements ModuleBuilder {
         }
         return results;
     }
-    
+
     private FilterModule getFilter(String string) {
         string = string.trim();
         if (!string.contains(" ")) return FilterModuleBuilder.getFilter(string);
@@ -89,5 +97,5 @@ public class AppliedRegionBuilder  implements ModuleBuilder {
             }
             return new AllFilter(null, collection);
         }
-    } 
+    }
 }

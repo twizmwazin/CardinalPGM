@@ -53,7 +53,8 @@ public class Portal implements Module {
             if ((filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW)) || (TeamUtils.getTeamByPlayer(event.getPlayer()) != null && TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
                 if (destination != null) {
                     event.getPlayer().teleport(destination.getRandomPoint().getLocation());
-                    if (sound) event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2F, 1);
+                    if (sound)
+                        event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2F, 1);
                 } else {
                     Location newLocation = event.getTo();
                     if (xRelative)
@@ -77,14 +78,16 @@ public class Portal implements Module {
                     else
                         newLocation.setPitch(pitch);
                     event.getPlayer().teleport(newLocation);
-                    if (sound) event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2F, 1);
+                    if (sound)
+                        event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2F, 1);
                 }
             }
         }
         if (destination != null && destination.contains(event.getTo().toVector()) && !destination.contains(event.getFrom().toVector()) && this.bidirectional) {
             if (filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW) || (TeamUtils.getTeamByPlayer(event.getPlayer()) != null && TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
                 event.getPlayer().teleport(region.getRandomPoint().getLocation());
-                if (sound) event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2F, 1);
+                if (sound)
+                    event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2F, 1);
             }
 
         }

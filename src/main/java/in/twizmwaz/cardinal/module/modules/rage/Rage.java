@@ -13,7 +13,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
-public class Rage implements Module{
+public class Rage implements Module {
 
     @Override
     public void unload() {

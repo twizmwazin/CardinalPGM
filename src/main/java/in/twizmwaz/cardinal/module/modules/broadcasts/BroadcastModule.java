@@ -10,17 +10,12 @@ import org.bukkit.event.HandlerList;
 
 public class BroadcastModule implements TaskedModule {
 
-    public enum BroadcastType {
-        TIP(), ALERT();
-    }
-
     private final String message;
     private final BroadcastType type;
     private final int timeAfter;
     private final int every;
     private final int count;
     private int timesBroadcasted;
-
     protected BroadcastModule(final String message, final BroadcastType type, final int timeAfter, final int every, final int count) {
         this.message = message;
         this.type = type;
@@ -49,6 +44,10 @@ public class BroadcastModule implements TaskedModule {
                 }
             }
         }
+    }
+
+    public enum BroadcastType {
+        TIP(), ALERT();
     }
 
 

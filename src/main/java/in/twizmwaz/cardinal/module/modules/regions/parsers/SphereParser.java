@@ -6,7 +6,7 @@ import org.bukkit.util.Vector;
 import org.jdom2.Element;
 
 public class SphereParser extends RegionParser {
-    
+
     private final Vector origin;
     private double radius;
 

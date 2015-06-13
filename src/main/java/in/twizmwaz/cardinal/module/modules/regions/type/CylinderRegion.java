@@ -13,7 +13,7 @@ public class CylinderRegion extends RegionModule {
 
     private final Vector base;
     private final double radius, height;
-    
+
     public CylinderRegion(String name, Vector base, double radius, double height) {
         super(name);
         this.base = base;

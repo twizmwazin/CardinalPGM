@@ -12,14 +12,14 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class KitRegion extends AppliedRegion {
-    
+
     private final Kit kit;
-    
+
     public KitRegion(RegionModule region, FilterModule filter, String message, Kit kit) {
         super(region, filter, message);
         this.kit = kit;
     }
-    
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerMove(PlayerMoveEvent event) {
         if (event.isCancelled() || TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) return;

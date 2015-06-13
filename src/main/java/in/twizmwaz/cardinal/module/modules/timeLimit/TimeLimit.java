@@ -17,38 +17,9 @@ public class TimeLimit implements Module {
     private Result result;
     private TeamModule team;
 
-    public enum Result {
-        TEAM(), MOST_OBJECTIVES(), TIE(), MOST_PLAYERS(), HIGHEST_SCORE()
-    }
-
     protected TimeLimit(int time, Result result, TeamModule team) {
         this.time = time;
         this.result = result;
-        this.team = team;
-    }
-
-    @Override
-    public void unload() {
-        HandlerList.unregisterAll(this);
-    }
-
-    public int getTimeLimit() {
-        return time;
-    }
-
-    public Result getResult() {
-        return result;
-    }
-
-    public void setResult(Result result) {
-        this.result = result;
-    }
-
-    public TeamModule getTeam() {
-        return team;
-    }
-
-    public void setTeam(TeamModule team) {
         this.team = team;
     }
 
@@ -72,9 +43,9 @@ public class TimeLimit implements Module {
                         boolean safetyProximity = false;
                         for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
                             if (obj.isComplete()) {
-                                teamCompleted ++;
+                                teamCompleted++;
                             } else if (obj.isTouched()) {
-                                teamTouched ++;
+                                teamTouched++;
                                 if (obj instanceof WoolObjective) {
                                     teamTouchedPoints += 50;
                                     if (((WoolObjective) obj).getProximity() < teamProximity || !safetyProximity) {
@@ -167,8 +138,37 @@ public class TimeLimit implements Module {
         return 0;
     }
 
+    @Override
+    public void unload() {
+        HandlerList.unregisterAll(this);
+    }
+
+    public int getTimeLimit() {
+        return time;
+    }
+
     public void setTimeLimit(int time) {
         this.time = time;
+    }
+
+    public Result getResult() {
+        return result;
+    }
+
+    public void setResult(Result result) {
+        this.result = result;
+    }
+
+    public TeamModule getTeam() {
+        return team;
+    }
+
+    public void setTeam(TeamModule team) {
+        this.team = team;
+    }
+
+    public enum Result {
+        TEAM(), MOST_OBJECTIVES(), TIE(), MOST_PLAYERS(), HIGHEST_SCORE()
     }
 
 }

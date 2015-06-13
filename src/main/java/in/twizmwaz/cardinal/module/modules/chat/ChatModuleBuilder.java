@@ -9,7 +9,7 @@ public class ChatModuleBuilder implements ModuleBuilder {
     @Override
     public ModuleCollection load(Match match) {
         ModuleCollection<ChatModule> results = new ModuleCollection<ChatModule>();
-        
+
         results.add(new ChatModule());
         return results;
     }

@@ -18,10 +18,12 @@ public class SettingCommands {
             Bukkit.dispatchCommand(sender, "settings 1");
         } else {
             int page = cmd.getInteger(0);
-            if (page > (Settings.getSettings().size() + 7) / 8) throw new CommandException("Invalid page number specified! " + ((Settings.getSettings().size() + 7) / 8) + " total pages.");
+            if (page > (Settings.getSettings().size() + 7) / 8)
+                throw new CommandException("Invalid page number specified! " + ((Settings.getSettings().size() + 7) / 8) + " total pages.");
             sender.sendMessage(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "--------------" + ChatColor.YELLOW + " Settings (Page " + page + " of " + ((Settings.getSettings().size() + 7) / 8) + ") " + ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "--------------");
-            for (int i = (page - 1) * 8; i < page * 8; i ++) {
-                if (i < Settings.getSettings().size()) sender.sendMessage(ChatColor.YELLOW + Settings.getSettings().get(i).getNames().get(0) + ": " + ChatColor.WHITE + Settings.getSettings().get(i).getDescription());
+            for (int i = (page - 1) * 8; i < page * 8; i++) {
+                if (i < Settings.getSettings().size())
+                    sender.sendMessage(ChatColor.YELLOW + Settings.getSettings().get(i).getNames().get(0) + ": " + ChatColor.WHITE + Settings.getSettings().get(i).getDescription());
             }
         }
     }

@@ -15,7 +15,7 @@ public class TranslateParser extends RegionParser {
     public TranslateParser(Element element) {
         super(element.getAttributeValue("name"));
         this.base = element.getAttributeValue("region") != null ? RegionModuleBuilder.getRegion(element.getAttributeValue("region")) : RegionModuleBuilder.getRegion(element.getChildren().get(0));
-        String[] offset = element.getAttributeValue("offset").contains(",") ?  element.getAttributeValue("offset").split(",") : element.getAttributeValue("offset").trim().replaceAll(" ",",").split(",");
+        String[] offset = element.getAttributeValue("offset").contains(",") ? element.getAttributeValue("offset").split(",") : element.getAttributeValue("offset").trim().replaceAll(" ", ",").split(",");
         this.offset = new Vector(NumUtils.parseDouble(offset[0].trim()), NumUtils.parseDouble(offset[1].trim()), NumUtils.parseDouble(offset[2].trim()));
     }
 
@@ -25,6 +25,6 @@ public class TranslateParser extends RegionParser {
 
     public Vector getOffset() {
         return offset;
-        
+
     }
 }

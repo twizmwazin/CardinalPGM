@@ -91,8 +91,8 @@ public class ScoreCommand {
                     int completed = 0;
                     int touched = 0;
                     for (GameObjective obj : TeamUtils.getShownObjectives(TimeLimit.getMatchWinner())) {
-                        if (obj.isComplete()) completed ++;
-                        else if (obj.isTouched()) touched ++;
+                        if (obj.isComplete()) completed++;
+                        else if (obj.isTouched()) touched++;
                     }
                     sender.sendMessage(TimeLimit.getMatchWinner().getCompleteName() + ChatColor.GOLD + " is winning with " + completed + " completed and " + touched + " touched objectives");
                 }

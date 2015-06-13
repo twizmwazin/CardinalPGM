@@ -34,7 +34,7 @@
         <noPlayerMatch>没有这个玩家。</noPlayerMatch>
         <multiplePlayers>有很多玩着有那个名字！请用 {0} 去找这个玩家</multiplePlayers>
         <unknownError>发生了故障，不知是为社么。请看服务器的日记擦顺。</unknownError>
-        <movedForBalance>为了让全部的队有均衡的大小，你被调去 {0} </movedForBalance>
+        <movedForBalance>为了让全部的队有均衡的大小，你被调去 {0}</movedForBalance>
         <autoJoinSwitch>(你没选个队，所以我们认为你不介意。)</autoJoinSwitch>
         <ownCore>你不可以摧毁自己的主机。</ownCore>
         <ownObjective>你不可以摧毁自己的目标。</ownObjective>
@@ -42,7 +42,7 @@
         <repairObjective>这一个目标是不可以修理的。</repairObjective>
         <noPotions>没有仙丹影响</noPotions>
         <teamPlace>只有 {0} 可以放 {1} 在这边！</teamPlace>
-        <blockPlace>这边只可以放！ {0} </blockPlace>
+        <blockPlace>这边只可以放！ {0}</blockPlace>
         <noCraft>你不可以做 {0}.</noCraft>
         <bedsDisabled>这一个游戏不尊睡觉！</bedsDisabled>
         <pearlOut>你不可以转移出去！</pearlOut>
@@ -173,7 +173,7 @@
         <objectiveDamagedFor>{0} 帮了 {2} 摧毁了 {1}</objectiveDamagedFor>
         <objectiveDamaged>{0} 摧毁了 {1}</objectiveDamaged>
         <creditReceived>达到目标后才会拿到荣誉</creditReceived>
-        <objectivePickedFor>{0} 帮 {2} 拿了 {1} </objectivePickedFor>
+        <objectivePickedFor>{0} 帮 {2} 拿了 {1}</objectivePickedFor>
         <objectivePicked>{0} 拿了 {1}</objectivePicked>
         <scoredFor>{0} 帮 {2} 取得 {1}</scoredFor>
         <onePoint>一分</onePoint>

@@ -20,5 +20,5 @@ public class CardinalCommand {
             Bukkit.getScheduler().runTaskAsynchronously(Cardinal.getInstance(), UpdateHandler.getUpdateHandler().getNotificationTask(sender));
         }
     }
-    
+
 }

@@ -13,7 +13,7 @@
         <rotPointInvalid>선택된 로테이션 시점은 잘못되었습니다.</rotPointInvalid>
         <invalidTime>잘못된 카운트다운 시간입니다.</invalidTime>
         <teamChatDefault>팀채팅이 이미 기본 채널입니다.</teamChatDefault>
-        <teamChannel>지금은 팀채팅을  변경할 수 없습니다. 몇분뒤에 다시 시도하십시오.</teamChannel>
+        <teamChannel>지금은 팀채팅을 변경할 수 없습니다. 몇분뒤에 다시 시도하십시오.</teamChannel>
         <noClass>해당 클래스는 존재하지 않습니다.</noClass>
         <classRestricted>{0} 클래스는 제한된 클래스입니다.</classRestricted>
         <noClassChange>지금은 클래스를 변경할 수 없습니다.</noClassChange>
@@ -37,7 +37,7 @@
         <unknownError>알수없는 오류가 발생했습니다. 관리자에게 문의하십시오.</unknownError>
         <movedForBalance>당신은 유료 회원을 위한 공간을 만들기 위해 {0}에서 제외되었습니다.</movedForBalance>
         <autoJoinSwitch>(팀을 선택하지 않았으므로 신경쓰지 않을거라 생각합니다)</autoJoinSwitch>
-        <ownCore>같은팀의 코어는  부술 수 없습니다.</ownCore>
+        <ownCore>같은팀의 코어는 부술 수 없습니다.</ownCore>
         <ownObjective>자기 팀의 목표물은 부술 수 없습니다.</ownObjective>
         <enemyObjective>당신은 적의 목표물을 복구할 수 없습니다.</enemyObjective>
         <repairObjective>이 목표물은 복구될 수 없습니다.</repairObjective>
@@ -94,7 +94,7 @@
         <insertedIndex>{0} 가 성공적으로 {1}에 추가되었습니다</insertedIndex>
         <removedInstance>성공적으로 모든 {0} 를 로테이션에서 제거했습니다.</removedInstance>
         <removedMap>성공적으로 {0}에서 맵을 로테이션에서 제거했습니다</removedMap>
-        <playerForce>성공적으로 {0} 을  {1} 로 편입시켰습니다</playerForce>
+        <playerForce>성공적으로 {0} 을 {1} 로 편입시켰습니다</playerForce>
         <teamShuffle>성공적으로 팀을 섞었습니다.</teamShuffle>
         <teamAlias>{0} 의 이름을 {1} 로 바꿧습니다</teamAlias>
         <channelSet>기본 채팅이 팀채팅으로 변경되었습니다..</channelSet>
@@ -111,7 +111,7 @@
         <defusePlayerTnt>{0}의 TNT가 해체되었습니다.</defusePlayerTnt>
         <landminePlanted>지뢰가 설치되었습니다.</landminePlanted>
         <ratingSaved>{1} {2} 에 대한 별점 {0}이 저장되었습니다.</ratingSaved>
-        <ratingChange>추후에 깔때기를 사용하거나 {0}을(를) 쳐서  별점을 변경할 수 있습니다.</ratingChange>
+        <ratingChange>추후에 깔때기를 사용하거나 {0}을(를) 쳐서 별점을 변경할 수 있습니다.</ratingChange>
         <mapRated>{0} 에 누군가가 이 맵의 별점을 {1}로 평가하였습니다.</mapRated>
         <mapReRated>{0} 에 누군가가 이 맵을 {2} 에서 {1} 로 다시 평가하였습니다.</mapReRated>
         <autoBalance>만약 {0} 에 사람이 계속 몰려있으면, 팀이 자동적으로 조정될 것 입니다.</autoBalance>
@@ -212,7 +212,7 @@
         <version>이 서버는 {0}버전의 Cardinal을 실행중입니다.</version>
         <matchReportUpload>경기 정보를 업로드하는 중입니다...</matchReportUpload>
         <matchReportSuccess>경기 정보가 업로드 되었습니다 {0}에서 보실 수 있습니다</matchReportSuccess>
-        <matchReportFaied>경기 정보를 업로드하는 도중 오류가 발생했습니다</matchReportFaied>
+        <matchReportFailed>경기 정보를 업로드하는 도중 오류가 발생했습니다</matchReportFailed>
         <globalMuteEnabled>전체 뮤트가 활성화 되었습니다</globalMuteEnabled>
         <globalMuteDisabled>전체 뮤트가 비활성화 되었습니다</globalMuteDisabled>
         <defaultChannelGlobal>기본 채팅이 전체 채팅으로 변경되었습니다</defaultChannelGlobal>

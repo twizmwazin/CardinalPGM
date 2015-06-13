@@ -9,7 +9,7 @@ import in.twizmwaz.cardinal.module.ModuleLoadTime;
 
 @BuilderData(load = ModuleLoadTime.EARLIEST)
 public class PermissionModuleBuilder implements ModuleBuilder {
-    
+
     @Override
     public ModuleCollection load(Match match) {
         ModuleCollection<PermissionModule> results = new ModuleCollection<>();

@@ -37,5 +37,5 @@ public interface ChatChannelModule extends Module {
      * Removes all members from the team
      */
     public void resetMembers();
-    
+
 }

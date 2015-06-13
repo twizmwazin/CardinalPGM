@@ -5,7 +5,9 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.SpawnFilterParser;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
-import static in.twizmwaz.cardinal.module.modules.filter.FilterState.*;
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ABSTAIN;
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ALLOW;
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.DENY;
 
 public class SpawnFilter extends FilterModule {
 

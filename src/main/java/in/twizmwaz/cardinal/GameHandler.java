@@ -45,7 +45,7 @@ public class GameHandler {
 
     public void cycleAndMakeMatch() {
         rotation.move();
-        World oldMatchWorld = matchWorld == null ? null: matchWorld.get();
+        World oldMatchWorld = matchWorld == null ? null : matchWorld.get();
         cycle.run();
         if (match != null) match.unregisterModules();
         this.match = new Match(cycle.getUuid(), cycle.getMap());

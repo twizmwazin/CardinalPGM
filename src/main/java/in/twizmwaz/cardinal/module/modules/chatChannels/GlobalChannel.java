@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.Locale;
 
 public class GlobalChannel implements ChatChannelModule {
-    
+
     @Override
     public void sendMessage(String string) {
         Bukkit.broadcastMessage(string);

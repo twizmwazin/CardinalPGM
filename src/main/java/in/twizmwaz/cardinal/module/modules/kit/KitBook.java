@@ -28,7 +28,7 @@ class KitBook {
         return pages.get(index);
     }
 
-    public List<String> getPages(){
+    public List<String> getPages() {
         return pages;
     }
 

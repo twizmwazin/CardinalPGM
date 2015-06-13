@@ -10,9 +10,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class LocaleHandler {
-    
+
     private final Set<Document> documents;
-    
+
     public LocaleHandler(Plugin plugin) throws JDOMException, IOException {
         this.documents = new HashSet<>();
         SAXBuilder saxBuilder = new SAXBuilder();
@@ -24,12 +24,12 @@ public class LocaleHandler {
         documents.add(saxBuilder.build(plugin.getResource("lang/sv.xml")));
         documents.add(saxBuilder.build(plugin.getResource("lang/zh.xml")));
     }
-    
+
     public Document getLocaleDocument(String locale) {
         for (Document document : documents) {
             if (locale.equals(document.getRootElement().getAttributeValue("lang"))) return document;
         }
         return getLocaleDocument("en");
     }
-    
+
 }

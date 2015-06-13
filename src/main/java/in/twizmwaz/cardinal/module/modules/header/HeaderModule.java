@@ -24,7 +24,7 @@ import org.bukkit.event.player.PlayerLocaleChangeEvent;
 import java.util.List;
 
 public class HeaderModule implements TaskedModule {
-    
+
     private final ChatMessage header;
     private final String message;
     private int last;
@@ -50,14 +50,14 @@ public class HeaderModule implements TaskedModule {
             }
         }
     }
-    
+
     @EventHandler
     public void onCycleComplete(CycleCompleteEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             updatePlayer(player, player.getLocale());
         }
     }
-    
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         updatePlayer(event.getPlayer(), event.getPlayer().getLocale());
@@ -69,12 +69,12 @@ public class HeaderModule implements TaskedModule {
             updatePlayer(player, player.getLocale());
         }
     }
-    
+
     @EventHandler
     public void onLangChange(PlayerLocaleChangeEvent event) {
         updatePlayer(event.getPlayer(), event.getNewLocale());
     }
-    
+
     private void updatePlayer(Player player, String locale) {
         StringBuilder footer = new StringBuilder()
                 .append(ChatColor.BOLD)
@@ -94,7 +94,7 @@ public class HeaderModule implements TaskedModule {
                 .append("Cardinal");
         player.setPlayerListHeaderFooter(new TextComponent(header.getMessage(locale)), new TextComponent(footer.toString()));
     }
-    
+
     private ChatMessage assembleAuthors(List<Contributor> authors) {
         StringBuilder builder = new StringBuilder();
         if (authors.size() == 1) builder.append(ChatColor.GRAY).append(authors.get(0).getName());

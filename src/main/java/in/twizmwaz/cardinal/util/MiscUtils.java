@@ -105,7 +105,7 @@ public class MiscUtils {
         for (T player : sorting.keySet()) {
             clone.put(player, sorting.get(player));
         }
-        for (int i = 0; i < sorting.size(); i ++) {
+        for (int i = 0; i < sorting.size(); i++) {
             int highestNumber = Integer.MIN_VALUE;
             T highestType = null;
             for (T player : clone.keySet()) {

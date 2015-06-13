@@ -58,7 +58,8 @@ public class Setting {
             for (SettingValue value : this.values) {
                 if (value.isDefault()) defaultValue = value;
             }
-            if (defaultValue != null) Cardinal.getCardinalDatabase().put(player, "setting_" + this.names.get(0), defaultValue.getValue());
+            if (defaultValue != null)
+                Cardinal.getCardinalDatabase().put(player, "setting_" + this.names.get(0), defaultValue.getValue());
         }
         return this.getSettingValueByName(Cardinal.getCardinalDatabase().get(player, "setting_" + this.names.get(0)));
     }

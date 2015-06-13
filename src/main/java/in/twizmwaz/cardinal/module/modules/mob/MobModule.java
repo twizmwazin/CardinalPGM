@@ -8,7 +8,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 public class MobModule implements Module {
-    
+
     private final FilterModule filter;
 
     protected MobModule(FilterModule filter) {
@@ -19,7 +19,7 @@ public class MobModule implements Module {
     public void unload() {
         HandlerList.unregisterAll(this);
     }
-    
+
     @EventHandler
     public void onMobSpawn(CreatureSpawnEvent event) {
         if (filter.evaluate(event.getSpawnReason(), event.getCreatureType(), event.getEntity().getType()).equals(FilterState.DENY))

@@ -30,7 +30,8 @@ public class DomUtils {
                     for (Element element : parse(including).getRootElement().getChildren()) {
                         original.getRootElement().addContent(element.clone().detach());
                     }
-                } catch (JDOMException | IOException ignored) {}
+                } catch (JDOMException | IOException ignored) {
+                }
             } else {
                 while (include.startsWith("../")) {
                     include = include.replace("../", "");
@@ -56,7 +57,8 @@ public class DomUtils {
                     }
                 }
             }
-            if (!found) Bukkit.getLogger().log(Level.WARNING, "File '" + including.getName() + "' was not found nor included!");
+            if (!found)
+                Bukkit.getLogger().log(Level.WARNING, "File '" + including.getName() + "' was not found nor included!");
         }
         return original;
     }

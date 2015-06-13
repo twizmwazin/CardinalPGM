@@ -38,7 +38,7 @@ public class MatchCommand {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (TeamUtils.getTeamByPlayer(player) != null) {
                     if (TeamUtils.getTeamByPlayer(player) == team) {
-                        players ++;
+                        players++;
                     }
                 }
             }
