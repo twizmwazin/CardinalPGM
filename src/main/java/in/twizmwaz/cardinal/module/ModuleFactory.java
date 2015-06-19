@@ -64,6 +64,7 @@ import in.twizmwaz.cardinal.module.modules.teamPicker.TeamPickerBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimitBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLock.TimeLockBuilder;
 import in.twizmwaz.cardinal.module.modules.timeNotifications.TimeNotificationsBuilder;
+import in.twizmwaz.cardinal.module.modules.titleRespawn.TitleRespawnBuilder;
 import in.twizmwaz.cardinal.module.modules.tnt.TntBuilder;
 import in.twizmwaz.cardinal.module.modules.tntDefuse.TntDefuseBuilder;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTrackerBuilder;
@@ -160,7 +161,8 @@ public class ModuleFactory {
             UpdateNotificationBuilder.class,
             MatchTranscriptBuilder.class,
             PotionRemoverBuilder.class,
-            InvisibleBlockBuilder.class
+            InvisibleBlockBuilder.class,
+            TitleRespawnBuilder.class
     };
     private final List<ModuleBuilder> builders;
 
