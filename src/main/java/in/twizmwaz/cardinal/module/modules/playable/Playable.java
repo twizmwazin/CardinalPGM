@@ -29,7 +29,7 @@ public class Playable implements Module {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (GameHandler.getGameHandler().getMatch().isRunning() && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) {
+        if (GameHandler.getGameHandler().getMatch().isRunning() && TeamUtils.getTeamByPlayer(event.getPlayer()) != null && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) {
             if (region != null) {
                 if (region.contains(event.getTo().toVector()) && !region.contains(event.getFrom().toVector())) {
                     ChatUtils.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_PLAYABLE_LEAVE));
@@ -41,7 +41,7 @@ public class Playable implements Module {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (GameHandler.getGameHandler().getMatch().isRunning() && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) {
+        if (GameHandler.getGameHandler().getMatch().isRunning() && TeamUtils.getTeamByPlayer(event.getPlayer()) != null && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) {
             if (region != null) {
                 if (region.contains(event.getBlock().getLocation())) {
                     ChatUtils.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_PLAYABLE_INTERACT));
@@ -53,7 +53,7 @@ public class Playable implements Module {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (GameHandler.getGameHandler().getMatch().isRunning() && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) {
+        if (GameHandler.getGameHandler().getMatch().isRunning() && TeamUtils.getTeamByPlayer(event.getPlayer()) != null && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) {
             if (region != null) {
                 if (region.contains(event.getBlock().getLocation())) {
                     ChatUtils.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_PLAYABLE_INTERACT));
@@ -65,7 +65,7 @@ public class Playable implements Module {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (GameHandler.getGameHandler().getMatch().isRunning() && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) {
+        if (GameHandler.getGameHandler().getMatch().isRunning() && TeamUtils.getTeamByPlayer(event.getPlayer()) != null && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) {
             if (region != null && event.getClickedBlock() != null) {
                 if (region.contains(event.getClickedBlock().getLocation())) {
                     ChatUtils.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_PLAYABLE_INTERACT));
