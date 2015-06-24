@@ -23,7 +23,7 @@ public class CycleCommand {
     public static void cycle(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
             if (cmd.hasFlag('f')) {
-                TeamModule team = TeamUtils.getTeamByName(cmd.getFlag('f'));
+                TeamModule team = TeamUtils.getTeamByName(cmd.getFlag('f')).orNull();
                 GameHandler.getGameHandler().getMatch().end(team);
             } else {
                 throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(ChatUtils.getLocale(sender)));
@@ -62,7 +62,7 @@ public class CycleCommand {
     public static void recycle(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
             if (cmd.hasFlag('f')) {
-                TeamModule team = TeamUtils.getTeamByName(cmd.getFlag('f'));
+                TeamModule team = TeamUtils.getTeamByName(cmd.getFlag('f')).orNull();
                 GameHandler.getGameHandler().getMatch().end(team);
             } else {
                 throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(ChatUtils.getLocale(sender)));

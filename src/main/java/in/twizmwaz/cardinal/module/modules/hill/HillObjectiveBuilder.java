@@ -94,9 +94,9 @@ public class HillObjectiveBuilder implements ModuleBuilder {
             permanent = NumUtils.parseBoolean(element.getAttributeValue("permanent"));
         TeamModule initialOwner = null;
         if (element.getParentElement().getAttributeValue("initial-owner") != null)
-            initialOwner = TeamUtils.getTeamById(element.getParentElement().getAttributeValue("initial-owner"));
+            initialOwner = TeamUtils.getTeamById(element.getParentElement().getAttributeValue("initial-owner")).orNull();
         if (element.getAttributeValue("initial-owner") != null)
-            initialOwner = TeamUtils.getTeamById(element.getAttributeValue("initial-owner"));
+            initialOwner = TeamUtils.getTeamById(element.getAttributeValue("initial-owner")).orNull();
         boolean show = true;
         if (element.getParentElement().getAttributeValue("show") != null)
             show = NumUtils.parseBoolean(element.getParentElement().getAttributeValue("show"));

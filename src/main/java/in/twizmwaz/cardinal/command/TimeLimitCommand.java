@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.command;
 
+import com.google.common.base.Optional;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
@@ -8,6 +9,7 @@ import com.sk89q.minecraft.util.commands.CommandUsageException;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.TimeLimitChangeEvent;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.module.modules.timeNotifications.TimeNotifications;
 import in.twizmwaz.cardinal.util.ChatUtils;
@@ -61,7 +63,8 @@ public class TimeLimitCommand {
                     if (TeamUtils.getTeamByName(cmd.getJoinedStrings(2)) != null) {
                         for (TimeLimit module : GameHandler.getGameHandler().getMatch().getModules().getModules(TimeLimit.class)) {
                             module.setResult(TimeLimit.Result.TEAM);
-                            module.setTeam(TeamUtils.getTeamByName(cmd.getJoinedStrings(2)));
+                            Optional<TeamModule> team = TeamUtils.getTeamByName(cmd.getJoinedStrings(2));
+                            if (team.isPresent()) module.setTeam(team.get());
                         }
                     } else {
                         throw new CommandException("No results match query.");

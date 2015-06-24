@@ -50,7 +50,7 @@ public class TeamManagerModule implements Module {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         PlayerUtils.resetPlayer(player);
-        TeamUtils.getTeamById("observers").add(player, true, false);
+        TeamUtils.getTeamById("observers").get().add(player, true, false);
         event.getPlayer().getInventory().setItem(0, new ItemStack(Material.COMPASS));
         ItemStack howTo = ItemUtils.createBook(Material.WRITTEN_BOOK, 1, ChatColor.AQUA.toString() + ChatColor.BOLD + "Coming Soon", ChatColor.GOLD + "CardinalPGM");
         event.getPlayer().getInventory().setItem(1, howTo);
@@ -196,7 +196,7 @@ public class TeamManagerModule implements Module {
 
     @EventHandler
     public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
-        if (event.getNewTeam() != null && !event.getNewTeam().isObserver() && GameHandler.getGameHandler().getMatch().isRunning()) {
+        if (event.getNewTeam().isPresent() && !event.getNewTeam().get().isObserver() && GameHandler.getGameHandler().getMatch().isRunning()) {
             Bukkit.dispatchCommand(event.getPlayer(), "match");
         }
     }

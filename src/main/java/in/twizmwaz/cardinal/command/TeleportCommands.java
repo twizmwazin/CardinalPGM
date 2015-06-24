@@ -22,7 +22,7 @@ public class TeleportCommands {
     public static void teleport(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (sender instanceof Player) {
             if (cmd.argsLength() == 1) {
-                if (sender.hasPermission("cardinal.teleport") || (TeamUtils.getTeamByPlayer((Player) sender) != null && TeamUtils.getTeamByPlayer((Player) sender).isObserver())) {
+                if (sender.hasPermission("cardinal.teleport") || (TeamUtils.getTeamByPlayer((Player) sender).isPresent() && TeamUtils.getTeamByPlayer((Player) sender).get().isObserver())) {
                     try {
                         Player player = Bukkit.getPlayer(cmd.getString(0));
                         ((Player) sender).teleport(player);

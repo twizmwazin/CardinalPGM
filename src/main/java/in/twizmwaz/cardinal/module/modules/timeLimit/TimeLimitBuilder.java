@@ -28,7 +28,7 @@ public class TimeLimitBuilder implements ModuleBuilder {
                     result = TimeLimit.Result.TIE;
                 } else {
                     result = TimeLimit.Result.TEAM;
-                    team = TeamUtils.getTeamById(time.getAttributeValue("result"));
+                    team = TeamUtils.getTeamById(time.getAttributeValue("result")).orNull();
                 }
             }
         }

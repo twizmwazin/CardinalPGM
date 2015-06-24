@@ -25,9 +25,9 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
             for (Element subElement : element.getChildren("core")) {
                 TeamModule team;
                 try {
-                    team = TeamUtils.getTeamById(subElement.getAttributeValue("team"));
+                    team = TeamUtils.getTeamById(subElement.getAttributeValue("team")).orNull();
                 } catch (NullPointerException e) {
-                    team = TeamUtils.getTeamById(element.getAttributeValue("team"));
+                    team = TeamUtils.getTeamById(element.getAttributeValue("team")).orNull();
                 }
                 String name = "Core";
                 if (subElement.getAttributeValue("name") != null) {
@@ -92,12 +92,12 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                 for (Element subChild : child.getChildren("core")) {
                     TeamModule team;
                     try {
-                        team = TeamUtils.getTeamById(subChild.getAttributeValue("team"));
+                        team = TeamUtils.getTeamById(subChild.getAttributeValue("team")).orNull();
                     } catch (NullPointerException e) {
                         try {
-                            team = TeamUtils.getTeamById(child.getAttributeValue("team"));
+                            team = TeamUtils.getTeamById(child.getAttributeValue("team")).orNull();
                         } catch (NullPointerException ex) {
-                            team = TeamUtils.getTeamById(element.getAttributeValue("team"));
+                            team = TeamUtils.getTeamById(element.getAttributeValue("team")).orNull();
                         }
                     }
                     String name = "Core";

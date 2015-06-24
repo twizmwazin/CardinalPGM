@@ -1,10 +1,12 @@
 package in.twizmwaz.cardinal.module.modules.portal;
 
+import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -50,7 +52,8 @@ public class Portal implements Module {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerMove(PlayerMoveEvent event) {
         if (region.contains(event.getTo().toVector()) && !region.contains(event.getFrom().toVector())) {
-            if ((filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW)) || (TeamUtils.getTeamByPlayer(event.getPlayer()) != null && TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
+            Optional<TeamModule> team = TeamUtils.getTeamByPlayer(event.getPlayer());
+            if ((filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW)) || (team.isPresent() && team.get().isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
                 if (destination != null) {
                     event.getPlayer().teleport(destination.getRandomPoint().getLocation());
                     if (sound)
@@ -84,7 +87,8 @@ public class Portal implements Module {
             }
         }
         if (destination != null && destination.contains(event.getTo().toVector()) && !destination.contains(event.getFrom().toVector()) && this.bidirectional) {
-            if (filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW) || (TeamUtils.getTeamByPlayer(event.getPlayer()) != null && TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
+            Optional<TeamModule> team = TeamUtils.getTeamByPlayer(event.getPlayer());
+            if (filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW) || (team.isPresent() && !team.get().isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
                 event.getPlayer().teleport(region.getRandomPoint().getLocation());
                 if (sound)
                     event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2F, 1);

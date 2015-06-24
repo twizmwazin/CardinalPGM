@@ -27,9 +27,9 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
             for (Element subElement : element.getChildren("destroyable")) {
                 TeamModule owner;
                 try {
-                    owner = TeamUtils.getTeamById(subElement.getAttributeValue("owner"));
+                    owner = TeamUtils.getTeamById(subElement.getAttributeValue("owner")).orNull();
                 } catch (NullPointerException e) {
-                    owner = TeamUtils.getTeamById(element.getAttributeValue("owner"));
+                    owner = TeamUtils.getTeamById(element.getAttributeValue("owner")).orNull();
                 }
                 String name = "Monument";
                 if (subElement.getAttributeValue("name") != null) {
@@ -132,12 +132,12 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                 for (Element subChild : child.getChildren("destroyable")) {
                     TeamModule owner;
                     try {
-                        owner = TeamUtils.getTeamById(subChild.getAttributeValue("owner"));
+                        owner = TeamUtils.getTeamById(subChild.getAttributeValue("owner")).orNull();
                     } catch (NullPointerException e) {
                         try {
-                            owner = TeamUtils.getTeamById(child.getAttributeValue("owner"));
+                            owner = TeamUtils.getTeamById(child.getAttributeValue("owner")).orNull();
                         } catch (NullPointerException exc) {
-                            owner = TeamUtils.getTeamById(element.getAttributeValue("owner"));
+                            owner = TeamUtils.getTeamById(element.getAttributeValue("owner")).orNull();
                         }
                     }
                     String name = "Monument";

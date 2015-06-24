@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.command;
 
+import com.google.common.base.Optional;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
@@ -8,7 +9,7 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
-import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
+import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannel;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ChatUtils;
@@ -72,12 +73,20 @@ public class ChatCommands {
             if (cmd.argsLength() > 0) {
                 if (GameHandler.getGameHandler().getGlobalMute() && !PermissionModule.isStaff(((Player) sender)))
                     throw new CommandException(ChatConstant.ERROR_GLOBAL_MUTE_ENABLED.asMessage().getMessage(ChatUtils.getLocale(sender)));
-                TeamModule team = TeamUtils.getTeamByPlayer((Player) sender);
-                TeamChannel channel = TeamUtils.getTeamChannel(team);
-                String message = assembleMessage(cmd);
-                if (message.trim().equals("")) return;
-                channel.sendLocalizedMessage(new UnlocalizedChatMessage(channel.getTeam().getColor() + ((Player) sender).getDisplayName() + ChatColor.RESET + ": " + message));
-                Bukkit.getConsoleSender().sendMessage(team.getColor() + "[" + team.getName() + "] " + ((Player) sender).getDisplayName() + ChatColor.RESET + ": " + message);
+                Optional<TeamModule> team = TeamUtils.getTeamByPlayer((Player) sender);
+                if (team.isPresent()) {
+                    ChatChannel channel = TeamUtils.getTeamChannel(team);
+                    String message = assembleMessage(cmd);
+                    if (message.trim().equals("")) return;
+                    channel.sendLocalizedMessage(new UnlocalizedChatMessage(TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() + ChatColor.RESET + ": " + message));
+                    Bukkit.getConsoleSender().sendMessage(team.get().getColor() + "[" + team.get().getName() + "] " + ((Player) sender).getDisplayName() + ChatColor.RESET + ": " + message);
+                } else {
+                    if (GameHandler.getGameHandler().getGlobalMute() && !PermissionModule.isStaff(((Player) sender)))
+                        throw new CommandException(ChatConstant.ERROR_GLOBAL_MUTE_ENABLED.asMessage().getMessage(ChatUtils.getLocale(sender)));
+                    String message = assembleMessage(cmd);
+                    if (message.trim().equals("")) return;
+                    ChatUtils.getGlobalChannel().sendMessage("<" + TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() + ChatColor.RESET + ">: " + message);
+                }
             }
         } else throw new CommandException("Console cannot use this command.");
     }

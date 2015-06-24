@@ -8,7 +8,7 @@ import org.bukkit.permissions.Permission;
 import java.util.Collection;
 import java.util.HashSet;
 
-public abstract class PrivateChannel implements ChatChannelModule {
+public abstract class PrivateChannel implements ChatChannel {
 
     protected final Permission permission;
     protected final PermissionModule permissionModule;

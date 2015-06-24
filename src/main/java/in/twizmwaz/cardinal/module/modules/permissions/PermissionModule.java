@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.permissions;
 
+import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
@@ -8,6 +9,7 @@ import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.event.RankChangeEvent;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.rank.Rank;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
@@ -118,7 +120,7 @@ public class PermissionModule implements Module {
     @EventHandler
     public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
         if (Cardinal.getInstance().getConfig().getBoolean("worldEditPermissions")) {
-            if (event.getNewTeam().isObserver() || !GameHandler.getGameHandler().getMatch().isRunning()) {
+            if ((event.getNewTeam().isPresent() && event.getNewTeam().get().isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
                 attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.jumpto.tool", true);
                 attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.thru.tool", true);
 
@@ -138,7 +140,8 @@ public class PermissionModule implements Module {
     public void onMatchStart(MatchStartEvent event) {
         if (Cardinal.getInstance().getConfig().getBoolean("worldEditPermissions")) {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                if (TeamUtils.getTeamByPlayer(player) == null || TeamUtils.getTeamByPlayer(player).isObserver()) {
+                Optional<TeamModule> team = TeamUtils.getTeamByPlayer(player);
+                if ((team.isPresent() && team.get().isObserver())) {
                     attachmentMap.get(player).setPermission("worldedit.navigation.jumpto.tool", true);
                     attachmentMap.get(player).setPermission("worldedit.navigation.thru.tool", true);
 
@@ -175,8 +178,8 @@ public class PermissionModule implements Module {
     @EventHandler
     public void onRankChange(RankChangeEvent event) {
         String prefix = Rank.getPlayerPrefix(event.getPlayer().getUniqueId());
-        event.getPlayer().setDisplayName(prefix + event.getTeam().getColor() + event.getPlayer().getName());
-        event.getPlayer().setPlayerListName(prefix + event.getTeam().getColor() + event.getPlayer().getName());
+        event.getPlayer().setDisplayName(prefix + TeamUtils.getTeamColorByPlayer(event.getPlayer()) + event.getPlayer().getName());
+        event.getPlayer().setPlayerListName(prefix + TeamUtils.getTeamColorByPlayer(event.getPlayer()) + event.getPlayer().getName());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

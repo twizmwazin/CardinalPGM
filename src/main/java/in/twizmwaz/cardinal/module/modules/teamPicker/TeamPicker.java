@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.teamPicker;
 
+import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -81,7 +82,8 @@ public class TeamPicker implements Module {
         ItemStack item = event.getCurrentItem();
         Player player = (Player) event.getWhoClicked();
         if (item != null) {
-            if (TeamUtils.getTeamByPlayer(player).isObserver() || !GameHandler.getGameHandler().getMatch().isRunning()) {
+            Optional<TeamModule> team = TeamUtils.getTeamByPlayer(player);
+            if (team.isPresent() && team.get().isObserver() || !GameHandler.getGameHandler().getMatch().isRunning()) {
                 if (event.getInventory().getName().equals(ChatColor.DARK_RED + new LocalizedChatMessage(ChatConstant.UI_TEAM_PICK).getMessage(player.getLocale()))) {
                     if (item.getType().equals(Material.CHAINMAIL_HELMET)) {
                         if (item.hasItemMeta()) {
@@ -129,7 +131,8 @@ public class TeamPicker implements Module {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() || !GameHandler.getGameHandler().getMatch().isRunning()) {
+        Optional<TeamModule> team = TeamUtils.getTeamByPlayer(event.getPlayer());
+        if (team.isPresent() && team.get().isObserver() || !GameHandler.getGameHandler().getMatch().isRunning()) {
             if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                 if (event.getPlayer().getItemInHand() != null) {
                     if (event.getPlayer().getItemInHand().getType().equals(Material.LEATHER_HELMET)) {

@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.command;
 
+import com.google.common.base.Optional;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
@@ -7,6 +8,7 @@ import com.sk89q.minecraft.util.commands.CommandPermissions;
 import com.sk89q.minecraft.util.commands.NestedCommand;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
@@ -223,7 +225,8 @@ public class WhitelistCommands {
         msg = msg.trim();
         if (TeamUtils.getTeamByName(msg) != null) {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                if (TeamUtils.getTeamByPlayer(player).getName().startsWith(msg)) {
+                Optional<TeamModule> team = TeamUtils.getTeamByPlayer(player);
+                if (team.isPresent() && team.get().getName().startsWith(msg)) {
                     if (!player.isWhitelisted()) {
                         player.setWhitelisted(true);
                         count++;

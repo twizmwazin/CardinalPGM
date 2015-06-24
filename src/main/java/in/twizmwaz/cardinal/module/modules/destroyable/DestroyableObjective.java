@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.destroyable;
 
+import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -137,16 +138,17 @@ public class DestroyableObjective implements GameObjective {
     public void onBlockBreak(BlockBreakEvent event) {
         if (!event.isCancelled()) {
             if (getBlocks().contains(event.getBlock())) {
-                if (TeamUtils.getTeamByPlayer(event.getPlayer()) != team) {
+                Optional<TeamModule> playerTeam = TeamUtils.getTeamByPlayer(event.getPlayer());
+                if (playerTeam.isPresent() && playerTeam.get() != team) {
                     boolean touchMessage = false;
                     if (!playersTouched.contains(event.getPlayer().getUniqueId())) {
                         playersTouched.add(event.getPlayer().getUniqueId());
-                        TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
-                        if (this.show && !this.completed) {
-                            TeamUtils.getTeamChannel(teamModule).sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED_FOR, teamModule.getColor() + event.getPlayer().getName() + ChatColor.WHITE, name, teamModule.getCompleteName() + ChatColor.WHITE));
+                        Optional<TeamModule> teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
+                        if (this.show && !this.completed && teamModule.isPresent()) {
+                            TeamUtils.getTeamChannel(teamModule).sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED_FOR, teamModule.get().getColor() + event.getPlayer().getName() + ChatColor.WHITE, name, teamModule.get().getCompleteName() + ChatColor.WHITE));
                             for (Player player : Bukkit.getOnlinePlayers()) {
-                                if (TeamUtils.getTeamByPlayer(player) != null && TeamUtils.getTeamByPlayer(player).isObserver()) {
-                                    player.sendMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED_FOR, teamModule.getColor() + event.getPlayer().getName() + ChatColor.WHITE, name, teamModule.getCompleteName() + ChatColor.WHITE).getMessage(player.getLocale()));
+                                if (TeamUtils.getTeamByPlayer(player) != null && TeamUtils.getTeamByPlayer(player).get().isObserver()) {
+                                    player.sendMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED_FOR, teamModule.get().getColor() + event.getPlayer().getName() + ChatColor.WHITE, name, teamModule.get().getCompleteName() + ChatColor.WHITE).getMessage(player.getLocale()));
                                 }
                             }
                         }
@@ -194,19 +196,23 @@ public class DestroyableObjective implements GameObjective {
             for (Block block : objectiveBlownUp) {
                 boolean blockDestroyed = false;
                 if (TntTracker.getWhoPlaced(event.getEntity()) != null) {
-                    UUID player = TntTracker.getWhoPlaced(event.getEntity());
-                    if (Bukkit.getOfflinePlayer(player).isOnline()) {
-                        if (TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player)) == team) {
+                    UUID playerID = TntTracker.getWhoPlaced(event.getEntity());
+                    Player player = Bukkit.getPlayer(playerID);
+                    if (Bukkit.getOfflinePlayer(playerID).isOnline()) {
+                        if (TeamUtils.getTeamByPlayer(Bukkit.getPlayer(playerID)).orNull() == team) {
                             event.blockList().remove(block);
                         } else {
-                            if (!playersTouched.contains(player)) {
-                                playersTouched.add(player);
-                                TeamModule teamModule = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
+                            if (!playersTouched.contains(playerID)) {
+                                playersTouched.add(playerID);
+                                Optional<TeamModule> teamModule = TeamUtils.getTeamByPlayer(player);
                                 if (this.show && !this.completed) {
-                                    TeamUtils.getTeamChannel(teamModule).sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED_FOR, teamModule.getColor() + Bukkit.getPlayer(player).getName() + ChatColor.WHITE, name, teamModule.getCompleteName() + ChatColor.WHITE));
+                                    if (!teamModule.isPresent() || !teamModule.get().isObserver()) {
+                                        TeamUtils.getTeamChannel(teamModule).sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED_FOR, TeamUtils.getTeamColorByPlayer(Bukkit.getPlayer(playerID)) + Bukkit.getPlayer(playerID).getName() + ChatColor.WHITE, name, teamModule.get().getCompleteName() + ChatColor.WHITE));
+                                    }
                                     for (Player player1 : Bukkit.getOnlinePlayers()) {
-                                        if (TeamUtils.getTeamByPlayer(player1) != null && TeamUtils.getTeamByPlayer(player1).isObserver()) {
-                                            player1.sendMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED_FOR, teamModule.getColor() + Bukkit.getPlayer(player).getName() + ChatColor.WHITE, name, teamModule.getCompleteName() + ChatColor.WHITE).getMessage(player1.getLocale()));
+                                        Optional<TeamModule> team1 = TeamUtils.getTeamByPlayer(player1);
+                                        if (!team1.isPresent() || !team1.get().isObserver()) {
+                                            player1.sendMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DAMAGED_FOR, teamModule.get().getColor() + Bukkit.getPlayer(playerID).getName() + ChatColor.WHITE, name, teamModule.get().getCompleteName() + ChatColor.WHITE).getMessage(player1.getLocale()));
                                         }
                                     }
                                     touchMessage = true;
@@ -214,11 +220,11 @@ public class DestroyableObjective implements GameObjective {
                             }
                             blockDestroyed = true;
                             blownUp = true;
-                            eventPlayer = Bukkit.getPlayer(player);
+                            eventPlayer = Bukkit.getPlayer(playerID);
                         }
                     } else {
-                        if (!playersTouched.contains(player)) {
-                            playersTouched.add(player);
+                        if (!playersTouched.contains(playerID)) {
+                            playersTouched.add(playerID);
                         }
                         blockDestroyed = true;
                         blownUp = true;
@@ -254,7 +260,7 @@ public class DestroyableObjective implements GameObjective {
     public void onBlockPlace(BlockPlaceEvent event) {
         if (!repairable && !isComplete()) {
             if (region.contains(event.getBlock().getLocation()) && partOfObjective(event.getBlock())) {
-                if (TeamUtils.getTeamByPlayer(event.getPlayer()).getName() != team.getName()) {
+                if (TeamUtils.getTeamByPlayer(event.getPlayer()).orNull() != team) {
                     ChatUtils.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_ENEMY_OBJECTIVE));
                     event.setCancelled(true);
                 } else {
@@ -371,7 +377,8 @@ public class DestroyableObjective implements GameObjective {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (GameHandler.getGameHandler().getMatch().isRunning() && !this.isTouched() && TeamUtils.getTeamByPlayer(event.getPlayer()) != null && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() && TeamUtils.getTeamByPlayer(event.getPlayer()) != this.team) {
+        Optional<TeamModule> playerTeam = TeamUtils.getTeamByPlayer(event.getPlayer());
+        if (GameHandler.getGameHandler().getMatch().isRunning() && !this.isTouched() && (!!playerTeam.isPresent() || !playerTeam.get().isObserver()) && playerTeam.orNull() != this.team) {
             if (event.getPlayer().getLocation().toVector().distance(region.getCenterBlock().getVector()) < proximity) {
                 double old = proximity;
                 proximity = event.getPlayer().getLocation().toVector().distance(region.getCenterBlock().getVector());

@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.match;
 
+import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
@@ -11,6 +12,7 @@ import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
 import in.twizmwaz.cardinal.util.DomUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 
@@ -96,6 +98,13 @@ public class Match {
         if (getState() == MatchState.PLAYING) {
             state = MatchState.ENDED;
             Bukkit.getServer().getPluginManager().callEvent(new MatchEndEvent(team));
+        }
+    }
+
+    public void end(Player player) {
+        if (getState() == MatchState.PLAYING) {
+            state = MatchState.ENDED;
+            Bukkit.getServer().getPluginManager().callEvent(new MatchEndEvent(player));
         }
     }
 

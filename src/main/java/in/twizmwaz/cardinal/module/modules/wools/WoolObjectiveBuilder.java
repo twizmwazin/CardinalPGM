@@ -25,9 +25,9 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
             for (Element subElement : element.getChildren("wool")) {
                 TeamModule team;
                 try {
-                    team = TeamUtils.getTeamById(element.getAttributeValue("team"));
+                    team = TeamUtils.getTeamById(element.getAttributeValue("team")).orNull();
                 } catch (NullPointerException e) {
-                    team = TeamUtils.getTeamById((subElement.getAttributeValue("team")));
+                    team = TeamUtils.getTeamById((subElement.getAttributeValue("team"))).orNull();
                 }
                 DyeColor color = ParseUtils.parseDyeColor(subElement.getAttributeValue("color"));
                 BlockRegion place = RegionModuleBuilder.getRegion(subElement.getChildren().get(0)).getCenterBlock();
@@ -63,12 +63,12 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
                 for (Element subChild : child.getChildren("wool")) {
                     TeamModule team;
                     try {
-                        team = TeamUtils.getTeamById((child.getAttributeValue("team")));
+                        team = TeamUtils.getTeamById((child.getAttributeValue("team"))).orNull();
                     } catch (NullPointerException e) {
                         try {
-                            team = TeamUtils.getTeamById((subChild.getAttributeValue("team")));
+                            team = TeamUtils.getTeamById((subChild.getAttributeValue("team"))).orNull();
                         } catch (NullPointerException ex) {
-                            team = TeamUtils.getTeamById((element.getAttributeValue("team")));
+                            team = TeamUtils.getTeamById((element.getAttributeValue("team"))).orNull();
                         }
                     }
                     DyeColor color = ParseUtils.parseDyeColor(subChild.getAttributeValue("color"));

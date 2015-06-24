@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.snowflakes;
 
+import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalDeathEvent;
@@ -48,7 +49,7 @@ public class Snowflakes implements Module {
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         if (!event.isCancelled() && TeamUtils.getTeamByPlayer(event.getPlayer()) != null && event.getItemDrop().getItemStack().getType().equals(Material.WOOL)) {
             for (TeamModule team : TeamUtils.getTeams()) {
-                if (!team.isObserver() && TeamUtils.getTeamByPlayer(event.getPlayer()) != team) {
+                if (!team.isObserver() && TeamUtils.getTeamByPlayer(event.getPlayer()).orNull() != team) {
                     for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
                         if (obj instanceof WoolObjective && event.getItemDrop().getItemStack().getData().getData() == ((WoolObjective) obj).getColor().getData()) {
                             if (!items.containsKey(event.getPlayer())) {
@@ -72,7 +73,7 @@ public class Snowflakes implements Module {
                     for (Item item : items.get(player)) {
                         if (item.equals(event.getEntity())) {
                             for (TeamModule team : TeamUtils.getTeams()) {
-                                if (!team.isObserver() && TeamUtils.getTeamByPlayer(player) != team) {
+                                if (!team.isObserver() && TeamUtils.getTeamByPlayer(player).orNull() != team) {
                                     for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
                                         if (obj instanceof WoolObjective && item.getItemStack().getData().getData() == ((WoolObjective) obj).getColor().getData() && (!destroyed.containsKey(player) || !destroyed.get(player).contains(((WoolObjective) obj).getColor()))) {
                                             if (!destroyed.containsKey(player)) {

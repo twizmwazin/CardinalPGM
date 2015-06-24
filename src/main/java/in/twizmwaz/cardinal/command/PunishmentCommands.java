@@ -8,7 +8,7 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.module.modules.chatChannels.AdminChannel;
-import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannelModule;
+import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannel;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
@@ -32,7 +32,7 @@ public class PunishmentCommands {
         }
         if (kicked != null) {
             String reason = cmd.argsLength() > 1 ? cmd.getJoinedStrings(1) : "You have been kicked!";
-            Bukkit.broadcastMessage((sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " \u00BB Kicked \u00BB " + TeamUtils.getTeamByPlayer(kicked).getColor() + kicked.getDisplayName() + ChatColor.GOLD + " \u00BB " + reason);
+            Bukkit.broadcastMessage((sender instanceof Player ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " \u00BB Kicked \u00BB " + TeamUtils.getTeamColorByPlayer(kicked) + kicked.getDisplayName() + ChatColor.GOLD + " \u00BB " + reason);
             kicked.kickPlayer(ChatColor.RED + "Kicked" + ChatColor.GOLD + "  \u00BB  " + ChatColor.AQUA + reason);
         } else {
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(ChatUtils.getLocale(sender)));
@@ -45,7 +45,7 @@ public class PunishmentCommands {
         Player warned = Bukkit.getPlayer(cmd.getString(0));
         if (warned != null) {
             String reason = cmd.argsLength() > 1 ? cmd.getJoinedStrings(1) : "You have been warned!";
-            ChatChannelModule channel = GameHandler.getGameHandler().getMatch().getModules().getModule(AdminChannel.class);
+            ChatChannel channel = GameHandler.getGameHandler().getMatch().getModules().getModule(AdminChannel.class);
             channel.sendMessage("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + ((sender instanceof Player) ? TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console") + ChatColor.GOLD + " warned " + TeamUtils.getTeamColorByPlayer(warned) + warned.getDisplayName() + ChatColor.GOLD + " for " + reason);
             warned.sendMessage(ChatColor.RED + "" + ChatColor.MAGIC + "-------" + ChatColor.YELLOW + "WARNING" + ChatColor.RED + ChatColor.MAGIC + "-------");
             warned.sendMessage(ChatColor.GREEN + reason);

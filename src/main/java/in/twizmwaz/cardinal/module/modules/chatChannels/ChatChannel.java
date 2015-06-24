@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Collection;
 
-public interface ChatChannelModule extends Module {
+public interface ChatChannel extends Module {
 
     /**
      * @param string Raw String to be sent to all players in this channel

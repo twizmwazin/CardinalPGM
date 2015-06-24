@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.wools;
 
+import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -127,14 +128,14 @@ public class WoolObjective implements GameObjective {
         if (!this.complete && GameHandler.getGameHandler().getMatch().isRunning()) {
             try {
                 if (event.getCurrentItem().getType() == Material.WOOL && event.getCurrentItem().getData().getData() == color.getData()) {
-                    if (TeamUtils.getTeamByPlayer(player) == team) {
+                    if (TeamUtils.getTeamByPlayer(player).orNull() == team) {
                         boolean touchMessage = false;
                         if (!this.playersTouched.contains(player.getUniqueId())) {
                             this.playersTouched.add(player.getUniqueId());
                             if (this.show && !this.complete) {
-                                TeamUtils.getTeamChannel(team).sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED_FOR, team.getColor() + player.getName() + ChatColor.WHITE, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.WHITE, team.getCompleteName() + ChatColor.WHITE)));
+                                TeamUtils.getTeamChannel(Optional.of(team)).sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED_FOR, team.getColor() + player.getName() + ChatColor.WHITE, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.WHITE, team.getCompleteName() + ChatColor.WHITE)));
                                 for (Player player1 : Bukkit.getOnlinePlayers()) {
-                                    if (TeamUtils.getTeamByPlayer(player1) != null && TeamUtils.getTeamByPlayer(player1).isObserver()) {
+                                    if (TeamUtils.getTeamByPlayer(player1).isPresent() && TeamUtils.getTeamByPlayer(player1).get().isObserver()) {
                                         player1.sendMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED_FOR, team.getColor() + player.getName() + ChatColor.GRAY, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.GRAY, team.getCompleteName() + ChatColor.GRAY)).getMessage(player1.getLocale()));
                                     }
                                 }
@@ -169,14 +170,14 @@ public class WoolObjective implements GameObjective {
         if (!this.complete && GameHandler.getGameHandler().getMatch().isRunning()) {
             try {
                 if (event.getItem().getItemStack().getType() == Material.WOOL && event.getItem().getItemStack().getData().getData() == color.getData()) {
-                    if (TeamUtils.getTeamByPlayer(player) == team) {
+                    if (TeamUtils.getTeamByPlayer(player).orNull() == team) {
                         boolean touchMessage = false;
                         if (!this.playersTouched.contains(player.getUniqueId())) {
                             this.playersTouched.add(player.getUniqueId());
                             if (this.show && !this.complete) {
-                                TeamUtils.getTeamChannel(team).sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED_FOR, team.getColor() + player.getName() + ChatColor.WHITE, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.WHITE, team.getCompleteName() + ChatColor.WHITE)));
+                                TeamUtils.getTeamChannel(Optional.of(team)).sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED, team.getColor() + player.getName() + ChatColor.WHITE, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.WHITE, team.getCompleteName() + ChatColor.WHITE)));
                                 for (Player player1 : Bukkit.getOnlinePlayers()) {
-                                    if (TeamUtils.getTeamByPlayer(player1) != null && TeamUtils.getTeamByPlayer(player1).isObserver()) {
+                                    if (TeamUtils.getTeamByPlayer(player1).isPresent() && TeamUtils.getTeamByPlayer(player1).get().isObserver()) {
                                         player1.sendMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED_FOR, team.getColor() + player.getName() + ChatColor.GRAY, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.GRAY, team.getCompleteName() + ChatColor.GRAY)).getMessage(player1.getLocale()));
                                     }
                                 }
@@ -217,7 +218,7 @@ public class WoolObjective implements GameObjective {
         if (event.getBlock().equals(place.getBlock())) {
             if (event.getBlock().getType().equals(Material.WOOL)) {
                 if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
-                    if (TeamUtils.getTeamByPlayer(event.getPlayer()) == team) {
+                    if (TeamUtils.getTeamByPlayer(event.getPlayer()).orNull() == team) {
                         this.complete = true;
                         if (this.show)
                             ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PLACED, team.getColor() + event.getPlayer().getName() + ChatColor.WHITE, team.getCompleteName() + ChatColor.WHITE, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.WHITE)));
@@ -259,7 +260,7 @@ public class WoolObjective implements GameObjective {
 
     @EventHandler
     public void onCardinalDeath(CardinalDeathEvent event) {
-        if (event.getKiller() != null && location != null && GameHandler.getGameHandler().getMatch().isRunning() && !this.touched && TeamUtils.getTeamByPlayer(event.getKiller()) != null && TeamUtils.getTeamByPlayer(event.getKiller()) == this.team) {
+        if (event.getKiller() != null && location != null && GameHandler.getGameHandler().getMatch().isRunning() && !this.touched && TeamUtils.getTeamByPlayer(event.getKiller()).isPresent() && TeamUtils.getTeamByPlayer(event.getKiller()).get() == this.team) {
             if (event.getKiller().getLocation().toVector().distance(location) < proximity) {
                 double old = proximity;
                 proximity = event.getKiller().getLocation().toVector().distance(location);
@@ -273,7 +274,7 @@ public class WoolObjective implements GameObjective {
         if (!event.isCancelled() && this.touched) {
             if (event.getBlock().getType().equals(Material.WOOL)) {
                 if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
-                    if (TeamUtils.getTeamByPlayer(event.getPlayer()) == team) {
+                    if (TeamUtils.getTeamByPlayer(event.getPlayer()).orNull() == team) {
                         if (event.getBlockPlaced().getLocation().distance(place.getLocation()) < proximity) {
                             double old = proximity;
                             proximity = event.getBlockPlaced().getLocation().distance(place.getLocation());

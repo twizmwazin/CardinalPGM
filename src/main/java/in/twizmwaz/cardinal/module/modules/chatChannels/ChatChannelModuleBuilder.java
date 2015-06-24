@@ -10,7 +10,7 @@ public class ChatChannelModuleBuilder implements ModuleBuilder {
 
     @Override
     public ModuleCollection load(Match match) {
-        ModuleCollection<ChatChannelModule> results = new ModuleCollection<ChatChannelModule>();
+        ModuleCollection<ChatChannel> results = new ModuleCollection<ChatChannel>();
         results.add(new GlobalChannel());
         results.add(new AdminChannel(match.getModules().getModule(PermissionModule.class)));
         for (TeamModule teamModule : match.getModules().getModules(TeamModule.class)) {

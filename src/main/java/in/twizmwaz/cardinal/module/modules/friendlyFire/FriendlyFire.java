@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.friendlyFire;
 
+import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
@@ -38,7 +39,9 @@ public class FriendlyFire implements Module {
     @EventHandler
     public void onBowShootEvent(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player) {
-            event.getEntity().setMetadata("team", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), TeamUtils.getTeamByPlayer(((Player) event.getEntity()).getPlayer()).getId()));
+            Optional<TeamModule> team = TeamUtils.getTeamByPlayer(((Player) event.getEntity()).getPlayer());
+            if (team.isPresent())
+                event.getEntity().setMetadata("team", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), team.get().getId()));
         }
     }
 
@@ -69,9 +72,9 @@ public class FriendlyFire implements Module {
             }
         }
         if (proceed && event.getPotion().getShooter() instanceof Player && TeamUtils.getTeamByPlayer((Player) event.getPotion().getShooter()) != null) {
-            TeamModule team = TeamUtils.getTeamByPlayer((Player) event.getPotion().getShooter());
+            Optional<TeamModule> team = TeamUtils.getTeamByPlayer((Player) event.getPotion().getShooter());
             for (LivingEntity affected : event.getAffectedEntities()) {
-                if (affected instanceof Player && TeamUtils.getTeamByPlayer((Player) affected) != null && TeamUtils.getTeamByPlayer((Player) affected) == team && !affected.equals((Player) event.getPotion().getShooter())) {
+                if (affected instanceof Player && TeamUtils.getTeamByPlayer((Player) affected) != null && TeamUtils.getTeamByPlayer((Player) affected).equals(team) && !affected.equals(event.getPotion().getShooter())) {
                     event.setIntensity(affected, 0);
                 }
             }

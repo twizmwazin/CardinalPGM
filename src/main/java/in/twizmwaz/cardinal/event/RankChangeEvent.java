@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.event;
 
+import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.entity.Player;
@@ -10,9 +11,9 @@ public class RankChangeEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
     private final Player player;
-    private final TeamModule team;
+    private final Optional<TeamModule> team;
 
-    public RankChangeEvent(Player player, TeamModule team) {
+    public RankChangeEvent(Player player, Optional<TeamModule> team) {
         this.player = player;
         this.team = team;
     }
@@ -34,7 +35,7 @@ public class RankChangeEvent extends Event {
         return player;
     }
 
-    public TeamModule getTeam() {
+    public Optional<TeamModule> getTeam() {
         return team;
     }
 }

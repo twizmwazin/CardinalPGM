@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.team;
 
+import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -8,6 +9,7 @@ import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
+import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -42,13 +44,6 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
     }
 
     public boolean add(Player player, boolean force, boolean message) {
-        TeamModule old = null;
-        for (TeamModule team : match.getModules().getModules(TeamModule.class)) {
-            if (team.contains(player)) {
-                old = team;
-                break;
-            }
-        }
         if (Blitz.matchIsBlitz() && GameHandler.getGameHandler().getMatch().isRunning() && !this.isObserver() && !force) {
             String title = GameHandler.getGameHandler().getMatch().getModules().getModule(Blitz.class).getTitle();
             player.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.ERROR_MAY_NOT_JOIN, ChatColor.ITALIC + "" + ChatColor.AQUA + title + ChatColor.RESET + ChatColor.RED)).getMessage(player.getLocale()));
@@ -58,10 +53,12 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
             player.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.ERROR_TEAM_FULL, getCompleteName() + ChatColor.RED)).getMessage(player.getLocale()));
             return false;
         }
-        PlayerChangeTeamEvent event = new PlayerChangeTeamEvent(player, force, this, old);
+        PlayerChangeTeamEvent event = new PlayerChangeTeamEvent(player, force, Optional.<TeamModule>of(this), TeamUtils.getTeamByPlayer(player));
         Bukkit.getServer().getPluginManager().callEvent(event);
-        if (message) {
-            event.getPlayer().sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_JOINED, event.getNewTeam().getCompleteName()).getMessage(event.getPlayer().getLocale()));
+        if (message && event.getNewTeam().isPresent()) {
+            event.getPlayer().sendMessage(ChatColor.WHITE + new LocalizedChatMessage(ChatConstant.GENERIC_JOINED, event.getNewTeam().get().getCompleteName()).getMessage(event.getPlayer().getLocale()));
+        } else if (message) {
+            event.getPlayer().sendMessage(ChatColor.WHITE + new LocalizedChatMessage(ChatConstant.GENERIC_JOINED, ChatConstant.MISC_MATCH.asMessage()).getMessage(event.getPlayer().getLocale()));
         }
         return !event.isCancelled() || force;
     }
@@ -79,7 +76,7 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
         if (!event.isCancelled()) {
             this.remove(event.getPlayer());
         }
-        if (event.getNewTeam() == this) {
+        if (event.getNewTeam().orNull() == this) {
             super.add(event.getPlayer());
         }
     }

@@ -11,7 +11,7 @@ public class TeamFilterParser extends FilterParser {
 
     public TeamFilterParser(final Element element) {
         super(element);
-        this.team = TeamUtils.getTeamById(element.getText());
+        this.team = TeamUtils.getTeamById(element.getText()).orNull();
     }
 
     public TeamModule getTeam() {

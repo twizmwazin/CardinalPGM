@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.filter.type;
 
+import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.TeamFilterParser;
@@ -24,8 +25,9 @@ public class TeamFilter extends FilterModule {
     public FilterState evaluate(final Object... objects) {
         for (Object object : objects) {
             if (object instanceof Player) {
-                if (TeamUtils.getTeamByPlayer((Player) object) != null)
-                    if (TeamUtils.getTeamByPlayer((Player) object) == team)
+                Optional<TeamModule> team = TeamUtils.getTeamByPlayer((Player) object);
+                if (team.isPresent())
+                    if (team.get() == this.team)
                         return ALLOW;
                     else
                         return DENY;

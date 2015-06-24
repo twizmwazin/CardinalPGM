@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.command;
 
+import com.google.common.base.Optional;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
@@ -40,13 +41,12 @@ public class StartAndEndCommand {
     @CommandPermissions("cardinal.match.end")
     public static void end(CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().getState() == MatchState.PLAYING) {
-            try {
-                TeamModule team = TeamUtils.getTeamByName(cmd.getString(0));
-                GameHandler.getGameHandler().getMatch().end(team);
-            } catch (IndexOutOfBoundsException ex) {
-                GameHandler.getGameHandler().getMatch().end(null);
+            if (cmd.argsLength() > 0) {
+                Optional<TeamModule> team = TeamUtils.getTeamByName(cmd.getString(0));
+                GameHandler.getGameHandler().getMatch().end(team.orNull());
+            } else {
+                GameHandler.getGameHandler().getMatch().end(Optional.<TeamModule>absent().orNull());
             }
-
         } else
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_END).getMessage(ChatUtils.getLocale(sender)));
     }

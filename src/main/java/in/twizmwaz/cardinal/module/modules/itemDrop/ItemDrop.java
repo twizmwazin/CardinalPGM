@@ -1,8 +1,10 @@
 package in.twizmwaz.cardinal.module.modules.itemDrop;
 
+import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -21,16 +23,18 @@ public class ItemDrop implements Module {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerLeave(PlayerQuitEvent event) {
+        Optional<TeamModule> team = TeamUtils.getTeamByPlayer(event.getPlayer());
         if (GameHandler.getGameHandler().getMatch().isRunning()
-                && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) {
+                && (!team.isPresent() || team.get().isObserver())) {
             dump(event.getPlayer());
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onSwitchTeam(PlayerChangeTeamEvent event) {
+        Optional<TeamModule> team = TeamUtils.getTeamByPlayer(event.getPlayer());
         if (GameHandler.getGameHandler().getMatch().isRunning()
-                && event.getOldTeam() != null && !event.getOldTeam().isObserver()) {
+                && (!team.isPresent() || team.get().isObserver())) {
             dump(event.getPlayer());
         }
     }

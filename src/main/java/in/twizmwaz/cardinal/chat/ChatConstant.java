@@ -85,6 +85,7 @@ public enum ChatConstant {
     ERROR_GLOBAL_MUTE_ENABLED("error.globalMuteEnabled"),
     ERROR_NOT_ENOUGH_ARGS_BROADCAST("error.notEnoughArgsBroadcast"),
     ERROR_NOT_ENOUGH_ARGS_SAY("error.notEnoughArgsSay"),
+    ERROR_TEAM_ABSENT("error.teamAbsent"),
 
     GENERIC_MAP_SET("generic.mapSet"),
     GENERIC_MARKED_FOR_RELOADING("generic.markedForReloading"),
@@ -134,6 +135,7 @@ public enum ChatConstant {
     MISC_AND("misc.and"),
     MISC_BY("misc.by"),
     MISC_TEAM("misc.team"),
+    MISC_MATCH("misc.match"),
 
     UI_MAPLOADED("userInterface.mapLoaded"),
     UI_MAP_OBJECTIVE("userInterface.mapObjective"),
