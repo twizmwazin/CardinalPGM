@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.startTimer;
 
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -15,6 +16,7 @@ import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -55,10 +57,23 @@ public class StartTimer implements TaskedModule, Cancellable {
                             return;
                         }
                     }
-                    match.setState(MatchState.PLAYING);
-                    ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "{0}", new LocalizedChatMessage(ChatConstant.UI_MATCH_STARTED)));
-                    Bukkit.getServer().getPluginManager().callEvent(new MatchStartEvent());
                 }
+                if (Cardinal.getInstance().getConfig().getBoolean("auto-whitelist")) {
+                    int count2 = 0;
+                    for (OfflinePlayer player : Bukkit.getWhitelistedPlayers()) {
+                        player.setWhitelisted(false);
+                        count2++;
+                    }
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        player.setWhitelisted(true);
+                    }
+                    Bukkit.getServer().setWhitelist(true);
+                    ChatUtils.getGlobalChannel().sendMessage(ChatColor.GREEN + "A number of " + ChatColor.GOLD + Bukkit.getOnlinePlayers().size() + ChatColor.GREEN + " player(s) has been added to the whitelist.");
+                    ChatUtils.getGlobalChannel().sendMessage(ChatColor.GREEN + "The whitelist is now " + ChatColor.GOLD + "enabled.");
+                }
+                match.setState(MatchState.PLAYING);
+                Bukkit.getServer().getPluginManager().callEvent(new MatchStartEvent());
+                ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "{0}", new LocalizedChatMessage(ChatConstant.UI_MATCH_STARTED)));
             }
             if (time <= 60 && time >= 20 && time % 20 == 0) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
@@ -73,6 +88,18 @@ public class StartTimer implements TaskedModule, Cancellable {
                         player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 2);
                     }
                 }
+            }
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (!TeamUtils.getTeamByPlayer(player).isObserver()) {
+                    if (time == 0) {
+                        //sendTitle(ChatColor.GREEN + "Go!");
+                    } else if (((time % 20) == 0) && (time <= 60)) {
+                        //sendTitle(ChatColor.YELLOW + (time / 20));
+                    }
+                }
+            }
+            if (time < 0) {
+                setCancelled(true);
             }
             time--;
         }
