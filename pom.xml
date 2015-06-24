@@ -11,6 +11,7 @@
     <properties>
         <plugin.name>Cardinal</plugin.name>
         <plugin.mainClass>in.twizmwaz.cardinal.Cardinal</plugin.mainClass>
+        <project.description>An open-source implementation of PGM</project.description>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
