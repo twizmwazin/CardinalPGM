@@ -145,11 +145,7 @@ public class WoolObjective implements GameObjective {
                         this.touched = true;
                         if (touchMessage) {
                             double newProx;
-                            if (location != null) {
-                                newProx = location.distance(place.getVector());
-                            } else {
-                                newProx = player.getLocation().toVector().distance(place.getVector());
-                            }
+                            newProx = player.getLocation().toVector().distance(place.getVector());
                             if (!oldState || newProx < proximity) {
                                 proximity = newProx;
                             }
@@ -187,11 +183,7 @@ public class WoolObjective implements GameObjective {
                         this.touched = true;
                         if (touchMessage) {
                             double newProx;
-                            if (location != null) {
-                                newProx = location.distance(place.getVector());
-                            } else {
-                                newProx = player.getLocation().toVector().distance(place.getVector());
-                            }
+                            newProx = player.getLocation().toVector().distance(place.getVector());
                             if (!oldState || newProx < proximity) {
                                 proximity = newProx;
                             }

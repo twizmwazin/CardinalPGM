@@ -10,12 +10,10 @@ import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.module.modules.chatChannels.AdminChannel;
 import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannelModule;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
+import in.twizmwaz.cardinal.settings.Settings;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
-import org.bukkit.BanList;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -52,6 +50,9 @@ public class PunishmentCommands {
             warned.sendMessage(ChatColor.YELLOW + reason);
             warned.sendMessage(ChatColor.RED + reason);
             warned.sendMessage(ChatColor.RED + "" + ChatColor.MAGIC + "-------" + ChatColor.YELLOW + "WARNING" + ChatColor.RED + ChatColor.MAGIC + "-------");
+            if (Settings.getSettingByName("Sounds") != null && Settings.getSettingByName("Sounds").getValueByPlayer(warned).getValue().equalsIgnoreCase("on")) {
+                warned.playSound(warned.getLocation(), Sound.ENDERDRAGON_GROWL, (float) 1.0, (float) 2.0);
+            }
         } else {
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(ChatUtils.getLocale(sender)));
         }
@@ -109,7 +110,7 @@ public class PunishmentCommands {
         } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_FOUND).getMessage(ChatUtils.getLocale(sender)));
     }
 
-    @Command(aliases = {"gmute"}, desc = "Enable/disable global mute.")
+    @Command(aliases = {"gmute", "muteall", "globalmute"}, desc = "Enable/disable global mute.")
     @CommandPermissions("cardinal.punish.mute")
     public static void gmute(CommandContext cmd, CommandSender sender) {
         boolean state = GameHandler.getGameHandler().toggleGlobalMute();
