@@ -19,7 +19,7 @@ import org.bukkit.command.CommandSender;
 
 public class TimeLimitCommand {
 
-    @Command(aliases = {"timelimit", "tl"}, desc = "Modify the time limit of the current match.", usage = "<add, set> <time> [result]")
+    @Command(aliases = {"timelimit", "tl"}, desc = "Modify the time limit of the current match.", usage = "<cancel, add, set> <time> [result]")
     public static void timeLimit(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (cmd.argsLength() == 0) {
             if (TimeLimit.getMatchTimeLimit() != 0) {
