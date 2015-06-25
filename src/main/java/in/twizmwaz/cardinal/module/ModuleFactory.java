@@ -150,7 +150,7 @@ public class ModuleFactory {
             SnowflakesBuilder.class,
             SoundModuleBuilder.class,
             StartTimerBuilder.class,
-            StatsBuilder.class,
+            /* StatsBuilder.class, */
             HeaderModuleBuilder.class,
             CycleTimerBuilder.class,
             TimeLimitBuilder.class,
