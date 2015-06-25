@@ -181,7 +181,7 @@
         <objectivePlaced>{0} puso {2} para {1}</objectivePlaced>
         <objectiveLeaked>¡El {1} de {0} ha sido leakeado!</objectiveLeaked>
         <objectiveDestroyed>El {1} del {0} ha sido destruido por {2}</objectiveDestroyed>
-        <objectiveTouchedFor>{0} rompió una pieza de {2} para {1}</objectiveTouchedFor>
+        <objectiveTouchedFor>{0} rompió una pieza de {1} para {2}</objectiveTouchedFor>
         <objectiveTouched>{0} rompió una pieza de {1}</objectiveTouched>
         <objectiveDamagedFor>{0} dañó {1} para {2}</objectiveDamagedFor>
         <objectiveDamaged>{0} dañó {1}</objectiveDamaged>
