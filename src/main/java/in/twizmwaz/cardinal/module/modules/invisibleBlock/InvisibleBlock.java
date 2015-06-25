@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.world.ChunkLoadEvent;
@@ -21,6 +22,11 @@ public class InvisibleBlock implements Module {
                     for (Block block36 : chunk.getBlocks(Material.getMaterial(36))) {
                         block36.setType(Material.AIR);
                         block36.setMetadata("block36", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), true));
+                    }
+                    for (Block door : chunk.getBlocks(Material.IRON_DOOR_BLOCK)) {
+                        if (door.getRelative(BlockFace.DOWN).getType() != Material.IRON_DOOR_BLOCK
+                                && door.getRelative(BlockFace.UP).getType() != Material.IRON_DOOR_BLOCK)
+                            door.setType(Material.BARRIER);
                     }
                 }
             }
@@ -41,6 +47,11 @@ public class InvisibleBlock implements Module {
                 for (Block block36 : chunk.getBlocks(Material.getMaterial(36))) {
                     block36.setType(Material.AIR);
                     block36.setMetadata("block36", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), true));
+                }
+                for (Block door : chunk.getBlocks(Material.IRON_DOOR_BLOCK)) {
+                    if (door.getRelative(BlockFace.DOWN).getType() != Material.IRON_DOOR_BLOCK
+                            && door.getRelative(BlockFace.UP).getType() != Material.IRON_DOOR_BLOCK)
+                        door.setType(Material.BARRIER);
                 }
             }
         });
