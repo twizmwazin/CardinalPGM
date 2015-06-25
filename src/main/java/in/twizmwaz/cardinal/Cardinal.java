@@ -194,6 +194,7 @@ public class Cardinal extends JavaPlugin {
             return;
         }
         setupCommands();
+        Bukkit.getServer().setSpawnRadius(0); //Disable spawn protection
     }
 
     @Override
