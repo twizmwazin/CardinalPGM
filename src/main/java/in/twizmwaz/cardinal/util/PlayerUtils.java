@@ -1,6 +1,9 @@
 package in.twizmwaz.cardinal.util;
 
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -34,4 +37,11 @@ public class PlayerUtils {
         if (PermissionModule.isMod(player.getUniqueId())) return 1.5;
         return 1.0;
     }
+
+    public static String getColoredName(OfflinePlayer player) {
+        if (player.isOnline())
+            return player.getPlayer().getDisplayName();
+        return ChatColor.DARK_AQUA + player.getName();
+    }
+
 }
