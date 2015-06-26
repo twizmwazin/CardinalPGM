@@ -101,9 +101,9 @@ public class HeaderModule implements TaskedModule {
         else if (authors.size() > 1) {
             for (Contributor author : authors) {
                 if (authors.indexOf(author) < authors.size() - 2) {
-                    builder.append(ChatColor.GRAY).append(author.getName()).append(ChatColor.DARK_GRAY).append(", ");
+                    builder.append(ChatColor.GRAY).append(author.getName()).append(ChatColor.DARK_AQUA).append(", ");
                 } else if (authors.indexOf(author) == authors.size() - 2) {
-                    builder.append(ChatColor.GRAY).append(author.getName()).append(ChatColor.DARK_GRAY).append(" {0} ");
+                    builder.append(ChatColor.GRAY).append(author.getName()).append(ChatColor.DARK_AQUA).append(" {0} ");
                 } else if (authors.indexOf(author) == authors.size() - 1) {
                     builder.append(ChatColor.GRAY).append(author.getName());
                 }
