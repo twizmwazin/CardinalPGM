@@ -1,4 +1,5 @@
-repo: maps
+repos:
+- maps
 rotation: rotation.txt
 deleteMatches: true
 displayMapLoadErrors: false

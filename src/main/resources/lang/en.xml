@@ -121,6 +121,8 @@
         <autoBalance>Teams will be auto-balanced if {0} remains stacked</autoBalance>
         <youChangedRating>You changed your rating for {1} {2} from {3} to {0}.</youChangedRating>
         <teamSizeChanged>{0} max-overfill was set to {1}</teamSizeChanged>
+        <repositoryReload>Reloaded the repository successfully</repositoryReload>
+        <rotationReload>Reloaded the repository successfully</rotationReload>
     </generic>
     <misc>
         <enemy>the enemy</enemy>
