@@ -11,10 +11,13 @@ import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
 import in.twizmwaz.cardinal.util.Contributor;
+import in.twizmwaz.cardinal.util.PlayerUtils;
 import in.twizmwaz.cardinal.util.StringUtils;
 import net.md_5.bungee.api.chat.TextComponent;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -100,15 +103,21 @@ public class HeaderModule implements TaskedModule {
         if (authors.size() == 1) builder.append(ChatColor.GRAY).append(authors.get(0).getName());
         else if (authors.size() > 1) {
             for (Contributor author : authors) {
+                OfflinePlayer player = null;
+                if (author.getUniqueId() != null)
+                    player = Bukkit.getOfflinePlayer(author.getUniqueId());
+                else
+                    player = Bukkit.getOfflinePlayer(author.getName());
                 if (authors.indexOf(author) < authors.size() - 2) {
-                    builder.append(ChatColor.GRAY).append(author.getName()).append(ChatColor.DARK_GRAY).append(", ");
+                    builder.append(PlayerUtils.getColoredName(player)).append(ChatColor.DARK_GRAY).append(", ");
                 } else if (authors.indexOf(author) == authors.size() - 2) {
-                    builder.append(ChatColor.GRAY).append(author.getName()).append(ChatColor.DARK_GRAY).append(" {0} ");
+                    builder.append(PlayerUtils.getColoredName(player)).append(ChatColor.DARK_GRAY).append(" {0} ");
                 } else if (authors.indexOf(author) == authors.size() - 1) {
-                    builder.append(ChatColor.GRAY).append(author.getName());
+                    builder.append(PlayerUtils.getColoredName(player));
                 }
             }
         }
         return new UnlocalizedChatMessage(builder.toString(), ChatConstant.MISC_AND.asMessage());
     }
+
 }
