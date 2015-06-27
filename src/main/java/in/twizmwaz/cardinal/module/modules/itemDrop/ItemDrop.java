@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.itemDrop;
 
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.util.TeamUtils;
@@ -20,14 +21,16 @@ public class ItemDrop implements Module {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerLeave(PlayerQuitEvent event) {
-        if (!TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) {
+        if (GameHandler.getGameHandler().getMatch().isRunning()
+                && !TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver()) {
             dump(event.getPlayer());
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onSwitchTeam(PlayerChangeTeamEvent event) {
-        if (event.getOldTeam() != null && !event.getOldTeam().isObserver()) {
+        if (GameHandler.getGameHandler().getMatch().isRunning()
+                && event.getOldTeam() != null && !event.getOldTeam().isObserver()) {
             dump(event.getPlayer());
         }
     }
