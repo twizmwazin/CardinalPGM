@@ -56,51 +56,46 @@ public class Rotation {
         loaded = new ArrayList<>();
         this.repo = new File(Cardinal.getInstance().getConfig().getString("repo"));
         if (!repo.exists()) repo.mkdir();
-        List<String> requirements = Arrays.asList("map.xml", "region", "level.dat");
-        if (repo.listFiles() != null) {
-            for (File map : repo.listFiles()) {
-                if (map.isFile()) continue;
-                if (Arrays.asList(map.list()).containsAll(requirements)) {
-                    try {
-                        Document xml = DomUtils.parse(new File(map.getPath() + "/map.xml"));
-                        String name = xml.getRootElement().getChild("name").getText();
-                        String version = xml.getRootElement().getChild("version").getText();
-                        String objective = xml.getRootElement().getChild("objective").getText();
-                        List<Contributor> authors = new ArrayList<>();
-                        for (Element authorsElement : xml.getRootElement().getChildren("authors")) {
-                            for (Element author : authorsElement.getChildren()) {
-                                authors.add(parseContributor(author));
-                            }
-                        }
-                        List<Contributor> contributors = new ArrayList<>();
-                        for (Element contributorsElement : xml.getRootElement().getChildren("contributors")) {
-                            for (Element contributor : contributorsElement.getChildren()) {
-                                contributors.add(parseContributor(contributor));
-                            }
-                        }
-                        List<String> rules = new ArrayList<>();
-                        for (Element rulesElement : xml.getRootElement().getChildren("rules")) {
-                            for (Element rule : rulesElement.getChildren()) {
-                                rules.add(rule.getText().trim());
-                            }
-                        }
-                        int maxPlayers = 0;
-                        for (Element teams : xml.getRootElement().getChildren("teams")) {
-                            for (Element team : teams.getChildren()) {
-                                maxPlayers = maxPlayers + NumUtils.parseInt(team.getAttributeValue("max"));
-                            }
-                        }
-                        loaded.add(new LoadedMap(name, version, objective, authors, contributors, rules, maxPlayers, map));
-                    } catch (Exception e) {
-                        Bukkit.getLogger().log(Level.WARNING, "Failed to load map at " + map.getAbsolutePath());
-                        if (Cardinal.getInstance().getConfig().getBoolean("displayMapLoadErrors")) {
-                            Bukkit.getLogger().log(Level.INFO, "Showing error, this can be disabled in the config: ");
-                            e.printStackTrace();
-                        }
+        for (File map : getLoadableMaps(repo)) {
+            try {
+                Document xml = DomUtils.parse(new File(map.getPath() + "/map.xml"));
+                String name = xml.getRootElement().getChild("name").getText();
+                String version = xml.getRootElement().getChild("version").getText();
+                String objective = xml.getRootElement().getChild("objective").getText();
+                List<Contributor> authors = new ArrayList<>();
+                for (Element authorsElement : xml.getRootElement().getChildren("authors")) {
+                    for (Element author : authorsElement.getChildren()) {
+                        authors.add(parseContributor(author));
                     }
+                }
+                List<Contributor> contributors = new ArrayList<>();
+                for (Element contributorsElement : xml.getRootElement().getChildren("contributors")) {
+                    for (Element contributor : contributorsElement.getChildren()) {
+                        contributors.add(parseContributor(contributor));
+                    }
+                }
+                List<String> rules = new ArrayList<>();
+                for (Element rulesElement : xml.getRootElement().getChildren("rules")) {
+                    for (Element rule : rulesElement.getChildren()) {
+                        rules.add(rule.getText().trim());
+                    }
+                }
+                int maxPlayers = 0;
+                for (Element teams : xml.getRootElement().getChildren("teams")) {
+                    for (Element team : teams.getChildren()) {
+                        maxPlayers = maxPlayers + NumUtils.parseInt(team.getAttributeValue("max"));
+                    }
+                }
+                loaded.add(new LoadedMap(name, version, objective, authors, contributors, rules, maxPlayers, map));
+            } catch (Exception e) {
+                Bukkit.getLogger().log(Level.WARNING, "Failed to load map at " + map.getAbsolutePath());
+                if (Cardinal.getInstance().getConfig().getBoolean("displayMapLoadErrors")) {
+                    Bukkit.getLogger().log(Level.INFO, "Showing error, this can be disabled in the config: ");
+                    e.printStackTrace();
                 }
             }
         }
+
         try {
             updatePlayers();
         } catch (IOException | ClassNotFoundException e) {
@@ -108,6 +103,28 @@ public class Rotation {
         }
         if (loaded.size() < 1)
             throw new RotationLoadException("No maps were loaded. Are there any maps in the repository?");
+    }
+
+    /**
+     *
+     * @param source Repository in the config.yml
+     * @return All loadable files in the repository and in sub folders
+     */
+    private List<File> getLoadableMaps(File source) {
+        List<File> returns = Lists.newArrayList();
+        List<String> requirements = Arrays.asList("map.xml", "region", "level.dat");
+        if (source.listFiles() != null) {
+            for (File map : source.listFiles()) {
+                if (map.isFile()) continue;
+                if (Arrays.asList(map.list()).containsAll(requirements)) {
+                    returns.add(map);
+                } else {
+                    returns.addAll(getLoadableMaps(map));
+                }
+            }
+        }
+
+        return returns;
     }
 
     /**
