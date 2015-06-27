@@ -36,6 +36,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ScoreboardModule implements Module {
@@ -111,20 +112,7 @@ public class ScoreboardModule implements Module {
             }
 
             if (Blitz.matchIsBlitz()) {
-                if (event.getOldTeam().isPresent() && !event.getOldTeam().get().isObserver()) {
-                    TeamModule team = event.getOldTeam().get();
-                    Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-b");
-                    for (String entry : scoreboardTeam.getEntries()) {
-                        setScore(scoreboard.getObjective("scoreboard"), entry, team.size());
-                    }
-                }
-                if (event.getNewTeam().isPresent() && !event.getNewTeam().get().isObserver()) {
-                    TeamModule team = event.getNewTeam().get();
-                    Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-b");
-                    for (String entry : scoreboardTeam.getEntries()) {
-                        setScore(scoreboard.getObjective("scoreboard"), entry, team.size());
-                    }
-                }
+                update();
             }
         }
     }
@@ -480,36 +468,41 @@ public class ScoreboardModule implements Module {
     public void renderTeamScore(ScoreModule score) {
         TeamModule teamModule = score.getTeam();
         Team team = scoreboard.getTeam(teamModule.getId() + "-s");
-        team.setPrefix(teamModule.getColor() + Strings.trimTo(teamModule.getName(), 0, 14));
-        team.setSuffix(Strings.trimTo(teamModule.getName(), 14, 30));
+        String fullName = score.getScore() + " " + teamModule.getCompleteName();
+        team.setPrefix(fullName.substring(0, 16));
+        team.setSuffix(fullName.substring(16, 32));
         if (team.getEntries().size() > 0) {
-            setScore(objective, new ArrayList<>(team.getEntries()).get(0), score.getScore());
+            setScore(objective, new ArrayList<>(team.getEntries()).get(0), currentScore);
         } else {
-            String name = teamModule.getColor() + "";
+            String name = ChatColor.RESET + "";
             while (used.contains(name)) {
-                name = teamModule.getColor() + name;
+                name = ChatColor.RESET + name;
             }
             team.addEntry(name);
-            setScore(objective, name, score.getScore());
+            setScore(objective, name, currentScore);
             used.add(name);
         }
+        currentScore++;
     }
 
     public void renderTeamBlitz(TeamModule teamModule) {
         Team team = scoreboard.getTeam(teamModule.getId() + "-b");
-        team.setPrefix(teamModule.getColor() + Strings.trimTo(teamModule.getName(), 0, 14));
-        team.setSuffix(Strings.trimTo(teamModule.getName(), 14, 30));
+        String fullName = teamModule.size() + " " + teamModule.getCompleteName();
+        team.setPrefix(fullName.substring(0, 16));
+        team.setSuffix(fullName.substring(16, 32));
         if (team.getEntries().size() > 0) {
-            setScore(objective, new ArrayList<>(team.getEntries()).get(0), teamModule.size());
+            String entry = new ArrayList<>(team.getEntries()).get(0);
+            setScore(objective, entry, scoreboard.getObjective("scoreboard").getScore(entry).getScore());
         } else {
-            String name = teamModule.getColor() + "";
+            String name = ChatColor.RESET + "";
             while (used.contains(name)) {
-                name = teamModule.getColor() + name;
+                name = ChatColor.RESET + name;
             }
             team.addEntry(name);
-            setScore(objective, name, teamModule.size());
+            setScore(objective, name, currentScore);
             used.add(name);
         }
+        currentScore++;
     }
 
 }
