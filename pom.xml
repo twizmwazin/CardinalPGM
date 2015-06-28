@@ -36,13 +36,13 @@
         <dependency>
             <groupId>com.sk89q</groupId>
             <artifactId>command-framework-core</artifactId>
-            <version>0.5-SNAPSHOT</version>
+            <version>0.6-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>com.sk89q</groupId>
             <artifactId>command-framework-bukkit</artifactId>
-            <version>0.5-SNAPSHOT</version>
+            <version>0.6-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
         <dependency>
