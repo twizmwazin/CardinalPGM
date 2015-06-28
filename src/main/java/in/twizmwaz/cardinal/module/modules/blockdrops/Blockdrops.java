@@ -32,6 +32,7 @@ public class Blockdrops implements Module {
     private final Material replace;
     private final int experience;
     private final boolean wrongTool;
+
     protected Blockdrops(final RegionModule region, final FilterModule filter, final Set<ItemStack> drops, final Material replace, final int experience, final boolean wrongTool) {
         this.region = region;
         this.filter = filter;

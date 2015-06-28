@@ -24,6 +24,7 @@ public class Blitz implements Module {
     private String title = null;
     private boolean broadcastLives;
     private int lives;
+
     protected Blitz(final String title, final boolean broadcastLives, final int lives) {
         this.title = title;
         this.broadcastLives = broadcastLives;
