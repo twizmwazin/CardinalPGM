@@ -23,6 +23,7 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.friendlyFire.FriendlyFireBuilder;
 import in.twizmwaz.cardinal.module.modules.gameComplete.GameCompleteBuilder;
 import in.twizmwaz.cardinal.module.modules.gamerules.GamerulesBuilder;
+import in.twizmwaz.cardinal.module.modules.guiKeep.GuiKeepModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.header.HeaderModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.hill.HillObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.hunger.HungerBuilder;
@@ -161,7 +162,8 @@ public class ModuleFactory {
             MatchTranscriptBuilder.class,
             PotionRemoverBuilder.class,
             InvisibleBlockBuilder.class,
-            ItemDropBuilder.class
+            ItemDropBuilder.class,
+            GuiKeepModuleBuilder.class
     };
     private final List<ModuleBuilder> builders;
 
