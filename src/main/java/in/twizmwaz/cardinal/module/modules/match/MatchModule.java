@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.match;
 
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
@@ -7,11 +8,18 @@ import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.match.Match;
+import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.snowflakes.Snowflakes;
+import in.twizmwaz.cardinal.module.modules.stats.MatchTracker;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -31,24 +39,28 @@ public class MatchModule implements Module {
     }
 
     @EventHandler
-    public void onMatchStart(MatchStartEvent event) {
-        ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # #"));
-        ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # " + ChatColor.GOLD + "{0}" + ChatColor.DARK_PURPLE + " # #", new LocalizedChatMessage(ChatConstant.UI_MATCH_STARTED)));
-        ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # #"));
-    }
-
-    @EventHandler
     public void onMatchEnd(MatchEndEvent event) {
-        ChatUtils.getGlobalChannel().sendMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # #");
-        ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# #    " + ChatColor.GOLD + "{0}" + ChatColor.DARK_PURPLE + "    # #", new LocalizedChatMessage(ChatConstant.UI_MATCH_OVER)));
         if (event.getTeam() != null) {
             if (event.getTeam().size() == 1) {
-                ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # {0}" + ChatColor.DARK_PURPLE + " # #", new LocalizedChatMessage(ChatConstant.UI_MATCH_WIN, event.getTeam().getColor() + ((Player) event.getTeam().get(0)).getName())));
+                ChatUtils.getGlobalChannel().sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_MATCH_WIN, event.getTeam().getColor() + ((Player) event.getTeam().get(0)).getName() + ChatColor.WHITE + ""));
+                //sendTitle.((Player) event.getTeam().get(0)).getName() + ChatColor.WHITE + " wins!");
             } else {
-                ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # {0}" + ChatColor.DARK_PURPLE + " # #", new LocalizedChatMessage(ChatConstant.UI_MATCH_WIN, event.getTeam().getCompleteName())));
+                ChatUtils.getGlobalChannel().sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_MATCH_WIN, event.getTeam().getCompleteName() + ChatColor.WHITE + ""));
+                //sendTitle.(event.getTeam().getCompleteName() + ChatColor.WHITE + " wins!");
             }
         }
-        ChatUtils.getGlobalChannel().sendMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # #");
+        /*TeamModule winner = TimeLimit.getMatchWinner();
+        if (event.getTeam() == winner) {
+            sendMessage.(ChatColor.GREEN + "Your team won!");
+            sendTitle. (ChatColor.GREEN + "Your team won!");
+        } else {
+            sendMessage.(ChatColor.RED + "Your team lost");
+            sendTitle. (ChatColor.RED + "Your team lost");
+        }*/
+        if (Cardinal.getInstance().getConfig().getBoolean("auto-whitelist")) {
+            Bukkit.getServer().setWhitelist(false);
+            ChatUtils.getGlobalChannel().sendMessage(ChatColor.GREEN + "The whitelist is now " + ChatColor.RED + "disabled.");
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
