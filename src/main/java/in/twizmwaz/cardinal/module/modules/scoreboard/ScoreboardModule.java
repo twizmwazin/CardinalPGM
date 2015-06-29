@@ -477,9 +477,9 @@ public class ScoreboardModule implements Module {
         if (team.getEntries().size() > 0) {
             setScore(objective, new ArrayList<>(team.getEntries()).get(0), currentScore);
         } else {
-            String name = ChatColor.RESET + "";
+            String name = teamModule.getColor() + "";
             while (used.contains(name)) {
-                name = ChatColor.RESET + name;
+                name = teamModule.getColor() + name;
             }
             team.addEntry(name);
             setScore(objective, name, currentScore);
@@ -497,9 +497,9 @@ public class ScoreboardModule implements Module {
             String entry = new ArrayList<>(team.getEntries()).get(0);
             setScore(objective, entry, scoreboard.getObjective("scoreboard").getScore(entry).getScore());
         } else {
-            String name = ChatColor.RESET + "";
+            String name = teamModule.getColor() + "";
             while (used.contains(name)) {
-                name = ChatColor.RESET + name;
+                name = teamModule.getColor() + name;
             }
             team.addEntry(name);
             setScore(objective, name, currentScore);
