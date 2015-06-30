@@ -81,6 +81,8 @@
         <globalMuteEnabled>No puedes hablar en el chat mientras el silenciado global está habilitado.</globalMuteEnabled>
     </error>
     <generic>
+        <autoWhitelistPlayers>{0} jugador(es) han sido añadidos a la lista blanca.</autoWhitelistPlayers>
+        <whitelistStatus>La lista blanca ahora está {0}.</whitelistStatus>
         <mapSet>El siguiente mapa ha sido establecido a {0}</mapSet>
         <markedForReloading>{0} marcado con éxito para la recarga.</markedForReloading>
         <allMarkedReloading>Todos los mapas fueron marcados con éxito para la recarga.</allMarkedReloading>

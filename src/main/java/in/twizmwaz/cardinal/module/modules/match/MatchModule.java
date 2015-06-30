@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.match;
 
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
@@ -49,6 +50,10 @@ public class MatchModule implements Module {
             }
         }
         ChatUtils.getGlobalChannel().sendMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # #");
+        if (Cardinal.getInstance().getConfig().getBoolean("auto-whitelist")) {
+            Bukkit.getServer().setWhitelist(false);
+            ChatUtils.getAdminChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + "{0}", new LocalizedChatMessage(ChatConstant.GENERIC_WHITELIST_STATUS, (Bukkit.getServer().hasWhitelist() ? ChatColor.GREEN + "ON" : ChatColor.RED + "OFF"))));
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
