@@ -3,6 +3,7 @@ rotation: rotation.txt
 deleteMatches: true
 displayMapLoadErrors: false
 custom-motd: true
+team-name: TEAM NAME
 worldEditPermissions: true
 server-message: Scrimmage Server
 cycle: -1
