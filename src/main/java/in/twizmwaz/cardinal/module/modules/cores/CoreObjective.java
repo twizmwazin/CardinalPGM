@@ -184,7 +184,7 @@ public class CoreObjective implements GameObjective {
                         TeamModule teamModule = TeamUtils.getTeamByPlayer(event.getPlayer());
                         TeamChannel channel = TeamUtils.getTeamChannel(teamModule);
                         if (this.show && !this.complete) {
-                            channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED, teamModule.getColor() + event.getPlayer().getName() + ChatColor.GRAY, ChatColor.RED + name + ChatColor.GRAY));
+                            channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED_FOR, teamModule.getColor() + event.getPlayer().getName() + ChatColor.WHITE, name, teamModule.getCompleteName() + ChatColor.WHITE));
                             for (Player player : Bukkit.getOnlinePlayers()) {
                                 if (TeamUtils.getTeamByPlayer(player) != null && TeamUtils.getTeamByPlayer(player).isObserver()) {
                                     player.sendMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED_FOR, teamModule.getColor() + event.getPlayer().getName() + ChatColor.GRAY, ChatColor.RED + name + ChatColor.GRAY, teamModule.getCompleteName() + ChatColor.GRAY).getMessage(player.getLocale()));
@@ -242,7 +242,7 @@ public class CoreObjective implements GameObjective {
                                 TeamModule teamModule = TeamUtils.getTeamByPlayer(Bukkit.getPlayer(player));
                                 TeamChannel channel = TeamUtils.getTeamChannel(teamModule);
                                 if (this.show && !this.complete) {
-                                    channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED, teamModule.getColor() + Bukkit.getPlayer(player).getName() + ChatColor.GRAY, ChatColor.RED + name + ChatColor.GRAY));
+                                    channel.sendLocalizedMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED_FOR, teamModule.getColor() + Bukkit.getPlayer(player).getName() + ChatColor.WHITE, name, teamModule.getCompleteName() + ChatColor.WHITE));
                                     for (Player player1 : Bukkit.getOnlinePlayers()) {
                                         if (TeamUtils.getTeamByPlayer(player1) != null && TeamUtils.getTeamByPlayer(player1).isObserver()) {
                                             player1.sendMessage(new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_TOUCHED_FOR, teamModule.getColor() + Bukkit.getPlayer(player).getName() + ChatColor.GRAY, ChatColor.RED + name + ChatColor.GRAY, teamModule.getCompleteName() + ChatColor.GRAY).getMessage(player1.getLocale()));

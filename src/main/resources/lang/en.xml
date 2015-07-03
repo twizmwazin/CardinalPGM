@@ -186,7 +186,7 @@
         <objectiveDamagedFor>{0} damaged {1} for {2}</objectiveDamagedFor>
         <objectiveDamaged>{0} damaged {1}</objectiveDamaged>
         <creditReceived>You will receive credit when this objective is completed.</creditReceived>
-        <objectivePickedFor>{0} picked up {1} for the {2}</objectivePickedFor>
+        <objectivePickedFor>{0} picked up {1} for {2}</objectivePickedFor>
         <objectivePicked>{0} picked up {1}</objectivePicked>
         <scoredFor>{0} scored {1} for {2}</scoredFor>
         <onePoint>1 point</onePoint>
