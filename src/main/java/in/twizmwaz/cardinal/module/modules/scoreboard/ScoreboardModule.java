@@ -100,24 +100,26 @@ public class ScoreboardModule implements Module {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
         if (!event.isCancelled()) {
-            if (event.getNewTeam() == this.team) {
+            if (event.getNewTeam().orNull() == this.team) {
                 event.getPlayer().setScoreboard(this.scoreboard);
             }
             for (TeamModule team : TeamUtils.getTeams()) {
                 remove(team, event.getPlayer());
             }
-            add(event.getNewTeam(), event.getPlayer());
+            if (event.getNewTeam().isPresent()) {
+                add(event.getNewTeam().get(), event.getPlayer());
+            }
 
             if (Blitz.matchIsBlitz()) {
-                if (event.getOldTeam() != null && !event.getOldTeam().isObserver()) {
-                    TeamModule team = event.getOldTeam();
+                if (event.getOldTeam().isPresent() && !event.getOldTeam().get().isObserver()) {
+                    TeamModule team = event.getOldTeam().get();
                     Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-b");
                     for (String entry : scoreboardTeam.getEntries()) {
                         setScore(scoreboard.getObjective("scoreboard"), entry, team.size());
                     }
                 }
-                if (event.getNewTeam() != null && !event.getNewTeam().isObserver()) {
-                    TeamModule team = event.getNewTeam();
+                if (event.getNewTeam().isPresent() && !event.getNewTeam().get().isObserver()) {
+                    TeamModule team = event.getNewTeam().get();
                     Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-b");
                     for (String entry : scoreboardTeam.getEntries()) {
                         setScore(scoreboard.getObjective("scoreboard"), entry, team.size());
