@@ -71,7 +71,10 @@ public class Tutorial implements Module {
 
     @EventHandler
     public void onPlayerRightClick(PlayerInteractEvent event) {
-        boolean condition = TeamUtils.getTeamByPlayer(event.getPlayer()).isObserver() && event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType().equals(Material.EMERALD);
+        boolean condition = TeamUtils.getTeamByPlayer(event.getPlayer()).isPresent()
+                && TeamUtils.getTeamByPlayer(event.getPlayer()).get().isObserver()
+                && event.getPlayer().getItemInHand() != null
+                && event.getPlayer().getItemInHand().getType().equals(Material.EMERALD);
 
         if (!this.displayHandlerMap.containsKey(event.getPlayer())) {
             this.displayHandlerMap.put(event.getPlayer(), new DisplayHandler(event.getPlayer(), this));
@@ -87,7 +90,7 @@ public class Tutorial implements Module {
 
     @EventHandler
     public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
-        if (event.getNewTeam().isObserver()) {
+        if (event.getNewTeam().isPresent() && event.getNewTeam().get().isObserver()) {
             this.displayHandlerMap.remove(event.getPlayer());
         }
     }

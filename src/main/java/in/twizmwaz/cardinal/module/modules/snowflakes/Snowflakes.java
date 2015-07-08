@@ -1,6 +1,5 @@
 package in.twizmwaz.cardinal.module.modules.snowflakes;
 
-import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalDeathEvent;
@@ -105,10 +104,10 @@ public class Snowflakes implements Module {
     @EventHandler
     public void onMatchEnd(MatchEndEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (TeamUtils.getTeamByPlayer(player) != null && !TeamUtils.getTeamByPlayer(player).isObserver() && event.getTeam() == TeamUtils.getTeamByPlayer(player)) {
-                Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.TEAM_WIN, 15, TeamUtils.getTeamByPlayer(player).getCompleteName()));
-            } else if (TeamUtils.getTeamByPlayer(player) != null && !TeamUtils.getTeamByPlayer(player).isObserver() && event.getTeam() != TeamUtils.getTeamByPlayer(player)) {
-                Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.TEAM_LOYAL, 5, TeamUtils.getTeamByPlayer(player).getCompleteName()));
+            if (TeamUtils.getTeamByPlayer(player).isPresent() && !TeamUtils.getTeamByPlayer(player).get().isObserver() && event.getTeam().equals(TeamUtils.getTeamByPlayer(player))) {
+                Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.TEAM_WIN, 15, TeamUtils.getTeamByPlayer(player).get().getCompleteName()));
+            } else if (TeamUtils.getTeamByPlayer(player).isPresent() && !TeamUtils.getTeamByPlayer(player).get().isObserver() && !event.getTeam().equals(TeamUtils.getTeamByPlayer(player))) {
+                Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.TEAM_LOYAL, 5, TeamUtils.getTeamByPlayer(player).get().getCompleteName()));
             }
         }
     }

@@ -38,7 +38,7 @@ public class ObjectiveFilterParser extends FilterParser {
         }
         try {
             String team = element.getAttributeValue("team");
-            this.team = TeamUtils.getTeamById(team);
+            this.team = TeamUtils.getTeamById(team).orNull();
         } catch (NullPointerException e) {
         }
         try {

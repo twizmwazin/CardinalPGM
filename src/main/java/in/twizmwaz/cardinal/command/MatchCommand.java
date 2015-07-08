@@ -36,8 +36,8 @@ public class MatchCommand {
         for (TeamModule team : TeamUtils.getTeams()) {
             int players = 0;
             for (Player player : Bukkit.getOnlinePlayers()) {
-                if (TeamUtils.getTeamByPlayer(player) != null) {
-                    if (TeamUtils.getTeamByPlayer(player) == team) {
+                if (TeamUtils.getTeamByPlayer(player).isPresent()) {
+                    if (TeamUtils.getTeamByPlayer(player).get() == team) {
                         players++;
                     }
                 }

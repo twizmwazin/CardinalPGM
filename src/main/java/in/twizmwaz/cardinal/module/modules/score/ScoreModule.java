@@ -98,12 +98,12 @@ public class ScoreModule implements Module {
     public void onCardinalDeath(CardinalDeathEvent event) {
         if (matchHasScoring()) {
             if (event.getKiller() != null) {
-                if (TeamUtils.getTeamByPlayer(event.getKiller()) != null && TeamUtils.getTeamByPlayer(event.getKiller()) == team) {
+                if (TeamUtils.getTeamByPlayer(event.getKiller()).isPresent() && TeamUtils.getTeamByPlayer(event.getKiller()).get().equals(team)) {
                     score += pointsPerKill;
                     Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
                 }
             } else {
-                if (TeamUtils.getTeamByPlayer(event.getPlayer()) != null && TeamUtils.getTeamByPlayer(event.getPlayer()) == team) {
+                if (TeamUtils.getTeamByPlayer(event.getPlayer()).isPresent() && TeamUtils.getTeamByPlayer(event.getPlayer()).get().equals(team)) {
                     score -= pointsPerKill;
                     Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
                 }
