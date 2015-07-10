@@ -75,6 +75,7 @@ import in.twizmwaz.cardinal.module.modules.updateNotification.UpdateNotification
 import in.twizmwaz.cardinal.module.modules.visibility.VisibilityBuilder;
 import in.twizmwaz.cardinal.module.modules.wildcard.WildCardBuilder;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjectiveBuilder;
+import in.twizmwaz.cardinal.module.modules.worldBorder.WorldBorderModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.worldFreeze.WorldFreezeBuilder;
 import org.bukkit.Bukkit;
 
@@ -163,7 +164,8 @@ public class ModuleFactory {
             PotionRemoverBuilder.class,
             InvisibleBlockBuilder.class,
             ItemDropBuilder.class,
-            GuiKeepModuleBuilder.class
+            GuiKeepModuleBuilder.class,
+            WorldBorderModuleBuilder.class
     };
     private final List<ModuleBuilder> builders;
 
