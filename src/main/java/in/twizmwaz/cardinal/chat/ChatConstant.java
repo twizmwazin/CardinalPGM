@@ -125,6 +125,7 @@ public enum ChatConstant {
     GENERIC_AUTO_BALANCE("generic.autoBalance"),
     GENERIC_YOU_CHANGED_RATING("generic.youChangedRating"),
     GENERIC_TEAM_SIZE_CHANGED("generic.teamSizeChanged"),
+    GENERIC_REPOSITORY_RELOAD("generic.repositoryReload"),
 
     MISC_ENEMY("misc.enemy"),
     MISC_FATE("misc.fate"),

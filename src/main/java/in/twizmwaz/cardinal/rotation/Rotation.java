@@ -1,17 +1,11 @@
 package in.twizmwaz.cardinal.rotation;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import in.twizmwaz.cardinal.util.Contributor;
 import in.twizmwaz.cardinal.util.DomUtils;
 import in.twizmwaz.cardinal.util.MojangUtils;
 import in.twizmwaz.cardinal.util.NumUtils;
-import org.apache.commons.io.Charsets;
-import org.bukkit.Bukkit;
-import org.jdom2.Document;
-import org.jdom2.Element;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,13 +23,24 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import org.apache.commons.io.Charsets;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.jdom2.Document;
+import org.jdom2.Element;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 public class Rotation {
+
+    private List<String> requirements = Arrays.asList("map.xml", "region", "level.dat");
 
     private File rotationFile;
     private List<LoadedMap> rotation;
     private List<LoadedMap> loaded;
     private int position;
-    private File repo;
+    private List<File> repos;
 
     public Rotation() throws RotationLoadException {
         this.rotationFile = new File(Cardinal.getInstance().getConfig().getString("rotation"));
@@ -53,52 +58,17 @@ public class Rotation {
      * @throws RotationLoadException
      */
     public void refreshRepo() throws RotationLoadException, IOException {
+        repos = new ArrayList<File>();
         loaded = new ArrayList<>();
-        this.repo = new File(Cardinal.getInstance().getConfig().getString("repo"));
-        if (!repo.exists()) repo.mkdir();
-        List<String> requirements = Arrays.asList("map.xml", "region", "level.dat");
-        if (repo.listFiles() != null) {
-            for (File map : repo.listFiles()) {
-                if (map.isFile()) continue;
-                if (Arrays.asList(map.list()).containsAll(requirements)) {
-                    try {
-                        Document xml = DomUtils.parse(new File(map.getPath() + "/map.xml"));
-                        String name = xml.getRootElement().getChild("name").getText();
-                        String version = xml.getRootElement().getChild("version").getText();
-                        String objective = xml.getRootElement().getChild("objective").getText();
-                        List<Contributor> authors = new ArrayList<>();
-                        for (Element authorsElement : xml.getRootElement().getChildren("authors")) {
-                            for (Element author : authorsElement.getChildren()) {
-                                authors.add(parseContributor(author));
-                            }
-                        }
-                        List<Contributor> contributors = new ArrayList<>();
-                        for (Element contributorsElement : xml.getRootElement().getChildren("contributors")) {
-                            for (Element contributor : contributorsElement.getChildren()) {
-                                contributors.add(parseContributor(contributor));
-                            }
-                        }
-                        List<String> rules = new ArrayList<>();
-                        for (Element rulesElement : xml.getRootElement().getChildren("rules")) {
-                            for (Element rule : rulesElement.getChildren()) {
-                                rules.add(rule.getText().trim());
-                            }
-                        }
-                        int maxPlayers = 0;
-                        for (Element teams : xml.getRootElement().getChildren("teams")) {
-                            for (Element team : teams.getChildren()) {
-                                maxPlayers = maxPlayers + NumUtils.parseInt(team.getAttributeValue("max"));
-                            }
-                        }
-                        loaded.add(new LoadedMap(name, version, objective, authors, contributors, rules, maxPlayers, map));
-                    } catch (Exception e) {
-                        Bukkit.getLogger().log(Level.WARNING, "Failed to load map at " + map.getAbsolutePath());
-                        if (Cardinal.getInstance().getConfig().getBoolean("displayMapLoadErrors")) {
-                            Bukkit.getLogger().log(Level.INFO, "Showing error, this can be disabled in the config: ");
-                            e.printStackTrace();
-                        }
-                    }
-                }
+        List<String> configRepos = Cardinal.getInstance().getConfig().getStringList("repos");
+        for (String repo : configRepos) {
+            repos.add(new File(repo));
+        }
+        for (File repo : repos) {
+            if (!repo.exists())
+                repo.mkdir();
+            if (repo.listFiles() != null) {
+                parseFolder(repo);
             }
         }
         try {
@@ -118,9 +88,11 @@ public class Rotation {
         try {
             if (!rotationFile.exists()) {
                 List<String> maps = Lists.newArrayList();
-                for (LoadedMap map : loaded) maps.add(map.getName());
+                for (LoadedMap map : loaded)
+                    maps.add(map.getName());
                 FileWriter writer = new FileWriter(rotationFile);
-                for (String map : maps) writer.write(map + System.lineSeparator());
+                for (String map : maps)
+                    writer.write(map + System.lineSeparator());
                 writer.close();
             }
             List<String> lines = Files.readAllLines(rotationFile.toPath(), Charsets.UTF_8);
@@ -155,7 +127,8 @@ public class Rotation {
     }
 
     /**
-     * Move the position in the rotation by one. If the end of the rotation is reached, it will be automatically reset.
+     * Move the position in the rotation by one. If the end of the rotation is
+     * reached, it will be automatically reset.
      */
     public int move() {
         position++;
@@ -199,7 +172,8 @@ public class Rotation {
      */
     public LoadedMap getMap(String string) {
         for (LoadedMap map : loaded) {
-            if (map.getName().toLowerCase().startsWith(string.toLowerCase())) return map;
+            if (map.getName().toLowerCase().startsWith(string.toLowerCase()))
+                return map;
         }
         return null;
     }
@@ -257,6 +231,73 @@ public class Rotation {
         ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(Cardinal.getInstance().getDataFolder().getPath() + "/.names.ser")));
         out.writeObject(names);
         out.close();
+    }
+
+    private void parseFolder(File folder) {
+        if (!folder.isDirectory() || folder.listFiles() == null)
+            return;
+
+        if (!Arrays.asList(folder.list()).containsAll(requirements)) {
+            File infoFile = new File(folder, "info.yml");
+            List<String> exclude = new ArrayList<String>();
+            if (infoFile.exists()) {
+                YamlConfiguration config = YamlConfiguration.loadConfiguration(infoFile);
+                if (config.getStringList("exclude") != null) {
+                    exclude = config.getStringList("exclude");
+                }
+            }
+            for (File file : folder.listFiles()) {
+                if (exclude.contains(file.getName()))
+                    continue;
+                
+                if (file.isFile())
+                    continue;
+                
+                parseFolder(file);
+            }
+        } else {
+            parseMap(folder);
+        }
+    }
+
+    private void parseMap(File map) {
+        try {
+            Document xml = DomUtils.parse(new File(map.getPath() + "/map.xml"));
+            String name = xml.getRootElement().getChild("name").getText();
+            String version = xml.getRootElement().getChild("version").getText();
+            String objective = xml.getRootElement().getChild("objective").getText();
+            List<Contributor> authors = new ArrayList<>();
+            for (Element authorsElement : xml.getRootElement().getChildren("authors")) {
+                for (Element author : authorsElement.getChildren()) {
+                    authors.add(parseContributor(author));
+                }
+            }
+            List<Contributor> contributors = new ArrayList<>();
+            for (Element contributorsElement : xml.getRootElement().getChildren("contributors")) {
+                for (Element contributor : contributorsElement.getChildren()) {
+                    contributors.add(parseContributor(contributor));
+                }
+            }
+            List<String> rules = new ArrayList<>();
+            for (Element rulesElement : xml.getRootElement().getChildren("rules")) {
+                for (Element rule : rulesElement.getChildren()) {
+                    rules.add(rule.getText().trim());
+                }
+            }
+            int maxPlayers = 0;
+            for (Element teams : xml.getRootElement().getChildren("teams")) {
+                for (Element team : teams.getChildren()) {
+                    maxPlayers = maxPlayers + NumUtils.parseInt(team.getAttributeValue("max"));
+                }
+            }
+            loaded.add(new LoadedMap(name, version, objective, authors, contributors, rules, maxPlayers, map));
+        } catch (Exception e) {
+            Bukkit.getLogger().log(Level.WARNING, "Failed to load map at " + map.getAbsolutePath());
+            if (Cardinal.getInstance().getConfig().getBoolean("displayMapLoadErrors")) {
+                Bukkit.getLogger().log(Level.INFO, "Showing error, this can be disabled in the config: ");
+                e.printStackTrace();
+            }
+        }
     }
 
 }
