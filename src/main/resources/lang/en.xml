@@ -81,6 +81,8 @@
         <globalMuteEnabled>You cannot talk in chat while global mute is enabled.</globalMuteEnabled>
     </error>
     <generic>
+        <autoWhitelistPlayers>{0} player(s) have been added to the whitelist.</autoWhitelistPlayers>
+        <whitelistStatus>The whitelist is now {0}.</whitelistStatus>
         <mapSet>Next map set to {0}</mapSet>
         <markedForReloading>{0} successfully marked for reloading.</markedForReloading>
         <allMarkedReloading>All maps successfully marked for reloading.</allMarkedReloading>
