@@ -56,4 +56,5 @@ public class ProximityCommand {
             }
         } else throw new CommandPermissionsException();
     }
+
 }

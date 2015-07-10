@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 
 public class TeleportCommands {
 
-    @Command(aliases = {"tp", "teleport"}, desc = "Teleport players.", usage = "<player> [player], [player] [[~]x] [[~]y] [[~]z]", min = 1, max = 4)
+    @Command(aliases = {"tp", "teleport", "goto", "gt"}, desc = "Teleport players.", usage = "<player> [player], [player] [[~]x] [[~]y] [[~]z]", min = 1, max = 4)
     public static void teleport(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (sender instanceof Player) {
             if (cmd.argsLength() == 1) {

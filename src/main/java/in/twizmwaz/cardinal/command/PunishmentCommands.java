@@ -57,8 +57,8 @@ public class PunishmentCommands {
         }
     }
 
-    @Command(aliases = {"ban", "pb"}, usage = "<player> [reason]", desc = "Ban a player.", min = 1)
-    @CommandPermissions("cardinal.punish.ban")
+    @Command(aliases = {"ban", "permaban", "pb"}, usage = "<player> [reason]", desc = "Ban a player.", min = 1)
+    @CommandPermissions("cardinal.punish.permaban")
     public static void ban(CommandContext cmd, CommandSender sender) throws CommandException {
         OfflinePlayer banned = Bukkit.getOfflinePlayer(cmd.getString(0));
         if (sender instanceof Player) {
@@ -116,7 +116,7 @@ public class PunishmentCommands {
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_FOUND).getMessage(ChatUtils.getLocale(sender)));
     }
 
-    @Command(aliases = {"gmute"}, desc = "Enable/disable global mute.")
+    @Command(aliases = {"gmute", "globalmute", "muteall", "unmuteall"}, desc = "Enable/disable global mute.")
     @CommandPermissions("cardinal.punish.mute")
     public static void gmute(CommandContext cmd, CommandSender sender) {
         boolean state = GameHandler.getGameHandler().toggleGlobalMute();
@@ -126,4 +126,5 @@ public class PunishmentCommands {
             ChatUtils.getGlobalChannel().sendLocalizedMessage(ChatConstant.UI_GLOBAL_MUTE_DISABLED.asMessage(ChatColor.AQUA));
         }
     }
+
 }
