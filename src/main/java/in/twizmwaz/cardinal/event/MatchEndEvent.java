@@ -11,14 +11,15 @@ public class MatchEndEvent extends Event {
     private final Optional<TeamModule> team;
     private final Optional<Player> player;
 
-    public MatchEndEvent(TeamModule team) {
-        this.team = Optional.of(team);
+    public MatchEndEvent(Optional<TeamModule> team) {
+        this.team = team;
         this.player = Optional.absent();
     }
 
     public MatchEndEvent(Player player) {
         this.team = Optional.absent();
-        this.player = Optional.of(player);
+        if (player == null) this.player = Optional.absent();
+        else this.player = Optional.of(player);
     }
 
     public static HandlerList getHandlerList() {
@@ -29,11 +30,11 @@ public class MatchEndEvent extends Event {
         return handlers;
     }
 
-    public Optional<TeamModule> getTeam() throws NullPointerException {
-        try {
-            return team;
-        } catch (NullPointerException ex) {
-            throw new NullPointerException("No valid winning team");
-        }
+    public Optional<TeamModule> getTeam() {
+        return team;
+    }
+
+    public Optional<Player> getPlayer() {
+        return player;
     }
 }

@@ -13,6 +13,7 @@ import in.twizmwaz.cardinal.rotation.LoadedMap;
 import in.twizmwaz.cardinal.util.DomUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 
@@ -97,7 +98,8 @@ public class Match {
     public void end(TeamModule team) {
         if (getState() == MatchState.PLAYING) {
             state = MatchState.ENDED;
-            Bukkit.getServer().getPluginManager().callEvent(new MatchEndEvent(team));
+            Event event = new MatchEndEvent(team == null ? Optional.<TeamModule>absent() : Optional.of(team));
+            Bukkit.getServer().getPluginManager().callEvent(event);
         }
     }
 
