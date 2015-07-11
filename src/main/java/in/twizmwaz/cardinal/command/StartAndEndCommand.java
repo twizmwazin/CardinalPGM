@@ -15,8 +15,6 @@ import in.twizmwaz.cardinal.util.TeamUtils;
 import org.bukkit.command.CommandSender;
 
 public class StartAndEndCommand {
-    private static int timer;
-    private static boolean waiting = false;
 
     @Command(aliases = {"start", "begin"}, desc = "Starts the match.", usage = "[time]", flags = "f")
     @CommandPermissions("cardinal.match.start")

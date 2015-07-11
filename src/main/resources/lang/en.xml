@@ -79,6 +79,8 @@
         <playableLeave>You may not leave the playing field</playableLeave>
         <playableInteract>You may not interact with blocks outside of the playing field</playableInteract>
         <globalMuteEnabled>You cannot talk in chat while global mute is enabled.</globalMuteEnabled>
+        <noResultsMatch>No results match!</noResultsMatch>
+        <badPageNumber>Invalid page number specified! {0} total pages.</badPageNumber>
     </error>
     <generic>
         <mapSet>Next map set to {0}</mapSet>
@@ -131,6 +133,9 @@
         <and>and</and>
         <by>by</by>
         <team>Team</team>
+        <teamChat>team</teamChat>
+        <globalChat>global</globalChat>
+        <adminChat>admin</adminChat>
     </misc>
     <userInterface>
         <mapLoaded>Loaded Maps</mapLoaded>
@@ -220,9 +225,7 @@
         <matchReportFailed>An error occurred while uploading the match report</matchReportFailed>
         <globalMuteEnabled>Global mute enabled</globalMuteEnabled>
         <globalMuteDisabled>Global mute disabled</globalMuteDisabled>
-        <defaultChannelGlobal>Changed default channel to global chat.</defaultChannelGlobal>
-        <defaultChannelAdmin>Changed default channel to administrator chat.</defaultChannelAdmin>
-        <defaultChannelTeam>Changed default channel to team chat.</defaultChannelTeam>
+        <defaultChannel>Changed default channel to {0} chat.</defaultChannel>
         <timeElapsed>Time Elapsed: {0}</timeElapsed>
     </userInterface>
     <deathMsg>

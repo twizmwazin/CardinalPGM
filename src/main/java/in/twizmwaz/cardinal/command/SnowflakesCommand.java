@@ -11,7 +11,7 @@ import org.bukkit.command.CommandSender;
 
 public class SnowflakesCommand {
 
-    @Command(aliases = {"snowflakes"}, desc = "View your own or another player's snowflake count.", usage = "[player]")
+    @Command(aliases = {"snowflakes", "snowflake", "sfs"}, desc = "View your own or another player's snowflake count.", usage = "[player]")
     public static void settings(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (cmd.argsLength() == 0) {
             Bukkit.dispatchCommand(sender, "snowflakes " + sender.getName());

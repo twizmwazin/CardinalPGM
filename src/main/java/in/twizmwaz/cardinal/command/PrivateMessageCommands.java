@@ -19,7 +19,7 @@ import java.util.Locale;
 
 public class PrivateMessageCommands {
 
-    @Command(aliases = {"msg", "message", "pm", "privatemessage", "whisper", "tell"}, desc = "Send a private message to a player.", usage = "<player> <message>", min = 2)
+    @Command(aliases = {"msg", "message", "pm", "privatemessage", "whisper", "tell", "m"}, desc = "Send a private message to a player.", usage = "<player> <message>", min = 2)
     public static void pm(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (!(sender instanceof Player))
             throw new CommandException(ChatConstant.ERROR_PLAYER_COMMAND.getMessage(Locale.getDefault().toString()));
@@ -32,6 +32,7 @@ public class PrivateMessageCommands {
             target.sendMessage(ChatColor.GRAY + "(From " + TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() + ChatColor.GRAY + "): " + ChatColor.RESET + cmd.getJoinedStrings(1));
             sender.sendMessage(ChatColor.GRAY + "(To " + TeamUtils.getTeamColorByPlayer(target) + target.getDisplayName() + ChatColor.GRAY + "): " + ChatColor.RESET + cmd.getJoinedStrings(1));
             target.setMetadata("reply", new FixedMetadataValue(Cardinal.getInstance(), sender));
+            ((Player) sender).setMetadata("reply", new FixedMetadataValue(Cardinal.getInstance(), target));
         } else {
             sender.sendMessage(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_DISABLED_PMS, target.getDisplayName()).getMessage(((Player) sender).getLocale()));
         }
@@ -57,4 +58,5 @@ public class PrivateMessageCommands {
             sender.sendMessage(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_DISABLED_PMS, target.getDisplayName()).getMessage(((Player) sender).getLocale()));
         }
     }
+
 }

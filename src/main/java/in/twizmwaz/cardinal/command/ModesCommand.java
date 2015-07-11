@@ -5,12 +5,17 @@ import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissionsException;
 import com.sk89q.minecraft.util.commands.CommandUsageException;
+
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.module.modules.monumentModes.MonumentModes;
+import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.MiscUtils;
 import in.twizmwaz.cardinal.util.StringUtils;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -58,7 +63,7 @@ public class ModesCommand {
                             return;
                         }
                     }
-                    throw new CommandException("No results match!");
+                    throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_RESULTS_MATCH).getMessage(ChatUtils.getLocale(sender)));
                 } else if (cmd.getString(0).equalsIgnoreCase("push")) {
                     if (!sender.hasPermission("cardinal.modes.push")) throw new CommandPermissionsException();
                     throw new CommandUsageException("Too few arguments.", "/modes push <time period>");
@@ -74,7 +79,7 @@ public class ModesCommand {
                             count++;
                         }
                     } else
-                        throw new CommandException("Invalid page number specified! " + ((modes.size() + 7) / 8) + " total pages.");
+                        throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_BAD_PAGE_NUMBER, ((modes.size() + 7) / 8) + "").getMessage(ChatUtils.getLocale(sender)));
                 }
             } else {
                 if (cmd.getString(0).equalsIgnoreCase("list")) {
@@ -89,7 +94,7 @@ public class ModesCommand {
                             count++;
                         }
                     } else
-                        throw new CommandException("Invalid page number specified! " + ((modes.size() + 7) / 8) + " total pages.");
+                        throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_BAD_PAGE_NUMBER, ((modes.size() + 7) / 8) + "").getMessage(ChatUtils.getLocale(sender)));
                 } else if (cmd.getString(0).equalsIgnoreCase("push")) {
                     if (!sender.hasPermission("cardinal.modes.push")) throw new CommandPermissionsException();
                     int time;
@@ -104,7 +109,7 @@ public class ModesCommand {
                     sender.sendMessage(ChatColor.GOLD + "All modes have been pushed " + (time < 0 ? "backwards" : "forwards") + " by " + StringUtils.formatTime(time));
                 }
             }
-        } else throw new CommandException("No results match!");
+        } else throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_RESULTS_MATCH).getMessage(ChatUtils.getLocale(sender)));
     }
 
 }

@@ -30,13 +30,12 @@ public class ChatCommands {
         if (sender instanceof Player) {
             if (cmd.argsLength() == 0) {
                 ((Player) sender).setMetadata("default-channel", new LazyMetadataValue(GameHandler.getGameHandler().getPlugin(), LazyMetadataValue.CacheStrategy.NEVER_CACHE, new Channel(ChatUtils.ChannelType.GLOBAL)));
-                sender.sendMessage(ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.UI_DEFAULT_CHANNEL_GLOBAL).getMessage(locale));
+                sender.sendMessage(ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.UI_DEFAULT_CHANNEL, new LocalizedChatMessage(ChatConstant.MISC_GLOBAL_CHAT)).getMessage(locale));
             }
             if (cmd.argsLength() > 0) {
                 if (GameHandler.getGameHandler().getGlobalMute() && !PermissionModule.isStaff(((Player) sender)))
                     throw new CommandException(ChatConstant.ERROR_GLOBAL_MUTE_ENABLED.asMessage().getMessage(ChatUtils.getLocale(sender)));
                 String message = assembleMessage(cmd);
-                if (message.trim().equals("")) return;
                 ChatUtils.getGlobalChannel().sendMessage("<" + TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() + ChatColor.RESET + ">: " + message);
             }
         } else throw new CommandException("Console cannot use this command.");
@@ -49,11 +48,10 @@ public class ChatCommands {
         if (sender instanceof Player) {
             if (cmd.argsLength() == 0) {
                 ((Player) sender).setMetadata("default-channel", new LazyMetadataValue(GameHandler.getGameHandler().getPlugin(), LazyMetadataValue.CacheStrategy.NEVER_CACHE, new Channel(ChatUtils.ChannelType.ADMIN)));
-                sender.sendMessage(ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.UI_DEFAULT_CHANNEL_ADMIN).getMessage(locale));
+                sender.sendMessage(ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.UI_DEFAULT_CHANNEL, new LocalizedChatMessage(ChatConstant.MISC_ADMIN_CHAT)).getMessage(locale));
             }
             if (cmd.argsLength() > 0) {
                 String message = assembleMessage(cmd);
-                if (message.trim().equals("")) return;
                 ChatUtils.getAdminChannel().sendMessage("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() + ChatColor.RESET + ": " + message);
                 Bukkit.getConsoleSender().sendMessage("[" + ChatColor.GOLD + "A" + ChatColor.WHITE + "] " + TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() + ChatColor.RESET + ": " + message);
             }
@@ -67,7 +65,7 @@ public class ChatCommands {
         if (sender instanceof Player) {
             if (cmd.argsLength() == 0) {
                 ((Player) sender).setMetadata("default-channel", new LazyMetadataValue(GameHandler.getGameHandler().getPlugin(), LazyMetadataValue.CacheStrategy.NEVER_CACHE, new Channel(ChatUtils.ChannelType.TEAM)));
-                sender.sendMessage(ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.UI_DEFAULT_CHANNEL_TEAM).getMessage(locale));
+                sender.sendMessage(ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.UI_DEFAULT_CHANNEL, new LocalizedChatMessage(ChatConstant.MISC_TEAM_CHAT)).getMessage(locale));
             }
             if (cmd.argsLength() > 0) {
                 if (GameHandler.getGameHandler().getGlobalMute() && !PermissionModule.isStaff(((Player) sender)))
@@ -75,7 +73,6 @@ public class ChatCommands {
                 TeamModule team = TeamUtils.getTeamByPlayer((Player) sender);
                 TeamChannel channel = TeamUtils.getTeamChannel(team);
                 String message = assembleMessage(cmd);
-                if (message.trim().equals("")) return;
                 channel.sendLocalizedMessage(new UnlocalizedChatMessage(channel.getTeam().getColor() + ((Player) sender).getDisplayName() + ChatColor.RESET + ": " + message));
                 Bukkit.getConsoleSender().sendMessage(team.getColor() + "[" + team.getName() + "] " + ((Player) sender).getDisplayName() + ChatColor.RESET + ": " + message);
             }

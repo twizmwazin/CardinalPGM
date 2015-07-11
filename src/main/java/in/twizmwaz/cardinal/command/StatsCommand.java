@@ -24,4 +24,5 @@ public class StatsCommand {
             sender.sendMessage(ChatColor.GRAY + " KD: " + ChatColor.GOLD + (Math.round(GameHandler.getGameHandler().getMatch().getModules().getModule(Stats.class).getKdByPlayer(player) * 100.0) / 100.0));
         }
     }
+
 }

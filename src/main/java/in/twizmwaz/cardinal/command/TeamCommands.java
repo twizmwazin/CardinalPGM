@@ -95,24 +95,23 @@ public class TeamCommands {
         }
     }
 
-    @Command(aliases = {"myteam", "mt"}, desc = "Shows what team you are on", min = 0, max = 0)
-    public static void myTeam(final CommandContext cmd, CommandSender sender) throws CommandException {
-        if (!(sender instanceof Player)) {
-            return;
-        }
-        Player player = (Player) sender;
-        player.sendMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}", new LocalizedChatMessage(ChatConstant.GENERIC_ON_TEAM, TeamUtils.getTeamByPlayer(player).getCompleteName())).getMessage(player.getLocale()));
-    }
-
     public static class TeamParentCommand {
-        @Command(
-                aliases = {"team"},
-                desc = "Manage the teams in the match."
-        )
+
+        @Command(aliases = {"team"}, desc = "Manage the teams in the match.")
         @NestedCommand({TeamCommands.class})
         public static void team(final CommandContext args, CommandSender sender) throws CommandException {
 
         }
+
+        @Command(aliases = {"myteam", "mt"}, desc = "Shows what team you are on", min = 0, max = 0)
+        public static void myTeam(final CommandContext cmd, CommandSender sender) throws CommandException {
+            if (!(sender instanceof Player)) {
+                return;
+            }
+            Player player = (Player) sender;
+            player.sendMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}", new LocalizedChatMessage(ChatConstant.GENERIC_ON_TEAM, TeamUtils.getTeamByPlayer(player).getCompleteName())).getMessage(player.getLocale()));
+        }
+
     }
 
 }

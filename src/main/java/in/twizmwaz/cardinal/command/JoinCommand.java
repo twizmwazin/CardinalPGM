@@ -50,8 +50,9 @@ public class JoinCommand {
         } else throw new CommandException("Console cannot use this command.");
     }
 
-    @Command(aliases = {"leave"}, desc = "Leave the game.")
+    @Command(aliases = {"leave", "quit", "spec", "spectate"}, desc = "Leave the game.")
     public static void leave(final CommandContext cmd, CommandSender sender) {
         Bukkit.getServer().dispatchCommand(sender, "join observers");
     }
+
 }

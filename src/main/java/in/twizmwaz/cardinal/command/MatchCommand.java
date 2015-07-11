@@ -27,7 +27,7 @@ import org.bukkit.entity.Player;
 
 public class MatchCommand {
 
-    @Command(aliases = {"matchinfo", "match"}, desc = "Shows information about the currently playing match.", usage = "")
+    @Command(aliases = {"matchinfo", "match", "mi"}, desc = "Shows information about the currently playing match.", usage = "")
     public static void match(final CommandContext args, CommandSender sender) throws CommandException {
         sender.sendMessage(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "------" + ChatColor.DARK_AQUA + " " + new LocalizedChatMessage(ChatConstant.UI_MATCH_INFO).getMessage(ChatUtils.getLocale(sender)) + " " + ChatColor.GRAY + "(" + GameHandler.getGameHandler().getMatch().getNumber() + ")" + ChatColor.RED + " " + ChatColor.STRIKETHROUGH + "------");
         sender.sendMessage(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TIME).getMessage(ChatUtils.getLocale(sender)) + ": " + ChatColor.GOLD + (Cardinal.getInstance().getConfig().getBoolean("matchTimeMillis") ? StringUtils.formatTimeWithMillis(MatchTimer.getTimeInSeconds()) : StringUtils.formatTime(MatchTimer.getTimeInSeconds())));

@@ -28,4 +28,5 @@ public class CancelCommand {
         if (handler.getMatch().getState().equals(MatchState.CYCLING)) handler.getMatch().setState(MatchState.ENDED);
         ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "{0}", new LocalizedChatMessage(ChatConstant.GENERIC_COUNTDOWN_CANELLED)));
     }
+
 }

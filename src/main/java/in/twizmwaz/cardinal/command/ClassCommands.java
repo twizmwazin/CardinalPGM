@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 
 public class ClassCommands {
 
-    @Command(aliases = {"classes", "classlist"}, desc = "Lists the classes available in a map.", max = 1)
+    @Command(aliases = {"classes", "classlist", "cls"}, desc = "Lists the classes available in a map.", max = 1)
     public static void classes(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null) {
             sender.sendMessage(ChatColor.RED + "------------------------ " + ChatColor.GOLD + "Classes" + ChatColor.RED + " ------------------------");
@@ -28,7 +28,7 @@ public class ClassCommands {
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CLASSES_DISABLED).getMessage(ChatUtils.getLocale(sender)));
     }
 
-    @Command(aliases = {"class"}, desc = "Allows you to change your class.")
+    @Command(aliases = {"class", "cl"}, desc = "Allows you to change your class.")
     public static void classCommand(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (sender instanceof Player) {
             if (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null) {
@@ -55,4 +55,5 @@ public class ClassCommands {
                 throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CLASSES_DISABLED).getMessage(((Player) sender).getLocale()));
         } else throw new CommandException("Console cannot use this command.");
     }
+
 }

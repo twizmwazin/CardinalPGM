@@ -1,22 +1,28 @@
 package in.twizmwaz.cardinal.command;
 
-import com.sk89q.minecraft.util.commands.Command;
-import com.sk89q.minecraft.util.commands.CommandContext;
-import com.sk89q.minecraft.util.commands.CommandException;
-import com.sk89q.minecraft.util.commands.CommandPermissions;
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.event.RankChangeEvent;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
+import in.twizmwaz.cardinal.util.ChatUtils;
 import in.twizmwaz.cardinal.util.TeamUtils;
+
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.List;
+import com.sk89q.minecraft.util.commands.Command;
+import com.sk89q.minecraft.util.commands.CommandContext;
+import com.sk89q.minecraft.util.commands.CommandException;
+import com.sk89q.minecraft.util.commands.CommandPermissions;
 
 public class ModeratorCommand {
+
     @Command(aliases = {"mod"}, desc = "Give a player the rank of moderator", usage = "<player>", min = 1, max = 1)
     @CommandPermissions("cardinal.admin.mod")
     public static void mod(CommandContext cmd, CommandSender sender) throws CommandException {
@@ -43,7 +49,7 @@ public class ModeratorCommand {
                 throw new CommandException("The player specified is already op!");
             }
         } else {
-            throw new CommandException("Unknown player specified!");
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_FOUND).getMessage(ChatUtils.getLocale(sender)));
         }
     }
 
@@ -72,7 +78,8 @@ public class ModeratorCommand {
                 throw new CommandException("The player specified is already op!");
             }
         } else {
-            throw new CommandException("Unknown player specified!");
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_FOUND).getMessage(ChatUtils.getLocale(sender)));
         }
     }
+
 }

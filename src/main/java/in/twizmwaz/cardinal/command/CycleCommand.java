@@ -47,7 +47,6 @@ public class CycleCommand {
     @Command(aliases = {"setnext", "sn"}, desc = "Sets the next map.", usage = "[map]", min = 1)
     @CommandPermissions("cardinal.match.setnext")
     public static void setNext(final CommandContext cmd, CommandSender sender) throws CommandException {
-        String input = cmd.getJoinedStrings(0).replaceAll(" ", "");
         LoadedMap nextMap = getMap(cmd.getJoinedStrings(0));
         if (nextMap == null) {
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_MAP_MATCH).getMessage(ChatUtils.getLocale(sender)));
@@ -80,13 +79,13 @@ public class CycleCommand {
         input = input.toLowerCase().replaceAll(" ", "");
         LoadedMap result = null;
         for (LoadedMap loadedMap : GameHandler.getGameHandler().getRotation().getLoaded()) {
-            if (loadedMap.getName().toLowerCase().replaceAll(" ", "").equalsIgnoreCase(input.toLowerCase())) {
+            if (loadedMap.getName().toLowerCase().replaceAll(" ", "").equalsIgnoreCase(input)) {
                 result = loadedMap;
             }
         }
         if (result == null) {
             for (LoadedMap loadedMap : GameHandler.getGameHandler().getRotation().getLoaded()) {
-                if (loadedMap.getName().toLowerCase().replaceAll(" ", "").startsWith(input.toLowerCase())) {
+                if (loadedMap.getName().toLowerCase().replaceAll(" ", "").startsWith(input)) {
                     result = loadedMap;
                 }
             }
@@ -97,4 +96,5 @@ public class CycleCommand {
     private static void setCycleMap(LoadedMap map) {
         GameHandler.getGameHandler().getCycle().setMap(map);
     }
+
 }

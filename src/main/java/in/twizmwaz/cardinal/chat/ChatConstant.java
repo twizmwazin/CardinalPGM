@@ -85,6 +85,8 @@ public enum ChatConstant {
     ERROR_GLOBAL_MUTE_ENABLED("error.globalMuteEnabled"),
     ERROR_NOT_ENOUGH_ARGS_BROADCAST("error.notEnoughArgsBroadcast"),
     ERROR_NOT_ENOUGH_ARGS_SAY("error.notEnoughArgsSay"),
+    ERROR_NO_RESULTS_MATCH("error.noResultsMatch"),
+    ERROR_BAD_PAGE_NUMBER("error.badPageNumber"),
 
     GENERIC_MAP_SET("generic.mapSet"),
     GENERIC_MARKED_FOR_RELOADING("generic.markedForReloading"),
@@ -134,6 +136,9 @@ public enum ChatConstant {
     MISC_AND("misc.and"),
     MISC_BY("misc.by"),
     MISC_TEAM("misc.team"),
+    MISC_TEAM_CHAT("misc.teamChat"),
+    MISC_GLOBAL_CHAT("misc.globalChat"),
+    MISC_ADMIN_CHAT("misc.adminChat"),
 
     UI_MAPLOADED("userInterface.mapLoaded"),
     UI_MAP_OBJECTIVE("userInterface.mapObjective"),
@@ -221,9 +226,7 @@ public enum ChatConstant {
     UI_MATCH_REPORT_FAILED("userInterface.matchReportFailed"),
     UI_GLOBAL_MUTE_ENABLED("userInterface.globalMuteEnabled"),
     UI_GLOBAL_MUTE_DISABLED("userInterface.globalMuteDisabled"),
-    UI_DEFAULT_CHANNEL_GLOBAL("userInterface.defaultChannelGlobal"),
-    UI_DEFAULT_CHANNEL_ADMIN("userInterface.defaultChannelAdmin"),
-    UI_DEFAULT_CHANNEL_TEAM("userInterface.defaultChannelTeam"),
+    UI_DEFAULT_CHANNEL("userInterface.defaultChannel"),
     UI_TIME_ELAPSED("userInterface.timeElapsed");
 
     private final String path;

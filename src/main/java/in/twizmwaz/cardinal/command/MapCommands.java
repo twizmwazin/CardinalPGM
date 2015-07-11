@@ -78,4 +78,5 @@ public class MapCommands {
             sender.sendMessage(result);
         }
     }
+
 }

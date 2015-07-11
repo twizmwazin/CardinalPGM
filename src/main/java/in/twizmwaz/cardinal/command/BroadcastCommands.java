@@ -21,4 +21,5 @@ public class BroadcastCommands {
     public static void broadcast(final CommandContext cmd, CommandSender sender) throws CommandException {
         ChatUtils.getGlobalChannel().sendMessage(ChatColor.RED + "[Broadcast] " + cmd.getJoinedStrings(0));
     }
+
 }
