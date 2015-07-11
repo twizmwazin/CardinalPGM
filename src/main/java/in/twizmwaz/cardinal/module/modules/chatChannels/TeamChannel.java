@@ -41,7 +41,7 @@ public class TeamChannel extends PrivateChannel {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
-        if (team.equals(event.getNewTeam())) addMember(event.getPlayer());
+        if (team.equals(event.getNewTeam().orNull())) addMember(event.getPlayer());
         else removeMember(event.getPlayer());
     }
 
