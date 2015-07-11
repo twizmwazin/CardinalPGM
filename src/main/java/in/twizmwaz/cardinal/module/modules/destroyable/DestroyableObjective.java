@@ -346,14 +346,14 @@ public class DestroyableObjective implements GameObjective {
             }
         }
         if (toCombine.size() == 0) {
-            toCombine.add(ChatColor.DARK_AQUA + new LocalizedChatMessage(ChatConstant.MISC_ENEMY).getMessage(locale));
+            toCombine.add(new LocalizedChatMessage(ChatConstant.MISC_ENEMY).getMessage(locale));
         }
         if (toCombine.size() < playersCompleted.keySet().size()) {
-            toCombine.add(ChatColor.DARK_AQUA + new LocalizedChatMessage(ChatConstant.MISC_OTHERS).getMessage(locale));
+            toCombine.add(new LocalizedChatMessage(ChatConstant.MISC_OTHERS).getMessage(locale));
         }
         whoDestroyed = toCombine.get(0);
         for (int i = 1; i < toCombine.size(); i++) {
-            whoDestroyed += ChatColor.GRAY + (i == toCombine.size() - 1 ? " " + new LocalizedChatMessage(ChatConstant.MISC_AND).getMessage(locale) + " " : ", ") + toCombine.get(i);
+            whoDestroyed += ChatColor.WHITE + (i == toCombine.size() - 1 ? " " + new LocalizedChatMessage(ChatConstant.MISC_AND).getMessage(locale) + " " : ", ") + toCombine.get(i);
         }
         return whoDestroyed;
     }

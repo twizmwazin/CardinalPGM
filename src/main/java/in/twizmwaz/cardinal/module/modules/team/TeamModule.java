@@ -61,7 +61,7 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
         PlayerChangeTeamEvent event = new PlayerChangeTeamEvent(player, force, this, old);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (message) {
-            event.getPlayer().sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_JOINED, event.getNewTeam().getCompleteName()).getMessage(event.getPlayer().getLocale()));
+            event.getPlayer().sendMessage(new LocalizedChatMessage(ChatConstant.GENERIC_JOINED, event.getNewTeam().getCompleteName()).getMessage(event.getPlayer().getLocale()));
         }
         return !event.isCancelled() || force;
     }

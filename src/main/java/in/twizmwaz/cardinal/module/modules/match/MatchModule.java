@@ -31,24 +31,16 @@ public class MatchModule implements Module {
     }
 
     @EventHandler
-    public void onMatchStart(MatchStartEvent event) {
-        ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # #"));
-        ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # " + ChatColor.GOLD + "{0}" + ChatColor.DARK_PURPLE + " # #", new LocalizedChatMessage(ChatConstant.UI_MATCH_STARTED)));
-        ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # #"));
-    }
-
-    @EventHandler
     public void onMatchEnd(MatchEndEvent event) {
-        ChatUtils.getGlobalChannel().sendMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # #");
-        ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# #    " + ChatColor.GOLD + "{0}" + ChatColor.DARK_PURPLE + "    # #", new LocalizedChatMessage(ChatConstant.UI_MATCH_OVER)));
         if (event.getTeam() != null) {
             if (event.getTeam().size() == 1) {
-                ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # {0}" + ChatColor.DARK_PURPLE + " # #", new LocalizedChatMessage(ChatConstant.UI_MATCH_WIN, event.getTeam().getColor() + ((Player) event.getTeam().get(0)).getName())));
+                ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage("{0}" , new LocalizedChatMessage(ChatConstant.UI_MATCH_WIN, event.getTeam().getColor() + ((Player) event.getTeam().get(0)).getName() + ChatColor.WHITE)));
             } else {
-                ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # {0}" + ChatColor.DARK_PURPLE + " # #", new LocalizedChatMessage(ChatConstant.UI_MATCH_WIN, event.getTeam().getCompleteName())));
+                ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage("{0}" , new LocalizedChatMessage(ChatConstant.UI_MATCH_WIN, event.getTeam().getCompleteName() + ChatColor.WHITE )));
             }
-        }
-        ChatUtils.getGlobalChannel().sendMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # #");
+        } else {
+			ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage("{0}", new LocalizedChatMessage(ChatConstant.UI_MATCH_OVER)));
+		}
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
