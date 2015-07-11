@@ -8,6 +8,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.server.ServerListPingEvent;
+import in.twizmwaz.cardinal.Cardinal;
+import in.twizmwaz.cardinal.util.StringUtils;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class MOTD implements Module {
 
@@ -27,13 +30,13 @@ public class MOTD implements Module {
         try {
             String name = match.getLoadedMap().getName();
             if (match.getState() == MatchState.ENDED) {
-                event.setMotd(ChatColor.RED + "\u00BB " + ChatColor.AQUA + name + ChatColor.RED + " \u00AB");
+                event.setMotd(ChatColor.RED + "\u00BB " + ChatColor.AQUA + name + ChatColor.RED + " \u00AB" + ChatColor.DARK_GRAY + " -" + ChatColor.WHITE + ChatColor.BOLD + " CardinalPGM" + "\n" + ChatColor.GOLD + "      Team: " + ChatColor.BLUE + Cardinal.getInstance().getConfig().getString("team-name"));
             } else if (match.getState() == MatchState.PLAYING) {
-                event.setMotd(ChatColor.GOLD + "\u00BB " + ChatColor.AQUA + name + ChatColor.GOLD + " \u00AB");
+                event.setMotd(ChatColor.GOLD + "\u00BB " + ChatColor.AQUA + name + ChatColor.GOLD + " \u00AB" + ChatColor.DARK_GRAY + " -" + ChatColor.WHITE + ChatColor.BOLD + " CardinalPGM" + "\n" + ChatColor.GOLD + "      Team: " + ChatColor.BLUE + Cardinal.getInstance().getConfig().getString("team-name"));
             } else if (match.getState() == MatchState.STARTING) {
-                event.setMotd(ChatColor.GREEN + "\u00BB " + ChatColor.AQUA + name + ChatColor.GREEN + " \u00AB");
+                event.setMotd(ChatColor.GREEN + "\u00BB " + ChatColor.AQUA + name + ChatColor.GREEN + " \u00AB" + ChatColor.DARK_GRAY + " -" + ChatColor.WHITE + ChatColor.BOLD + " CardinalPGM" + "\n" + ChatColor.GOLD + "      Team: " + ChatColor.BLUE + Cardinal.getInstance().getConfig().getString("team-name"));
             } else {
-                event.setMotd(ChatColor.GRAY + "\u00BB " + ChatColor.AQUA + name + ChatColor.GRAY + " \u00AB");
+                event.setMotd(ChatColor.GRAY + "\u00BB " + ChatColor.AQUA + name + ChatColor.GRAY + " \u00AB" + ChatColor.DARK_GRAY + " -" + ChatColor.WHITE + ChatColor.BOLD + " CardinalPGM" + "\n" + ChatColor.GOLD + "      Team: " + ChatColor.BLUE + Cardinal.getInstance().getConfig().getString("team-name"));
             }
         } catch (NullPointerException ex) {
 
