@@ -3,13 +3,10 @@ package in.twizmwaz.cardinal.module.modules.filter.type;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.CauseFilterParser;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 
-import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ABSTAIN;
-import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ALLOW;
-import static in.twizmwaz.cardinal.module.modules.filter.FilterState.DENY;
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.*;
 
 public class CauseFilter extends FilterModule {
 
@@ -26,10 +23,8 @@ public class CauseFilter extends FilterModule {
             EventCause eventCause = null;
             if (object instanceof Player) {
                 eventCause = EventCause.PLAYER;
-            } else if (object instanceof Entity) {
-                if (((Entity) object).getType().equals(EntityType.PRIMED_TNT)) {
-                    eventCause = EventCause.TNT;
-                }
+            } else if (object instanceof TNTPrimed) {
+                return cause.equals(EventCause.TNT) ? ALLOW : DENY;
             }
             if (cause.equals(eventCause))
                 return ALLOW;
@@ -55,6 +50,7 @@ public class CauseFilter extends FilterModule {
                 case "player":
                     return PLAYER;
                 case "tnt":
+                case "explosion":
                     return TNT;
                 default:
                     return null;
