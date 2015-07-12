@@ -110,6 +110,13 @@ public class Match {
         }
     }
 
+    public void end() {
+        if (getState() == MatchState.PLAYING) {
+            state = MatchState.ENDED;
+            Bukkit.getServer().getPluginManager().callEvent(new MatchEndEvent(Optional.<TeamModule>absent()));
+        }
+    }
+
     public ModuleCollection<Module> getModules() {
         return modules;
     }

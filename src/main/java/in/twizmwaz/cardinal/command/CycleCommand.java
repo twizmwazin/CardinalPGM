@@ -9,10 +9,8 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.modules.cycleTimer.CycleTimerModule;
-import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
 import in.twizmwaz.cardinal.util.ChatUtil;
-import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -23,8 +21,7 @@ public class CycleCommand {
     public static void cycle(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
             if (cmd.hasFlag('f')) {
-                TeamModule team = Teams.getTeamByName(cmd.getFlag('f')).orNull();
-                GameHandler.getGameHandler().getMatch().end(team);
+                GameHandler.getGameHandler().getMatch().end();
             } else {
                 throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(ChatUtil.getLocale(sender)));
             }
@@ -62,8 +59,7 @@ public class CycleCommand {
     public static void recycle(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
             if (cmd.hasFlag('f')) {
-                TeamModule team = Teams.getTeamByName(cmd.getFlag('f')).orNull();
-                GameHandler.getGameHandler().getMatch().end(team);
+                GameHandler.getGameHandler().getMatch().end();
             } else {
                 throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(ChatUtil.getLocale(sender)));
             }
