@@ -2,7 +2,7 @@ package in.twizmwaz.cardinal.module.modules.updateNotification;
 
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.util.GitUtils;
+import in.twizmwaz.cardinal.util.GitUtil;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
@@ -27,7 +27,7 @@ public class UpdateNotification implements Module {
             @Override
             public void run() {
                 try {
-                    BaseComponent[] chat = ComponentSerializer.parse(GitUtils.getUpdateMessage(notification));
+                    BaseComponent[] chat = ComponentSerializer.parse(GitUtil.getUpdateMessage(notification));
                     event.getPlayer().sendMessage(chat);
                 } catch (IOException ignored) {
                 }

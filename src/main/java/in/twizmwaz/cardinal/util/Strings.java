@@ -5,12 +5,12 @@ import org.bukkit.util.ChatPaginator;
 
 import java.text.DecimalFormat;
 
-public class StringUtils {
+public class Strings {
 
     public static int timeStringToSeconds(String input) {
-        if (input == "oo")
+        if (input.equals("oo"))
             return (int) Double.POSITIVE_INFINITY;
-        if (input == "-oo")
+        if (input.equals("-oo"))
             return (int) Double.NEGATIVE_INFINITY;
         int time = 0;
         String currentUnit = "";
@@ -19,19 +19,19 @@ public class StringUtils {
         for (int i = 0; i < input.length(); i++) {
             char c = input.charAt(i);
             if (Character.isDigit(c) && !currentUnit.equals("")) {
-                time += convert(NumUtils.parseInt(current) * (negative ? -1 : 1), currentUnit);
+                time += convert(Numbers.parseInt(current) * (negative ? -1 : 1), currentUnit);
                 current = "";
                 currentUnit = "";
             }
             if (c == '-') {
                 negative = true;
             } else if (Character.isDigit(c)) {
-                current += NumUtils.parseInt(c + "");
+                current += Numbers.parseInt(c + "");
             } else {
                 currentUnit += c + "";
             }
         }
-        time += convert(NumUtils.parseInt(current) * (negative ? -1 : 1), currentUnit);
+        time += convert(Numbers.parseInt(current) * (negative ? -1 : 1), currentUnit);
         return time;
     }
 
@@ -122,7 +122,7 @@ public class StringUtils {
 
     public static String padMessage(String message, String c, ChatColor dashColor, ChatColor messageColor) {
         message = " " + message + " ";
-        String dashes = StringUtils.repeat(c, (ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH - ChatColor.stripColor(message).length() - 2) / (c.length() * 2));
+        String dashes = Strings.repeat(c, (ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH - ChatColor.stripColor(message).length() - 2) / (c.length() * 2));
         return dashColor + dashes + ChatColor.RESET + messageColor + message + ChatColor.RESET + dashColor + dashes;
     }
 

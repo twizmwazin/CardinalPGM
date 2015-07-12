@@ -7,7 +7,7 @@ import com.sk89q.minecraft.util.commands.CommandPermissions;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.RankChangeEvent;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -28,7 +28,7 @@ public class ModeratorCommand {
                     players.add(moderator.getUniqueId().toString());
                     GameHandler.getGameHandler().getPlugin().getConfig().set("permissions.Moderator.players", players);
                     GameHandler.getGameHandler().getPlugin().saveConfig();
-                    sender.sendMessage(ChatColor.GREEN + "You gave moderator permissions to " + TeamUtils.getTeamColorByPlayer(moderator) + (moderator.isOnline() ? ((Player) moderator).getDisplayName() : moderator.getName()));
+                    sender.sendMessage(ChatColor.GREEN + "You gave moderator permissions to " + Teams.getTeamColorByPlayer(moderator) + (moderator.isOnline() ? ((Player) moderator).getDisplayName() : moderator.getName()));
                     if (moderator.isOnline()) {
                         ((Player) moderator).sendMessage(ChatColor.GREEN + "You are now a moderator!");
                         for (String permission : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.permissions")) {
@@ -57,7 +57,7 @@ public class ModeratorCommand {
                     List<String> players = GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.players");
                     players.remove(moderator.getUniqueId().toString());
                     GameHandler.getGameHandler().getPlugin().getConfig().set("permissions.Moderator.players", players);
-                    sender.sendMessage(ChatColor.RED + "You removed moderator permissions from " + TeamUtils.getTeamColorByPlayer(moderator) + (moderator.isOnline() ? ((Player) moderator).getDisplayName() : moderator.getName()));
+                    sender.sendMessage(ChatColor.RED + "You removed moderator permissions from " + Teams.getTeamColorByPlayer(moderator) + (moderator.isOnline() ? ((Player) moderator).getDisplayName() : moderator.getName()));
                     if (moderator.isOnline()) {
                         ((Player) moderator).sendMessage(ChatColor.RED + "You are no longer a moderator!");
                         for (String permission : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.permissions")) {

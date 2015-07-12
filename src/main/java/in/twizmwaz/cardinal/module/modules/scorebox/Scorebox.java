@@ -12,8 +12,8 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.ChatUtils;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.ChatUtil;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -52,7 +52,7 @@ public class Scorebox implements Module {
                 for (ItemStack item : redeemables.keySet()) {
                     if (event.getPlayer().getInventory().contains(item)) {
                         for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
-                            Optional<TeamModule> playerTeam = TeamUtils.getTeamByPlayer(event.getPlayer());
+                            Optional<TeamModule> playerTeam = Teams.getTeamByPlayer(event.getPlayer());
                             if (playerTeam.isPresent() && score.getTeam() == playerTeam.get()) {
                                 event.getPlayer().getInventory().remove(item);
                                 points += redeemables.get(item);
@@ -62,13 +62,13 @@ public class Scorebox implements Module {
                 }
             }
             points += this.points;
-            Optional<TeamModule> playerTeam = TeamUtils.getTeamByPlayer(event.getPlayer());
+            Optional<TeamModule> playerTeam = Teams.getTeamByPlayer(event.getPlayer());
             if (points != 0 && playerTeam.isPresent()) {
                 for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
                     if (score.getTeam() == playerTeam.get()) {
                         score.setScore(score.getScore() + points);
                         Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(score));
-                        ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}",
+                        ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}",
                                 new LocalizedChatMessage(ChatConstant.UI_SCORED_FOR,
                                         new UnlocalizedChatMessage(playerTeam.get().getColor() + event.getPlayer().getName() + ChatColor.GRAY),
                                         new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "{0}" + ChatColor.GRAY, points == 1 ? new LocalizedChatMessage(ChatConstant.UI_ONE_POINT) : new LocalizedChatMessage(ChatConstant.UI_POINTS, points + "" + ChatColor.GRAY)),

@@ -11,8 +11,8 @@ import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.settings.Settings;
-import in.twizmwaz.cardinal.util.ChatUtils;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.ChatUtil;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -36,7 +36,7 @@ public class StartTimer implements TaskedModule, Cancellable {
     public void run() {
         if (!isCancelled()) {
             if ((time % 100 == 0 && time > 0) || (time < 100 && time > 0 && time % 20 == 0)) {
-                ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "{0}", new LocalizedChatMessage(ChatConstant.UI_MATCH_STARTING_IN, time == 20 ? new LocalizedChatMessage(ChatConstant.UI_SECOND, ChatColor.DARK_RED + "1" + ChatColor.GREEN) : new LocalizedChatMessage(ChatConstant.UI_SECONDS, ChatColor.DARK_RED + "" + (time / 20) + "" + ChatColor.GREEN))));
+                ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "{0}", new LocalizedChatMessage(ChatConstant.UI_MATCH_STARTING_IN, time == 20 ? new LocalizedChatMessage(ChatConstant.UI_SECOND, ChatColor.DARK_RED + "1" + ChatColor.GREEN) : new LocalizedChatMessage(ChatConstant.UI_SECONDS, ChatColor.DARK_RED + "" + (time / 20) + "" + ChatColor.GREEN))));
             }
             if (time == 0) {
                 if (match.getState() != MatchState.STARTING) {
@@ -44,19 +44,19 @@ public class StartTimer implements TaskedModule, Cancellable {
                 } else {
                     if (Blitz.matchIsBlitz()) {
                         int count = 0;
-                        for (TeamModule team : TeamUtils.getTeams()) {
+                        for (TeamModule team : Teams.getTeams()) {
                             if (!team.isObserver() && team.size() > 0) {
                                 count++;
                             }
                         }
                         if (count <= 1 && !forced) {
-                            ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.ERROR_NOT_ENOUGH_PLAYERS)));
+                            ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.ERROR_NOT_ENOUGH_PLAYERS)));
                             this.setCancelled(true);
                             return;
                         }
                     }
                     match.setState(MatchState.PLAYING);
-                    ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "{0}", new LocalizedChatMessage(ChatConstant.UI_MATCH_STARTED)));
+                    ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "{0}", new LocalizedChatMessage(ChatConstant.UI_MATCH_STARTED)));
                     Bukkit.getServer().getPluginManager().callEvent(new MatchStartEvent());
                 }
             }

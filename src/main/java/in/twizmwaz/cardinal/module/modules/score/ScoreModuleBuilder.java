@@ -6,9 +6,9 @@ import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.NumUtils;
-import in.twizmwaz.cardinal.util.StringUtils;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.Numbers;
+import in.twizmwaz.cardinal.util.Strings;
+import in.twizmwaz.cardinal.util.Teams;
 import org.jdom2.Element;
 
 @BuilderData(load = ModuleLoadTime.LATE)
@@ -24,7 +24,7 @@ public class ScoreModuleBuilder implements ModuleBuilder {
         int time = 0;
         for (Element score : match.getDocument().getRootElement().getChildren("score")) {
             if (score.getChild("limit") != null) {
-                max = NumUtils.parseInt(score.getChild("limit").getText());
+                max = Numbers.parseInt(score.getChild("limit").getText());
                 if (max < 0) max = 0;
                 if (max != 0) {
                     pointsPerKill = 1;
@@ -32,7 +32,7 @@ public class ScoreModuleBuilder implements ModuleBuilder {
                 }
             }
             if (score.getChild("time") != null) {
-                time = StringUtils.timeStringToSeconds(score.getChild("time").getText());
+                time = Strings.timeStringToSeconds(score.getChild("time").getText());
                 if (time > 0) {
                     pointsPerKill = 1;
                     pointsPerDeath = 1;
@@ -43,13 +43,13 @@ public class ScoreModuleBuilder implements ModuleBuilder {
                 pointsPerDeath = 0;
             }
             if (score.getChild("kills") != null) {
-                pointsPerKill = NumUtils.parseInt(score.getChild("kills").getText());
+                pointsPerKill = Numbers.parseInt(score.getChild("kills").getText());
             }
             if (score.getChild("deaths") != null) {
-                pointsPerDeath = NumUtils.parseInt(score.getChild("deaths").getText());
+                pointsPerDeath = Numbers.parseInt(score.getChild("deaths").getText());
             }
         }
-        for (TeamModule team : TeamUtils.getTeams()) {
+        for (TeamModule team : Teams.getTeams()) {
             if (!team.isObserver()) {
                 results.add(new ScoreModule(team, pointsPerKill, pointsPerDeath, max));
             }

@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-public class GitUtils {
+public class GitUtil {
 
     public static String getLatestGitRevision() {
         try {
@@ -25,6 +25,4 @@ public class GitUtils {
         JsonElement jsonElement = parser.parse(new InputStreamReader(new URL(url).openStream()));
         return jsonElement.toString();
     }
-
-
 }

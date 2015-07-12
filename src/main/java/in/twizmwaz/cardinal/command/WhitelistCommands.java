@@ -9,8 +9,8 @@ import com.sk89q.minecraft.util.commands.NestedCommand;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.ChatUtils;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.ChatUtil;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -163,8 +163,8 @@ public class WhitelistCommands {
             String offlineWhitelisted = ChatColor.RED + "Offline: \n";
             for (OfflinePlayer player : Bukkit.getWhitelistedPlayers()) {
                 if (player.isOnline()) {
-                    if (TeamUtils.getTeamByPlayer(player.getPlayer()) != null) {
-                        onlineWhitelisted += TeamUtils.getTeamColorByPlayer(player) + player.getName() + ChatColor.RESET + " ";
+                    if (Teams.getTeamByPlayer(player.getPlayer()) != null) {
+                        onlineWhitelisted += Teams.getTeamColorByPlayer(player) + player.getName() + ChatColor.RESET + " ";
                     }
                 } else {
                     offlineWhitelisted += player.getName() + " ";
@@ -223,9 +223,9 @@ public class WhitelistCommands {
             msg += args.getString(i) + " ";
         }
         msg = msg.trim();
-        if (TeamUtils.getTeamByName(msg) != null) {
+        if (Teams.getTeamByName(msg) != null) {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                Optional<TeamModule> team = TeamUtils.getTeamByPlayer(player);
+                Optional<TeamModule> team = Teams.getTeamByPlayer(player);
                 if (team.isPresent() && team.get().getName().startsWith(msg)) {
                     if (!player.isWhitelisted()) {
                         player.setWhitelisted(true);
@@ -235,7 +235,7 @@ public class WhitelistCommands {
             }
             sender.sendMessage(ChatColor.GREEN + "Added " + ChatColor.RED + count + ChatColor.GREEN + " player(s) to the whitelist.");
         } else {
-            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAM_MATCH).getMessage(ChatUtils.getLocale(sender)));
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAM_MATCH).getMessage(ChatUtil.getLocale(sender)));
         }
     }
 

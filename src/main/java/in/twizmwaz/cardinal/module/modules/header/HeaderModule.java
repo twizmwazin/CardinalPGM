@@ -11,8 +11,8 @@ import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
 import in.twizmwaz.cardinal.util.Contributor;
-import in.twizmwaz.cardinal.util.PlayerUtils;
-import in.twizmwaz.cardinal.util.StringUtils;
+import in.twizmwaz.cardinal.util.Players;
+import in.twizmwaz.cardinal.util.Strings;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -88,7 +88,7 @@ public class HeaderModule implements TaskedModule {
                 .append(ChatConstant.UI_TIME.getMessage(locale))
                 .append(": ")
                 .append(GameHandler.getGameHandler().getMatch().isRunning() ? ChatColor.GREEN : ChatColor.GOLD)
-                .append(StringUtils.formatTime(MatchTimer.getTimeInSeconds()))
+                .append(Strings.formatTime(MatchTimer.getTimeInSeconds()))
                 .append(ChatColor.DARK_GRAY)
                 .append(" - ")
                 .append(ChatColor.WHITE)
@@ -108,11 +108,11 @@ public class HeaderModule implements TaskedModule {
                 else
                     player = Bukkit.getOfflinePlayer(author.getName());
                 if (authors.indexOf(author) < authors.size() - 2) {
-                    builder.append(PlayerUtils.getColoredName(player)).append(ChatColor.DARK_GRAY).append(", ");
+                    builder.append(Players.getColoredName(player)).append(ChatColor.DARK_GRAY).append(", ");
                 } else if (authors.indexOf(author) == authors.size() - 2) {
-                    builder.append(PlayerUtils.getColoredName(player)).append(ChatColor.DARK_GRAY).append(" {0} ");
+                    builder.append(Players.getColoredName(player)).append(ChatColor.DARK_GRAY).append(" {0} ");
                 } else if (authors.indexOf(author) == authors.size() - 1) {
-                    builder.append(PlayerUtils.getColoredName(player));
+                    builder.append(Players.getColoredName(player));
                 }
             }
         }

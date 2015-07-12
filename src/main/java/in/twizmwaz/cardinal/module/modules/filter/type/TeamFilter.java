@@ -5,7 +5,7 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.TeamFilterParser;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.entity.Player;
 
 import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ABSTAIN;
@@ -25,7 +25,7 @@ public class TeamFilter extends FilterModule {
     public FilterState evaluate(final Object... objects) {
         for (Object object : objects) {
             if (object instanceof Player) {
-                Optional<TeamModule> team = TeamUtils.getTeamByPlayer((Player) object);
+                Optional<TeamModule> team = Teams.getTeamByPlayer((Player) object);
                 if (team.isPresent())
                     if (team.get() == this.team)
                         return ALLOW;

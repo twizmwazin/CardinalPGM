@@ -3,7 +3,7 @@ package in.twizmwaz.cardinal.module.modules.regions.parsers;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionParser;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
-import in.twizmwaz.cardinal.util.NumUtils;
+import in.twizmwaz.cardinal.util.Numbers;
 import org.bukkit.util.Vector;
 import org.jdom2.Element;
 
@@ -22,13 +22,13 @@ public class PointParser extends RegionParser {
             z = subPoint.getZ();
         } else {
             if (element.getText().contains(",")) {
-                x = NumUtils.parseDouble(element.getText().split(",")[0].trim());
-                y = NumUtils.parseDouble(element.getText().split(",")[1].trim());
-                z = NumUtils.parseDouble(element.getText().split(",")[2].trim());
+                x = Numbers.parseDouble(element.getText().split(",")[0].trim());
+                y = Numbers.parseDouble(element.getText().split(",")[1].trim());
+                z = Numbers.parseDouble(element.getText().split(",")[2].trim());
             } else {
-                x = NumUtils.parseDouble(element.getText().trim().replaceAll(" ", ",").split(",")[0]);
-                y = NumUtils.parseDouble(element.getText().trim().replaceAll(" ", ",").split(",")[1]);
-                z = NumUtils.parseDouble(element.getText().trim().replaceAll(" ", ",").split(",")[2]);
+                x = Numbers.parseDouble(element.getText().trim().replaceAll(" ", ",").split(",")[0]);
+                y = Numbers.parseDouble(element.getText().trim().replaceAll(" ", ",").split(",")[1]);
+                z = Numbers.parseDouble(element.getText().trim().replaceAll(" ", ",").split(",")[2]);
             }
         }
         this.vector = new Vector(x, y, z);

@@ -7,8 +7,8 @@ import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.settings.Settings;
-import in.twizmwaz.cardinal.util.ChatUtils;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.ChatUtil;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -29,8 +29,8 @@ public class PrivateMessageCommands {
             throw new CommandException(ChatConstant.ERROR_PLAYER_NOT_FOUND.getMessage(((Player) sender).getLocale()));
         }
         if (Settings.getSettingByName("PrivateMessages") == null || Settings.getSettingByName("PrivateMessages").getValueByPlayer(target).getValue().equalsIgnoreCase("all")) {
-            target.sendMessage(ChatColor.GRAY + "(From " + TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() + ChatColor.GRAY + "): " + ChatColor.RESET + cmd.getJoinedStrings(1));
-            sender.sendMessage(ChatColor.GRAY + "(To " + TeamUtils.getTeamColorByPlayer(target) + target.getDisplayName() + ChatColor.GRAY + "): " + ChatColor.RESET + cmd.getJoinedStrings(1));
+            target.sendMessage(ChatColor.GRAY + "(From " + Teams.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() + ChatColor.GRAY + "): " + ChatColor.RESET + cmd.getJoinedStrings(1));
+            sender.sendMessage(ChatColor.GRAY + "(To " + Teams.getTeamColorByPlayer(target) + target.getDisplayName() + ChatColor.GRAY + "): " + ChatColor.RESET + cmd.getJoinedStrings(1));
             target.setMetadata("reply", new FixedMetadataValue(Cardinal.getInstance(), sender));
         } else {
             sender.sendMessage(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_DISABLED_PMS, target.getDisplayName()).getMessage(((Player) sender).getLocale()));
@@ -40,18 +40,18 @@ public class PrivateMessageCommands {
     @Command(aliases = {"reply", "r"}, desc = "Reply to a private message", min = 1)
     public static void reply(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (!(sender instanceof Player)) {
-            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_COMMAND).getMessage(ChatUtils.getLocale(sender)));
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_COMMAND).getMessage(ChatUtil.getLocale(sender)));
         }
         if (!((Player) sender).hasMetadata("reply")) {
-            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_MESSAGES).getMessage(ChatUtils.getLocale(sender)));
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_MESSAGES).getMessage(ChatUtil.getLocale(sender)));
         }
         Player target = (Player) ((Player) sender).getMetadata("reply").get(0).value();
         if (target == null) {
             throw new CommandException(ChatConstant.ERROR_PLAYER_NOT_FOUND.getMessage(((Player) sender).getLocale()));
         }
         if (Settings.getSettingByName("PrivateMessages") == null || Settings.getSettingByName("PrivateMessages").getValueByPlayer(target).getValue().equalsIgnoreCase("all")) {
-            target.sendMessage(ChatColor.GRAY + "(From " + TeamUtils.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() + ChatColor.GRAY + "): " + ChatColor.RESET + cmd.getJoinedStrings(0));
-            sender.sendMessage(ChatColor.GRAY + "(To " + TeamUtils.getTeamColorByPlayer(target) + target.getDisplayName() + ChatColor.GRAY + "): " + ChatColor.RESET + cmd.getJoinedStrings(0));
+            target.sendMessage(ChatColor.GRAY + "(From " + Teams.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() + ChatColor.GRAY + "): " + ChatColor.RESET + cmd.getJoinedStrings(0));
+            sender.sendMessage(ChatColor.GRAY + "(To " + Teams.getTeamColorByPlayer(target) + target.getDisplayName() + ChatColor.GRAY + "): " + ChatColor.RESET + cmd.getJoinedStrings(0));
             target.setMetadata("reply", new FixedMetadataValue(Cardinal.getInstance(), sender));
         } else {
             sender.sendMessage(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_DISABLED_PMS, target.getDisplayName()).getMessage(((Player) sender).getLocale()));

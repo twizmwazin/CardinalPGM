@@ -5,7 +5,7 @@ import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.event.ScoreUpdateEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -98,12 +98,12 @@ public class ScoreModule implements Module {
     public void onCardinalDeath(CardinalDeathEvent event) {
         if (matchHasScoring()) {
             if (event.getKiller() != null) {
-                if (TeamUtils.getTeamByPlayer(event.getKiller()).isPresent() && TeamUtils.getTeamByPlayer(event.getKiller()).get().equals(team)) {
+                if (Teams.getTeamByPlayer(event.getKiller()).isPresent() && Teams.getTeamByPlayer(event.getKiller()).get().equals(team)) {
                     score += pointsPerKill;
                     Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
                 }
             } else {
-                if (TeamUtils.getTeamByPlayer(event.getPlayer()).isPresent() && TeamUtils.getTeamByPlayer(event.getPlayer()).get().equals(team)) {
+                if (Teams.getTeamByPlayer(event.getPlayer()).isPresent() && Teams.getTeamByPlayer(event.getPlayer()).get().equals(team)) {
                     score -= pointsPerKill;
                     Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
                 }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MiscUtils {
+public class MiscUtil {
 
     public static Color convertChatColorToColor(ChatColor chatColor) {
         if (chatColor.isColor()) {
@@ -53,9 +53,6 @@ public class MiscUtils {
         }
     }
 
-    /**
-     * @author ParaPenguin
-     */
     public static ChatColor convertDyeColorToChatColor(DyeColor dye) {
         switch (dye) {
             case WHITE:

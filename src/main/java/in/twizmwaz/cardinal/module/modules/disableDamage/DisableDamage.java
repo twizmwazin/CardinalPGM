@@ -4,7 +4,7 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -62,9 +62,9 @@ public class DisableDamage implements Module {
                     if (Bukkit.getOfflinePlayer(source).isOnline()) {
                         if (Bukkit.getPlayer(source).equals(player)) {
                             event.setCancelled(!blockExplosionSelf);
-                        } else if (TeamUtils.getTeamByPlayer(Bukkit.getPlayer(source)) == TeamUtils.getTeamByPlayer(player)) {
+                        } else if (Teams.getTeamByPlayer(Bukkit.getPlayer(source)) == Teams.getTeamByPlayer(player)) {
                             event.setCancelled(!blockExplosionAlly);
-                        } else if (TeamUtils.getTeamByPlayer(Bukkit.getPlayer(source)) != TeamUtils.getTeamByPlayer(player)) {
+                        } else if (Teams.getTeamByPlayer(Bukkit.getPlayer(source)) != Teams.getTeamByPlayer(player)) {
                             event.setCancelled(!blockExplosionEnemy);
                         } else {
                             event.setCancelled(!blockExplosionOther);

@@ -6,7 +6,7 @@ import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.scoreboard.ScoreboardModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -28,7 +28,7 @@ public class FriendlyFire implements Module {
         this.match = match;
         this.arrowReturn = arrowReturn;
         if (enabled) {
-            for (TeamModule team : TeamUtils.getTeams()) {
+            for (TeamModule team : Teams.getTeams()) {
                 for (ScoreboardModule scoreboard : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreboardModule.class)) {
                     scoreboard.getScoreboard().getTeam(team.getId()).setAllowFriendlyFire(false);
                 }
@@ -39,7 +39,7 @@ public class FriendlyFire implements Module {
     @EventHandler
     public void onBowShootEvent(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player) {
-            Optional<TeamModule> team = TeamUtils.getTeamByPlayer(((Player) event.getEntity()).getPlayer());
+            Optional<TeamModule> team = Teams.getTeamByPlayer(((Player) event.getEntity()).getPlayer());
             if (team.isPresent())
                 event.getEntity().setMetadata("team", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), team.get().getId()));
         }
@@ -51,7 +51,7 @@ public class FriendlyFire implements Module {
             if (((Arrow) event.getDamager()).getShooter() instanceof Player) {
                 if (event.getDamager().hasMetadata("team")) {
                     Player shooter = (Player) ((Arrow) event.getDamager()).getShooter();
-                    if (TeamUtils.getTeamByPlayer(shooter) == TeamUtils.getTeamById(event.getDamager().getMetadata("team").get(0).toString())) {
+                    if (Teams.getTeamByPlayer(shooter) == Teams.getTeamById(event.getDamager().getMetadata("team").get(0).toString())) {
                         event.setCancelled(true);
                     }
                 }
@@ -71,10 +71,10 @@ public class FriendlyFire implements Module {
                 proceed = true;
             }
         }
-        if (proceed && event.getPotion().getShooter() instanceof Player && TeamUtils.getTeamByPlayer((Player) event.getPotion().getShooter()) != null) {
-            Optional<TeamModule> team = TeamUtils.getTeamByPlayer((Player) event.getPotion().getShooter());
+        if (proceed && event.getPotion().getShooter() instanceof Player && Teams.getTeamByPlayer((Player) event.getPotion().getShooter()) != null) {
+            Optional<TeamModule> team = Teams.getTeamByPlayer((Player) event.getPotion().getShooter());
             for (LivingEntity affected : event.getAffectedEntities()) {
-                if (affected instanceof Player && TeamUtils.getTeamByPlayer((Player) affected) != null && TeamUtils.getTeamByPlayer((Player) affected).equals(team) && !affected.equals(event.getPotion().getShooter())) {
+                if (affected instanceof Player && Teams.getTeamByPlayer((Player) affected) != null && Teams.getTeamByPlayer((Player) affected).equals(team) && !affected.equals(event.getPotion().getShooter())) {
                     event.setIntensity(affected, 0);
                 }
             }

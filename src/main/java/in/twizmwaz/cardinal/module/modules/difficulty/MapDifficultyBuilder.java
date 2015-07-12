@@ -3,7 +3,7 @@ package in.twizmwaz.cardinal.module.modules.difficulty;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
-import in.twizmwaz.cardinal.util.NumUtils;
+import in.twizmwaz.cardinal.util.Numbers;
 import org.bukkit.Difficulty;
 
 public class MapDifficultyBuilder implements ModuleBuilder {
@@ -12,7 +12,7 @@ public class MapDifficultyBuilder implements ModuleBuilder {
     public ModuleCollection load(Match match) {
         ModuleCollection<MapDifficulty> results = new ModuleCollection<>();
         try {
-            switch (NumUtils.parseInt(match.getDocument().getRootElement().getChildText("difficulty"))) {
+            switch (Numbers.parseInt(match.getDocument().getRootElement().getChildText("difficulty"))) {
                 case 0:
                     results.add(new MapDifficulty(Difficulty.PEACEFUL));
                     break;

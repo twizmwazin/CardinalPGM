@@ -9,8 +9,8 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.ChatUtils;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.ChatUtil;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -22,12 +22,12 @@ public class JoinCommand {
     public static void join(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (sender instanceof Player) {
             if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) || GameHandler.getGameHandler().getMatch().getState().equals(MatchState.CYCLING)) {
-                ChatUtils.sendWarningMessage((Player) sender, ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_MATCH_OVER).getMessage(((Player) sender).getLocale()));
+                ChatUtil.sendWarningMessage((Player) sender, ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_MATCH_OVER).getMessage(((Player) sender).getLocale()));
                 return;
             }
-            Optional<TeamModule> originalTeam = TeamUtils.getTeamByPlayer((Player) sender);
+            Optional<TeamModule> originalTeam = Teams.getTeamByPlayer((Player) sender);
             if (cmd.argsLength() == 0 && originalTeam.isPresent() && !originalTeam.get().isObserver()) {
-                throw new CommandException(ChatUtils.getWarningMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_JOINED, TeamUtils.getTeamByPlayer((Player) sender).get().getCompleteName() + ChatColor.RED).getMessage(((Player) sender).getLocale())));
+                throw new CommandException(ChatUtil.getWarningMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_JOINED, Teams.getTeamByPlayer((Player) sender).get().getCompleteName() + ChatColor.RED).getMessage(((Player) sender).getLocale())));
             }
             Optional<TeamModule> destinationTeam = Optional.absent();
             if (cmd.argsLength() > 0) {
@@ -41,12 +41,12 @@ public class JoinCommand {
                     if (!destinationTeam.get().contains(sender)) {
                         destinationTeam.get().add((Player) sender, false);
                     } else {
-                        throw new CommandException(ChatUtils.getWarningMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_JOINED, destinationTeam.get().getCompleteName() + ChatColor.RED).getMessage(((Player) sender).getLocale())));
+                        throw new CommandException(ChatUtil.getWarningMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_JOINED, destinationTeam.get().getCompleteName() + ChatColor.RED).getMessage(((Player) sender).getLocale())));
                     }
                 } else
                     throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAM_MATCH).getMessage(((Player) sender).getLocale()));
             } else {
-                destinationTeam = TeamUtils.getTeamWithFewestPlayers(GameHandler.getGameHandler().getMatch());
+                destinationTeam = Teams.getTeamWithFewestPlayers(GameHandler.getGameHandler().getMatch());
                 if (destinationTeam.isPresent()) {
                     destinationTeam.get().add((Player) sender, false);
                 }

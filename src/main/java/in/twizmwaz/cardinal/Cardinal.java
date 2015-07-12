@@ -15,7 +15,7 @@ import in.twizmwaz.cardinal.command.*;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import in.twizmwaz.cardinal.settings.Setting;
 import in.twizmwaz.cardinal.settings.SettingValue;
-import in.twizmwaz.cardinal.util.ChatUtils;
+import in.twizmwaz.cardinal.util.ChatUtil;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -57,7 +57,7 @@ public class Cardinal extends JavaPlugin {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        String locale = ChatUtils.getLocale(sender);
+        String locale = ChatUtil.getLocale(sender);
         try {
             this.commands.execute(cmd.getName(), args, sender, sender);
         } catch (CommandPermissionsException e) {

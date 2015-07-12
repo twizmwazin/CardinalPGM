@@ -15,10 +15,10 @@ import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
-import in.twizmwaz.cardinal.util.ChatUtils;
-import in.twizmwaz.cardinal.util.ScoreboardUtils;
-import in.twizmwaz.cardinal.util.StringUtils;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.ChatUtil;
+import in.twizmwaz.cardinal.util.Scoreboards;
+import in.twizmwaz.cardinal.util.Strings;
+import in.twizmwaz.cardinal.util.Teams;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -29,36 +29,36 @@ public class MatchCommand {
 
     @Command(aliases = {"matchinfo", "match"}, desc = "Shows information about the currently playing match.", usage = "")
     public static void match(final CommandContext args, CommandSender sender) throws CommandException {
-        sender.sendMessage(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "------" + ChatColor.DARK_AQUA + " " + new LocalizedChatMessage(ChatConstant.UI_MATCH_INFO).getMessage(ChatUtils.getLocale(sender)) + " " + ChatColor.GRAY + "(" + GameHandler.getGameHandler().getMatch().getNumber() + ")" + ChatColor.RED + " " + ChatColor.STRIKETHROUGH + "------");
-        sender.sendMessage(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TIME).getMessage(ChatUtils.getLocale(sender)) + ": " + ChatColor.GOLD + (Cardinal.getInstance().getConfig().getBoolean("matchTimeMillis") ? StringUtils.formatTimeWithMillis(MatchTimer.getTimeInSeconds()) : StringUtils.formatTime(MatchTimer.getTimeInSeconds())));
+        sender.sendMessage(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "------" + ChatColor.DARK_AQUA + " " + new LocalizedChatMessage(ChatConstant.UI_MATCH_INFO).getMessage(ChatUtil.getLocale(sender)) + " " + ChatColor.GRAY + "(" + GameHandler.getGameHandler().getMatch().getNumber() + ")" + ChatColor.RED + " " + ChatColor.STRIKETHROUGH + "------");
+        sender.sendMessage(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TIME).getMessage(ChatUtil.getLocale(sender)) + ": " + ChatColor.GOLD + (Cardinal.getInstance().getConfig().getBoolean("matchTimeMillis") ? Strings.formatTimeWithMillis(MatchTimer.getTimeInSeconds()) : Strings.formatTime(MatchTimer.getTimeInSeconds())));
         String teams = "";
         boolean hasObjectives = false;
-        for (TeamModule team : TeamUtils.getTeams()) {
+        for (TeamModule team : Teams.getTeams()) {
             int players = 0;
             for (Player player : Bukkit.getOnlinePlayers()) {
-                if (TeamUtils.getTeamByPlayer(player).isPresent()) {
-                    if (TeamUtils.getTeamByPlayer(player).get() == team) {
+                if (Teams.getTeamByPlayer(player).isPresent()) {
+                    if (Teams.getTeamByPlayer(player).get() == team) {
                         players++;
                     }
                 }
             }
             teams += team.getCompleteName() + ChatColor.GRAY + ": " + ChatColor.RESET + players + (team.isObserver() ? "" : ChatColor.GRAY + "/" + team.getMax() + ChatColor.AQUA + " | ");
-            if (TeamUtils.getShownObjectives(team).size() > 0) hasObjectives = true;
+            if (Teams.getShownObjectives(team).size() > 0) hasObjectives = true;
         }
-        if (ScoreboardUtils.getHills().size() > 0) hasObjectives = true;
+        if (Scoreboards.getHills().size() > 0) hasObjectives = true;
         sender.sendMessage(teams);
         Match match = GameHandler.getGameHandler().getMatch();
         if (match.isRunning() || match.getState().equals(MatchState.ENDED) || match.getState().equals(MatchState.CYCLING)) {
             if (hasObjectives) {
-                sender.sendMessage(ChatColor.RED + "---- " + new LocalizedChatMessage(ChatConstant.UI_GOALS).getMessage(ChatUtils.getLocale(sender)) + " ----");
-                for (TeamModule team : TeamUtils.getTeams()) {
+                sender.sendMessage(ChatColor.RED + "---- " + new LocalizedChatMessage(ChatConstant.UI_GOALS).getMessage(ChatUtil.getLocale(sender)) + " ----");
+                for (TeamModule team : Teams.getTeams()) {
                     if (!team.isObserver()) {
-                        if (TeamUtils.getShownObjectives(team).size() > 0 || ScoreboardUtils.getHills().size() > 0) {
+                        if (Teams.getShownObjectives(team).size() > 0 || Scoreboards.getHills().size() > 0) {
                             String objectives = "";
-                            for (GameObjective objective : TeamUtils.getShownObjectives(team)) {
+                            for (GameObjective objective : Teams.getShownObjectives(team)) {
                                 objectives += (objective.isComplete() ? ChatColor.GREEN : ChatColor.DARK_RED) + WordUtils.capitalizeFully(objective.getName().replaceAll("_", " ")) + "  ";
                             }
-                            for (HillObjective hill : ScoreboardUtils.getHills()) {
+                            for (HillObjective hill : Scoreboards.getHills()) {
                                 if (hill.getTeam() != null) {
                                     if (hill.getTeam() == team) {
                                         objectives += ChatColor.GREEN + WordUtils.capitalizeFully(hill.getName().replaceAll("_", " ") + "  ");
@@ -82,7 +82,7 @@ public class MatchCommand {
                 double timeRemaining;
                 if (TimeLimit.getMatchTimeLimit() != 0) {
                     timeRemaining = TimeLimit.getMatchTimeLimit() - MatchTimer.getTimeInSeconds();
-                    sender.sendMessage(ChatColor.DARK_AQUA + "Score: " + score + (TimeLimit.getMatchTimeLimit() != 0 ? ChatColor.RED + "  " + StringUtils.formatTime(timeRemaining) : "") + (ScoreModule.matchHasMax() ? ChatColor.GRAY + "  [" + ScoreModule.max() + "]" : ""));
+                    sender.sendMessage(ChatColor.DARK_AQUA + "Score: " + score + (TimeLimit.getMatchTimeLimit() != 0 ? ChatColor.RED + "  " + Strings.formatTime(timeRemaining) : "") + (ScoreModule.matchHasMax() ? ChatColor.GRAY + "  [" + ScoreModule.max() + "]" : ""));
                 }
             }
         }

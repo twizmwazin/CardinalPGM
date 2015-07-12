@@ -10,7 +10,7 @@ import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.startTimer.StartTimer;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
-import in.twizmwaz.cardinal.util.DomUtils;
+import in.twizmwaz.cardinal.util.DomUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -37,7 +37,7 @@ public class Match {
         this.uuid = id;
         this.modules = new ModuleCollection<>();
         try {
-            this.document = DomUtils.parse(new File(map.getFolder() + "/map.xml"));
+            this.document = DomUtil.parse(new File(map.getFolder() + "/map.xml"));
         } catch (JDOMException | IOException e) {
             e.printStackTrace();
         }

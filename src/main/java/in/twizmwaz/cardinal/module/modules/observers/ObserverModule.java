@@ -15,8 +15,8 @@ import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.tutorial.Tutorial;
-import in.twizmwaz.cardinal.util.ItemUtils;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.Items;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -98,11 +98,11 @@ public class ObserverModule implements Module {
         }
 
         player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
-        ItemStack howTo = ItemUtils.createBook(Material.WRITTEN_BOOK, 1, ChatColor.AQUA + "" + ChatColor.BOLD + "Coming Soon", ChatColor.GOLD + "CardinalPGM");
+        ItemStack howTo = Items.createBook(Material.WRITTEN_BOOK, 1, ChatColor.AQUA + "" + ChatColor.BOLD + "Coming Soon", ChatColor.GOLD + "CardinalPGM");
         player.getInventory().setItem(1, howTo);
         player.getInventory().setItem(3, Tutorial.getEmerald(player));
         if (player.hasPermission("tnt.defuse")) {
-            ItemStack shears = ItemUtils.createItem(Material.SHEARS, 1, (short) 0, ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
+            ItemStack shears = Items.createItem(Material.SHEARS, 1, (short) 0, ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
             player.getInventory().setItem(5, shears);
         }
 
@@ -141,7 +141,7 @@ public class ObserverModule implements Module {
         } else {
             resetPlayer(event.getPlayer(), false);
             if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
-                ItemStack picker = ItemUtils.createItem(Material.LEATHER_HELMET, 1, (short) 0,
+                ItemStack picker = Items.createItem(Material.LEATHER_HELMET, 1, (short) 0,
                         ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(event.getPlayer().getLocale()) : new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(event.getPlayer().getLocale())),
                         Collections.singletonList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(event.getPlayer().getLocale())));
                 event.getPlayer().getInventory().setItem(2, picker);
@@ -361,7 +361,7 @@ public class ObserverModule implements Module {
                 /* if (Bukkit.getPlayer(view) != null && viewing.containsKey(view)) {
                     for (UUID uuid : viewing.get(view)) {
                         Player player = Bukkit.getPlayer(uuid);
-                        if (player != null && player.getOpenInventory().getTitle().equals(TeamUtils.getTeamColorByPlayer(Bukkit.getPlayer(view)) + Bukkit.getPlayer(view).getName())) {
+                        if (player != null && player.getOpenInventory().getTitle().equals(Teams.getTeamColorByPlayer(Bukkit.getPlayer(view)) + Bukkit.getPlayer(view).getName())) {
                             Inventory fake = getFakeInventory(Bukkit.getPlayer(view), player.getLocale());
                             for (int i = 0; i < 36; i ++) {
                                 try {
@@ -377,7 +377,7 @@ public class ObserverModule implements Module {
     }
 
     public Inventory getFakeInventory(Player player, String locale) {
-        Inventory inventory = Bukkit.createInventory(null, 45, TeamUtils.getTeamColorByPlayer(player) + player.getName());
+        Inventory inventory = Bukkit.createInventory(null, 45, Teams.getTeamColorByPlayer(player) + player.getName());
         inventory.setItem(0, player.getInventory().getHelmet());
         inventory.setItem(1, player.getInventory().getChestplate());
         inventory.setItem(2, player.getInventory().getLeggings());
@@ -401,11 +401,11 @@ public class ObserverModule implements Module {
             }
             effects.add(ChatColor.GRAY + effectType + " " + (effect.getAmplifier() + 1));
         }
-        ItemStack potion = ItemUtils.createItem(Material.POTION, 1, (short) 0, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_POTION_EFFECTS).getMessage(locale), effects);
+        ItemStack potion = Items.createItem(Material.POTION, 1, (short) 0, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_POTION_EFFECTS).getMessage(locale), effects);
         inventory.setItem(6, potion);
-        ItemStack food = ItemUtils.createItem(Material.SPECKLED_MELON, player.getFoodLevel(), (short) 0, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_HUNGER_LEVEL).getMessage(locale));
+        ItemStack food = Items.createItem(Material.SPECKLED_MELON, player.getFoodLevel(), (short) 0, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_HUNGER_LEVEL).getMessage(locale));
         inventory.setItem(7, food);
-        ItemStack health = ItemUtils.createItem(Material.POTION, (int) Math.ceil(player.getHealth()), (short) 16389, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_HEALTH_LEVEL).getMessage(locale));
+        ItemStack health = Items.createItem(Material.POTION, (int) Math.ceil(player.getHealth()), (short) 16389, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_HEALTH_LEVEL).getMessage(locale));
         inventory.setItem(8, health);
         for (int i = 36; i <= 44; i++) {
             inventory.setItem(i, player.getInventory().getItem(i - 36));
@@ -491,7 +491,7 @@ public class ObserverModule implements Module {
     public void onPlayerMove(PlayerMoveEvent event) {
         if (testObserver(event.getPlayer())) {
             if (event.getTo().getY() <= -64) {
-                TeamModule teamModule = TeamUtils.getTeamById("observers").get();
+                TeamModule teamModule = Teams.getTeamById("observers").get();
                 ModuleCollection<SpawnModule> modules = new ModuleCollection<>();
                 for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
                     if (spawnModule.getTeam() == teamModule) modules.add(spawnModule);
@@ -505,7 +505,7 @@ public class ObserverModule implements Module {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         if (testObserver(event.getPlayer())) {
             if (event.getTo().getY() <= -64) {
-                TeamModule teamModule = TeamUtils.getTeamById("observers").get();
+                TeamModule teamModule = Teams.getTeamById("observers").get();
                 ModuleCollection<SpawnModule> modules = new ModuleCollection<>();
                 for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
                     if (spawnModule.getTeam() == teamModule) modules.add(spawnModule);
@@ -548,7 +548,7 @@ public class ObserverModule implements Module {
     }
 
     private boolean testObserver(Player player) {
-        Optional<TeamModule> team = TeamUtils.getTeamByPlayer(player);
+        Optional<TeamModule> team = Teams.getTeamByPlayer(player);
         return (team.isPresent() && team.get().isObserver()) || !match.isRunning();
 
     }

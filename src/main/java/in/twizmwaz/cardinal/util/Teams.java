@@ -15,7 +15,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-public class TeamUtils {
+public class Teams {
 
     public static Optional<TeamModule> getTeamWithFewestPlayers(Match match) {
         TeamModule result = null;

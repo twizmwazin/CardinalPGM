@@ -5,9 +5,9 @@ import com.google.common.collect.Maps;
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import in.twizmwaz.cardinal.util.Contributor;
-import in.twizmwaz.cardinal.util.DomUtils;
-import in.twizmwaz.cardinal.util.MojangUtils;
-import in.twizmwaz.cardinal.util.NumUtils;
+import in.twizmwaz.cardinal.util.DomUtil;
+import in.twizmwaz.cardinal.util.MojangUtil;
+import in.twizmwaz.cardinal.util.Numbers;
 import org.apache.commons.io.Charsets;
 import org.bukkit.Bukkit;
 import org.jdom2.Document;
@@ -62,7 +62,7 @@ public class Rotation {
                 if (map.isFile()) continue;
                 if (Arrays.asList(map.list()).containsAll(requirements)) {
                     try {
-                        Document xml = DomUtils.parse(new File(map.getPath() + "/map.xml"));
+                        Document xml = DomUtil.parse(new File(map.getPath() + "/map.xml"));
                         String name = xml.getRootElement().getChild("name").getText();
                         String version = xml.getRootElement().getChild("version").getText();
                         String objective = xml.getRootElement().getChild("objective").getText();
@@ -87,7 +87,7 @@ public class Rotation {
                         int maxPlayers = 0;
                         for (Element teams : xml.getRootElement().getChildren("teams")) {
                             for (Element team : teams.getChildren()) {
-                                maxPlayers = maxPlayers + NumUtils.parseInt(team.getAttributeValue("max"));
+                                maxPlayers = maxPlayers + Numbers.parseInt(team.getAttributeValue("max"));
                             }
                         }
                         loaded.add(new LoadedMap(name, version, objective, authors, contributors, rules, maxPlayers, map));
@@ -235,7 +235,7 @@ public class Rotation {
                     } else if (names.containsKey(contributor.getUniqueId())) {
                         contributor.setName(names.get(contributor.getUniqueId()));
                     } else {
-                        names.put(contributor.getUniqueId(), MojangUtils.getNameByUUID(contributor.getUniqueId()));
+                        names.put(contributor.getUniqueId(), MojangUtil.getName(contributor.getUniqueId()));
                         contributor.setName(names.get(contributor.getUniqueId()));
                     }
                 }
@@ -248,7 +248,7 @@ public class Rotation {
                     } else if (names.containsKey(contributor.getUniqueId())) {
                         contributor.setName(names.get(contributor.getUniqueId()));
                     } else {
-                        names.put(contributor.getUniqueId(), MojangUtils.getNameByUUID(contributor.getUniqueId()));
+                        names.put(contributor.getUniqueId(), MojangUtil.getName(contributor.getUniqueId()));
                         contributor.setName(names.get(contributor.getUniqueId()));
                     }
                 }

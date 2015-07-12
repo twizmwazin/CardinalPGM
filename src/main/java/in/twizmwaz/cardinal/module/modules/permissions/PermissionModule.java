@@ -11,7 +11,7 @@ import in.twizmwaz.cardinal.event.RankChangeEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.rank.Rank;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -140,7 +140,7 @@ public class PermissionModule implements Module {
     public void onMatchStart(MatchStartEvent event) {
         if (Cardinal.getInstance().getConfig().getBoolean("worldEditPermissions")) {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                Optional<TeamModule> team = TeamUtils.getTeamByPlayer(player);
+                Optional<TeamModule> team = Teams.getTeamByPlayer(player);
                 if ((team.isPresent() && team.get().isObserver())) {
                     attachmentMap.get(player).setPermission("worldedit.navigation.jumpto.tool", true);
                     attachmentMap.get(player).setPermission("worldedit.navigation.thru.tool", true);
@@ -178,8 +178,8 @@ public class PermissionModule implements Module {
     @EventHandler
     public void onRankChange(RankChangeEvent event) {
         String prefix = Rank.getPlayerPrefix(event.getPlayer().getUniqueId());
-        event.getPlayer().setDisplayName(prefix + TeamUtils.getTeamColorByPlayer(event.getPlayer()) + event.getPlayer().getName());
-        event.getPlayer().setPlayerListName(prefix + TeamUtils.getTeamColorByPlayer(event.getPlayer()) + event.getPlayer().getName());
+        event.getPlayer().setDisplayName(prefix + Teams.getTeamColorByPlayer(event.getPlayer()) + event.getPlayer().getName());
+        event.getPlayer().setPlayerListName(prefix + Teams.getTeamColorByPlayer(event.getPlayer()) + event.getPlayer().getName());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

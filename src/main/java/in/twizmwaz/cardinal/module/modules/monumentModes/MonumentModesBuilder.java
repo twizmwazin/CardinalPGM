@@ -6,8 +6,8 @@ import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.cores.CoreObjective;
-import in.twizmwaz.cardinal.util.NumUtils;
-import in.twizmwaz.cardinal.util.StringUtils;
+import in.twizmwaz.cardinal.util.Numbers;
+import in.twizmwaz.cardinal.util.Strings;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.jdom2.Element;
@@ -21,12 +21,12 @@ public class MonumentModesBuilder implements ModuleBuilder {
         ModuleCollection results = new ModuleCollection();
         for (Element modes : match.getDocument().getRootElement().getChildren("modes")) {
             for (Element mode : modes.getChildren("mode")) {
-                int after = StringUtils.timeStringToSeconds(mode.getAttributeValue("after"));
+                int after = Strings.timeStringToSeconds(mode.getAttributeValue("after"));
                 Material material;
                 int damageValue = 0;
                 if (mode.getAttributeValue("material").contains(":")) {
                     material = Material.matchMaterial(mode.getAttributeValue("material").split(":")[0]);
-                    damageValue = NumUtils.parseInt(mode.getAttributeValue("material").split(":")[1]);
+                    damageValue = Numbers.parseInt(mode.getAttributeValue("material").split(":")[1]);
                 } else {
                     material = Material.matchMaterial(mode.getAttributeValue("material"));
                 }

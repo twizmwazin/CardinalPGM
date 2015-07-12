@@ -6,9 +6,9 @@ import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjective;
 import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
-import in.twizmwaz.cardinal.util.MiscUtils;
-import in.twizmwaz.cardinal.util.NumUtils;
-import in.twizmwaz.cardinal.util.StringUtils;
+import in.twizmwaz.cardinal.util.MiscUtil;
+import in.twizmwaz.cardinal.util.Numbers;
+import in.twizmwaz.cardinal.util.Strings;
 import org.bukkit.ChatColor;
 
 public class GameObjectiveScoreboardHandler {
@@ -34,13 +34,13 @@ public class GameObjectiveScoreboardHandler {
         if (objective instanceof WoolObjective) {
             WoolObjective wool = (WoolObjective) objective;
             if (wool.isComplete()) {
-                prefix = MiscUtils.convertDyeColorToChatColor(wool.getColor()) + " \u2B1B ";
+                prefix = MiscUtil.convertDyeColorToChatColor(wool.getColor()) + " \u2B1B ";
             } else if (wool.isTouched() && (this.team == team || team.isObserver())) {
-                prefix = MiscUtils.convertDyeColorToChatColor(wool.getColor()) + " \u2592 " + (wool.showProximity() ? ChatColor.RESET + NumUtils.convertToSubscript(wool.getProximity() == Double.POSITIVE_INFINITY || wool.getProximity() == Double.NEGATIVE_INFINITY ? wool.getProximity() : Math.round(wool.getProximity() * 10.0) / 10.0) + " " : "");
+                prefix = MiscUtil.convertDyeColorToChatColor(wool.getColor()) + " \u2592 " + (wool.showProximity() ? ChatColor.RESET + Numbers.convertToSubscript(wool.getProximity() == Double.POSITIVE_INFINITY || wool.getProximity() == Double.NEGATIVE_INFINITY ? wool.getProximity() : Math.round(wool.getProximity() * 10.0) / 10.0) + " " : "");
             } else if (this.team == team || team.isObserver()) {
-                prefix = MiscUtils.convertDyeColorToChatColor(wool.getColor()) + " \u2B1C " + (wool.showProximity() ? ChatColor.RESET + NumUtils.convertToSubscript(wool.getProximity() == Double.POSITIVE_INFINITY || wool.getProximity() == Double.NEGATIVE_INFINITY ? wool.getProximity() : Math.round(wool.getProximity() * 10.0) / 10.0) + " " : "");
+                prefix = MiscUtil.convertDyeColorToChatColor(wool.getColor()) + " \u2B1C " + (wool.showProximity() ? ChatColor.RESET + Numbers.convertToSubscript(wool.getProximity() == Double.POSITIVE_INFINITY || wool.getProximity() == Double.NEGATIVE_INFINITY ? wool.getProximity() : Math.round(wool.getProximity() * 10.0) / 10.0) + " " : "");
             } else {
-                prefix = MiscUtils.convertDyeColorToChatColor(wool.getColor()) + " \u2B1C ";
+                prefix = MiscUtil.convertDyeColorToChatColor(wool.getColor()) + " \u2B1C ";
             }
         } else if (objective instanceof CoreObjective) {
             CoreObjective core = (CoreObjective) objective;
@@ -49,7 +49,7 @@ public class GameObjectiveScoreboardHandler {
             } else if (core.isTouched() && this.team != team) {
                 prefix = ChatColor.YELLOW + " \u2733 ";
             } else if (this.team != team) {
-                prefix = ChatColor.RED + " \u2715 " + ChatColor.RESET + (core.showProximity() ? NumUtils.convertToSubscript(core.getProximity() == Double.POSITIVE_INFINITY || core.getProximity() == Double.NEGATIVE_INFINITY ? core.getProximity() : Math.round(core.getProximity() * 10.0) / 10.0) + " " : "");
+                prefix = ChatColor.RED + " \u2715 " + ChatColor.RESET + (core.showProximity() ? Numbers.convertToSubscript(core.getProximity() == Double.POSITIVE_INFINITY || core.getProximity() == Double.NEGATIVE_INFINITY ? core.getProximity() : Math.round(core.getProximity() * 10.0) / 10.0) + " " : "");
             } else {
                 prefix = ChatColor.RED + " \u2715 ";
             }
@@ -61,7 +61,7 @@ public class GameObjectiveScoreboardHandler {
                 } else if (destroyable.isTouched() && this.team != team) {
                     prefix = ChatColor.YELLOW + " " + destroyable.getPercent() + "% ";
                 } else if (this.team != team) {
-                    prefix = ChatColor.RED + " " + destroyable.getPercent() + "% " + ChatColor.RESET + (destroyable.showProximity() ? NumUtils.convertToSubscript(destroyable.getProximity() == Double.POSITIVE_INFINITY || destroyable.getProximity() == Double.NEGATIVE_INFINITY ? destroyable.getProximity() : Math.round(destroyable.getProximity() * 10.0) / 10.0) + " " : "");
+                    prefix = ChatColor.RED + " " + destroyable.getPercent() + "% " + ChatColor.RESET + (destroyable.showProximity() ? Numbers.convertToSubscript(destroyable.getProximity() == Double.POSITIVE_INFINITY || destroyable.getProximity() == Double.NEGATIVE_INFINITY ? destroyable.getProximity() : Math.round(destroyable.getProximity() * 10.0) / 10.0) + " " : "");
                 } else {
                     prefix = ChatColor.RED + " " + destroyable.getPercent() + "% ";
                 }
@@ -71,7 +71,7 @@ public class GameObjectiveScoreboardHandler {
                 } else if (destroyable.isTouched() && this.team != team) {
                     prefix = ChatColor.YELLOW + " " + destroyable.getPercent() + "% " + ChatColor.GRAY + destroyable.getBlocksBroken() + "/" + destroyable.getBlocksRequired() + " ";
                 } else if (this.team != team) {
-                    prefix = ChatColor.RED + " " + destroyable.getPercent() + "% " + ChatColor.GRAY + destroyable.getBlocksBroken() + "/" + destroyable.getBlocksRequired() + " " + ChatColor.RESET + (destroyable.showProximity() ? NumUtils.convertToSubscript(destroyable.getProximity() == Double.POSITIVE_INFINITY || destroyable.getProximity() == Double.NEGATIVE_INFINITY ? destroyable.getProximity() : Math.round(destroyable.getProximity() * 10.0) / 10.0) + " " : "");
+                    prefix = ChatColor.RED + " " + destroyable.getPercent() + "% " + ChatColor.GRAY + destroyable.getBlocksBroken() + "/" + destroyable.getBlocksRequired() + " " + ChatColor.RESET + (destroyable.showProximity() ? Numbers.convertToSubscript(destroyable.getProximity() == Double.POSITIVE_INFINITY || destroyable.getProximity() == Double.NEGATIVE_INFINITY ? destroyable.getProximity() : Math.round(destroyable.getProximity() * 10.0) / 10.0) + " " : "");
                 } else {
                     prefix = ChatColor.RED + " " + destroyable.getPercent() + "% " + ChatColor.GRAY + destroyable.getBlocksBroken() + "/" + destroyable.getBlocksRequired() + " ";
                 }
@@ -81,7 +81,7 @@ public class GameObjectiveScoreboardHandler {
                 } else if (destroyable.isTouched() && this.team != team) {
                     prefix = ChatColor.YELLOW + " \u2733 ";
                 } else if (this.team != team) {
-                    prefix = ChatColor.RED + " \u2715 " + ChatColor.RESET + (destroyable.showProximity() ? NumUtils.convertToSubscript(destroyable.getProximity() == Double.POSITIVE_INFINITY || destroyable.getProximity() == Double.NEGATIVE_INFINITY ? destroyable.getProximity() : Math.round(destroyable.getProximity() * 10.0) / 10.0) + " " : "");
+                    prefix = ChatColor.RED + " \u2715 " + ChatColor.RESET + (destroyable.showProximity() ? Numbers.convertToSubscript(destroyable.getProximity() == Double.POSITIVE_INFINITY || destroyable.getProximity() == Double.NEGATIVE_INFINITY ? destroyable.getProximity() : Math.round(destroyable.getProximity() * 10.0) / 10.0) + " " : "");
                 } else {
                     prefix = ChatColor.RED + " \u2715 ";
                 }
@@ -103,7 +103,7 @@ public class GameObjectiveScoreboardHandler {
             prefix = " ";
         }
         while (prefix.length() > 16) {
-            prefix = StringUtils.removeLastWord(prefix);
+            prefix = Strings.removeLastWord(prefix);
         }
         return prefix;
     }

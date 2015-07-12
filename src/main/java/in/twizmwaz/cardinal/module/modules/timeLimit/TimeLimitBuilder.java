@@ -6,8 +6,8 @@ import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.StringUtils;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.Strings;
+import in.twizmwaz.cardinal.util.Teams;
 import org.jdom2.Element;
 
 public class TimeLimitBuilder implements ModuleBuilder {
@@ -19,7 +19,7 @@ public class TimeLimitBuilder implements ModuleBuilder {
         TimeLimit.Result result = null;
         TeamModule team = null;
         for (Element time : match.getDocument().getRootElement().getChildren("time")) {
-            timeLimit = StringUtils.timeStringToSeconds(time.getText());
+            timeLimit = Strings.timeStringToSeconds(time.getText());
             result = TimeLimit.Result.TIE;
             if (time.getAttributeValue("result") != null) {
                 if (time.getAttributeValue("result").equalsIgnoreCase("objectives")) {
@@ -28,7 +28,7 @@ public class TimeLimitBuilder implements ModuleBuilder {
                     result = TimeLimit.Result.TIE;
                 } else {
                     result = TimeLimit.Result.TEAM;
-                    team = TeamUtils.getTeamById(time.getAttributeValue("result")).orNull();
+                    team = Teams.getTeamById(time.getAttributeValue("result")).orNull();
                 }
             }
         }
@@ -37,7 +37,7 @@ public class TimeLimitBuilder implements ModuleBuilder {
                 result = TimeLimit.Result.HIGHEST_SCORE;
             }
             if (score.getChild("time") != null) {
-                timeLimit = StringUtils.timeStringToSeconds(score.getChild("time").getText());
+                timeLimit = Strings.timeStringToSeconds(score.getChild("time").getText());
                 result = TimeLimit.Result.HIGHEST_SCORE;
             }
         }
@@ -46,7 +46,7 @@ public class TimeLimitBuilder implements ModuleBuilder {
                 result = TimeLimit.Result.MOST_PLAYERS;
             }
             if (blitz.getChild("time") != null) {
-                timeLimit = StringUtils.timeStringToSeconds(blitz.getChild("time").getText());
+                timeLimit = Strings.timeStringToSeconds(blitz.getChild("time").getText());
                 result = TimeLimit.Result.MOST_PLAYERS;
             }
         }

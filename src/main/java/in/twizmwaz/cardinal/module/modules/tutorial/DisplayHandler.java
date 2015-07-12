@@ -2,7 +2,7 @@ package in.twizmwaz.cardinal.module.modules.tutorial;
 
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
-import in.twizmwaz.cardinal.util.ChatUtils;
+import in.twizmwaz.cardinal.util.ChatUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -61,7 +61,7 @@ public class DisplayHandler {
         if (stage.getTeleport() != null) {
             Location location = stage.getTeleport().getRandomPoint().getLocation();
             if (!location.getBlock().getType().equals(Material.AIR) || !location.add(0, 1, 0).getBlock().getType().equals(Material.AIR)) {
-                this.player.sendMessage("   " + ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.ERROR_TUTORIAL_TP).getMessage(ChatUtils.getLocale(this.player)));
+                this.player.sendMessage("   " + ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.ERROR_TUTORIAL_TP).getMessage(ChatUtil.getLocale(this.player)));
             } else {
                 this.player.setFlying(true);
                 this.player.teleport(stage.getTeleport().getRandomPoint().getLocation());

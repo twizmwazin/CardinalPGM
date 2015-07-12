@@ -3,7 +3,7 @@ package in.twizmwaz.cardinal.module.modules.itemRemove;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
-import in.twizmwaz.cardinal.util.NumUtils;
+import in.twizmwaz.cardinal.util.Numbers;
 import org.bukkit.Material;
 import org.jdom2.Element;
 
@@ -17,7 +17,7 @@ public class ItemRemoveBuilder implements ModuleBuilder {
                 String[] broken = item.getText().split(":");
                 Material material;
                 try {
-                    material = Material.getMaterial(NumUtils.parseInt(broken[0]));
+                    material = Material.getMaterial(Numbers.parseInt(broken[0]));
                 } catch (NumberFormatException e) {
                     material = Material.matchMaterial(broken[0]);
                 }

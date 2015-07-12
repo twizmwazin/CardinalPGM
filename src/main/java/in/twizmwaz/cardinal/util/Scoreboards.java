@@ -8,7 +8,7 @@ import org.bukkit.scoreboard.Team;
 
 import java.util.Set;
 
-public class ScoreboardUtils {
+public class Scoreboards {
 
     public static String getConversion(String string, String insertColor, boolean doNotInterruptColorCodes) {
         int max1 = 16 - insertColor.length();
@@ -93,10 +93,10 @@ public class ScoreboardUtils {
     }
 
     public static String getNextConversion(Objective objective, int slot, Team team, String string, String insert, String addition, Set<String> used, boolean doNotInterruptColorCodes) {
-        while (used.contains(ScoreboardUtils.getConversion(string, insert))) {
+        while (used.contains(Scoreboards.getConversion(string, insert))) {
             insert += addition;
         }
-        String steam = ScoreboardUtils.convertToScoreboard(team, string, insert, doNotInterruptColorCodes);
+        String steam = Scoreboards.convertToScoreboard(team, string, insert, doNotInterruptColorCodes);
         used.add(steam);
         if (slot == 0) {
             objective.getScore(steam).setScore(1);

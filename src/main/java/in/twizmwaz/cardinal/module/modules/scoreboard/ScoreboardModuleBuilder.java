@@ -6,7 +6,7 @@ import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.Teams;
 
 @BuilderData(load = ModuleLoadTime.LATER)
 public class ScoreboardModuleBuilder implements ModuleBuilder {
@@ -15,7 +15,7 @@ public class ScoreboardModuleBuilder implements ModuleBuilder {
     @Override
     public ModuleCollection load(Match match) {
         ModuleCollection results = new ModuleCollection();
-        for (TeamModule team : TeamUtils.getTeams()) {
+        for (TeamModule team : Teams.getTeams()) {
             results.add(new ScoreboardModule(team));
         }
         return results;

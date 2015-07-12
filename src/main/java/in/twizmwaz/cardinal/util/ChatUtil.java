@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Locale;
 
-public class ChatUtils {
+public class ChatUtil {
 
     public static void sendWarningMessage(Player player, String msg) {
         if (msg != null) player.sendMessage(ChatColor.YELLOW + " \u26A0 " + ChatColor.RED + msg);
@@ -44,7 +44,7 @@ public class ChatUtils {
         return GameHandler.getGameHandler().getMatch().getModules().getModules(TeamChannel.class);
     }
 
-    public static enum ChannelType {
+    public enum ChannelType {
         GLOBAL, ADMIN, TEAM
     }
 

@@ -7,8 +7,8 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
-import in.twizmwaz.cardinal.util.NumUtils;
-import in.twizmwaz.cardinal.util.ParseUtils;
+import in.twizmwaz.cardinal.util.Numbers;
+import in.twizmwaz.cardinal.util.Parser;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jdom2.Element;
@@ -34,7 +34,7 @@ public class BlockdropsBuilder implements ModuleBuilder {
                 Set<ItemStack> drops = new HashSet<>();
                 for (Element items : rule.getChildren("drops")) {
                     for (Element item : items.getChildren("item")) {
-                        drops.add(ParseUtils.getItem(item));
+                        drops.add(Parser.getItem(item));
                     }
                 }
                 Material replace = Material.AIR;
@@ -43,11 +43,11 @@ public class BlockdropsBuilder implements ModuleBuilder {
                 }
                 int experience = 0;
                 for (Element experienceElement : rule.getChildren("experience")) {
-                    experience = NumUtils.parseInt(experienceElement.getText());
+                    experience = Numbers.parseInt(experienceElement.getText());
                 }
                 boolean wrongTool = false;
                 for (Element wrongToolElement : rule.getChildren("wrongtool")) {
-                    wrongTool = NumUtils.parseBoolean(wrongToolElement.getText());
+                    wrongTool = Numbers.parseBoolean(wrongToolElement.getText());
                 }
                 results.add(new Blockdrops(region, filter, drops, replace, experience, wrongTool));
             }

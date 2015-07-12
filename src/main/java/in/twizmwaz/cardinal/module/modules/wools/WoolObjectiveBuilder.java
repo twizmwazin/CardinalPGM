@@ -8,9 +8,9 @@ import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.NumUtils;
-import in.twizmwaz.cardinal.util.ParseUtils;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.Numbers;
+import in.twizmwaz.cardinal.util.Parser;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.DyeColor;
 import org.bukkit.util.Vector;
 import org.jdom2.Element;
@@ -25,11 +25,11 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
             for (Element subElement : element.getChildren("wool")) {
                 TeamModule team;
                 try {
-                    team = TeamUtils.getTeamById(element.getAttributeValue("team")).orNull();
+                    team = Teams.getTeamById(element.getAttributeValue("team")).orNull();
                 } catch (NullPointerException e) {
-                    team = TeamUtils.getTeamById((subElement.getAttributeValue("team"))).orNull();
+                    team = Teams.getTeamById((subElement.getAttributeValue("team"))).orNull();
                 }
-                DyeColor color = ParseUtils.parseDyeColor(subElement.getAttributeValue("color"));
+                DyeColor color = Parser.parseDyeColor(subElement.getAttributeValue("color"));
                 BlockRegion place = RegionModuleBuilder.getRegion(subElement.getChildren().get(0)).getCenterBlock();
                 String name = color == null ? "Wool" : color.name() + " Wool";
                 if (element.getAttributeValue("name") != null) {
@@ -53,9 +53,9 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
                 }
                 Vector location = null;
                 if (subElement.getAttributeValue("location") != null) {
-                    location = new Vector(NumUtils.parseDouble(subElement.getAttributeValue("location").replaceAll(" ", ",").split(",")[0]), NumUtils.parseDouble(subElement.getAttributeValue("location").replaceAll(" ", ",").split(",")[1]), NumUtils.parseDouble(subElement.getAttributeValue("location").replaceAll(" ", ",").split(",")[2]));
+                    location = new Vector(Numbers.parseDouble(subElement.getAttributeValue("location").replaceAll(" ", ",").split(",")[0]), Numbers.parseDouble(subElement.getAttributeValue("location").replaceAll(" ", ",").split(",")[1]), Numbers.parseDouble(subElement.getAttributeValue("location").replaceAll(" ", ",").split(",")[2]));
                 } else if (element.getAttributeValue("location") != null) {
-                    location = new Vector(NumUtils.parseDouble(element.getAttributeValue("location").replaceAll(" ", ",").split(",")[0]), NumUtils.parseDouble(element.getAttributeValue("location").replaceAll(" ", ",").split(",")[1]), NumUtils.parseDouble(element.getAttributeValue("location").replaceAll(" ", ",").split(",")[2]));
+                    location = new Vector(Numbers.parseDouble(element.getAttributeValue("location").replaceAll(" ", ",").split(",")[0]), Numbers.parseDouble(element.getAttributeValue("location").replaceAll(" ", ",").split(",")[1]), Numbers.parseDouble(element.getAttributeValue("location").replaceAll(" ", ",").split(",")[2]));
                 }
                 result.add(new WoolObjective(team, name, id, color, place, craftable, show, location));
             }
@@ -63,15 +63,15 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
                 for (Element subChild : child.getChildren("wool")) {
                     TeamModule team;
                     try {
-                        team = TeamUtils.getTeamById((child.getAttributeValue("team"))).orNull();
+                        team = Teams.getTeamById((child.getAttributeValue("team"))).orNull();
                     } catch (NullPointerException e) {
                         try {
-                            team = TeamUtils.getTeamById((subChild.getAttributeValue("team"))).orNull();
+                            team = Teams.getTeamById((subChild.getAttributeValue("team"))).orNull();
                         } catch (NullPointerException ex) {
-                            team = TeamUtils.getTeamById((element.getAttributeValue("team"))).orNull();
+                            team = Teams.getTeamById((element.getAttributeValue("team"))).orNull();
                         }
                     }
-                    DyeColor color = ParseUtils.parseDyeColor(subChild.getAttributeValue("color"));
+                    DyeColor color = Parser.parseDyeColor(subChild.getAttributeValue("color"));
                     BlockRegion place = RegionModuleBuilder.getRegion(subChild.getChildren().get(0)).getCenterBlock();
                     String name = color == null ? "Wool" : color.name() + " Wool";
                     if (element.getAttributeValue("name") != null) {
@@ -99,11 +99,11 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
                     }
                     Vector location = null;
                     if (subChild.getAttributeValue("location") != null) {
-                        location = new Vector(NumUtils.parseDouble(subChild.getAttributeValue("location").replaceAll(" ", ",").split(",")[0]), NumUtils.parseDouble(subChild.getAttributeValue("location").replaceAll(" ", ",").split(",")[1]), NumUtils.parseDouble(subChild.getAttributeValue("location").replaceAll(" ", ",").split(",")[2]));
+                        location = new Vector(Numbers.parseDouble(subChild.getAttributeValue("location").replaceAll(" ", ",").split(",")[0]), Numbers.parseDouble(subChild.getAttributeValue("location").replaceAll(" ", ",").split(",")[1]), Numbers.parseDouble(subChild.getAttributeValue("location").replaceAll(" ", ",").split(",")[2]));
                     } else if (child.getAttributeValue("location") != null) {
-                        location = new Vector(NumUtils.parseDouble(child.getAttributeValue("location").replaceAll(" ", ",").split(",")[0]), NumUtils.parseDouble(child.getAttributeValue("location").replaceAll(" ", ",").split(",")[1]), NumUtils.parseDouble(child.getAttributeValue("location").replaceAll(" ", ",").split(",")[2]));
+                        location = new Vector(Numbers.parseDouble(child.getAttributeValue("location").replaceAll(" ", ",").split(",")[0]), Numbers.parseDouble(child.getAttributeValue("location").replaceAll(" ", ",").split(",")[1]), Numbers.parseDouble(child.getAttributeValue("location").replaceAll(" ", ",").split(",")[2]));
                     } else if (element.getAttributeValue("location") != null) {
-                        location = new Vector(NumUtils.parseDouble(element.getAttributeValue("location").replaceAll(" ", ",").split(",")[0]), NumUtils.parseDouble(element.getAttributeValue("location").replaceAll(" ", ",").split(",")[1]), NumUtils.parseDouble(element.getAttributeValue("location").replaceAll(" ", ",").split(",")[2]));
+                        location = new Vector(Numbers.parseDouble(element.getAttributeValue("location").replaceAll(" ", ",").split(",")[0]), Numbers.parseDouble(element.getAttributeValue("location").replaceAll(" ", ",").split(",")[1]), Numbers.parseDouble(element.getAttributeValue("location").replaceAll(" ", ",").split(",")[2]));
                     }
                     result.add(new WoolObjective(team, name, id, color, place, craftable, show, location));
                 }

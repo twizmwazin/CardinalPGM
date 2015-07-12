@@ -9,7 +9,7 @@ import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -53,7 +53,7 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
             player.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.ERROR_TEAM_FULL, getCompleteName() + ChatColor.RED)).getMessage(player.getLocale()));
             return false;
         }
-        PlayerChangeTeamEvent event = new PlayerChangeTeamEvent(player, force, Optional.<TeamModule>of(this), TeamUtils.getTeamByPlayer(player));
+        PlayerChangeTeamEvent event = new PlayerChangeTeamEvent(player, force, Optional.<TeamModule>of(this), Teams.getTeamByPlayer(player));
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (message && event.getNewTeam().isPresent()) {
             event.getPlayer().sendMessage(ChatColor.WHITE + new LocalizedChatMessage(ChatConstant.GENERIC_JOINED, event.getNewTeam().get().getCompleteName()).getMessage(event.getPlayer().getLocale()));

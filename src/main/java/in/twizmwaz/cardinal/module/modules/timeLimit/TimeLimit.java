@@ -8,7 +8,7 @@ import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjective;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.event.HandlerList;
 
 public class TimeLimit implements Module {
@@ -34,14 +34,14 @@ public class TimeLimit implements Module {
                 int touched = Integer.MIN_VALUE;
                 int touchedPoints = Integer.MIN_VALUE;
                 double proximity = Double.POSITIVE_INFINITY;
-                for (TeamModule team : TeamUtils.getTeams()) {
+                for (TeamModule team : Teams.getTeams()) {
                     if (!team.isObserver()) {
                         int teamCompleted = 0;
                         int teamTouched = 0;
                         int teamTouchedPoints = 0;
                         double teamProximity = Double.POSITIVE_INFINITY;
                         boolean safetyProximity = false;
-                        for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
+                        for (GameObjective obj : Teams.getShownObjectives(team)) {
                             if (obj.isComplete()) {
                                 teamCompleted++;
                             } else if (obj.isTouched()) {
@@ -106,7 +106,7 @@ public class TimeLimit implements Module {
                 // Winner stays null
             } else if (timeLimit.getResult().equals(Result.MOST_PLAYERS)) {
                 int players = Integer.MIN_VALUE;
-                for (TeamModule team : TeamUtils.getTeams()) {
+                for (TeamModule team : Teams.getTeams()) {
                     if (!team.isObserver()) {
                         if (team.size() > players) {
                             winner = team;

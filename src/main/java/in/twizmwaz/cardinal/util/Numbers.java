@@ -2,7 +2,7 @@ package in.twizmwaz.cardinal.util;
 
 import java.util.Random;
 
-public class NumUtils {
+public class Numbers {
 
     public static boolean checkInterval(double test, double bound1, double bound2) {
         return (test >= bound1 && test <= bound2) || (test >= bound2 && test <= bound1);
@@ -29,8 +29,7 @@ public class NumUtils {
     }
 
     public static boolean parseBoolean(String string) {
-        if (string.equalsIgnoreCase("on")) return true;
-        return !string.equalsIgnoreCase("off") && Boolean.parseBoolean(string);
+        return string.equalsIgnoreCase("on") || !string.equalsIgnoreCase("off") && Boolean.parseBoolean(string);
     }
 
     public static String convertToSubscript(double number) {

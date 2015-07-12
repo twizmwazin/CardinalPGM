@@ -7,8 +7,8 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.ChatUtils;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.ChatUtil;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -20,14 +20,14 @@ public class EnterRegion extends AppliedRegion {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        Optional<TeamModule> team = TeamUtils.getTeamByPlayer(event.getPlayer());
+        Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
         if (region.contains(event.getTo().toVector())
                 && !region.contains(event.getFrom().toVector())
                 && filter.evaluate(event.getPlayer(), event).equals(FilterState.DENY)
                 && (!team.isPresent() || (team.isPresent() && !team.get().isObserver()))
                 && GameHandler.getGameHandler().getMatch().isRunning()) {
             event.setTo(event.getFrom());
-            ChatUtils.sendWarningMessage(event.getPlayer(), message);
+            ChatUtil.sendWarningMessage(event.getPlayer(), message);
         }
     }
 }

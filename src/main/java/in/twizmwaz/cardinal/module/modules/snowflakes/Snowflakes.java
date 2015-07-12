@@ -9,9 +9,9 @@ import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
-import in.twizmwaz.cardinal.util.MiscUtils;
-import in.twizmwaz.cardinal.util.NumUtils;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.MiscUtil;
+import in.twizmwaz.cardinal.util.Numbers;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
@@ -46,10 +46,10 @@ public class Snowflakes implements Module {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDropItem(PlayerDropItemEvent event) {
-        if (!event.isCancelled() && TeamUtils.getTeamByPlayer(event.getPlayer()) != null && event.getItemDrop().getItemStack().getType().equals(Material.WOOL)) {
-            for (TeamModule team : TeamUtils.getTeams()) {
-                if (!team.isObserver() && TeamUtils.getTeamByPlayer(event.getPlayer()).orNull() != team) {
-                    for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
+        if (!event.isCancelled() && Teams.getTeamByPlayer(event.getPlayer()) != null && event.getItemDrop().getItemStack().getType().equals(Material.WOOL)) {
+            for (TeamModule team : Teams.getTeams()) {
+                if (!team.isObserver() && Teams.getTeamByPlayer(event.getPlayer()).orNull() != team) {
+                    for (GameObjective obj : Teams.getShownObjectives(team)) {
                         if (obj instanceof WoolObjective && event.getItemDrop().getItemStack().getData().getData() == ((WoolObjective) obj).getColor().getData()) {
                             if (!items.containsKey(event.getPlayer())) {
                                 items.put(event.getPlayer(), new ArrayList<Item>());
@@ -68,12 +68,12 @@ public class Snowflakes implements Module {
     public void onItemDespawnInVoid(EntityDespawnInVoidEvent event) {
         if (event.getEntity() instanceof Item) {
             for (Player player : items.keySet()) {
-                if (player != null && TeamUtils.getTeamByPlayer(player) != null) {
+                if (player != null && Teams.getTeamByPlayer(player) != null) {
                     for (Item item : items.get(player)) {
                         if (item.equals(event.getEntity())) {
-                            for (TeamModule team : TeamUtils.getTeams()) {
-                                if (!team.isObserver() && TeamUtils.getTeamByPlayer(player).orNull() != team) {
-                                    for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
+                            for (TeamModule team : Teams.getTeams()) {
+                                if (!team.isObserver() && Teams.getTeamByPlayer(player).orNull() != team) {
+                                    for (GameObjective obj : Teams.getShownObjectives(team)) {
                                         if (obj instanceof WoolObjective && item.getItemStack().getData().getData() == ((WoolObjective) obj).getColor().getData() && (!destroyed.containsKey(player) || !destroyed.get(player).contains(((WoolObjective) obj).getColor()))) {
                                             if (!destroyed.containsKey(player)) {
                                                 destroyed.put(player, new ArrayList<DyeColor>());
@@ -82,7 +82,7 @@ public class Snowflakes implements Module {
                                             list.add(((WoolObjective) obj).getColor());
                                             destroyed.put(player, list);
 
-                                            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.DESTROY_WOOL, 8, MiscUtils.convertDyeColorToChatColor(((WoolObjective) obj).getColor()) + ((WoolObjective) obj).getColor().name().toUpperCase().replaceAll("_", " ") + " WOOL" + ChatColor.GRAY));
+                                            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.DESTROY_WOOL, 8, MiscUtil.convertDyeColorToChatColor(((WoolObjective) obj).getColor()) + ((WoolObjective) obj).getColor().name().toUpperCase().replaceAll("_", " ") + " WOOL" + ChatColor.GRAY));
                                         }
                                     }
                                 }
@@ -96,7 +96,7 @@ public class Snowflakes implements Module {
 
     @EventHandler
     public void onCardinalDeath(CardinalDeathEvent event) {
-        if (event.getKiller() != null && TeamUtils.getTeamByPlayer(event.getPlayer()) != TeamUtils.getTeamByPlayer(event.getKiller())) {
+        if (event.getKiller() != null && Teams.getTeamByPlayer(event.getPlayer()) != Teams.getTeamByPlayer(event.getKiller())) {
             Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getKiller(), ChangeReason.PLAYER_KILL, 1, event.getPlayer().getName()));
         }
     }
@@ -104,10 +104,10 @@ public class Snowflakes implements Module {
     @EventHandler
     public void onMatchEnd(MatchEndEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (TeamUtils.getTeamByPlayer(player).isPresent() && !TeamUtils.getTeamByPlayer(player).get().isObserver() && event.getTeam().equals(TeamUtils.getTeamByPlayer(player))) {
-                Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.TEAM_WIN, 15, TeamUtils.getTeamByPlayer(player).get().getCompleteName()));
-            } else if (TeamUtils.getTeamByPlayer(player).isPresent() && !TeamUtils.getTeamByPlayer(player).get().isObserver() && !event.getTeam().equals(TeamUtils.getTeamByPlayer(player))) {
-                Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.TEAM_LOYAL, 5, TeamUtils.getTeamByPlayer(player).get().getCompleteName()));
+            if (Teams.getTeamByPlayer(player).isPresent() && !Teams.getTeamByPlayer(player).get().isObserver() && event.getTeam().equals(Teams.getTeamByPlayer(player))) {
+                Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.TEAM_WIN, 15, Teams.getTeamByPlayer(player).get().getCompleteName()));
+            } else if (Teams.getTeamByPlayer(player).isPresent() && !Teams.getTeamByPlayer(player).get().isObserver() && !event.getTeam().equals(Teams.getTeamByPlayer(player))) {
+                Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.TEAM_LOYAL, 5, Teams.getTeamByPlayer(player).get().getCompleteName()));
             }
         }
     }
@@ -117,7 +117,7 @@ public class Snowflakes implements Module {
         if (event.getFinalAmount() != 0) {
             String reason;
             if (event.getChangeReason().equals(ChangeReason.PLAYER_KILL)) {
-                reason = "killed " + TeamUtils.getTeamColorByPlayer(Bukkit.getOfflinePlayer(event.get(0))) + event.get(0);
+                reason = "killed " + Teams.getTeamColorByPlayer(Bukkit.getOfflinePlayer(event.get(0))) + event.get(0);
             } else if (event.getChangeReason().equals(ChangeReason.WOOL_TOUCH)) {
                 reason = "picked up " + event.get(0);
             } else if (event.getChangeReason().equals(ChangeReason.WOOL_PLACE)) {
@@ -140,7 +140,7 @@ public class Snowflakes implements Module {
             if (Cardinal.getCardinalDatabase().get(event.getPlayer(), "snowflakes").equals("")) {
                 Cardinal.getCardinalDatabase().put(event.getPlayer(), "snowflakes", event.getFinalAmount() + "");
             } else {
-                Cardinal.getCardinalDatabase().put(event.getPlayer(), "snowflakes", (NumUtils.parseInt(Cardinal.getCardinalDatabase().get(event.getPlayer(), "snowflakes")) + event.getFinalAmount()) + "");
+                Cardinal.getCardinalDatabase().put(event.getPlayer(), "snowflakes", (Numbers.parseInt(Cardinal.getCardinalDatabase().get(event.getPlayer(), "snowflakes")) + event.getFinalAmount()) + "");
             }
         }
     }

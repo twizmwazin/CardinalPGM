@@ -10,8 +10,8 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.modules.startTimer.StartTimer;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.ChatUtils;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.ChatUtil;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -22,12 +22,12 @@ public class ReadyCommand {
     public static void ready(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (!(sender instanceof Player)) throw new CommandException("Console cannot use this command!");
         if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.WAITING) || GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
-            Optional<TeamModule> team = TeamUtils.getTeamByPlayer((Player) sender);
+            Optional<TeamModule> team = Teams.getTeamByPlayer((Player) sender);
             if (team.isPresent()) {
                 if (!team.get().isReady()) {
                     team.get().setReady(true);
-                    ChatUtils.getGlobalChannel().sendMessage(team.get().getCompleteName() + ChatColor.YELLOW + " is now ready");
-                    if (Cardinal.getInstance().getConfig().getBoolean("observers-ready") ? TeamUtils.teamsReady() : TeamUtils.teamsNoObsReady())
+                    ChatUtil.getGlobalChannel().sendMessage(team.get().getCompleteName() + ChatColor.YELLOW + " is now ready");
+                    if (Cardinal.getInstance().getConfig().getBoolean("observers-ready") ? Teams.teamsReady() : Teams.teamsNoObsReady())
                         GameHandler.getGameHandler().getMatch().start(600);
                 } else throw new CommandException("Your team is already ready!");
             } else
@@ -39,15 +39,15 @@ public class ReadyCommand {
     public static void unready(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (!(sender instanceof Player)) throw new CommandException("Console cannot use this command!");
         if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.WAITING) || GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
-            Optional<TeamModule> team = TeamUtils.getTeamByPlayer((Player) sender);
+            Optional<TeamModule> team = Teams.getTeamByPlayer((Player) sender);
             if (team.isPresent()) {
                 if (team.get().isReady()) {
                     team.get().setReady(false);
-                    ChatUtils.getGlobalChannel().sendMessage(team.get().getCompleteName() + ChatColor.YELLOW + " is no longer ready");
+                    ChatUtil.getGlobalChannel().sendMessage(team.get().getCompleteName() + ChatColor.YELLOW + " is no longer ready");
                     if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
                         GameHandler.getGameHandler().getMatch().setState(MatchState.WAITING);
                         GameHandler.getGameHandler().getMatch().getModules().getModule(StartTimer.class).setCancelled(true);
-                        ChatUtils.getGlobalChannel().sendMessage(ChatColor.RED + "Match start countdown cancelled because " + team.get().getCompleteName() + ChatColor.RED + " became un-ready.");
+                        ChatUtil.getGlobalChannel().sendMessage(ChatColor.RED + "Match start countdown cancelled because " + team.get().getCompleteName() + ChatColor.RED + " became un-ready.");
                     }
                 } else throw new CommandException("Your team is already not ready!");
             } else

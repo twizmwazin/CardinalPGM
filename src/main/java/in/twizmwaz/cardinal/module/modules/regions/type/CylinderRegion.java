@@ -2,7 +2,7 @@ package in.twizmwaz.cardinal.module.modules.regions.type;
 
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.CylinderParser;
-import in.twizmwaz.cardinal.util.NumUtils;
+import in.twizmwaz.cardinal.util.Numbers;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
@@ -47,14 +47,14 @@ public class CylinderRegion extends RegionModule {
 
     @Override
     public boolean contains(Vector vector) {
-        return (Math.hypot(Math.abs(vector.getX() - getBaseX()), Math.abs(vector.getZ() - getBaseZ())) <= getRadius()) && NumUtils.checkInterval(vector.getY(), getBaseY(), getBaseY() + getHeight());
+        return (Math.hypot(Math.abs(vector.getX() - getBaseX()), Math.abs(vector.getZ() - getBaseZ())) <= getRadius()) && Numbers.checkInterval(vector.getY(), getBaseY(), getBaseY() + getHeight());
     }
 
     @Override
     public PointRegion getRandomPoint() {
-        double a = NumUtils.getRandom(0, radius);
-        double b = NumUtils.getRandom(0, 360);
-        double c = NumUtils.getRandom(0, height);
+        double a = Numbers.getRandom(0, radius);
+        double b = Numbers.getRandom(0, 360);
+        double c = Numbers.getRandom(0, height);
 
         return new PointRegion(null, getBaseX() + a * Math.cos(b), getBaseY() + c, getBaseZ() + a * Math.sin(b));
     }

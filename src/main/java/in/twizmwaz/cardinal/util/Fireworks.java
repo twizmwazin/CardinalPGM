@@ -9,7 +9,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.util.Random;
 
-public class FireworkUtil {
+public class Fireworks {
 
     public static void spawnFirework(Location location, World world) {
         Random random = new Random();

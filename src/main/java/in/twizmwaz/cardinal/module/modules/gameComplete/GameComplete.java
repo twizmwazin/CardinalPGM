@@ -11,7 +11,7 @@ import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
@@ -28,12 +28,12 @@ public class GameComplete implements TaskedModule {
 
     @EventHandler
     public void onObjectiveComplete(ObjectiveCompleteEvent event) {
-        for (TeamModule team : TeamUtils.getTeams()) {
+        for (TeamModule team : Teams.getTeams()) {
             boolean skipTeam = false;
-            for (GameObjective condition : TeamUtils.getShownObjectives(team)) {
+            for (GameObjective condition : Teams.getShownObjectives(team)) {
                 if (!condition.isComplete() && !condition.equals(event.getObjective())) skipTeam = true;
             }
-            if (TeamUtils.getShownObjectives(team).size() == 0 || skipTeam) continue;
+            if (Teams.getShownObjectives(team).size() == 0 || skipTeam) continue;
             GameHandler.getGameHandler().getMatch().end(team);
         }
     }
@@ -52,7 +52,7 @@ public class GameComplete implements TaskedModule {
         if (Blitz.matchIsBlitz()) {
             boolean win = true;
             TeamModule winner = null;
-            for (TeamModule team : TeamUtils.getTeams()) {
+            for (TeamModule team : Teams.getTeams()) {
                 if (!team.isObserver()) {
                     if (winner == null && team.size() > 0) {
                         winner = team;

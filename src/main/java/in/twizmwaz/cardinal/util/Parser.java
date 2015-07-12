@@ -17,19 +17,13 @@ import org.jdom2.Element;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParseUtils {
+public class Parser {
 
     public static ItemStack getItem(Element element) {
-        int amount = 1;
-        if (element.getAttributeValue("amount") != null) {
-            try {
-                amount = NumUtils.parseInt(element.getAttributeValue("amount"));
-            } catch (NumberFormatException e) {
-            }
-        }
+        int amount = Numbers.parseInt(element.getAttributeValue("amount", "1"));
         ItemStack itemStack;
         if (element.getText().contains(":"))
-            itemStack = new ItemStack(Material.matchMaterial(element.getText().split(":")[0]), amount, (short) NumUtils.parseInt(element.getText().split(":")[1]));
+            itemStack = new ItemStack(Material.matchMaterial(element.getText().split(":")[0]), amount, (short) Numbers.parseInt(element.getText().split(":")[1]));
         else itemStack = new ItemStack(Material.matchMaterial(element.getText()), amount);
         if (element.getAttributeValue("unbreakable") != null && Boolean.parseBoolean(element.getAttributeValue("unbreakable"))) {
             try {
@@ -42,51 +36,44 @@ public class ParseUtils {
                 e.printStackTrace();
             }
         }
-        if (element.getAttributeValue("damage") != null) {
-            itemStack.setDurability(Short.parseShort(element.getAttributeValue("damage")));
-        }
-        try {
+        itemStack.setDurability(Short.parseShort(element.getAttributeValue("damage", "0")));
+        if (element.getAttributeValue("enchantment") != null) {
             for (String raw : element.getAttributeValue("enchantment").split(";")) {
                 String[] enchant = raw.split(":");
-                try {
-                    itemStack.addUnsafeEnchantment(Enchantment.getByName(StringUtils.getTechnicalName(enchant[0])), NumUtils.parseInt(enchant[1]));
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    itemStack.addUnsafeEnchantment(Enchantment.getByName(StringUtils.getTechnicalName(enchant[0])), 1);
+                if (enchant.length == 2) {
+                    itemStack.addUnsafeEnchantment(Enchantment.getByName(Strings.getTechnicalName(enchant[0])), Numbers.parseInt(enchant[1]));
+                } else if (enchant.length == 1) {
+                    itemStack.addUnsafeEnchantment(Enchantment.getByName(Strings.getTechnicalName(enchant[0])), 1);
                 }
             }
-        } catch (NullPointerException e) {
-
         }
         ItemMeta meta = itemStack.getItemMeta();
-        if (element.getAttributeValue("name") != null) {
-            meta.setDisplayName(ChatColor.translateAlternateColorCodes('`', element.getAttributeValue("name")));
+        meta.setDisplayName(ChatColor.translateAlternateColorCodes('`', element.getAttributeValue("name", meta.getDisplayName() == null ? "" : meta.getDisplayName())));
+
+        ArrayList<String> lore = new ArrayList<>();
+        for (String raw : element.getAttributeValue("lore", "").split("\\|")) {
+            String colored = ChatColor.translateAlternateColorCodes('`', raw);
+            lore.add(colored);
         }
-        if (element.getAttributeValue("lore") != null) {
-            ArrayList<String> lore = new ArrayList<>();
-            for (String raw : element.getAttributeValue("lore").split("\\|")) {
-                String colored = ChatColor.translateAlternateColorCodes('`', raw);
-                lore.add(colored);
-            }
-            meta.setLore(lore);
-        }
+        meta.setLore(lore);
         if (element.getAttributeValue("potions") != null) {
             String potions = element.getAttributeValue("potions");
             if (potions.contains(";")) {
                 for (String potion : potions.split(";")) {
                     String[] parse = potion.split(":");
-                    PotionEffect effect = new PotionEffect(PotionEffectType.getByName(parse[0].toUpperCase().replaceAll(" ", "_")), NumUtils.parseInt(parse[1]), NumUtils.parseInt(parse[2]));
+                    PotionEffect effect = new PotionEffect(PotionEffectType.getByName(parse[0].toUpperCase().replaceAll(" ", "_")), Numbers.parseInt(parse[1]), Numbers.parseInt(parse[2]));
                     ((PotionMeta) meta).addCustomEffect(effect, true);
                 }
             } else {
                 String[] parse = potions.split(":");
-                PotionEffect effect = new PotionEffect(PotionEffectType.getByName(parse[0].toUpperCase().replaceAll(" ", "_")), NumUtils.parseInt(parse[1]), NumUtils.parseInt(parse[2]));
+                PotionEffect effect = new PotionEffect(PotionEffectType.getByName(parse[0].toUpperCase().replaceAll(" ", "_")), Numbers.parseInt(parse[1]), Numbers.parseInt(parse[2]));
                 ((PotionMeta) meta).addCustomEffect(effect, true);
             }
         }
         itemStack.setItemMeta(meta);
-
         String attributes = element.getAttributeValue("attributes");
         if (attributes != null) {
+            //TODO: This needs to be converted to the attribute API
             itemStack = setAttributes(itemStack, attributes);
         }
         return itemStack;
@@ -132,26 +119,26 @@ public class ParseUtils {
 
     public static ChatColor parseChatColor(String string) {
         for (ChatColor color : ChatColor.values()) {
-            if (color.name().equals(StringUtils.getTechnicalName(string))) return color;
+            if (color.name().equals(Strings.getTechnicalName(string))) return color;
         }
         return ChatColor.WHITE;
     }
 
     public static DyeColor parseDyeColor(String string) {
         for (DyeColor color : DyeColor.values()) {
-            if (color.name().equals(StringUtils.getTechnicalName(string))) return color;
+            if (color.name().equals(Strings.getTechnicalName(string))) return color;
         }
         return DyeColor.WHITE;
     }
 
     public static PotionEffect getPotion(Element potion) {
-        PotionEffectType type = PotionEffectType.getByName(StringUtils.getTechnicalName(potion.getText()));
-        int duration = NumUtils.parseInt(potion.getAttributeValue("duration")) == Integer.MAX_VALUE ? NumUtils.parseInt(potion.getAttributeValue("duration")) : NumUtils.parseInt(potion.getAttributeValue("duration")) * 20;
+        PotionEffectType type = PotionEffectType.getByName(Strings.getTechnicalName(potion.getText()));
+        int duration = Numbers.parseInt(potion.getAttributeValue("duration")) == Integer.MAX_VALUE ? Numbers.parseInt(potion.getAttributeValue("duration")) : Numbers.parseInt(potion.getAttributeValue("duration")) * 20;
         int amplifier = 0;
         boolean ambient = false;
 
         if (potion.getAttributeValue("amplifier") != null) {
-            amplifier = NumUtils.parseInt(potion.getAttributeValue("amplifier")) - 1;
+            amplifier = Numbers.parseInt(potion.getAttributeValue("amplifier")) - 1;
         }
 
         if (potion.getAttributeValue("ambient") != null) {

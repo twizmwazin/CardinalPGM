@@ -5,7 +5,7 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
-import in.twizmwaz.cardinal.util.ChatUtils;
+import in.twizmwaz.cardinal.util.ChatUtil;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.event.EventHandler;
@@ -30,7 +30,7 @@ public class BlockBreakRegion extends AppliedRegion {
     public void onBlockBreak(BlockBreakEvent event) {
         if (!event.isCancelled() && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector())) && filter.evaluate(event.getPlayer(), event.getBlock(), event).equals(FilterState.DENY)) {
             event.setCancelled(true);
-            ChatUtils.sendWarningMessage(event.getPlayer(), message);
+            ChatUtil.sendWarningMessage(event.getPlayer(), message);
         }
     }
 
@@ -38,7 +38,7 @@ public class BlockBreakRegion extends AppliedRegion {
     public void onBucketFill(PlayerBucketFillEvent event) {
         if (!event.isCancelled() && region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector())) && filter.evaluate(event.getPlayer(), event.getBlockClicked().getRelative(event.getBlockFace()), event).equals(FilterState.DENY)) {
             event.setCancelled(true);
-            ChatUtils.sendWarningMessage(event.getPlayer(), message);
+            ChatUtil.sendWarningMessage(event.getPlayer(), message);
         }
     }
 

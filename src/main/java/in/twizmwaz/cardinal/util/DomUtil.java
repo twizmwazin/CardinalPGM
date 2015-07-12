@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 
-public class DomUtils {
+public class DomUtil {
 
     public static Document parse(File file) throws JDOMException, IOException {
         SAXBuilder saxBuilder = new SAXBuilder();

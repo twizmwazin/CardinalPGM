@@ -4,7 +4,7 @@ import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.settings.Settings;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -34,7 +34,7 @@ public class SoundModule implements Module {
     public void onMatchEnd(MatchEndEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (Settings.getSettingByName("Sounds") != null && Settings.getSettingByName("Sounds").getValueByPlayer(player).getValue().equalsIgnoreCase("on")) {
-                if (TeamUtils.getTeamByPlayer(player) == event.getTeam()) {
+                if (Teams.getTeamByPlayer(player) == event.getTeam()) {
                     player.playSound(player.getLocation(), Sound.WITHER_DEATH, 1, 1);
                 } else {
                     player.playSound(player.getLocation(), Sound.WITHER_SPAWN, 1, 1);

@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
-public class PlayerUtils {
+public class Players {
 
     public static void resetPlayer(Player player) {
         player.setHealth(player.getMaxHealth());

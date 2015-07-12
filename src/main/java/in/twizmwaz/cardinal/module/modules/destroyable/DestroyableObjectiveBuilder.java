@@ -9,8 +9,8 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.NumUtils;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.Numbers;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Material;
 import org.jdom2.Element;
 
@@ -27,9 +27,9 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
             for (Element subElement : element.getChildren("destroyable")) {
                 TeamModule owner;
                 try {
-                    owner = TeamUtils.getTeamById(subElement.getAttributeValue("owner")).orNull();
+                    owner = Teams.getTeamById(subElement.getAttributeValue("owner")).orNull();
                 } catch (NullPointerException e) {
-                    owner = TeamUtils.getTeamById(element.getAttributeValue("owner")).orNull();
+                    owner = Teams.getTeamById(element.getAttributeValue("owner")).orNull();
                 }
                 String name = "Monument";
                 if (subElement.getAttributeValue("name") != null) {
@@ -59,7 +59,7 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                         for (String material : materials.split(";")) {
                             if (material.contains(":")) {
                                 types.add(Material.matchMaterial(material.split(":")[0].trim()));
-                                damageValues.add(NumUtils.parseInt(material.split(":")[1].trim()));
+                                damageValues.add(Numbers.parseInt(material.split(":")[1].trim()));
                             } else {
                                 types.add(Material.matchMaterial(material.trim()));
                                 damageValues.add(-1);
@@ -68,7 +68,7 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                     } else {
                         if (materials.contains(":")) {
                             types.add(Material.matchMaterial(materials.split(":")[0].trim()));
-                            damageValues.add(NumUtils.parseInt(materials.split(":")[1].trim()));
+                            damageValues.add(Numbers.parseInt(materials.split(":")[1].trim()));
                         } else {
                             types.add(Material.matchMaterial(materials.trim()));
                             damageValues.add(-1);
@@ -80,7 +80,7 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                         for (String material : materials.split(";")) {
                             if (material.contains(":")) {
                                 types.add(Material.matchMaterial(material.split(":")[0].trim()));
-                                damageValues.add(NumUtils.parseInt(material.split(":")[1].trim()));
+                                damageValues.add(Numbers.parseInt(material.split(":")[1].trim()));
                             } else {
                                 types.add(Material.matchMaterial(material.trim()));
                                 damageValues.add(0);
@@ -89,7 +89,7 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                     } else {
                         if (materials.contains(":")) {
                             types.add(Material.matchMaterial(materials.split(":")[0].trim()));
-                            damageValues.add(NumUtils.parseInt(materials.split(":")[1].trim()));
+                            damageValues.add(Numbers.parseInt(materials.split(":")[1].trim()));
                         } else {
                             types.add(Material.matchMaterial(materials.trim()));
                             damageValues.add(0);
@@ -132,12 +132,12 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                 for (Element subChild : child.getChildren("destroyable")) {
                     TeamModule owner;
                     try {
-                        owner = TeamUtils.getTeamById(subChild.getAttributeValue("owner")).orNull();
+                        owner = Teams.getTeamById(subChild.getAttributeValue("owner")).orNull();
                     } catch (NullPointerException e) {
                         try {
-                            owner = TeamUtils.getTeamById(child.getAttributeValue("owner")).orNull();
+                            owner = Teams.getTeamById(child.getAttributeValue("owner")).orNull();
                         } catch (NullPointerException exc) {
-                            owner = TeamUtils.getTeamById(element.getAttributeValue("owner")).orNull();
+                            owner = Teams.getTeamById(element.getAttributeValue("owner")).orNull();
                         }
                     }
                     String name = "Monument";
@@ -172,7 +172,7 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                             for (String material : materials.split(";")) {
                                 if (material.contains(":")) {
                                     types.add(Material.matchMaterial(material.split(":")[0].trim()));
-                                    damageValues.add(NumUtils.parseInt(material.split(":")[1].trim()));
+                                    damageValues.add(Numbers.parseInt(material.split(":")[1].trim()));
                                 } else {
                                     types.add(Material.matchMaterial(material.trim()));
                                     damageValues.add(-1);
@@ -181,7 +181,7 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                         } else {
                             if (materials.contains(":")) {
                                 types.add(Material.matchMaterial(materials.split(":")[0].trim()));
-                                damageValues.add(NumUtils.parseInt(materials.split(":")[1].trim()));
+                                damageValues.add(Numbers.parseInt(materials.split(":")[1].trim()));
                             } else {
                                 types.add(Material.matchMaterial(materials.trim()));
                                 damageValues.add(-1);
@@ -193,7 +193,7 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                             for (String material : materials.split(";")) {
                                 if (material.contains(":")) {
                                     types.add(Material.matchMaterial(material.split(":")[0].trim()));
-                                    damageValues.add(NumUtils.parseInt(material.split(":")[1].trim()));
+                                    damageValues.add(Numbers.parseInt(material.split(":")[1].trim()));
                                 } else {
                                     types.add(Material.matchMaterial(material.trim()));
                                     damageValues.add(-1);
@@ -202,7 +202,7 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                         } else {
                             if (materials.contains(":")) {
                                 types.add(Material.matchMaterial(materials.split(":")[0].trim()));
-                                damageValues.add(NumUtils.parseInt(materials.split(":")[1].trim()));
+                                damageValues.add(Numbers.parseInt(materials.split(":")[1].trim()));
                             } else {
                                 types.add(Material.matchMaterial(materials.trim()));
                                 damageValues.add(0);
@@ -214,7 +214,7 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                             for (String material : materials.split(";")) {
                                 if (material.contains(":")) {
                                     types.add(Material.matchMaterial(material.split(":")[0].trim()));
-                                    damageValues.add(NumUtils.parseInt(material.split(":")[1].trim()));
+                                    damageValues.add(Numbers.parseInt(material.split(":")[1].trim()));
                                 } else {
                                     types.add(Material.matchMaterial(material.trim()));
                                     damageValues.add(0);
@@ -223,7 +223,7 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                         } else {
                             if (materials.contains(":")) {
                                 types.add(Material.matchMaterial(materials.split(":")[0].trim()));
-                                damageValues.add(NumUtils.parseInt(materials.split(":")[1].trim()));
+                                damageValues.add(Numbers.parseInt(materials.split(":")[1].trim()));
                             } else {
                                 types.add(Material.matchMaterial(materials.trim()));
                                 damageValues.add(0);

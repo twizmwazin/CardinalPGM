@@ -11,8 +11,8 @@ import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
-import in.twizmwaz.cardinal.util.MiscUtils;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.MiscUtil;
+import in.twizmwaz.cardinal.util.Teams;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -22,11 +22,11 @@ public class ScoreCommand {
 
     @Command(aliases = {"score"}, desc = "Shows the score of the current match.", usage = "")
     public static void score(final CommandContext args, CommandSender sender) throws CommandException {
-        if (!(sender instanceof Player) || (TeamUtils.getTeamByPlayer((Player) sender).isPresent() && TeamUtils.getTeamByPlayer((Player) sender).get().isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning() || sender.hasPermission("cardinal.score")) {
+        if (!(sender instanceof Player) || (Teams.getTeamByPlayer((Player) sender).isPresent() && Teams.getTeamByPlayer((Player) sender).get().isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning() || sender.hasPermission("cardinal.score")) {
             TimeLimit.Result result = GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getResult();
             if (result.equals(TimeLimit.Result.HIGHEST_SCORE)) {
                 int score = 0;
-                for (TeamModule team : TeamUtils.getTeams()) {
+                for (TeamModule team : Teams.getTeams()) {
                     if (!team.isObserver()) {
                         sender.sendMessage(ChatColor.RED + "Calculating scores for " + team.getCompleteName());
                         for (ScoreModule scoreModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
@@ -42,14 +42,14 @@ public class ScoreCommand {
                     sender.sendMessage(TimeLimit.getMatchWinner().getCompleteName() + ChatColor.GOLD + " is winning with " + score + " points");
                 }
             } else if (result.equals(TimeLimit.Result.TIE)) {
-                for (TeamModule team : TeamUtils.getTeams()) {
+                for (TeamModule team : Teams.getTeams()) {
                     if (!team.isObserver()) {
                         sender.sendMessage(ChatColor.RED + "Calculating scores for " + team.getCompleteName());
                     }
                 }
                 sender.sendMessage(ChatColor.GOLD + "Teams are tied");
             } else if (result.equals(TimeLimit.Result.TEAM)) {
-                for (TeamModule team : TeamUtils.getTeams()) {
+                for (TeamModule team : Teams.getTeams()) {
                     if (!team.isObserver()) {
                         sender.sendMessage(ChatColor.RED + "Calculating scores for " + team.getCompleteName());
                     }
@@ -57,7 +57,7 @@ public class ScoreCommand {
                 sender.sendMessage(GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getTeam().getCompleteName() + ChatColor.GOLD + " is winning");
             } else if (result.equals(TimeLimit.Result.MOST_PLAYERS)) {
                 int players = 0;
-                for (TeamModule team : TeamUtils.getTeams()) {
+                for (TeamModule team : Teams.getTeams()) {
                     if (!team.isObserver()) {
                         sender.sendMessage(ChatColor.RED + "Calculating scores for " + team.getCompleteName());
                         if (team.size() > players) {
@@ -71,16 +71,16 @@ public class ScoreCommand {
                     sender.sendMessage(TimeLimit.getMatchWinner().getCompleteName() + ChatColor.GOLD + " is winning with " + players + " players");
                 }
             } else if (result.equals(TimeLimit.Result.MOST_OBJECTIVES)) {
-                for (TeamModule team : TeamUtils.getTeams()) {
+                for (TeamModule team : Teams.getTeams()) {
                     if (!team.isObserver()) {
                         sender.sendMessage(ChatColor.RED + "Calculating scores for " + team.getCompleteName());
-                        for (GameObjective obj : TeamUtils.getShownObjectives(team)) {
+                        for (GameObjective obj : Teams.getShownObjectives(team)) {
                             if (obj.isComplete()) {
-                                sender.sendMessage((obj instanceof WoolObjective ? MiscUtils.convertDyeColorToChatColor(((WoolObjective) obj).getColor()) : (obj instanceof CoreObjective ? ChatColor.RED : ChatColor.AQUA)) + WordUtils.capitalizeFully(obj.getName().replaceAll("_", " ")) + ChatColor.GRAY + " was completed!");
+                                sender.sendMessage((obj instanceof WoolObjective ? MiscUtil.convertDyeColorToChatColor(((WoolObjective) obj).getColor()) : (obj instanceof CoreObjective ? ChatColor.RED : ChatColor.AQUA)) + WordUtils.capitalizeFully(obj.getName().replaceAll("_", " ")) + ChatColor.GRAY + " was completed!");
                             } else if (obj.isTouched()) {
-                                sender.sendMessage((obj instanceof WoolObjective ? MiscUtils.convertDyeColorToChatColor(((WoolObjective) obj).getColor()) : (obj instanceof CoreObjective ? ChatColor.RED : ChatColor.AQUA)) + WordUtils.capitalizeFully(obj.getName().replaceAll("_", " ")) + ChatColor.GRAY + " was touched!");
+                                sender.sendMessage((obj instanceof WoolObjective ? MiscUtil.convertDyeColorToChatColor(((WoolObjective) obj).getColor()) : (obj instanceof CoreObjective ? ChatColor.RED : ChatColor.AQUA)) + WordUtils.capitalizeFully(obj.getName().replaceAll("_", " ")) + ChatColor.GRAY + " was touched!");
                             } else {
-                                sender.sendMessage((obj instanceof WoolObjective ? MiscUtils.convertDyeColorToChatColor(((WoolObjective) obj).getColor()) : (obj instanceof CoreObjective ? ChatColor.RED : ChatColor.AQUA)) + WordUtils.capitalizeFully(obj.getName().replaceAll("_", " ")) + ChatColor.GRAY + " is untouched!");
+                                sender.sendMessage((obj instanceof WoolObjective ? MiscUtil.convertDyeColorToChatColor(((WoolObjective) obj).getColor()) : (obj instanceof CoreObjective ? ChatColor.RED : ChatColor.AQUA)) + WordUtils.capitalizeFully(obj.getName().replaceAll("_", " ")) + ChatColor.GRAY + " is untouched!");
                             }
                         }
                     }
@@ -90,7 +90,7 @@ public class ScoreCommand {
                 } else {
                     int completed = 0;
                     int touched = 0;
-                    for (GameObjective obj : TeamUtils.getShownObjectives(TimeLimit.getMatchWinner())) {
+                    for (GameObjective obj : Teams.getShownObjectives(TimeLimit.getMatchWinner())) {
                         if (obj.isComplete()) completed++;
                         else if (obj.isTouched()) touched++;
                     }

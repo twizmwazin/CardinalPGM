@@ -16,10 +16,10 @@ import in.twizmwaz.cardinal.module.modules.scoreboard.GameObjectiveScoreboardHan
 import in.twizmwaz.cardinal.module.modules.snowflakes.Snowflakes;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
-import in.twizmwaz.cardinal.util.ChatUtils;
-import in.twizmwaz.cardinal.util.FireworkUtil;
-import in.twizmwaz.cardinal.util.MiscUtils;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.ChatUtil;
+import in.twizmwaz.cardinal.util.Fireworks;
+import in.twizmwaz.cardinal.util.MiscUtil;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
@@ -128,15 +128,15 @@ public class WoolObjective implements GameObjective {
         if (!this.complete && GameHandler.getGameHandler().getMatch().isRunning()) {
             try {
                 if (event.getCurrentItem().getType() == Material.WOOL && event.getCurrentItem().getData().getData() == color.getData()) {
-                    if (TeamUtils.getTeamByPlayer(player).orNull() == team) {
+                    if (Teams.getTeamByPlayer(player).orNull() == team) {
                         boolean touchMessage = false;
                         if (!this.playersTouched.contains(player.getUniqueId())) {
                             this.playersTouched.add(player.getUniqueId());
                             if (this.show && !this.complete) {
-                                TeamUtils.getTeamChannel(Optional.of(team)).sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED_FOR, team.getColor() + player.getName() + ChatColor.WHITE, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.WHITE, team.getCompleteName() + ChatColor.WHITE)));
+                                Teams.getTeamChannel(Optional.of(team)).sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED_FOR, team.getColor() + player.getName() + ChatColor.WHITE, MiscUtil.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.WHITE, team.getCompleteName() + ChatColor.WHITE)));
                                 for (Player player1 : Bukkit.getOnlinePlayers()) {
-                                    if (TeamUtils.getTeamByPlayer(player1).isPresent() && TeamUtils.getTeamByPlayer(player1).get().isObserver()) {
-                                        player1.sendMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED_FOR, team.getColor() + player.getName() + ChatColor.GRAY, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.GRAY, team.getCompleteName() + ChatColor.GRAY)).getMessage(player1.getLocale()));
+                                    if (Teams.getTeamByPlayer(player1).isPresent() && Teams.getTeamByPlayer(player1).get().isObserver()) {
+                                        player1.sendMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED_FOR, team.getColor() + player.getName() + ChatColor.GRAY, MiscUtil.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.GRAY, team.getCompleteName() + ChatColor.GRAY)).getMessage(player1.getLocale()));
                                     }
                                 }
                                 touchMessage = true;
@@ -170,15 +170,15 @@ public class WoolObjective implements GameObjective {
         if (!this.complete && GameHandler.getGameHandler().getMatch().isRunning()) {
             try {
                 if (event.getItem().getItemStack().getType() == Material.WOOL && event.getItem().getItemStack().getData().getData() == color.getData()) {
-                    if (TeamUtils.getTeamByPlayer(player).orNull() == team) {
+                    if (Teams.getTeamByPlayer(player).orNull() == team) {
                         boolean touchMessage = false;
                         if (!this.playersTouched.contains(player.getUniqueId())) {
                             this.playersTouched.add(player.getUniqueId());
                             if (this.show && !this.complete) {
-                                TeamUtils.getTeamChannel(Optional.of(team)).sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED, team.getColor() + player.getName() + ChatColor.WHITE, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.WHITE, team.getCompleteName() + ChatColor.WHITE)));
+                                Teams.getTeamChannel(Optional.of(team)).sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED, team.getColor() + player.getName() + ChatColor.WHITE, MiscUtil.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.WHITE, team.getCompleteName() + ChatColor.WHITE)));
                                 for (Player player1 : Bukkit.getOnlinePlayers()) {
-                                    if (TeamUtils.getTeamByPlayer(player1).isPresent() && TeamUtils.getTeamByPlayer(player1).get().isObserver()) {
-                                        player1.sendMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED_FOR, team.getColor() + player.getName() + ChatColor.GRAY, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.GRAY, team.getCompleteName() + ChatColor.GRAY)).getMessage(player1.getLocale()));
+                                    if (Teams.getTeamByPlayer(player1).isPresent() && Teams.getTeamByPlayer(player1).get().isObserver()) {
+                                        player1.sendMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED_FOR, team.getColor() + player.getName() + ChatColor.GRAY, MiscUtil.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.GRAY, team.getCompleteName() + ChatColor.GRAY)).getMessage(player1.getLocale()));
                                     }
                                 }
                                 touchMessage = true;
@@ -218,28 +218,28 @@ public class WoolObjective implements GameObjective {
         if (event.getBlock().equals(place.getBlock())) {
             if (event.getBlock().getType().equals(Material.WOOL)) {
                 if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
-                    if (TeamUtils.getTeamByPlayer(event.getPlayer()).orNull() == team) {
+                    if (Teams.getTeamByPlayer(event.getPlayer()).orNull() == team) {
                         this.complete = true;
                         if (this.show)
-                            ChatUtils.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PLACED, team.getColor() + event.getPlayer().getName() + ChatColor.WHITE, team.getCompleteName() + ChatColor.WHITE, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.WHITE)));
-                        FireworkUtil.spawnFirework(event.getPlayer().getLocation(), event.getPlayer().getWorld(), MiscUtils.convertChatColorToColor(MiscUtils.convertDyeColorToChatColor(color)));
+                            ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PLACED, team.getColor() + event.getPlayer().getName() + ChatColor.WHITE, team.getCompleteName() + ChatColor.WHITE, MiscUtil.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.WHITE)));
+                        Fireworks.spawnFirework(event.getPlayer().getLocation(), event.getPlayer().getWorld(), MiscUtil.convertChatColorToColor(MiscUtil.convertDyeColorToChatColor(color)));
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
                         event.setCancelled(false);
                     } else {
                         event.setCancelled(true);
                         if (this.show)
-                            ChatUtils.sendWarningMessage(event.getPlayer(), "You may not complete the other team's objective.");
+                            ChatUtil.sendWarningMessage(event.getPlayer(), "You may not complete the other team's objective.");
                     }
                 } else {
                     event.setCancelled(true);
                     if (this.show)
-                        ChatUtils.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_BLOCK_PLACE, MiscUtils.convertDyeColorToChatColor(color) + color.name().toUpperCase().replaceAll("_", " ") + " WOOL" + ChatColor.RED));
+                        ChatUtil.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_BLOCK_PLACE, MiscUtil.convertDyeColorToChatColor(color) + color.name().toUpperCase().replaceAll("_", " ") + " WOOL" + ChatColor.RED));
                 }
             } else {
                 event.setCancelled(true);
                 if (this.show)
-                    ChatUtils.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_BLOCK_PLACE, MiscUtils.convertDyeColorToChatColor(color) + color.name().toUpperCase().replaceAll("_", " ") + " WOOL" + ChatColor.RED));
+                    ChatUtil.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_BLOCK_PLACE, MiscUtil.convertDyeColorToChatColor(color) + color.name().toUpperCase().replaceAll("_", " ") + " WOOL" + ChatColor.RED));
             }
         }
     }
@@ -260,7 +260,7 @@ public class WoolObjective implements GameObjective {
 
     @EventHandler
     public void onCardinalDeath(CardinalDeathEvent event) {
-        if (event.getKiller() != null && location != null && GameHandler.getGameHandler().getMatch().isRunning() && !this.touched && TeamUtils.getTeamByPlayer(event.getKiller()).isPresent() && TeamUtils.getTeamByPlayer(event.getKiller()).get() == this.team) {
+        if (event.getKiller() != null && location != null && GameHandler.getGameHandler().getMatch().isRunning() && !this.touched && Teams.getTeamByPlayer(event.getKiller()).isPresent() && Teams.getTeamByPlayer(event.getKiller()).get() == this.team) {
             if (event.getKiller().getLocation().toVector().distance(location) < proximity) {
                 double old = proximity;
                 proximity = event.getKiller().getLocation().toVector().distance(location);
@@ -274,7 +274,7 @@ public class WoolObjective implements GameObjective {
         if (!event.isCancelled() && this.touched) {
             if (event.getBlock().getType().equals(Material.WOOL)) {
                 if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
-                    if (TeamUtils.getTeamByPlayer(event.getPlayer()).orNull() == team) {
+                    if (Teams.getTeamByPlayer(event.getPlayer()).orNull() == team) {
                         if (event.getBlockPlaced().getLocation().distance(place.getLocation()) < proximity) {
                             double old = proximity;
                             proximity = event.getBlockPlaced().getLocation().distance(place.getLocation());
@@ -297,14 +297,14 @@ public class WoolObjective implements GameObjective {
     @EventHandler
     public void onWoolTouch(ObjectiveTouchEvent event) {
         if (event.getObjective().equals(this) && event.displayTouchMessage()) {
-            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getPlayer(), Snowflakes.ChangeReason.WOOL_TOUCH, 8, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.GRAY));
+            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getPlayer(), Snowflakes.ChangeReason.WOOL_TOUCH, 8, MiscUtil.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.GRAY));
         }
     }
 
     @EventHandler
     public void onWoolPlace(ObjectiveCompleteEvent event) {
         if (event.getObjective().equals(this) && event.getObjective().showOnScoreboard()) {
-            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getPlayer(), Snowflakes.ChangeReason.WOOL_PLACE, 15, MiscUtils.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.GRAY));
+            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getPlayer(), Snowflakes.ChangeReason.WOOL_PLACE, 15, MiscUtil.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.GRAY));
         }
     }
 }

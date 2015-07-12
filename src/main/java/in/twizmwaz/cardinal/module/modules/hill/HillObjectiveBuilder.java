@@ -10,9 +10,9 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.NumUtils;
-import in.twizmwaz.cardinal.util.StringUtils;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.Numbers;
+import in.twizmwaz.cardinal.util.Strings;
+import in.twizmwaz.cardinal.util.Teams;
 import org.jdom2.Element;
 
 @BuilderData(load = ModuleLoadTime.EARLIER)
@@ -49,14 +49,14 @@ public class HillObjectiveBuilder implements ModuleBuilder {
         String name = element.getAttributeValue("name");
         int capturetime = 30;
         if (element.getParentElement().getAttributeValue("capture-time") != null)
-            capturetime = StringUtils.timeStringToSeconds(element.getParentElement().getAttributeValue("capture-time"));
+            capturetime = Strings.timeStringToSeconds(element.getParentElement().getAttributeValue("capture-time"));
         if (element.getAttributeValue("capture-time") != null)
-            capturetime = StringUtils.timeStringToSeconds(element.getAttributeValue("capture-time"));
+            capturetime = Strings.timeStringToSeconds(element.getAttributeValue("capture-time"));
         int points = 1;
         if (element.getParentElement().getAttributeValue("points") != null)
-            points = NumUtils.parseInt(element.getParentElement().getAttributeValue("points"));
+            points = Numbers.parseInt(element.getParentElement().getAttributeValue("points"));
         if (element.getAttributeValue("points") != null)
-            points = NumUtils.parseInt(element.getAttributeValue("points"));
+            points = Numbers.parseInt(element.getAttributeValue("points"));
         double pointsGrowth = 0;
         if (element.getParentElement().getAttributeValue("points-growth") != null)
             pointsGrowth = Double.parseDouble(element.getParentElement().getAttributeValue("points-growth"));
@@ -74,34 +74,34 @@ public class HillObjectiveBuilder implements ModuleBuilder {
             timeMultiplier = Double.parseDouble(element.getAttributeValue("time-multiplier"));
         boolean showProgress = false;
         if (element.getParentElement().getAttributeValue("show-progress") != null)
-            showProgress = NumUtils.parseBoolean(element.getParentElement().getAttributeValue("show-progress"));
+            showProgress = Numbers.parseBoolean(element.getParentElement().getAttributeValue("show-progress"));
         if (element.getAttributeValue("show-progress") != null)
-            showProgress = NumUtils.parseBoolean(element.getAttributeValue("show-progress"));
+            showProgress = Numbers.parseBoolean(element.getAttributeValue("show-progress"));
         boolean neutralState = false;
         if (element.getParentElement().getAttributeValue("neutral-state") != null)
-            neutralState = NumUtils.parseBoolean(element.getParentElement().getAttributeValue("neutral-state"));
+            neutralState = Numbers.parseBoolean(element.getParentElement().getAttributeValue("neutral-state"));
         if (element.getAttributeValue("neutral-state") != null)
-            neutralState = NumUtils.parseBoolean(element.getAttributeValue("neutral-state"));
+            neutralState = Numbers.parseBoolean(element.getAttributeValue("neutral-state"));
         boolean incremental = false;
         if (element.getParentElement().getAttributeValue("incremental") != null)
-            incremental = NumUtils.parseBoolean(element.getParentElement().getAttributeValue("incremental"));
+            incremental = Numbers.parseBoolean(element.getParentElement().getAttributeValue("incremental"));
         if (element.getAttributeValue("incremental") != null)
-            incremental = NumUtils.parseBoolean(element.getAttributeValue("incremental"));
+            incremental = Numbers.parseBoolean(element.getAttributeValue("incremental"));
         boolean permanent = false;
         if (element.getParentElement().getAttributeValue("permanent") != null)
-            permanent = NumUtils.parseBoolean(element.getParentElement().getAttributeValue("permanent"));
+            permanent = Numbers.parseBoolean(element.getParentElement().getAttributeValue("permanent"));
         if (element.getAttributeValue("permanent") != null)
-            permanent = NumUtils.parseBoolean(element.getAttributeValue("permanent"));
+            permanent = Numbers.parseBoolean(element.getAttributeValue("permanent"));
         TeamModule initialOwner = null;
         if (element.getParentElement().getAttributeValue("initial-owner") != null)
-            initialOwner = TeamUtils.getTeamById(element.getParentElement().getAttributeValue("initial-owner")).orNull();
+            initialOwner = Teams.getTeamById(element.getParentElement().getAttributeValue("initial-owner")).orNull();
         if (element.getAttributeValue("initial-owner") != null)
-            initialOwner = TeamUtils.getTeamById(element.getAttributeValue("initial-owner")).orNull();
+            initialOwner = Teams.getTeamById(element.getAttributeValue("initial-owner")).orNull();
         boolean show = true;
         if (element.getParentElement().getAttributeValue("show") != null)
-            show = NumUtils.parseBoolean(element.getParentElement().getAttributeValue("show"));
+            show = Numbers.parseBoolean(element.getParentElement().getAttributeValue("show"));
         if (element.getAttributeValue("show") != null)
-            show = NumUtils.parseBoolean(element.getAttributeValue("show"));
+            show = Numbers.parseBoolean(element.getAttributeValue("show"));
         String materials = element.getAttributeValue("visual-materials") == null ?
                 element.getParentElement().getAttributeValue("visual-materials") :
                 element.getAttributeValue("visual-materials");

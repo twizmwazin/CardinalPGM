@@ -7,7 +7,7 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.event.EventHandler;
@@ -52,7 +52,7 @@ public class Portal implements Module {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerMove(PlayerMoveEvent event) {
         if (region.contains(event.getTo().toVector()) && !region.contains(event.getFrom().toVector())) {
-            Optional<TeamModule> team = TeamUtils.getTeamByPlayer(event.getPlayer());
+            Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
             if ((filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW)) || (team.isPresent() && team.get().isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
                 if (destination != null) {
                     event.getPlayer().teleport(destination.getRandomPoint().getLocation());
@@ -87,7 +87,7 @@ public class Portal implements Module {
             }
         }
         if (destination != null && destination.contains(event.getTo().toVector()) && !destination.contains(event.getFrom().toVector()) && this.bidirectional) {
-            Optional<TeamModule> team = TeamUtils.getTeamByPlayer(event.getPlayer());
+            Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
             if (filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW) || (team.isPresent() && !team.get().isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
                 event.getPlayer().teleport(region.getRandomPoint().getLocation());
                 if (sound)

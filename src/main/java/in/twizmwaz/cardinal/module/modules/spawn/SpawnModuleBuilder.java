@@ -12,7 +12,7 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.PointParser;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.Teams;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Location;
@@ -30,7 +30,7 @@ public class SpawnModuleBuilder implements ModuleBuilder {
         ModuleCollection<SpawnModule> results = new ModuleCollection<SpawnModule>();
         for (Element spawns : match.getDocument().getRootElement().getChildren("spawns")) {
             for (Element spawn : spawns.getChildren("spawn")) {
-                TeamModule team = TeamUtils.getTeamById(spawns.getAttributeValue("team") != null ? spawns.getAttributeValue("team") : spawn.getAttributeValue("team")).orNull();
+                TeamModule team = Teams.getTeamById(spawns.getAttributeValue("team") != null ? spawns.getAttributeValue("team") : spawn.getAttributeValue("team")).orNull();
                 List<Pair<RegionModule, Vector>> regions = new ArrayList<>();
                 for (Element region : spawn.getChildren()) {
                     RegionModule current = RegionModuleBuilder.getRegion(region);
@@ -63,7 +63,7 @@ public class SpawnModuleBuilder implements ModuleBuilder {
                 results.add(new SpawnModule(team, regions, kit, true, true));
             }
             for (Element spawn : spawns.getChildren("default")) {
-                TeamModule team = TeamUtils.getTeamById("observers").get();
+                TeamModule team = Teams.getTeamById("observers").get();
                 List<Pair<RegionModule, Vector>> regions = new ArrayList<>();
                 if (spawn.getChildren().size() > 0)
                     for (Element region : spawn.getChildren()) {
@@ -97,11 +97,11 @@ public class SpawnModuleBuilder implements ModuleBuilder {
                 for (Element spawn : element.getChildren("spawn")) {
                     TeamModule team = null;
                     if (spawns.getAttributeValue("team") != null)
-                        team = TeamUtils.getTeamById(spawns.getAttributeValue("team")).orNull();
+                        team = Teams.getTeamById(spawns.getAttributeValue("team")).orNull();
                     if (element.getAttributeValue("team") != null)
-                        team = TeamUtils.getTeamById(element.getAttributeValue("team")).orNull();
+                        team = Teams.getTeamById(element.getAttributeValue("team")).orNull();
                     if (spawn.getAttributeValue("team") != null)
-                        team = TeamUtils.getTeamById(spawn.getAttributeValue("team")).orNull();
+                        team = Teams.getTeamById(spawn.getAttributeValue("team")).orNull();
                     List<Pair<RegionModule, Vector>> regions = new ArrayList<>();
                     for (Element region : spawn.getChildren()) {
                         RegionModule current = RegionModuleBuilder.getRegion(region);

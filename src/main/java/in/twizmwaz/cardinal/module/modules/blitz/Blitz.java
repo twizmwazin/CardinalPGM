@@ -10,7 +10,7 @@ import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.TeamUtils;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -44,13 +44,13 @@ public class Blitz implements Module {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        Optional<TeamModule> team = TeamUtils.getTeamByPlayer(player);
+        Optional<TeamModule> team = Teams.getTeamByPlayer(player);
         if (team.isPresent() && !team.get().isObserver()) {
             int oldMeta = this.getLives(player);
             player.removeMetadata("lives", Cardinal.getInstance());
             player.setMetadata("lives", new LazyMetadataValue(Cardinal.getInstance(), LazyMetadataValue.CacheStrategy.NEVER_CACHE, new BlitzLives(oldMeta - 1)));
             if (this.getLives(player) == 0) {
-                TeamUtils.getTeamById("observers").get().add(player, true);
+                Teams.getTeamById("observers").get().add(player, true);
                 player.removeMetadata("lives", Cardinal.getInstance());
             }
         }
@@ -60,7 +60,7 @@ public class Blitz implements Module {
     public void onPgmSpawn(CardinalSpawnEvent event) {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
             Player player = event.getPlayer();
-            Optional<TeamModule> team = TeamUtils.getTeamByPlayer(player);
+            Optional<TeamModule> team = Teams.getTeamByPlayer(player);
             if (team.isPresent()) {
                 if (!team.get().isObserver()) {
                     if (!player.hasMetadata("lives")) {
