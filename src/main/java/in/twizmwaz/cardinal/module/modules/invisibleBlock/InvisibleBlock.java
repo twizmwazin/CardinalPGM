@@ -15,7 +15,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 public class InvisibleBlock implements Module {
 
     protected InvisibleBlock() {
-        Bukkit.getScheduler().runTaskAsynchronously(GameHandler.getGameHandler().getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTask(GameHandler.getGameHandler().getPlugin(), new Runnable() {
             @Override
             public void run() {
                 for (Chunk chunk : GameHandler.getGameHandler().getMatchWorld().getLoadedChunks()) {
@@ -41,7 +41,7 @@ public class InvisibleBlock implements Module {
     @EventHandler
     public void onChunkLoad(ChunkLoadEvent event) {
         final Chunk chunk = event.getChunk();
-        Bukkit.getScheduler().runTaskAsynchronously(GameHandler.getGameHandler().getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTask(GameHandler.getGameHandler().getPlugin(), new Runnable() {
             @Override
             public void run() {
                 for (Block block36 : chunk.getBlocks(Material.getMaterial(36))) {
