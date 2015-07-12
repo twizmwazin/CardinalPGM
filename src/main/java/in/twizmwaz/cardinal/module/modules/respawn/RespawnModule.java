@@ -133,7 +133,7 @@ public class RespawnModule implements Module {
     public void onMatchStart(MatchStartEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             Optional<TeamModule> team = Teams.getTeamByPlayer(player);
-            if (team.isPresent() || !Teams.getTeamByPlayer(player).get().isObserver()) {
+            if (!team.isPresent() || !team.get().isObserver()) {
                 Players.resetPlayer(player);
                 ModuleCollection<SpawnModule> modules = new ModuleCollection<SpawnModule>();
                 for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
