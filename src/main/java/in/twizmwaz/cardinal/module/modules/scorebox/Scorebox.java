@@ -46,7 +46,7 @@ public class Scorebox implements Module {
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerMove(PlayerMoveEvent event) {
         if (GameHandler.getGameHandler().getMatch().isRunning() && region.contains(event.getTo().toVector()) && !region.contains(event.getFrom().toVector()) &&
-                filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW) && event.getPlayer().getHealth() > 0) {
+                (filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW)) && event.getPlayer().getHealth() > 0) {
             int points = 0;
             if (redeemables.size() > 0) {
                 for (ItemStack item : redeemables.keySet()) {
