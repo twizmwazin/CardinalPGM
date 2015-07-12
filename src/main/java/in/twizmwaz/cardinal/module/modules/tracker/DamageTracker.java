@@ -59,8 +59,10 @@ public class DamageTracker implements Module {
             } else if (event.getDamager() instanceof Player) {
                 damage = new TrackerDamageEvent((Player) event.getEntity(), (Player) event.getDamager(), ((Player) event.getDamager()).getItemInHand(), Cause.PLAYER, description, Type.KNOCKED);
             } else if (event.getDamager() instanceof TNTPrimed) {
-                OfflinePlayer source = Bukkit.getOfflinePlayer(TntTracker.getWhoPlaced(event.getDamager()));
-                damage = new TrackerDamageEvent((Player) event.getEntity(), source, null, Cause.TNT, description, Type.BLOWN);
+                UUID uuid = TntTracker.getWhoPlaced(event.getDamager());
+                if (uuid != null) {
+                    damage = new TrackerDamageEvent((Player) event.getEntity(), Bukkit.getOfflinePlayer(uuid), null, Cause.TNT, description, Type.BLOWN);
+                } else damage = new TrackerDamageEvent((Player) event.getEntity(), null, null, Cause.TNT, description, Type.BLOWN);
             } else {
                 damage = new TrackerDamageEvent((Player) event.getEntity(), null, null, Cause.PLAYER, description, Type.KNOCKED);
             }
