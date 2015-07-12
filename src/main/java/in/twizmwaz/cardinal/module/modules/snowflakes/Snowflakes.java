@@ -96,7 +96,7 @@ public class Snowflakes implements Module {
 
     @EventHandler
     public void onCardinalDeath(CardinalDeathEvent event) {
-        if (event.getKiller() != null && Teams.getTeamByPlayer(event.getPlayer()) != Teams.getTeamByPlayer(event.getKiller())) {
+        if (event.getKiller() != null && Teams.getTeamByPlayer(event.getPlayer()).orNull() != Teams.getTeamByPlayer(event.getKiller()).orNull()) {
             Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getKiller(), ChangeReason.PLAYER_KILL, 1, event.getPlayer().getName()));
         }
     }
