@@ -48,14 +48,17 @@ public class Parser {
             }
         }
         ItemMeta meta = itemStack.getItemMeta();
-        meta.setDisplayName(ChatColor.translateAlternateColorCodes('`', element.getAttributeValue("name", meta.getDisplayName() == null ? "" : meta.getDisplayName())));
-
-        ArrayList<String> lore = new ArrayList<>();
-        for (String raw : element.getAttributeValue("lore", "").split("\\|")) {
-            String colored = ChatColor.translateAlternateColorCodes('`', raw);
-            lore.add(colored);
+        if (element.getAttributeValue("name") != null) {
+            meta.setDisplayName(ChatColor.translateAlternateColorCodes('`', element.getAttributeValue("name")));
         }
-        meta.setLore(lore);
+        if (element.getAttributeValue("lore") != null) {
+            ArrayList<String> lore = new ArrayList<>();
+            for (String raw : element.getAttributeValue("lore").split("\\|")) {
+                String colored = ChatColor.translateAlternateColorCodes('`', raw);
+                lore.add(colored);
+            }
+            meta.setLore(lore);
+        }
         if (element.getAttributeValue("potions") != null) {
             String potions = element.getAttributeValue("potions");
             if (potions.contains(";")) {
