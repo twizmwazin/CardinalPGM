@@ -2,11 +2,11 @@ package in.twizmwaz.cardinal.command;
 
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
+import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
-import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.modules.cycleTimer.CycleTimerModule;
 import in.twizmwaz.cardinal.module.modules.startTimer.StartTimer;
@@ -20,12 +20,22 @@ public class CancelCommand {
     @CommandPermissions("cardinal.cancel")
     public static void cancel(final CommandContext cmd, CommandSender sender) {
         GameHandler handler = GameHandler.getGameHandler();
-        if (!handler.getMatch().getModules().getModule(CycleTimerModule.class).isCancelled())
-            handler.getMatch().getModules().getModule(CycleTimerModule.class).setCancelled(true);
-        if (!handler.getMatch().getModules().getModule(StartTimer.class).isCancelled())
+        if (handler.getMatch().getState().equals(MatchState.STARTING)) {
+            handler.getMatch().setState(MatchState.WAITING);
+            ChatUtil.getGlobalChannel().sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.GENERIC_START_COUNTDOWN_CANELLED).getMessage(ChatUtil.getLocale(sender)));
             handler.getMatch().getModules().getModule(StartTimer.class).setCancelled(true);
-        if (handler.getMatch().getState().equals(MatchState.STARTING)) handler.getMatch().setState(MatchState.WAITING);
-        if (handler.getMatch().getState().equals(MatchState.CYCLING)) handler.getMatch().setState(MatchState.ENDED);
-        ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "{0}", new LocalizedChatMessage(ChatConstant.GENERIC_COUNTDOWN_CANELLED)));
+        } else if (handler.getMatch().getState().equals(MatchState.CYCLING)) {
+            handler.getMatch().setState(MatchState.ENDED);
+            ChatUtil.getGlobalChannel().sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.GENERIC_CYCLE_COUNTDOWN_CANELLED).getMessage(ChatUtil.getLocale(sender)));
+            handler.getMatch().getModules().getModule(CycleTimerModule.class).setCancelled(true);
+        } else {
+            sender.sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.GENERIC_NO_COUNTDOWNS).getMessage(ChatUtil.getLocale(sender)));
+        }
+        if (!handler.getMatch().getModules().getModule(CycleTimerModule.class).isCancelled()) {
+            handler.getMatch().getModules().getModule(CycleTimerModule.class).setCancelled(true);
+        }
+        if (!handler.getMatch().getModules().getModule(StartTimer.class).isCancelled()) {
+            handler.getMatch().getModules().getModule(StartTimer.class).setCancelled(true);
+        }
     }
 }
