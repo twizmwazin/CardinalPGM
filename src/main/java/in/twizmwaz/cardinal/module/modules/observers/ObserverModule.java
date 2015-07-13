@@ -233,7 +233,7 @@ public class ObserverModule implements Module {
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         if (testObserver(event.getPlayer())) {
-            if (event.getRightClicked() instanceof Player && testObserver((Player) event.getRightClicked())) {
+            if (event.getRightClicked() instanceof Player && !testObserver((Player) event.getRightClicked())) {
                 event.getPlayer().openInventory(getFakeInventory((Player) event.getRightClicked(), event.getPlayer().getLocale()));
                 setViewing(event.getPlayer().getUniqueId(), event.getRightClicked().getUniqueId());
             } else if (event.getRightClicked() instanceof ItemFrame) {
@@ -358,7 +358,7 @@ public class ObserverModule implements Module {
                     }
                 }
 
-                /* if (Bukkit.getPlayer(view) != null && viewing.containsKey(view)) {
+                if (Bukkit.getPlayer(view) != null && viewing.containsKey(view)) {
                     for (UUID uuid : viewing.get(view)) {
                         Player player = Bukkit.getPlayer(uuid);
                         if (player != null && player.getOpenInventory().getTitle().equals(Teams.getTeamColorByPlayer(Bukkit.getPlayer(view)) + Bukkit.getPlayer(view).getName())) {
@@ -371,7 +371,7 @@ public class ObserverModule implements Module {
                             }
                         }
                     }
-                } */
+                }
             }
         }, 0);
     }
