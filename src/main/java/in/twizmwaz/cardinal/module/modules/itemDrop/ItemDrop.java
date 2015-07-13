@@ -25,7 +25,7 @@ public class ItemDrop implements Module {
     public void onPlayerLeave(PlayerQuitEvent event) {
         Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
         if (GameHandler.getGameHandler().getMatch().isRunning()
-                && (!team.isPresent() || team.get().isObserver())) {
+                && (!team.isPresent() || !team.get().isObserver())) {
             dump(event.getPlayer());
         }
     }
@@ -34,7 +34,7 @@ public class ItemDrop implements Module {
     public void onSwitchTeam(PlayerChangeTeamEvent event) {
         Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
         if (GameHandler.getGameHandler().getMatch().isRunning()
-                && (!team.isPresent() || team.get().isObserver())) {
+                && (!team.isPresent() || !team.get().isObserver())) {
             dump(event.getPlayer());
         }
     }
