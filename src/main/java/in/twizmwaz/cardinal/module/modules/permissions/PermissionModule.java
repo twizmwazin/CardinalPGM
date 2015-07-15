@@ -8,13 +8,8 @@ import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.module.Module;
-<<<<<<< HEAD
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.rank.Rank;
 import in.twizmwaz.cardinal.util.Teams;
-=======
-import in.twizmwaz.cardinal.util.TeamUtils;
->>>>>>> Clean up module building and add a rank system
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -142,26 +137,6 @@ public class PermissionModule implements Module {
         return attachmentMap.get(player);
     }
 
-<<<<<<< HEAD
-    @EventHandler
-    public void onRankChange(RankChangeEvent event) {
-        String prefix = Rank.getPlayerPrefix(event.getPlayer().getUniqueId());
-        event.getPlayer().setDisplayName(prefix + Teams.getTeamColorByPlayer(event.getPlayer()) + event.getPlayer().getName());
-        event.getPlayer().setPlayerListName(prefix + Teams.getTeamColorByPlayer(event.getPlayer()) + event.getPlayer().getName());
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerChangeTeamRank(PlayerChangeTeamEvent event) {
-        Bukkit.getServer().getPluginManager().callEvent(new RankChangeEvent(event.getPlayer(), event.getNewTeam()));
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerJoinRank(PlayerJoinEvent event) {
-        Bukkit.getServer().getPluginManager().callEvent(new RankChangeEvent(event.getPlayer()));
-    }
-
-=======
->>>>>>> Clean up module building and add a rank system
     public void disablePermission(Player player, String permission) {
         attachmentMap.get(player).unsetPermission(permission);
     }
