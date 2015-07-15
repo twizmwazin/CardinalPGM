@@ -19,7 +19,7 @@ import java.util.Set;
 public class BlockdropsBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
+    public ModuleCollection<Blockdrops> load(Match match) {
         ModuleCollection<Blockdrops> results = new ModuleCollection<>();
         for (Element element : match.getDocument().getRootElement().getChildren("blockdrops")) {
             for (Element rule : element.getChildren("rule")) {

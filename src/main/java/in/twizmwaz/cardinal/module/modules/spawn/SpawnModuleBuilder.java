@@ -26,8 +26,8 @@ import java.util.List;
 public class SpawnModuleBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection<SpawnModule> results = new ModuleCollection<SpawnModule>();
+    public ModuleCollection<SpawnModule> load(Match match) {
+        ModuleCollection<SpawnModule> results = new ModuleCollection<>();
         for (Element spawns : match.getDocument().getRootElement().getChildren("spawns")) {
             for (Element spawn : spawns.getChildren("spawn")) {
                 TeamModule team = Teams.getTeamById(spawns.getAttributeValue("team") != null ? spawns.getAttributeValue("team") : spawn.getAttributeValue("team")).orNull();

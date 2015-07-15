@@ -1,0 +1,32 @@
+<ranks>
+    <rank name="Moderator" staff="true" flair="`c❖">
+        <permission>cardinal.say</permission>
+        <permission>cardinal.broadcast</permission>
+        <permission>cardinal.mod</permission>
+        <permission>tnt.defuse</permission>
+        <permission>cardinal.cancel</permission>
+        <permission>cardinal.chat.admin</permission>
+        <permission>cardinal.match.setnext</permission>
+        <permission>cardinal.match.end</permission>
+        <permission>cardinal.match.start</permission>
+        <permission>cardinal.match.cycle</permission>
+        <permission>cardinal.team.force</permission>
+        <permission>cardinal.team.alias</permission>
+        <permission>cardinal.teleport</permission>
+        <permission>whitelist.reload</permission>
+        <permission>whitelist.toggle</permission>
+        <permission>whitelist.on</permission>
+        <permission>whitelist.off</permission>
+        <permission>whitelist.status</permission>
+        <permission>whitelist.add</permission>
+        <permission>whitelist.remove</permission>
+        <permission>whitelist.list</permission>
+        <permission>whitelist.team</permission>
+        <permission>whitelist.kick</permission>
+        <permission>cardinal.punish.warn</permission>
+        <permission>cardinal.punish.kick</permission>
+        <permission>cardinal.punish.ban</permission>
+        <permission>cardinal.punish.mute</permission>
+        <permission>minecraft.command.pardon</permission>
+    </rank>
+</ranks>

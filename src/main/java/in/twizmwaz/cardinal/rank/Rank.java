@@ -1,30 +1,29 @@
 package in.twizmwaz.cardinal.rank;
 
+import in.twizmwaz.cardinal.Cardinal;
+import in.twizmwaz.cardinal.event.RankChangeEvent;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 public class Rank {
 
     private static List<Rank> ranks = new ArrayList<>();
-    private static HashMap<UUID, List<Rank>> playerRanks = new HashMap<>();
-    private String name;
-    private String flair;
-    private boolean staffRank;
-    private boolean defaultRank;
+    private String name, flair;
+    private boolean staffRank, defaultRank;
+    private List<String> permissions;
 
-    public Rank(String name, String flair, boolean staffRank, boolean defaultRank) {
+    public Rank(String name, boolean defaultRank, boolean staffRank, String flair, List<String> permissions) {
         this.name = name;
-        this.flair = flair;
-        this.staffRank = staffRank;
         this.defaultRank = defaultRank;
+        this.staffRank = staffRank;
+        this.flair = flair;
+        this.permissions = permissions;
 
         ranks.add(this);
     }
@@ -43,20 +42,43 @@ public class Rank {
         return results;
     }
 
-    public static List<Rank> getRanksByPlayer(UUID player) {
-        return playerRanks.containsKey(player) ? playerRanks.get(player) : new ArrayList<Rank>();
+    public static List<Rank> getRanks(UUID uuid) {
+        List<Rank> ranks = new ArrayList<>();
+        for (Rank rank : Rank.ranks) {
+            if (rank.contains(uuid)) {
+                ranks.add(rank);
+            }
+        }
+        return ranks;
     }
 
-    public static String getPlayerPrefix(UUID player) {
+    public static Rank getRank(String name) {
+        for (Rank rank : ranks) {
+            if (rank.getName().equalsIgnoreCase(name)) {
+                return rank;
+            }
+        }
+        for (Rank rank : ranks) {
+            if (rank.getName().toLowerCase().startsWith(name.toLowerCase())) {
+                return rank;
+            }
+        }
+        return null;
+    }
+
+    public static String getPrefix(UUID uuid) {
         String prefix = "";
         String staffChar = "\u2756";
-        if (Bukkit.getOfflinePlayer(player).isOp()) {
+        if (Bukkit.getOfflinePlayer(uuid).isOp()) {
             prefix += ChatColor.GOLD + staffChar;
-        } else if (PermissionModule.isMod(player)) {
-            prefix += ChatColor.RED + staffChar;
         }
-        if (PermissionModule.isDeveloper(player)) {
+        if (PermissionModule.isDeveloper(uuid)) {
             prefix += ChatColor.DARK_PURPLE + staffChar;
+        }
+        for (Rank rank : getRanks(uuid)) {
+            if (rank.contains(uuid)) {
+                prefix += rank.getFlair();
+            }
         }
         return prefix;
     }
@@ -77,26 +99,32 @@ public class Rank {
         return defaultRank;
     }
 
-    public void addPlayer(UUID player) {
-        if (!playerRanks.containsKey(player)) {
-            playerRanks.put(player, new ArrayList<Rank>());
+    public void add(UUID uuid) {
+        FileConfiguration config = Cardinal.getInstance().getConfig();
+        List<String> players = config.contains("ranks." + name + ".players") ? config.getStringList("ranks." + name + ".players") : new ArrayList<String>();
+        players.add(uuid.toString());
+        config.set("ranks." + name + ".players", players);
+        if (Bukkit.getOfflinePlayer(uuid).isOnline()) {
+            Bukkit.getPluginManager().callEvent(new RankChangeEvent(Bukkit.getPlayer(uuid), this, true));
         }
-        playerRanks.get(player).add(this);
     }
 
-    public void removePlayer(UUID player) {
-        if (!playerRanks.containsKey(player)) {
-            playerRanks.put(player, new ArrayList<Rank>());
+    public void remove(UUID uuid) {
+        FileConfiguration config = Cardinal.getInstance().getConfig();
+        List<String> players = config.contains("ranks." + name + ".players") ? config.getStringList("ranks." + name + ".players") : new ArrayList<String>();
+        players.remove(uuid.toString());
+        config.set("ranks." + name + ".players", players);
+        if (Bukkit.getOfflinePlayer(uuid).isOnline()) {
+            Bukkit.getPluginManager().callEvent(new RankChangeEvent(Bukkit.getPlayer(uuid), this, false));
         }
-        playerRanks.get(player).remove(this);
     }
 
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        for (Rank rank : getDefaultRanks()) {
-            rank.addPlayer(event.getPlayer().getUniqueId());
-        }
-//        Bukkit.getPluginManager().callEvent(new RankChangeEvent());
+    public boolean contains(UUID uuid) {
+        FileConfiguration config = Cardinal.getInstance().getConfig();
+        return config.contains("ranks." + name + ".players") && config.getStringList("ranks." + name + ".players").contains(uuid.toString());
     }
 
+    public List<String> getPermissions() {
+        return permissions;
+    }
 }

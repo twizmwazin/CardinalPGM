@@ -2,10 +2,7 @@ package in.twizmwaz.cardinal.module.modules.kit;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.BuilderData;
-import in.twizmwaz.cardinal.module.ModuleBuilder;
-import in.twizmwaz.cardinal.module.ModuleCollection;
-import in.twizmwaz.cardinal.module.ModuleLoadTime;
+import in.twizmwaz.cardinal.module.*;
 import in.twizmwaz.cardinal.util.ArmorType;
 import in.twizmwaz.cardinal.util.MiscUtil;
 import in.twizmwaz.cardinal.util.Numbers;
@@ -120,8 +117,8 @@ public class KitBuilder implements ModuleBuilder {
     }
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection<in.twizmwaz.cardinal.module.Module> results = new ModuleCollection<in.twizmwaz.cardinal.module.Module>();
+    public ModuleCollection<Module> load(Match match) {
+        ModuleCollection<Module> results = new ModuleCollection<>();
         for (Element kits : match.getDocument().getRootElement().getChildren("kits")) {
             for (Element element : kits.getChildren("kit")) {
                 results.add(getKit(element));

@@ -13,8 +13,8 @@ import java.util.Set;
 public class DisableDamageBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
+    public ModuleCollection<DisableDamage> load(Match match) {
+        ModuleCollection<DisableDamage> results = new ModuleCollection<>();
         Set<DamageCause> damageTypes = new HashSet<>(128);
         boolean ally = true, self = true, enemy = true, other = true;
         for (Element itemRemove : match.getDocument().getRootElement().getChildren("disabledamage")) {

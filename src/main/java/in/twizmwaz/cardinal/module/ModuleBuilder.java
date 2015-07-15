@@ -4,6 +4,6 @@ import in.twizmwaz.cardinal.match.Match;
 
 public interface ModuleBuilder {
 
-    public ModuleCollection load(Match match);
+    ModuleCollection<? extends Module> load(Match match);
 
 }

@@ -7,15 +7,11 @@ import in.twizmwaz.cardinal.util.Numbers;
 import org.bukkit.Material;
 import org.jdom2.Element;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class ArmorKeepBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
+    public ModuleCollection<ArmorKeep> load(Match match) {
         ModuleCollection<ArmorKeep> results = new ModuleCollection<>();
-        Set<Material> materials = new HashSet<>(128);
         for (Element itemKeep : match.getDocument().getRootElement().getChildren("armorkeep")) {
             for (Element item : itemKeep.getChildren("item")) {
                 Material material;

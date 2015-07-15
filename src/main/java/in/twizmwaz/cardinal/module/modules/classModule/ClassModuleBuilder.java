@@ -14,7 +14,7 @@ import org.jdom2.Element;
 public class ClassModuleBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
+    public ModuleCollection<ClassModule> load(Match match) {
         ModuleCollection<ClassModule> results = new ModuleCollection<>();
         for (Element classes : match.getDocument().getRootElement().getChildren("classes")) {
             for (Element classElement : classes.getChildren("class")) {

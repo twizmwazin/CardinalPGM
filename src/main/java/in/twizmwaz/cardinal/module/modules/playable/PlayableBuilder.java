@@ -11,11 +11,13 @@ import org.jdom2.Element;
 public class PlayableBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
+    public ModuleCollection<Playable> load(Match match) {
+        ModuleCollection<Playable> results = new ModuleCollection<>();
         RegionModule region = null;
         for (Element element : match.getDocument().getRootElement().getChildren("playable")) {
-            if (element != null) region = new NegativeRegion(new CombinationParser(element, match.getDocument()));
+            if (element != null) {
+                region = new NegativeRegion(new CombinationParser(element, match.getDocument()));
+            }
         }
         results.add(new Playable(region));
         return results;

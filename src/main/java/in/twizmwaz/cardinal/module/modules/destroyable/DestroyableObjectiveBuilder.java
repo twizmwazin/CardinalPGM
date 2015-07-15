@@ -21,8 +21,8 @@ import java.util.List;
 public class DestroyableObjectiveBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection result = new ModuleCollection();
+    public ModuleCollection<DestroyableObjective> load(Match match) {
+        ModuleCollection<DestroyableObjective> result = new ModuleCollection<>();
         for (Element element : match.getDocument().getRootElement().getChildren("destroyables")) {
             for (Element subElement : element.getChildren("destroyable")) {
                 TeamModule owner;

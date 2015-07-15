@@ -17,10 +17,9 @@ import org.jdom2.Element;
 @BuilderData(load = ModuleLoadTime.EARLIER)
 public class CoreObjectiveBuilder implements ModuleBuilder {
 
-    @SuppressWarnings("unchecked")
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection result = new ModuleCollection<>();
+    public ModuleCollection<CoreObjective> load(Match match) {
+        ModuleCollection<CoreObjective> result = new ModuleCollection<>();
         for (Element element : match.getDocument().getRootElement().getChildren("cores")) {
             for (Element subElement : element.getChildren("core")) {
                 TeamModule team;

@@ -12,8 +12,8 @@ import java.util.Set;
 public class ToolRepairBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection<ToolRepair> results = new ModuleCollection<ToolRepair>();
+    public ModuleCollection<ToolRepair> load(Match match) {
+        ModuleCollection<ToolRepair> results = new ModuleCollection<>();
         Set<Material> materials = new HashSet<>(128);
         for (Element itemRemove : match.getDocument().getRootElement().getChildren("toolrepair")) {
             for (Element item : itemRemove.getChildren("tool")) {

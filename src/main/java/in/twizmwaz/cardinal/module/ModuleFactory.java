@@ -12,7 +12,7 @@ import in.twizmwaz.cardinal.module.modules.chat.ChatModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannelModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.cores.CoreObjectiveBuilder;
-import in.twizmwaz.cardinal.module.modules.cycleTimer.CycleTimerBuilder;
+import in.twizmwaz.cardinal.module.modules.cycleTimer.CycleTimerModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.deathMessages.DeathMessagesBuilder;
 import in.twizmwaz.cardinal.module.modules.deathTracker.DeathTrackerBuilder;
 import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjectiveBuilder;
@@ -48,6 +48,7 @@ import in.twizmwaz.cardinal.module.modules.potionRemover.PotionRemoverBuilder;
 import in.twizmwaz.cardinal.module.modules.projectiles.ProjectilesBuilder;
 import in.twizmwaz.cardinal.module.modules.proximityAlarm.ProximityAlarmBuilder;
 import in.twizmwaz.cardinal.module.modules.rage.RageBuilder;
+import in.twizmwaz.cardinal.module.modules.rank.RankModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.respawn.RespawnModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModuleBuilder;
@@ -150,7 +151,7 @@ public class ModuleFactory {
             SoundModuleBuilder.class,
             StartTimerBuilder.class,
             HeaderModuleBuilder.class,
-            CycleTimerBuilder.class,
+            CycleTimerModuleBuilder.class,
             TimeLimitBuilder.class,
             PlayableBuilder.class,
             TutorialBuilder.class,
@@ -160,7 +161,8 @@ public class ModuleFactory {
             PotionRemoverBuilder.class,
             InvisibleBlockBuilder.class,
             ItemDropBuilder.class,
-            GuiKeepModuleBuilder.class
+            GuiKeepModuleBuilder.class,
+            RankModuleBuilder.class
     };
     private final List<ModuleBuilder> builders;
 
@@ -179,9 +181,8 @@ public class ModuleFactory {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public ModuleCollection<Module> build(Match match, ModuleLoadTime time) {
-        ModuleCollection results = new ModuleCollection();
+        ModuleCollection<Module> results = new ModuleCollection<>();
         for (ModuleBuilder builder : builders) {
             try {
                 if (builder.getClass().getAnnotation(BuilderData.class).load().equals(time)) {

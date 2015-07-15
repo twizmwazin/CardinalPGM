@@ -9,10 +9,7 @@ public class TrackerBuilder implements ModuleBuilder {
     @SuppressWarnings("unchecked")
     @Override
     public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
-        results.add(new DamageTracker());
-        results.add(new SpleefTracker());
-        return results;
+        return new ModuleCollection(new DamageTracker(), new SpleefTracker());
     }
 
 }

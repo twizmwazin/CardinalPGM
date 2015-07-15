@@ -15,11 +15,11 @@ import java.util.List;
 public class ProjectilesBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
+    public ModuleCollection<Projectiles> load(Match match) {
         EntityType projectile = EntityType.ARROW;
         double velocityMod = 1.0;
         List<PotionEffect> potionEffects = new ArrayList<>();
-        ModuleCollection<Projectiles> results = new ModuleCollection<Projectiles>();
+        ModuleCollection<Projectiles> results = new ModuleCollection<>();
         for (Element projectiles : match.getDocument().getRootElement().getChildren("modifybowprojectile")) {
             try {
                 projectile = EntityType.valueOf(Strings.getTechnicalName(projectiles.getChild("projectile").getText()));

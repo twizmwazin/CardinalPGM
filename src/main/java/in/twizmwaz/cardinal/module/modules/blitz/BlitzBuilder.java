@@ -12,8 +12,8 @@ import org.jdom2.Element;
 @BuilderData(load = ModuleLoadTime.LATE)
 public class BlitzBuilder implements ModuleBuilder {
 
-    public ModuleCollection load(Match match) {
-        ModuleCollection<Blitz> result = new ModuleCollection<Blitz>();
+    public ModuleCollection<Blitz> load(Match match) {
+        ModuleCollection<Blitz> result = new ModuleCollection<>();
         for (Element element : match.getDocument().getRootElement().getChildren("blitz")) {
             boolean broadcastLives = element.getChild("broadcastLives") == null || Numbers.parseBoolean(element.getChild("broadcastLives").getText());
             int lives = element.getChild("lives") == null ? 1 : Numbers.parseInt(element.getChild("lives").getText());

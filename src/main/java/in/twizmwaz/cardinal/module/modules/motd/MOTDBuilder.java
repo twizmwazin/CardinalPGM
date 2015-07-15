@@ -8,9 +8,11 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 public class MOTDBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection<MOTD> results = new ModuleCollection<MOTD>();
-        if (Cardinal.getInstance().getConfig().getBoolean("custom-motd")) results.add(new MOTD(match));
+    public ModuleCollection<MOTD> load(Match match) {
+        ModuleCollection<MOTD> results = new ModuleCollection<>();
+        if (Cardinal.getInstance().getConfig().getBoolean("custom-motd")) {
+            results.add(new MOTD(match));
+        }
         return results;
     }
 

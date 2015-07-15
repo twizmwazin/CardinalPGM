@@ -14,8 +14,8 @@ import org.jdom2.Element;
 public class ProximityAlarmBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
+    public ModuleCollection<ProximityAlarm> load(Match match) {
+        ModuleCollection<ProximityAlarm> results = new ModuleCollection<>();
         for (Element element : match.getDocument().getRootElement().getChildren("proximity-alarms")) {
             for (Element subElement : element.getChildren("proximity-alarm")) {
                 String message = null;

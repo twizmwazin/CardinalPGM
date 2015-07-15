@@ -133,8 +133,8 @@ public class RegionModuleBuilder implements ModuleBuilder {
     }
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
+    public ModuleCollection<RegionModule> load(Match match) {
+        ModuleCollection<RegionModule> results = new ModuleCollection<>();
         for (Element element : match.getDocument().getRootElement().getChildren("regions")) {
             for (Element givenRegion : element.getChildren()) {
                 for (Element givenChild : givenRegion.getChildren()) {

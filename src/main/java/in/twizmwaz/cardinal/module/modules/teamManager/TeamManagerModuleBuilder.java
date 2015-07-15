@@ -7,10 +7,8 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 public class TeamManagerModuleBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection<TeamManagerModule> results = new ModuleCollection<>();
-        results.add(new TeamManagerModule(match));
-        return results;
+    public ModuleCollection<TeamManagerModule> load(Match match) {
+        return new ModuleCollection<>(new TeamManagerModule(match));
     }
 
 }

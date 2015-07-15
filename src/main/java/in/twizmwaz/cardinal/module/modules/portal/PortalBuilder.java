@@ -14,7 +14,7 @@ import org.jdom2.Element;
 public class PortalBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
+    public ModuleCollection<Portal> load(Match match) {
         ModuleCollection<Portal> results = new ModuleCollection<>();
         for (Element portals : match.getDocument().getRootElement().getChildren("portals")) {
             for (Element portal : portals.getChildren("portal")) {

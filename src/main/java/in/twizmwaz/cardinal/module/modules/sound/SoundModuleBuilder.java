@@ -6,9 +6,7 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 
 public class SoundModuleBuilder implements ModuleBuilder {
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection<SoundModule> results = new ModuleCollection<>();
-        results.add(new SoundModule());
-        return results;
+    public ModuleCollection<SoundModule> load(Match match) {
+        return new ModuleCollection<>(new SoundModule());
     }
 }

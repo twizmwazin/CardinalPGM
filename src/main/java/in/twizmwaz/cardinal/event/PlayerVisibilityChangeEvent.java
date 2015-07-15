@@ -1,16 +1,15 @@
 package in.twizmwaz.cardinal.event;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerEvent;
 
-public class PlayerVisibilityChangeEvent extends Event {
+public class PlayerVisibilityChangeEvent extends PlayerEvent {
 
     private static final HandlerList handlers = new HandlerList();
-    private Player player;
 
     public PlayerVisibilityChangeEvent(Player player) {
-        this.player = player;
+        super(player);
     }
 
     public static HandlerList getHandlerList() {
@@ -22,7 +21,4 @@ public class PlayerVisibilityChangeEvent extends Event {
         return handlers;
     }
 
-    public Player getPlayer() {
-        return player;
-    }
 }

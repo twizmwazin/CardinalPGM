@@ -7,10 +7,8 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 public class ObserverModuleBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
-        results.add(new ObserverModule(match));
-        return results;
+    public ModuleCollection<ObserverModule> load(Match match) {
+        return new ModuleCollection<>(new ObserverModule(match));
     }
 
 }

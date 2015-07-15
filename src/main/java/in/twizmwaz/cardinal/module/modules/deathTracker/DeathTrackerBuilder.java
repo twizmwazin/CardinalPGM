@@ -7,10 +7,8 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 public class DeathTrackerBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection<DeathTracker> results = new ModuleCollection<>();
-        results.add(new DeathTracker());
-        return results;
+    public ModuleCollection<DeathTracker> load(Match match) {
+        return new ModuleCollection<>(new DeathTracker());
     }
 
 }

@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.permissions.ServerOperator;
 import org.bukkit.potion.PotionEffect;
 
 public class Players {
@@ -32,14 +33,27 @@ public class Players {
     public static double getSnowflakeMultiplier(OfflinePlayer player) {
         if (player.isOp()) return 2.5;
         if (PermissionModule.isDeveloper(player.getUniqueId())) return 2.0;
-        if (PermissionModule.isMod(player.getUniqueId())) return 1.5;
         return 1.0;
     }
 
-    public static String getColoredName(OfflinePlayer player) {
-        if (player.isOnline())
-            return player.getPlayer().getDisplayName();
-        return ChatColor.DARK_AQUA + player.getName();
+    public static String getName(ServerOperator who, boolean flairs) {
+        if (who instanceof OfflinePlayer) {
+            Player player = (Player) who;
+            if (player.isOnline()) {
+                if (flairs) {
+                    return player.getPlayer().getDisplayName();
+                } else {
+                    return Teams.getTeamColorByPlayer(player) + player.getPlayer().getName();
+                }
+            }
+            return ChatColor.DARK_AQUA + player.getName();
+        } else {
+            return ChatColor.GOLD + "\u2756" + ChatColor.DARK_AQUA + "Console";
+        }
+    }
+
+    public static String getName(ServerOperator who) {
+        return getName(who, true);
     }
 
 }

@@ -10,10 +10,9 @@ import org.bukkit.ChatColor;
 import org.jdom2.Element;
 
 public class BroadcastModuleBuilder implements ModuleBuilder {
-    @SuppressWarnings("unchecked")
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
+    public ModuleCollection<BroadcastModule> load(Match match) {
+        ModuleCollection<BroadcastModule> results = new ModuleCollection<>();
         for (Element broadcast : match.getDocument().getRootElement().getChildren("broadcasts")) {
             for (Element element : broadcast.getChildren("tip")) {
                 String message;

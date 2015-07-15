@@ -6,9 +6,7 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 
 public class WildCardBuilder implements ModuleBuilder {
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection<WildCard> results = new ModuleCollection<>();
-        results.add(new WildCard());
-        return results;
+    public ModuleCollection<WildCard> load(Match match) {
+        return new ModuleCollection<>(new WildCard());
     }
 }

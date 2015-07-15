@@ -14,10 +14,9 @@ import org.jdom2.Element;
 @BuilderData(load = ModuleLoadTime.LATE)
 public class ScoreModuleBuilder implements ModuleBuilder {
 
-    @SuppressWarnings("unchecked")
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
+    public ModuleCollection<ScoreModule> load(Match match) {
+        ModuleCollection<ScoreModule> results = new ModuleCollection<>();
         int pointsPerKill = 0;
         int pointsPerDeath = 0;
         int max = 0;

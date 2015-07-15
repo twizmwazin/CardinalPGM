@@ -17,7 +17,7 @@ import java.util.List;
 public class TeamModuleBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
+    public ModuleCollection<TeamModule> load(Match match) {
         ModuleCollection<TeamModule> results = new ModuleCollection<>();
         Document doc = match.getDocument();
         Element teams = doc.getRootElement().getChild("teams");

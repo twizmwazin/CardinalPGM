@@ -10,7 +10,7 @@ import org.jdom2.Element;
 public class TntBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
+    public ModuleCollection<Tnt> load(Match match) {
         ModuleCollection<Tnt> results = new ModuleCollection<>();
         for (Element element : match.getDocument().getRootElement().getChildren("tnt")) {
             boolean instantIgnite = false;

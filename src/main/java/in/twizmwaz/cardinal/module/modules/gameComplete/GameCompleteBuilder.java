@@ -7,10 +7,8 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 public class GameCompleteBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
-        results.add(new GameComplete());
-        return results;
+    public ModuleCollection<GameComplete> load(Match match) {
+        return new ModuleCollection<>(new GameComplete());
     }
 
 }

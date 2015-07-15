@@ -23,11 +23,14 @@ public class BlockFilter extends FilterModule {
 
     @Override
     public FilterState evaluate(final Object... objects) {
+
         for (Object object : objects) {
             if (object instanceof Block) {
                 if (((Block) object).getType().equals(material) && (damageValue == -1 || (int) ((Block) object).getState().getData().getData() == damageValue))
                     return ALLOW;
                 else return DENY;
+            } else if (object instanceof Material) {
+
             }
         }
         return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));

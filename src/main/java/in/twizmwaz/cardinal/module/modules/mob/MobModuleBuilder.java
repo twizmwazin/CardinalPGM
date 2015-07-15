@@ -7,8 +7,8 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 
 public class MobModuleBuilder implements ModuleBuilder {
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection<MobModule> results = new ModuleCollection<MobModule>();
+    public ModuleCollection<MobModule> load(Match match) {
+        ModuleCollection<MobModule> results = new ModuleCollection<>();
         if (match.getDocument().getRootElement().getChild("mobs") != null) {
             results.add(new MobModule(FilterModuleBuilder.getFilter(match.getDocument().getRootElement().getChild("mobs").getChild("filter"))));
         } else {

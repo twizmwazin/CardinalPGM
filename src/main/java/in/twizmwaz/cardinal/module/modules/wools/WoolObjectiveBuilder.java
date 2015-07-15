@@ -19,8 +19,8 @@ import org.jdom2.Element;
 public class WoolObjectiveBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection<WoolObjective> result = new ModuleCollection<WoolObjective>();
+    public ModuleCollection<WoolObjective> load(Match match) {
+        ModuleCollection<WoolObjective> result = new ModuleCollection<>();
         for (Element element : match.getDocument().getRootElement().getChildren("wools")) {
             for (Element subElement : element.getChildren("wool")) {
                 TeamModule team;

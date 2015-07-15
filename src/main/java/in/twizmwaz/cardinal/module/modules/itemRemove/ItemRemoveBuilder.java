@@ -10,8 +10,8 @@ import org.jdom2.Element;
 public class ItemRemoveBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
+    public ModuleCollection<ItemRemove> load(Match match) {
+        ModuleCollection<ItemRemove> results = new ModuleCollection<>();
         for (Element itemRemove : match.getDocument().getRootElement().getChildren("itemremove")) {
             for (Element item : itemRemove.getChildren("item")) {
                 String[] broken = item.getText().split(":");
@@ -24,8 +24,7 @@ public class ItemRemoveBuilder implements ModuleBuilder {
                 short damage = -1;
                 try {
                     damage = Short.parseShort(broken[1]);
-                } catch (ArrayIndexOutOfBoundsException e) {
-                } catch (NumberFormatException e) {
+                } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
                 }
                 results.add(new ItemRemove(new RemovedItem(material, damage)));
             }
