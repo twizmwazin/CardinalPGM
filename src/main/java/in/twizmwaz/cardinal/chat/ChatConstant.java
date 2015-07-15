@@ -87,6 +87,8 @@ public enum ChatConstant {
     ERROR_NOT_ENOUGH_ARGS_BROADCAST("error.notEnoughArgsBroadcast"),
     ERROR_NOT_ENOUGH_ARGS_SAY("error.notEnoughArgsSay"),
     ERROR_TEAM_ABSENT("error.teamAbsent"),
+    ERROR_ALREADY_HAS_RANK("error.alreadyHasRank"),
+    ERROR_ALREADY_DOESNT_HAVE_RANK("error.alreadyDoesntHaveRank"),
 
     GENERIC_MAP_SET("generic.mapSet"),
     GENERIC_MARKED_FOR_RELOADING("generic.markedForReloading"),
@@ -127,6 +129,10 @@ public enum ChatConstant {
     GENERIC_AUTO_BALANCE("generic.autoBalance"),
     GENERIC_YOU_CHANGED_RATING("generic.youChangedRating"),
     GENERIC_TEAM_SIZE_CHANGED("generic.teamSizeChanged"),
+    GENERIC_RANK_REMOVED("generic.rankRemoved"),
+    GENERIC_OWN_RANK_REMOVED("generic.ownRankRemoved"),
+    GENERIC_RANK_GIVEN("generic.rankGiven"),
+    GENERIC_OWN_RANK_GIVEN("generic.ownRankGiven"),
 
     MISC_ENEMY("misc.enemy"),
     MISC_FATE("misc.fate"),

@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.command;
 
 import com.sk89q.minecraft.util.commands.*;
 import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.rank.Rank;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Players;
@@ -23,11 +24,11 @@ public class RankCommands {
             throw new CommandException(ChatConstant.ERROR_NO_RANK_MATCH.getMessage(ChatUtil.getLocale(sender)));
         }
         if (rank.contains(player.getUniqueId())) {
-            throw new CommandException(player.getName() + " already has the " + rank.getName() + " rank.");
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_HAS_RANK, player.getName(), rank.getName()).getMessage(ChatUtil.getLocale(sender)));
         }
         rank.add(player.getUniqueId());
-        sender.sendMessage(ChatColor.GRAY + "You have given " + Players.getName(player) + ChatColor.GRAY + " the " + rank.getName() + " rank.");
-        player.sendMessage(Players.getName(sender) + ChatColor.GRAY + " has given you the " + rank.getName() + " rank.");
+        sender.sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_RANK_GIVEN, Players.getName(player) + ChatColor.GRAY, rank.getName()).getMessage(ChatUtil.getLocale(sender)));
+        player.sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_OWN_RANK_GIVEN, Players.getName(sender) + ChatColor.GRAY, rank.getName()).getMessage(ChatUtil.getLocale(player)));
     }
 
     @Command(aliases = {"remove"}, desc = "Remove a player's rank.", min = 2, usage = "<player> <rank>")
@@ -42,11 +43,11 @@ public class RankCommands {
             throw new CommandException(ChatConstant.ERROR_NO_RANK_MATCH.getMessage(ChatUtil.getLocale(sender)));
         }
         if (!rank.contains(player.getUniqueId())) {
-            throw new CommandException(player.getName() + " already doesn't have the " + rank.getName() + " rank.");
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_DOESNT_HAVE_RANK, player.getName(), rank.getName()).getMessage(ChatUtil.getLocale(sender)));
         }
         rank.remove(player.getUniqueId());
-        sender.sendMessage(ChatColor.GRAY + "You have removed " + Players.getName(player) + ChatColor.GRAY + "'s " + rank.getName() + " rank.");
-        player.sendMessage(Players.getName(sender) + ChatColor.GRAY + " has removed your " + rank.getName() + " rank.");
+        sender.sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_RANK_REMOVED, Players.getName(player) + ChatColor.GRAY, rank.getName()).getMessage(ChatUtil.getLocale(sender)));
+        player.sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_OWN_RANK_REMOVED, Players.getName(sender) + ChatColor.GRAY, rank.getName()).getMessage(ChatUtil.getLocale(player)));
     }
 
     public static class RankParentCommand {
