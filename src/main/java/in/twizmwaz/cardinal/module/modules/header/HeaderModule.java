@@ -102,25 +102,17 @@ public class HeaderModule implements TaskedModule {
         if (authors.size() == 1) builder.append(ChatColor.GRAY).append(authors.get(0).getName());
         else if (authors.size() > 1) {
             for (Contributor author : authors) {
-                OfflinePlayer player = null;
+                OfflinePlayer player;
                 if (author.getUniqueId() != null)
                     player = Bukkit.getOfflinePlayer(author.getUniqueId());
                 else
                     player = Bukkit.getOfflinePlayer(author.getName());
                 if (authors.indexOf(author) < authors.size() - 2) {
-<<<<<<< HEAD
-                    builder.append(Players.getColoredName(player)).append(ChatColor.DARK_GRAY).append(", ");
+                    builder.append(Players.getName(player)).append(ChatColor.DARK_GRAY).append(", ");
                 } else if (authors.indexOf(author) == authors.size() - 2) {
-                    builder.append(Players.getColoredName(player)).append(ChatColor.DARK_GRAY).append(" {0} ");
+                    builder.append(Players.getName(player)).append(ChatColor.DARK_GRAY).append(" {0} ");
                 } else if (authors.indexOf(author) == authors.size() - 1) {
-                    builder.append(Players.getColoredName(player));
-=======
-                    builder.append(PlayerUtils.getName(player)).append(ChatColor.DARK_GRAY).append(", ");
-                } else if (authors.indexOf(author) == authors.size() - 2) {
-                    builder.append(PlayerUtils.getName(player)).append(ChatColor.DARK_GRAY).append(" {0} ");
-                } else if (authors.indexOf(author) == authors.size() - 1) {
-                    builder.append(PlayerUtils.getName(player));
->>>>>>> Clean up module building and add a rank system
+                    builder.append(Players.getName(player));
                 }
             }
         }
