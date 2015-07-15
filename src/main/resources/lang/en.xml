@@ -81,6 +81,8 @@
         <playableInteract>You may not interact with blocks outside of the playing field</playableInteract>
         <globalMuteEnabled>You cannot talk in chat while global mute is enabled.</globalMuteEnabled>
         <teamAbsent>You are not on a team</teamAbsent>
+        <alreadyHasRank>{0} already has the {1} rank.</alreadyHasRank>
+        <alreadyDoesntHaveRank>{0} already doesn't have the {1} rank.</alreadyDoesntHaveRank>
     </error>
     <generic>
         <mapSet>Next map set to {0}</mapSet>
@@ -123,6 +125,10 @@
         <autoBalance>Teams will be auto-balanced if {0} remains stacked</autoBalance>
         <youChangedRating>You changed your rating for {1} {2} from {3} to {0}.</youChangedRating>
         <teamSizeChanged>{0} max-overfill was set to {1}</teamSizeChanged>
+        <rankRemoved>You removed {0}'s {1} rank.</rankRemoved>
+        <ownRankRemoved>{0} has removed your {1} rank.</ownRankRemoved>
+        <rankGiven>You have given {0} the {1} rank.</rankGiven>
+        <ownRankGiven>{0} has given you the {1} rank.</ownRankGiven>
     </generic>
     <misc>
         <enemy>the enemy</enemy>

@@ -12,15 +12,9 @@ import in.twizmwaz.cardinal.util.Teams;
 public class ScoreboardModuleBuilder implements ModuleBuilder {
 
     @Override
-<<<<<<< HEAD
-    public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
-        for (TeamModule team : Teams.getTeams()) {
-=======
     public ModuleCollection<ScoreboardModule> load(Match match) {
         ModuleCollection<ScoreboardModule> results = new ModuleCollection<>();
-        for (TeamModule team : TeamUtils.getTeams()) {
->>>>>>> Clean up module building and add a rank system
+        for (TeamModule team : Teams.getTeams()) {
             results.add(new ScoreboardModule(team));
         }
         return results;
