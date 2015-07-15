@@ -195,7 +195,7 @@ public class FilterModuleBuilder implements ModuleBuilder {
     }
 
     @Override
-    public ModuleCollection load(Match match) {
+    public ModuleCollection<FilterModule> load(Match match) {
         match.getModules().add(new AllEventFilter("allow-all", true));
         match.getModules().add(new AllEventFilter("deny-all", false));
         match.getModules().add(new AllPlayerFilter("allow-players", true));

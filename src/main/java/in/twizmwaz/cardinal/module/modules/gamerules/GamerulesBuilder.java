@@ -11,8 +11,8 @@ import java.util.Set;
 public class GamerulesBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
+    public ModuleCollection<Gamerules> load(Match match) {
+        ModuleCollection<Gamerules> results = new ModuleCollection<>();
         Set<String> toDisable = new HashSet<>(128);
         for (Element itemRemove : match.getDocument().getRootElement().getChildren("gamerules")) {
             for (Element item : itemRemove.getChildren()) {

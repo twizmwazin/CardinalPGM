@@ -10,9 +10,7 @@ import in.twizmwaz.cardinal.module.ModuleLoadTime;
 public class HeaderModuleBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection<HeaderModule> results = new ModuleCollection<HeaderModule>();
-        results.add(new HeaderModule(match.getLoadedMap()));
-        return results;
+    public ModuleCollection<HeaderModule> load(Match match) {
+        return new ModuleCollection<>(new HeaderModule(match.getLoadedMap()));
     }
 }

@@ -11,6 +11,7 @@ import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannel;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
+import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Teams;
@@ -34,8 +35,9 @@ public class ChatCommands {
                 sender.sendMessage(ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.UI_DEFAULT_CHANNEL_GLOBAL).getMessage(locale));
             }
             if (cmd.argsLength() > 0) {
-                if (GameHandler.getGameHandler().getGlobalMute() && !PermissionModule.isStaff(((Player) sender)))
+                if (GameHandler.getGameHandler().getGlobalMute() && !sender.hasPermission("cardinal.globalmute.override")) {
                     throw new CommandException(ChatConstant.ERROR_GLOBAL_MUTE_ENABLED.asMessage().getMessage(ChatUtil.getLocale(sender)));
+                }
                 String message = assembleMessage(cmd);
                 if (message.trim().equals("")) return;
                 ChatUtil.getGlobalChannel().sendMessage("<" + Teams.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() + ChatColor.RESET + ">: " + message);
@@ -71,7 +73,7 @@ public class ChatCommands {
                 sender.sendMessage(ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.UI_DEFAULT_CHANNEL_TEAM).getMessage(locale));
             }
             if (cmd.argsLength() > 0) {
-                if (GameHandler.getGameHandler().getGlobalMute() && !PermissionModule.isStaff(((Player) sender)))
+                if (GameHandler.getGameHandler().getGlobalMute() && !sender.hasPermission("cardinal.globalmute.override"))
                     throw new CommandException(ChatConstant.ERROR_GLOBAL_MUTE_ENABLED.asMessage().getMessage(ChatUtil.getLocale(sender)));
                 Optional<TeamModule> team = Teams.getTeamByPlayer((Player) sender);
                 if (team.isPresent()) {
@@ -81,7 +83,7 @@ public class ChatCommands {
                     channel.sendLocalizedMessage(new UnlocalizedChatMessage(Teams.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() + ChatColor.RESET + ": " + message));
                     Bukkit.getConsoleSender().sendMessage(team.get().getColor() + "[" + team.get().getName() + "] " + ((Player) sender).getDisplayName() + ChatColor.RESET + ": " + message);
                 } else {
-                    if (GameHandler.getGameHandler().getGlobalMute() && !PermissionModule.isStaff(((Player) sender)))
+                    if (GameHandler.getGameHandler().getGlobalMute() && !sender.hasPermission("cardinal.globalmute.override"))
                         throw new CommandException(ChatConstant.ERROR_GLOBAL_MUTE_ENABLED.asMessage().getMessage(ChatUtil.getLocale(sender)));
                     String message = assembleMessage(cmd);
                     if (message.trim().equals("")) return;

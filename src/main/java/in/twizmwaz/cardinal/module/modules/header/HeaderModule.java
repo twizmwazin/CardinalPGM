@@ -108,11 +108,19 @@ public class HeaderModule implements TaskedModule {
                 else
                     player = Bukkit.getOfflinePlayer(author.getName());
                 if (authors.indexOf(author) < authors.size() - 2) {
+<<<<<<< HEAD
                     builder.append(Players.getColoredName(player)).append(ChatColor.DARK_GRAY).append(", ");
                 } else if (authors.indexOf(author) == authors.size() - 2) {
                     builder.append(Players.getColoredName(player)).append(ChatColor.DARK_GRAY).append(" {0} ");
                 } else if (authors.indexOf(author) == authors.size() - 1) {
                     builder.append(Players.getColoredName(player));
+=======
+                    builder.append(PlayerUtils.getName(player)).append(ChatColor.DARK_GRAY).append(", ");
+                } else if (authors.indexOf(author) == authors.size() - 2) {
+                    builder.append(PlayerUtils.getName(player)).append(ChatColor.DARK_GRAY).append(" {0} ");
+                } else if (authors.indexOf(author) == authors.size() - 1) {
+                    builder.append(PlayerUtils.getName(player));
+>>>>>>> Clean up module building and add a rank system
                 }
             }
         }

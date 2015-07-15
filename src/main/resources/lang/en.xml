@@ -37,6 +37,7 @@
         <noTeamMatch>No teams matched query.</noTeamMatch>
         <noRotMatch>No rotations matched query.</noRotMatch>
         <noPlayerMatch>No players matched query.</noPlayerMatch>
+        <noRankMatch>No ranks matched query.</noRankMatch>
         <multiplePlayers>More than one player found! Use {0} for exact matching.</multiplePlayers>
         <unknownError>An unknown error has occurred. Please refer to the server console.</unknownError>
         <movedForBalance>You were moved to {0} to balance team sizes</movedForBalance>
@@ -73,7 +74,7 @@
         <playerNotFound>No players matched query.</playerNotFound>
         <playerAlreadyBanned>Player is already banned</playerAlreadyBanned>
         <playerAlreadyMuted>Player is already muted</playerAlreadyMuted>
-        <PlayerNotMuted>Player is not muted</PlayerNotMuted>
+        <playerNotMuted>Player is not muted</playerNotMuted>
         <playerNotAffected>Player is not affected by this command</playerNotAffected>
         <playerDisabledPMs>Your message was not sent because {0} has chosen not to receive private messages.</playerDisabledPMs>
         <playableLeave>You may not leave the playing field</playableLeave>

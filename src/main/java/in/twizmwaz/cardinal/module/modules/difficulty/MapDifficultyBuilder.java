@@ -9,7 +9,7 @@ import org.bukkit.Difficulty;
 public class MapDifficultyBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
+    public ModuleCollection<MapDifficulty> load(Match match) {
         ModuleCollection<MapDifficulty> results = new ModuleCollection<>();
         try {
             switch (Numbers.parseInt(match.getDocument().getRootElement().getChildText("difficulty"))) {

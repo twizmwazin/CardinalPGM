@@ -19,8 +19,8 @@ import org.jdom2.Element;
 public class HillObjectiveBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection<HillObjective> results = new ModuleCollection<HillObjective>();
+    public ModuleCollection<HillObjective> load(Match match) {
+        ModuleCollection<HillObjective> results = new ModuleCollection<>();
         for (Element king : match.getDocument().getRootElement().getChildren("king")) {
             for (Element hill : king.getChildren("hill")) {
                 results.add(parseHill(hill));

@@ -30,16 +30,18 @@ import org.jdom2.Element;
 public class AppliedRegionBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection<AppliedRegion> results = new ModuleCollection<AppliedRegion>();
+    public ModuleCollection<AppliedRegion> load(Match match) {
+        ModuleCollection<AppliedRegion> results = new ModuleCollection<>();
         for (Element regionElement : match.getDocument().getRootElement().getChildren("regions")) {
             for (Element applied : regionElement.getChildren("apply")) {
                 RegionModule region;
                 if (applied.getAttributeValue("region") != null) {
                     region = RegionModuleBuilder.getRegion(applied.getAttributeValue("region"));
                 } else {
-                    ModuleCollection<RegionModule> regions = new ModuleCollection<RegionModule>();
-                    for (Element element : applied.getChildren()) regions.add(RegionModuleBuilder.getRegion(element));
+                    ModuleCollection<RegionModule> regions = new ModuleCollection<>();
+                    for (Element element : applied.getChildren()) {
+                        regions.add(RegionModuleBuilder.getRegion(element));
+                    }
                     region = new UnionRegion(null, regions);
                 }
                 String message = (applied.getAttributeValue("message") != null ? ChatColor.translateAlternateColorCodes('`', applied.getAttributeValue("message")) : null);

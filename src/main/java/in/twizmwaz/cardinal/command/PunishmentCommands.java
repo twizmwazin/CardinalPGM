@@ -26,7 +26,7 @@ public class PunishmentCommands {
     public static void kick(CommandContext cmd, CommandSender sender) throws CommandException {
         Player kicked = Bukkit.getPlayer(cmd.getString(0));
         if (sender instanceof Player) {
-            if (PermissionModule.isMod(((Player) sender).getUniqueId()) && kicked.isOp()) {
+            if (!sender.isOp() && kicked.isOp()) {
                 throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_AFFECTED).getMessage(ChatUtil.getLocale(sender)));
             }
         }
@@ -61,10 +61,8 @@ public class PunishmentCommands {
     @CommandPermissions("cardinal.punish.ban")
     public static void ban(CommandContext cmd, CommandSender sender) throws CommandException {
         OfflinePlayer banned = Bukkit.getOfflinePlayer(cmd.getString(0));
-        if (sender instanceof Player) {
-            if (PermissionModule.isMod(((Player) sender).getUniqueId()) && banned.isOp()) {
-                throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_AFFECTED).getMessage(ChatUtil.getLocale(sender)));
-            }
+        if (!sender.isOp() && banned.isOp()) {
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_AFFECTED).getMessage(ChatUtil.getLocale(sender)));
         }
         String reason = cmd.argsLength() > 1 ? cmd.getJoinedStrings(1) : "You have been banned!";
         if (banned.isOnline()) {
@@ -85,7 +83,7 @@ public class PunishmentCommands {
     public static void mute(CommandContext cmd, CommandSender sender) throws CommandException {
         Player player = Bukkit.getPlayer(cmd.getString(0));
         if (player != null) {
-            if (!(PermissionModule.isMod(player.getUniqueId()) || player.isOp())) {
+            if (!(!sender.isOp() && player.isOp())) {
                 if (!GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).isMuted(player)) {
                     sender.sendMessage(ChatColor.RED + "You muted " + Teams.getTeamColorByPlayer(player) + player.getDisplayName());
                     player.sendMessage(ChatColor.RED + "You were muted by " + (sender instanceof Player ? Teams.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console"));
@@ -103,7 +101,7 @@ public class PunishmentCommands {
     public static void unmute(CommandContext cmd, CommandSender sender) throws CommandException {
         Player player = Bukkit.getPlayer(cmd.getString(0));
         if (player != null) {
-            if (!(PermissionModule.isMod(player.getUniqueId()) || player.isOp())) {
+            if (!(!sender.isOp() && player.isOp())) {
                 if (GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).isMuted(player)) {
                     sender.sendMessage(ChatColor.GREEN + "You unmuted " + Teams.getTeamColorByPlayer(player) + player.getDisplayName());
                     player.sendMessage(ChatColor.GREEN + "You were unmuted by " + (sender instanceof Player ? Teams.getTeamColorByPlayer((Player) sender) + ((Player) sender).getDisplayName() : ChatColor.YELLOW + "*Console"));

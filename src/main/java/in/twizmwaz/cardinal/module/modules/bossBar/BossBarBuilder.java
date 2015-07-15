@@ -6,7 +6,7 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 
 public class BossBarBuilder implements ModuleBuilder {
     @Override
-    public ModuleCollection load(Match match) {
-        return new ModuleCollection<BossBar>(new BossBar());
+    public ModuleCollection<BossBar> load(Match match) {
+        return new ModuleCollection<>(new BossBar());
     }
 }

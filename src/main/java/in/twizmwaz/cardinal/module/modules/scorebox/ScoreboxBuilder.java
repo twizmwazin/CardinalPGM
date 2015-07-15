@@ -18,11 +18,11 @@ import java.util.HashMap;
 public class ScoreboxBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
+    public ModuleCollection<Scorebox> load(Match match) {
         ModuleCollection<Scorebox> results = new ModuleCollection<>();
         for (Element score : match.getDocument().getRootElement().getChildren("score")) {
             for (Element box : score.getChildren("box")) {
-                RegionModule region = null;
+                RegionModule region;
                 if (box.getAttributeValue("region") != null) {
                     region = RegionModuleBuilder.getRegion(box);
                 } else {

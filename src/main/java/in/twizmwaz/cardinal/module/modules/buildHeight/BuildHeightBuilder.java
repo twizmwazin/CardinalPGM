@@ -9,7 +9,7 @@ import org.jdom2.Element;
 public class BuildHeightBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
+    public ModuleCollection<BuildHeight> load(Match match) {
         ModuleCollection<BuildHeight> result = new ModuleCollection<>();
         for (Element element : match.getDocument().getRootElement().getChildren("maxbuildheight")) {
             int height = Numbers.parseInt(element.getValue());

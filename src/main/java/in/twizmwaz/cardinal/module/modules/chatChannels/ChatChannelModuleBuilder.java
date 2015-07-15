@@ -9,8 +9,8 @@ import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 public class ChatChannelModuleBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection<ChatChannel> results = new ModuleCollection<ChatChannel>();
+    public ModuleCollection<ChatChannel> load(Match match) {
+        ModuleCollection<ChatChannel> results = new ModuleCollection<>();
         results.add(new GlobalChannel());
         results.add(new AdminChannel(match.getModules().getModule(PermissionModule.class)));
         for (TeamModule teamModule : match.getModules().getModules(TeamModule.class)) {

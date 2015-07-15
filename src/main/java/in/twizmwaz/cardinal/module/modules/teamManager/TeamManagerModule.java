@@ -46,7 +46,7 @@ public class TeamManagerModule implements Module {
         HandlerList.unregisterAll(this);
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         Players.resetPlayer(player);

@@ -6,11 +6,8 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 
 public class MapNotificationBuilder implements ModuleBuilder {
 
-    @SuppressWarnings("unchecked")
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
-        results.add(new MapNotification());
-        return results;
+    public ModuleCollection<MapNotification> load(Match match) {
+        return new ModuleCollection<>(new MapNotification());
     }
 }

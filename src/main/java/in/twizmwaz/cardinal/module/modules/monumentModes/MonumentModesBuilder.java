@@ -15,10 +15,9 @@ import org.jdom2.Element;
 @BuilderData(load = ModuleLoadTime.LATEST)
 public class MonumentModesBuilder implements ModuleBuilder {
 
-    @SuppressWarnings("unchecked")
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
+    public ModuleCollection<MonumentModes> load(Match match) {
+        ModuleCollection<MonumentModes> results = new ModuleCollection<>();
         for (Element modes : match.getDocument().getRootElement().getChildren("modes")) {
             for (Element mode : modes.getChildren("mode")) {
                 int after = Strings.timeStringToSeconds(mode.getAttributeValue("after"));

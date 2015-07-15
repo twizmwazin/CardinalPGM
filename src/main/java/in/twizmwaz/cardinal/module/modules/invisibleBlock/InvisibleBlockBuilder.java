@@ -7,10 +7,8 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 public class InvisibleBlockBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection<InvisibleBlock> results = new ModuleCollection<>();
-        results.add(new InvisibleBlock());
-        return results;
+    public ModuleCollection<InvisibleBlock> load(Match match) {
+        return new ModuleCollection<>(new InvisibleBlock());
     }
 
 }

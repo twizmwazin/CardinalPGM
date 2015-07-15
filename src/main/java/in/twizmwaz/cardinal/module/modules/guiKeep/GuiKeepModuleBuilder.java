@@ -7,10 +7,8 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 public class GuiKeepModuleBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection<GuiKeepModule> results = new ModuleCollection<>();
-        results.add(new GuiKeepModule());
-        return results;
+    public ModuleCollection<GuiKeepModule> load(Match match) {
+        return new ModuleCollection<>(new GuiKeepModule());
     }
 
 }

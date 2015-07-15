@@ -10,10 +10,8 @@ import in.twizmwaz.cardinal.module.ModuleLoadTime;
 public class DoubleKillPatchBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
-        results.add(new DoubleKillPatch());
-        return results;
+    public ModuleCollection<DoubleKillPatch> load(Match match) {
+        return new ModuleCollection<>(new DoubleKillPatch());
     }
 
 }

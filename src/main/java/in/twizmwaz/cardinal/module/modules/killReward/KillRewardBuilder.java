@@ -12,10 +12,9 @@ import org.jdom2.Element;
 
 public class KillRewardBuilder implements ModuleBuilder {
 
-    @SuppressWarnings("unchecked")
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
+    public ModuleCollection<KillReward> load(Match match) {
+        ModuleCollection<KillReward> results = new ModuleCollection<>();
         for (Element element : match.getDocument().getRootElement().getChildren("killreward")) {
             ModuleCollection<Kit> kits = new ModuleCollection<>();
             kits.add(KitBuilder.getKit(element, GameHandler.getGameHandler().getMatch().getDocument(), true));

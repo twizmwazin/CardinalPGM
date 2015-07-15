@@ -13,7 +13,7 @@ import org.jdom2.Element;
 public class TimeLimitBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
+    public ModuleCollection<TimeLimit> load(Match match) {
         ModuleCollection<TimeLimit> results = new ModuleCollection<>();
         int timeLimit = 0;
         TimeLimit.Result result = null;

@@ -6,9 +6,7 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 
 public class BloodBuilder implements ModuleBuilder {
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection<Blood> results = new ModuleCollection<>();
-        results.add(new Blood());
-        return results;
+    public ModuleCollection<Blood> load(Match match) {
+        return new ModuleCollection<>(new Blood());
     }
 }

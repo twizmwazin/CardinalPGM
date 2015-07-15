@@ -65,8 +65,8 @@ public class BlockEventRegion extends AppliedRegion {
 
     @EventHandler
     public void onBucketEmpty(PlayerBucketEmptyEvent event) {
-        Material newMaterial = (event.getBucket().equals(Material.WATER_BUCKET) ? Material.WATER : (event.getBucket().equals(Material.LAVA_BUCKET) ? Material.LAVA : Material.AIR));
-        if (!event.isCancelled() && filter.evaluate(event.getPlayer(), newMaterial, event).equals(FilterState.DENY)
+        Material material = (event.getBucket().equals(Material.WATER_BUCKET) ? Material.WATER : (event.getBucket().equals(Material.LAVA_BUCKET) ? Material.LAVA : Material.AIR));
+        if (!event.isCancelled() && filter.evaluate(event.getPlayer(), material, event).equals(FilterState.DENY)
                 && region.contains(new BlockRegion(null, event.getBlockClicked().getRelative(event.getBlockFace()).getLocation().toVector()))) {
             event.setCancelled(true);
             ChatUtil.sendWarningMessage(event.getPlayer(), message);

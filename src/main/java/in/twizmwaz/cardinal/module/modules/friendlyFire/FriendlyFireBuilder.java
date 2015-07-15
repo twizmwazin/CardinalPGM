@@ -10,8 +10,8 @@ import in.twizmwaz.cardinal.module.ModuleLoadTime;
 public class FriendlyFireBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
+    public ModuleCollection<FriendlyFire> load(Match match) {
+        ModuleCollection<FriendlyFire> results = new ModuleCollection<>();
         boolean enabled = true;
         boolean arrowReturn = true;
         try {

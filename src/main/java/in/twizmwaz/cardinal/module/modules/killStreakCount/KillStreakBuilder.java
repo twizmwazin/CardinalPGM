@@ -7,10 +7,8 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 public class KillStreakBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection<KillStreakCounter> results = new ModuleCollection<KillStreakCounter>();
-        results.add(new KillStreakCounter());
-        return results;
+    public ModuleCollection<KillStreakCounter> load(Match match) {
+        return new ModuleCollection<>(new KillStreakCounter());
     }
 
 }

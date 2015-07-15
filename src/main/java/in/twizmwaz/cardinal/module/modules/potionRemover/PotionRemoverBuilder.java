@@ -7,8 +7,8 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 public class PotionRemoverBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection<PotionRemover>();
+    public ModuleCollection<PotionRemover> load(Match match) {
+        ModuleCollection<PotionRemover> results = new ModuleCollection<>();
         if (match.getDocument().getRootElement().getChild("keep-potion-bottles") == null) {
             results.add(new PotionRemover());
         }

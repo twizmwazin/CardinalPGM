@@ -14,7 +14,7 @@ import java.util.List;
 public class TutorialBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
+    public ModuleCollection<Tutorial> load(Match match) {
         ModuleCollection<Tutorial> result = new ModuleCollection<>();
         Stage prefix = null;
         Stage suffix = null;

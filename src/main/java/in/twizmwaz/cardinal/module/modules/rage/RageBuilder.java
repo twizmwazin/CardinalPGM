@@ -5,16 +5,14 @@ import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
-import org.jdom2.Element;
 
 @BuilderData(load = ModuleLoadTime.LATER)
 public class RageBuilder implements ModuleBuilder {
 
-    @SuppressWarnings("unchecked")
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
-        for (Element element : match.getDocument().getRootElement().getChildren("rage")) {
+    public ModuleCollection<Rage> load(Match match) {
+        ModuleCollection<Rage> results = new ModuleCollection<>();
+        if (match.getDocument().getRootElement().getChild("rage") != null) {
             results.add(new Rage());
         }
         return results;

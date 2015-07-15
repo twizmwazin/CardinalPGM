@@ -7,11 +7,14 @@ import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
-import in.twizmwaz.cardinal.event.RankChangeEvent;
 import in.twizmwaz.cardinal.module.Module;
+<<<<<<< HEAD
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.rank.Rank;
 import in.twizmwaz.cardinal.util.Teams;
+=======
+import in.twizmwaz.cardinal.util.TeamUtils;
+>>>>>>> Clean up module building and add a rank system
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -23,12 +26,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class PermissionModule implements Module {
 
@@ -41,19 +39,6 @@ public class PermissionModule implements Module {
     public PermissionModule(Plugin plugin) {
         this.plugin = plugin;
         this.attachmentMap = new HashMap<>();
-    }
-
-    public static boolean isMod(UUID player) {
-        for (String uuid : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.players")) {
-            if (uuid.equals(player.toString())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean isStaff(OfflinePlayer player) {
-        return isMod(player.getUniqueId()) || player.isOp();
     }
 
     public static boolean isDeveloper(UUID player) {
@@ -76,25 +61,7 @@ public class PermissionModule implements Module {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         attachmentMap.put(event.getPlayer(), event.getPlayer().addAttachment(plugin));
-        for (String permission : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Default.permissions")) {
-            attachmentMap.get(event.getPlayer()).setPermission(permission, true);
-        }
-        if (event.getPlayer().isOp() && GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.players").contains(event.getPlayer().getUniqueId().toString())) {
-            List<String> players = new ArrayList<>();
-            players.addAll(GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.players"));
-            players.remove(event.getPlayer().getUniqueId().toString());
-            GameHandler.getGameHandler().getPlugin().getConfig().set("permissions.Moderator.players", players);
-            GameHandler.getGameHandler().getPlugin().saveConfig();
-        }
-        if (GameHandler.getGameHandler().getPlugin().getConfig().get("permissions.Moderator.players") != null) {
-            for (String uuid : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.players")) {
-                if (event.getPlayer().getUniqueId().toString().equals(uuid)) {
-                    for (String permission : GameHandler.getGameHandler().getPlugin().getConfig().getStringList("permissions.Moderator.permissions")) {
-                        attachmentMap.get(event.getPlayer()).setPermission(permission, true);
-                    }
-                }
-            }
-        }
+
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -175,6 +142,7 @@ public class PermissionModule implements Module {
         return attachmentMap.get(player);
     }
 
+<<<<<<< HEAD
     @EventHandler
     public void onRankChange(RankChangeEvent event) {
         String prefix = Rank.getPlayerPrefix(event.getPlayer().getUniqueId());
@@ -192,6 +160,8 @@ public class PermissionModule implements Module {
         Bukkit.getServer().getPluginManager().callEvent(new RankChangeEvent(event.getPlayer()));
     }
 
+=======
+>>>>>>> Clean up module building and add a rank system
     public void disablePermission(Player player, String permission) {
         attachmentMap.get(player).unsetPermission(permission);
     }

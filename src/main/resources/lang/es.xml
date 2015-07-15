@@ -73,7 +73,7 @@
         <playerNotFound>No se ha encontrado ningún jugador con ese nombre.</playerNotFound>
         <playerAlreadyBanned>Este jugador ya está baneado</playerAlreadyBanned>
         <playerAlreadyMuted>Este jugador ya está silenciado</playerAlreadyMuted>
-        <PlayerNotMuted>Este jugador no está silenciado</PlayerNotMuted>
+        <playerNotMuted>Este jugador no está silenciado</playerNotMuted>
         <playerNotAffected>Este jugador no está afectado por este comando</playerNotAffected>
         <playerDisabledPMs>Tu mensaje no fue enviado porque {0} eligió no recibir mensajes privados.</playerDisabledPMs>
         <playableLeave>No puedes salir del terreno de juego</playableLeave>

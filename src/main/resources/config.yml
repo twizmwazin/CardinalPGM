@@ -11,42 +11,6 @@ observers-ready: true
 html:
   upload: true
   transcriptMilliseconds: true
-permissions:
-  Default:
-    permissions:
-    - cardinal.chat.global
-    - cardinal.chat.team
-  Moderator:
-    permissions:
-    - cardinal.say
-    - cardinal.broadcast
-    - cardinal.mod
-    - tnt.defuse
-    - cardinal.cancel
-    - cardinal.chat.admin
-    - cardinal.match.setnext
-    - cardinal.match.end
-    - cardinal.match.start
-    - cardinal.match.cycle
-    - cardinal.team.force
-    - cardinal.team.alias
-    - cardinal.teleport
-    - whitelist.reload
-    - whitelist.toggle
-    - whitelist.on
-    - whitelist.off
-    - whitelist.status
-    - whitelist.add
-    - whitelist.remove
-    - whitelist.list
-    - whitelist.team
-    - whitelist.kick
-    - cardinal.punish.warn
-    - cardinal.punish.kick
-    - cardinal.punish.ban
-    - cardinal.punish.mute
-    - minecraft.command.pardon
-    players:
 settings:
 - Blood
 - DeathMessages

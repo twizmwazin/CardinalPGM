@@ -9,12 +9,9 @@ import in.twizmwaz.cardinal.module.ModuleLoadTime;
 @BuilderData(load = ModuleLoadTime.LATEST)
 public class TimeNotificationsBuilder implements ModuleBuilder {
 
-    @SuppressWarnings("unchecked")
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
-        results.add(new TimeNotifications());
-        return results;
+    public ModuleCollection<TimeNotifications> load(Match match) {
+        return new ModuleCollection<>(new TimeNotifications());
     }
 
 }

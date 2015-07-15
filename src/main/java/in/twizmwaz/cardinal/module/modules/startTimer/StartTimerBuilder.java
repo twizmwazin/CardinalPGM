@@ -7,10 +7,8 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 public class StartTimerBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection<StartTimer> results = new ModuleCollection<StartTimer>();
-        results.add(new StartTimer(match, 30));
-        return results;
+    public ModuleCollection<StartTimer> load(Match match) {
+        return new ModuleCollection<>(new StartTimer(match, 30));
     }
 
 }

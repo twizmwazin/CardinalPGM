@@ -7,10 +7,8 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 public class TntTrackerBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
-        results.add(new TntTracker());
-        return results;
+    public ModuleCollection<TntTracker> load(Match match) {
+        return new ModuleCollection<>(new TntTracker());
     }
 
 }

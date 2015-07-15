@@ -7,8 +7,8 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 public class HungerBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
+    public ModuleCollection<Hunger> load(Match match) {
+        ModuleCollection<Hunger> results = new ModuleCollection<>();
         try {
             String data = match.getDocument().getRootElement().getChild("hunger").getChildText("depletion");
             if (data.equalsIgnoreCase("off")) {

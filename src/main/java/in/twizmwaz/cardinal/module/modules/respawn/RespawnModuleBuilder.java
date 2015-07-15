@@ -7,10 +7,8 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 public class RespawnModuleBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection load(Match match) {
-        ModuleCollection results = new ModuleCollection();
-        results.add(new RespawnModule(match));
-        return results;
+    public ModuleCollection<RespawnModule> load(Match match) {
+        return new ModuleCollection<>(new RespawnModule(match));
     }
 
 }
