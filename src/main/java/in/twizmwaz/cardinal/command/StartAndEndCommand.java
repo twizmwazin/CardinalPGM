@@ -11,6 +11,7 @@ import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.modules.startTimer.StartTimer;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.command.CommandSender;
@@ -37,7 +38,7 @@ public class StartAndEndCommand {
 
     }
 
-    @Command(aliases = {"end", "finish"}, desc = "Ends the match.", usage = "[team]")
+    @Command(aliases = {"end", "finish"}, desc = "Ends the match.", usage = "[team]", flags = "n")
     @CommandPermissions("cardinal.match.end")
     public static void end(CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().getState() == MatchState.PLAYING) {
@@ -45,7 +46,11 @@ public class StartAndEndCommand {
                 Optional<TeamModule> team = Teams.getTeamByName(cmd.getString(0));
                 GameHandler.getGameHandler().getMatch().end(team.orNull());
             } else {
-                GameHandler.getGameHandler().getMatch().end(Optional.<TeamModule>absent().orNull());
+                if (cmd.hasFlag('n')) {
+                    GameHandler.getGameHandler().getMatch().end();
+                } else {
+                    GameHandler.getGameHandler().getMatch().end(TimeLimit.getMatchWinner());
+                }
             }
         } else
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_END).getMessage(ChatUtil.getLocale(sender)));

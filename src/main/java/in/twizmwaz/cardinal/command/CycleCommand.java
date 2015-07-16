@@ -9,6 +9,7 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.modules.cycleTimer.CycleTimerModule;
+import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import org.bukkit.ChatColor;
@@ -16,12 +17,16 @@ import org.bukkit.command.CommandSender;
 
 public class CycleCommand {
 
-    @Command(aliases = {"cycle"}, desc = "Cycles the world and loads a new world.", usage = "[time] [map]", flags = "f")
+    @Command(aliases = {"cycle"}, desc = "Cycles the world and loads a new world.", usage = "[time] [map]", flags = "fn")
     @CommandPermissions("cardinal.match.cycle")
     public static void cycle(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
             if (cmd.hasFlag('f')) {
-                GameHandler.getGameHandler().getMatch().end();
+                if (cmd.hasFlag('n')) {
+                    GameHandler.getGameHandler().getMatch().end();
+                } else {
+                    GameHandler.getGameHandler().getMatch().end(TimeLimit.getMatchWinner());
+                }
             } else {
                 throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(ChatUtil.getLocale(sender)));
             }
