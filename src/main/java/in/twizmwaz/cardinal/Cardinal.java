@@ -237,6 +237,17 @@ public class Cardinal extends JavaPlugin {
             e.printStackTrace();
             getLogger().warning("Could not parse file 'ranks.xml' for ranks.");
         }
+        
+        for (Rank rank : Rank.getRanks()) {
+            if (rank.getParent() != null &&
+                    Rank.getRank(rank.getParent()) != null &&
+                    Rank.getRank(rank.getParent()).getParent() != null &&
+                    Rank.getRank(Rank.getRank(rank.getParent()).getParent()) != null &&
+                    Rank.getRank(Rank.getRank(rank.getParent()).getParent()).equals(rank)) {
+                getLogger().warning("Rank inheritance processes were terminated because " + rank.getName() + " and " + Rank.getRank(rank.getParent()).getName() + " are parents of each other, which cannot occur.");
+                return;
+            }
+        }
 
         List<Rank> completed = new ArrayList<>();
         for (Rank rank : Rank.getRanks()) {
