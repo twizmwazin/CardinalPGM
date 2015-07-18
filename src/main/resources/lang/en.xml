@@ -129,6 +129,9 @@
         <ownRankRemoved>{0} has removed your {1} rank.</ownRankRemoved>
         <rankGiven>You have given {0} the {1} rank.</rankGiven>
         <ownRankGiven>{0} has given you the {1} rank.</ownRankGiven>
+        <noRanks>There are no ranks.</noRanks>
+        <ranks>Ranks:</ranks>
+        <ranksMoreInfo>Use /rank info &lt;rank&gt; for more info about a certain rank.</ranksMoreInfo>
     </generic>
     <misc>
         <enemy>the enemy</enemy>

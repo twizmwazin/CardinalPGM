@@ -55,6 +55,19 @@ public class RankCommands {
         player.sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_OWN_RANK_REMOVED, Players.getName(sender) + ChatColor.GRAY, rank.getName()).getMessage(ChatUtil.getLocale(player)));
     }
 
+    @Command(aliases = {"list"}, desc = "List the ranks.")
+    public static void list(final CommandContext args, CommandSender sender) {
+        if (Rank.getRanks().size() == 0) {
+            sender.sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_NO_RANKS).getMessage(ChatUtil.getLocale(sender)));
+        } else {
+            sender.sendMessage(ChatColor.GOLD + new LocalizedChatMessage(ChatConstant.GENERIC_RANKS).getMessage(ChatUtil.getLocale(sender)));
+            for (Rank rank : Rank.getRanks()) {
+                sender.sendMessage(" " + (rank.getFlair().equals("") ? "" : rank.getFlair() + " ") + ChatColor.GRAY + rank.getName());
+            }
+            sender.sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_RANKS_MORE_INFO).getMessage(ChatUtil.getLocale(sender)));
+        }
+    }
+
     public static class RankParentCommand {
         @Command(aliases = {"rank", "ranks"}, desc = "Manage ranks.", min = 1)
         @NestedCommand({RankCommands.class})
