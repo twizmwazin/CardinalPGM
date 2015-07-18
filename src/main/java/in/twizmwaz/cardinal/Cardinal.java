@@ -247,7 +247,7 @@ public class Cardinal extends JavaPlugin {
         while (!completed.containsAll(Rank.getRanks())) {
             Rank inheriting = null;
             for (Rank rank : Rank.getRanks()) {
-                if (rank.getParent() != null && completed.contains(Rank.getRank(rank.getParent()))) {
+                if (!completed.contains(rank) && rank.getParent() != null && completed.contains(Rank.getRank(rank.getParent()))) {
                     inheriting = rank;
                 }
             }
