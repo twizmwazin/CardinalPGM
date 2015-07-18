@@ -47,6 +47,9 @@ public class RankModule implements Module {
             for (String permission : event.getRank().getPermissions()) {
                 GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).enablePermission(player, permission);
             }
+            for (String permission : event.getRank().getDisabledPermissions()) {
+                GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).disablePermission(player, permission);
+            }
         } else {
             for (String permission : event.getRank().getPermissions()) {
                 boolean keep = false;
@@ -57,6 +60,21 @@ public class RankModule implements Module {
                 }
                 if (!keep) {
                     GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).disablePermission(player, permission);
+                }
+            }
+            for (String permission : event.getRank().getDisabledPermissions()) {
+                boolean enable = false;
+                for (Rank rank : Rank.getRanks(event.getPlayer().getUniqueId())) {
+                    if (rank.getPermissions().contains(permission)) {
+                        enable = true;
+                    }
+                    if (rank.getDisabledPermissions().contains(permission)) {
+                        enable = false;
+                        break;
+                    }
+                }
+                if (enable) {
+                    GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).enablePermission(player, permission);
                 }
             }
         }

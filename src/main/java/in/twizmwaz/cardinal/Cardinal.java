@@ -227,46 +227,51 @@ public class Cardinal extends JavaPlugin {
                     staffRank = rank.getAttributeValue("staff") != null && Numbers.parseBoolean(rank.getAttributeValue("staff"));
                 }
                 String flair = rank.getAttributeValue("flair") != null ? ChatColor.translateAlternateColorCodes('`', rank.getAttributeValue("flair")) : "";
-                List<String> permissions = new ArrayList<>();
+                List<String> permissions = new ArrayList<>(), disabledPermissions = new ArrayList<>();
                 for (Element permission : rank.getChildren("permission")) {
-                    permissions.add(permission.getText());
+                    if (permission.getText().startsWith("-")) {
+                        disabledPermissions.add(permission.getText().substring(1));
+                    } else {
+                        permissions.add(permission.getText());
+                    }
                 }
-                new Rank(name, defaultRank, staffRank, flair, permissions, parent);
+                new Rank(name, defaultRank, staffRank, flair, permissions, disabledPermissions, parent);
+            }
+
+            for (Rank rank : Rank.getRanks()) {
+                if (rank.getParent() != null &&
+                        Rank.getRank(rank.getParent()) != null &&
+                        Rank.getRank(rank.getParent()).getParent() != null &&
+                        Rank.getRank(Rank.getRank(rank.getParent()).getParent()) != null &&
+                        Rank.getRank(Rank.getRank(rank.getParent()).getParent()).equals(rank)) {
+                    getLogger().warning("Rank inheritance processes were terminated because " + rank.getName() + " and " + Rank.getRank(rank.getParent()).getName() + " are parents of each other, which cannot occur.");
+                    return;
+                }
+            }
+
+            List<Rank> completed = new ArrayList<>();
+            for (Rank rank : Rank.getRanks()) {
+                if (rank.getParent() == null) {
+                    completed.add(rank);
+                }
+            }
+            while (!completed.containsAll(Rank.getRanks())) {
+                Rank inheriting = null;
+                for (Rank rank : Rank.getRanks()) {
+                    if (!completed.contains(rank) && rank.getParent() != null && completed.contains(Rank.getRank(rank.getParent()))) {
+                        inheriting = rank;
+                    }
+                }
+                for (String permission : Rank.getRank(inheriting.getParent()).getPermissions()) {
+                    inheriting.addPermission(permission);
+                }
+                    completed.add(inheriting);
             }
         } catch (JDOMException | IOException e) {
             e.printStackTrace();
             getLogger().warning("Could not parse file 'ranks.xml' for ranks.");
         }
-        
-        for (Rank rank : Rank.getRanks()) {
-            if (rank.getParent() != null &&
-                    Rank.getRank(rank.getParent()) != null &&
-                    Rank.getRank(rank.getParent()).getParent() != null &&
-                    Rank.getRank(Rank.getRank(rank.getParent()).getParent()) != null &&
-                    Rank.getRank(Rank.getRank(rank.getParent()).getParent()).equals(rank)) {
-                getLogger().warning("Rank inheritance processes were terminated because " + rank.getName() + " and " + Rank.getRank(rank.getParent()).getName() + " are parents of each other, which cannot occur.");
-                return;
-            }
-        }
 
-        List<Rank> completed = new ArrayList<>();
-        for (Rank rank : Rank.getRanks()) {
-            if (rank.getParent() == null) {
-                completed.add(rank);
-            }
-        }
-        while (!completed.containsAll(Rank.getRanks())) {
-            Rank inheriting = null;
-            for (Rank rank : Rank.getRanks()) {
-                if (!completed.contains(rank) && rank.getParent() != null && completed.contains(Rank.getRank(rank.getParent()))) {
-                    inheriting = rank;
-                }
-            }
-            for (String permission : Rank.getRank(inheriting.getParent()).getPermissions()) {
-                inheriting.addPermission(permission);
-            }
-            completed.add(inheriting);
-        }
     }
 
     @Override
