@@ -170,6 +170,7 @@
         <second>{0} second</second>
         <seconds>{0} seconds</seconds>
         <matchStarted>The match has started!</matchStarted>
+        <matchStartTitle>Go!</matchStartTitle>
         <matchStartCancelled>Match start cancelled</matchStartCancelled>
         <matchOver>Game over!</matchOver>
         <matchWin>{0} wins!</matchWin>

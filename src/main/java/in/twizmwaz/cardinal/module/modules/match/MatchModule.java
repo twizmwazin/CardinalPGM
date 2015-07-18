@@ -5,11 +5,11 @@ import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
-import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Teams;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -31,24 +31,37 @@ public class MatchModule implements Module {
     }
 
     @EventHandler
-    public void onMatchStart(MatchStartEvent event) {
-        ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # #"));
-        ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # " + ChatColor.GOLD + "{0}" + ChatColor.DARK_PURPLE + " # #", new LocalizedChatMessage(ChatConstant.UI_MATCH_STARTED)));
-        ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # #"));
-    }
-
-    @EventHandler
     public void onMatchEnd(MatchEndEvent event) {
-        ChatUtil.getGlobalChannel().sendMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # #");
-        ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# #    " + ChatColor.GOLD + "{0}" + ChatColor.DARK_PURPLE + "    # #", new LocalizedChatMessage(ChatConstant.UI_MATCH_OVER)));
         if (event.getTeam().isPresent()) {
-            if (event.getTeam().get().size() == 1) {
-                ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # {0}" + ChatColor.DARK_PURPLE + " # #", new LocalizedChatMessage(ChatConstant.UI_MATCH_WIN, event.getTeam().get().getColor() + (event.getTeam().get()).getName())));
-            } else {
-                ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "# # {0}" + ChatColor.DARK_PURPLE + " # #", new LocalizedChatMessage(ChatConstant.UI_MATCH_WIN, event.getTeam().get().getCompleteName())));
+            ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage("{0}", new LocalizedChatMessage(ChatConstant.UI_MATCH_WIN, event.getTeam().get().getCompleteName() + ChatColor.WHITE)));
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                String title;
+                title = new LocalizedChatMessage(ChatConstant.UI_MATCH_WIN, event.getTeam().get().getCompleteName() + ChatColor.WHITE).getMessage(player.getLocale());
+                if (Teams.getTeamByPlayer(player).isPresent() && Teams.getTeamByPlayer(player).get() == event.getTeam().get()) {
+                    player.sendMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "{0}", new LocalizedChatMessage(ChatConstant.UI_MATCH_TEAM_WIN)).getMessage(player.getLocale()));
+                    String subtitle = new LocalizedChatMessage(ChatConstant.UI_MATCH_TEAM_WIN).getMessage(player.getLocale());
+                    player.showTitle(new TextComponent(title),new TextComponent(ChatColor.GREEN + subtitle), 0, 40, 30);
+                } else if (!Teams.getTeamByPlayer(player).get().isObserver()) {
+                    player.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.UI_MATCH_TEAM_LOSE)).getMessage(player.getLocale()));
+                    String subtitle = new LocalizedChatMessage(ChatConstant.UI_MATCH_TEAM_LOSE).getMessage(player.getLocale());
+                    player.showTitle(new TextComponent(title), new TextComponent(ChatColor.RED + subtitle), 0, 40, 30);
+                } else {
+                    player.showTitle(new TextComponent(title), new TextComponent(""), 0, 40, 30);
+                }
+            }
+        } else if (event.getPlayer().isPresent()){
+            ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage("{0}", new LocalizedChatMessage(ChatConstant.UI_MATCH_WIN, ChatColor.YELLOW + (event.getPlayer().get()).getName() + ChatColor.WHITE)));
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                String title = new LocalizedChatMessage(ChatConstant.UI_MATCH_WIN, ChatColor.YELLOW + (event.getPlayer().get()).getName() + ChatColor.WHITE).getMessage(player.getLocale());
+                player.showTitle(new TextComponent(title),new TextComponent(""), 0, 40, 30);
+            }
+        } else {
+            ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage("{0}", new LocalizedChatMessage(ChatConstant.UI_MATCH_OVER)));
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                String title = new LocalizedChatMessage(ChatConstant.UI_MATCH_OVER).getMessage(player.getLocale());
+                player.showTitle(new TextComponent(title),new TextComponent(""), 0, 20, 20);		
             }
         }
-        ChatUtil.getGlobalChannel().sendMessage(ChatColor.DARK_PURPLE + "# # # # # # # # # # # #");
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

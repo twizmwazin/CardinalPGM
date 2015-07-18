@@ -172,6 +172,7 @@ public enum ChatConstant {
     UI_SECOND("userInterface.second"),
     UI_SECONDS("userInterface.seconds"),
     UI_MATCH_STARTED("userInterface.matchStarted"),
+    UI_MATCH_START_TITLE("userInterface.matchStartTitle"),
     UI_MATCH_START_CANCELLED("userInterface.matchStartCancelled"),
     UI_MATCH_OVER("userInterface.matchOver"),
     UI_MATCH_WIN("userInterface.matchWin"),

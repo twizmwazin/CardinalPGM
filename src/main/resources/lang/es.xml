@@ -168,6 +168,7 @@
         <second>{0} segundo</second>
         <seconds>{0} segundos</seconds>
         <matchStarted>¡La partida ha comenzado!</matchStarted>
+        <matchStartTitle>¡Ya!</matchStartTitle>
         <matchStartCancelled>Se ha cancelado el inicio de la partida</matchStartCancelled>
         <matchOver>¡Partida terminada!</matchOver>
         <matchWin>¡{0} gana!</matchWin>

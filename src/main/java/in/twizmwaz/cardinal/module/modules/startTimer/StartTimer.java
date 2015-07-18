@@ -13,6 +13,7 @@ import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.settings.Settings;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Teams;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -65,12 +66,19 @@ public class StartTimer implements TaskedModule, Cancellable {
                     if (Settings.getSettingByName("Sounds") != null && Settings.getSettingByName("Sounds").getValueByPlayer(player).getValue().equalsIgnoreCase("on")) {
                         player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1);
                     }
+                    if (!Teams.getTeamByPlayer(player).get().isObserver()) {
+                        player.showTitle(new TextComponent(ChatColor.YELLOW + "" + (time/20)), new TextComponent(""), 0, 10, 10);
+                    }
                 }
             }
             if (time == 0) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (Settings.getSettingByName("Sounds") != null && Settings.getSettingByName("Sounds").getValueByPlayer(player).getValue().equalsIgnoreCase("on")) {
                         player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 2);
+                    }
+                    if (!Teams.getTeamByPlayer(player).get().isObserver()) {
+                        String title = new LocalizedChatMessage(ChatConstant.UI_MATCH_START_TITLE).getMessage(player.getLocale());
+                        player.showTitle(new TextComponent(ChatColor.GREEN + title), new TextComponent(""), 0, 10, 10);
                     }
                 }
             }
