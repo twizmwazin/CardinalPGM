@@ -22,11 +22,18 @@ public class RankModule implements Module {
         HandlerList.unregisterAll(this);
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void onPlayerJoin(PlayerJoinEvent event) {
         for (Rank rank : Rank.getDefaultRanks()) {
             if (rank.isDefaultRank() && !rank.contains(event.getPlayer().getUniqueId())) {
                 rank.add(event.getPlayer().getUniqueId());
+            }
+        }
+        for (Rank rank : Rank.getRanks(event.getPlayer().getUniqueId())) {
+            for (String permission : rank.getPermissions()) {
+                if (!event.getPlayer().hasPermission(permission)) {
+                    GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).enablePermission(event.getPlayer(), permission);
+                }
             }
         }
     }
@@ -67,5 +74,6 @@ public class RankModule implements Module {
         player.setDisplayName(prefix + Teams.getTeamColorByPlayer(player) + player.getName());
         player.setPlayerListName(prefix + Teams.getTeamColorByPlayer(player) + player.getName());
     }
+
 }
 
