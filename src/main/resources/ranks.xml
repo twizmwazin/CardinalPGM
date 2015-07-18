@@ -1,5 +1,9 @@
 <ranks>
-    <rank name="Moderator" staff="true" flair="`c❖">
+    <rank name="Default" default="true">
+        <permission>cardinal.chat.team</permission>
+        <permission>cardinal.chat.global</permission>
+    </rank>
+    <rank name="Moderator" staff="true" flair="`c❖" parent="Default">
         <permission>cardinal.say</permission>
         <permission>cardinal.broadcast</permission>
         <permission>cardinal.mod</permission>

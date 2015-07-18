@@ -211,17 +211,50 @@ public class Cardinal extends JavaPlugin {
             for (Element rank : document.getRootElement().getChildren("rank")) {
                 String name = rank.getAttributeValue("name");
                 boolean defaultRank = rank.getAttributeValue("default") != null && Numbers.parseBoolean(rank.getAttributeValue("default"));
-                boolean staffRank = rank.getAttributeValue("staff") != null && Numbers.parseBoolean(rank.getAttributeValue("staff"));
+                boolean staffRank = false;
+                String parent = rank.getAttributeValue("parent");
+                if (parent != null) {
+                    for (Element element : document.getRootElement().getChildren("rank")) {
+                        String elementName = element.getAttributeValue("name");
+                        if (elementName.equalsIgnoreCase(parent) || elementName.toLowerCase().startsWith(parent.toLowerCase())) {
+                            staffRank = element.getAttributeValue("staff") != null && Numbers.parseBoolean(element.getAttributeValue("staff"));
+                        }
+                    }
+                    if (rank.getAttributeValue("staff") != null) {
+                        staffRank = Numbers.parseBoolean(rank.getAttributeValue("staff"));
+                    }
+                } else {
+                    staffRank = rank.getAttributeValue("staff") != null && Numbers.parseBoolean(rank.getAttributeValue("staff"));
+                }
                 String flair = rank.getAttributeValue("flair") != null ? ChatColor.translateAlternateColorCodes('`', rank.getAttributeValue("flair")) : "";
                 List<String> permissions = new ArrayList<>();
                 for (Element permission : rank.getChildren("permission")) {
                     permissions.add(permission.getText());
                 }
-                new Rank(name, defaultRank, staffRank, flair, permissions);
+                new Rank(name, defaultRank, staffRank, flair, permissions, parent);
             }
         } catch (JDOMException | IOException e) {
             e.printStackTrace();
             getLogger().warning("Could not parse file 'ranks.xml' for ranks.");
+        }
+
+        List<Rank> completed = new ArrayList<>();
+        for (Rank rank : Rank.getRanks()) {
+            if (rank.getParent() == null) {
+                completed.add(rank);
+            }
+        }
+        while (!completed.containsAll(Rank.getRanks())) {
+            Rank inheriting = null;
+            for (Rank rank : Rank.getRanks()) {
+                if (rank.getParent() != null && completed.contains(Rank.getRank(rank.getParent()))) {
+                    inheriting = rank;
+                }
+            }
+            for (String permission : Rank.getRank(inheriting.getParent()).getPermissions()) {
+                inheriting.addPermission(permission);
+            }
+            completed.add(inheriting);
         }
     }
 

@@ -14,12 +14,13 @@ import java.util.UUID;
 public class Rank {
 
     private static List<Rank> ranks = new ArrayList<>();
-    private String name, flair;
+    private String name, flair, parent;
     private boolean staffRank, defaultRank;
     private List<String> permissions;
 
-    public Rank(String name, boolean defaultRank, boolean staffRank, String flair, List<String> permissions) {
+    public Rank(String name, boolean defaultRank, boolean staffRank, String flair, List<String> permissions, String parent) {
         this.name = name;
+        this.parent = parent;
         this.defaultRank = defaultRank;
         this.staffRank = staffRank;
         this.flair = flair;
@@ -126,5 +127,13 @@ public class Rank {
 
     public List<String> getPermissions() {
         return permissions;
+    }
+
+    public String getParent() {
+        return parent;
+    }
+
+    public void addPermission(String permission) {
+        permissions.add(permission);
     }
 }
