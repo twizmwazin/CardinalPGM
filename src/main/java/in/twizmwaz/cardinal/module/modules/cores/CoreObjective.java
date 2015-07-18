@@ -300,7 +300,7 @@ public class CoreObjective implements GameObjective {
                         this.complete = true;
                         event.setCancelled(false);
                         if (this.show)
-                            ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_LEAKED, team.getCompleteName() + ChatColor.RED, ChatColor.DARK_AQUA + name + ChatColor.RED)));
+                            ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_LEAKED, team.getCompleteName() + ChatColor.RED, name)));
                         Fireworks.spawnFirework(event.getBlock().getLocation(), event.getBlock().getWorld(), MiscUtil.convertChatColorToColor(team.getColor()));
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, null);
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
