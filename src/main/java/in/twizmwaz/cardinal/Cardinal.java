@@ -57,6 +57,7 @@ import org.jdom2.JDOMException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Cardinal extends JavaPlugin {
@@ -194,6 +195,7 @@ public class Cardinal extends JavaPlugin {
                 new Setting(names, description, values);
             }
         }
+        new Setting(Arrays.asList("ChatChannel"), "Choose a default chat channel.", Arrays.asList(new SettingValue("global", false), new SettingValue("team", true), new SettingValue("admin", false)));
     }
 
     public void registerRanks() {

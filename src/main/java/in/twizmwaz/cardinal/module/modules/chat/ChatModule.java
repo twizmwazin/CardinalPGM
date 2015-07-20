@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
+import in.twizmwaz.cardinal.settings.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -22,10 +23,17 @@ public class ChatModule implements Module {
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         event.setCancelled(true);
-        if (event.getPlayer().hasMetadata("default-channel")) {
-            Bukkit.dispatchCommand(event.getPlayer(), String.valueOf(event.getPlayer().getMetadata("default-channel").get(0).asString().charAt(0)) + " " + event.getMessage());
-        } else {
-            Bukkit.dispatchCommand(event.getPlayer(), "t " + event.getMessage());
+        switch (Settings.getSettingByName("ChatChannel").getValueByPlayer(event.getPlayer()).getValue()) {
+            case "global":
+                Bukkit.dispatchCommand(event.getPlayer(), "g " + event.getMessage());
+                break;
+            case "admin":
+                Bukkit.dispatchCommand(event.getPlayer(), "a " + event.getMessage());
+                break;
+            case "team":
+            default:
+                Bukkit.dispatchCommand(event.getPlayer(), "t " + event.getMessage());
+                break;
         }
     }
 

@@ -7,19 +7,16 @@ import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
-import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannel;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.settings.Settings;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.LazyMetadataValue;
-
-import java.util.concurrent.Callable;
 
 public class ChatCommands {
 
@@ -29,8 +26,12 @@ public class ChatCommands {
         String locale = ChatUtil.getLocale(sender);
         if (sender instanceof Player) {
             if (cmd.argsLength() == 0) {
-                ((Player) sender).setMetadata("default-channel", new LazyMetadataValue(GameHandler.getGameHandler().getPlugin(), LazyMetadataValue.CacheStrategy.NEVER_CACHE, new Channel(ChatUtil.ChannelType.GLOBAL)));
-                sender.sendMessage(ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.UI_DEFAULT_CHANNEL_GLOBAL).getMessage(locale));
+                if (Settings.getSettingByName("ChatChannel").getValueByPlayer((Player) sender).getValue().equals("global")) {
+                    sender.sendMessage(ChatColor.RED + ChatConstant.ERROR_GLOBAL_ALREADY_DEAFULT.getMessage(ChatUtil.getLocale(sender)));
+                } else {
+                    Settings.getSettingByName("ChatChannel").setValueByPlayer((Player) sender, Settings.getSettingByName("ChatChannel").getSettingValueByName("global"));
+                    sender.sendMessage(ChatColor.YELLOW + ChatConstant.UI_DEFAULT_CHANNEL_GLOBAL.getMessage(ChatUtil.getLocale(sender)));
+                }
             }
             if (cmd.argsLength() > 0) {
                 if (GameHandler.getGameHandler().getGlobalMute() && !sender.hasPermission("cardinal.globalmute.override")) {
@@ -49,8 +50,12 @@ public class ChatCommands {
         String locale = ChatUtil.getLocale(sender);
         if (sender instanceof Player) {
             if (cmd.argsLength() == 0) {
-                ((Player) sender).setMetadata("default-channel", new LazyMetadataValue(GameHandler.getGameHandler().getPlugin(), LazyMetadataValue.CacheStrategy.NEVER_CACHE, new Channel(ChatUtil.ChannelType.ADMIN)));
-                sender.sendMessage(ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.UI_DEFAULT_CHANNEL_ADMIN).getMessage(locale));
+                if (Settings.getSettingByName("ChatChannel").getValueByPlayer((Player) sender).getValue().equals("admin")) {
+                    sender.sendMessage(ChatColor.RED + ChatConstant.ERROR_ADMIN_ALREADY_DEAFULT.getMessage(ChatUtil.getLocale(sender)));
+                } else {
+                    Settings.getSettingByName("ChatChannel").setValueByPlayer((Player) sender, Settings.getSettingByName("ChatChannel").getSettingValueByName("admin"));
+                    sender.sendMessage(ChatColor.YELLOW + ChatConstant.UI_DEFAULT_CHANNEL_ADMIN.getMessage(ChatUtil.getLocale(sender)));
+                }
             }
             if (cmd.argsLength() > 0) {
                 String message = assembleMessage(cmd);
@@ -67,8 +72,12 @@ public class ChatCommands {
         String locale = ChatUtil.getLocale(sender);
         if (sender instanceof Player) {
             if (cmd.argsLength() == 0) {
-                ((Player) sender).setMetadata("default-channel", new LazyMetadataValue(GameHandler.getGameHandler().getPlugin(), LazyMetadataValue.CacheStrategy.NEVER_CACHE, new Channel(ChatUtil.ChannelType.TEAM)));
-                sender.sendMessage(ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.UI_DEFAULT_CHANNEL_TEAM).getMessage(locale));
+                if (Settings.getSettingByName("ChatChannel").getValueByPlayer((Player) sender).getValue().equals("team")) {
+                    sender.sendMessage(ChatColor.RED + ChatConstant.ERROR_TEAM_ALREADY_DEAFULT.getMessage(ChatUtil.getLocale(sender)));
+                } else {
+                    Settings.getSettingByName("ChatChannel").setValueByPlayer((Player) sender, Settings.getSettingByName("ChatChannel").getSettingValueByName("team"));
+                    sender.sendMessage(ChatColor.YELLOW + ChatConstant.UI_DEFAULT_CHANNEL_TEAM.getMessage(ChatUtil.getLocale(sender)));
+                }
             }
             if (cmd.argsLength() > 0) {
                 if (GameHandler.getGameHandler().getGlobalMute() && !sender.hasPermission("cardinal.globalmute.override"))
@@ -93,20 +102,6 @@ public class ChatCommands {
 
     private static String assembleMessage(CommandContext context) {
         return context.getJoinedStrings(0);
-    }
-
-    public static class Channel implements Callable {
-
-        private final ChatUtil.ChannelType channel;
-
-        protected Channel(final ChatUtil.ChannelType channel) {
-            this.channel = channel;
-        }
-
-        @Override
-        public Object call() throws Exception {
-            return channel;
-        }
     }
 
 }

@@ -89,6 +89,9 @@ public enum ChatConstant {
     ERROR_TEAM_ABSENT("error.teamAbsent"),
     ERROR_ALREADY_HAS_RANK("error.alreadyHasRank"),
     ERROR_ALREADY_DOESNT_HAVE_RANK("error.alreadyDoesntHaveRank"),
+    ERROR_GLOBAL_ALREADY_DEAFULT("error.globalAlreadyDefault"),
+    ERROR_TEAM_ALREADY_DEAFULT("error.teamAlreadyDefault"),
+    ERROR_ADMIN_ALREADY_DEAFULT("error.adminAlreadyDefault"),
 
     GENERIC_MAP_SET("generic.mapSet"),
     GENERIC_MARKED_FOR_RELOADING("generic.markedForReloading"),

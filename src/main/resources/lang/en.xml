@@ -83,6 +83,9 @@
         <teamAbsent>You are not on a team</teamAbsent>
         <alreadyHasRank>{0} already has the {1} rank.</alreadyHasRank>
         <alreadyDoesntHaveRank>{0} already doesn't have the {1} rank.</alreadyDoesntHaveRank>
+        <globalAlreadyDefault>Global chat is already your default channel.</globalAlreadyDefault>
+        <teamAlreadyDefault>Team chat is already your default channel.</teamAlreadyDefault>
+        <adminAlreadyDefault>Administrator chat is already your default channel.</adminAlreadyDefault>
     </error>
     <generic>
         <mapSet>Next map set to {0}</mapSet>
