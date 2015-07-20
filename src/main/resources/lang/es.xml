@@ -37,6 +37,7 @@
         <noTeamMatch>No se ha encontrado ningún equipo con esos criterios.</noTeamMatch>
         <noRotMatch>No se ha encontrado ninguna rotación con esos criterios.</noRotMatch>
         <noPlayerMatch>Ningún jugador coincide con ese criterio.</noPlayerMatch>
+        <noRankMatch>Ningún rango coincide con esos criterios.</noRankMatch>
         <multiplePlayers>¡Más de un jugador encontrado! Utiliza {0} para una búsqueda más precisa.</multiplePlayers>
         <unknownError>Se ha producido un error desconocido. Por favor consulte la consola del servidor.</unknownError>
         <movedForBalance>Has sido movido a {0} para balancear el tamaño de los equipos</movedForBalance>
@@ -79,6 +80,12 @@
         <playableLeave>No puedes salir del terreno de juego</playableLeave>
         <playableInteract>No puedes interactuar con bloques de fuera del terreno de juego</playableInteract>
         <globalMuteEnabled>No puedes hablar en el chat mientras el silenciado global está habilitado.</globalMuteEnabled>
+        <teamAbsent>No estás un un equipo.</teamAbsent>
+        <alreadyHasRank>{0} ya tiene el rango de {1}.</alreadyHasRank>
+        <alreadyDoesntHaveRank>{0} ya no tiene el rango de {1}.</alreadyDoesntHaveRank>
+        <globalAlreadyDefault>El chat global ya es tu canal por defecto.</globalAlreadyDefault>
+        <teamAlreadyDefault>El chat de equipo ya es tu canal por defecto.</teamAlreadyDefault>
+        <adminAlreadyDefault>El chat de administrador ya es tu canal por defecto.</adminAlreadyDefault>
     </error>
     <generic>
         <mapSet>El siguiente mapa ha sido establecido a {0}</mapSet>
@@ -121,6 +128,13 @@
         <autoBalance>Los equipos serán automáticamente balanceados si {0} continúa stackeado</autoBalance>
         <youChangedRating>Has cambiado tu puntuación para {1} {2} de {3} a {0}.</youChangedRating>
         <teamSizeChanged>{0} máxima capacidad establecida a {1}</teamSizeChanged>
+        <rankRemoved>Le has quitado el rango de {1} a {0}.</rankRemoved>
+        <ownRankRemoved>{0} te ha quitado tu rango de {1}.</ownRankRemoved>
+        <rankGiven>Le has dado el rango de {1} a {0}.</rankGiven>
+        <ownRankGiven>{0} te ha dado el rango de {1}.</ownRankGiven>
+        <noRanks>No hay rangos.</noRanks>
+        <ranks>Rangos:</ranks>
+        <ranksMoreInfo>Usa /rank info &lt;rank&gt; para más información sobre un cierto rango.</ranksMoreInfo>
     </generic>
     <misc>
         <enemy>el enemigo</enemy>
@@ -131,6 +145,7 @@
         <and>y</and>
         <by>por</by>
         <team>Equipo</team>
+        <Match>la partida</Match>
     </misc>
     <userInterface>
         <mapLoaded>Mapas cargados</mapLoaded>
