@@ -10,8 +10,6 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannel;
-import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
-import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Teams;
@@ -25,7 +23,7 @@ import java.util.concurrent.Callable;
 
 public class ChatCommands {
 
-    @Command(aliases = {"g", "global", "shout"}, desc = "Talk in global chat.", usage = "<message>")
+    @Command(aliases = {"g", "global", "shout"}, desc = "Talk in global chat.", usage = "<message>", anyFlags = true)
     @CommandPermissions("cardinal.chat.global")
     public static void global(final CommandContext cmd, CommandSender sender) throws CommandException {
         String locale = ChatUtil.getLocale(sender);
@@ -45,7 +43,7 @@ public class ChatCommands {
         } else throw new CommandException("Console cannot use this command.");
     }
 
-    @Command(aliases = {"a", "admin"}, desc = "Talk in admin chat.", usage = "<message>")
+    @Command(aliases = {"a", "admin"}, desc = "Talk in admin chat.", usage = "<message>", anyFlags = true)
     @CommandPermissions("cardinal.chat.admin")
     public static void admin(final CommandContext cmd, CommandSender sender) throws CommandException {
         String locale = ChatUtil.getLocale(sender);
@@ -63,7 +61,7 @@ public class ChatCommands {
         } else throw new CommandException("Console cannot use this command.");
     }
 
-    @Command(aliases = {"t"}, desc = "Talk in team chat.", usage = "<message>")
+    @Command(aliases = {"t"}, desc = "Talk in team chat.", usage = "<message>", anyFlags = true)
     @CommandPermissions("cardinal.chat.team")
     public static void team(final CommandContext cmd, CommandSender sender) throws CommandException {
         String locale = ChatUtil.getLocale(sender);
