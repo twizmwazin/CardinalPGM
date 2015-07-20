@@ -12,6 +12,7 @@ import in.twizmwaz.cardinal.module.modules.cycleTimer.CycleTimerModule;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
 import in.twizmwaz.cardinal.util.ChatUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -33,7 +34,7 @@ public class CycleCommand {
         } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING))
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(ChatUtil.getLocale(sender)));
         if (cmd.argsLength() > 1) {
-            LoadedMap next = getMap(cmd.getJoinedStrings(1));
+            LoadedMap next = getMap(cmd.getJoinedStrings(1).replace("-f", ""));
             if (next == null) {
                 throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_MAP_MATCH).getMessage(ChatUtil.getLocale(sender)));
             } else {
