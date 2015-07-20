@@ -36,6 +36,13 @@ public class RankModule implements Module {
                 }
             }
         }
+        for (Rank rank : Rank.getRanks(event.getPlayer().getUniqueId())) {
+            for (String permission : rank.getDisabledPermissions()) {
+                if (event.getPlayer().hasPermission(permission)) {
+                    GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).disablePermission(event.getPlayer(), permission);
+                }
+            }
+        }
     }
 
     @EventHandler
