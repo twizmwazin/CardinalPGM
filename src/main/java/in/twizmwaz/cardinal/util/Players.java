@@ -38,7 +38,7 @@ public class Players {
 
     public static String getName(ServerOperator who, boolean flairs) {
         if (who instanceof OfflinePlayer) {
-            Player player = (Player) who;
+            OfflinePlayer player = (OfflinePlayer) who;
             if (player.isOnline()) {
                 if (flairs) {
                     return player.getPlayer().getDisplayName();
