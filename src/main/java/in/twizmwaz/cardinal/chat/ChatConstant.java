@@ -139,6 +139,8 @@ public enum ChatConstant {
     GENERIC_NO_RANKS("generic.noRanks"),
     GENERIC_RANKS("generic.ranks"),
     GENERIC_RANKS_MORE_INFO("generic.ranksMoreInfo"),
+    GENERIC_SELF_RANK_GIVEN("generic.selfRankGiven"),
+    GENERIC_SELF_RANK_REMOVED("generic.selfRankRemoved"),
 
     MISC_ENEMY("misc.enemy"),
     MISC_FATE("misc.fate"),
