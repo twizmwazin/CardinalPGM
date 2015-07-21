@@ -12,15 +12,15 @@ import in.twizmwaz.cardinal.rank.Rank;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Players;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class RankCommands {
 
     @Command(aliases = {"add"}, desc = "Give a player a rank.", min = 2, usage = "<player> <rank>")
     @CommandPermissions("ranks.add")
     public static void add(final CommandContext args, CommandSender sender) throws CommandException {
-        Player player = Bukkit.getPlayer(args.getString(0));
+        OfflinePlayer player = args.getString(0).startsWith("@") ? Bukkit.getOfflinePlayer(args.getString(0).substring(1)) : Bukkit.getPlayer(args.getString(0));
         if (player == null) {
             throw new CommandException(ChatConstant.ERROR_NO_PLAYER_MATCH.getMessage(ChatUtil.getLocale(sender)));
         }
@@ -36,14 +36,14 @@ public class RankCommands {
             sender.sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_SELF_RANK_GIVEN, rank.getName()).getMessage(ChatUtil.getLocale(sender)));
         } else {
             sender.sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_RANK_GIVEN, Players.getName(player) + ChatColor.GRAY, rank.getName()).getMessage(ChatUtil.getLocale(sender)));
-            player.sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_OWN_RANK_GIVEN, Players.getName(sender) + ChatColor.GRAY, rank.getName()).getMessage(ChatUtil.getLocale(player)));
+            if (player.isOnline()) player.getPlayer().sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_OWN_RANK_GIVEN, Players.getName(sender) + ChatColor.GRAY, rank.getName()).getMessage(ChatUtil.getLocale(player.getPlayer())));
         }
     }
 
     @Command(aliases = {"remove"}, desc = "Remove a player's rank.", min = 2, usage = "<player> <rank>")
     @CommandPermissions("ranks.remove")
     public static void remove(final CommandContext args, CommandSender sender) throws CommandException {
-        Player player = Bukkit.getPlayer(args.getString(0));
+        OfflinePlayer player = args.getString(0).startsWith("@") ? Bukkit.getOfflinePlayer(args.getString(0).substring(1)) : Bukkit.getPlayer(args.getString(0));
         if (player == null) {
             throw new CommandException(ChatConstant.ERROR_NO_PLAYER_MATCH.getMessage(ChatUtil.getLocale(sender)));
         }
@@ -59,7 +59,7 @@ public class RankCommands {
             sender.sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_SELF_RANK_REMOVED, rank.getName()).getMessage(ChatUtil.getLocale(sender)));
         } else {
             sender.sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_RANK_REMOVED, Players.getName(player) + ChatColor.GRAY, rank.getName()).getMessage(ChatUtil.getLocale(sender)));
-            player.sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_OWN_RANK_REMOVED, Players.getName(sender) + ChatColor.GRAY, rank.getName()).getMessage(ChatUtil.getLocale(player)));
+            if (player.isOnline()) player.getPlayer().sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_OWN_RANK_REMOVED, Players.getName(sender) + ChatColor.GRAY, rank.getName()).getMessage(ChatUtil.getLocale(player.getPlayer())));
         }
     }
 
