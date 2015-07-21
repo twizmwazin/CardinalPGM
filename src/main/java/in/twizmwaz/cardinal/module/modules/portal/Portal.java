@@ -88,7 +88,7 @@ public class Portal implements Module {
         }
         if (destination != null && destination.contains(event.getTo().toVector()) && !destination.contains(event.getFrom().toVector()) && this.bidirectional) {
             Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
-            if (filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW) || (team.isPresent() && !team.get().isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
+            if (filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW) || (team.isPresent() && team.get().isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
                 event.getPlayer().teleport(region.getRandomPoint().getLocation());
                 if (sound)
                     event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2F, 1);
