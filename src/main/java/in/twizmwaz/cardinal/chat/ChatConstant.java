@@ -92,6 +92,7 @@ public enum ChatConstant {
     ERROR_GLOBAL_ALREADY_DEAFULT("error.globalAlreadyDefault"),
     ERROR_TEAM_ALREADY_DEAFULT("error.teamAlreadyDefault"),
     ERROR_ADMIN_ALREADY_DEAFULT("error.adminAlreadyDefault"),
+    ERROR_CONSOLE_NO_USE("error.consoleNoUse"),
 
     GENERIC_MAP_SET("generic.mapSet"),
     GENERIC_MARKED_FOR_RELOADING("generic.markedForReloading"),

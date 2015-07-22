@@ -86,6 +86,7 @@
         <globalAlreadyDefault>Global chat is already your default channel.</globalAlreadyDefault>
         <teamAlreadyDefault>Team chat is already your default channel.</teamAlreadyDefault>
         <adminAlreadyDefault>Administrator chat is already your default channel.</adminAlreadyDefault>
+        <consoleNoUse>Console cannot use this command.</consoleNoUse>
     </error>
     <generic>
         <mapSet>Next map set to {0}</mapSet>
