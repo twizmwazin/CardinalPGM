@@ -60,26 +60,11 @@ public class Portal implements Module {
                         event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2F, 1);
                 } else {
                     Location newLocation = event.getTo();
-                    if (xRelative)
-                        newLocation.setX(newLocation.getX() + location.getX());
-                    else
-                        newLocation.setX(location.getX());
-                    if (yRelative)
-                        newLocation.setY(newLocation.getY() + location.getY());
-                    else
-                        newLocation.setY(location.getY());
-                    if (zRelative)
-                        newLocation.setZ(newLocation.getZ() + location.getZ());
-                    else
-                        newLocation.setZ(location.getZ());
-                    if (yawRelative)
-                        newLocation.setYaw(newLocation.getYaw() + yaw);
-                    else
-                        newLocation.setYaw(yaw);
-                    if (pitchRelative)
-                        newLocation.setPitch(newLocation.getPitch() + pitch);
-                    else
-                        newLocation.setPitch(pitch);
+                    newLocation.setX(location.getX() + (xRelative ? newLocation.getX() : 0));
+                    newLocation.setY(location.getY() + (yRelative ? newLocation.getY() : 0));
+                    newLocation.setZ(location.getZ() + (zRelative ? newLocation.getZ() : 0));
+                    newLocation.setYaw(yaw + (yawRelative ? newLocation.getYaw() : 0));
+                    newLocation.setPitch(pitch + (pitchRelative ? newLocation.getPitch() : 0));
                     event.getPlayer().teleport(newLocation);
                     if (sound)
                         event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2F, 1);
