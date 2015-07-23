@@ -41,19 +41,19 @@ public class StartAndEndCommand {
     @Command(aliases = {"end", "finish"}, desc = "Ends the match.", usage = "[team]", flags = "n")
     @CommandPermissions("cardinal.match.end")
     public static void end(CommandContext cmd, CommandSender sender) throws CommandException {
-        if (GameHandler.getGameHandler().getMatch().getState() == MatchState.PLAYING) {
-            if (cmd.argsLength() > 0) {
-                Optional<TeamModule> team = Teams.getTeamByName(cmd.getString(0));
-                GameHandler.getGameHandler().getMatch().end(team.orNull());
+        if (!GameHandler.getGameHandler().getMatch().isRunning()) {
+            throw new CommandException(ChatConstant.ERROR_NO_END.getMessage(ChatUtil.getLocale(sender)));
+        }
+        if (cmd.argsLength() > 0) {
+            Optional<TeamModule> team = Teams.getTeamByName(cmd.getString(0));
+            GameHandler.getGameHandler().getMatch().end(team.orNull());
+        } else {
+            if (cmd.hasFlag('n')) {
+                GameHandler.getGameHandler().getMatch().end();
             } else {
-                if (cmd.hasFlag('n')) {
-                    GameHandler.getGameHandler().getMatch().end();
-                } else {
-                    GameHandler.getGameHandler().getMatch().end(TimeLimit.getMatchWinner());
-                }
+                GameHandler.getGameHandler().getMatch().end(TimeLimit.getMatchWinner());
             }
-        } else
-            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_END).getMessage(ChatUtil.getLocale(sender)));
+        }
     }
 
 }

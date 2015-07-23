@@ -23,8 +23,9 @@ public class RotationCommands {
         int index = cmd.argsLength() == 0 ? 1 : cmd.getInteger(0);
         List<LoadedMap> rot = GameHandler.getGameHandler().getRotation().getRotation();
         int pages = (int) Math.ceil((rot.size() + 7) / 8);
-        if (index > pages)
+        if (index > pages) {
             throw new CommandException("Invalid page number specified! Maximum page number is " + pages + ".");
+        }
         sender.sendMessage(ChatColor.RED + "------------- " + ChatColor.WHITE + new LocalizedChatMessage(ChatConstant.UI_ROTATION_CURRENT).getMessage(ChatUtil.getLocale(sender)) + ChatColor.DARK_AQUA + " (" + ChatColor.AQUA + index + ChatColor.DARK_AQUA + " of " + ChatColor.AQUA + pages + ChatColor.DARK_AQUA + ") " + ChatColor.RED + "-------------");
         String[] maps = {"", "", "", "", "", "", "", ""};
         for (int i = 0; i <= maps.length - 1; i++) {
@@ -51,7 +52,7 @@ public class RotationCommands {
                     maps[i] = ChatColor.WHITE + "" + (position + 1) + ". " + maps[i];
                 }
 
-            } catch (IndexOutOfBoundsException e) {
+            } catch (IndexOutOfBoundsException ignored) {
             }
         }
         for (String map : maps) {

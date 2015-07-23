@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.GameObjective;
@@ -82,7 +83,7 @@ public class MatchCommand {
                 double timeRemaining;
                 if (TimeLimit.getMatchTimeLimit() != 0) {
                     timeRemaining = TimeLimit.getMatchTimeLimit() - MatchTimer.getTimeInSeconds();
-                    sender.sendMessage(ChatColor.DARK_AQUA + "Score: " + score + (TimeLimit.getMatchTimeLimit() != 0 ? ChatColor.RED + "  " + Strings.formatTime(timeRemaining) : "") + (ScoreModule.matchHasMax() ? ChatColor.GRAY + "  [" + ScoreModule.max() + "]" : ""));
+                    sender.sendMessage(new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "{0}: " + score + (TimeLimit.getMatchTimeLimit() != 0 ? ChatColor.RED + "  " + Strings.formatTime(timeRemaining) : "") + (ScoreModule.matchHasMax() ? ChatColor.GRAY + "  [" + ScoreModule.max() + "]" : ""), ChatConstant.MISC_SCORE.asMessage()).getMessage(ChatUtil.getLocale(sender)));
                 }
             }
         }

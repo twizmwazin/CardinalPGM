@@ -4,9 +4,14 @@ import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import in.twizmwaz.cardinal.Cardinal;
-import in.twizmwaz.cardinal.util.Teams;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
+import in.twizmwaz.cardinal.util.ChatUtil;
+import in.twizmwaz.cardinal.util.Players;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
 public class SnowflakesCommand {
@@ -16,8 +21,12 @@ public class SnowflakesCommand {
         if (cmd.argsLength() == 0) {
             Bukkit.dispatchCommand(sender, "snowflakes " + sender.getName());
         } else {
-            String name = Bukkit.getOfflinePlayer(cmd.getString(0)).getName();
-            sender.sendMessage(ChatColor.DARK_PURPLE + (sender.getName().equals(name) ? "You have " : Teams.getTeamColorByPlayer(Bukkit.getOfflinePlayer(name)) + name + ChatColor.DARK_PURPLE + " has ") + ChatColor.GOLD + (Cardinal.getCardinalDatabase().get(Bukkit.getOfflinePlayer(cmd.getString(0)), "snowflakes").equals("") ? "0" : Cardinal.getCardinalDatabase().get(Bukkit.getOfflinePlayer(cmd.getString(0)), "snowflakes")) + " snowflake" + (Cardinal.getCardinalDatabase().get(Bukkit.getOfflinePlayer(cmd.getString(0)), "snowflakes").equals("1") ? "" : "s"));
+            OfflinePlayer player = Bukkit.getOfflinePlayer(cmd.getString(0));
+            if (sender.equals(player)) {
+                sender.sendMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "{0} " + ChatColor.GOLD + "{1} {2}", ChatConstant.MISC_YOU_HAVE.asMessage(), new UnlocalizedChatMessage("{0}", Cardinal.getCardinalDatabase().get(player, "snowflakes")), Cardinal.getCardinalDatabase().get(player, "snowflakes").equals("1") ? ChatConstant.SNOWFLAKES_SNOWFLAKE.asMessage() : ChatConstant.SNOWFLAKES_SNOWFLAKES.asMessage()).getMessage(ChatUtil.getLocale(sender)));
+            } else {
+                sender.sendMessage(new UnlocalizedChatMessage(ChatColor.DARK_PURPLE + "{0} " + ChatColor.GOLD + "{1} {2}", new LocalizedChatMessage(ChatConstant.MISC_HAS, Players.getName(player) + ChatColor.DARK_PURPLE), new UnlocalizedChatMessage("{0}", Cardinal.getCardinalDatabase().get(player, "snowflakes")), Cardinal.getCardinalDatabase().get(player, "snowflakes").equals("1") ? ChatConstant.SNOWFLAKES_SNOWFLAKE.asMessage() : ChatConstant.SNOWFLAKES_SNOWFLAKES.asMessage()).getMessage(ChatUtil.getLocale(sender)));
+            }
         }
     }
 
