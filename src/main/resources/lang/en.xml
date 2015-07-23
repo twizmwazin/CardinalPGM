@@ -38,6 +38,9 @@
         <noRotMatch>No rotations matched query.</noRotMatch>
         <noPlayerMatch>No players matched query.</noPlayerMatch>
         <noRankMatch>No ranks matched query.</noRankMatch>
+        <noSettingMatch>No settings matched query.</noSettingMatch>
+        <noValueMatch>No values matched query.</noValueMatch>
+        <noResultMatch>No results matched query.</noResultMatch>
         <multiplePlayers>More than one player found! Use {0} for exact matching.</multiplePlayers>
         <unknownError>An unknown error has occurred. Please refer to the server console.</unknownError>
         <movedForBalance>You were moved to {0} to balance team sizes</movedForBalance>
@@ -61,6 +64,7 @@
         <defuseTntEnemy>You may not defuse enemy TNT.</defuseTntEnemy>
         <noPermission>You do not have permission.</noPermission>
         <numberString>Number expected, string received instead.</numberString>
+        <timeFormatString>Time format expected, string received instead.</timeFormatString>
         <errorRejoin>Uh oh! We had an error. Please try rejoining.</errorRejoin>
         <serverFull>Server is full</serverFull>
         <teamsFull>Teams are full</teamsFull>
@@ -87,6 +91,14 @@
         <teamAlreadyDefault>Team chat is already your default channel.</teamAlreadyDefault>
         <adminAlreadyDefault>Administrator chat is already your default channel.</adminAlreadyDefault>
         <consoleNoUse>Console cannot use this command.</consoleNoUse>
+        <readyBeforeMatch>You must ready before the match starts.</readyBeforeMatch>
+        <unreadyBeforeMatch>You must unready before the match starts.</unreadyBeforeMatch>
+        <teamAlreadyReady>Your team is already ready.</teamAlreadyReady>
+        <teamAlreadyNotReady>Your team is already not ready.</teamAlreadyNotReady>
+        <invalidPageNumber>Invalid page number specified! {0} total pages.</invalidPageNumber>
+        <invalidArguments>Invalid arguments.</invalidArguments>
+        <tooFewArguments>Too few arguments.</tooFewArguments>
+        <cannotCalculateScores>Team scores cannot be calculated.</cannotCalculateScores>
     </error>
     <generic>
         <mapSet>Next map set to {0}</mapSet>
@@ -138,6 +150,44 @@
         <noRanks>There are no ranks.</noRanks>
         <ranks>Ranks:</ranks>
         <ranksMoreInfo>Use /rank info &lt;rank&gt; for more info about a certain rank.</ranksMoreInfo>
+        <teamNowReady>{0} is now ready</teamNowReady>
+        <teamNoLongerReady>{0} is no longer ready</teamNoLongerReady>
+        <unreadyCancelCountdown>Match start countdown cancelled because {0} is no longer ready.</unreadyCancelCountdown>
+        <teleported>Teleported.</teleported>
+        <timeLimitCancelled>Time limit cancelled</timeLimitCancelled>
+        <noTimeLimit>There is no time limit.</noTimeLimit>
+        <timeLimitWithResult>The time limit is {0} with the result {1}</timeLimitWithResult>
+        <whitelistReloaded>The whitelist has been reloaded.</whitelistReloaded>
+        <whitelistEnabled>Whitelist enabled</whitelistEnabled>
+        <whitelistDisabled>Whitelist disabled</whitelistDisabled>
+        <playerAddWhitelist>{0} has been added to the whitelist.</playerAddWhitelist>
+        <playerRemoveWhitelist>{0} has been removed from the whitelist.</playerRemoveWhitelist>
+        <addedPlayersWhitelist>Added {0} player(s) to the whitelist.</addedPlayersWhitelist>
+        <removedPlayersWhitelist>Removed {0} player(s) from the whitelist.</removedPlayersWhitelist>
+        <kickedNotWhitelisted>All players who are not on the whitelist were kicked.</kickedNotWhitelisted>
+        <noWhitelistedPlayers>There are currently no whitelisted players.</noWhitelistedPlayers>
+        <whitelistedPlayers>Whitelisted Players:</whitelistedPlayers>
+        <playerOnline>There is currently {0} player online.</playerOnline>
+        <playersOnline>There are currently {0} players online.</playersOnline>
+        <whitelistedPlayerOnline>There is currently {0} whitelisted player online.</whitelistedPlayerOnline>
+        <whitelistedPlayersOnline>There are currently {0} whitelisted players online.</whitelistedPlayersOnline>
+        <whitelistedPlayerOutOfOnline>Of the online players, {0} player is whitelisted.</whitelistedPlayerOutOfOnline>
+        <whitelistedPlayersOutOfOnline>Of the online players, {0} players are whitelisted.</whitelistedPlayersOutOfOnline>
+        <monumentModes>Monument Modes</monumentModes>
+        <nextMode>Next mode: {0} ({1} left)</nextMode>
+        <modesPushedForwards>All modes have been pushed forwards by {0}</modesPushedForwards>
+        <modesPushedBackwards>All modes have been pushed backwards by {0}</modesPushedBackwards>
+        <calculatingScoresFor>Calculating scores for {0}</calculatingScoresFor>
+        <teamsAreTied>Teams are tied</teamsAreTied>
+        <teamsAreTiedWithPoints>Teams are tied with {0} points</teamsAreTiedWithPoints>
+        <teamsAreTiedWithPlayers>Teams are tied with {0} players</teamsAreTiedWithPlayers>
+        <teamIsWinning>{0} is winning</teamIsWinning>
+        <teamIsWinningWithPoints>{0} is winning with {1} points</teamIsWinningWithPoints>
+        <teamIsWinningWithPlayers>{0} is winning with {1} players</teamIsWinningWithPlayers>
+        <teamIsWinningWithObjectives>{0} is winning with {1} completed and {2} touched objectives</teamIsWinningWithObjectives>
+        <objectiveIsUntouched>{0} is untouched!</objectiveIsUntouched>
+        <objectiveWasTouched>{0} was touched!</objectiveWasTouched>
+        <objectiveWasCompleted>{0} was completed!</objectiveWasCompleted>
     </generic>
     <misc>
         <enemy>the enemy</enemy>
@@ -149,6 +199,11 @@
         <by>by</by>
         <team>Team</team>
         <match>the match</match>
+        <youHave>You have</youHave>
+        <has>{0} has</has>
+        <online>Online</online>
+        <offline>Offline</offline>
+        <score>Score</score>
     </misc>
     <userInterface>
         <mapLoaded>Loaded Maps</mapLoaded>
@@ -280,4 +335,8 @@
         <wither>{0} withered away</wither>
         <unknown>{0} died from unknown causes</unknown>
     </deathMsg>
+    <snowflakes>
+        <snowflake>snowflake</snowflake>
+        <snowflakes>snowflakes</snowflakes>
+    </snowflakes>
 </locale>

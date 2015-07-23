@@ -18,41 +18,42 @@ public class ClassCommands {
 
     @Command(aliases = {"classes", "classlist"}, desc = "Lists the classes available in a map.", max = 1)
     public static void classes(final CommandContext cmd, CommandSender sender) throws CommandException {
-        if (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null) {
-            sender.sendMessage(ChatColor.RED + "------------------------ " + ChatColor.GOLD + "Classes" + ChatColor.RED + " ------------------------");
-            int count = 1;
-            for (ClassModule classModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class)) {
-                sender.sendMessage(count + ". " + (sender instanceof Player && ClassModule.getClassByPlayer((Player) sender) != null && ClassModule.getClassByPlayer((Player) sender).equals(classModule) ? ChatColor.GOLD + "" + ChatColor.UNDERLINE : ChatColor.GREEN + "") + classModule.getName() + ChatColor.DARK_PURPLE + " - " + ChatColor.RESET + classModule.getDescription());
-            }
-        } else
-            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CLASSES_DISABLED).getMessage(ChatUtil.getLocale(sender)));
+        if (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) == null) {
+            throw new CommandException(ChatConstant.ERROR_CLASSES_DISABLED.getMessage(ChatUtil.getLocale(sender)));
+        }
+        sender.sendMessage(ChatColor.RED + "------------------------ " + ChatColor.GOLD + "Classes" + ChatColor.RED + " ------------------------");
+        int count = 1;
+        for (ClassModule classModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class)) {
+            sender.sendMessage(count + ". " + (sender instanceof Player && ClassModule.getClassByPlayer((Player) sender) != null && ClassModule.getClassByPlayer((Player) sender).equals(classModule) ? ChatColor.GOLD + "" + ChatColor.UNDERLINE : ChatColor.GREEN + "") + classModule.getName() + ChatColor.DARK_PURPLE + " - " + ChatColor.RESET + classModule.getDescription());
+        }
     }
 
     @Command(aliases = {"class"}, desc = "Allows you to change your class.")
     public static void classCommand(final CommandContext cmd, CommandSender sender) throws CommandException {
-        if (sender instanceof Player) {
-            if (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null) {
-                if (cmd.argsLength() == 0) {
-                    if (ClassModule.getClassByPlayer((Player) sender) != null) {
-                        sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.GENERIC_CLASS_CURRENT).getMessage(((Player) sender).getLocale()) + " " + ChatColor.GOLD + "" + ChatColor.UNDERLINE + ClassModule.getClassByPlayer((Player) sender).getName());
-                        String classMessage = new LocalizedChatMessage(ChatConstant.GENERIC_CLASS_LIST).getMessage(((Player) sender).getLocale());
-                        String newClassMessage = "";
-                        for (int i = 0; i < classMessage.split("'").length; i++) {
-                            newClassMessage += (i == 1 ? ChatColor.GOLD : ChatColor.DARK_PURPLE) + (i > 0 ? "'" : "") + classMessage.split("'")[i];
-                        }
-                        sender.sendMessage(newClassMessage);
-                    }
-                } else {
-                    String input = cmd.getJoinedStrings(0);
-                    if (ClassModule.getClassByName(input) != null) {
-                        ClassModule.playerClass.put(((Player) sender).getUniqueId(), ClassModule.getClassByName(input));
-                        ClassChangeEvent changeEvent = new ClassChangeEvent((Player) sender, ClassModule.getClassByName(input));
-                        Bukkit.getServer().getPluginManager().callEvent(changeEvent);
-                    } else
-                        throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_CLASS).getMessage(((Player) sender).getLocale()));
+        if (!(sender instanceof Player)) {
+            throw new CommandException(ChatConstant.ERROR_CONSOLE_NO_USE.getMessage(ChatUtil.getLocale(sender)));
+        }
+        if (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) == null) {
+            throw new CommandException(ChatConstant.ERROR_CLASSES_DISABLED.getMessage(ChatUtil.getLocale(sender)));
+        }
+        if (cmd.argsLength() == 0) {
+            if (ClassModule.getClassByPlayer((Player) sender) != null) {
+                sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.GENERIC_CLASS_CURRENT).getMessage(ChatUtil.getLocale(sender)) + " " + ChatColor.GOLD + "" + ChatColor.UNDERLINE + ClassModule.getClassByPlayer((Player) sender).getName());
+                String classMessage = new LocalizedChatMessage(ChatConstant.GENERIC_CLASS_LIST).getMessage(((Player) sender).getLocale());
+                String newClassMessage = "";
+                for (int i = 0; i < classMessage.split("'").length; i++) {
+                    newClassMessage += (i == 1 ? ChatColor.GOLD : ChatColor.DARK_PURPLE) + (i > 0 ? "'" : "") + classMessage.split("'")[i];
                 }
-            } else
-                throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CLASSES_DISABLED).getMessage(((Player) sender).getLocale()));
-        } else throw new CommandException("Console cannot use this command.");
+                sender.sendMessage(newClassMessage);
+            }
+        } else {
+            String input = cmd.getJoinedStrings(0);
+            if (ClassModule.getClassByName(input) == null) {
+                throw new CommandException(ChatConstant.ERROR_NO_CLASS.getMessage(ChatUtil.getLocale(sender)));
+            }
+            ClassModule.playerClass.put(((Player) sender).getUniqueId(), ClassModule.getClassByName(input));
+            ClassChangeEvent changeEvent = new ClassChangeEvent((Player) sender, ClassModule.getClassByName(input));
+            Bukkit.getServer().getPluginManager().callEvent(changeEvent);
+        }
     }
 }

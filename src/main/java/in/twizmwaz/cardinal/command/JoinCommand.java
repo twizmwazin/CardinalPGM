@@ -20,38 +20,37 @@ public class JoinCommand {
 
     @Command(aliases = {"join", "play"}, desc = "Join a team.", usage = "[team]")
     public static void join(final CommandContext cmd, CommandSender sender) throws CommandException {
-        if (sender instanceof Player) {
-            if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) || GameHandler.getGameHandler().getMatch().getState().equals(MatchState.CYCLING)) {
-                ChatUtil.sendWarningMessage((Player) sender, ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_MATCH_OVER).getMessage(((Player) sender).getLocale()));
-                return;
-            }
-            Optional<TeamModule> originalTeam = Teams.getTeamByPlayer((Player) sender);
-            if (cmd.argsLength() == 0 && originalTeam.isPresent() && !originalTeam.get().isObserver()) {
-                throw new CommandException(ChatUtil.getWarningMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_JOINED, Teams.getTeamByPlayer((Player) sender).get().getCompleteName() + ChatColor.RED).getMessage(((Player) sender).getLocale())));
-            }
-            Optional<TeamModule> destinationTeam = Optional.absent();
-            if (cmd.argsLength() > 0) {
-                for (TeamModule teamModule : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
-                    if (teamModule.getName().toLowerCase().startsWith(cmd.getJoinedStrings(0).toLowerCase())) {
-                        destinationTeam = Optional.of(teamModule);
-                        break;
-                    }
-                }
-                if (destinationTeam.isPresent()) {
-                    if (!destinationTeam.get().contains(sender)) {
-                        destinationTeam.get().add((Player) sender, false);
-                    } else {
-                        throw new CommandException(ChatUtil.getWarningMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_JOINED, destinationTeam.get().getCompleteName() + ChatColor.RED).getMessage(((Player) sender).getLocale())));
-                    }
-                } else
-                    throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAM_MATCH).getMessage(((Player) sender).getLocale()));
-            } else {
-                destinationTeam = Teams.getTeamWithFewestPlayers(GameHandler.getGameHandler().getMatch());
-                if (destinationTeam.isPresent()) {
-                    destinationTeam.get().add((Player) sender, false);
+        if (!(sender instanceof Player)) {
+            throw new CommandException(ChatConstant.ERROR_CONSOLE_NO_USE.getMessage(ChatUtil.getLocale(sender)));
+        }
+        if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) || GameHandler.getGameHandler().getMatch().getState().equals(MatchState.CYCLING)) {
+            throw new CommandException(ChatUtil.getWarningMessage(new LocalizedChatMessage(ChatConstant.ERROR_MATCH_OVER).getMessage(((Player) sender).getLocale())));
+        }
+        Optional<TeamModule> originalTeam = Teams.getTeamByPlayer((Player) sender);
+        if (cmd.argsLength() == 0 && originalTeam.isPresent() && !originalTeam.get().isObserver()) {
+            throw new CommandException(ChatUtil.getWarningMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_JOINED, Teams.getTeamByPlayer((Player) sender).get().getCompleteName() + ChatColor.RED).getMessage(((Player) sender).getLocale())));
+        }
+        Optional<TeamModule> destinationTeam = Optional.absent();
+        if (cmd.argsLength() > 0) {
+            for (TeamModule teamModule : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
+                if (teamModule.getName().toLowerCase().startsWith(cmd.getJoinedStrings(0).toLowerCase())) {
+                    destinationTeam = Optional.of(teamModule);
+                    break;
                 }
             }
-        } else throw new CommandException("Console cannot use this command.");
+            if (!destinationTeam.isPresent()) {
+                throw new CommandException(ChatConstant.ERROR_NO_TEAM_MATCH.getMessage(ChatUtil.getLocale(sender)));
+            }
+            if (destinationTeam.get().contains(sender)) {
+                throw new CommandException(ChatUtil.getWarningMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_JOINED, destinationTeam.get().getCompleteName() + ChatColor.RED).getMessage(ChatUtil.getLocale(sender))));
+            }
+            destinationTeam.get().add((Player) sender, false);
+        } else {
+            destinationTeam = Teams.getTeamWithFewestPlayers(GameHandler.getGameHandler().getMatch());
+            if (destinationTeam.isPresent()) {
+                destinationTeam.get().add((Player) sender, false);
+            }
+        }
     }
 
     @Command(aliases = {"leave"}, desc = "Leave the game.")

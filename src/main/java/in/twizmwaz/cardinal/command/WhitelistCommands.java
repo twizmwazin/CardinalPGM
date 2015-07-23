@@ -8,8 +8,10 @@ import com.sk89q.minecraft.util.commands.CommandPermissions;
 import com.sk89q.minecraft.util.commands.NestedCommand;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ChatUtil;
+import in.twizmwaz.cardinal.util.Players;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -34,61 +36,36 @@ import java.util.Set;
  *         Modified for use with CardinalPGM
  */
 public class WhitelistCommands {
-    @Command(
-            aliases = {"reload", "rl"},
-            desc = "Reload the whitelist from a file.",
-            min = 0,
-            max = 0
-    )
-    @CommandPermissions("whitelist.reload")
+    @Command(aliases = {"reload", "rl"}, desc = "Reload the whitelist from a file.", min = 0, max = 0)
+    @CommandPermissions("cardinal.whitelist.reload")
     public static void reload(final CommandContext args, final CommandSender sender) throws CommandException {
         Bukkit.getServer().reloadWhitelist();
-        sender.sendMessage(ChatColor.GREEN + "The whitelist has been reloaded.");
+        sender.sendMessage(ChatColor.GREEN + ChatConstant.GENERIC_WHITELIST_RELOADED.getMessage(ChatUtil.getLocale(sender)));
     }
 
-    @Command(
-            aliases = {"toggle", "t"},
-            desc = "Toggle the whitelist.",
-            min = 0,
-            max = 0
-    )
-    @CommandPermissions("whitelist.toggle")
+    @Command(aliases = {"toggle", "t"}, desc = "Toggle the whitelist.", min = 0, max = 0)
+    @CommandPermissions("cardinal.whitelist.toggle")
     public static void toggle(final CommandContext args, final CommandSender sender) throws CommandException {
         Bukkit.getServer().setWhitelist(!Bukkit.getServer().hasWhitelist());
-        sender.sendMessage(ChatColor.WHITE + "Whitelist: " + (Bukkit.getServer().hasWhitelist() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"));
+        sender.sendMessage(Bukkit.getServer().hasWhitelist() ? ChatColor.GREEN + ChatConstant.GENERIC_WHITELIST_ENABLED.getMessage(ChatUtil.getLocale(sender)) : ChatColor.RED + ChatConstant.GENERIC_WHITELIST_DISABLED.getMessage(ChatUtil.getLocale(sender)));
     }
 
-    @Command(
-            aliases = {"on"},
-            desc = "Turn the whitelist on.",
-            min = 0,
-            max = 0
-    )
-    @CommandPermissions("whitelist.on")
+    @Command(aliases = {"on"}, desc = "Turn the whitelist on.", min = 0, max = 0)
+    @CommandPermissions("cardinal.whitelist.on")
     public static void on(final CommandContext args, final CommandSender sender) throws CommandException {
         Bukkit.getServer().setWhitelist(true);
-        sender.sendMessage(ChatColor.WHITE + "Whitelist " + ChatColor.GREEN + "Enabled");
+        sender.sendMessage(ChatColor.GREEN + ChatConstant.GENERIC_WHITELIST_ENABLED.getMessage(ChatUtil.getLocale(sender)));
     }
 
-    @Command(
-            aliases = {"off"},
-            desc = "Turn the whitelist off.",
-            min = 0,
-            max = 0
-    )
-    @CommandPermissions("whitelist.off")
+    @Command(aliases = {"off"}, desc = "Turn the whitelist off.", min = 0, max = 0)
+    @CommandPermissions("cardinal.whitelist.off")
     public static void off(final CommandContext args, final CommandSender sender) throws CommandException {
         Bukkit.getServer().setWhitelist(false);
-        sender.sendMessage(ChatColor.WHITE + "Whitelist " + ChatColor.RED + "Disabled");
+        sender.sendMessage(ChatColor.RED + ChatConstant.GENERIC_WHITELIST_DISABLED.getMessage(ChatUtil.getLocale(sender)));
     }
 
-    @Command(
-            aliases = {"status", "s"},
-            desc = "Get the status of whitelist.",
-            min = 0,
-            max = 0
-    )
-    @CommandPermissions("whitelist.status")
+    @Command(aliases = {"status", "s"}, desc = "Get the status of whitelist.", min = 0, max = 0)
+    @CommandPermissions("cardinal.whitelist.status")
     public static void status(final CommandContext args, final CommandSender sender) throws CommandException {
         Set<OfflinePlayer> whitelisted = Bukkit.getServer().getWhitelistedPlayers();
 
@@ -96,126 +73,86 @@ public class WhitelistCommands {
         int onlinePlayers = Bukkit.getOnlinePlayers().size();
         int onlineWhitelistedPlayers = 0;
 
-
-        for (OfflinePlayer player : Bukkit.getOnlinePlayers()) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
             if (whitelisted.contains(player)) {
                 onlineWhitelistedPlayers++;
             }
         }
 
-        sender.sendMessage(ChatColor.GOLD + "Whitelist: " + (Bukkit.getServer().hasWhitelist() ? ChatColor.GREEN + "On" : ChatColor.RED + "Off"));
-        sender.sendMessage(ChatColor.GREEN + "There " + (onlinePlayers == 1 ? "is" : "are") + " currently " + ChatColor.RED + String.valueOf(onlinePlayers) + ChatColor.GREEN + " player" + (onlinePlayers == 1 ? "" : "s") + " online.");
-        sender.sendMessage(ChatColor.GREEN + "There " + (whitelistedPlayers == 1 ? "is" : "are") + " currently " + ChatColor.RED + String.valueOf(whitelistedPlayers) + ChatColor.GREEN + " whitelisted player" + (whitelistedPlayers == 1 ? "." : "s."));
-        sender.sendMessage(ChatColor.GREEN + "Of the online players, " + ChatColor.RED + String.valueOf(onlineWhitelistedPlayers) + ChatColor.GREEN + (onlineWhitelistedPlayers == 1 ? " is" : " are") + " whitelisted.");
+        sender.sendMessage(Bukkit.getServer().hasWhitelist() ? ChatColor.GREEN + ChatConstant.GENERIC_WHITELIST_ENABLED.getMessage(ChatUtil.getLocale(sender)) : ChatColor.RED + ChatConstant.GENERIC_WHITELIST_DISABLED.getMessage(ChatUtil.getLocale(sender)));
+        sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(onlinePlayers == 1 ? ChatConstant.GENERIC_PLAYER_ONLINE : ChatConstant.GENERIC_PLAYERS_ONLINE, "" + ChatColor.GOLD + onlinePlayers + ChatColor.GREEN).getMessage(ChatUtil.getLocale(sender)));
+        sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(whitelistedPlayers == 1 ? ChatConstant.GENERIC_WHITELISTED_PLAYER_ONLINE : ChatConstant.GENERIC_WHITELISTED_PLAYERS_ONLINE, "" + ChatColor.GOLD + whitelistedPlayers + ChatColor.GREEN).getMessage(ChatUtil.getLocale(sender)));
+        sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(onlineWhitelistedPlayers == 1 ? ChatConstant.GENERIC_WHITELISTED_PLAYER_OUT_OF_ONLINE : ChatConstant.GENERIC_WHITELISTED_PLAYERS_OUT_OF_ONLINE, "" + ChatColor.GOLD + onlineWhitelistedPlayers + ChatColor.GREEN).getMessage(ChatUtil.getLocale(sender)));
     }
 
-    @Command(
-            aliases = {"add", "a"},
-            desc = "Add someone to the whitelist.",
-            min = 1,
-            max = 1
-    )
-    @CommandPermissions("whitelist.add")
+    @Command(aliases = {"add", "a"}, desc = "Add someone to the whitelist.", min = 1, max = 1)
+    @CommandPermissions("cardinal.whitelist.add")
     public static void add(final CommandContext args, final CommandSender sender) throws CommandException {
         OfflinePlayer player = matchSinglePlayer(sender, args.getString(0));
         player.setWhitelisted(true);
-        sender.sendMessage(ChatColor.GOLD + player.getName() + ChatColor.GREEN + " has been added to the whitelist.");
+        sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.GENERIC_PLAYER_ADD_WHITELIST, Players.getName(player) + ChatColor.GREEN).getMessage(ChatUtil.getLocale(sender)));
     }
 
-    @Command(
-            aliases = {"remove", "r"},
-            desc = "Remove someone from the whitelist.",
-            min = 1,
-            max = 1
-    )
-    @CommandPermissions("whitelist.remove")
+    @Command(aliases = {"remove", "r"}, desc = "Remove someone from the whitelist.", min = 1, max = 1)
+    @CommandPermissions("cardinal.whitelist.remove")
     public static void remove(final CommandContext args, final CommandSender sender) throws CommandException {
         OfflinePlayer player = matchSinglePlayer(sender, args.getString(0));
         player.setWhitelisted(false);
-        sender.sendMessage(ChatColor.GOLD + player.getName() + ChatColor.GREEN + " has been removed from the whitelist.");
+        sender.sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.GENERIC_PLAYER_REMOVE_WHITELIST, Players.getName(player) + ChatColor.RED).getMessage(ChatUtil.getLocale(sender)));
     }
 
-    @Command(
-            aliases = {"all"},
-            desc = "Add everyone that's online to the whitelist.",
-            min = 0,
-            max = 0
-    )
-    @CommandPermissions("whitelist.all")
+    @Command(aliases = {"all"}, desc = "Add everyone that's online to the whitelist.", min = 0, max = 0)
+    @CommandPermissions("cardinal.whitelist.all")
     public static void all(final CommandContext args, final CommandSender sender) throws CommandException {
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.setWhitelisted(true);
         }
-        sender.sendMessage(ChatColor.GREEN + "Added " + ChatColor.GOLD + Bukkit.getOnlinePlayers().size() + ChatColor.GREEN + " player(s) to the whitelist.");
+        sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.GENERIC_ADDED_PLAYERS_WHITELIST, "" + ChatColor.GOLD + Bukkit.getOnlinePlayers().size() + ChatColor.GREEN).getMessage(ChatUtil.getLocale(sender)));
     }
 
-    @Command(
-            aliases = {"list", "l"},
-            desc = "List players on the whitelist.",
-            min = 0,
-            max = 1
-    )
-    @CommandPermissions("whitelist.list")
+    @Command(aliases = {"list", "l"}, desc = "List players on the whitelist.", min = 0, max = 1)
+    @CommandPermissions("cardinal.whitelist.list")
     public static void list(final CommandContext args, final CommandSender sender) throws CommandException {
-        sender.sendMessage(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "-------" + ChatColor.LIGHT_PURPLE + "Whitelisted players:" + ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "-------");
+        sender.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "--------" + ChatColor.LIGHT_PURPLE + " {0} " + ChatColor.RED + ChatColor.STRIKETHROUGH + "--------", ChatConstant.GENERIC_WHITELISTED_PLAYERS.asMessage()).getMessage(ChatUtil.getLocale(sender)));
         if (Bukkit.getWhitelistedPlayers().size() != 0) {
-            String onlineWhitelisted = ChatColor.GREEN + "Online: \n";
-            String offlineWhitelisted = ChatColor.RED + "Offline: \n";
+            String online = "", offline = "";
             for (OfflinePlayer player : Bukkit.getWhitelistedPlayers()) {
-                if (player.isOnline()) {
-                    if (Teams.getTeamByPlayer(player.getPlayer()) != null) {
-                        onlineWhitelisted += Teams.getTeamColorByPlayer(player) + player.getName() + ChatColor.RESET + " ";
-                    }
-                } else {
-                    offlineWhitelisted += player.getName() + " ";
-                }
+                if (player.isOnline()) online += Players.getName(player) + ChatColor.RESET + " ";
+                else offline += Players.getName(player) + ChatColor.RESET + " ";
             }
-            sender.sendMessage(onlineWhitelisted);
-            sender.sendMessage("");
-            sender.sendMessage(offlineWhitelisted);
+            sender.sendMessage(ChatColor.GREEN + new UnlocalizedChatMessage("{0}:", ChatConstant.MISC_ONLINE.asMessage()).getMessage(ChatUtil.getLocale(sender)));
+            sender.sendMessage(online);
+            sender.sendMessage(ChatColor.RED + new UnlocalizedChatMessage("{0}:", ChatConstant.MISC_OFFLINE.asMessage()).getMessage(ChatUtil.getLocale(sender)));
+            sender.sendMessage(offline);
         } else {
-            sender.sendMessage(ChatColor.RED + "There are currently no whitelisted players");
+            sender.sendMessage(ChatColor.RED + ChatConstant.GENERIC_NO_WHITELISTED_PLAYERS.getMessage(ChatUtil.getLocale(sender)));
         }
     }
 
-    @Command(
-            aliases = {"clear"},
-            desc = "Clear the whitelist",
-            min = 0,
-            max = 0
-    )
-    @CommandPermissions("whitelist.clear")
+    @Command(aliases = {"clear"}, desc = "Clear the whitelist.", min = 0, max = 0)
+    @CommandPermissions("cardinal.whitelist.clear")
     public static void clear(final CommandContext args, final CommandSender sender) throws CommandException {
         int count = 0;
         for (OfflinePlayer player : Bukkit.getWhitelistedPlayers()) {
             player.setWhitelisted(false);
             count++;
         }
-        sender.sendMessage(ChatColor.GREEN + "Removed " + ChatColor.GOLD + count + ChatColor.GREEN + " player(s) from the whitelist.");
+        sender.sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.GENERIC_REMOVED_PLAYERS_WHITELIST, "" + ChatColor.GOLD + count + ChatColor.RED).getMessage(ChatUtil.getLocale(sender)));
     }
 
-    @Command(
-            aliases = {"kick"},
-            desc = "Kicks everyone who is not on the whitelist.",
-            max = 0,
-            min = 0
-    )
-    @CommandPermissions("whitelist.kick")
+    @Command(aliases = {"kick"}, desc = "Kicks everyone who is not on the whitelist.", min = 0, max = 0)
+    @CommandPermissions("cardinal.whitelist.kick")
     public static void kick(final CommandContext args, final CommandSender sender) throws CommandException {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!player.isWhitelisted() && !player.isOp()) {
-                player.kickPlayer(ChatColor.RED + "All players who were not on the whitelist were kicked.");
+                player.kickPlayer(ChatColor.RED + ChatConstant.GENERIC_KICKED_NOT_WHITELISTED.getMessage(ChatUtil.getLocale(player)));
             }
         }
+        ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", ChatConstant.GENERIC_KICKED_NOT_WHITELISTED.asMessage()));
     }
 
-    @Command(
-            aliases = {"team"},
-            desc = "Adds everyone on a team to the whitelist.",
-            max = 1,
-            min = 1
-    )
-    @CommandPermissions("whitelist.team")
+    @Command(aliases = {"team"}, desc = "Adds everyone on a team to the whitelist.", max = 1, min = 1)
+    @CommandPermissions("cardinal.whitelist.team")
     public static void team(final CommandContext args, final CommandSender sender) throws CommandException {
         int count = 0;
         String msg = "";
@@ -223,20 +160,19 @@ public class WhitelistCommands {
             msg += args.getString(i) + " ";
         }
         msg = msg.trim();
-        if (Teams.getTeamByName(msg) != null) {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                Optional<TeamModule> team = Teams.getTeamByPlayer(player);
-                if (team.isPresent() && team.get().getName().startsWith(msg)) {
-                    if (!player.isWhitelisted()) {
-                        player.setWhitelisted(true);
-                        count++;
-                    }
-                }
-            }
-            sender.sendMessage(ChatColor.GREEN + "Added " + ChatColor.RED + count + ChatColor.GREEN + " player(s) to the whitelist.");
-        } else {
+        if (Teams.getTeamByName(msg) == null) {
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAM_MATCH).getMessage(ChatUtil.getLocale(sender)));
         }
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            Optional<TeamModule> team = Teams.getTeamByPlayer(player);
+            if (team.isPresent() && team.get().getName().startsWith(msg)) {
+                if (!player.isWhitelisted()) {
+                    player.setWhitelisted(true);
+                    count++;
+                }
+            }
+        }
+        sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.GENERIC_ADDED_PLAYERS_WHITELIST, "" + ChatColor.GOLD + count + ChatColor.GREEN).getMessage(ChatUtil.getLocale(sender)));
     }
 
     public static OfflinePlayer matchSinglePlayer(CommandSender sender, String rawUsername) throws CommandException {
@@ -260,8 +196,7 @@ public class WhitelistCommands {
         @Command(
                 aliases = {"whitelist", "wl"},
                 desc = "Commands for managing the whitelist.",
-                min = 1,
-                max = -1
+                min = 1
         )
         @NestedCommand({WhitelistCommands.class})
         public static void whitelist(final CommandContext args, CommandSender sender) throws CommandException {
