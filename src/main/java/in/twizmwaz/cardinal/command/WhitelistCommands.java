@@ -212,21 +212,16 @@ public class WhitelistCommands {
     @Command(
             aliases = {"team"},
             desc = "Adds everyone on a team to the whitelist.",
-            max = 1,
             min = 1
     )
     @CommandPermissions("whitelist.team")
     public static void team(final CommandContext args, final CommandSender sender) throws CommandException {
         int count = 0;
-        String msg = "";
-        for (int i = 2; i < args.argsLength(); i++) {
-            msg += args.getString(i) + " ";
-        }
-        msg = msg.trim();
+        String msg = args.getJoinedStrings(0).trim().toLowerCase();
         if (Teams.getTeamByName(msg) != null) {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 Optional<TeamModule> team = Teams.getTeamByPlayer(player);
-                if (team.isPresent() && team.get().getName().startsWith(msg)) {
+                if (team.isPresent() && team.get().getName().toLowerCase().startsWith(msg)) {
                     if (!player.isWhitelisted()) {
                         player.setWhitelisted(true);
                         count++;
