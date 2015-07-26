@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <locale lang="ko">
     <error>
-        <notEnoughArgsSay>You must have a message to say.</notEnoughArgsSay>
-        <notEnoughArgsBroadcast>You must have a message to broadcast.</notEnoughArgsBroadcast>
+        <notEnoughArgsSay>말할 메시지가 없습니다.</notEnoughArgsSay>
+        <notEnoughArgsBroadcast>방송할 메시지가 없습니다.</notEnoughArgsBroadcast>
         <noMessages>당신에게는 답장을 할 개인 메시지가 없습니다.</noMessages>
         <restartDuringMatch>경기중에는 재시작 할 수 없습니다. -f로 강제로 경기를 끝내십시오</restartDuringMatch>
         <cycleDuringMatch>경기중에는 이동 할 수 없습니다. -f로 강제로 경기를 끝내십시오</cycleDuringMatch>
@@ -10,7 +10,7 @@
         <matchNoResume>경기는 이미 끝났으며 재시작될수 없습니다.</matchNoResume>
         <matchNoStart>지금은 경기를 시작할수 없습니다.</matchNoStart>
         <matchNoEnd>지금은 경기를 끝낼수 없습니다.</matchNoEnd>
-        <notEnoughPlayers>There are not enough players to start the match.</notEnoughPlayers>
+        <notEnoughPlayers>경기를 시작하기에 플레이어 수가 충분하지 않습니다.</notEnoughPlayers>
         <noSetNext>재시작이 대기중인 경우에는 다음맵을 세팅 할 수 없습니다. 강제로 진행하려면 -f 을 사용하십시오</noSetNext>
         <disabledCommand>이 명령어는 비활성화 되었습니다. 맵들은 변화가 생기면 다시 로드될것입니다.</disabledCommand>
         <rotPointInvalid>선택된 이동 시점은 잘못되었습니다.</rotPointInvalid>
