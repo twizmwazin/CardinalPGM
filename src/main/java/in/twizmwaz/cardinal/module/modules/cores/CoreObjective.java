@@ -284,6 +284,9 @@ public class CoreObjective implements GameObjective {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockFromTo(BlockFromToEvent event) {
+        if (lava.contains(event.getToBlock())){
+            event.setCancelled(true);
+        }
         if (!event.isCancelled()) {
             Block to = event.getToBlock();
             Block from = event.getBlock();
@@ -383,19 +386,19 @@ public class CoreObjective implements GameObjective {
 
     @EventHandler
     public void onBucketFill(PlayerBucketFillEvent event) {
-        if (region.contains(event.getBlockClicked().getLocation()) && event.getBlockClicked().getType() == Material.STATIONARY_LAVA)
+        if (lava.contains(event.getBlockClicked()))
             event.setCancelled(true);
     }
 
     @EventHandler
     public void onBucketEmpty(PlayerBucketEmptyEvent event) {
-        if (region.contains(event.getBlockClicked().getLocation()) && event.getBucket() == Material.LAVA_BUCKET)
+        if (lava.contains(event.getBlockClicked().getRelative(event.getBlockFace())))
             event.setCancelled(true);
     }
 
     @EventHandler
     public void onEntityChangeBlock(EntityChangeBlockEvent event) {
-        if (region.contains(event.getBlock().getLocation()) && event.getBlock().getType() == Material.STATIONARY_LAVA)
+        if (lava.contains(event.getBlock()))
             event.setCancelled(true);
     }
 }
