@@ -138,6 +138,8 @@
         <noRanks>There are no ranks.</noRanks>
         <ranks>Ranks:</ranks>
         <ranksMoreInfo>Use /rank info &lt;rank&gt; for more info about a certain rank.</ranksMoreInfo>
+        <teleported>Teleported.</teleported>
+        <teleportedBy>You've been teleported by {0}</teleportedBy>
     </generic>
     <misc>
         <enemy>the enemy</enemy>
