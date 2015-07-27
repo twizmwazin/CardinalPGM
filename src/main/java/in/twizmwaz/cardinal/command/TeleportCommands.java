@@ -11,6 +11,7 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.util.Numbers;
 import in.twizmwaz.cardinal.util.Teams;
+import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -21,14 +22,15 @@ public class TeleportCommands {
     @Command(aliases = {"tp", "teleport"}, desc = "Teleport players.", usage = "<player> [player], [player] [[~]x] [[~]y] [[~]z]", min = 1, max = 4)
     public static void teleport(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (sender instanceof Player) {
+            Player player = (Player) sender;
             if (cmd.argsLength() == 1) {
-                if (sender.hasPermission("cardinal.teleport") || (Teams.getTeamByPlayer((Player) sender).isPresent() && Teams.getTeamByPlayer((Player) sender).get().isObserver())) {
+                if (sender.hasPermission("cardinal.teleport") || (Teams.getTeamByPlayer(player).isPresent() && Teams.getTeamByPlayer(player).get().isObserver())) {
                     try {
-                        Player player = Bukkit.getPlayer(cmd.getString(0));
-                        ((Player) sender).teleport(player);
-                        sender.sendMessage(ChatColor.YELLOW + "Teleported.");
+                        Player target = Bukkit.getPlayer(cmd.getString(0));
+                        player.teleport(target);
+                        sender.sendMessage(ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.GENERIC_TELEPORTED).getMessage(player.getLocale()));
                     } catch (NullPointerException e) {
-                        throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(((Player) sender).getLocale()));
+                        throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(player.getLocale()));
                     }
                 } else {
                     throw new CommandPermissionsException();
@@ -39,9 +41,12 @@ public class TeleportCommands {
                         Player from = Bukkit.getPlayer(cmd.getString(0));
                         Player to = Bukkit.getPlayer(cmd.getString(1));
                         from.teleport(to);
-                        sender.sendMessage(ChatColor.YELLOW + "Teleported.");
+                        sender.sendMessage(ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.GENERIC_TELEPORTED).getMessage(player.getLocale()));
+                        if (player != from) {
+                            from.sendMessage(ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.GENERIC_TELEPORTED_BY, player.getDisplayName()).getMessage((from.getLocale())));
+                        }
                     } catch (NullPointerException e) {
-                        throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(((Player) sender).getLocale()));
+                        throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(player.getLocale()));
                     }
                 } else {
                     throw new CommandPermissionsException();
@@ -51,11 +56,27 @@ public class TeleportCommands {
                     double x = cmd.getString(0).equals("~") ? 0 : Numbers.parseDouble(cmd.getString(0).replaceAll("~", ""));
                     double y = cmd.getString(1).equals("~") ? 0 : Numbers.parseDouble(cmd.getString(1).replaceAll("~", ""));
                     double z = cmd.getString(2).equals("~") ? 0 : Numbers.parseDouble(cmd.getString(2).replaceAll("~", ""));
-                    if (cmd.getString(0).contains("~")) x += ((Player) sender).getLocation().getX();
-                    if (cmd.getString(1).contains("~")) y += ((Player) sender).getLocation().getY();
-                    if (cmd.getString(2).contains("~")) z += ((Player) sender).getLocation().getZ();
-                    ((Player) sender).teleport(new Location(((Player) sender).getWorld(), x, y, z, ((Player) sender).getLocation().getYaw(), ((Player) sender).getLocation().getPitch()));
-                    sender.sendMessage(ChatColor.YELLOW + "Teleported.");
+                    if (cmd.getString(0).contains("~")) x += player.getLocation().getX();
+                    if (cmd.getString(1).contains("~")) y += player.getLocation().getY();
+                    if (cmd.getString(2).contains("~")) z += player.getLocation().getZ();
+                    if ( -30000000 < x && x < 30000000) {
+                        if ( -30000000 < z && z < 30000000) {
+                            player.teleport(new Location(player.getWorld(), x, y, z, player.getLocation().getYaw(), player.getLocation().getPitch()));
+                            sender.sendMessage(ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.GENERIC_TELEPORTED).getMessage(player.getLocale()));
+                        } else {
+                            TranslatableComponent numTooBig = new TranslatableComponent("commands.generic.num.tooBig");
+                            numTooBig.addWith("" + z);
+                            numTooBig.addWith("30000000");
+                            numTooBig.setColor(net.md_5.bungee.api.ChatColor.RED);
+                            player.sendMessage(numTooBig);
+                        }
+                    } else {
+                        TranslatableComponent numTooBig = new TranslatableComponent("commands.generic.num.tooBig");
+                        numTooBig.addWith("" + x);
+                        numTooBig.addWith("30000000");
+                        numTooBig.setColor(net.md_5.bungee.api.ChatColor.RED);
+                        player.sendMessage(numTooBig);
+                    }
                 } else {
                     throw new CommandPermissionsException();
                 }
@@ -69,10 +90,29 @@ public class TeleportCommands {
                         if (cmd.getString(1).contains("~")) x += teleporting.getLocation().getX();
                         if (cmd.getString(2).contains("~")) y += teleporting.getLocation().getY();
                         if (cmd.getString(3).contains("~")) z += teleporting.getLocation().getZ();
-                        teleporting.teleport(new Location(teleporting.getWorld(), x, y, z, teleporting.getLocation().getYaw(), teleporting.getLocation().getPitch()));
-                        sender.sendMessage(ChatColor.YELLOW + "Teleported.");
+                        if ( -30000000 < x && x < 30000000) {
+                            if ( -30000000 < z && z < 30000000) {
+                                teleporting.teleport(new Location(teleporting.getWorld(), x, y, z, teleporting.getLocation().getYaw(), teleporting.getLocation().getPitch()));
+                                sender.sendMessage(new LocalizedChatMessage(ChatConstant.GENERIC_TELEPORTED).getMessage(player.getLocale()) + ChatColor.YELLOW);
+                                if (player != teleporting) {
+                                    teleporting.sendMessage(ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.GENERIC_TELEPORTED_BY, player.getDisplayName()).getMessage((teleporting.getLocale())));
+                                }
+                            } else {
+                                TranslatableComponent numTooBig = new TranslatableComponent("commands.generic.num.tooBig");
+                                numTooBig.addWith("" + z);
+                                numTooBig.addWith("30000000");
+                                numTooBig.setColor(net.md_5.bungee.api.ChatColor.RED);
+                                player.sendMessage(numTooBig);
+                            }
+                        } else {
+                            TranslatableComponent numTooBig = new TranslatableComponent("commands.generic.num.tooBig");
+                            numTooBig.addWith("" + x);
+                            numTooBig.addWith("30000000");
+                            numTooBig.setColor(net.md_5.bungee.api.ChatColor.RED);
+                            player.sendMessage(numTooBig);
+                        }
                     } catch (NullPointerException e) {
-                        throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(((Player) sender).getLocale()));
+                        throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(player.getLocale()));
                     }
                 } else {
                     throw new CommandPermissionsException();

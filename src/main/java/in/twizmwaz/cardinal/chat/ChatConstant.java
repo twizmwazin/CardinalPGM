@@ -142,6 +142,8 @@ public enum ChatConstant {
     GENERIC_RANKS_MORE_INFO("generic.ranksMoreInfo"),
     GENERIC_SELF_RANK_GIVEN("generic.selfRankGiven"),
     GENERIC_SELF_RANK_REMOVED("generic.selfRankRemoved"),
+    GENERIC_TELEPORTED("generic.teleported"),
+    GENERIC_TELEPORTED_BY("generic.teleportedBy"),
 
     MISC_ENEMY("misc.enemy"),
     MISC_FATE("misc.fate"),

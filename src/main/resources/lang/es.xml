@@ -121,6 +121,8 @@
         <autoBalance>Los equipos serán automáticamente balanceados si {0} continúa stackeado</autoBalance>
         <youChangedRating>Has cambiado tu puntuación para {1} {2} de {3} a {0}.</youChangedRating>
         <teamSizeChanged>{0} máxima capacidad establecida a {1}</teamSizeChanged>
+        <teleported>Teletransportado.</teleported>
+        <teleportedBy>Has sido teletransportado por {0}</teleportedBy>
     </generic>
     <misc>
         <enemy>el enemigo</enemy>
