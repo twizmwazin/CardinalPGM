@@ -54,8 +54,16 @@ public class TeleportCommands {
                     if (cmd.getString(0).contains("~")) x += ((Player) sender).getLocation().getX();
                     if (cmd.getString(1).contains("~")) y += ((Player) sender).getLocation().getY();
                     if (cmd.getString(2).contains("~")) z += ((Player) sender).getLocation().getZ();
-                    ((Player) sender).teleport(new Location(((Player) sender).getWorld(), x, y, z, ((Player) sender).getLocation().getYaw(), ((Player) sender).getLocation().getPitch()));
-                    sender.sendMessage(ChatColor.YELLOW + "Teleported.");
+                    if ( -30000000 < x && x < 30000000) {
+                        if( -30000000 < z && z < 30000000) {
+                            ((Player) sender).teleport(new Location(((Player) sender).getWorld(), x, y, z, ((Player) sender).getLocation().getYaw(), ((Player) sender).getLocation().getPitch()));
+                            sender.sendMessage(ChatColor.YELLOW + "Teleported.");
+                        } else {
+                            sender.sendMessage(ChatColor.RED + "The number you have entered(" + z + ") is too big, it must be at most 30000000");
+                        }
+                    } else {
+                        sender.sendMessage(ChatColor.RED + "The number you have entered(" + x + ") is too big, it must be at most 30000000");
+                    }
                 } else {
                     throw new CommandPermissionsException();
                 }
@@ -69,8 +77,16 @@ public class TeleportCommands {
                         if (cmd.getString(1).contains("~")) x += teleporting.getLocation().getX();
                         if (cmd.getString(2).contains("~")) y += teleporting.getLocation().getY();
                         if (cmd.getString(3).contains("~")) z += teleporting.getLocation().getZ();
-                        teleporting.teleport(new Location(teleporting.getWorld(), x, y, z, teleporting.getLocation().getYaw(), teleporting.getLocation().getPitch()));
-                        sender.sendMessage(ChatColor.YELLOW + "Teleported.");
+                        if ( -30000000 < x && x < 30000000) {
+                            if( -30000000 < z && z < 30000000) {
+                            teleporting.teleport(new Location(teleporting.getWorld(), x, y, z, teleporting.getLocation().getYaw(), teleporting.getLocation().getPitch()));
+                            sender.sendMessage(ChatColor.YELLOW + "Teleported.");
+                            } else {
+                                sender.sendMessage(ChatColor.RED + "The number you have entered(" + z + ") is too big, it must be at most 30000000");
+                            }
+                        } else {
+                            sender.sendMessage(ChatColor.RED + "The number you have entered(" + x + ") is too big, it must be at most 30000000");
+                        }
                     } catch (NullPointerException e) {
                         throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_PLAYER_MATCH).getMessage(((Player) sender).getLocale()));
                     }
