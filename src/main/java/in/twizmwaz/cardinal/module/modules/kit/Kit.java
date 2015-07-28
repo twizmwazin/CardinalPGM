@@ -77,18 +77,18 @@ public class Kit implements Module {
         } catch (NullPointerException e) {
 
         }
-        if (health > -1) {
-            if (force) player.setMaxHealth(health);
-            else player.setMaxHealth(player.getMaxHealth() + health);
+        if (health >= 1 && health <= 20) {
+            if (force) player.setHealth(health);
+            else if (player.getHealth() < health) player.setHealth(health);
         }
         try {
             if (force) player.setSaturation(saturation);
-            else player.setSaturation(player.getSaturation() + saturation);
+            else if (player.getSaturation() < saturation) player.setSaturation(saturation);
         } catch (IllegalArgumentException e) {
         }
-        if (foodLevel > -1) {
+        if (foodLevel >= 0 && foodLevel <= 20) {
             if (force) player.setFoodLevel(foodLevel);
-            else player.setFoodLevel(player.getFoodLevel() + foodLevel);
+            else if (player.getFoodLevel() < foodLevel) player.setFoodLevel(foodLevel);
         }
         player.setWalkSpeed(walkSpeed);
         player.setKnockbackReduction(knockback);
