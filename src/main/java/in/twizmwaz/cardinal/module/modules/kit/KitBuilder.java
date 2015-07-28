@@ -98,7 +98,7 @@ public class KitBuilder implements ModuleBuilder {
             boolean resetPearls = element.getAttributeValue("reset-ender-pearls") != null && Numbers.parseBoolean(element.getAttributeValue("reset-ender-pearls"));
             boolean clear = element.getChildren("clear").size() > 0;
             boolean clearItems = element.getChildren("clear-items").size() > 0;
-            int health = element.getChildText("health") == null ? -1 : Numbers.parseInt(element.getChild("health").getText()) / 2;
+            int health = element.getChildText("health") == null ? -1 : Numbers.parseInt(element.getChild("health").getText());
             float saturation = element.getChildText("saturation") == null ? 0 : Float.parseFloat(element.getChildText("saturation"));
             int foodLevel = element.getChildText("foodlevel") == null ? -1 : Numbers.parseInt(element.getChildText("foodlevel"));
             float walkSpeed = element.getChildText("walk-speed") == null ? 0.2F : Float.parseFloat(element.getChildText("walk-speed")) / 5;
