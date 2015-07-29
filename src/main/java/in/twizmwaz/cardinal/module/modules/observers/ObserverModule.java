@@ -435,7 +435,7 @@ public class ObserverModule implements Module {
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         if (testObserver(event.getPlayer())) {
-            event.setCancelled(true);
+            event.getItemDrop().remove();
         }
     }
 
