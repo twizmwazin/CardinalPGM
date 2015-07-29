@@ -11,6 +11,7 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.TeamNameChangeEvent;
+import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Teams;
@@ -64,24 +65,28 @@ public class TeamCommands {
     @Command(aliases = {"shuffle"}, desc = "Shuffles the teams.")
     @CommandPermissions("cardinal.team.shuffle")
     public static void shuffle(final CommandContext cmd, CommandSender sender) throws CommandException {
-        List<Player> playersToShuffle = new ArrayList<>();
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (Teams.getTeamByPlayer(player).isPresent()) {
-                if (!Teams.getTeamByPlayer(player).get().isObserver()) {
-                    playersToShuffle.add(player);
-                    TeamModule observers = Teams.getTeamById("observers").get();
-                    observers.add(player, true, false);
+        if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.WAITING) || GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
+            List<Player> playersToShuffle = new ArrayList<>();
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (Teams.getTeamByPlayer(player).isPresent()) {
+                    if (!Teams.getTeamByPlayer(player).get().isObserver()) {
+                        playersToShuffle.add(player);
+                        TeamModule observers = Teams.getTeamById("observers").get();
+                        observers.add(player, true, false);
+                    }
                 }
             }
+            while (playersToShuffle.size() > 0) {
+                Player player = playersToShuffle.get(new Random().nextInt(playersToShuffle.size()));
+                Optional<TeamModule> team = Teams.getTeamWithFewestPlayers(GameHandler.getGameHandler().getMatch());
+                if (team.isPresent()) team.get().add(player, true);
+                playersToShuffle.remove(player);
+            }
+            String locale = ChatUtil.getLocale(sender);
+            sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.GENERIC_TEAM_SHUFFLE).getMessage(locale));
+        } else {
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_SHUFFLE).getMessage(ChatUtil.getLocale(sender)));
         }
-        while (playersToShuffle.size() > 0) {
-            Player player = playersToShuffle.get(new Random().nextInt(playersToShuffle.size()));
-            Optional<TeamModule> team = Teams.getTeamWithFewestPlayers(GameHandler.getGameHandler().getMatch());
-            if (team.isPresent()) team.get().add(player, true);
-            playersToShuffle.remove(player);
-        }
-        String locale = ChatUtil.getLocale(sender);
-        sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.GENERIC_TEAM_SHUFFLE).getMessage(locale));
     }
 
     @Command(aliases = {"size"}, desc = "Changes the specified team's size.", usage = "<team> <size>", min = 2)

@@ -139,6 +139,7 @@ public class Cardinal extends JavaPlugin {
         cmdRegister.register(SnowflakesCommand.class);
         cmdRegister.register(StartAndEndCommand.class);
         cmdRegister.register(TeamCommands.TeamParentCommand.class);
+        cmdRegister.register(TeamCommands.class);
         cmdRegister.register(TeleportCommands.class);
         cmdRegister.register(TimeLimitCommand.class);
         cmdRegister.register(WhitelistCommands.WhitelistParentCommand.class);
