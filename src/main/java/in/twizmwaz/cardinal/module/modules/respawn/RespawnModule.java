@@ -4,7 +4,6 @@ import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
-import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
@@ -110,19 +109,7 @@ public class RespawnModule implements Module {
                 Player player = event.getPlayer();
                 event.setRespawnLocation(chosen.getLocation());
                 Players.resetPlayer(player);
-                player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
-                ItemStack howTo = Items.createBook(Material.WRITTEN_BOOK, 1, ChatColor.AQUA.toString() + ChatColor.BOLD + "Coming Soon", ChatColor.GOLD + "CardinalPGM");
-                player.getInventory().setItem(1, howTo);
-                if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
-                    ItemStack picker = Items.createItem(Material.LEATHER_HELMET, 1, (short) 0,
-                            ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(player.getLocale()) : new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(player.getLocale())),
-                            Collections.singletonList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(player.getLocale())));
-                    player.getInventory().setItem(2, picker);
-                }
-                if (player.hasPermission("tnt.defuse")) {
-                    ItemStack shears = Items.createItem(Material.SHEARS, 1, (short) 0, ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
-                    player.getInventory().setItem(5, shears);
-                }
+                giveObserversKit(player);
                 player.teleport(chosen.getLocation());
             }
         }
@@ -162,20 +149,7 @@ public class RespawnModule implements Module {
             Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
             if (!spawnEvent.isCancelled()) {
                 Players.resetPlayer(player);
-                player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
-                ItemStack howTo = Items.createBook(Material.WRITTEN_BOOK, 1, ChatColor.AQUA.toString() + ChatColor.BOLD + "Coming Soon", ChatColor.GOLD + "CardinalPGM");
-                player.getInventory().setItem(1, howTo);
-                if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
-                    ItemStack picker = Items.createItem(Material.LEATHER_HELMET, 1, (short) 0,
-                            ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(player.getLocale()) : new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(player.getLocale())),
-                            Collections.singletonList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(player.getLocale())));
-                    player.getInventory().setItem(2, picker);
-                }
-                player.getInventory().setItem(3, Tutorial.getEmerald(player));
-                if (player.hasPermission("tnt.defuse")) {
-                    ItemStack shears = Items.createItem(Material.SHEARS, 1, (short) 0, ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
-                    player.getInventory().setItem(5, shears);
-                }
+                giveObserversKit(player);
                 player.teleport(chosen.getLocation());
             }
         }
@@ -233,6 +207,21 @@ public class RespawnModule implements Module {
 
         }
 
+    }
+
+    public void giveObserversKit(Player player) {
+        player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
+        player.getInventory().setItem(1, Items.createBook(Material.WRITTEN_BOOK, 1, ChatColor.AQUA.toString() + ChatColor.BOLD + "Coming Soon", ChatColor.GOLD + "CardinalPGM"));
+        if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
+            player.getInventory().setItem(2, Items.createItem(Material.LEATHER_HELMET, 1, (short) 0,
+                    ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? ChatConstant.UI_TEAM_CLASS_SELECTION.getMessage(player.getLocale()) : ChatConstant.UI_TEAM_SELECTION.getMessage(player.getLocale())),
+                    Collections.singletonList(ChatColor.DARK_PURPLE + ChatConstant.UI_TEAM_JOIN_TIP.getMessage(player.getLocale()))));
+        }
+        player.getInventory().setItem(3, Tutorial.getEmerald(player));
+        if (player.hasPermission("tnt.defuse")) {
+            player.getInventory().setItem(5, Items.createItem(Material.SHEARS, 1, (short) 0, ChatColor.RED + ChatConstant.UI_TNT_DEFUSER.getMessage(player.getLocale())));
+        }
+        player.getInventory().setItem(8, Items.createItem(Material.DIAMOND, 1, (short) 0, ChatColor.AQUA + "" + ChatColor.BOLD + ChatConstant.UI_TOGGLE_SPECTATOR_MODE.getMessage(player.getLocale())));
     }
 
 }

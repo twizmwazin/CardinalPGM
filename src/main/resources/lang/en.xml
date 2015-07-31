@@ -138,6 +138,8 @@
         <noRanks>There are no ranks.</noRanks>
         <ranks>Ranks:</ranks>
         <ranksMoreInfo>Use /rank info &lt;rank&gt; for more info about a certain rank.</ranksMoreInfo>
+        <enabledSpectatorMode>You have enabled spectator mode.</enabledSpectatorMode>
+        <disabledSpectatorMode>You have disabled spectator mode.</disabledSpectatorMode>
     </generic>
     <misc>
         <enemy>the enemy</enemy>
@@ -242,6 +244,7 @@
         <defaultChannelAdmin>Changed default channel to administrator chat.</defaultChannelAdmin>
         <defaultChannelTeam>Changed default channel to team chat.</defaultChannelTeam>
         <timeElapsed>Time Elapsed: {0}</timeElapsed>
+        <toggleSpectatorMode>Toggle Spectator Mode</toggleSpectatorMode>
     </userInterface>
     <deathMsg>
         <explosionSelf>{0} 'sploded</explosionSelf>
