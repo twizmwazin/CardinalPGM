@@ -289,6 +289,9 @@ public class Cardinal extends JavaPlugin {
             setEnabled(false);
             return;
         }
+
+        getDataFolder().mkdir();
+
         databaseFile = new File(getDataFolder(), "database.xml");
         if (databaseFile.exists()) {
             try {
