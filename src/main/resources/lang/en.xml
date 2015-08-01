@@ -245,6 +245,7 @@
         <defaultChannelTeam>Changed default channel to team chat.</defaultChannelTeam>
         <timeElapsed>Time Elapsed: {0}</timeElapsed>
         <toggleSpectatorMode>Toggle Spectator Mode</toggleSpectatorMode>
+        <leftClick>Left click to use</leftClick>
     </userInterface>
     <deathMsg>
         <explosionSelf>{0} 'sploded</explosionSelf>

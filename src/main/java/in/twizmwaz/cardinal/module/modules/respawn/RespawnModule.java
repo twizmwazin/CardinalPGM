@@ -33,6 +33,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 public class RespawnModule implements Module {
@@ -221,7 +222,7 @@ public class RespawnModule implements Module {
         if (player.hasPermission("tnt.defuse")) {
             player.getInventory().setItem(5, Items.createItem(Material.SHEARS, 1, (short) 0, ChatColor.RED + ChatConstant.UI_TNT_DEFUSER.getMessage(player.getLocale())));
         }
-        player.getInventory().setItem(8, Items.createItem(Material.DIAMOND, 1, (short) 0, ChatColor.AQUA + "" + ChatColor.BOLD + ChatConstant.UI_TOGGLE_SPECTATOR_MODE.getMessage(player.getLocale())));
+        player.getInventory().setItem(8, Items.createItem(Material.DIAMOND, 1, (short) 0, ChatColor.AQUA + "" + ChatColor.BOLD + ChatConstant.UI_TOGGLE_SPECTATOR_MODE.getMessage(player.getLocale()), Arrays.asList(ChatColor.BLUE + ChatConstant.UI_LEFT_CLICK.getMessage(player.getLocale()))));
     }
 
 }

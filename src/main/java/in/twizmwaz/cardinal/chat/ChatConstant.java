@@ -245,7 +245,8 @@ public enum ChatConstant {
     UI_DEFAULT_CHANNEL_ADMIN("userInterface.defaultChannelAdmin"),
     UI_DEFAULT_CHANNEL_TEAM("userInterface.defaultChannelTeam"),
     UI_TIME_ELAPSED("userInterface.timeElapsed"),
-    UI_TOGGLE_SPECTATOR_MODE("userInterface.toggleSpectatorMode");
+    UI_TOGGLE_SPECTATOR_MODE("userInterface.toggleSpectatorMode"),
+    UI_LEFT_CLICK("userInterface.leftClick");
 
     private final String path;
 

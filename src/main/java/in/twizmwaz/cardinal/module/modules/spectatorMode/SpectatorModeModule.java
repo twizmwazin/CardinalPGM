@@ -27,7 +27,7 @@ public class SpectatorModeModule implements Module {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (event.getAction().equals(Action.PHYSICAL)) {
+        if (!event.getAction().equals(Action.LEFT_CLICK_AIR) && !event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
             return;
         }
         Player player = event.getPlayer();
