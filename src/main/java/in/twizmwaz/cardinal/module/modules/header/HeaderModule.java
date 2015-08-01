@@ -33,7 +33,7 @@ public class HeaderModule implements TaskedModule {
 
     public HeaderModule(LoadedMap map) {
         this.last = 0;
-        this.message = Cardinal.getInstance().getConfig().getString("server-message");
+        this.message = ChatColor.translateAlternateColorCodes('`', Cardinal.getInstance().getConfig().getString("server-message"));
         this.header = new UnlocalizedChatMessage(ChatColor.AQUA.toString() + ChatColor.BOLD + map.getName() + ChatColor.RESET.toString() + ChatColor.DARK_GRAY + " {0} {1}", ChatConstant.MISC_BY.asMessage(), assembleAuthors(map.getAuthors()));
     }
 
