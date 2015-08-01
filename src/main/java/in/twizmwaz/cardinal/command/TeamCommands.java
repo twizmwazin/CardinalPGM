@@ -54,7 +54,7 @@ public class TeamCommands {
         if (team.isPresent()) {
             String msg = cmd.getJoinedStrings(1);
             String locale = ChatUtil.getLocale(sender);
-            sender.sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_TEAM_ALIAS, team.get().getCompleteName() + ChatColor.GRAY, team.get().getColor() + msg + ChatColor.GRAY).getMessage(locale));
+            ChatUtil.getGlobalChannel().sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_TEAM_ALIAS, team.get().getCompleteName() + ChatColor.GRAY, team.get().getColor() + msg + ChatColor.GRAY).getMessage(locale));
             team.get().setName(msg);
             Bukkit.getServer().getPluginManager().callEvent(new TeamNameChangeEvent(team.get()));
         } else {
