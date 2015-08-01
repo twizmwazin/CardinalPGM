@@ -108,7 +108,7 @@
         <removedMap>Successfully removed map at index {0} from the rotation</removedMap>
         <playerForce>{0} successfully forced onto {1}</playerForce>
         <teamShuffle>Teams successfully shuffled.</teamShuffle>
-        <teamAlias>{0} successfully renamed to {1}</teamAlias>
+        <teamAlias>{0} renamed to {1}</teamAlias>
         <channelSet>Changed default channel to team chat.</channelSet>
         <messageSent>Message sent.</messageSent>
         <onTeam>You are on {0}</onTeam>
