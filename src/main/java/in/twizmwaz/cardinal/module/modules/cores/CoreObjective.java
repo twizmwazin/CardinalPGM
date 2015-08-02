@@ -240,7 +240,7 @@ public class CoreObjective implements GameObjective {
                 if (TntTracker.getWhoPlaced(event.getEntity()) != null) {
                     UUID player = TntTracker.getWhoPlaced(event.getEntity());
                     if (Bukkit.getOfflinePlayer(player).isOnline()) {
-                        if (Teams.getTeamByPlayer(Bukkit.getPlayer(player)).orNull() == team) {
+                        if (Teams.getTeamByPlayer(Bukkit.getPlayer(player)).orNull() == team || (Teams.getTeamByPlayer(Bukkit.getPlayer(player)).isPresent() && Teams.getTeamByPlayer(Bukkit.getPlayer(player)).get().isObserver())) {
                             event.blockList().remove(block);
                         } else {
                             if (!playersTouched.contains(player)) {
