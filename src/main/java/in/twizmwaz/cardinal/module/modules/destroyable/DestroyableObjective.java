@@ -199,7 +199,7 @@ public class DestroyableObjective implements GameObjective {
                     UUID playerID = TntTracker.getWhoPlaced(event.getEntity());
                     if (Bukkit.getOfflinePlayer(playerID).isOnline()) {
                         Player player = Bukkit.getPlayer(playerID);
-                        if (Teams.getTeamByPlayer(Bukkit.getPlayer(playerID)).orNull() == team) {
+                        if (Teams.getTeamByPlayer(Bukkit.getPlayer(playerID)).orNull() == team || (Teams.getTeamByPlayer(Bukkit.getPlayer(playerID)).isPresent() && Teams.getTeamByPlayer(Bukkit.getPlayer(playerID)).get().isObserver())) {
                             event.blockList().remove(block);
                         } else {
                             if (!playersTouched.contains(playerID)) {
