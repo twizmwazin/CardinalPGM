@@ -60,6 +60,7 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
@@ -547,6 +548,13 @@ public class ObserverModule implements Module {
         }
     }
 
+    @EventHandler
+    public void PlayerInteractAtEntityEvent(PlayerInteractAtEntityEvent event) {
+        if (testObserver(event.getPlayer())) {
+            event.setCancelled(true);
+        }
+    }
+    
     private boolean testObserver(Player player) {
         Optional<TeamModule> team = Teams.getTeamByPlayer(player);
         return (team.isPresent() && team.get().isObserver()) || !match.isRunning();
