@@ -30,6 +30,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -265,6 +267,28 @@ public class DestroyableObjective implements GameObjective {
                     event.setCancelled(true);
                 } else {
                     ChatUtil.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_REPAIR_OBJECTIVE));
+                    event.setCancelled(true);
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPistonPush(BlockPistonExtendEvent event) {
+        if (!event.isCancelled()) {
+            for (Block block : event.getBlocks()) {
+                if (getBlocks().contains(block)) {
+                    event.setCancelled(true);
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPistonRetract(BlockPistonRetractEvent event) {
+        if (!event.isCancelled() && event.isSticky()) {
+            for (Block block : event.getBlocks()) {
+                if (getBlocks().contains(block)) {
                     event.setCancelled(true);
                 }
             }
