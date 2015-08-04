@@ -24,12 +24,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -249,6 +253,38 @@ public class WoolObjective implements GameObjective {
         if (event.getBlock().equals(place.getBlock())) {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPistonPush(BlockPistonExtendEvent event) {
+        if (!event.isCancelled()) {
+            if (event.getBlock().getRelative(event.getDirection()).equals(place.getBlock())) {
+                event.setCancelled(true);
+            } else {
+                for (Block block : event.getBlocks()) {
+                    if (block.equals(place.getBlock()) || block.equals(place.getBlock().getRelative(event.getDirection().getOppositeFace()))) {
+                        event.setCancelled(true);
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPistonRetract(BlockPistonRetractEvent event) {
+        if (!event.isCancelled()) {
+            for (Block block : event.getBlocks()) {
+                if (block.equals(place.getBlock()) || block.equals(place.getBlock().getRelative(event.getDirection().getOppositeFace()))) {
+                    event.setCancelled(true);
+                }
+            }
+        }
+    }
+    
+    @EventHandler
+    public void onEntityChangeBlock(EntityChangeBlockEvent event) {
+        if (place.getBlock().equals(event.getBlock()))
+            event.setCancelled(true);
     }
 
     @EventHandler
