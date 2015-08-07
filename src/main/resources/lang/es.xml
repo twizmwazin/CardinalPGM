@@ -33,10 +33,14 @@
         <matchOver>La partida ha finalizado</matchOver>
         <cycle>Por favor espere que el servidor cambie de mapa</cycle>
         <playerCommand>Tienes que ser un jugador para utilizar este comando.</playerCommand>
-        <noMapMatch>No se ha encontrado ningún mapa con esos criterios.</noMapMatch>
-        <noTeamMatch>No se ha encontrado ningún equipo con esos criterios.</noTeamMatch>
-        <noRotMatch>No se ha encontrado ninguna rotación con esos criterios.</noRotMatch>
-        <noPlayerMatch>Ningún jugador coincide con ese criterio.</noPlayerMatch>
+        <noMapMatch>No se encontraron mapas según los criterios ingresados.</noMapMatch>
+        <noTeamMatch>No se encontraron equipos según los criterios ingresados.</noTeamMatch>
+        <noRotMatch>No se encontraron rotaciones según los criterios ingresados.</noRotMatch>
+        <noPlayerMatch>No se encontraron jugadores según los criterios ingresados.</noPlayerMatch>
+        <noRankMatch>No se encontraron rangos según los criterios ingresados.</noRankMatch>
+        <noSettingMatch>No se encontraron ajustes según los criterios ingresados.</noSettingMatch>
+        <noValueMatch>No se encontraron valores según los criterios ingresados.</noValueMatch>
+        <noResultMatch>No se encontraron resultados según los criterios ingresados.</noResultMatch>
         <multiplePlayers>¡Más de un jugador encontrado! Utiliza {0} para una búsqueda más precisa.</multiplePlayers>
         <unknownError>Se ha producido un error desconocido. Por favor consulte la consola del servidor.</unknownError>
         <movedForBalance>Has sido movido a {0} para balancear el tamaño de los equipos</movedForBalance>
@@ -59,7 +63,8 @@
         <defuseTntWater>No puedes desactivar TNT en el agua.</defuseTntWater>
         <defuseTntEnemy>No puedes desactivar la TNT enemiga.</defuseTntEnemy>
         <noPermission>No tienes permiso.</noPermission>
-        <numberString>Se esperaba un número, en su lugar se ha recibido texto.</numberString>
+        <numberString>Se esperaba un número, en su lugar, se ha recibido texto.</numberString>
+        <timeFormatString>Se esperaba un formato de tiempo, en su lugar, se ha recibido texto.</timeFormatString>
         <errorRejoin>Uh oh! Hemos tenido un error. Por favor prueba relogueando.</errorRejoin>
         <serverFull>El servidor está lleno</serverFull>
         <teamsFull>Los equipos están llenos</teamsFull>
@@ -79,6 +84,21 @@
         <playableLeave>No puedes salir del terreno de juego</playableLeave>
         <playableInteract>No puedes interactuar con bloques de fuera del terreno de juego</playableInteract>
         <globalMuteEnabled>No puedes hablar en el chat mientras el silenciado global está habilitado.</globalMuteEnabled>
+        <teamAbsent>No estás en un equipo.</teamAbsent>
+        <alreadyHasRank>{0} ya tiene el rango {1}.</alreadyHasRank>
+        <alreadyDoesntHaveRank>{0} ya no tiene el rango {1}.</alreadyDoesntHaveRank>
+        <globalAlreadyDefault>El chat global ya es tu canal por defecto.</globalAlreadyDefault>
+        <teamAlreadyDefault>El chat de equipo ya es tu canal por defecto.</teamAlreadyDefault>
+        <adminAlreadyDefault>El chat de administrador ya es tu canal por defecto.</adminAlreadyDefault>
+        <consoleNoUse>La consola no puede usar este comando.</consoleNoUse>
+        <readyBeforeMatch>Debes estar listo antes de que la partida comience.</readyBeforeMatch>
+        <unreadyBeforeMatch>Debes dejar de estar listo antes de que la partida comience.</unreadyBeforeMatch>
+        <teamAlreadyReady>Tu equipo ya está listo.</teamAlreadyReady>
+        <teamAlreadyNotReady>Tu equipo ya dejó de estar listo.</teamAlreadyNotReady>
+        <invalidPageNumber>El número de pagina ingresado es invalido! Hay {0} paginas en total.</invalidPageNumber>
+        <invalidArguments>Argumentos invalidos.</invalidArguments>
+        <tooFewArguments>Muy pocos argumentos.</tooFewArguments>
+        <cannotCalculateScores>El puntaje de los equipos no puede ser calculado.</cannotCalculateScores>
     </error>
     <generic>
         <mapSet>El siguiente mapa ha sido establecido a {0}</mapSet>
@@ -121,6 +141,53 @@
         <autoBalance>Los equipos serán automáticamente balanceados si {0} continúa stackeado</autoBalance>
         <youChangedRating>Has cambiado tu puntuación para {1} {2} de {3} a {0}.</youChangedRating>
         <teamSizeChanged>{0} máxima capacidad establecida a {1}</teamSizeChanged>
+        <rankRemoved>Le has quitado el rango {1} a {0}.</rankRemoved>
+        <ownRankRemoved>{0} te ha quitado tu rango {1}.</ownRankRemoved>
+        <rankGiven>Le has dado el rango {1} a {0}.</rankGiven>
+        <ownRankGiven>{0} te ha dado el rango {1}.</ownRankGiven>
+        <selfRankGiven>Te has dado el rango {0}.</selfRankGiven>
+        <selfRankRemoved>Te has quitado el rango {0}</selfRankRemoved>
+        <noRanks>No se han encontrado rangos.</noRanks>
+        <ranks>Rangos:</ranks>
+        <ranksMoreInfo>Usa /rank info &lt;rango&gt; para mas información acerca cierto rango.</ranksMoreInfo>
+        <teamNowReady>{0} está listo</teamNowReady>
+        <teamNoLongerReady>{0} dejó de estar listo</teamNoLongerReady>
+        <unreadyCancelCountdown>La cuenta regresiva para empezar fue cancelada debido a que {0} dejó de estar listo.</unreadyCancelCountdown>
+        <teleported>Teletransportado.</teleported>
+        <timeLimitCancelled>Tiempo limite cancelado</timeLimitCancelled>
+        <noTimeLimit>No hay tiempo limite.</noTimeLimit>
+        <timeLimitWithResult>El tiempo limite es {0} con el resultado {1}</timeLimitWithResult>
+        <whitelistReloaded>La whitelist fue recargada.</whitelistReloaded>
+        <whitelistEnabled>Whitelist activada</whitelistEnabled>
+        <whitelistDisabled>Whitelist desactivada</whitelistDisabled>
+        <playerAddWhitelist>{0} fue agregado a la whitelist.</playerAddWhitelist>
+        <playerRemoveWhitelist>{0} fue quitado de la whitelist.</playerRemoveWhitelist>
+        <addedPlayersWhitelist>Agregados {0} jugador(es) a la whitelist.</addedPlayersWhitelist>
+        <removedPlayersWhitelist>Eliminados {0} jugador(es) de la whitelist.</removedPlayersWhitelist>
+        <kickedNotWhitelisted>Todos los jugadores que no están en la whitelist fueron kickeados.</kickedNotWhitelisted>
+        <noWhitelistedPlayers>No hay jugadores en la whitelist.</noWhitelistedPlayers>
+        <whitelistedPlayers>Jugadores en la whitelist:</whitelistedPlayers>
+        <playerOnline>Hay {0} jugador en linea.</playerOnline>
+        <playersOnline>Hay {0} jugadores en linea.</playersOnline>
+        <whitelistedPlayerOnline>Hay {0} jugador en la whitelist en linea.</whitelistedPlayerOnline>
+        <whitelistedPlayersOnline>Hay {0} jugadores en la whitelist en linea.</whitelistedPlayersOnline>
+        <whitelistedPlayerOutOfOnline>De los jugadores en linea, {0} jugador está en la whitelist.</whitelistedPlayerOutOfOnline>
+        <whitelistedPlayersOutOfOnline>De los jugadores en linea, {0} jugadores están en la whitelist.</whitelistedPlayersOutOfOnline>
+        <monumentModes>Modos</monumentModes>
+        <nextMode>Siguiente modo: {0} ({1} restante)</nextMode>
+        <modesPushedForwards>Todos los modos fueron empujados hacia delante {0}</modesPushedForwards>
+        <modesPushedBackwards>Todos los modos fueron empujados hacia atrás {0}</modesPushedBackwards>
+        <calculatingScoresFor>Calculando el puntuaje de {0}</calculatingScoresFor>
+        <teamsAreTied>Los equipos están empatando</teamsAreTied>
+        <teamsAreTiedWithPoints>Los equipos están empatando con {0} puntos</teamsAreTiedWithPoints>
+        <teamsAreTiedWithPlayers>Los equipos están empatando con {0} jugadores</teamsAreTiedWithPlayers>
+        <teamIsWinning>{0} está ganando</teamIsWinning>
+        <teamIsWinningWithPoints>{0} está ganando con {1} punto</teamIsWinningWithPoints>
+        <teamIsWinningWithPlayers>{0} está ganando con {1} jugadores</teamIsWinningWithPlayers>
+        <teamIsWinningWithObjectives>{0} está ganando con {1} objetivo completado y {2} dañados</teamIsWinningWithObjectives>
+        <objectiveIsUntouched>{0} no fue dañado!</objectiveIsUntouched>
+        <objectiveWasTouched>{0} fue dañado!</objectiveWasTouched>
+        <objectiveWasCompleted>{0} fue completado!</objectiveWasCompleted>
     </generic>
     <misc>
         <enemy>el enemigo</enemy>
@@ -131,6 +198,12 @@
         <and>y</and>
         <by>por</by>
         <team>Equipo</team>
+        <match>la partida</match>
+        <youHave>Tienes</youHave>
+        <has>{0} tiene</has>
+        <online>Online</online>
+        <offline>Offline</offline>
+        <score>Puntuacion</score>
     </misc>
     <userInterface>
         <mapLoaded>Mapas cargados</mapLoaded>
@@ -262,4 +335,8 @@
         <wither>{0} sufrió la ira del wither</wither>
         <unknown>{0} ha muerto por una causa desconocida</unknown>
     </deathMsg>
+    <snowflakes>
+        <snowflake>snowflake</snowflake>
+        <snowflakes>snowflakes</snowflakes>
+    </snowflakes>
 </locale>
