@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.observers;
 
 import com.google.common.base.Optional;
+import com.sk89q.minecraft.util.commands.ChatColor;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -12,14 +13,13 @@ import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
+import in.twizmwaz.cardinal.module.modules.respawn.RespawnModule;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.module.modules.tutorial.Tutorial;
 import in.twizmwaz.cardinal.util.Items;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Beacon;
@@ -98,14 +98,7 @@ public class ObserverModule implements Module {
             player.getInventory().clear();
         }
 
-        player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
-        ItemStack howTo = Items.createBook(Material.WRITTEN_BOOK, 1, ChatColor.AQUA + "" + ChatColor.BOLD + "Coming Soon", ChatColor.GOLD + "CardinalPGM");
-        player.getInventory().setItem(1, howTo);
-        player.getInventory().setItem(3, Tutorial.getEmerald(player));
-        if (player.hasPermission("tnt.defuse")) {
-            ItemStack shears = Items.createItem(Material.SHEARS, 1, (short) 0, ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
-            player.getInventory().setItem(5, shears);
-        }
+        GameHandler.getGameHandler().getMatch().getModules().getModule(RespawnModule.class).giveObserversKit(player);
 
         try {
             player.updateInventory();

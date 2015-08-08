@@ -142,6 +142,8 @@ public enum ChatConstant {
     GENERIC_RANKS_MORE_INFO("generic.ranksMoreInfo"),
     GENERIC_SELF_RANK_GIVEN("generic.selfRankGiven"),
     GENERIC_SELF_RANK_REMOVED("generic.selfRankRemoved"),
+    GENERIC_ENABLED_SPECTATOR_MODE("generic.enabledSpectatorMode"),
+    GENERIC_DISABLED_SPECTATOR_MODE("generic.disabledSpectatorMode"),
 
     MISC_ENEMY("misc.enemy"),
     MISC_FATE("misc.fate"),
@@ -242,7 +244,9 @@ public enum ChatConstant {
     UI_DEFAULT_CHANNEL_GLOBAL("userInterface.defaultChannelGlobal"),
     UI_DEFAULT_CHANNEL_ADMIN("userInterface.defaultChannelAdmin"),
     UI_DEFAULT_CHANNEL_TEAM("userInterface.defaultChannelTeam"),
-    UI_TIME_ELAPSED("userInterface.timeElapsed");
+    UI_TIME_ELAPSED("userInterface.timeElapsed"),
+    UI_TOGGLE_SPECTATOR_MODE("userInterface.toggleSpectatorMode"),
+    UI_LEFT_CLICK("userInterface.leftClick");
 
     private final String path;
 

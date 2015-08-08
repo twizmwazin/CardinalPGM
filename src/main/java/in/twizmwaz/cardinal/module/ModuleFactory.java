@@ -57,6 +57,7 @@ import in.twizmwaz.cardinal.module.modules.scorebox.ScoreboxBuilder;
 import in.twizmwaz.cardinal.module.modules.snowflakes.SnowflakesBuilder;
 import in.twizmwaz.cardinal.module.modules.sound.SoundModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.spectatorMode.SpectatorModeModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.startTimer.StartTimerBuilder;
 import in.twizmwaz.cardinal.module.modules.tasker.TaskerModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.team.TeamModuleBuilder;
@@ -162,7 +163,8 @@ public class ModuleFactory {
             InvisibleBlockBuilder.class,
             ItemDropBuilder.class,
             GuiKeepModuleBuilder.class,
-            RankModuleBuilder.class
+            RankModuleBuilder.class,
+            SpectatorModeModuleBuilder.class
     };
     private final List<ModuleBuilder> builders;
 
