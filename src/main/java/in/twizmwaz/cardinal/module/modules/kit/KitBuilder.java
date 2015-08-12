@@ -47,26 +47,11 @@ public class KitBuilder implements ModuleBuilder {
             armors.addAll(element.getChildren("leggings"));
             armors.addAll(element.getChildren("boots"));
             for (Element piece : armors) {
-                ItemStack itemStack = new ItemStack(Material.matchMaterial(piece.getText()), 1);
-                if (piece.getAttributeValue("damage") != null) {
-                    itemStack.setDurability(Short.parseShort(piece.getAttributeValue("damage")));
-                }
+                ItemStack itemStack = Parser.getItem(piece);
                 if (itemStack.getItemMeta() instanceof LeatherArmorMeta && piece.getAttributeValue("color") != null) {
                     LeatherArmorMeta meta = (LeatherArmorMeta) itemStack.getItemMeta();
                     meta.setColor(MiscUtil.convertHexToRGB(piece.getAttributeValue("color")));
                     itemStack.setItemMeta(meta);
-                }
-                try {
-                    for (String raw : piece.getAttributeValue("enchantment").split(";")) {
-                        String[] enchant = raw.split(":");
-                        try {
-                            itemStack.addUnsafeEnchantment(Enchantment.getByName(Strings.getTechnicalName(enchant[0])), Numbers.parseInt(enchant[1]));
-                        } catch (ArrayIndexOutOfBoundsException e) {
-                            itemStack.addUnsafeEnchantment(Enchantment.getByName(Strings.getTechnicalName(enchant[0])), 1);
-                        }
-                    }
-                } catch (NullPointerException e) {
-
                 }
                 ArmorType type = ArmorType.getArmorType(piece.getName());
                 armor.add(new KitArmor(itemStack, type));
