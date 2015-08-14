@@ -92,7 +92,10 @@
         <mapSet>Next map set to {0}</mapSet>
         <markedForReloading>{0} successfully marked for reloading.</markedForReloading>
         <allMarkedReloading>All maps successfully marked for reloading.</allMarkedReloading>
-        <countdownCancelled>All countdowns cancelled.</countdownCancelled>
+        <startCountdownCancelled>Match start countdown cancelled</startCountdownCancelled>
+        <cycleCountdownCancelled>Map cycle countdown cancelled</cycleCountdownCancelled>
+        <countdownCancelled>All countdowns cancelled</countdownCancelled>
+        <noCountdowns>There are no countdowns to cancel</noCountdowns>
         <autoStart>Auto-start enabled for this match</autoStart>
         <autoStartDisabled>Auto-start disabled for this match</autoStartDisabled>
         <skippedOver>Successfully skipped over {0}</skippedOver>
