@@ -319,30 +319,29 @@
         <attackPlayerFists>{0} felt the fury of {1}'s fists</attackPlayerFists>
         <attackPlayer>{0} was slain by {1}'s {2}</attackPlayer>
         <attack>{0} was slain</attack>
-        <fallPlayerKnocked>{0} was {1} off a high place ({2}) by {3}'s {4}</fallPlayerKnocked>
-        <fallPlayerShot>{0} was {1} off a high place ({2}) by {3} ({4})</fallPlayerShot>
-        <fallPlayerBlown>{0} was {1} off a high place ({2}) by {3}'s TNT</fallPlayerBlown>
-        <shot>shot</shot>
-        <knocked>knocked</knocked>
-        <blown>blown</blown>
+        <fists>fists</fists>
+        <fallPlayerKnocked>{0} was knocked off a high place ({1} blocks) by {2}'s {3}</fallPlayerKnocked>
+        <fallPlayerShot>{0} was shot ({1} blocks) off a high place ({2} blocks) by {3}</fallPlayerShot>
+        <fallPlayerBlown>{0} was blown off a high place ({1} blocks) by {2}'s TNT</fallPlayerBlown>
         <spleefed>spleefed</spleefed>
-        <fall>{0} hit the ground too hard</fall>
+        <fall>{0} hit the ground too hard ({1} blocks)</fall>
         <fallingBlock>{0} was squashed by a falling anvil</fallingBlock>
         <fire>{0} burned to death</fire>
         <lava>{0} tried to swim in lava</lava>
         <lightning>{0} was struck by lightning</lightning>
-        <potionPlayer>{0} took {1}'s potion to the face</potionPlayer>
+        <potionPlayer>{0} took {1}'s potion to the face ({2} blocks)</potionPlayer>
         <potion>{0} took a potion to the face</potion>
-        <projectilePlayer>{0} was shot by {1}</projectilePlayer>
+        <projectilePlayer>{0} was shot by {1} ({2} blocks)</projectilePlayer>
         <projectile>{0} was shot</projectile>
         <starvation>{0} starved to death</starvation>
         <suffocation>{0} suffocated in a wall</suffocation>
         <suicide>{0} died</suicide>
         <thornsPlayer>{0} died trying to hurt {1}</thornsPlayer>
         <thorns>{0} died trying to hurt an enemy</thorns>
-        <voidPlayerKnocked>{0} was {1} out of the world by {3}'s {4}</voidPlayerKnocked>
-        <voidPlayerShot>{0} was {1} out of the world by {3} ({4})</voidPlayerShot>
-        <voidPlayerBlown>{0} was {1} out of the world by {3}'s TNT</voidPlayerBlown>
+        <voidPlayerKnocked>{0} was knocked out of the world by {1}'s {2}</voidPlayerKnocked>
+        <voidPlayerKnockedFists>{0} was knocked out of the world by {1}'s fists</voidPlayerKnockedFists>
+        <voidPlayerShot>{0} was shot ({1} blocks) out of the world by {2}</voidPlayerShot>
+        <voidPlayerBlown>{0} was blown out of the world by {1}'s TNT</voidPlayerBlown>
         <void>{0} fell out of the world</void>
         <wither>{0} withered away</wither>
         <unknown>{0} died from unknown causes</unknown>

@@ -312,7 +312,42 @@ public enum ChatConstant {
     UI_MODE_IN_TIME("userInterface.modeInTime"),
 
     SNOWFLAKES_SNOWFLAKE("snowflakes.snowflake"),
-    SNOWFLAKES_SNOWFLAKES("snowflakes.snowflakes");
+    SNOWFLAKES_SNOWFLAKES("snowflakes.snowflakes"),
+
+    DEATH_EXPLOSION_SELF("deathMsg.explosionSelf"),
+    DEATH_EXPLOSION_PLAYER("deathMsg.explosionPlayer"),
+    DEATH_EXPLOSION("deathMsg.explosion"),
+    DEATH_CONTACT("deathMsg.contact"),
+    DEATH_DROWNING("deathMsg.drowning"),
+    DEATH_ATTACK_PLAYER_FISTS("deathMsg.attackPlayerFists"),
+    DEATH_ATTACK_PLAYER("deathMsg.attackPlayer"),
+    DEATH_ATTACK("deathMsg.attack"),
+    DEATH_FISTS("deathMsg.fists"),
+    DEATH_FALL_PLAYER_KNOCKED("deathMsg.fallPlayerKnocked"),
+    DEATH_FALL_PLAYER_SHOT("deathMsg.fallPlayerShot"),
+    DEATH_FALL_PLAYER_BLOWN("deathMsg.fallPlayerBlown"),
+    DEATH_SPLEEFED("deathMsg.spleefed"),
+    DEATH_FALL("deathMsg.fall"),
+    DEATH_FALLING_BLOCK("deathMsg.fallingBlock"),
+    DEATH_FIRE("deathMsg.fire"),
+    DEATH_LAVA("deathMsg.lava"),
+    DEATH_LIGHTNING("deathMsg.lightning"),
+    DEATH_POTION_PLAYER("deathMsg.potionPlayer"),
+    DEATH_POTION("deathMsg.potion"),
+    DEATH_PROJECTILE_PLAYER("deathMsg.projectilePlayer"),
+    DEATH_PROJECTILE("deathMsg.projectile"),
+    DEATH_STARVATION("deathMsg.starvation"),
+    DEATH_SUFFOCATION("deathMsg.suffocation"),
+    DEATH_SUICIDE("deathMsg.suicide"),
+    DEATH_THORNS_PLAYER("deathMsg.thornsPlayer"),
+    DEATH_THORNS("deathMsg.thorns"),
+    DEATH_VOID_PLAYER_KNOCKED("deathMsg.voidPlayerKnocked"),
+    DEATH_VOID_PLAYER_KNOCKED_FISTS("deathMsg.voidPlayerKnockedFists"),
+    DEATH_VOID_PLAYER_SHOT("deathMsg.voidPlayerShot"),
+    DEATH_VOID_PLAYER_BLOWN("deathMsg.voidPlayerBlown"),
+    DEATH_VOID("deathMsg.void"),
+    DEATH_WITHER("deathMsg.wither"),
+    DEATH_UNKNOWN("deathMsg.unknown");
 
     private final String path;
 
