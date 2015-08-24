@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.guiKeep;
 
 import com.google.common.base.Optional;
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Teams;
@@ -20,7 +21,7 @@ public class GuiKeepModule implements Module {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
-        if (!team.isPresent() || !team.orNull().isObserver()) {
+        if (GameHandler.getGameHandler().getMatch().isRunning() && (!team.isPresent() || !team.orNull().isObserver())) {
             if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                 if (event.getClickedBlock() != null) {
                     if (event.getClickedBlock().getType().equals(Material.WORKBENCH)) {
