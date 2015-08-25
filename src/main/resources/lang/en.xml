@@ -95,6 +95,7 @@
         <unreadyBeforeMatch>You must unready before the match starts.</unreadyBeforeMatch>
         <teamAlreadyReady>Your team is already ready.</teamAlreadyReady>
         <teamAlreadyNotReady>Your team is already not ready.</teamAlreadyNotReady>
+        <teamCanNotUnready>Your team can't unready.</teamCanNotUnready>
         <invalidPageNumber>Invalid page number specified! {0} total pages.</invalidPageNumber>
         <invalidArguments>Invalid arguments.</invalidArguments>
         <tooFewArguments>Too few arguments.</tooFewArguments>

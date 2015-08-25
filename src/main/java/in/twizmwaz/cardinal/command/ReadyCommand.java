@@ -33,7 +33,7 @@ public class ReadyCommand {
         if (!team.isPresent()) {
             throw new CommandException(ChatConstant.ERROR_TEAM_ABSENT.getMessage(ChatUtil.getLocale(sender)));
         }
-        if (team.get().isReady()) {
+        if (team.get().isReady() || (!Cardinal.getInstance().getConfig().getBoolean("observers-ready") && team.get().isObserver())) {
             throw new CommandException(ChatConstant.ERROR_TEAM_ALREADY_READY.getMessage(ChatUtil.getLocale(sender)));
         }
         team.get().setReady(true);
@@ -55,6 +55,9 @@ public class ReadyCommand {
         Optional<TeamModule> team = Teams.getTeamByPlayer((Player) sender);
         if (!team.isPresent()) {
             throw new CommandException(ChatConstant.ERROR_TEAM_ABSENT.getMessage(ChatUtil.getLocale(sender)));
+        }
+        if (!Cardinal.getInstance().getConfig().getBoolean("observers-ready") && team.get().isObserver()) {
+            throw new CommandException(ChatConstant.ERROR_TEAM_CAN_NOT_UNREADY.getMessage(ChatUtil.getLocale(sender)));
         }
         if (!team.get().isReady()) {
             throw new CommandException(ChatConstant.ERROR_TEAM_ALREADY_NOT_READY.getMessage(ChatUtil.getLocale(sender)));
