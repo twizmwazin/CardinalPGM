@@ -74,7 +74,7 @@ public class ClassModule implements Module {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_NO_CLASS_CHANGE).getMessage(event.getPlayer().getLocale()));
             }
-            if (!restrict && !event.getPlayer().isOp()) {
+            if (restrict && !event.getPlayer().isOp()) {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_CLASS_RESTRICTED, ChatColor.AQUA + name + ChatColor.RED).getMessage(event.getPlayer().getLocale()));
             }
