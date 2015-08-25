@@ -44,7 +44,7 @@ public class CycleCommand {
         CycleTimerModule timer = GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimerModule.class);
         timer.setOriginalState(GameHandler.getGameHandler().getMatch().getState());
         timer.setCancelled(true);
-        timer.startTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
+        timer.cycleTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
     }
 
     @Command(aliases = {"setnext", "sn"}, desc = "Sets the next map.", usage = "[map]", min = 1)
@@ -78,7 +78,7 @@ public class CycleCommand {
         CycleTimerModule timer = GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimerModule.class);
         timer.setOriginalState(GameHandler.getGameHandler().getMatch().getState());
         timer.setCancelled(true);
-        timer.startTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
+        timer.cycleTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
     }
 
     private static LoadedMap getMap(String input) {

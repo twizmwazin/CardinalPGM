@@ -303,6 +303,7 @@ public enum ChatConstant {
     UI_DEFAULT_CHANNEL_ADMIN("userInterface.defaultChannelAdmin"),
     UI_DEFAULT_CHANNEL_TEAM("userInterface.defaultChannelTeam"),
     UI_TIME_ELAPSED("userInterface.timeElapsed"),
+    UI_MODE_IN_TIME("userInterface.modeInTime"),
 
     SNOWFLAKES_SNOWFLAKE("snowflakes.snowflake"),
     SNOWFLAKES_SNOWFLAKES("snowflakes.snowflakes");

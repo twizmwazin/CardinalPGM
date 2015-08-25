@@ -4,13 +4,20 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
+import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.TaskedModule;
+import in.twizmwaz.cardinal.module.modules.bossBar.BossBar;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
+import in.twizmwaz.cardinal.module.modules.monumentModes.MonumentModes;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.util.ChatUtil;
+import in.twizmwaz.cardinal.util.MiscUtil;
 import in.twizmwaz.cardinal.util.Strings;
 import org.bukkit.ChatColor;
 import org.bukkit.event.HandlerList;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class TimeNotifications implements TaskedModule {
 
@@ -46,6 +53,36 @@ public class TimeNotifications implements TaskedModule {
                 return;
             }
             timeRemaining = TimeLimit.getMatchTimeLimit() - time;
+            if (GameHandler.getGameHandler().getMatch().getModules().getModule(MonumentModes.class) != null) {
+                ModuleCollection<MonumentModes> modes = GameHandler.getGameHandler().getMatch().getModules().getModules(MonumentModes.class);
+                HashMap<MonumentModes, Integer> modesWithTime = new HashMap<>();
+                for (MonumentModes modeForTime : modes) {
+                    modesWithTime.put(modeForTime, modeForTime.getTimeAfter());
+                }
+                List<MonumentModes> sortedModes = MiscUtil.getSortedHashMapKeyset(modesWithTime);
+                int timeBeforeMode = 1;
+                int showBefore = 60;
+                String name = MonumentModes.getModeName();
+                for (MonumentModes mode : sortedModes) {
+                    if (!mode.hasRan()) {
+                        timeBeforeMode = mode.getTimeAfter() - (int) MatchTimer.getTimeInSeconds();
+                        name = mode.getName();
+                        showBefore = mode.getShowBefore();
+                    }
+                }
+                int timeLeft = TimeLimit.getMatchTimeLimit() - (int) MatchTimer.getTimeInSeconds();
+                if (((timeBeforeMode > showBefore) || (name == null)) && (TimeLimit.getMatchTimeLimit() > 0)) {
+                    int percent = (int) ((100F * timeLeft) / TimeLimit.getMatchTimeLimit());
+                    BossBar.sendGlobalBossBar(new UnlocalizedChatMessage(ChatColor.AQUA + "{0} " + ChatUtil.getTimerColor(timeRemaining) + "{1}", new LocalizedChatMessage(ChatConstant.UI_TIMER), new UnlocalizedChatMessage(Strings.formatTime(timeRemaining + 1))), percent);
+                }
+                if (timeBeforeMode == showBefore || timeBeforeMode <= 0) {
+                    BossBar.delete();
+                }
+            } else if (TimeLimit.getMatchTimeLimit() > 0) {
+                int timeLeft = ((TimeLimit.getMatchTimeLimit() - (int) MatchTimer.getTimeInSeconds()));
+                int percent = (int) ((100F * timeLeft) / TimeLimit.getMatchTimeLimit());
+                BossBar.sendGlobalBossBar(new UnlocalizedChatMessage(ChatColor.AQUA + "{0} " + ChatUtil.getTimerColor(timeRemaining) + "{1}", new LocalizedChatMessage(ChatConstant.UI_TIMER), new UnlocalizedChatMessage(Strings.formatTime(timeRemaining + 1))), percent);
+            }
             if (nextTimeMessage >= timeRemaining) {
                 if (nextTimeMessage <= 5) {
                     ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.AQUA + "{0} " + ChatColor.DARK_RED + Strings.formatTime(nextTimeMessage), new LocalizedChatMessage(ChatConstant.UI_TIMER)));
@@ -69,4 +106,5 @@ public class TimeNotifications implements TaskedModule {
             }
         }
     }
+
 }
