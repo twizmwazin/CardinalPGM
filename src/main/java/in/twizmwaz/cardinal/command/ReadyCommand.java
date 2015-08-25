@@ -10,6 +10,7 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.match.MatchState;
+import in.twizmwaz.cardinal.module.modules.bossBar.BossBar;
 import in.twizmwaz.cardinal.module.modules.startTimer.StartTimer;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ChatUtil;
@@ -68,6 +69,7 @@ public class ReadyCommand {
             GameHandler.getGameHandler().getMatch().setState(MatchState.WAITING);
             GameHandler.getGameHandler().getMatch().getModules().getModule(StartTimer.class).setCancelled(true);
             ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.GENERIC_UNREADY_CANCEL_COUNTDOWN, team.get().getCompleteName() + ChatColor.RED)));
+            BossBar.delete();
         }
     }
 

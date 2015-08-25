@@ -21,6 +21,10 @@ public class MonumentModesBuilder implements ModuleBuilder {
         for (Element modes : match.getDocument().getRootElement().getChildren("modes")) {
             for (Element mode : modes.getChildren("mode")) {
                 int after = Strings.timeStringToSeconds(mode.getAttributeValue("after"));
+                int showBefore = (after < 60 ? after : 60);
+                if (mode.getAttributeValue("show-before") != null) {
+                    showBefore = Strings.timeStringToSeconds(mode.getAttributeValue("show-before"));
+                }
                 Material material;
                 int damageValue = 0;
                 if (mode.getAttributeValue("material").contains(":")) {
@@ -33,7 +37,7 @@ public class MonumentModesBuilder implements ModuleBuilder {
                 if (mode.getAttributeValue("name") != null) {
                     name = ChatColor.translateAlternateColorCodes('`', mode.getAttributeValue("name"));
                 }
-                results.add(new MonumentModes(after, material, damageValue, name));
+                results.add(new MonumentModes(after, material, damageValue, name, showBefore));
             }
         }
         boolean core = match.getModules().getModules(CoreObjective.class).size() > 0;
@@ -41,8 +45,8 @@ public class MonumentModesBuilder implements ModuleBuilder {
             for (CoreObjective coreObjective : match.getModules().getModules(CoreObjective.class)) {
                 coreObjective.setChangesModes(true);
             }
-            results.add(new MonumentModes(900, Material.GOLD_BLOCK, 0, "GOLD CORE MODE"));
-            results.add(new MonumentModes(1200, Material.GLASS, 0, "GLASS CORE MODE"));
+            results.add(new MonumentModes(900, Material.GOLD_BLOCK, 0, "GOLD CORE MODE", 60));
+            results.add(new MonumentModes(1200, Material.GLASS, 0, "GLASS CORE MODE", 60));
         }
         return results;
     }
