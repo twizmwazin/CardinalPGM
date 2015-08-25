@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
@@ -87,6 +88,19 @@ public class BuildHeight implements Module {
 
     @EventHandler
     public void onBlockPistonExtend(BlockPistonExtendEvent event) {
+        if (event.getBlock().getRelative(event.getDirection()).getY() >= height){
+            event.setCancelled(true);
+        } else {
+            for (Block block : event.getBlocks()) {
+                if (block.getRelative(event.getDirection()).getY() >= height) {
+                    event.setCancelled(true);
+                }
+            }
+        }
+    } 
+
+    @EventHandler
+    public void onBlockPistonRetract(BlockPistonRetractEvent event) {
         for (Block block : event.getBlocks()) {
             if (block.getRelative(event.getDirection()).getY() >= height) {
                 event.setCancelled(true);
