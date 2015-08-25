@@ -40,7 +40,7 @@ public class TeamPicker implements Module {
 
 
     public Inventory getTeamPicker(Player player) {
-        int size = ((GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class).size() / 9) + 1) * 9;
+        int size = (((GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class).size() + (Teams.getTeamByPlayer(player).isPresent() && Teams.getTeamByPlayer(player).get().isObserver() ? 0 : 1 )) / 9) + 1) * 9;
         int classesSize = ((GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class).size() + 8) / 9) * 9;
         Inventory picker = Bukkit.createInventory(null, size + classesSize, ChatColor.DARK_RED + new LocalizedChatMessage(ChatConstant.UI_TEAM_PICK).getMessage(player.getLocale()));
         int item = 0;
@@ -64,6 +64,10 @@ public class TeamPicker implements Module {
             }
         }
         item = size;
+        if (!(Teams.getTeamByPlayer(player).isPresent() && Teams.getTeamByPlayer(player).get().isObserver())){
+            ItemStack leave = Items.createItem(Material.LEATHER_BOOTS, 1, (short) 0, ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_LEAVE).getMessage(player.getLocale()), Arrays.asList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_LEAVE_LORE).getMessage(player.getLocale())));
+            picker.setItem(item - 1, leave);
+        }
         for (ClassModule classModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class)) {
             ItemStack classStack = Items.createItem(classModule.getIcon(), 1, (short) 0, ChatColor.GREEN + classModule.getName(), Arrays.asList(ChatColor.GOLD + classModule.getLongDescription()));
             ItemMeta classMeta = classStack.getItemMeta();
@@ -93,6 +97,17 @@ public class TeamPicker implements Module {
                                     player.closeInventory();
                                     player.playSound(player.getLocation(), Sound.CLICK, 1, 2);
                                     Bukkit.dispatchCommand(player, "join");
+                                }
+                            }
+                        }
+                    } else if (item.getType().equals(Material.LEATHER_BOOTS)) {
+                        if (item.hasItemMeta()) {
+                            if (item.getItemMeta().hasDisplayName()) {
+                                if (item.getItemMeta().getDisplayName().equals(ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_LEAVE).getMessage(player.getLocale()))) {
+                                    event.setCancelled(true);
+                                    player.closeInventory();
+                                    player.playSound(player.getLocation(), Sound.CLICK, 1, 2);
+                                    Bukkit.dispatchCommand(player, "leave");
                                 }
                             }
                         }

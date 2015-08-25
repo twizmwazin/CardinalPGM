@@ -177,6 +177,8 @@ public enum ChatConstant {
     UI_TEAM_PICK("userInterface.teamPick"),
     UI_TEAM_JOIN_AUTO("userInterface.teamJoinAuto"),
     UI_TEAM_JOIN_AUTO_LORE("userInterface.teamJoinAutoLore"),
+    UI_TEAM_LEAVE("userInterface.teamLeave"),
+    UI_TEAM_LEAVE_LORE("userInterface.teamLeaveLore"),
     UI_TEAM_CAPACITY("userInterface.teamCapacity"),
     UI_TEAM_CAN_PICK("userInterface.teamCanPick"),
     UI_TEAM_SELECTION("userInterface.teamSelection"),
