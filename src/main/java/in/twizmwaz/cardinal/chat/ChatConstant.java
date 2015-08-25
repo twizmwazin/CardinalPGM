@@ -101,6 +101,7 @@ public enum ChatConstant {
     ERROR_UNREADY_BEFORE_MATCH("error.unreadyBeforeMatch"),
     ERROR_TEAM_ALREADY_READY("error.teamAlreadyReady"),
     ERROR_TEAM_ALREADY_NOT_READY("error.teamAlreadyNotReady"),
+    ERROR_TEAM_CAN_NOT_UNREADY("error.teamCanNotUnready"),
     ERROR_INVALID_PAGE_NUMBER("error.invalidPageNumber"),
     ERROR_INVALID_ARGUMENTS("error.invalidArguments"),
     ERROR_TOO_FEW_ARGUMENTS("error.tooFewArguments"),
