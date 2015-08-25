@@ -175,6 +175,8 @@
         <teamPick>Pick your team</teamPick>
         <teamJoinAuto>Auto Join</teamJoinAuto>
         <teamJoinAutoLore>Puts you on the team with the fewest players</teamJoinAutoLore>
+        <teamLeave>Leave Match</teamLeave>
+        <teamLeaveLore>Join the observers</teamLeaveLore>
         <teamCapacity>Team is at capacity, you can not join.</teamCapacity>
         <teamCanPick>You are able to pick your team, click to join!</teamCanPick>
         <teamSelection>Team Selection</teamSelection>
