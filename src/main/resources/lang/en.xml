@@ -100,6 +100,8 @@
         <invalidArguments>Invalid arguments.</invalidArguments>
         <tooFewArguments>Too few arguments.</tooFewArguments>
         <cannotCalculateScores>Team scores cannot be calculated.</cannotCalculateScores>
+        <proximityObsOnly>The /proximity command is only available to observers.</proximityObsOnly>
+        <proximityNoScoring>There are no objectives that track proximity.</proximityNoScoring>
     </error>
     <generic>
         <mapSet>Next map set to {0}</mapSet>

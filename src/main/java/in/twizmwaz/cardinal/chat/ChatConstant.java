@@ -106,6 +106,8 @@ public enum ChatConstant {
     ERROR_INVALID_ARGUMENTS("error.invalidArguments"),
     ERROR_TOO_FEW_ARGUMENTS("error.tooFewArguments"),
     ERROR_CANNOT_CALCULATE_SCORES("error.cannotCalculateScores"),
+    ERROR_PROXIMITY_OBS_ONLY("error.proximityObsOnly"),
+    ERROR_PROXIMITY_NO_SCORING("error.proximityNoScoring"),
 
     GENERIC_MAP_SET("generic.mapSet"),
     GENERIC_MARKED_FOR_RELOADING("generic.markedForReloading"),
