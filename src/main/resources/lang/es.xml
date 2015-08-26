@@ -79,6 +79,8 @@
         <playableLeave>No puedes salir del terreno de juego</playableLeave>
         <playableInteract>No puedes interactuar con bloques de fuera del terreno de juego</playableInteract>
         <globalMuteEnabled>No puedes hablar en el chat mientras el silenciado global está habilitado.</globalMuteEnabled>
+        <proximityObsOnly>El comando /proximity solo esta disponible para los observadores.</proximityObsOnly>
+        <proximityNoScoring>No hay objetivos que tengan proximidad.</proximityNoScoring>
     </error>
     <generic>
         <mapSet>El siguiente mapa ha sido establecido a {0}</mapSet>
