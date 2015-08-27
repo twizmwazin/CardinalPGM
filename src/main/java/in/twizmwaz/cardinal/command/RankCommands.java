@@ -17,7 +17,7 @@ import org.bukkit.command.CommandSender;
 
 public class RankCommands {
 
-    @Command(aliases = {"add"}, desc = "Give a player a rank.", min = 2, usage = "<player> <rank>")
+    @Command(aliases = {"add", "give"}, desc = "Give a player a rank.", min = 2, usage = "<player> <rank>")
     @CommandPermissions("ranks.add")
     public static void add(final CommandContext args, CommandSender sender) throws CommandException {
         OfflinePlayer player = args.getString(0).startsWith("@") ? Bukkit.getOfflinePlayer(args.getString(0).substring(1)) : Bukkit.getPlayer(args.getString(0));
