@@ -23,18 +23,9 @@ public class CycleCommand {
         if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
             throw new CommandException(ChatConstant.ERROR_CYCLE_DURING_MATCH.getMessage(ChatUtil.getLocale(sender)));
         }
-        if (GameHandler.getGameHandler().getMatch().isRunning()) {
-            if (!cmd.hasFlag('f')) {
-                throw new CommandException(ChatConstant.ERROR_CYCLE_DURING_MATCH.getMessage(ChatUtil.getLocale(sender)));
-            }
-            if (cmd.hasFlag('n')) {
-                GameHandler.getGameHandler().getMatch().end();
-            } else {
-                GameHandler.getGameHandler().getMatch().end(TimeLimit.getMatchWinner());
-            }
-        }
+        processCycle(cmd, sender);
         if (cmd.argsLength() > 1) {
-            LoadedMap next = getMap(cmd.getJoinedStrings(1));
+            LoadedMap next = getMap(cmd.getJoinedStrings(1).replace(" -f", "").replace("-f ", ""));
             if (next == null) {
                 throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_MAP_MATCH).getMessage(ChatUtil.getLocale(sender)));
             } else {
@@ -64,16 +55,7 @@ public class CycleCommand {
         if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(ChatUtil.getLocale(sender)));
         }
-        if (GameHandler.getGameHandler().getMatch().isRunning()) {
-            if (!cmd.hasFlag('f')) {
-                throw new CommandException(ChatConstant.ERROR_CYCLE_DURING_MATCH.getMessage(ChatUtil.getLocale(sender)));
-            }
-            if (cmd.hasFlag('n')) {
-                GameHandler.getGameHandler().getMatch().end();
-            } else {
-                GameHandler.getGameHandler().getMatch().end(TimeLimit.getMatchWinner());
-            }
-        }
+        processCycle(cmd, sender);
         setCycleMap(GameHandler.getGameHandler().getMatch().getLoadedMap());
         CycleTimerModule timer = GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimerModule.class);
         timer.setOriginalState(GameHandler.getGameHandler().getMatch().getState());
@@ -101,5 +83,18 @@ public class CycleCommand {
 
     private static void setCycleMap(LoadedMap map) {
         GameHandler.getGameHandler().getCycle().setMap(map);
+    }
+
+    private static void processCycle(CommandContext cmd, CommandSender sender) throws CommandException {
+        if (GameHandler.getGameHandler().getMatch().isRunning()) {
+            if (!cmd.hasFlag('f')) {
+                throw new CommandException(ChatConstant.ERROR_CYCLE_DURING_MATCH.getMessage(ChatUtil.getLocale(sender)));
+            }
+            if (cmd.hasFlag('n')) {
+                GameHandler.getGameHandler().getMatch().end();
+            } else {
+                GameHandler.getGameHandler().getMatch().end(TimeLimit.getMatchWinner());
+            }
+        }
     }
 }
