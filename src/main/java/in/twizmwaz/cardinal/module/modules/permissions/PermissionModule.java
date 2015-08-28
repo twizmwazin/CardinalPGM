@@ -150,6 +150,7 @@ public class PermissionModule implements Module {
             muted.add(player);
             disablePermission(player, "cardinal.chat.team");
             disablePermission(player, "cardinal.chat.global");
+            disablePermission(player, "cardinal.me");
         }
     }
 
@@ -158,6 +159,7 @@ public class PermissionModule implements Module {
             muted.remove(player);
             enablePermission(player, "cardinal.chat.team");
             enablePermission(player, "cardinal.chat.global");
+            enablePermission(player, "cardinal.me");
         }
     }
 
