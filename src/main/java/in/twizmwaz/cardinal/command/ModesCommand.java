@@ -38,7 +38,7 @@ public class ModesCommand {
             Collections.reverse(sortedModes);
             if (cmd.argsLength() == 0) {
                 int page = 1;
-                sender.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "-------------- " + ChatColor.RESET + "{0}" + ChatColor.DARK_AQUA + " (" + ChatColor.AQUA + page + ChatColor.DARK_AQUA + " {1} " + ChatColor.AQUA + ((modes.size() + 7) / 8) + ChatColor.DARK_AQUA + ")" + ChatColor.RED + " --------------", ChatConstant.GENERIC_MONUMENT_MODES.asMessage(), ChatConstant.UI_OF.asMessage()).getMessage(ChatUtil.getLocale(sender)));
+                sender.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "-------------- " + ChatColor.RESET + "{0}" + ChatColor.DARK_AQUA + " (" + ChatColor.DARK_AQUA + "{1}" + ChatColor.DARK_AQUA + ")" + ChatColor.RED + " --------------", ChatConstant.GENERIC_MONUMENT_MODES.asMessage(), new LocalizedChatMessage(ChatConstant.UI_OF, ChatColor.AQUA + "" + page + ChatColor.DARK_AQUA, ChatColor.AQUA + "" + ((modes.size() + 7) / 8))).getMessage(ChatUtil.getLocale(sender)));
                 int count = 1;
                 for (MonumentModes mode : sortedModes) {
                     if ((count + 7) / 8 == page) {
@@ -49,7 +49,7 @@ public class ModesCommand {
             } else if (cmd.argsLength() == 1) {
                 if (cmd.getString(0).equalsIgnoreCase("list")) {
                     int page = 1;
-                    sender.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "-------------- " + ChatColor.RESET + "{0}" + ChatColor.DARK_AQUA + " (" + ChatColor.AQUA + page + ChatColor.DARK_AQUA + " {1} " + ChatColor.AQUA + ((modes.size() + 7) / 8) + ChatColor.DARK_AQUA + ")" + ChatColor.RED + " --------------", ChatConstant.GENERIC_MONUMENT_MODES.asMessage(), ChatConstant.UI_OF.asMessage()).getMessage(ChatUtil.getLocale(sender)));
+                    sender.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "-------------- " + ChatColor.RESET + "{0}" + ChatColor.DARK_AQUA + " (" + ChatColor.DARK_AQUA + "{1}" + ChatColor.DARK_AQUA + ")" + ChatColor.RED + " --------------", ChatConstant.GENERIC_MONUMENT_MODES.asMessage(), new LocalizedChatMessage(ChatConstant.UI_OF, ChatColor.AQUA + "" + page + ChatColor.DARK_AQUA, ChatColor.AQUA + "" + ((modes.size() + 7) / 8))).getMessage(ChatUtil.getLocale(sender)));
                     int count = 1;
                     for (MonumentModes mode : sortedModes) {
                         if ((count + 7) / 8 == page) {
