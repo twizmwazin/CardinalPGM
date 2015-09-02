@@ -103,6 +103,12 @@
         <cannotCalculateScores>Team scores cannot be calculated.</cannotCalculateScores>
         <proximityObsOnly>The /proximity command is only available to observers.</proximityObsOnly>
         <proximityNoScoring>There are no objectives that track proximity.</proximityNoScoring>
+        <teamAlreadyRegistered>You have already registered this team.</teamAlreadyRegistered>
+        <teamAlreadyRegisteredAlias>This team is registered. Use /unregister to be able to change the name</teamAlreadyRegisteredAlias>
+        <cantRegisterMoreTeams>You can't register more teams. Try to unregister using /unregister</cantRegisterMoreTeams>
+        <cantFindAnyRegisteredTeam>No registered teams matched query. Only found: {0}</cantFindAnyRegisteredTeam>
+        <cantGetTeamList>Could not get the team list</cantGetTeamList>
+        <cantJoinTeamFull>Your team already has {0} players</cantJoinTeamFull>
     </error>
     <generic>
         <mapSet>Next map set to {0}</mapSet>
@@ -197,6 +203,9 @@
         <mutedBy>You were muted by {0}</mutedBy>
         <unmuted>You unmuted {0}</unmuted>
         <unmutedBy>You were unmuted by {0}</unmutedBy>
+        <teamRegistered>Successfully registered {0}</teamRegistered>
+        <teamUnregistered>Successfully unregistered {0}</teamUnregistered>
+        <userKickedTeamUnregistered>You have been kicked because your team has been unregistered of the match</userKickedTeamUnregistered>
     </generic>
     <misc>
         <enemy>the enemy</enemy>

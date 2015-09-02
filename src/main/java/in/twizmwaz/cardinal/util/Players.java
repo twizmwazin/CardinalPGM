@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.util;
 
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -49,6 +50,14 @@ public class Players {
             return ChatColor.DARK_AQUA + player.getName();
         } else {
             return ChatColor.GOLD + "\u2756" + ChatColor.DARK_AQUA + "Console";
+        }
+    }
+
+    public static OfflinePlayer matchSinglePlayer(String rawUsername) {
+        if (rawUsername.startsWith("@")) {
+            return Bukkit.getOfflinePlayer(rawUsername.substring(1));
+        } else {
+            return null;
         }
     }
 

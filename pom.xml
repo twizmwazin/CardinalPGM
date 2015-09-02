@@ -64,6 +64,11 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.8.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -110,6 +115,7 @@
                                     <include>org.jdom:jdom2</include>
                                     <include>commons-io:commons-io</include>
                                     <include>org.apache.commons:commons-lang3</include>
+                                    <include>org.jsoup:jsoup</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
