@@ -113,6 +113,12 @@
         <pollAlreadyVoted>You already voted.</pollAlreadyVoted>
         <breakFlag>You can not break flags.</breakFlag>
         <breakBlockUnderFlag>You can not break the block under the flag.</breakBlockUnderFlag>
+        <teamAlreadyRegistered>You have already registered this team.</teamAlreadyRegistered>
+        <teamAlreadyRegisteredAlias>This team is registered. Use /unregister to be able to change the name</teamAlreadyRegisteredAlias>
+        <cantRegisterMoreTeams>You can't register more teams. Try to unregister using /unregister</cantRegisterMoreTeams>
+        <cantFindAnyRegisteredTeam>No registered teams matched query. Only found: {0}</cantFindAnyRegisteredTeam>
+        <cantGetTeamList>Could not get the team list</cantGetTeamList>
+        <cantJoinTeamFull>Your team already has {0} players</cantJoinTeamFull>
     </error>
     <generic>
         <mapSet>Next map set to {0}</mapSet>
@@ -226,6 +232,9 @@
         <downloadStarting>New cardinal version was found, download starting...</downloadStarting>
         <downloadReady>{0} is ready! Restart server to finish the update.</downloadReady>
         <downloadFailed>{0} failed to update!</downloadFailed>
+        <teamRegistered>Successfully registered {0}</teamRegistered>
+        <teamUnregistered>Successfully unregistered {0}</teamUnregistered>
+        <userKickedTeamUnregistered>You have been kicked because your team has been unregistered of the match</userKickedTeamUnregistered>
     </generic>
     <misc>
         <enemy>the enemy</enemy>

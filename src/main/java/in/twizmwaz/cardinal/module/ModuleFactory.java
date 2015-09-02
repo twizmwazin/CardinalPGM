@@ -73,6 +73,7 @@ import in.twizmwaz.cardinal.module.modules.tasker.TaskerModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.team.TeamModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.teamManager.TeamManagerModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.teamPicker.TeamPickerBuilder;
+import in.twizmwaz.cardinal.module.modules.teamRegister.TeamRegisterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimitBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLock.TimeLockBuilder;
 import in.twizmwaz.cardinal.module.modules.timeNotifications.TimeNotificationsBuilder;
@@ -92,7 +93,6 @@ import in.twizmwaz.cardinal.util.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -193,7 +193,8 @@ public class ModuleFactory {
                 FallingBlocksBuilder.class,
                 SpectatorToolsBuilder.class,
                 ProjectileParticlesModuleBuilder.class,
-                FeedbackModuleBuilder.class
+                FeedbackModuleBuilder.class,
+                TeamRegisterModuleBuilder.class
         );
     }
 
