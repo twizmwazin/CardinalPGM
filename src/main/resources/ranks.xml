@@ -17,16 +17,18 @@
         <permission>cardinal.team.force</permission>
         <permission>cardinal.team.alias</permission>
         <permission>cardinal.teleport</permission>
-        <permission>whitelist.reload</permission>
-        <permission>whitelist.toggle</permission>
-        <permission>whitelist.on</permission>
-        <permission>whitelist.off</permission>
-        <permission>whitelist.status</permission>
-        <permission>whitelist.add</permission>
-        <permission>whitelist.remove</permission>
-        <permission>whitelist.list</permission>
-        <permission>whitelist.team</permission>
-        <permission>whitelist.kick</permission>
+        <permission>cardinal.whitelist.reload</permission>
+        <permission>cardinal.whitelist.toggle</permission>
+        <permission>cardinal.whitelist.on</permission>
+        <permission>cardinal.whitelist.off</permission>
+        <permission>cardinal.whitelist.status</permission>
+        <permission>cardinal.whitelist.add</permission>
+        <permission>cardinal.whitelist.remove</permission>
+        <permission>cardinal.whitelist.all</permission>
+        <permission>cardinal.whitelist.list</permission>
+        <permission>cardinal.whitelist.clear</permission>
+        <permission>cardinal.whitelist.team</permission>
+        <permission>cardinal.whitelist.kick</permission>
         <permission>cardinal.punish.warn</permission>
         <permission>cardinal.punish.kick</permission>
         <permission>cardinal.punish.ban</permission>
