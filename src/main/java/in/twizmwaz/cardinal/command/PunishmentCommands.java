@@ -102,8 +102,8 @@ public class PunishmentCommands {
         if (!GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).isMuted(player)) {
             throw new CommandException(ChatConstant.ERROR_PLAYER_NOT_MUTED.getMessage(ChatUtil.getLocale(sender)));
         }
-        sender.sendMessage(ChatColor.RED + "You muted " + Players.getName(player));
-        player.sendMessage(ChatColor.RED + "You were muted by " + Players.getName(sender));
+        sender.sendMessage(ChatColor.GREEN + "You unmuted " + Players.getName(player));
+        player.sendMessage(ChatColor.GREEN + "You were unmuted by " + Players.getName(sender));
         GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).unmute(player);
     }
 
