@@ -194,6 +194,10 @@ public enum ChatConstant {
     GENERIC_OBJECTIVE_IS_UNTOUCHED("generic.objectiveIsUntouched"),
     GENERIC_OBJECTIVE_WAS_TOUCHED("generic.objectiveWasTouched"),
     GENERIC_OBJECTIVE_WAS_COMPLETED("generic.objectiveWasCompleted"),
+    GENERIC_MUTED("generic.muted"),
+    GENERIC_MUTED_BY("generic.mutedBy"),
+    GENERIC_UNMUTED("generic.unmuted"),
+    GENERIC_UNMUTED_BY("generic.unmutedBy"),
 
     MISC_ENEMY("misc.enemy"),
     MISC_FATE("misc.fate"),

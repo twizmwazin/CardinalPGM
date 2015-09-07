@@ -6,6 +6,8 @@ import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.module.modules.chatChannels.AdminChannel;
 import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannel;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
@@ -84,8 +86,8 @@ public class PunishmentCommands {
         if (GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).isMuted(player)) {
             throw new CommandException(ChatConstant.ERROR_PLAYER_ALREADY_MUTED.getMessage(ChatUtil.getLocale(sender)));
         }
-        sender.sendMessage(ChatColor.RED + "You muted " + Players.getName(player));
-        player.sendMessage(ChatColor.RED + "You were muted by " + Players.getName(sender));
+        sender.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.GENERIC_MUTED, Players.getName(player))).getMessage(ChatUtil.getLocale(sender)));
+        player.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.GENERIC_MUTED_BY, Players.getName(sender))).getMessage(ChatUtil.getLocale(player)));
         GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).mute(player);
     }
 
@@ -102,8 +104,8 @@ public class PunishmentCommands {
         if (!GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).isMuted(player)) {
             throw new CommandException(ChatConstant.ERROR_PLAYER_NOT_MUTED.getMessage(ChatUtil.getLocale(sender)));
         }
-        sender.sendMessage(ChatColor.RED + "You muted " + Players.getName(player));
-        player.sendMessage(ChatColor.RED + "You were muted by " + Players.getName(sender));
+        sender.sendMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "{0}", new LocalizedChatMessage(ChatConstant.GENERIC_UNMUTED, Players.getName(player))).getMessage(ChatUtil.getLocale(sender)));
+        player.sendMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "{0}", new LocalizedChatMessage(ChatConstant.GENERIC_UNMUTED_BY, Players.getName(sender))).getMessage(ChatUtil.getLocale(player)));
         GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).unmute(player);
     }
 
