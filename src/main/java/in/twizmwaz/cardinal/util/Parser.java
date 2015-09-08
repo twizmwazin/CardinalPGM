@@ -22,21 +22,24 @@ public class Parser {
     public static ItemStack getItem(Element element) {
         int amount = Numbers.parseInt(element.getAttributeValue("amount", "1"));
         ItemStack itemStack;
-        if (element.getText().contains(":"))
-            itemStack = new ItemStack(Material.matchMaterial(element.getText().split(":")[0]), amount, (short) Numbers.parseInt(element.getText().split(":")[1]));
-        else itemStack = new ItemStack(Material.matchMaterial(element.getText()), amount);
-        if (element.getAttributeValue("unbreakable") != null && Boolean.parseBoolean(element.getAttributeValue("unbreakable"))) {
-            try {
-                net.minecraft.server.v1_8_R3.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
-                NBTTagCompound tag = new NBTTagCompound();
-                tag.setBoolean("Unbreakable", true);
-                nmsStack.setTag(tag);
-                itemStack = CraftItemStack.asBukkitCopy(nmsStack);
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
+        if (element.getAttributeValue("material") != null) {
+            itemStack = new ItemStack(Material.matchMaterial(element.getAttributeValue("material")), amount);
+        } else {
+            if (element.getText().contains(":"))
+                itemStack = new ItemStack(Material.matchMaterial(element.getText().split(":")[0]), amount, (short) Numbers.parseInt(element.getText().split(":")[1]));
+            else itemStack = new ItemStack(Material.matchMaterial(element.getText()), amount);
         }
         itemStack.setDurability(Short.parseShort(element.getAttributeValue("damage", "0")));
+        if (element.getChildren("enchantment") != null) {
+            for (Element raw : element.getChildren("enchantment")) {
+                try {
+                    itemStack.addUnsafeEnchantment(Enchantment.getByName(Strings.getTechnicalName(raw.getText())), Numbers.parseInt(raw.getAttributeValue("level")));
+                } catch(ArrayIndexOutOfBoundsException e) {
+                    itemStack.addUnsafeEnchantment(Enchantment.getByName(Strings.getTechnicalName(raw.getText())), 1);
+                }
+            }
+        }
+
         if (element.getAttributeValue("enchantment") != null) {
             for (String raw : element.getAttributeValue("enchantment").split(";")) {
                 String[] enchant = raw.split(":");
@@ -72,6 +75,9 @@ public class Parser {
                 PotionEffect effect = new PotionEffect(PotionEffectType.getByName(parse[0].toUpperCase().replaceAll(" ", "_")), Numbers.parseInt(parse[1]), Numbers.parseInt(parse[2]));
                 ((PotionMeta) meta).addCustomEffect(effect, true);
             }
+        }
+        if (element.getAttributeValue("unbreakable") != null && Boolean.parseBoolean(element.getAttributeValue("unbreakable"))) {
+            meta.setUnbreakable(true);
         }
         itemStack.setItemMeta(meta);
         String attributes = element.getAttributeValue("attributes");
