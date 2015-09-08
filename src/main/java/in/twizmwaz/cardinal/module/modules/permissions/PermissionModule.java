@@ -83,17 +83,9 @@ public class PermissionModule implements Module {
     public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
         if (Cardinal.getInstance().getConfig().getBoolean("worldEditPermissions")) {
             if ((event.getNewTeam().isPresent() && event.getNewTeam().get().isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
-                attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.jumpto.tool", true);
-                attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.thru.tool", true);
-
-                attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.jumpto.command", true);
-                attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.thru.command", true);
+                setWorldeditPermissions(event.getPlayer(), true);
             } else {
-                attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.jumpto.tool", false);
-                attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.thru.tool", false);
-
-                attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.jumpto.command", false);
-                attachmentMap.get(event.getPlayer()).setPermission("worldedit.navigation.thru.command", false);
+                setWorldeditPermissions(event.getPlayer(), false);
             }
         }
     }
@@ -104,17 +96,9 @@ public class PermissionModule implements Module {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 Optional<TeamModule> team = Teams.getTeamByPlayer(player);
                 if ((team.isPresent() && team.get().isObserver())) {
-                    attachmentMap.get(player).setPermission("worldedit.navigation.jumpto.tool", true);
-                    attachmentMap.get(player).setPermission("worldedit.navigation.thru.tool", true);
-
-                    attachmentMap.get(player).setPermission("worldedit.navigation.jumpto.command", true);
-                    attachmentMap.get(player).setPermission("worldedit.navigation.thru.command", true);
+                    setWorldeditPermissions(player, true);
                 } else {
-                    attachmentMap.get(player).setPermission("worldedit.navigation.jumpto.tool", false);
-                    attachmentMap.get(player).setPermission("worldedit.navigation.thru.tool", false);
-
-                    attachmentMap.get(player).setPermission("worldedit.navigation.jumpto.command", false);
-                    attachmentMap.get(player).setPermission("worldedit.navigation.thru.command", false);
+                    setWorldeditPermissions(player, false);
                 }
             }
         }
@@ -124,11 +108,7 @@ public class PermissionModule implements Module {
     public void onMatchEnd(MatchEndEvent event) {
         if (Cardinal.getInstance().getConfig().getBoolean("worldEditPermissions")) {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                attachmentMap.get(player).setPermission("worldedit.navigation.jumpto.tool", true);
-                attachmentMap.get(player).setPermission("worldedit.navigation.thru.tool", true);
-
-                attachmentMap.get(player).setPermission("worldedit.navigation.jumpto.command", true);
-                attachmentMap.get(player).setPermission("worldedit.navigation.thru.command", true);
+                setWorldeditPermissions(player, true);
             }
         }
     }
@@ -163,6 +143,16 @@ public class PermissionModule implements Module {
 
     public boolean isMuted(Player player) {
         return muted.contains(player);
+    }
+
+    public void setWorldeditPermissions(Player player, boolean state) {
+        attachmentMap.get(player).setPermission("worldedit.navigation.jumpto.tool", state);
+        attachmentMap.get(player).setPermission("worldedit.navigation.thru.tool", state);
+
+        attachmentMap.get(player).setPermission("worldedit.navigation.jumpto.command", state);
+        attachmentMap.get(player).setPermission("worldedit.navigation.thru.command", state);
+
+        attachmentMap.get(player).setPermission("worldedit.navigation.unstuck", state);
     }
 
 }
