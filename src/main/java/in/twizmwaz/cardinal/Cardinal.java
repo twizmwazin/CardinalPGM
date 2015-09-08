@@ -324,7 +324,9 @@ public class Cardinal extends JavaPlugin {
             return;
         }
 
-        Bukkit.getServer().setSpawnRadius(0); //Disable spawn protection
+        if (config.getBoolean("resetSpawnProtection") && Bukkit.getServer().getSpawnRadius() != 0) {
+            Bukkit.getServer().setSpawnRadius(0);
+        }
     }
 
     @Override

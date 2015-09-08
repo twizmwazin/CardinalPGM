@@ -10,6 +10,7 @@ motd-message-color: dark gray
 cycle: -1
 matchTimeMillis: true
 observers-ready: true
+resetSpawnProtection: true
 html:
   upload: true
   transcriptMilliseconds: true
