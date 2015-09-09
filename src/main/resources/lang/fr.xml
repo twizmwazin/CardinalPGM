@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <locale lang="fr">
     <error>
+    	<notEnoughArgsSay>Veuillez fournir un message.</notEnoughArgsSay>
+    	<notEnoughArgsBroadcast>Veuillez fournir un message à annoncer.</notEnoughArgsBroadcast>
         <noMessages>Vous n'avez aucun message privé auquel répondre</noMessages>
-        <restartDuringMatch>Vous ne pouvez pas relancer la partie pendant un match. Utilisez -f pour forcer l'opération.</restartDuringMatch>
-        <cycleDuringMatch>Vous ne pouvez pas passer au match suivant pendant un match. Utilisez -f pour forcer l'opération.</cycleDuringMatch>
-        <matchRunning>Le match est déjà en cours.</matchRunning>
-        <matchNoResume>Le match est terminé et ne peut pas être repris.</matchNoResume>
-        <matchNoStart>Le match ne pouvait pas être démarré à cet instant.</matchNoStart>
-        <matchNoEnd>Le match ne pouvait pas être terminé à cet instant.</matchNoEnd>
-        <noSetNext>Vous ne pouvez pas sélectionner la prochaine map quand le serveur s'apprête à redémarrer. Utilisez -f pour forcer l'opération.</noSetNext>
-        <disabledCommand>Cette commande est désactivée. Les cartes se rechargeront automatiquement si des modifications sont détectées.</disabledCommand>
+        <restartDuringMatch>Vous ne pouvez pas relancer le serveur au cours d'une partie. Utilisez -f pour forcer l'opération.</restartDuringMatch>
+        <cycleDuringMatch>Vous ne pouvez pas changer de map au cours d'une partie. Utilisez -f pour forcer l'opération.</cycleDuringMatch>
+        <matchRunning>La partie est déjà en cours.</matchRunning>
+        <matchNoResume>La partie est terminée et ne peut pas être reprise.</matchNoResume>
+        <matchNoStart>La partie ne peut pas être démarrée à cet instant.</matchNoStart>
+        <matchNoEnd>La partie ne peut pas être terminé à cet instant.</matchNoEnd>
+        <notEnoughPlayers>Le nombre de joueurs minimum n'est pas respecté pour commencer la partie.</notEnoughPlayers>
+        <noSetNext>Vous ne pouvez pas définir la prochaine map quand le serveur s'apprête à redémarrer. Utilisez -f pour forcer l'opération.</noSetNext>
+        <disabledCommand>Cette commande est désactivée. Les maps se rechargeront automatiquement si des modifications sont détectées.</disabledCommand>
         <rotPointInvalid>Le point de rotation spécifié n'est pas valide.</rotPointInvalid>
         <invalidTime>Le compte à rebours indiqué est invalide.</invalidTime>
         <teamChatDefault>Le chat "équipe" est déjà votre canal par défaut.</teamChatDefault>
@@ -21,18 +24,20 @@
         <noTeam>Vous n'êtes pas dans une équipe.</noTeam>
         <alreadyObs>Vous êtes déjà dans l'équipe d'observation.</alreadyObs>
         <alreadyJoined>Vous avez déjà rejoint {0}</alreadyJoined>
-        <teamFull>Désolé, {0} est complétement plein</teamFull>
+        <alreadyOnTeam>{0} est déjà dans {1}</alreadyOnTeam>
+        <teamFull>Désolé, {0} n'accepte pas de joueurs supplémentaire.</teamFull>
         <forceExemption>{0} ne peut pas être contraint à joindre une équipe.</forceExemption>
-        <noShuffle>Vous ne pouvez pas changer d'équipes lors d'un match.</noShuffle>
+        <noShuffle>Vous ne pouvez pas changer d'équipe au cours d'une partie.</noShuffle>
         <teamExists>Une équipe du nom de {0} existe déjà.</teamExists>
-        <mayNotJoin>Vous ne pouvez pas joindre la partie lors d'un match de {0}.</mayNotJoin>
-        <matchOver>Le match est terminé.</matchOver>
-        <cycle>Veuillez attendre que le serveur cycle.</cycle>
+        <mayNotJoin>Vous ne pouvez pas joindre lors d'une partie de {0}.</mayNotJoin>
+        <matchOver>La partie est terminée.</matchOver>
+        <cycle>Veuillez attendre que le serveur change de map.</cycle>
         <playerCommand>Vous devez être un joueur pour utiliser cette commande.</playerCommand>
         <noMapMatch>Aucune map ne correspond à la requête.</noMapMatch>
-        <noTeamMatch>Aucunes équipes ne correspond à la requête.</noTeamMatch>
+        <noTeamMatch>Aucune équipe ne correspond à la requête.</noTeamMatch>
         <noRotMatch>Aucune rotation ne correspond à la requête.</noRotMatch>
-        <noPlayerMatch>Aucuns joueurs ne correspond à la requête.</noPlayerMatch>
+        <noPlayerMatch>Aucun joueur ne correspond à la requête.</noPlayerMatch>
+        <noRankMatch>Aucun grade ne correspond à la requête.</noRankMatch>
         <multiplePlayers>Plus d'un joueur trouvé ! Utilisez {0} pour une correspondance exacte.</multiplePlayers>
         <unknownError>Une erreur inconnue s'est produite. Veuillez vous référer à la console du serveur.</unknownError>
         <movedForBalance>Vous avez été déplacé dans {0} pour équilibrer la taille des équipes</movedForBalance>
@@ -46,8 +51,8 @@
         <blockPlace>Seulement {0} peut être placé ici !</blockPlace>
         <noCraft>Vous ne pouvez pas fabriquer {0}.</noCraft>
         <bedsDisabled>Les lits sont désactivés sur cette map !</bedsDisabled>
-        <pearlOut>Vous ne pouvez pas utiliser de perles de l'End pour quitter votre voie</pearlOut>
-        <laneReEnter>Vous ne pouvez pas retourner sur votre voie</laneReEnter>
+        <pearlOut>Vous ne pouvez pas utiliser de perle du Néant pour quitter votre voie.</pearlOut>
+        <laneReEnter>Vous ne pouvez pas retourner sur votre voie.</laneReEnter>
         <landminePlace>Vous ne pouvez pas placer une mine là !</landminePlace>
         <landmineExists>Une mine existe déjà là !</landmineExists>
         <landmineProximity>Vous ne pouvez pas placer une mine si proche d'une autre mine !</landmineProximity>
@@ -57,28 +62,40 @@
         <noPermission>Vous n'avez pas les permissions nécessaires.</noPermission>
         <numberString>Série de mots reçue, veuillez préciser un nombre.</numberString>
         <errorRejoin>Uh oh ! Il y a eu une erreur. Essayez encore.</errorRejoin>
-        <serverFull>Le serveur est plein</serverFull>
-        <teamsFull>Les équipes sont pleines</teamsFull>
-        <teamsCapacity>Les équipes ont atteint leur capacité maximale</teamsCapacity>
+        <serverFull>Le serveur n'accepte pas de joueur supplémentaire.</serverFull>
+        <teamsFull>Les équipes n'acceptent pas de joueur supplémentaire.</teamsFull>
+        <teamsCapacity>Les équipes ont atteint leur capacité maximale.</teamsCapacity>
         <invalidMatch>Match invalide</invalidMatch>
         <ratingRange>La note doit être comprise entre {0} et {1}, inclut.</ratingRange>
         <ratingsDisabled>Les notations de maps ne sont pas activées sur ce serveur.</ratingsDisabled>
-        <lowParticipation>Désolé, vous n'avez pas assez participé à ce match pour évaluer cette map</lowParticipation>
+        <lowParticipation>Désolé, vous n'avez pas assez participé à ce partie pour évaluer cette map</lowParticipation>
         <rateWhilePlaying>Pour évaluer la map tout en jouant, écrivez {0}</rateWhilePlaying>
         <noRecentPM>Vous n'avez aucun message privé auquel répondre</noRecentPM>
-        <playerNotFound>Aucuns joueurs ne correspond à la requête.</playerNotFound>
+        <playerNotFound>Aucun joueur ne correspond à la requête.</playerNotFound>
+        <playerAlreadyBanned>Ce joueur est déjà banni.</playerAlreadyBanned>
+        <playerAlreadyMuted>Ce joueur est déjà privé de parole.</playerAlreadyMuted>
+        <playerNotMuted>Ce joueur n'est pas privé de parole.</playerNotMuted>
+        <playerNotAffected>Ce joueur n'est pas affecté par cette commande.</playerNotAffected>
         <playerDisabledPMs>Votre message n'a pas été envoyé car {0} a choisi de ne pas recevoir des messages privés.</playerDisabledPMs>
-        <playableLeave>Vous ne pouvez pas laisser le terrain de jeu</playableLeave>
+        <playableLeave>Vous ne pouvez pas quitter le terrain de jeu.</playableLeave>
         <playableInteract>Vous ne pouvez pas interagir avec des blocs à l'extérieur du terrain de jeu</playableInteract>
+        <globalMuteEnabled>Vous ne pouvez pas parler pendant que le * est activé.</globalMuteEnabled>
+        <teamAbsent>Vous n'êtes pas dans une équipe.</teamAbsent>
+        <alreadyHasRank>{0} possède déjà le grade {1}</alreadyHasRank>
+        <alreadyDoesntHaveRank>{0} ne possède pas encore le grade {1}</alreadyDoesntHaveRank>
+        <globalAlreadyDefault>Le chat global est déjà votre canal par défaut.</globalAlreadyDefault>
+        <teamAlreadyDefault>Le chat d'équipe est déjà votre canal par défaut.</teamAlreadyDefault>
+        <adminAlreadyDefault>Le chat d'administration est déjà votre canal par défaut.</adminAlreadyDefault>
+        <consoleNoUse>La console ne peut pas utiliser cette commande.</consoleNoUse>
     </error>
     <generic>
         <mapSet>La map suivante sera {0}</mapSet>
         <markedForReloading>{0} a été marquée avec succès pour être rechargée.</markedForReloading>
         <allMarkedReloading>Toutes les maps ont été marquées avec succès pour être rechargées.</allMarkedReloading>
         <countdownCancelled>Tous les comptes à rebours ont été annulés.</countdownCancelled>
-        <autoStart>Le démarrage automatique est activé pour ce match</autoStart>
-        <autoStartDisabled>Le démarrage automatique est désactivé pour ce match</autoStartDisabled>
-        <skippedOver>La carte suivante sera ignorée : {0}</skippedOver>
+        <autoStart>Le démarrage automatique est activé pour cette partie.</autoStart>
+        <autoStartDisabled>Le démarrage automatique est désactivé pour ce match.</autoStartDisabled>
+        <skippedOver>La map suivante sera ignorée : {0}.</skippedOver>
         <skippedFromTo>Vous avez bien passé {0} pour aller sur {1}</skippedFromTo>
         <skippedTo>Succès de l'opération pour aller à {0}</skippedTo>
         <configReload>La configuration a été rechargée avec succès.</configReload>
@@ -111,16 +128,29 @@
         <mapReRated>Une personne sur {0} a réévalué cette map de {2} à {1}</mapReRated>
         <autoBalance>Les équipes seront auto-équilibrées si la répartition des joueurs reste disproportionnée en faveur de {0}</autoBalance>
         <youChangedRating>Vous avez réévalué {1} {2} de {3} à {0}.</youChangedRating>
+        <teamSizeChanged>La taille maximum de {0} a été définie sur {1}</teamSizeChanged>
+        <rankRemoved>Vous avez supprimé le grade</rankRemoved> <!-- TODO -->
+        <ownRankRemoved>{0} a supprimé votre grade {1}</ownRankRemoved>
+        <rankGiven>Vous avez attribué le grade {1} à {0}</rankGiven>
+        <ownRankGiven>{0} vous a attribué le grade {1}</ownRankGiven>
+        <selfRankGiven>Vous vous êtes attribué le grade {0}</selfRankGiven>
+        <selfRankRemoved>Vous vous êtes ôté du grade {0}</selfRankRemoved>
+        <noRanks>Il n'y a pas de grade.</noRanks>
+        <ranks>Grade(s):</ranks>
+        <ranksMoreInfo>Utilisez /rank info &lt;rank&gt; pour plus d'informations à propos d'un grade.</ranksMoreInfo>
+        <teleported>Téléporté.</teleported>
+        <teleportedBy>Vous avez été téléporté par {0}</teleportedBy>
     </generic>
     <misc>
         <enemy>l'ennemi</enemy>
         <fate>le destin</fate>
-        <others>les autres</others>
+        <others>les autres joueurs</others>
         <blocks>{0} blocs</blocks>
         <ownership>{1} de {0}</ownership>
         <and>et</and>
         <by>par</by>
-        <team>Équipe</team>
+        <team>Equipe</team>
+        <match>la partie</match>
     </misc>
     <userInterface>
         <mapLoaded>Maps chargées</mapLoaded>
@@ -132,20 +162,20 @@
         <mapMax>Maximum de joueurs</mapMax>
         <rotationCurrent>Rotation actuelle</rotationCurrent>
         <rotationLoaded>Rotations chargées</rotationLoaded>
-        <matchInfo>Informations sur le match</matchInfo>
+        <matchInfo>Informations sur la partie</matchInfo>
         <time>Temps</time>
-        <matchTime>Durée du match</matchTime>
+        <matchTime>Durée de la partie</matchTime>
         <goals>Buts</goals>
         <classes>Classes</classes>
         <of>{0} de {1}</of>
         <xmlErrors>Erreurs XML</xmlErrors>
         <close>Fermer</close>
         <teamClassSelection>Team/Class Selection</teamClassSelection>
-        <teamJoinTip>Join the game!</teamJoinTip>
+        <teamJoinTip>Rejoint la partie!</teamJoinTip>
         <teamPick>Choisissez votre équipe</teamPick>
-        <teamJoinAuto>Joindre automatiquement</teamJoinAuto>
+        <teamJoinAuto>Rejoindre automatiquement</teamJoinAuto>
         <teamJoinAutoLore>Vous met dans l'équipe avec le moins de joueurs</teamJoinAutoLore>
-        <teamCapacity>Les équipes ont atteint leur capacité, vous ne pouvez pas rejoindre le match.</teamCapacity>
+        <teamCapacity>Les équipes ont atteint leur capacité, vous ne pouvez pas rejoindre la partie.</teamCapacity>
         <teamCanPick>Vous pouvez choisir votre équipe, cliquez sur l'équipe désirée !</teamCanPick>
         <teamSelection>Sélection de l'équipe</teamSelection>
         <tutorialView>Visionnez le tutoriel</tutorialView>
@@ -157,9 +187,9 @@
         <maps>{0} maps</maps>
         <second>{0} seconde</second>
         <seconds>{0} secondes</seconds>
-        <matchStarted>Le match a commencé !</matchStarted>
-        <matchStartCancelled>Début de match annulé</matchStartCancelled>
-        <matchOver>Fin du jeu!</matchOver>
+        <matchStarted>La partie a commencé !</matchStarted>
+        <matchStartCancelled>Début de la partie annulé</matchStartCancelled>
+        <matchOver>Fin de la partie!</matchOver>
         <matchWin>{0} a remporté la victoire !</matchWin>
         <matchTeamWin>Votre équipe a gagné !</matchTeamWin>
         <matchTeamLose>Votre équipe a perdu</matchTeamLose>
@@ -181,7 +211,7 @@
         <scoredFor>{0} a marqué {1} pour {2}</scoredFor>
         <onePoint>1 point</onePoint>
         <points>{0} points</points>
-        <amountRemaining>Vous avez {0} restantes.</amountRemaining>
+        <amountRemaining>Vous avez {0} restante(s).</amountRemaining>
         <oneLife>1 vie</oneLife>
         <lives>{0} vies</lives>
         <timer>Temps restant:</timer>
@@ -190,7 +220,7 @@
         <typeForMapInfo>tapez /map pour plus d'infos</typeForMapInfo>
         <cyclingTimer>Changement vers {0} dans {1}</cyclingTimer>
         <cycledTo>Changé vers {0}</cycledTo>
-        <matchStartingIn>Le match commence dans {0}</matchStartingIn>
+        <matchStartingIn>La partie commence dans {0}</matchStartingIn>
         <serverRestartingIn>Le serveur redémarrera dans {0} !</serverRestartingIn>
         <tntDefuser>Désamorceur de TNT</tntDefuser>
         <tntRadiusDefuser>Faites un clic droit pour désamorcer la TNT dans un rayon de 5 blocs</tntRadiusDefuser>
@@ -205,5 +235,51 @@
         <latestVersion>Cardinal est à jour!</latestVersion>
         <updateAvailable>Une nouvelle version de Cardinal est disponible!</updateAvailable>
         <version>Ce serveur exécute la version Cardinal {0}</version>
+        <matchReportUpload>Téléchargement du rapport de la partie...</matchReportUpload>
+        <matchReportSuccess>Le rapport de la partie a bien été téléchargé! Vous pouvez le voir sur {0}</matchReportSuccess>
+        <matchReportFailed>Une erreur est survenue lors du téléchargement du rapport du match.</matchReportFailed>
+        <globalMuteEnabled>Le chat global est bâillonné.</globalMuteEnabled>
+        <globalMuteDisabled>Le chat global n'est plus bâillonné.</globalMuteDisabled>
+        <defaultChannelGlobal>Le chat global est maintenant votre canal par défaut.</defaultChannelGlobal>
+        <defaultChannelAdmin>Le chat d'administration est maintenant votre canal par défaut.</defaultChannelAdmin>
+        <defaultChannelTeam>Le chat d'équipe est maintenant votre canal par défaut.</defaultChannelTeam>
+        <timeElapsed>Temps écoulé:</timeElapsed>
     </userInterface>
+    <deathMsg>
+        <explosionSelf>{0} a explosé</explosionSelf>
+        <explosionPlayer>{0} a été explosé à l'aide de la TNT de {1}</explosionPlayer>
+        <explosion>{0} a explosé</explosion>
+        <contact>{0} s'est fait piquer à la mort</contact>
+        <drowning>{0} a oublié de respirer</drowning>
+        <attackPlayerFists>{0} a ressenti la fureur des poings de {1}</attackPlayerFists>
+        <attackPlayer>{0} a été tué à par un(e) {2} de {1}</attackPlayer>
+        <attack>{0} a été tué</attack>
+        <fallPlayerKnocked>{0} s'est fait {1} d'un haut lieu ({2}) par un(e) {4} de {3}</fallPlayerKnocked>
+        <fallPlayerShot>{0} s'est fait {1} d'un haut lieu ({2}) par {3} ({4})</fallPlayerShot>
+        <fallPlayerBlown>{0} s'est fait {1} d'un haut lieu ({2}) par la TNT de {3}</fallPlayerBlown>
+        <shot>tirer dessus</shot>
+        <knocked>éjecter</knocked>
+        <blown>exploser</blown>
+        <spleefed>spleefer</spleefed>
+        <fall>{0} est tombé de trop haut</fall>
+        <fallingBlock>{0} a été écrasé par une enclume tombante</fallingBlock>
+        <fire>{0} a été brûlé à mort</fire>
+        <lava>{0} est tombé dans la lave</lava>
+        <lightning>{0} a été frappé par la foudre</lightning>
+        <potionPlayer>{0} a pris la potion de {1} dans la face</potionPlayer>
+        <potion>{0} a pris une potion dans la face</potion>
+        <projectilePlayer>{0} s'est fait tirer dessus par {1}</projectilePlayer>
+        <projectile>{0} s'est fait tirer dessus</projectile>
+        <starvation>{0} est mort de faim</starvation>
+        <suffocation>{0} s'est étouffé dans un mur</suffocation>
+        <suicide>{0} est mort</suicide>
+        <thornsPlayer>{0} a tenté de faire un câlin à un(e) {1}</thornsPlayer>
+        <thorns>{0} a tenté de faire un câlin à un ennemi</thorns>
+        <voidPlayerKnocked>{0} s'est fait {1} hors du monde par un(e) {4} de {3}</voidPlayerKnocked>
+        <voidPlayerShot>{0} s'est fait {1} hors du monde par {3} ({4})</voidPlayerShot>
+        <voidPlayerBlown>{0} s'est fait {1} hors du monde par la TNT de {3}</voidPlayerBlown>
+        <void>{0} est tombé hors du monde</void>
+        <wither>{0} s'est dispersé au loin</wither>
+        <unknown>{0} est mort de causes inconnues</unknown>
+    </deathMsg>
 </locale>
