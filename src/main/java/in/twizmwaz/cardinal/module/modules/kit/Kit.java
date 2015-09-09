@@ -1,6 +1,8 @@
 package in.twizmwaz.cardinal.module.modules.kit;
 
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.event.KitApplyEvent;
 import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -22,7 +24,7 @@ public class Kit implements Module {
     private String parent;
     private boolean force;
     private boolean potionParticles;
-    private boolean resetPearls; //unimplemented
+    private boolean resetPearls;
     private boolean clear;
     private boolean clearItems;
     private int health;
@@ -31,9 +33,9 @@ public class Kit implements Module {
     private float walkSpeed;
     private float knockback;
     private boolean jump; //unimplemented
-    private float flySpeed;
+    private KitFly fly;
 
-    protected Kit(String name, List<KitItem> items, List<KitArmor> armor, List<PotionEffect> effects, List<KitBook> books, String parent, boolean force, boolean potionParticles, boolean resetPearls, boolean clear, boolean clearItems, int health, float saturation, int foodLevel, float walkSpeed, float knockback, boolean jump, float flySpeed) {
+    protected Kit(String name, List<KitItem> items, List<KitArmor> armor, List<PotionEffect> effects, List<KitBook> books, String parent, boolean force, boolean potionParticles, boolean resetPearls, boolean clear, boolean clearItems, int health, float saturation, int foodLevel, float walkSpeed, float knockback, boolean jump, KitFly fly) {
         this.name = name;
         this.items = items;
         this.armor = armor;
@@ -51,7 +53,7 @@ public class Kit implements Module {
         this.walkSpeed = walkSpeed;
         this.knockback = knockback;
         this.jump = jump;
-        this.flySpeed = flySpeed;
+        this.fly = fly;
     }
 
     public static Kit getKitByName(String name) {
@@ -66,6 +68,8 @@ public class Kit implements Module {
     }
 
     public void apply(final Player player) {
+        KitApplyEvent event = new KitApplyEvent(this, player);
+        Cardinal.getInstance().getServer().getPluginManager().callEvent(event);
         if (clear || clearItems) player.getInventory().clear();
         if (clear) {
             for (ItemStack armor : player.getInventory().getArmorContents()) {
@@ -92,6 +96,11 @@ public class Kit implements Module {
         }
         player.setWalkSpeed(walkSpeed);
         player.setKnockbackReduction(knockback);
+        if (fly != null) {
+            player.setAllowFlight(fly.canFly());
+            player.setFlying(fly.isFlying());
+            player.setFlySpeed(fly.getFlySpeed());
+        }
         for (KitItem item : this.items) {
             if (item.hasSlot()) {
                 if (player.getInventory().getItem(item.getSlot()) == null || force) {
@@ -153,4 +162,7 @@ public class Kit implements Module {
         return name;
     }
 
+    public boolean isResetPearls() {
+        return resetPearls;
+    }
 }
