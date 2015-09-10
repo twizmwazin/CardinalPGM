@@ -58,7 +58,7 @@ public enum ChatConstant {
     ERROR_BLOCK_PLACE("error.blockPlace"),
     ERROR_NO_CRAFT("error.noCraft"),
     ERROR_BEDS_DISABLED("error.bedsDisabled"),
-    ERROR_PEARL_OUT("error.bedsDisabled"),
+    ERROR_PEARL_OUT("error.pearlOut"),
     ERROR_LANE_REENTER("error.laneReEnter"),
     ERROR_LANDMINE_PLACE("error.landminePlace"),
     ERROR_LANDMINE_EXISTS("error.landmineExists"),

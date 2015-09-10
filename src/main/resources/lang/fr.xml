@@ -21,6 +21,7 @@
         <noTeam>Vous n'êtes pas dans une équipe.</noTeam>
         <alreadyObs>Vous êtes déjà dans l'équipe d'observation.</alreadyObs>
         <alreadyJoined>Vous avez déjà rejoint {0}</alreadyJoined>
+        <alreadyOnTeam>{0} est déjà dans {1}</alreadyOnTeam>
         <teamFull>Désolé, {0} est complétement plein</teamFull>
         <forceExemption>{0} ne peut pas être contraint à joindre une équipe.</forceExemption>
         <noShuffle>Vous ne pouvez pas changer d'équipes lors d'un match.</noShuffle>
@@ -33,6 +34,11 @@
         <noTeamMatch>Aucunes équipes ne correspond à la requête.</noTeamMatch>
         <noRotMatch>Aucune rotation ne correspond à la requête.</noRotMatch>
         <noPlayerMatch>Aucuns joueurs ne correspond à la requête.</noPlayerMatch>
+        <noRankMatch>Aucune partie ne correspond à la requête.</noRankMatch>
+        <noSettingMatch>Aucun paramètre ne correspond à la requête.</noSettingMatch>
+        <noValueMatch>Aucune valeur ne correspond à la requête.</noValueMatch>
+        <noResultMatch>Aucun résultat ne correspond à la requête.</noResultMatch>
+        <notEnoughPlayers>Il n'y a pas assez de joueurs pour lancer la partie.</notEnoughPlayers>
         <multiplePlayers>Plus d'un joueur trouvé ! Utilisez {0} pour une correspondance exacte.</multiplePlayers>
         <unknownError>Une erreur inconnue s'est produite. Veuillez vous référer à la console du serveur.</unknownError>
         <movedForBalance>Vous avez été déplacé dans {0} pour équilibrer la taille des équipes</movedForBalance>
@@ -56,6 +62,7 @@
         <defuseTntEnemy>Vous ne pouvez pas désamorcer TNT de l'ennemi.</defuseTntEnemy>
         <noPermission>Vous n'avez pas les permissions nécessaires.</noPermission>
         <numberString>Série de mots reçue, veuillez préciser un nombre.</numberString>
+        <timeFormatString>Série de mots reçue, veuillez préciser un format de temps.</timeFormatString>
         <errorRejoin>Uh oh ! Il y a eu une erreur. Essayez encore.</errorRejoin>
         <serverFull>Le serveur est plein</serverFull>
         <teamsFull>Les équipes sont pleines</teamsFull>
@@ -67,9 +74,34 @@
         <rateWhilePlaying>Pour évaluer la map tout en jouant, écrivez {0}</rateWhilePlaying>
         <noRecentPM>Vous n'avez aucun message privé auquel répondre</noRecentPM>
         <playerNotFound>Aucuns joueurs ne correspond à la requête.</playerNotFound>
+        <playerAlreadyBanned>Ce joueur est déjà banni.</playerAlreadyBanned>
+        <playerAlreadyMuted>Ce joueur est déjà privé de parole.</playerAlreadyMuted>
+        <playerNotMuted>Ce joueur n'est pas privé de parole.</playerNotMuted>
+        <playerNotAffected>Ce joueur n'est pas affecté par cette commande.</playerNotAffected>
         <playerDisabledPMs>Votre message n'a pas été envoyé car {0} a choisi de ne pas recevoir des messages privés.</playerDisabledPMs>
-        <playableLeave>Vous ne pouvez pas laisser le terrain de jeu</playableLeave>
+        <playableLeave>Vous ne pouvez pas quitter le terrain de jeu</playableLeave>
         <playableInteract>Vous ne pouvez pas interagir avec des blocs à l'extérieur du terrain de jeu</playableInteract>
+        <globalMuteEnabled>Vous ne pouvez pas parler tant que tout le monde est privé de parole.</globalMuteEnabled>
+        <notEnoughArgsBroadcast>Veuillez fournir un message à annoncer.</notEnoughArgsBroadcast>
+        <notEnoughArgsSay>Veuillez fournir un message.</notEnoughArgsSay>
+        <teamAbsent>Vous n'êtes pas dans une équipe.</teamAbsent>
+        <alreadyHasRank>{0} possède déjà le grade {1}</alreadyHasRank>
+        <alreadyDoesntHaveRank>{0} ne possède pas encore le grade {1}</alreadyDoesntHaveRank>
+        <globalAlreadyDefault>Le chat global est déjà votre canal par défaut.</globalAlreadyDefault>
+        <teamAlreadyDefault>Le chat d'équipe est déjà votre canal par défaut.</teamAlreadyDefault>
+        <adminAlreadyDefault>Le chat d'administration est déjà votre canal par défaut.</adminAlreadyDefault>
+        <consoleNoUse>La console ne peut pas utiliser cette commande.</consoleNoUse>
+        <readyBeforeMatch>Vous devez vous déclarer prêt avant le début de la partie.</readyBeforeMatch>
+        <unreadyBeforeMatch>Vous devez vous déclarer non prêt avant le début de la partie.</unreadyBeforeMatch>
+        <teamAlreadyReady>Votre équipe est déjà prête.</teamAlreadyReady>
+        <teamAlreadyNotReady>Votre équipe est déjà non prête.</teamAlreadyNotReady>
+        <teamCanNotUnready>Votre équipe ne peux pas ne plus être prête.</teamCanNotUnready>
+        <invalidPageNumber>Numéro de page invalide! Il y a un total de {0} pages.</invalidPageNumber>
+        <invalidArguments>Arguments invalide.</invalidArguments>
+        <tooFewArguments>Pas assez d'arguments.</tooFewArguments>
+        <cannotCalculateScores>Impossible de calculer les scores des équipes.</cannotCalculateScores>
+        <proximityObsOnly>Seulement les observateurs peuvent faire la commande /proximity.</proximityObsOnly>
+        <proximityNoScoring>Il n'y a aucun objectifs utilisant la proximité.</proximityNoScoring>
     </error>
     <generic>
         <mapSet>La map suivante sera {0}</mapSet>
@@ -111,16 +143,75 @@
         <mapReRated>Une personne sur {0} a réévalué cette map de {2} à {1}</mapReRated>
         <autoBalance>Les équipes seront auto-équilibrées si la répartition des joueurs reste disproportionnée en faveur de {0}</autoBalance>
         <youChangedRating>Vous avez réévalué {1} {2} de {3} à {0}.</youChangedRating>
+        <teamSizeChanged>La taille maximum de {0} a été définie sur {1}</teamSizeChanged>
+        <rankRemoved>Vous avez supprimé le grade {1} à {0}</rankRemoved>
+        <ownRankRemoved>{0} a supprimé votre grade {1}</ownRankRemoved>
+        <rankGiven>Vous avez attribué le grade {1} à {0}</rankGiven>
+        <ownRankGiven>{0} vous a attribué le grade {1}</ownRankGiven>
+        <noRanks>Il n'y a pas de grade.</noRanks>
+        <ranks>Grade(s):</ranks>
+        <ranksMoreInfo>Utilisez /rank info &lt;rank&gt; pour plus d'informations à propos d'un grade.</ranksMoreInfo>
+        <selfRankGiven>Vous vous êtes attribué le grade {0}</selfRankGiven>
+        <selfRankRemoved>Vous vous êtes ôté du grade {0}</selfRankRemoved>
+        <teleported>Téléporté.</teleported>
+        <teleportedBy>Vous avez été téléporté par {0}</teleportedBy>
+        <teamNowReady>{0} est désormais prêt</teamNowReady>
+        <teamNoLongerReady>{0} n'est plus prêt</teamNoLongerReady>
+        <unreadyCancelCountdown>Le lancement de la partie s'est arrêté car {0} n'est plus prêt/</unreadyCancelCountdown>
+        <timeLimitCanceled>La limite de temps a été retirée.</timeLimitCanceled>
+        <noTimeLimit>Il n'y a aucune limite de temps.</noTimeLimit>
+        <timeLimitWithResult>La limite de temps est de {0} avec comme résultat {1}</timeLimitWithResult>
+        <whitelistReloaded>La whitelist a été rechargée.</whitelistReloaded>
+        <whitelistEnabled>La whitelist est désormais active.</whitelistEnabled>
+        <whitelistDisabled>La whitelist n'est plus active.</whitelistDisabled>
+        <playerAddWhitelist>Ajout de {0} à la whitelist.</playerAddWhitelist>
+        <playerRemoveWhitelist>Suppression de {0} de la whitelist.</playerRemoveWhitelist>
+        <addedPlayersWhitelist>Ajout de {0} joueur(s) à la whitelist.</addedPlayersWhitelist>
+        <removedPlayersWhitelist>Suppression de {0} joueur(s) de la whitelist.</removedPlayersWhitelist>
+        <kickedNotWhitelisted>Les joueurs qui ne sont pas sur la whitelist ont été expulsés.</kickedNotWhitelisted>
+        <noWhitelistedPlayers>Il n'y a aucun joueur présent sur la whitelist.</noWhitelistedPlayers>
+        <whitelistedPlayers>Joueurs présent sur la whitelist:</whitelistedPlayers>
+        <playerOnline>Il y a actuellement {0} joueur connecté.</playerOnline>
+        <playersOnline>Il y a actuellement {0} joueurs connectés.</playersOnline>
+        <whitelistedPlayerOnline>Il y a actuellement {0} joueur connecté présent sur la whitelist.</whitelistedPlayerOnline>
+        <whitelistedPlayersOnline>Il y a actuellement {0} joueurs connectés présent sur la whitelist.</whitelistedPlayersOnline>
+        <whitelistedPlayerOutOfOnline>Sur les joueurs connectés, {0} est sur la whitelist.</whitelistedPlayerOutOfOnline>
+        <whitelistedPlayersOutOfOnline>Sur les joueurs connectés, {0} sont sur la whitelist.</whitelistedPlayersOutOfOnline>
+        <monumentModes>Etats des monuments</monumentModes>
+        <nextMode>Prochain état: {0} ({1} restant)</nextMode>
+        <modesPushedForwards>Tous les états ont été avancés de {0}</modesPushedForwards>
+        <modesPushedBackwards>Tous les états ont été reculés de {0}</modesPushedBackwards>
+        <calculatingScoresFor>Calcul des scores pour {0}</calculatingScoresFor>
+        <teamsAreTied>Les équipes font match nul.</teamsAreTied>
+        <teamsAreTiedWithPoints>Les équipes font match nul avec {0} points.</teamsAreTiedWithPoints>
+        <teamsAreTiedWithPlayers>Les équipes font match nul avec {0} joueurs.</teamsAreTiedWithPlayers>
+        <teamIsWinning>{0} gagne actuellement</teamIsWinning>
+        <teamIsWinningWithPoints>{0} gagne actuellement avec {1} points.</teamIsWinningWithPoints>
+        <teamIsWinningWithPlayers>{0} gagne actuellement avec {1} joueurs.</teamIsWinningWithPlayers>
+        <teamIsWinningWithObjectives>{0} gagne actuellement avec {1} objectifs remplis et {2} objectifs touchés.</teamIsWinningWithObjectives>
+        <objectiveIsUntouched>{0} n'a pas été touché!</objectiveIsUntouched>
+        <objectiveWasTouched>{0} a été touché!</objectiveWasTouched>
+        <objectiveWasCompleted>{0} a été remplis!</objectiveWasCompleted>
+        <muted>Vous avez privé de parole {0}</muted>
+        <mutedBy>Vous avez été privé de parole par {0}</mutedBy>
+        <unmuted>Votre parole vous a été rendue</unmuted>
+        <unmutedBy>{0} vous a rendu la parole</unmutedBy>
     </generic>
     <misc>
         <enemy>l'ennemi</enemy>
         <fate>le destin</fate>
-        <others>les autres</others>
+        <others>les autres joueurs</others>
         <blocks>{0} blocs</blocks>
         <ownership>{1} de {0}</ownership>
         <and>et</and>
         <by>par</by>
         <team>Équipe</team>
+        <match>la partie</match>
+        <youHave>Vous avez</youHave>
+        <has>{0} a</has>
+        <online>Connecté</online>
+        <offline>Déconnecté</offline>
+        <score>Score</score>
     </misc>
     <userInterface>
         <mapLoaded>Maps chargées</mapLoaded>
@@ -145,6 +236,8 @@
         <teamPick>Choisissez votre équipe</teamPick>
         <teamJoinAuto>Joindre automatiquement</teamJoinAuto>
         <teamJoinAutoLore>Vous met dans l'équipe avec le moins de joueurs</teamJoinAutoLore>
+        <teamLeave>Quitter la partie</teamLeave>
+        <teamLeaveLore>Rejoindre les observateurs</teamLeaveLore>
         <teamCapacity>Les équipes ont atteint leur capacité, vous ne pouvez pas rejoindre le match.</teamCapacity>
         <teamCanPick>Vous pouvez choisir votre équipe, cliquez sur l'équipe désirée !</teamCanPick>
         <teamSelection>Sélection de l'équipe</teamSelection>
@@ -158,6 +251,7 @@
         <second>{0} seconde</second>
         <seconds>{0} secondes</seconds>
         <matchStarted>Le match a commencé !</matchStarted>
+        <matchStartedTitle>Go!</matchStartedTitle>
         <matchStartCancelled>Début de match annulé</matchStartCancelled>
         <matchOver>Fin du jeu!</matchOver>
         <matchWin>{0} a remporté la victoire !</matchWin>
@@ -205,5 +299,56 @@
         <latestVersion>Cardinal est à jour!</latestVersion>
         <updateAvailable>Une nouvelle version de Cardinal est disponible!</updateAvailable>
         <version>Ce serveur exécute la version Cardinal {0}</version>
+        <matchReportUpload>Téléchargement du rapport de la partie...</matchReportUpload>
+        <matchReportSuccess>Le rapport de la partie a bien été téléchargé! Vous pouvez le voir sur {0}</matchReportSuccess>
+        <matchReportFailed>Une erreur est survenue lors du téléchargement du rapport du match.</matchReportFailed>
+        <globalMuteEnabled>Le chat global est bâillonné.</globalMuteEnabled>
+        <globalMuteDisabled>Le chat global n'est plus bâillonné.</globalMuteDisabled>
+        <defaultChannelGlobal>Le chat global est maintenant votre canal par défaut.</defaultChannelGlobal>
+        <defaultChannelAdmin>Le chat d'administration est maintenant votre canal par défaut.</defaultChannelAdmin>
+        <defaultChannelTeam>Le chat d'équipe est maintenant votre canal par défaut.</defaultChannelTeam>
+        <timeElapsed>Temps écoulé:</timeElapsed>
+        <modeInTime>{0} dans {1}</modeInTime>
     </userInterface>
+    <deathMsg>
+        <explosionSelf>{0} s'est explosé</explosionSelf>
+        <explosionPlayer>{0} a explosé par la TNT de {1}</explosionPlayer>
+        <explosion>{0} a explosé</explosion>
+        <contact>{0} s'est fait piquer à la mort</contact>
+        <drowning>{0} a oublié de respirer</drowning>
+        <attackPlayerFists>{0} a ressenti la fureur des poings de {1}</attackPlayerFists>
+        <attackPlayer>{0} a été tué à par un(e) {2} de {1}</attackPlayer>
+        <attack>{0} a été tué</attack>
+        <fallPlayerKnocked>{0} s'est fait {1} d'un haut lieu ({2}) par un(e) {4} de {3}</fallPlayerKnocked>
+        <fallPlayerShot>{0} s'est fait {1} d'un haut lieu ({2}) par {3} ({4})</fallPlayerShot>
+        <fallPlayerBlown>{0} s'est fait {1} d'un haut lieu ({2}) par la TNT de {3}</fallPlayerBlown>
+        <shot>tirer dessus</shot>
+        <knocked>éjecter</knocked>
+        <blown>exploser</blown>
+        <spleefed>spleefer</spleefed>
+        <fall>{0} est tombé de trop haut</fall>
+        <fallingBlock>{0} a été écrasé par une enclume tombante</fallingBlock>
+        <fire>{0} a été brûlé à mort</fire>
+        <lava>{0} est tombé dans la lave</lava>
+        <lightning>{0} a été frappé par la foudre</lightning>
+        <potionPlayer>{0} a pris la potion de {1} dans la face</potionPlayer>
+        <potion>{0} a pris une potion dans la face</potion>
+        <projectilePlayer>{0} s'est fait tirer dessus par {1}</projectilePlayer>
+        <projectile>{0} s'est fait tirer dessus</projectile>
+        <starvation>{0} est mort de faim</starvation>
+        <suffocation>{0} s'est étouffé dans un mur</suffocation>
+        <suicide>{0} est mort</suicide>
+        <thornsPlayer>{0} a tenté de faire un câlin à un(e) {1}</thornsPlayer>
+        <thorns>{0} a tenté de faire un câlin à un ennemi</thorns>
+        <voidPlayerKnocked>{0} s'est fait {1} hors du monde par un(e) {4} de {3}</voidPlayerKnocked>
+        <voidPlayerShot>{0} s'est fait {1} hors du monde par {3} ({4})</voidPlayerShot>
+        <voidPlayerBlown>{0} s'est fait {1} hors du monde par la TNT de {3}</voidPlayerBlown>
+        <void>{0} est tombé hors du monde</void>
+        <wither>{0} s'est dispersé au loin</wither>
+        <unknown>{0} est mort de causes inconnues</unknown>
+    </deathMsg>
+    <snowflakes>
+        <snowflake>snowflake</snowflake>
+        <snowflakes>snowflakes</snowflakes>
+    </snowflakes>
 </locale>
