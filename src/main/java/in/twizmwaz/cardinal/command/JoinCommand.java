@@ -49,6 +49,8 @@ public class JoinCommand {
             destinationTeam = Teams.getTeamWithFewestPlayers(GameHandler.getGameHandler().getMatch());
             if (destinationTeam.isPresent()) {
                 destinationTeam.get().add((Player) sender, false);
+            } else {
+                throw new CommandException(ChatConstant.ERROR_TEAMS_FULL.getMessage(ChatUtil.getLocale(sender)));
             }
         }
     }
