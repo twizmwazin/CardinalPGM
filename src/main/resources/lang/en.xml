@@ -110,6 +110,8 @@
         <pollNoPolls>No polls are running.</pollNoPolls>
         <pollNoSuchPoll>Poll {0} is not running</pollNoSuchPoll>
         <pollAlreadyVoted>You already voted.</pollAlreadyVoted>
+        <breakFlag>You can not break flags.</breakFlag>
+        <breakBlockUnderFlag>You can not break the block under the flag.</breakBlockUnderFlag>
     </error>
     <generic>
         <mapSet>Next map set to {0}</mapSet>
@@ -348,6 +350,10 @@
         <deathRespawnConfirmedWaitingFlagDropped>You will respawn when the flag is dropped...</deathRespawnConfirmedWaitingFlagDropped>
         <freezeItem>Player freezer</freezeItem>
         <pollBossbar>{0}Poll to {1} will end in {2} {3}</pollBossbar>
+        <flagCaptured>{0} captured by {1}</flagCaptured>
+        <flagPickedUp>{0} picked up by {1}</flagPickedUp>
+        <flagDropped>{0} has been dropped</flagDropped>
+        <flagRespawned>{0} has respawned</flagRespawned>
     </userInterface>
     <deathMsg>
         <explosionSelf>{0} 'sploded</explosionSelf>
