@@ -117,6 +117,8 @@ public enum ChatConstant {
     ERROR_POLL_NO_SUCH_POLL("error.pollNoSuchPoll"),
     ERROR_POLL_ALREADY_VOTED("error.pollAlreadyVoted"),
     ERROR_POLL_USAGE("error.pollUsage"),
+    ERROR_BREAK_FLAG("error.breakFlag"),
+    ERROR_BREAK_BLOCK_UNDER_FLAG("error.breakBlockUnderFlag"),
 
     GENERIC_MAP_SET("generic.mapSet"),
     GENERIC_MARKED_FOR_RELOADING("generic.markedForReloading"),
@@ -345,6 +347,10 @@ public enum ChatConstant {
     UI_WAITING_PLAYERS("userInterface.waitingPlayers"),
     UI_FREEZE_ITEM("userInterface.freezeItem"),
     UI_POLL_BOSSBAR("userInterface.pollBossbar"),
+    UI_FLAG_CAPTURED("userInterface.flagCaptured"),
+    UI_FLAG_PICKED_UP("userInterface.flagPickedUp"),
+    UI_FLAG_DROPPED("userInterface.flagDropped"),
+    UI_FLAG_RESPAWNED("userInterface.flagRespawned"),
 
     UI_DEATH_RESPAWN_UNCONFIRMED("userInterface.deathRespawnUnconfirmed"),
     UI_DEATH_RESPAWN_UNCONFIRMED_TIME("userInterface.deathRespawnUnconfirmedTime"),
