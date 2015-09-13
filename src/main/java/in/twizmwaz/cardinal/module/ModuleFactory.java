@@ -12,6 +12,9 @@ import in.twizmwaz.cardinal.module.modules.chat.ChatModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannelModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.cores.CoreObjectiveBuilder;
+import in.twizmwaz.cardinal.module.modules.ctf.FlagBuilder;
+import in.twizmwaz.cardinal.module.modules.ctf.net.NetBuilder;
+import in.twizmwaz.cardinal.module.modules.ctf.post.PostBuilder;
 import in.twizmwaz.cardinal.module.modules.cycleTimer.CycleTimerModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.deathMessages.DeathMessagesBuilder;
 import in.twizmwaz.cardinal.module.modules.deathTracker.DeathTrackerBuilder;
@@ -162,7 +165,10 @@ public class ModuleFactory {
             InvisibleBlockBuilder.class,
             ItemDropBuilder.class,
             GuiKeepModuleBuilder.class,
-            RankModuleBuilder.class
+            RankModuleBuilder.class,
+            FlagBuilder.class,
+            PostBuilder.class,
+            NetBuilder.class
     };
     private final List<ModuleBuilder> builders;
 
