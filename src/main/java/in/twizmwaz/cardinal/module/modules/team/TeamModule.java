@@ -49,7 +49,7 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
             player.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.ERROR_MAY_NOT_JOIN, ChatColor.ITALIC + "" + ChatColor.AQUA + title + ChatColor.RESET + ChatColor.RED)).getMessage(player.getLocale()));
             return false;
         }
-        if (!force && size() >= maxOverfill) {
+        if (!force && size() >= max) {
             player.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.ERROR_TEAM_FULL, getCompleteName() + ChatColor.RED)).getMessage(player.getLocale()));
             return false;
         }
