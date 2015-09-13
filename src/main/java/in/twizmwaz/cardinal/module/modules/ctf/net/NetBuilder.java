@@ -76,11 +76,6 @@ public class NetBuilder implements ModuleBuilder {
                 Bukkit.getLogger().info(s);
             }
         }
-//        else {
-//            if (element.getChildren() != null) {
-//                net = parseNet(element.getChildren().get(0));
-//            }
-//        }
         return net;
     }
 }

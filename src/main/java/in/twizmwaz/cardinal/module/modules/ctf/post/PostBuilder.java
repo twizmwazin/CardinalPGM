@@ -67,11 +67,6 @@ public class PostBuilder implements ModuleBuilder {
                 Bukkit.getLogger().info(s);
             }
         }
-//      else {
-//            if (element.getChildren() != null) {
-//                post = parsePostElement(element.getChildren().get(0));
-//            }
-//        }
         return post;
     }
 }
