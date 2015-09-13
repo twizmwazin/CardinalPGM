@@ -1,18 +1,28 @@
 package in.twizmwaz.cardinal.module.modules.ctf;
 
 import com.google.common.collect.Lists;
-import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.TaskedModule;
+import in.twizmwaz.cardinal.module.modules.ctf.event.FlagRespawnEvent;
+import in.twizmwaz.cardinal.module.modules.ctf.event.PlayerCaptureFlagEvent;
 import in.twizmwaz.cardinal.module.modules.ctf.net.Net;
 import in.twizmwaz.cardinal.module.modules.ctf.post.Post;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.kit.Kit;
+import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
+import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
+import org.bukkit.block.Banner;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 
 import java.util.List;
 
-public class Flag implements Module {
+public class Flag implements TaskedModule {
 
     private String id;
     private boolean required;           // Default: true
@@ -32,6 +42,9 @@ public class Flag implements Module {
     private Kit dropKit;
     private Kit carryKit;
     private boolean dropOnWater;
+
+    private Banner banner;
+    private Player picker;
 
     public Flag(String id,
                 boolean required,
@@ -69,6 +82,12 @@ public class Flag implements Module {
         this.dropKit = dropKit;
         this.carryKit = carryKit;
         this.dropOnWater = dropOnWater;
+
+        for (RegionModule region : post.getRegions()) {
+            if (region.getCenterBlock().getBlock().getState() instanceof Banner) {
+                this.banner = (Banner) region.getCenterBlock().getBlock().getState();
+            }
+        }
     }
 
     public List<String> debug() {
@@ -100,4 +119,50 @@ public class Flag implements Module {
         HandlerList.unregisterAll(this);
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public List<Net> getNets() {
+        return nets;
+    }
+
+    public Player getPicker() {
+        return picker;
+    }
+
+    public void setPicker(Player picker) {
+        this.picker = picker;
+    }
+
+    public void respawnFlag() {
+        RegionModule spawn = getPost().getNextFlagSpawn();
+        Block block;
+        if (spawn instanceof PointRegion) {
+            block = ((PointRegion) spawn).getBlock();
+        } else {
+            block = spawn.getRandomPoint().getBlock();
+        }
+        block.getState().setMaterialData(banner.getMaterialData());
+        block.getState().update();
+
+        FlagRespawnEvent e = new FlagRespawnEvent(this, getPost());
+        Bukkit.getServer().getPluginManager().callEvent(e);
+    }
+
+    @EventHandler
+    public void onCaptureFlag(PlayerCaptureFlagEvent event) {
+        if (event.getFlag().equals(this)) {
+            setPicker(null);
+            Bukkit.broadcastMessage(event.getPlayer().getName() + " captured " + getName());
+        }
+    }
+
+    public void run() {
+
+    }
 }

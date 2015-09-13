@@ -1,17 +1,28 @@
 package in.twizmwaz.cardinal.module.modules.ctf.post;
 
 import com.google.common.collect.Lists;
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.ctf.Flag;
+import in.twizmwaz.cardinal.module.modules.ctf.event.PlayerPickupFlagEvent;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
-import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
+import in.twizmwaz.cardinal.module.modules.filter.FilterState;
+import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.util.Flags;
+import in.twizmwaz.cardinal.util.Teams;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.List;
+import java.util.Random;
 
 public class Post implements Module {
 
-    private PointRegion point;
+    private List<RegionModule> regions;
     private String id;
     private TeamModule owner;
     private boolean permanent;          // Default: false
@@ -23,7 +34,10 @@ public class Post implements Module {
     private int respawnSpeed;           // Default: 8 (M/s)
     private float yaw;
 
-    public Post(PointRegion point,
+    private RegionModule currentRegion;
+    private int lastRegionId = 0;
+
+    public Post(List<RegionModule> regions,
                 String id,
                 TeamModule owner,
                 boolean permanent,
@@ -34,7 +48,7 @@ public class Post implements Module {
                 int respawnTime,
                 int respawnSpeed,
                 float yaw) {
-        this.point = point;
+        this.regions = regions;
         this.id = id;
         this.owner = owner;
         this.permanent = permanent;
@@ -50,7 +64,7 @@ public class Post implements Module {
     public List<String> debug() {
         List<String> debug = Lists.newArrayList();
         debug.add("---------- DEBUG Post Flag ----------");
-        debug.add("PointRegion point = " + point.getLocation().toString());
+        debug.add("RegionModule regions = " + regions.size());
         debug.add("String id = " + id);
         debug.add("TeamModule owner = " + (owner == null ? "None" : owner.getName()));
         debug.add("boolean permanent = " + permanent);
@@ -76,5 +90,39 @@ public class Post implements Module {
 
     public FilterModule getPickupFilter() {
         return pickupFilter;
+    }
+
+    public List<RegionModule> getRegions() {
+        return regions;
+    }
+
+    public RegionModule getNextFlagSpawn() {
+        if (sequential) {
+            if (lastRegionId >= getRegions().size()) lastRegionId = 0;
+            return getRegions().get(lastRegionId ++);
+        } else {
+            Random rand = new Random();
+            return getRegions().get(rand.nextInt(getRegions().size()));
+        }
+    }
+
+    @EventHandler
+    public void onMove(PlayerMoveEvent event) {
+        Player p = event.getPlayer();
+        if ((Teams.getTeamByPlayer(p).isPresent() && Teams.getTeamByPlayer(p).get().isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
+            for (RegionModule region : getRegions()) {
+                if (region.contains(event.getTo()) && currentRegion.equals(region)) {
+                    if (pickupFilter == null || (pickupFilter != null && pickupFilter.evaluate(event.getPlayer()).equals(FilterState.ALLOW))) {
+                        Flag flag = Flags.getFlag(this);
+                        if (flag != null) {
+                            Bukkit.broadcastMessage(p.getName() + " picked up " + flag.getName());
+                            flag.setPicker(p);
+                            PlayerPickupFlagEvent e = new PlayerPickupFlagEvent(p, flag);
+                            Bukkit.getServer().getPluginManager().callEvent(e);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

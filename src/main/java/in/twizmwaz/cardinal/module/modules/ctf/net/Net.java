@@ -3,12 +3,15 @@ package in.twizmwaz.cardinal.module.modules.ctf.net;
 import com.google.common.collect.Lists;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.ctf.Flag;
+import in.twizmwaz.cardinal.module.modules.ctf.event.PlayerCaptureFlagEvent;
 import in.twizmwaz.cardinal.module.modules.ctf.event.PlayerEnterNetEvent;
 import in.twizmwaz.cardinal.module.modules.ctf.event.PlayerLeaveNetEvent;
 import in.twizmwaz.cardinal.module.modules.ctf.post.Post;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.util.Flags;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -100,6 +103,18 @@ public class Net implements Module {
             PlayerLeaveNetEvent e = new PlayerLeaveNetEvent(event.getPlayer(), this);
             Bukkit.getServer().getPluginManager().callEvent(e);
             Bukkit.getLogger().info(event.getPlayer().getName() + " left " + id + " net.");
+        }
+    }
+
+    @EventHandler
+    public void onEnterNet(PlayerEnterNetEvent event) {
+        if (event.getNet().equals(this)) {
+            TeamModule own = owner == null ? Teams.getTeamByPlayer(event.getPlayer()).get() : owner;
+            Flag flag = Flags.getFlag(this);
+            if (flag != null && flag.getPicker() != null && flag.getPicker().equals(event.getPlayer())) {
+                PlayerCaptureFlagEvent e = new PlayerCaptureFlagEvent(event.getPlayer(), Flags.getFlag(this), this);
+                Bukkit.getServer().getPluginManager().callEvent(e);
+            }
         }
     }
 }
