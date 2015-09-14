@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.ctf;
 
 import com.google.common.collect.Lists;
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.*;
 import in.twizmwaz.cardinal.module.modules.ctf.net.Net;
@@ -40,11 +41,14 @@ public class FlagBuilder implements ModuleBuilder {
                 } else {
                     post = PostBuilder.parsePostElement(flag.getChild("post"));
                 }
+                Cardinal.getInstance().getServer().getPluginManager().registerEvents(post, Cardinal.getInstance());
                 List<Net> nets = null;
                 if (flag.getChildren("net") != null) {
                     nets = Lists.newArrayList();
-                    for (Element net : flag.getChildren("net")) {
-                        nets.add(NetBuilder.parseNet(net));
+                    for (Element enet : flag.getChildren("net")) {
+                        Net net = NetBuilder.parseNet(enet);
+                        nets.add(net);
+                        Cardinal.getInstance().getServer().getPluginManager().registerEvents(net, Cardinal.getInstance());
                     }
                 }
                 TeamModule owner = flag.getAttributeValue("owner") == null ? null : Teams.getTeamById(flag.getAttributeValue("owner")).orNull();

@@ -2,8 +2,7 @@ package in.twizmwaz.cardinal.module.modules.ctf;
 
 import com.google.common.collect.Lists;
 import in.twizmwaz.cardinal.module.TaskedModule;
-import in.twizmwaz.cardinal.module.modules.ctf.event.FlagRespawnEvent;
-import in.twizmwaz.cardinal.module.modules.ctf.event.PlayerCaptureFlagEvent;
+import in.twizmwaz.cardinal.module.modules.ctf.event.*;
 import in.twizmwaz.cardinal.module.modules.ctf.net.Net;
 import in.twizmwaz.cardinal.module.modules.ctf.post.Post;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
@@ -11,14 +10,22 @@ import in.twizmwaz.cardinal.module.modules.kit.Kit;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.util.Flags;
+import in.twizmwaz.cardinal.util.MiscUtil;
+import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
+import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
+import org.bukkit.craftbukkit.libs.jline.internal.Log;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BannerMeta;
 
 import java.util.List;
 
@@ -45,6 +52,10 @@ public class Flag implements TaskedModule {
 
     private Banner banner;
     private Player picker;
+    private Block currentFlagBlock;
+    private ItemStack pickerHelmet;
+    private boolean respawning;
+    private int respawnTime;
 
     public Flag(String id,
                 boolean required,
@@ -88,6 +99,9 @@ public class Flag implements TaskedModule {
                 this.banner = (Banner) region.getCenterBlock().getBlock().getState();
             }
         }
+
+        currentFlagBlock = getPost().getInitialBlock();
+        respawning = false;
     }
 
     public List<String> debug() {
@@ -123,6 +137,10 @@ public class Flag implements TaskedModule {
         return name;
     }
 
+    public String getDisplayName() {
+        return MiscUtil.convertDyeColorToChatColor(color) + getName();
+    }
+
     public Post getPost() {
         return post;
     }
@@ -139,6 +157,10 @@ public class Flag implements TaskedModule {
         this.picker = picker;
     }
 
+    public boolean isPickedUp() {
+        return getPicker() != null;
+    }
+
     public void respawnFlag() {
         RegionModule spawn = getPost().getNextFlagSpawn();
         Block block;
@@ -147,22 +169,69 @@ public class Flag implements TaskedModule {
         } else {
             block = spawn.getRandomPoint().getBlock();
         }
-        block.getState().setMaterialData(banner.getMaterialData());
-        block.getState().update();
+        currentFlagBlock = block;
+        block.setType(banner.getMaterial());
+        Banner newBanner = (Banner) block.getState();
+        newBanner.setPatterns(banner.getPatterns());
+        newBanner.setBaseColor(banner.getBaseColor());
+        Flags.setBannerFacing(getPost().getYaw(), newBanner, true);
+        newBanner.update();
 
-        FlagRespawnEvent e = new FlagRespawnEvent(this, getPost());
+        FlagRespawnEvent e = new FlagRespawnEvent(this, getPost(), block);
         Bukkit.getServer().getPluginManager().callEvent(e);
+        Bukkit.broadcastMessage(getDisplayName() + ChatColor.RESET + " has respawned");
+        respawning = false;
+    }
+
+    @EventHandler
+    public void onPlayerPickupFlag(PlayerPickupFlagEvent event) {
+        if (event.getFlag().equals(this)) {
+            ItemStack bannerItem = new ItemStack(Material.BANNER);
+            BannerMeta meta = (BannerMeta) bannerItem.getItemMeta();
+            meta.setBaseColor(banner.getBaseColor());
+            meta.setPatterns(banner.getPatterns());
+            bannerItem.setItemMeta(meta);
+            event.getPlayer().getInventory().setHelmet(bannerItem);
+            event.getPlayer().getWorld().getBlockAt(banner.getLocation()).setType(Material.AIR);
+            pickerHelmet = event.getPlayer().getInventory().getHelmet();
+        }
     }
 
     @EventHandler
     public void onCaptureFlag(PlayerCaptureFlagEvent event) {
+        Player p = event.getPlayer();
         if (event.getFlag().equals(this)) {
             setPicker(null);
-            Bukkit.broadcastMessage(event.getPlayer().getName() + " captured " + getName());
+            p.getInventory().setHelmet(pickerHelmet);
+            pickerHelmet = null;
+            Bukkit.broadcastMessage(getDisplayName() + ChatColor.RESET + " captured by " + Teams.getTeamByPlayer(p).get().getColor() + p.getName());
+
+            respawning = true;
         }
     }
 
-    public void run() {
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent event) {
+        if (event.getBlock().equals(currentFlagBlock) && event.getBlock().getType().equals(Material.BANNER)) {
+            event.setCancelled(true);
+            event.getPlayer().sendMessage(ChatColor.RED + "You can not break flags.");
+        }
+    }
 
+    private int timer = 0;
+    @Override
+    public void run() {
+        if (respawning && timer % 20 == 0) {
+            respawnTime = getPost().getRespawnTime();
+            if (respawnTime == 0) {
+                respawnFlag();
+                respawning = false;
+            }
+            respawnTime --;
+            Log.info("Respawning in " + respawnTime + " secs");
+        }
+
+        if (timer > 100) timer = 0;
+        timer ++;
     }
 }

@@ -17,6 +17,7 @@ import in.twizmwaz.cardinal.util.Numbers;
 import in.twizmwaz.cardinal.util.Strings;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.libs.jline.internal.Log;
 import org.jdom2.Element;
 
 import java.util.List;
@@ -28,11 +29,15 @@ public class PostBuilder implements ModuleBuilder {
         ModuleCollection<Post> results = new ModuleCollection<>();
         for (Element flags : match.getDocument().getRootElement().getChildren("flags")) {
             for (Element post : flags.getChildren("post")) {
-                results.add(parsePostElement(post));
+                Post postp = parsePostElement(post);
+                Log.info("Added postp " + postp.getId());
+                results.add(postp);
             }
             for (Element subFlags : flags.getChildren("flags")) {
                 for (Element post : subFlags.getChildren("post")) {
-                    results.add(parsePostElement(post));
+                    Post postp = parsePostElement(post);
+                    Log.info("Added postp " + postp.getId());
+                    results.add(postp);
                 }
             }
         }

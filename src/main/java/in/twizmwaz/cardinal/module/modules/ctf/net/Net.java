@@ -98,11 +98,9 @@ public class Net implements Module {
         if (region.contains(event.getTo()) && !region.contains(event.getFrom())) {
             PlayerEnterNetEvent e = new PlayerEnterNetEvent(event.getPlayer(), this);
             Bukkit.getServer().getPluginManager().callEvent(e);
-            Bukkit.getLogger().info(event.getPlayer().getName() + " entered " + id + " net.");
         } else if (!region.contains(event.getTo()) && region.contains(event.getFrom())) {
             PlayerLeaveNetEvent e = new PlayerLeaveNetEvent(event.getPlayer(), this);
             Bukkit.getServer().getPluginManager().callEvent(e);
-            Bukkit.getLogger().info(event.getPlayer().getName() + " left " + id + " net.");
         }
     }
 

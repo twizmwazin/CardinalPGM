@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.ctf.Flag;
+import in.twizmwaz.cardinal.module.modules.ctf.event.FlagRespawnEvent;
 import in.twizmwaz.cardinal.module.modules.ctf.event.PlayerPickupFlagEvent;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
@@ -12,6 +13,8 @@ import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Flags;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -34,7 +37,7 @@ public class Post implements Module {
     private int respawnSpeed;           // Default: 8 (M/s)
     private float yaw;
 
-    private RegionModule currentRegion;
+    private Block currentBlock;
     private int lastRegionId = 0;
 
     public Post(List<RegionModule> regions,
@@ -59,6 +62,8 @@ public class Post implements Module {
         this.respawnTime = respawnTime;
         this.respawnSpeed = respawnSpeed;
         this.yaw = yaw;
+
+        this.currentBlock = getInitialBlock();
     }
 
     public List<String> debug() {
@@ -75,6 +80,8 @@ public class Post implements Module {
         debug.add("int respawnTime = " + respawnTime);
         debug.add("int respawnSpeed = " + respawnSpeed);
         debug.add("float yaw = " + yaw);
+        debug.add("---");
+        debug.add("Current Block = " + currentBlock);
         debug.add("-------------------------------------");
         return debug;
     }
@@ -106,16 +113,32 @@ public class Post implements Module {
         }
     }
 
+    public Block getInitialBlock() {
+        return getRegions().get(0).getCenterBlock().getBlock();
+    }
+
+    public void setCurrentBlock(Block block) {
+        this.currentBlock = block;
+    }
+
+    public int getRespawnTime() {
+        return respawnTime;
+    }
+
+    public float getYaw() {
+        return yaw;
+    }
+
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
         Player p = event.getPlayer();
-        if ((Teams.getTeamByPlayer(p).isPresent() && Teams.getTeamByPlayer(p).get().isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
+        if ((Teams.getTeamByPlayer(p).isPresent() && !Teams.getTeamByPlayer(p).get().isObserver()) && GameHandler.getGameHandler().getMatch().isRunning()) {
             for (RegionModule region : getRegions()) {
-                if (region.contains(event.getTo()) && currentRegion.equals(region)) {
+                if (region.contains(event.getTo()) && currentBlock.equals(region.getCenterBlock().getBlock())) {
                     if (pickupFilter == null || (pickupFilter != null && pickupFilter.evaluate(event.getPlayer()).equals(FilterState.ALLOW))) {
                         Flag flag = Flags.getFlag(this);
-                        if (flag != null) {
-                            Bukkit.broadcastMessage(p.getName() + " picked up " + flag.getName());
+                        if (flag != null && !flag.isPickedUp()) {
+                            Bukkit.broadcastMessage(flag.getDisplayName() + ChatColor.RESET + " picked up by " + Teams.getTeamByPlayer(p).get().getColor() + p.getName());
                             flag.setPicker(p);
                             PlayerPickupFlagEvent e = new PlayerPickupFlagEvent(p, flag);
                             Bukkit.getServer().getPluginManager().callEvent(e);
@@ -123,6 +146,13 @@ public class Post implements Module {
                     }
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onFlagRespawn(FlagRespawnEvent event) {
+        if (event.getPost().equals(this)) {
+            setCurrentBlock(event.getBlock());
         }
     }
 }

@@ -30,9 +30,9 @@ public class Flags {
     }
 
     public static void setBannerFacing(float yaw, Banner banner, boolean update) {
-        org.bukkit.material.Banner data = (org.bukkit.material.Banner) banner.getData();
+        org.bukkit.material.Banner data = (org.bukkit.material.Banner) banner.getMaterialData();
         data.setFacingDirection(yawToFace(yaw));
-        banner.setData(data);
+        banner.setMaterialData(data);
         if (update) banner.update();
     }
 

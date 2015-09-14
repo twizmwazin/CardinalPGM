@@ -2,6 +2,8 @@ package in.twizmwaz.cardinal.module.modules.ctf.event;
 
 import in.twizmwaz.cardinal.module.modules.ctf.Flag;
 import in.twizmwaz.cardinal.module.modules.ctf.post.Post;
+import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
+import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -11,10 +13,12 @@ public class FlagRespawnEvent extends Event {
 
     private Flag flag;
     private Post post;
+    private Block where;
 
-    public FlagRespawnEvent(Flag flag, Post post) {
+    public FlagRespawnEvent(Flag flag, Post post, Block where) {
         this.flag = flag;
         this.post = post;
+        this.where = where;
     }
 
     public Flag getFlag() {
@@ -23,6 +27,10 @@ public class FlagRespawnEvent extends Event {
 
     public Post getPost() {
         return post;
+    }
+
+    public Block getBlock() {
+        return where;
     }
 
     public static HandlerList getHandlerList() {
