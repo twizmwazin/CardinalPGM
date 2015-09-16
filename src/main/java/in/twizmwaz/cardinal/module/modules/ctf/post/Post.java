@@ -137,7 +137,7 @@ public class Post implements Module {
                 if (region.contains(event.getTo()) && currentBlock.equals(region.getCenterBlock().getBlock())) {
                     if (pickupFilter == null || (pickupFilter != null && pickupFilter.evaluate(event.getPlayer()).equals(FilterState.ALLOW))) {
                         Flag flag = Flags.getFlag(this);
-                        if (flag != null && !flag.isPickedUp()) {
+                        if (flag != null && !flag.isCarried()) {
                             Bukkit.broadcastMessage(flag.getDisplayName() + ChatColor.RESET + " picked up by " + Teams.getTeamByPlayer(p).get().getColor() + p.getName());
                             flag.setPicker(p);
                             PlayerPickupFlagEvent e = new PlayerPickupFlagEvent(p, flag);

@@ -1,6 +1,8 @@
 package in.twizmwaz.cardinal.module.modules.ctf;
 
 import com.google.common.collect.Lists;
+import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.event.ScoreUpdateEvent;
 import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.module.modules.ctf.event.*;
 import in.twizmwaz.cardinal.module.modules.ctf.net.Net;
@@ -9,6 +11,7 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.kit.Kit;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
+import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Flags;
 import in.twizmwaz.cardinal.util.MiscUtil;
@@ -55,6 +58,7 @@ public class Flag implements TaskedModule {
     private Block currentFlagBlock;
     private ItemStack pickerHelmet;
     private boolean respawning;
+    private int timer = 0;
     private int respawnTime;
 
     public Flag(String id,
@@ -157,35 +161,38 @@ public class Flag implements TaskedModule {
         this.picker = picker;
     }
 
-    public boolean isPickedUp() {
+    public boolean isCarried() {
         return getPicker() != null;
     }
 
     public void respawnFlag() {
-        RegionModule spawn = getPost().getNextFlagSpawn();
-        Block block;
-        if (spawn instanceof PointRegion) {
-            block = ((PointRegion) spawn).getBlock();
-        } else {
-            block = spawn.getRandomPoint().getBlock();
-        }
-        currentFlagBlock = block;
-        block.setType(banner.getMaterial());
-        Banner newBanner = (Banner) block.getState();
-        newBanner.setPatterns(banner.getPatterns());
-        newBanner.setBaseColor(banner.getBaseColor());
-        Flags.setBannerFacing(getPost().getYaw(), newBanner, true);
-        newBanner.update();
+        if (GameHandler.getGameHandler().getMatch().isRunning()) {
+            RegionModule spawn = getPost().getNextFlagSpawn();
+            Block block;
+            if (spawn instanceof PointRegion) {
+                block = ((PointRegion) spawn).getBlock();
+            } else {
+                block = spawn.getRandomPoint().getBlock();
+            }
+            currentFlagBlock = block;
+            block.setType(banner.getMaterial());
+            Banner newBanner = (Banner) block.getState();
+            newBanner.setPatterns(banner.getPatterns());
+            newBanner.setBaseColor(banner.getBaseColor());
+            Flags.setBannerFacing(getPost().getYaw(), newBanner, true);
+            newBanner.update();
 
-        FlagRespawnEvent e = new FlagRespawnEvent(this, getPost(), block);
-        Bukkit.getServer().getPluginManager().callEvent(e);
-        Bukkit.broadcastMessage(getDisplayName() + ChatColor.RESET + " has respawned");
-        respawning = false;
+            FlagRespawnEvent e = new FlagRespawnEvent(this, getPost(), block);
+            Bukkit.getServer().getPluginManager().callEvent(e);
+            Bukkit.broadcastMessage(getDisplayName() + ChatColor.RESET + " has respawned");
+            respawning = false;
+        }
     }
 
     @EventHandler
     public void onPlayerPickupFlag(PlayerPickupFlagEvent event) {
         if (event.getFlag().equals(this)) {
+            pickerHelmet = event.getPlayer().getInventory().getHelmet();
             ItemStack bannerItem = new ItemStack(Material.BANNER);
             BannerMeta meta = (BannerMeta) bannerItem.getItemMeta();
             meta.setBaseColor(banner.getBaseColor());
@@ -193,7 +200,6 @@ public class Flag implements TaskedModule {
             bannerItem.setItemMeta(meta);
             event.getPlayer().getInventory().setHelmet(bannerItem);
             event.getPlayer().getWorld().getBlockAt(banner.getLocation()).setType(Material.AIR);
-            pickerHelmet = event.getPlayer().getInventory().getHelmet();
         }
     }
 
@@ -205,6 +211,17 @@ public class Flag implements TaskedModule {
             p.getInventory().setHelmet(pickerHelmet);
             pickerHelmet = null;
             Bukkit.broadcastMessage(getDisplayName() + ChatColor.RESET + " captured by " + Teams.getTeamByPlayer(p).get().getColor() + p.getName());
+
+            if (points > 0 || event.getNet().getPoints() > 0) {
+                for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
+                    TeamModule scored = owner != null ? owner : Teams.getTeamByPlayer(p).get();
+                    if (scored != null && scored == score.getTeam()) {
+                        int pointsToAdd = points > 0 ? points : event.getNet().getPoints();
+                        score.setScore(score.getScore() + pointsToAdd);
+                        Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(score));
+                    }
+                }
+            }
 
             respawning = true;
         }
@@ -218,7 +235,7 @@ public class Flag implements TaskedModule {
         }
     }
 
-    private int timer = 0;
+
     @Override
     public void run() {
         if (respawning && timer % 20 == 0) {
@@ -228,7 +245,16 @@ public class Flag implements TaskedModule {
                 respawning = false;
             }
             respawnTime --;
-            Log.info("Respawning in " + respawnTime + " secs");
+        }
+
+        if (isCarried() && pointsRate > 0 && timer % 20 == 0) {
+            for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
+                TeamModule scored = owner != null ? owner : Teams.getTeamByPlayer(getPicker()).get();
+                if (scored != null && scored == score.getTeam()) {
+                    score.setScore(score.getScore() + pointsRate);
+                    Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(score));
+                }
+            }
         }
 
         if (timer > 100) timer = 0;

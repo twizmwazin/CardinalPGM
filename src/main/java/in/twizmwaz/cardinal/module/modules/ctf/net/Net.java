@@ -8,6 +8,7 @@ import in.twizmwaz.cardinal.module.modules.ctf.event.PlayerEnterNetEvent;
 import in.twizmwaz.cardinal.module.modules.ctf.event.PlayerLeaveNetEvent;
 import in.twizmwaz.cardinal.module.modules.ctf.post.Post;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
+import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Flags;
@@ -93,6 +94,10 @@ public class Net implements Module {
         return captureFilter;
     }
 
+    public int getPoints() {
+        return points;
+    }
+
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         if (region.contains(event.getTo()) && !region.contains(event.getFrom())) {
@@ -110,8 +115,10 @@ public class Net implements Module {
             TeamModule own = owner == null ? Teams.getTeamByPlayer(event.getPlayer()).get() : owner;
             Flag flag = Flags.getFlag(this);
             if (flag != null && flag.getPicker() != null && flag.getPicker().equals(event.getPlayer())) {
-                PlayerCaptureFlagEvent e = new PlayerCaptureFlagEvent(event.getPlayer(), Flags.getFlag(this), this);
-                Bukkit.getServer().getPluginManager().callEvent(e);
+                if (captureFilter == null || captureFilter.evaluate(event.getPlayer()).equals(FilterState.ALLOW)) {
+                    PlayerCaptureFlagEvent e = new PlayerCaptureFlagEvent(event.getPlayer(), Flags.getFlag(this), this);
+                    Bukkit.getServer().getPluginManager().callEvent(e);
+                }
             }
         }
     }
