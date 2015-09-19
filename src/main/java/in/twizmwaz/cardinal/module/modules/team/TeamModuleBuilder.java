@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
+import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
 import in.twizmwaz.cardinal.util.Parser;
 import org.apache.logging.log4j.core.helpers.Integers;
 import org.bukkit.ChatColor;
@@ -25,6 +26,12 @@ public class TeamModuleBuilder implements ModuleBuilder {
         for (Element teamNode : teamElements) {
             String name = teamNode.getText();
             String id = teamNode.getAttributeValue("id") == null ? name.toLowerCase().split(" ")[0] : teamNode.getAttribute("id").getValue();
+            int min;
+            try {
+                min = Integers.parseInt(teamNode.getAttribute("min").getValue(), doc.getRootElement().getChildren("blitz").size() != 0 ? 1 : 0);
+            } catch (NullPointerException ex) {
+                min = doc.getRootElement().getChildren("blitz").size() != 0 ? 1 : 0;
+            }
             int max = Integers.parseInt(teamNode.getAttribute("max").getValue());
             int maxOverfill;
             try {
@@ -39,9 +46,9 @@ public class TeamModuleBuilder implements ModuleBuilder {
                 respawnLimit = -1;
             }
             ChatColor color = Parser.parseChatColor(teamNode.getAttribute("color").getValue());
-            results.add(new TeamModule(match, name, id, max, maxOverfill, respawnLimit, color, false));
+            results.add(new TeamModule(match, name, id, min, max, maxOverfill, respawnLimit, color, false));
         }
-        results.add(new TeamModule(match, "Observers", "observers", Integer.MAX_VALUE, Integer.MAX_VALUE, -1, ChatColor.AQUA, true));
+        results.add(new TeamModule(match, "Observers", "observers", 0, Integer.MAX_VALUE, Integer.MAX_VALUE, -1, ChatColor.AQUA, true));
         return results;
     }
 }
