@@ -25,16 +25,18 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
     private final String id;
     private final boolean observer;
     private String name;
+    private int min;
     private int max;
     private int maxOverfill;
     private int respawnLimit;
     private ChatColor color;
     private boolean ready;
 
-    protected TeamModule(Match match, String name, String id, int max, int maxOverfill, int respawnLimit, ChatColor color, boolean observer) {
+    protected TeamModule(Match match, String name, String id, int min, int max, int maxOverfill, int respawnLimit, ChatColor color, boolean observer) {
         this.match = match;
         this.name = name;
         this.id = id;
+        this.min = min;
         this.max = max;
         this.maxOverfill = maxOverfill;
         this.respawnLimit = respawnLimit;
@@ -104,6 +106,10 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
 
     public String getId() {
         return id;
+    }
+
+    public int getMin() {
+        return min;
     }
 
     public int getMax() {

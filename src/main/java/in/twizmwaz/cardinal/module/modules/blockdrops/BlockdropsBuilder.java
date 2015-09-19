@@ -24,10 +24,10 @@ public class BlockdropsBuilder implements ModuleBuilder {
     @Override
     public ModuleCollection<Blockdrops> load(Match match) {
         ModuleCollection<Blockdrops> results = new ModuleCollection<>();
-        List<Element> blockdrops = new ArrayList<>();
-        blockdrops.addAll(match.getDocument().getRootElement().getChildren("blockdrops"));
-        blockdrops.addAll(match.getDocument().getRootElement().getChildren("block-drops"));
-        for (Element element : blockdrops) {
+        List<Element> blockDrops = new ArrayList<>();
+        blockDrops.addAll(match.getDocument().getRootElement().getChildren("blockdrops"));
+        blockDrops.addAll(match.getDocument().getRootElement().getChildren("block-drops"));
+        for (Element element : blockDrops) {
             for (Element rule : element.getChildren("rule")) {
                 RegionModule region = null;
                 if (rule.getChild("region") != null) {

@@ -313,6 +313,8 @@
         <timeElapsed>Time Elapsed: {0}</timeElapsed>
         <modeInTime>{0} in {1}</modeInTime>
         <compass>Teleport Tool</compass>
+        <waitingPlayer>Waiting for {0} more player to join {1}</waitingPlayer>
+        <waitingPlayers>Waiting for {0} more players to join {1}</waitingPlayers>
     </userInterface>
     <deathMsg>
         <explosionSelf>{0} 'sploded</explosionSelf>
