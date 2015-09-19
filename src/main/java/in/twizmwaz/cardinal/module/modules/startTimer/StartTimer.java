@@ -8,7 +8,6 @@ import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.TaskedModule;
-import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
 import in.twizmwaz.cardinal.module.modules.bossBar.BossBar;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.settings.Settings;
@@ -49,18 +48,16 @@ public class StartTimer implements TaskedModule, Cancellable {
                 if (match.getState() != MatchState.STARTING) {
                     return;
                 } else {
-                    if (Blitz.matchIsBlitz()) {
-                        int count = 0;
-                        for (TeamModule team : Teams.getTeams()) {
-                            if (!team.isObserver() && team.size() > 0) {
-                                count++;
-                            }
+                    int count = 0;
+                    for (TeamModule team : Teams.getTeams()) {
+                        if (!team.isObserver() && team.size() < team.getMin()) {
+                            count++;
                         }
-                        if (count <= 1 && !forced) {
-                            ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.ERROR_NOT_ENOUGH_PLAYERS)));
-                            this.setCancelled(true);
-                            return;
-                        }
+                    }
+                    if (count > 0 && !forced) {
+                        ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.ERROR_NOT_ENOUGH_PLAYERS)));
+                        this.setCancelled(true);
+                        return;
                     }
                     BossBar.delete();
                     match.setState(MatchState.PLAYING);
@@ -95,6 +92,13 @@ public class StartTimer implements TaskedModule, Cancellable {
             }
             time--;
         }
+        if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.WAITING)) {
+            if (neededPlayers() > 0) {
+                BossBar.sendGlobalBossBar(waitingPlayerMessage(), 100F);
+            } else {
+                BossBar.delete();
+            }
+        }
     }
 
     @Override
@@ -122,6 +126,32 @@ public class StartTimer implements TaskedModule, Cancellable {
 
     public void setForced(boolean forced) {
         this.forced = forced;
+    }
+
+    public int neededPlayers(){
+        int count = 0;
+        for (TeamModule teams : Teams.getTeams()) {
+            if (!teams.isObserver() && teams.size() < teams.getMin()) {
+                count += teams.getMin() - teams.size();
+            }
+        }
+        return count;
+    }
+
+    public UnlocalizedChatMessage waitingPlayerMessage(){
+        int count = 0;
+        TeamModule team = Teams.getTeamById("observers").get();
+        for (TeamModule teams : Teams.getTeams()) {
+            if (!teams.isObserver() && teams.size() < teams.getMin()) {
+                count ++;
+                team = teams;
+            }
+        }
+        if (neededPlayers() == 1) {
+            return new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.UI_WAITING_PLAYER, ChatColor.AQUA + "" + count + ChatColor.RED, count == 1 ? team.getCompleteName() : ""));
+        } else {
+            return new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.UI_WAITING_PLAYERS, ChatColor.AQUA + "" + count + ChatColor.RED, count == 1 ? team.getCompleteName() : ""));
+        }
     }
 
     @Override
