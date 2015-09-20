@@ -52,7 +52,7 @@ public class BossBar implements Module {
         }
         if (wither != null) {
             wither.name = checkMessageLength(message.getMessage(player.getLocale()));
-            wither.health = percent * 100F / wither.getMaxHealth() < 1 ? 1 : percent * 100F / wither.getMaxHealth();
+            wither.health = percent * 100F / wither.getMaxHealth();
         }
         updateWither(wither, player);
     }

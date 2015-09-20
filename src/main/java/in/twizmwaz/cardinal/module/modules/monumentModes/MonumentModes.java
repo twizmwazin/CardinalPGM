@@ -103,11 +103,12 @@ public class MonumentModes implements TaskedModule {
                     showBefore = mode.getShowBefore();
                 }
             }
-            if (timeBeforeMode > 0 && timeBeforeMode < showBefore && name != null) {
+            if (timeBeforeMode > 0 && timeBeforeMode <= showBefore && name != null) {
                 int percent = (int) (timeBeforeMode * 100F) / showBefore;
+                if (timeBeforeMode <= 1) percent = 0;
                 BossBar.sendGlobalBossBar(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.UI_MODE_IN_TIME, new UnlocalizedChatMessage(ChatColor.RED + name + ChatColor.AQUA)), ((timeBeforeMode) == 1 ? new LocalizedChatMessage(ChatConstant.UI_SECOND, ChatColor.DARK_AQUA + "1" + ChatColor.AQUA) : new LocalizedChatMessage(ChatConstant.UI_SECONDS, ChatColor.DARK_AQUA + String.valueOf(timeBeforeMode) + ChatColor.AQUA))), percent);
             }
-            if (timeBeforeMode < 0 || (TimeLimit.getMatchTimeLimit() == 0 && (timeBeforeMode > showBefore || timeBeforeMode <= 0))) {
+            if (timeBeforeMode <= 0 || (TimeLimit.getMatchTimeLimit() == 0 && (timeBeforeMode > showBefore || timeBeforeMode <= 0))) {
                 BossBar.delete();
             }
         }
