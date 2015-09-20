@@ -81,6 +81,7 @@ public class TimeNotifications implements TaskedModule {
             } else if (TimeLimit.getMatchTimeLimit() > 0) {
                 int timeLeft = ((TimeLimit.getMatchTimeLimit() - (int) MatchTimer.getTimeInSeconds()));
                 int percent = (int) ((100F * timeLeft) / TimeLimit.getMatchTimeLimit());
+                if (percent == 0) percent = 1;
                 BossBar.sendGlobalBossBar(new UnlocalizedChatMessage(ChatColor.AQUA + "{0} " + ChatUtil.getTimerColor(timeRemaining) + "{1}", new LocalizedChatMessage(ChatConstant.UI_TIMER), new UnlocalizedChatMessage(Strings.formatTime(timeRemaining + 1))), percent);
             }
             if (nextTimeMessage >= timeRemaining) {
