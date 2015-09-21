@@ -22,7 +22,7 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.libs.jline.internal.Log;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -229,9 +229,15 @@ public class Flag implements TaskedModule {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (event.getBlock().equals(currentFlagBlock) && event.getBlock().getType().equals(Material.BANNER)) {
-            event.setCancelled(true);
-            event.getPlayer().sendMessage(ChatColor.RED + "You can not break flags.");
+        Material type = event.getBlock().getType();
+        if (type.equals(Material.BANNER) || type.equals(Material.STANDING_BANNER) || type.equals(Material.WALL_BANNER)) {
+            if (event.getBlock().equals(currentFlagBlock)) {
+                event.setCancelled(true);
+                event.getPlayer().sendMessage(ChatColor.RED + "You can not break flags.");
+            } else if (event.getBlock().equals(currentFlagBlock.getRelative(BlockFace.DOWN))) {
+                event.setCancelled(true);
+                event.getPlayer().sendMessage(ChatColor.RED + "You can not break the block under the flag.");
+            }
         }
     }
 
