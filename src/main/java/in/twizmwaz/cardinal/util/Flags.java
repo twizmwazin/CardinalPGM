@@ -6,6 +6,7 @@ import in.twizmwaz.cardinal.module.modules.ctf.net.Net;
 import in.twizmwaz.cardinal.module.modules.ctf.post.Post;
 import org.bukkit.block.Banner;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -27,6 +28,20 @@ public class Flags {
             if (flag.getNets().contains(net)) return flag;
         }
         return  null;
+    }
+
+    public static boolean hasFlag(Player player) {
+        for (Flag flag : getFlags()) {
+            if (flag.getPicker() != null && flag.getPicker().equals(player)) return true;
+        }
+        return false;
+    }
+
+    public static Flag getFlag(Player player) {
+        for (Flag flag : getFlags()) {
+            if (flag.getPicker() != null && flag.getPicker().equals(player)) return flag;
+        }
+        return null;
     }
 
     public static void setBannerFacing(float yaw, Banner banner, boolean update) {

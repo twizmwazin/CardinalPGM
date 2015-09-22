@@ -3,9 +3,9 @@ package in.twizmwaz.cardinal.module.modules.ctf.net;
 import com.google.common.collect.Lists;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.ctf.Flag;
-import in.twizmwaz.cardinal.module.modules.ctf.event.PlayerCaptureFlagEvent;
-import in.twizmwaz.cardinal.module.modules.ctf.event.PlayerEnterNetEvent;
-import in.twizmwaz.cardinal.module.modules.ctf.event.PlayerLeaveNetEvent;
+import in.twizmwaz.cardinal.event.flag.FlagCaptureEvent;
+import in.twizmwaz.cardinal.event.flag.NetEnterEvent;
+import in.twizmwaz.cardinal.event.flag.NetLeaveEvent;
 import in.twizmwaz.cardinal.module.modules.ctf.post.Post;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
@@ -100,23 +100,26 @@ public class Net implements Module {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (region.contains(event.getTo()) && !region.contains(event.getFrom())) {
-            PlayerEnterNetEvent e = new PlayerEnterNetEvent(event.getPlayer(), this);
-            Bukkit.getServer().getPluginManager().callEvent(e);
-        } else if (!region.contains(event.getTo()) && region.contains(event.getFrom())) {
-            PlayerLeaveNetEvent e = new PlayerLeaveNetEvent(event.getPlayer(), this);
-            Bukkit.getServer().getPluginManager().callEvent(e);
+        if (Flags.hasFlag(event.getPlayer())) {
+            Flag flag = Flags.getFlag(event.getPlayer());
+            if (region.contains(event.getTo()) && !region.contains(event.getFrom())) {
+                NetEnterEvent e = new NetEnterEvent(event.getPlayer(), this, flag);
+                Bukkit.getServer().getPluginManager().callEvent(e);
+            } else if (!region.contains(event.getTo()) && region.contains(event.getFrom())) {
+                NetLeaveEvent e = new NetLeaveEvent(event.getPlayer(), this, flag);
+                Bukkit.getServer().getPluginManager().callEvent(e);
+            }
         }
     }
 
     @EventHandler
-    public void onEnterNet(PlayerEnterNetEvent event) {
+    public void onEnterNet(NetEnterEvent event) {
         if (event.getNet().equals(this)) {
             TeamModule own = owner == null ? Teams.getTeamByPlayer(event.getPlayer()).get() : owner;
             Flag flag = Flags.getFlag(this);
             if (flag != null && flag.getPicker() != null && flag.getPicker().equals(event.getPlayer())) {
                 if (captureFilter == null || captureFilter.evaluate(event.getPlayer()).equals(FilterState.ALLOW)) {
-                    PlayerCaptureFlagEvent e = new PlayerCaptureFlagEvent(event.getPlayer(), Flags.getFlag(this), this);
+                    FlagCaptureEvent e = new FlagCaptureEvent(event.getPlayer(), Flags.getFlag(this), this);
                     Bukkit.getServer().getPluginManager().callEvent(e);
                 }
             }

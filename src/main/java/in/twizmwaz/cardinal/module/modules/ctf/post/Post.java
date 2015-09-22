@@ -4,8 +4,8 @@ import com.google.common.collect.Lists;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.ctf.Flag;
-import in.twizmwaz.cardinal.module.modules.ctf.event.FlagRespawnEvent;
-import in.twizmwaz.cardinal.module.modules.ctf.event.PlayerPickupFlagEvent;
+import in.twizmwaz.cardinal.event.flag.FlagRespawnEvent;
+import in.twizmwaz.cardinal.event.flag.FlagPickupEvent;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
@@ -140,7 +140,7 @@ public class Post implements Module {
                         if (flag != null && !flag.isCarried()) {
                             Bukkit.broadcastMessage(flag.getDisplayName() + ChatColor.RESET + " picked up by " + Teams.getTeamByPlayer(p).get().getColor() + p.getName());
                             flag.setPicker(p);
-                            PlayerPickupFlagEvent e = new PlayerPickupFlagEvent(p, flag);
+                            FlagPickupEvent e = new FlagPickupEvent(p, flag);
                             Bukkit.getServer().getPluginManager().callEvent(e);
                         }
                     }

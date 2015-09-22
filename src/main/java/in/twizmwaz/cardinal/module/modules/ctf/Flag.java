@@ -3,15 +3,21 @@ package in.twizmwaz.cardinal.module.modules.ctf;
 import com.google.common.collect.Lists;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.ScoreUpdateEvent;
+import in.twizmwaz.cardinal.event.flag.FlagDropEvent;
+import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.TaskedModule;
-import in.twizmwaz.cardinal.module.modules.ctf.event.*;
+import in.twizmwaz.cardinal.event.flag.FlagRespawnEvent;
+import in.twizmwaz.cardinal.event.flag.FlagCaptureEvent;
+import in.twizmwaz.cardinal.event.flag.FlagPickupEvent;
 import in.twizmwaz.cardinal.module.modules.ctf.net.Net;
 import in.twizmwaz.cardinal.module.modules.ctf.post.Post;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.kit.Kit;
+import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
+import in.twizmwaz.cardinal.module.modules.scoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Flags;
 import in.twizmwaz.cardinal.util.MiscUtil;
@@ -27,12 +33,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 
 import java.util.List;
 
-public class Flag implements TaskedModule {
+public class Flag implements TaskedModule, GameObjective {
 
     private String id;
     private boolean required;           // Default: true
@@ -58,8 +65,10 @@ public class Flag implements TaskedModule {
     private Block currentFlagBlock;
     private ItemStack pickerHelmet;
     private boolean respawning;
-    private int timer = 0;
+    private int seconds = 1;
     private int respawnTime;
+
+    private GameObjectiveScoreboardHandler scoreboardHandler;
 
     public Flag(String id,
                 boolean required,
@@ -106,6 +115,7 @@ public class Flag implements TaskedModule {
 
         currentFlagBlock = getPost().getInitialBlock();
         respawning = false;
+        scoreboardHandler = new GameObjectiveScoreboardHandler(this);
     }
 
     public List<String> debug() {
@@ -137,8 +147,39 @@ public class Flag implements TaskedModule {
         HandlerList.unregisterAll(this);
     }
 
+    @Override
+    public TeamModule getTeam() {
+        return owner;
+    }
+
+    @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public boolean isTouched() {
+        return false;
+    }
+
+    @Override
+    public boolean isComplete() {
+        return false;
+    }
+
+    @Override
+    public boolean showOnScoreboard() {
+        return show;
+    }
+
+    @Override
+    public GameObjectiveScoreboardHandler getScoreboardHandler() {
+        return scoreboardHandler;
     }
 
     public String getDisplayName() {
@@ -163,6 +204,33 @@ public class Flag implements TaskedModule {
 
     public boolean isCarried() {
         return getPicker() != null;
+    }
+
+    public int getRespawnTime() {
+        return respawnTime;
+    }
+
+    public boolean isRespawning() {
+        return respawning;
+    }
+
+    public void dropFlag(Block block) {
+        if (GameHandler.getGameHandler().getMatch().isRunning()) {
+            if (block.getRelative(BlockFace.DOWN).getType().equals(Material.WATER)) {
+                if (dropOnWater) {
+                    block.getRelative(BlockFace.DOWN).setType(Material.PACKED_ICE);
+                } else {
+                    //TODO get nearest block non water
+                }
+            }
+
+            currentFlagBlock = block;
+            block.setType(banner.getMaterial());
+            Banner newBanner = (Banner) block.getState();
+            newBanner.setPatterns(banner.getPatterns());
+            newBanner.setBaseColor(banner.getBaseColor());
+            newBanner.update();
+        }
     }
 
     public void respawnFlag() {
@@ -190,7 +258,7 @@ public class Flag implements TaskedModule {
     }
 
     @EventHandler
-    public void onPlayerPickupFlag(PlayerPickupFlagEvent event) {
+    public void onPlayerPickupFlag(FlagPickupEvent event) {
         if (event.getFlag().equals(this)) {
             pickerHelmet = event.getPlayer().getInventory().getHelmet();
             ItemStack bannerItem = new ItemStack(Material.BANNER);
@@ -204,7 +272,7 @@ public class Flag implements TaskedModule {
     }
 
     @EventHandler
-    public void onCaptureFlag(PlayerCaptureFlagEvent event) {
+    public void onCaptureFlag(FlagCaptureEvent event) {
         Player p = event.getPlayer();
         if (event.getFlag().equals(this)) {
             setPicker(null);
@@ -222,7 +290,6 @@ public class Flag implements TaskedModule {
                     }
                 }
             }
-
             respawning = true;
         }
     }
@@ -230,40 +297,48 @@ public class Flag implements TaskedModule {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         Material type = event.getBlock().getType();
-        if (type.equals(Material.BANNER) || type.equals(Material.STANDING_BANNER) || type.equals(Material.WALL_BANNER)) {
-            if (event.getBlock().equals(currentFlagBlock)) {
+        if (event.getBlock().equals(currentFlagBlock)) {
+            if (type.equals(Material.BANNER) || type.equals(Material.STANDING_BANNER) || type.equals(Material.WALL_BANNER)) {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage(ChatColor.RED + "You can not break flags.");
-            } else if (event.getBlock().equals(currentFlagBlock.getRelative(BlockFace.DOWN))) {
-                event.setCancelled(true);
-                event.getPlayer().sendMessage(ChatColor.RED + "You can not break the block under the flag.");
             }
+        } else if (event.getBlock().equals(currentFlagBlock.getRelative(BlockFace.DOWN))) {
+            event.setCancelled(true);
+            event.getPlayer().sendMessage(ChatColor.RED + "You can not break the block under the flag.");
         }
     }
 
+    @EventHandler
+    public void onDead(PlayerDeathEvent event) {
+        if (getPicker() != null && event.getEntity().equals(getPicker())) {
+            dropFlag(event.getEntity().getLocation().getBlock());
+        }
+    }
 
     @Override
     public void run() {
-        if (respawning && timer % 20 == 0) {
-            respawnTime = getPost().getRespawnTime();
-            if (respawnTime == 0) {
-                respawnFlag();
-                respawning = false;
-            }
-            respawnTime --;
-        }
+        if (GameHandler.getGameHandler().getMatch().isRunning()) {
+            if (seconds <= MatchTimer.getTimeInSeconds()) {
+                seconds ++;
+                if (respawning && seconds % 20 == 0) {
+                    respawnTime = getPost().getRespawnTime();
+                    if (respawnTime == 0) {
+                        respawnFlag();
+                        respawning = false;
+                    }
+                    respawnTime --;
+                }
 
-        if (isCarried() && pointsRate > 0 && timer % 20 == 0) {
-            for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
-                TeamModule scored = owner != null ? owner : Teams.getTeamByPlayer(getPicker()).get();
-                if (scored != null && scored == score.getTeam()) {
-                    score.setScore(score.getScore() + pointsRate);
-                    Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(score));
+                if (isCarried() && pointsRate > 0 && seconds % 20 == 0) {
+                    for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
+                        TeamModule scored = owner != null ? owner : Teams.getTeamByPlayer(getPicker()).get();
+                        if (scored != null && scored == score.getTeam()) {
+                            score.setScore(score.getScore() + pointsRate);
+                            Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(score));
+                        }
+                    }
                 }
             }
         }
-
-        if (timer > 100) timer = 0;
-        timer ++;
     }
 }

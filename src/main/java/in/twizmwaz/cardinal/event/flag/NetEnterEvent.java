@@ -1,20 +1,21 @@
-package in.twizmwaz.cardinal.module.modules.ctf.event;
+package in.twizmwaz.cardinal.event.flag;
 
+import in.twizmwaz.cardinal.module.modules.ctf.Flag;
 import in.twizmwaz.cardinal.module.modules.ctf.net.Net;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class PlayerLeaveNetEvent extends Event {
-
-    private static final HandlerList handlers = new HandlerList();
+public class NetEnterEvent extends FlagEvent {
 
     private Player player;
     private Net net;
+    private Flag flag;
 
-    public PlayerLeaveNetEvent(Player player, Net net) {
+    public NetEnterEvent(Player player, Net net, Flag flag) {
         this.player = player;
         this.net = net;
+        this.flag = flag;
     }
 
     public Player getPlayer() {
@@ -25,13 +26,8 @@ public class PlayerLeaveNetEvent extends Event {
         return net;
     }
 
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
     @Override
-    public HandlerList getHandlers() {
-        return handlers;
+    public Flag getFlag() {
+        return flag;
     }
-
 }
