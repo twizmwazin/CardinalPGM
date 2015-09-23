@@ -2,7 +2,7 @@ package in.twizmwaz.cardinal.module.modules.scoreboard;
 
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.modules.cores.CoreObjective;
-import in.twizmwaz.cardinal.module.modules.ctf.Flag;
+import in.twizmwaz.cardinal.module.modules.ctf.FlagObjective;
 import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjective;
 import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
@@ -101,15 +101,15 @@ public class GameObjectiveScoreboardHandler {
             } else {
                 prefix = ChatColor.RESET + " \u29BE ";
             }
-        } else if (objective instanceof Flag) {
-            Flag flag = (Flag) objective;
-            if (flag.isRespawning()) {
-                prefix = ChatColor.GRAY.toString() + " " + flag.getRespawnTime() + " " + ChatColor.RESET;
-            } else if (flag.isCarried()) {
-                ChatColor color = MatchTimer.getTimeInSeconds() % 2 == 0 ? (flag.getTeam() != null ? flag.getTeam().getColor() : ChatColor.RESET) : ChatColor.GRAY;
+        } else if (objective instanceof FlagObjective) {
+            FlagObjective flagObjective = (FlagObjective) objective;
+            if (flagObjective.isRespawning()) {
+                prefix = ChatColor.GRAY.toString() + " " + flagObjective.getRespawnTime() + " " + ChatColor.RESET;
+            } else if (flagObjective.isCarried()) {
+                ChatColor color = MatchTimer.getTimeInSeconds() % 2 == 0 ? (flagObjective.getTeam() != null ? flagObjective.getTeam().getColor() : ChatColor.RESET) : ChatColor.GRAY;
                 prefix = color + " \u2794 " + ChatColor.RESET;
             } else {
-                prefix = (flag.getTeam() != null ? flag.getTeam().getColor() : "") + " \u2691 " + ChatColor.RESET;
+                prefix = (flagObjective.getTeam() != null ? flagObjective.getTeam().getColor() : "") + " \u2691 " + ChatColor.RESET;
             }
             // TODO
         } else {

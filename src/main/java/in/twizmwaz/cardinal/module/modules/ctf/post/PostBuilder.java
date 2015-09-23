@@ -67,22 +67,22 @@ public class PostBuilder implements ModuleBuilder {
             boolean permanent = Boolean.parseBoolean(element.getAttributeValue("permanent", "false"));
             boolean sequential = Boolean.parseBoolean(element.getAttributeValue("sequential", "false"));
             int pointsRate = Numbers.parseInt(element.getAttributeValue("points-rate", "0"));
-            FilterModule pickupFilter;
+            FilterModule pickupFilter = null;
             if (element.getAttributeValue("pickup-filter") != null) {
                 pickupFilter = FilterModuleBuilder.getFilter(element.getAttributeValue("pickup-filter"));
-            } else {
+            } else if (element.getChild("pickup-filter") != null) {
                 pickupFilter = FilterModuleBuilder.getFilter(element.getChild("pickup-filter"));
             }
-            int recoverTime = Strings.timeStringToSeconds(element.getAttributeValue("return-time", "30s"));
+            int recoverTime = 30;
+            if (element.getAttributeValue("recover-time") != null) {
+                recoverTime = Strings.timeStringToSeconds(element.getAttributeValue("recover-time"));
+            } else if (element.getAttributeValue("return-time") != null) {
+                recoverTime = Strings.timeStringToSeconds(element.getAttributeValue("return-time"));
+            }
             int respawnTime = Strings.timeStringToSeconds(element.getAttributeValue("respawn-time", "0s"));
             int respawnSpeed = Numbers.parseInt(element.getAttributeValue("respawn-speed", "8"));
             float yaw = (float) Numbers.parseDouble(element.getAttributeValue("yaw", "0"));
             post = new Post(regions, id, owner, permanent, sequential, pointsRate, pickupFilter, recoverTime, respawnTime, respawnSpeed, yaw);
-
-            // DEBUG
-            for (String s : post.debug()) {
-                Bukkit.getLogger().info(s);
-            }
         }
         return post;
     }

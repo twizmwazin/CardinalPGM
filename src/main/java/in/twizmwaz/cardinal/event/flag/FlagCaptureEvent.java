@@ -1,20 +1,18 @@
 package in.twizmwaz.cardinal.event.flag;
 
-import in.twizmwaz.cardinal.module.modules.ctf.Flag;
+import in.twizmwaz.cardinal.module.modules.ctf.FlagObjective;
 import in.twizmwaz.cardinal.module.modules.ctf.net.Net;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
 
 public class FlagCaptureEvent extends FlagEvent {
 
     private Player player;
-    private Flag flag;
+    private FlagObjective flagObjective;
     private Net net;
 
-    public FlagCaptureEvent(Player player, Flag flag, Net net) {
+    public FlagCaptureEvent(Player player, FlagObjective flagObjective, Net net) {
         this.player = player;
-        this.flag = flag;
+        this.flagObjective = flagObjective;
         this.net = net;
     }
 
@@ -23,8 +21,8 @@ public class FlagCaptureEvent extends FlagEvent {
     }
 
     @Override
-    public Flag getFlag() {
-        return flag;
+    public FlagObjective getFlagObjective() {
+        return flagObjective;
     }
 
     public Net getNet() {

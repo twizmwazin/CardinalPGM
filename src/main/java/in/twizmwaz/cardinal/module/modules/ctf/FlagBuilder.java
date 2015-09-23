@@ -20,7 +20,6 @@ import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Numbers;
 import in.twizmwaz.cardinal.util.Parser;
 import in.twizmwaz.cardinal.util.Teams;
-import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.jdom2.Element;
 
@@ -31,7 +30,7 @@ public class FlagBuilder implements ModuleBuilder {
 
     @Override
     public ModuleCollection<? extends Module> load(Match match) {
-        ModuleCollection<Flag> results = new ModuleCollection<>();
+        ModuleCollection<FlagObjective> results = new ModuleCollection<>();
         for (Element element : match.getDocument().getRootElement().getChildren("flags")) {
             for (Element flag : element.getChildren("flag")) {
                 String id = flag.getAttributeValue("id") == null ? null : flag.getAttributeValue("id");
@@ -97,13 +96,8 @@ public class FlagBuilder implements ModuleBuilder {
                     carryKit = KitBuilder.getKit(flag.getChild("carry-kit"));
                 }
                 boolean dropOnWater = Boolean.parseBoolean(flag.getAttributeValue("drop-on-water", "true"));
-                Flag fflag = new Flag(id, required, name, color, show, post, nets, owner, shared, carryMessage, points, pointsRate, pickupFilter, captureFilter, pickupKit, dropKit, carryKit, dropOnWater);
+                FlagObjective fflag = new FlagObjective(id, required, name, color, show, post, nets, owner, shared, carryMessage, points, pointsRate, pickupFilter, captureFilter, pickupKit, dropKit, carryKit, dropOnWater);
                 results.add(fflag);
-
-                // DEBUG
-                for (String s : fflag.debug()) {
-                    Bukkit.getLogger().info(s);
-                }
             }
         }
         return results;

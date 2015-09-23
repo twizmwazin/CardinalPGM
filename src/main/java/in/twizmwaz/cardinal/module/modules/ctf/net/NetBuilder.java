@@ -6,7 +6,7 @@ import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
-import in.twizmwaz.cardinal.module.modules.ctf.Flag;
+import in.twizmwaz.cardinal.module.modules.ctf.FlagObjective;
 import in.twizmwaz.cardinal.module.modules.ctf.post.Post;
 import in.twizmwaz.cardinal.module.modules.ctf.post.PostBuilder;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
@@ -16,7 +16,6 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Numbers;
 import in.twizmwaz.cardinal.util.Teams;
-import org.bukkit.Bukkit;
 import org.jdom2.Element;
 
 import java.util.Set;
@@ -53,8 +52,8 @@ public class NetBuilder implements ModuleBuilder {
             TeamModule owner = element.getAttributeValue("owner") == null ? null : Teams.getTeamById(element.getAttributeValue("owner")).orNull();
             int points = Numbers.parseInt(element.getAttributeValue("points", "0"));
             Post post = element.getAttributeValue("post") == null ? null : PostBuilder.getPost(element.getAttributeValue("post"));
-            Set<Flag> flags = null;
-            Set<Flag> rescue = null;
+            Set<FlagObjective> flagObjectives = null;
+            Set<FlagObjective> rescue = null;
             // TODO : Flags;
             // TODO : rescue;
             boolean sticky = Boolean.parseBoolean(element.getAttributeValue("sticky", "true"));
@@ -73,12 +72,7 @@ public class NetBuilder implements ModuleBuilder {
                 respawnFilter = FilterModuleBuilder.getFilter(element.getChild("respawn-filter"));
             }
             String respawnMessage = element.getAttributeValue("respawn-message") == null ? null : element.getAttributeValue("respawn-message");
-            net = new Net(id, region, owner, points, post, flags, rescue, sticky, captureFilter, denyMessage, respawnTogether, respawnFilter, respawnMessage);
-
-            // DEBUG
-            for (String s : net.debug()) {
-                Bukkit.getLogger().info(s);
-            }
+            net = new Net(id, region, owner, points, post, flagObjectives, rescue, sticky, captureFilter, denyMessage, respawnTogether, respawnFilter, respawnMessage);
         }
         return net;
     }

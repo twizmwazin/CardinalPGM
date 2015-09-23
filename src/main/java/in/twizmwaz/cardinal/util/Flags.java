@@ -1,7 +1,7 @@
 package in.twizmwaz.cardinal.util;
 
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.module.modules.ctf.Flag;
+import in.twizmwaz.cardinal.module.modules.ctf.FlagObjective;
 import in.twizmwaz.cardinal.module.modules.ctf.net.Net;
 import in.twizmwaz.cardinal.module.modules.ctf.post.Post;
 import org.bukkit.block.Banner;
@@ -12,43 +12,43 @@ import java.util.List;
 
 public class Flags {
 
-    public static List<Flag> getFlags() {
-        return GameHandler.getGameHandler().getMatch().getModules().getModules(Flag.class);
+    public static List<FlagObjective> getFlags() {
+        return GameHandler.getGameHandler().getMatch().getModules().getModules(FlagObjective.class);
     }
 
-    public static Flag getFlag(Post post) {
-        for (Flag flag : getFlags()) {
-            if (flag.getPost().equals(post)) return flag;
+    public static FlagObjective getFlag(Post post) {
+        for (FlagObjective flagObjective : getFlags()) {
+            if (flagObjective.getPost().equals(post)) return flagObjective;
         }
         return null;
     }
 
-    public static Flag getFlag(Net net) {
-        for (Flag flag : getFlags()) {
-            if (flag.getNets().contains(net)) return flag;
+    public static FlagObjective getFlag(Net net) {
+        for (FlagObjective flagObjective : getFlags()) {
+            if (flagObjective.getNets().contains(net)) return flagObjective;
         }
         return  null;
     }
 
     public static boolean hasFlag(Player player) {
-        for (Flag flag : getFlags()) {
-            if (flag.getPicker() != null && flag.getPicker().equals(player)) return true;
+        for (FlagObjective flagObjective : getFlags()) {
+            if (flagObjective.getPicker() != null && flagObjective.getPicker().equals(player)) return true;
         }
         return false;
     }
 
-    public static Flag getFlag(Player player) {
-        for (Flag flag : getFlags()) {
-            if (flag.getPicker() != null && flag.getPicker().equals(player)) return flag;
+    public static FlagObjective getFlag(Player player) {
+        for (FlagObjective flagObjective : getFlags()) {
+            if (flagObjective.getPicker() != null && flagObjective.getPicker().equals(player)) return flagObjective;
         }
         return null;
     }
 
-    public static void setBannerFacing(float yaw, Banner banner, boolean update) {
+    public static void setBannerFacing(BlockFace face, Banner banner) {
         org.bukkit.material.Banner data = (org.bukkit.material.Banner) banner.getMaterialData();
-        data.setFacingDirection(yawToFace(yaw));
+        data.setFacingDirection(face);
         banner.setMaterialData(data);
-        if (update) banner.update();
+        banner.update();
     }
 
     private static BlockFace yawToFace(float yaw) {

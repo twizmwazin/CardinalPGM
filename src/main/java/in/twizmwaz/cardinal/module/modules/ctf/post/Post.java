@@ -1,9 +1,9 @@
 package in.twizmwaz.cardinal.module.modules.ctf.post;
 
-import com.google.common.collect.Lists;
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.event.flag.FlagDropEvent;
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.module.modules.ctf.Flag;
+import in.twizmwaz.cardinal.module.modules.ctf.FlagObjective;
 import in.twizmwaz.cardinal.event.flag.FlagRespawnEvent;
 import in.twizmwaz.cardinal.event.flag.FlagPickupEvent;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
@@ -66,26 +66,6 @@ public class Post implements Module {
         this.currentBlock = getInitialBlock();
     }
 
-    public List<String> debug() {
-        List<String> debug = Lists.newArrayList();
-        debug.add("---------- DEBUG Post Flag ----------");
-        debug.add("RegionModule regions = " + regions.size());
-        debug.add("String id = " + id);
-        debug.add("TeamModule owner = " + (owner == null ? "None" : owner.getName()));
-        debug.add("boolean permanent = " + permanent);
-        debug.add("boolean sequential = " + sequential);
-        debug.add("int pointsRate = " + pointsRate);
-        debug.add("FilterModule pickupFilter = " + (pickupFilter == null ? "None" : pickupFilter.getName()));
-        debug.add("int recoverTime = " + recoverTime);
-        debug.add("int respawnTime = " + respawnTime);
-        debug.add("int respawnSpeed = " + respawnSpeed);
-        debug.add("float yaw = " + yaw);
-        debug.add("---");
-        debug.add("Current Block = " + currentBlock);
-        debug.add("-------------------------------------");
-        return debug;
-    }
-
     @Override
     public void unload() {
         HandlerList.unregisterAll(this);
@@ -125,6 +105,10 @@ public class Post implements Module {
         return respawnTime;
     }
 
+    public int getRecoverTime() {
+        return recoverTime;
+    }
+
     public float getYaw() {
         return yaw;
     }
@@ -136,17 +120,20 @@ public class Post implements Module {
             for (RegionModule region : getRegions()) {
                 if (region.contains(event.getTo()) && currentBlock.equals(region.getCenterBlock().getBlock())) {
                     if (pickupFilter == null || (pickupFilter != null && pickupFilter.evaluate(event.getPlayer()).equals(FilterState.ALLOW))) {
-                        Flag flag = Flags.getFlag(this);
-                        if (flag != null && !flag.isCarried()) {
-                            Bukkit.broadcastMessage(flag.getDisplayName() + ChatColor.RESET + " picked up by " + Teams.getTeamByPlayer(p).get().getColor() + p.getName());
-                            flag.setPicker(p);
-                            FlagPickupEvent e = new FlagPickupEvent(p, flag);
+                        FlagObjective flagObjective = Flags.getFlag(this);
+                        if (flagObjective != null && !flagObjective.isCarried()) {
+                            FlagPickupEvent e = new FlagPickupEvent(p, flagObjective);
                             Bukkit.getServer().getPluginManager().callEvent(e);
                         }
                     }
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onFlagDrop(FlagDropEvent event) {
+        setCurrentBlock(event.getFlagObjective().getCurrentFlagBlock());
     }
 
     @EventHandler
