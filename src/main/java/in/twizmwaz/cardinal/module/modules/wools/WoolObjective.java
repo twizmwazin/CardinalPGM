@@ -149,14 +149,8 @@ public class WoolObjective implements GameObjective {
                         boolean oldState = this.touched;
                         this.touched = true;
                         if (touchMessage) {
-                            double newProx;
-                            if (location != null) {
-                                newProx = location.distance(place.getVector());
-                            } else {
-                                newProx = player.getLocation().toVector().distance(place.getVector());
-                            }
-                            if (!oldState || newProx < proximity) {
-                                proximity = newProx;
+                            if (!oldState) {
+                                proximity = Double.POSITIVE_INFINITY;
                             }
                         }
                         ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !oldState, touchMessage);
@@ -190,16 +184,8 @@ public class WoolObjective implements GameObjective {
                         }
                         boolean oldState = this.touched;
                         this.touched = true;
-                        if (touchMessage) {
-                            double newProx;
-                            if (location != null) {
-                                newProx = location.distance(place.getVector());
-                            } else {
-                                newProx = player.getLocation().toVector().distance(place.getVector());
-                            }
-                            if (!oldState || newProx < proximity) {
-                                proximity = newProx;
-                            }
+                        if (touchMessage && !oldState) {
+                                proximity = Double.POSITIVE_INFINITY;
                         }
                         ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !oldState, touchMessage);
                         Bukkit.getServer().getPluginManager().callEvent(touchEvent);
@@ -280,7 +266,7 @@ public class WoolObjective implements GameObjective {
             }
         }
     }
-    
+
     @EventHandler
     public void onEntityChangeBlock(EntityChangeBlockEvent event) {
         if (place.getBlock().equals(event.getBlock()))
