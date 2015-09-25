@@ -22,14 +22,29 @@ public class Numbers {
         return Double.parseDouble(string);
     }
 
+    public static double parseDouble(String string, double fallback) {
+        if (string == null) return fallback;
+        return parseDouble(string);
+    }
+
     public static int parseInt(String string) {
         if (string.equalsIgnoreCase("oo")) return Integer.MAX_VALUE;
         if (string.equalsIgnoreCase("-oo")) return Integer.MIN_VALUE;
         return Integer.parseInt(string);
     }
 
+    public static int parseInt(String string, int fallback) {
+        if (string == null) return fallback;
+        return parseInt(string);
+    }
+
     public static boolean parseBoolean(String string) {
         return string.equalsIgnoreCase("on") || !string.equalsIgnoreCase("off") && Boolean.parseBoolean(string);
+    }
+
+    public static boolean parseBoolean(String string, boolean fallback) {
+        if (string == null) return fallback;
+        return parseBoolean(string);
     }
 
     public static String convertToSubscript(double number) {

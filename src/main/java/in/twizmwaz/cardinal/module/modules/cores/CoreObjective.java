@@ -23,6 +23,8 @@ import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Fireworks;
 import in.twizmwaz.cardinal.util.MiscUtil;
 import in.twizmwaz.cardinal.util.Teams;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -34,9 +36,9 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockFromToEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -65,8 +67,7 @@ public class CoreObjective implements GameObjective {
 
     private Set<UUID> playersTouched;
     private Set<UUID> playersCompleted;
-    private Material currentType;
-    private int damageValue;
+    private Pair<Material, Integer> material;
     private Set<Block> lava;
     private Set<Block> core;
 
@@ -75,13 +76,12 @@ public class CoreObjective implements GameObjective {
 
     private GameObjectiveScoreboardHandler scoreboardHandler;
 
-    protected CoreObjective(final TeamModule team, final String name, final String id, final RegionModule region, final int leak, Material type, int damageValue, final boolean show, boolean changesModes) {
+    protected CoreObjective(final TeamModule team, final String name, final String id, final RegionModule region, final int leak, Pair<Material, Integer> material, final boolean show, boolean changesModes) {
         this.team = team;
         this.name = name;
         this.id = id;
         this.region = region;
         this.leak = leak;
-        this.damageValue = damageValue;
         this.show = show;
         this.changesModes = changesModes;
 
@@ -89,7 +89,7 @@ public class CoreObjective implements GameObjective {
 
         this.playersTouched = new HashSet<>();
         this.playersCompleted = new HashSet<>();
-        this.currentType = type;
+        this.material = material;
 
         this.lava = new HashSet<>();
         this.core = new HashSet<>();
@@ -351,7 +351,7 @@ public class CoreObjective implements GameObjective {
     }
 
     public boolean partOfObjective(Block block) {
-        return currentType.equals(block.getType()) && (damageValue == -1 || damageValue == (int) block.getState().getData().getData());
+        return material.getLeft().equals(block.getType()) && (material.getRight() == -1 || material.getRight() == (int) block.getState().getData().getData());
     }
 
     public List<Block> getBlocks() {
@@ -377,8 +377,7 @@ public class CoreObjective implements GameObjective {
     }
 
     public void setMaterial(Material material, int damageValue) {
-        this.currentType = material;
-        this.damageValue = damageValue;
+        this.material = new ImmutablePair<>(material, damageValue);
     }
 
     @EventHandler

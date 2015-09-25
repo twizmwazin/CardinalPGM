@@ -149,4 +149,22 @@ public class Parser {
         }
         return new PotionEffect(type, duration, amplifier, ambient);
     }
+
+    public static String getOrderedAttribute(String attribute, Element... elements) {
+        for (Element element : elements) {
+            if (element.getAttributeValue(attribute) != null && !element.getAttributeValue(attribute).equals("")) {
+                return element.getAttributeValue(attribute);
+            }
+        }
+        return null;
+    }
+
+    public static String getOrderedText(Element... elements) {
+        for (Element element : elements) {
+            if (element.getText() != null && !element.getText().equals("")) {
+                return element.getText();
+            }
+        }
+        return null;
+    }
 }

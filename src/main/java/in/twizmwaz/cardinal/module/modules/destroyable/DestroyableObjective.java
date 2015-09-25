@@ -20,6 +20,8 @@ import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Fireworks;
 import in.twizmwaz.cardinal.util.MiscUtil;
 import in.twizmwaz.cardinal.util.Teams;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -29,9 +31,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -54,8 +56,7 @@ public class DestroyableObjective implements GameObjective {
     private final boolean showPercent;
     private final boolean repairable;
     private final boolean show;
-    private List<Material> types;
-    private List<Integer> damageValues;
+    private List<Pair<Material, Integer>> materials;
     private boolean changesModes;
 
     private double proximity;
@@ -70,13 +71,12 @@ public class DestroyableObjective implements GameObjective {
 
     private GameObjectiveScoreboardHandler scoreboardHandler;
 
-    protected DestroyableObjective(final TeamModule team, final String name, final String id, final RegionModule region, List<Material> types, List<Integer> damageValues, final double required, final boolean show, boolean changesModes, boolean showPercent, boolean repairable) {
+    protected DestroyableObjective(final TeamModule team, final String name, final String id, final RegionModule region, List<Pair<Material, Integer>> materials, final double required, final boolean show, boolean changesModes, boolean showPercent, boolean repairable) {
         this.team = team;
         this.name = name;
         this.id = id;
         this.region = region;
-        this.types = types;
-        this.damageValues = damageValues;
+        this.materials = materials;
         this.showPercent = showPercent;
         this.repairable = repairable;
         this.complete = 0;
@@ -345,8 +345,8 @@ public class DestroyableObjective implements GameObjective {
     }
 
     public boolean partOfObjective(Block block) {
-        for (int i = 0; i < types.size(); i++) {
-            if (types.get(i).equals(block.getType()) && (damageValues.get(i) == -1 || damageValues.get(i) == (int) block.getState().getData().getData())) {
+        for (Pair<Material, Integer> material : materials) {
+            if (material.getLeft().equals(block.getType()) && (material.getRight() == -1 || material.getRight() == (int) block.getState().getData().getData())) {
                 return true;
             }
         }
@@ -393,10 +393,8 @@ public class DestroyableObjective implements GameObjective {
     }
 
     public void setMaterial(Material material, int damageValue) {
-        this.types = new ArrayList<>();
-        this.damageValues = new ArrayList<>();
-        this.types.add(material);
-        this.damageValues.add(damageValue);
+        materials.clear();
+        materials.add(new ImmutablePair<>(material, damageValue));
     }
 
     @EventHandler
