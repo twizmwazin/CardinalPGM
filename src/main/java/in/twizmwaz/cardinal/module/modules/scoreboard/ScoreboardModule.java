@@ -30,6 +30,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -45,7 +46,7 @@ public class ScoreboardModule implements Module {
     private Scoreboard scoreboard;
 
     private Objective objective;
-    private int currentScore, currentHillScore;
+    private int currentScore, currentHillScore, minBlitzScore = -1, minTdmScore = -1;
     private List<String> used;
 
     public ScoreboardModule(final TeamModule team) {
@@ -54,7 +55,9 @@ public class ScoreboardModule implements Module {
         for (TeamModule teams : Teams.getTeams()) {
             Team prefixTeam = scoreboard.registerNewTeam(teams.getId());
             prefixTeam.setPrefix(teams.getColor() + "");
-            scoreboard.registerNewTeam(teams.getId() + "-t");
+            if (!teams.isObserver()) {
+                scoreboard.registerNewTeam(teams.getId() + "-t");
+            }
         }
         for (GameObjective objective : GameHandler.getGameHandler().getMatch().getModules().getModules(GameObjective.class)) {
             scoreboard.registerNewTeam(objective.getScoreboardHandler().getNumber() + "-o");
@@ -111,9 +114,14 @@ public class ScoreboardModule implements Module {
                 add(event.getNewTeam().get(), event.getPlayer());
             }
             if (Blitz.matchIsBlitz()) {
-                update();
+                updateTeamBlitz();
             }
         }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerLeave(PlayerQuitEvent event){
+        updateTeamBlitz();
     }
 
     @EventHandler
@@ -123,7 +131,13 @@ public class ScoreboardModule implements Module {
 
     @EventHandler
     public void onObjectiveProximity(ObjectiveProximityEvent event) {
-        update();
+        if (!this.team.isObserver()) {
+            if ((event.getObjective() instanceof WoolObjective && !(event.getObjective().getTeam() == this.team)) ||
+                    ((event.getObjective() instanceof CoreObjective || event.getObjective() instanceof DestroyableObjective) && (event.getObjective().getTeam() == this.team))) {
+                return;
+            }
+        }
+        updateObjectivePrefix(event.getObjective());
     }
 
     @EventHandler
@@ -133,22 +147,28 @@ public class ScoreboardModule implements Module {
 
     @EventHandler
     public void onObjectiveTouch(ObjectiveTouchEvent event) {
-        update();
+        updateObjectivePrefix(event.getObjective());
     }
 
     @EventHandler
     public void onObjectiveComplete(ObjectiveCompleteEvent event) {
-        update();
+        updateObjectivePrefix(event.getObjective());
     }
 
     @EventHandler
     public void onTeamNameChange(TeamNameChangeEvent event) {
-        update();
+        updateTeamTitle(event.getTeam());
+        if (Blitz.matchIsBlitz()) {
+            updateTeamBlitz();
+        }
+        if (ScoreModule.matchHasScoring()) {
+            updateTeamScore();
+        }
     }
 
     @EventHandler
     public void onScoreUpdate(ScoreUpdateEvent event) {
-        update();
+        updateTeamScore();
     }
 
     public void update() {
@@ -160,72 +180,101 @@ public class ScoreboardModule implements Module {
         currentHillScore = (getSpecificObjective() != null && getSpecificObjective().equals(HillObjective.class)) && !ScoreModule.matchHasScoring() ? 0 : -1;
         used = new ArrayList<>();
 
-        if (getCompactSlots() < 16) {
-            for (TeamModule team : Teams.getTeams()) {
-                if (!team.isObserver() && team != prioritized && Teams.getShownObjectives(team).size() > 0) {
-                    if (getSlots() < 16) {
-                        for (GameObjective obj : Teams.getShownObjectives(team)) {
-                            renderObjective(obj);
-                        }
-                    } else {
-                        renderCompactObjectives(Teams.getShownObjectives(team));
-                    }
-                    renderTeamTitle(team);
-                    if (currentScore < getObjectiveSlots()) {
-                        setBlankSlot(currentScore);
-                        currentScore++;
-                    }
-                }
-            }
-            if (prioritized != null && !prioritized.isObserver() && Teams.getShownObjectives(prioritized).size() > 0) {
-                if (getSlots() < 16) {
-                    for (GameObjective obj : Teams.getShownObjectives(prioritized)) {
-                        renderObjective(obj);
-                    }
-                } else {
-                    renderCompactObjectives(Teams.getShownObjectives(prioritized));
-                }
-                renderTeamTitle(prioritized);
-                if (currentScore < getObjectiveSlots()) {
-                    setBlankSlot(currentScore);
-                    currentScore++;
-                }
-            }
-            if (ScoreModule.matchHasScoring()) {
+        for (TeamModule team : Teams.getTeams()) {
+            if (!team.isObserver() && team != prioritized && Teams.getShownObjectives(team).size() > 0) {
                 if (currentScore != 0) {
                     setBlankSlot(currentScore);
                     currentScore++;
                 }
-                renderTeamScore();
-            }
-            if (Blitz.matchIsBlitz()) {
-                if (currentScore != 0) {
-                    setBlankSlot(currentScore);
-                    currentScore++;
-                }
-                renderTeamBlitz();
-            }
-            if (Scoreboards.getHills().size() > 0) {
-                if (!((getSpecificObjective() != null && getSpecificObjective().equals(HillObjective.class)) && !ScoreModule.matchHasScoring())) {
-                    setBlankSlot(currentHillScore);
-                    currentHillScore--;
-                }
                 if (getSlots() < 16) {
-                    for (HillObjective obj : Scoreboards.getHills()) {
+                    for (GameObjective obj : Teams.getShownObjectives(team)) {
                         renderObjective(obj);
                     }
                 } else {
-                    ModuleCollection<GameObjective> objectives = new ModuleCollection<>();
-                    for (HillObjective obj : Scoreboards.getHills()) {
-                        objectives.add(obj);
-                    }
-                    renderCompactObjectives(objectives);
+                    renderCompactObjectives(Teams.getShownObjectives(team));
                 }
+                renderTeamTitle(team);
+            }
+        }
+        if (prioritized != null && !prioritized.isObserver() && Teams.getShownObjectives(prioritized).size() > 0) {
+            if (currentScore != 0) {
+                setBlankSlot(currentScore);
+                currentScore++;
+            }
+            if (getSlots() < 16) {
+                for (GameObjective obj : Teams.getShownObjectives(prioritized)) {
+                    renderObjective(obj);
+                }
+            } else {
+                renderCompactObjectives(Teams.getShownObjectives(prioritized));
+            }
+            renderTeamTitle(prioritized);
+        }
+        if (ScoreModule.matchHasScoring()) {
+            if (currentScore != 0) {
+                setBlankSlot(currentScore);
+                currentScore++;
+            }
+            renderTeamScore();
+        }
+        if (Blitz.matchIsBlitz()) {
+            if (currentScore != 0) {
+                setBlankSlot(currentScore);
+                currentScore++;
+            }
+            renderTeamBlitz();
+        }
+        if (Scoreboards.getHills().size() > 0) {
+            if (!((getSpecificObjective() != null && getSpecificObjective().equals(HillObjective.class)) && !ScoreModule.matchHasScoring())) {
+                setBlankSlot(currentHillScore);
+                currentHillScore--;
+            }
+            if (getSlots() < 16) {
+                for (HillObjective obj : Scoreboards.getHills()) {
+                    renderObjective(obj);
+                }
+            } else {
+                ModuleCollection<GameObjective> objectives = new ModuleCollection<>();
+                for (HillObjective obj : Scoreboards.getHills()) {
+                    objectives.add(obj);
+                }
+                renderCompactObjectives(objectives);
             }
         }
 
         if (objective.getDisplaySlot() == null || !objective.getDisplaySlot().equals(DisplaySlot.SIDEBAR)) {
             objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        }
+    }
+
+    public void updateObjectivePrefix(GameObjective objective) {
+        if (getSlots() < 16) {
+            Team team = scoreboard.getTeam(objective.getScoreboardHandler().getNumber() + "-o");
+            String prefix = objective.getScoreboardHandler().getPrefix(this.team);
+            team.setPrefix(prefix);
+        } else {
+            update();
+        }
+    }
+
+    public void updateTeamTitle(TeamModule teamModule) {
+        Team team = scoreboard.getTeam(teamModule.getId() + "-t");
+        team.setPrefix(teamModule.getColor() + Strings.trimTo(teamModule.getName(), 0, 14));
+        team.setSuffix(Strings.trimTo(teamModule.getName(), 14, 30));
+    }
+    public void updateTeamBlitz() {
+        if (minBlitzScore == -1) {
+            update();
+        } else {
+            renderTeamBlitz();
+        }
+    }
+
+    public void updateTeamScore() {
+        if (minTdmScore == -1) {
+            update();
+        } else {
+            renderTeamBlitz();
         }
     }
 
@@ -240,7 +289,7 @@ public class ScoreboardModule implements Module {
 
     public void setScore(Objective objective, String string, int score) {
         if (score == 0) {
-            objective.getScore(string).setScore(1);
+            objective.getScore(string).setScore(-1);
         }
         objective.getScore(string).setScore(score);
     }
@@ -249,62 +298,28 @@ public class ScoreboardModule implements Module {
         int slots = 0;
         for (TeamModule team : Teams.getTeams()) {
             if (!team.isObserver() && Teams.getShownObjectives(team).size() > 0) {
-                slots += 2;
-                slots += Teams.getShownObjectives(team).size();
+                if (slots != 0) {
+                    slots++;
+                }
+                slots += Teams.getShownObjectives(team).size() + 1;
             }
         }
-        if (ScoreModule.matchHasScoring()) slots += (Teams.getTeams().size() - 1);
-        if (Blitz.matchIsBlitz()) slots += (Teams.getTeams().size() - 1);
-        if (ScoreModule.matchHasMax()) slots++;
+        if (ScoreModule.matchHasScoring()) {
+            if (slots != 0) {
+                slots++;
+            }
+            slots += (Teams.getTeams().size() - 1);
+        }
+        if (Blitz.matchIsBlitz())
+            if (slots != 0) {
+                slots++;
+            }
+            slots += (Teams.getTeams().size() - 1);
         if (Scoreboards.getHills().size() > 0) {
             if (slots != 0) {
                 slots++;
             }
             slots += Scoreboards.getHills().size();
-        }
-        slots--;
-        return slots;
-    }
-
-    public int getCompactSlots() {
-        int slots = 0;
-        for (TeamModule team : Teams.getTeams()) {
-            if (!team.isObserver() && Teams.getShownObjectives(team).size() > 0) {
-                slots += 2;
-                if (Teams.getShownObjectives(team).size() > 0) slots++;
-            }
-        }
-        if (ScoreModule.matchHasScoring()) slots += (Teams.getTeams().size() - 1);
-        if (Blitz.matchIsBlitz()) slots += (Teams.getTeams().size() - 1);
-        if (ScoreModule.matchHasMax()) slots++;
-        if (Scoreboards.getHills().size() > 0) {
-            if (slots != 0) {
-                slots++;
-            }
-            slots++;
-        }
-        slots--;
-        return slots;
-    }
-
-    public int getObjectiveSlots() {
-        int slots = 0;
-        if (getSlots() < 16) {
-            for (TeamModule team : Teams.getTeams()) {
-                if (!team.isObserver() && Teams.getShownObjectives(team).size() > 0) {
-                    slots += 2;
-                    slots += Teams.getShownObjectives(team).size();
-                }
-            }
-            slots--;
-        } else if (getCompactSlots() < 16) {
-            for (TeamModule team : Teams.getTeams()) {
-                if (!team.isObserver() && Teams.getShownObjectives(team).size() > 0) {
-                    slots += 2;
-                    if (Teams.getShownObjectives(team).size() > 0) slots++;
-                }
-            }
-            slots--;
         }
         return slots;
     }
@@ -375,18 +390,17 @@ public class ScoreboardModule implements Module {
     public void renderObjective(GameObjective objective) {
         int score = objective instanceof HillObjective ? currentHillScore : currentScore;
         Team team = scoreboard.getTeam(objective.getScoreboardHandler().getNumber() + "-o");
-        String prefix = objective.getScoreboardHandler().getPrefix(this.team).length() > 16 ? objective.getScoreboardHandler().getPrefix(this.team).substring(0, 16) : objective.getScoreboardHandler().getPrefix(this.team);
+        String prefix = objective.getScoreboardHandler().getPrefix(this.team);
         team.setPrefix(prefix);
         if (team.getEntries().size() > 0) {
-            setScore(this.objective, Strings.trimTo(new ArrayList<>(team.getEntries()).get(0), 0, 16), score);
+            setScore(this.objective, new ArrayList<>(team.getEntries()).get(0), score);
         } else {
-            String raw = ChatColor.RESET + WordUtils.capitalizeFully(objective.getName().replaceAll("_", " "));
-            while (used.contains(Strings.trimTo(raw, 0, 16))) {
+            String raw = ChatColor.RESET + " " + WordUtils.capitalizeFully(objective.getName().replaceAll("_", " "));
+            while (used.contains(raw)) {
                 raw = ChatColor.RESET + raw;
             }
-            team.addEntry(Strings.trimTo(raw, 0, 16));
-            team.setSuffix(Strings.trimTo(raw, 16, 32));
-            setScore(this.objective, Strings.trimTo(raw, 0, 16), score);
+            team.addEntry(raw);
+            setScore(this.objective, raw, score);
             used.add(raw);
         }
         if (objective instanceof HillObjective) {
@@ -411,23 +425,26 @@ public class ScoreboardModule implements Module {
         Team team = scoreboard.getTeam(objectives.get(0).getScoreboardHandler().getNumber() + "-o");
         if (team != null) {
             String compact = "";
-            for (GameObjective obj : Teams.getShownObjectives(this.team)) {
-                compact += obj.getScoreboardHandler().getPrefix(this.team) + " ";
+            for (GameObjective obj : objectives) {
+                compact += obj.getScoreboardHandler().getCompactPrefix(this.team) + " ";
             }
             while (compact.length() > 32) {
                 compact = Strings.removeLastWord(compact);
             }
-            if (compact.charAt(15) == '\u00A7') {
+            if (compact.length() < 16){
+                team.setPrefix(Strings.trimTo(compact, 0, 16));
+                team.setSuffix("r");
+            } else if (compact.charAt(15) == '\u00A7') {
                 team.setPrefix(Strings.trimTo(compact, 0, 15));
-                team.setSuffix(Strings.getCurrentChatColor(compact, 15) + Strings.trimTo(compact, 15, 29));
+                team.setSuffix(Strings.trimTo(compact, 15, 31));
             } else {
                 team.setPrefix(Strings.trimTo(compact, 0, 16));
-                team.setSuffix(Strings.getCurrentChatColor(compact, 16) + Strings.trimTo(compact, 16, 30));
+                team.setSuffix(Strings.getCurrentChatColor(compact, 16).charAt(1) + Strings.trimTo(compact, 16, 31));
             }
             if (team.getEntries().size() > 0) {
                 setScore(objective, new ArrayList<>(team.getEntries()).get(0), currentScore);
             } else {
-                String name = ChatColor.RESET + "";
+                String name = "\u00A7";
                 while (used.contains(name)) {
                     name = ChatColor.RESET + name;
                 }
@@ -466,6 +483,9 @@ public class ScoreboardModule implements Module {
     }
 
     public void renderTeamScore() {
+        if (minTdmScore == -1){
+            minTdmScore = currentScore;
+        }
         List<String> fullNames = new ArrayList<>();
         for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)){
             if (score.getMax() != 0){
@@ -482,20 +502,20 @@ public class ScoreboardModule implements Module {
             }
         });
         for (int i = 0; i < fullNames.size(); i++) {
-            String teamCompleteName[] = fullNames.get(i).split(" ",2);
-            String teamName = teamCompleteName[1].substring(2);
-            Team team = scoreboard.getTeam(Teams.getTeamByName(teamName).get().getId() + "-s");
+            String teamCompleteName = fullNames.get(i).split(" ",2)[1];
+            Team team = scoreboard.getTeam(Teams.getTeamByName(teamCompleteName.substring(2)).get().getId() + "-s");
             team.setPrefix(Strings.trimTo(fullNames.get(i), 0, 16));
             team.setSuffix(Strings.trimTo(fullNames.get(i), 16, 32));
             if (team.getEntries().size() > 0) {
-                setScore(objective, new ArrayList<>(team.getEntries()).get(0), currentScore);
+                setScore(objective, new ArrayList<>(team.getEntries()).get(0), minTdmScore + i);
             } else {
-                String name = Teams.getTeamByName(teamName).get().getColor() + "";
+                String color = teamCompleteName.substring(0, 2);
+                String name = color + "";
                 while (used.contains(name)) {
-                    name = Teams.getTeamByName(teamName).get().getColor() + name;
+                    name = color + name;
                 }
                 team.addEntry(name);
-                setScore(objective, name, currentScore);
+                setScore(objective, name, minTdmScore + i);
                 used.add(name);
             }
             currentScore++;
@@ -503,6 +523,9 @@ public class ScoreboardModule implements Module {
     }
 
     public void renderTeamBlitz() {
+        if (minBlitzScore == -1){
+            minBlitzScore = currentScore;
+        }
         List<String> fullNames = new ArrayList<>();
         for (TeamModule team : Teams.getTeams()) {
             if (!team.isObserver()) {
@@ -511,24 +534,23 @@ public class ScoreboardModule implements Module {
         }
         java.util.Collections.sort(fullNames);
         for (int i = 0; i < fullNames.size(); i++) {
-            String teamCompleteName[] = fullNames.get(i).split(" ",2);
-            String teamName = teamCompleteName[1].substring(2);
-            Team team = scoreboard.getTeam(Teams.getTeamByName(teamName).get().getId() + "-b");
+            String teamCompleteName = fullNames.get(i).split(" ", 2)[1];
+            Team team = scoreboard.getTeam(Teams.getTeamByName(teamCompleteName.substring(2)).get().getId() + "-b");
             team.setPrefix(Strings.trimTo(fullNames.get(i), 0, 16));
             team.setSuffix(Strings.trimTo(fullNames.get(i), 16, 32));
             if (team.getEntries().size() > 0) {
-                setScore(objective, new ArrayList<>(team.getEntries()).get(0), currentScore);
+                setScore(objective, new ArrayList<>(team.getEntries()).get(0), minBlitzScore + i);
             } else {
-                String name = Teams.getTeamByName(teamName).get().getColor() + "";
+                String color = teamCompleteName.substring(0, 2);
+                String name = color + "";
                 while (used.contains(name)) {
-                    name = Teams.getTeamByName(teamName).get().getColor() + name;
+                    name = color + name;
                 }
                 team.addEntry(name);
-                setScore(objective, name, currentScore);
+                setScore(objective, name, minBlitzScore + i);
                 used.add(name);
             }
             currentScore++;
         }
     }
-
 }
