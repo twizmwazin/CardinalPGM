@@ -244,6 +244,7 @@
         <tutorialView>View Tutorial</tutorialView>
         <tutorialLore>Learn how to play {0}!</tutorialLore>
         <potionEffects>Potion Effects</potionEffects>
+        <noPotionEffects>No Potion effects</noPotionEffects>
         <hungerLevel>Hunger level</hungerLevel>
         <healthLevel>Health level</healthLevel>
         <oneMap>1 map</oneMap>
