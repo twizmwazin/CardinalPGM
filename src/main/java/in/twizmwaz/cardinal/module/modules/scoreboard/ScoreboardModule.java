@@ -36,6 +36,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ScoreboardModule implements Module {
@@ -109,22 +110,8 @@ public class ScoreboardModule implements Module {
             if (event.getNewTeam().isPresent()) {
                 add(event.getNewTeam().get(), event.getPlayer());
             }
-
             if (Blitz.matchIsBlitz()) {
-                if (event.getOldTeam().isPresent() && !event.getOldTeam().get().isObserver()) {
-                    TeamModule team = event.getOldTeam().get();
-                    Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-b");
-                    for (String entry : scoreboardTeam.getEntries()) {
-                        setScore(scoreboard.getObjective("scoreboard"), entry, team.size());
-                    }
-                }
-                if (event.getNewTeam().isPresent() && !event.getNewTeam().get().isObserver()) {
-                    TeamModule team = event.getNewTeam().get();
-                    Team scoreboardTeam = scoreboard.getTeam(team.getId() + "-b");
-                    for (String entry : scoreboardTeam.getEntries()) {
-                        setScore(scoreboard.getObjective("scoreboard"), entry, team.size());
-                    }
-                }
+                update();
             }
         }
     }
@@ -185,9 +172,7 @@ public class ScoreboardModule implements Module {
                     }
                     renderTeamTitle(team);
                     if (currentScore < getObjectiveSlots()) {
-                        String blank = getNextBlankSlot(used);
-                        setScore(objective, blank, currentScore);
-                        used.add(blank);
+                        setBlankSlot(currentScore);
                         currentScore++;
                     }
                 }
@@ -202,32 +187,27 @@ public class ScoreboardModule implements Module {
                 }
                 renderTeamTitle(prioritized);
                 if (currentScore < getObjectiveSlots()) {
-                    String blank = getNextBlankSlot(used);
-                    setScore(objective, blank, currentScore);
-                    used.add(blank);
+                    setBlankSlot(currentScore);
                     currentScore++;
                 }
             }
             if (ScoreModule.matchHasScoring()) {
-                for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
-                    renderTeamScore(score);
+                if (currentScore != 0) {
+                    setBlankSlot(currentScore);
+                    currentScore++;
                 }
-            }
-            if (ScoreModule.matchHasMax()) {
-                setScore(objective, ChatColor.RED + "---- MAX ----", ScoreModule.max());
+                renderTeamScore();
             }
             if (Blitz.matchIsBlitz()) {
-                for (TeamModule team : Teams.getTeams()) {
-                    if (!team.isObserver()) {
-                        renderTeamBlitz(team);
-                    }
+                if (currentScore != 0) {
+                    setBlankSlot(currentScore);
+                    currentScore++;
                 }
+                renderTeamBlitz();
             }
             if (Scoreboards.getHills().size() > 0) {
                 if (!((getSpecificObjective() != null && getSpecificObjective().equals(HillObjective.class)) && !ScoreModule.matchHasScoring())) {
-                    String blank = getNextBlankSlot(used);
-                    setScore(objective, blank, currentHillScore);
-                    used.add(blank);
+                    setBlankSlot(currentHillScore);
                     currentHillScore--;
                 }
                 if (getSlots() < 16) {
@@ -249,12 +229,13 @@ public class ScoreboardModule implements Module {
         }
     }
 
-    public String getNextBlankSlot(List<String> used) {
+    public void setBlankSlot(int score) {
         String blank = " ";
         while (used.contains(blank)) {
             blank += " ";
         }
-        return blank;
+        setScore(objective, blank, score);
+        used.add(blank);
     }
 
     public void setScore(Objective objective, String string, int score) {
@@ -329,6 +310,7 @@ public class ScoreboardModule implements Module {
     }
 
     public String getDisplayTitle() {
+        String displayTitle = "";
         boolean hasObjectives = false;
         for (GameObjective obj : GameHandler.getGameHandler().getMatch().getModules().getModules(GameObjective.class)) {
             if (obj.showOnScoreboard()) {
@@ -339,23 +321,29 @@ public class ScoreboardModule implements Module {
         if (hasObjectives) {
             if (objective != null) {
                 if (objective.equals(WoolObjective.class)) {
-                    return ChatColor.AQUA + "Wools";
+                    displayTitle = "Wools";
                 } else if (objective.equals(CoreObjective.class)) {
-                    return ChatColor.AQUA + "Cores";
+                    displayTitle = "Cores";
                 } else if (objective.equals(DestroyableObjective.class)) {
-                    return ChatColor.AQUA + "Monuments";
+                    displayTitle = "Monuments";
                 } else if (objective.equals(HillObjective.class)) {
-                    return ChatColor.AQUA + "Hills";
+                    displayTitle = "Hills";
                 }
             } else {
-                return ChatColor.AQUA + "Objectives";
+                displayTitle = "Objectives";
             }
-        } else if (GameHandler.getGameHandler().getMatch().getModules().getModule(Blitz.class) != null) {
-            return ChatColor.AQUA + GameHandler.getGameHandler().getMatch().getModules().getModule(Blitz.class).getTitle();
-        } else if (ScoreModule.matchHasScoring()) {
-            return ChatColor.AQUA + "Scores";
         }
-        return ChatColor.RED + "" + ChatColor.BOLD + "Invalid";
+        if (ScoreModule.matchHasScoring()) {
+            displayTitle = displayTitle.equals("") || displayTitle.equals("Hills") ? "Scores" : "Objectives";
+        }
+        if (Blitz.matchIsBlitz()) {
+            String blitzTitle = GameHandler.getGameHandler().getMatch().getModules().getModule(Blitz.class).getTitle();
+            displayTitle = (blitzTitle.equals("Blitz") || blitzTitle.equals("Blitz: Rage")) ? (displayTitle.equals("") ? blitzTitle : "Players Remaining") : blitzTitle;
+        }
+        if (displayTitle.equals("")) {
+            return ChatColor.RED + "" + ChatColor.BOLD + "Invalid";
+        }
+        return ChatColor.AQUA + displayTitle;
     }
 
     public Class getSpecificObjective() {
@@ -477,38 +465,69 @@ public class ScoreboardModule implements Module {
         currentScore++;
     }
 
-    public void renderTeamScore(ScoreModule score) {
-        TeamModule teamModule = score.getTeam();
-        Team team = scoreboard.getTeam(teamModule.getId() + "-s");
-        team.setPrefix(teamModule.getColor() + Strings.trimTo(teamModule.getName(), 0, 14));
-        team.setSuffix(Strings.trimTo(teamModule.getName(), 14, 30));
-        if (team.getEntries().size() > 0) {
-            setScore(objective, new ArrayList<>(team.getEntries()).get(0), score.getScore());
-        } else {
-            String name = teamModule.getColor() + "";
-            while (used.contains(name)) {
-                name = teamModule.getColor() + name;
+    public void renderTeamScore() {
+        List<String> fullNames = new ArrayList<>();
+        for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)){
+            if (score.getMax() != 0){
+                fullNames.add(score.getScore() + "" + ChatColor.DARK_GRAY + "/" + ChatColor.GRAY + score.getMax() + " " + score.getTeam().getCompleteName());
+            } else {
+                fullNames.add(score.getScore() + " " + score.getTeam().getCompleteName());
             }
-            team.addEntry(name);
-            setScore(objective, name, score.getScore());
-            used.add(name);
+        }
+        java.util.Collections.sort(fullNames, new Comparator<String>(){
+            public int compare(String str1, String str2){
+                int int1 = Integer.parseInt((str1.contains("/") ? str1.split("\u00a7",2) : str1.split(" ",2))[0]);
+                int int2 = Integer.parseInt((str2.contains("/") ? str2.split("\u00a7",2) : str2.split(" ",2))[0]);
+                return int1 - int2;
+            }
+        });
+        for (int i = 0; i < fullNames.size(); i++) {
+            String teamCompleteName[] = fullNames.get(i).split(" ",2);
+            String teamName = teamCompleteName[1].substring(2);
+            Team team = scoreboard.getTeam(Teams.getTeamByName(teamName).get().getId() + "-s");
+            team.setPrefix(Strings.trimTo(fullNames.get(i), 0, 16));
+            team.setSuffix(Strings.trimTo(fullNames.get(i), 16, 32));
+            if (team.getEntries().size() > 0) {
+                setScore(objective, new ArrayList<>(team.getEntries()).get(0), currentScore);
+            } else {
+                String name = Teams.getTeamByName(teamName).get().getColor() + "";
+                while (used.contains(name)) {
+                    name = Teams.getTeamByName(teamName).get().getColor() + name;
+                }
+                team.addEntry(name);
+                setScore(objective, name, currentScore);
+                used.add(name);
+            }
+            currentScore++;
         }
     }
 
-    public void renderTeamBlitz(TeamModule teamModule) {
-        Team team = scoreboard.getTeam(teamModule.getId() + "-b");
-        team.setPrefix(teamModule.getColor() + Strings.trimTo(teamModule.getName(), 0, 14));
-        team.setSuffix(Strings.trimTo(teamModule.getName(), 14, 30));
-        if (team.getEntries().size() > 0) {
-            setScore(objective, new ArrayList<>(team.getEntries()).get(0), teamModule.size());
-        } else {
-            String name = teamModule.getColor() + "";
-            while (used.contains(name)) {
-                name = teamModule.getColor() + name;
+    public void renderTeamBlitz() {
+        List<String> fullNames = new ArrayList<>();
+        for (TeamModule team : Teams.getTeams()) {
+            if (!team.isObserver()) {
+                fullNames.add(team.size() + " " + team.getCompleteName());
             }
-            team.addEntry(name);
-            setScore(objective, name, teamModule.size());
-            used.add(name);
+        }
+        java.util.Collections.sort(fullNames);
+        for (int i = 0; i < fullNames.size(); i++) {
+            String teamCompleteName[] = fullNames.get(i).split(" ",2);
+            String teamName = teamCompleteName[1].substring(2);
+            Team team = scoreboard.getTeam(Teams.getTeamByName(teamName).get().getId() + "-b");
+            team.setPrefix(Strings.trimTo(fullNames.get(i), 0, 16));
+            team.setSuffix(Strings.trimTo(fullNames.get(i), 16, 32));
+            if (team.getEntries().size() > 0) {
+                setScore(objective, new ArrayList<>(team.getEntries()).get(0), currentScore);
+            } else {
+                String name = Teams.getTeamByName(teamName).get().getColor() + "";
+                while (used.contains(name)) {
+                    name = Teams.getTeamByName(teamName).get().getColor() + name;
+                }
+                team.addEntry(name);
+                setScore(objective, name, currentScore);
+                used.add(name);
+            }
+            currentScore++;
         }
     }
 

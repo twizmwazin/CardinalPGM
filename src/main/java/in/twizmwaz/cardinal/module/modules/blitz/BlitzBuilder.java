@@ -17,7 +17,10 @@ public class BlitzBuilder implements ModuleBuilder {
         for (Element element : match.getDocument().getRootElement().getChildren("blitz")) {
             boolean broadcastLives = element.getChild("broadcastLives") == null || Numbers.parseBoolean(element.getChild("broadcastLives").getText());
             int lives = element.getChild("lives") == null ? 1 : Numbers.parseInt(element.getChild("lives").getText());
-            String title = element.getChildText("title") == null ? (match.getModules().getModule(Rage.class) != null ? "Blitz: Rage" : "Blitz") : element.getChildText("title");
+            String title = match.getModules().getModule(Rage.class) != null ? "Blitz: Rage" : "Blitz";
+            if (element.getChild("map") != null && element.getChild("map").getAttribute("game") != null){
+                title = element.getChild("map").getAttribute("game").getValue();
+            }
             result.add(new Blitz(title, broadcastLives, lives));
         }
         return result;
