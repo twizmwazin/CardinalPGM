@@ -246,6 +246,7 @@ public enum ChatConstant {
     UI_TUTORIAL_VIEW("userInterface.tutorialView"),
     UI_TUTORIAL_LORE("userInterface.tutorialLore"),
     UI_POTION_EFFECTS("userInterface.potionEffects"),
+    UI_NO_POTION_EFFECTS("userInterface.noPotionEffects"),
     UI_HUNGER_LEVEL("userInterface.hungerLevel"),
     UI_HEALTH_LEVEL("userInterface.healthLevel"),
     UI_ONE_MAP("userInterface.oneMap"),

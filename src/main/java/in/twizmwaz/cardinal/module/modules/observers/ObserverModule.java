@@ -17,6 +17,7 @@ import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.tutorial.Tutorial;
 import in.twizmwaz.cardinal.util.Items;
 import in.twizmwaz.cardinal.util.Teams;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -384,29 +385,21 @@ public class ObserverModule implements Module {
         inventory.setItem(2, player.getInventory().getLeggings());
         inventory.setItem(3, player.getInventory().getBoots());
 
-        ArrayList<String> effects = new ArrayList<>();
-        for (PotionEffect effect : player.getActivePotionEffects()) {
-            String effectType = effect.getType().getName().toLowerCase().replaceAll("_", " ");
-            if (effectType.contains(" ")) {
-                String temp = "";
-                String[] parts = effectType.split(" ");
-                for (String part : parts) {
-                    temp += Character.toUpperCase(part.charAt(0)) + part.substring(1) + " ";
-                }
-                temp = temp.trim();
-                effectType = temp;
-            } else {
-                String temp = "";
-                temp += Character.toUpperCase(effectType.charAt(0)) + effectType.substring(1);
-                effectType = temp;
+        ItemStack potion;
+        if (player.getActivePotionEffects().size() > 0){
+            ArrayList<String> effects = new ArrayList<>();
+            for (PotionEffect effect : player.getActivePotionEffects()) {
+                String effectName = WordUtils.capitalizeFully(effect.getType().getName().toLowerCase().replaceAll("_", " "));
+                effects.add(ChatColor.YELLOW + effectName + " " + (effect.getAmplifier() + 1));
             }
-            effects.add(ChatColor.GRAY + effectType + " " + (effect.getAmplifier() + 1));
+            potion = Items.createItem(Material.POTION, 1, (short) 0, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_POTION_EFFECTS).getMessage(locale), effects);
+        } else {
+            potion = Items.createItem(Material.GLASS_BOTTLE, 1, (short) 0, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_POTION_EFFECTS).getMessage(locale), new ArrayList<>(Collections.singletonList(ChatColor.YELLOW + new LocalizedChatMessage(ChatConstant.UI_NO_POTION_EFFECTS).getMessage(locale))));
         }
-        ItemStack potion = Items.createItem(Material.POTION, 1, (short) 0, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_POTION_EFFECTS).getMessage(locale), effects);
         inventory.setItem(6, potion);
-        ItemStack food = Items.createItem(Material.SPECKLED_MELON, player.getFoodLevel(), (short) 0, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_HUNGER_LEVEL).getMessage(locale));
+        ItemStack food = Items.createItem(Material.COOKED_BEEF, player.getFoodLevel(), (short) 0, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_HUNGER_LEVEL).getMessage(locale));
         inventory.setItem(7, food);
-        ItemStack health = Items.createItem(Material.POTION, (int) Math.ceil(player.getHealth()), (short) 16389, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_HEALTH_LEVEL).getMessage(locale));
+        ItemStack health = Items.createItem(Material.REDSTONE, (int) Math.ceil(player.getHealth()), (short) 0, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_HEALTH_LEVEL).getMessage(locale));
         inventory.setItem(8, health);
         for (int i = 36; i <= 44; i++) {
             inventory.setItem(i, player.getInventory().getItem(i - 36));
