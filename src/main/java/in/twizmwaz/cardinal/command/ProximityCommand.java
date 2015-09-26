@@ -26,7 +26,7 @@ public class ProximityCommand {
         if (!(sender instanceof Player) || (Teams.getTeamByPlayer((Player) sender).isPresent() && Teams.getTeamByPlayer((Player) sender).get().isObserver()) || !GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING) || sender.hasPermission("cardinal.proximity")){
             boolean hasObjectives = false;
             for (GameObjective obj : GameHandler.getGameHandler().getMatch().getModules().getModules(GameObjective.class)) {
-                if (obj.showOnScoreboard()) {
+                if (obj.show()) {
                     hasObjectives = true;
                 }
             }

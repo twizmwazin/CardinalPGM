@@ -111,7 +111,7 @@ public class HillObjective implements TaskedModule, GameObjective {
     }
 
     @Override
-    public boolean showOnScoreboard() {
+    public boolean show() {
         return show;
     }
 

@@ -94,7 +94,7 @@ public class Teams {
     public static ModuleCollection<GameObjective> getShownObjectives(TeamModule team) {
         ModuleCollection<GameObjective> objectives = new ModuleCollection<>();
         for (GameObjective objective : getObjectives(team)) {
-            if (objective.showOnScoreboard()) {
+            if (objective.show()) {
                 objectives.add(objective);
             }
         }

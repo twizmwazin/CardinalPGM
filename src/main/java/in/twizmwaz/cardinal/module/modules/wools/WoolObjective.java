@@ -37,6 +37,7 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Wool;
@@ -48,37 +49,44 @@ import java.util.UUID;
 
 public class WoolObjective implements GameObjective {
 
-    private final TeamModule team;
-    private final String name;
     private final String id;
+    private final boolean required;
+    private final TeamModule team;
     private final DyeColor color;
-    private final BlockRegion place;
+    private final BlockRegion monument;
     private final boolean craftable;
     private final boolean show;
-
-    private Vector location;
-    private double proximity;
+    private final Vector location;
+    private final ProximityMetric woolProximityMetric;
+    private final boolean woolProximityHorizontal;
+    private final ProximityMetric monumentProximityMetric;
+    private final boolean monumentProximityHorizontal;
 
     private Set<UUID> playersTouched;
+    private double proximity;
+    private GameObjectiveScoreboardHandler scoreboardHandler;
+
     private boolean touched;
     private boolean complete;
 
-    private GameObjectiveScoreboardHandler scoreboardHandler;
 
-    protected WoolObjective(final TeamModule team, final String name, final String id, final DyeColor color, final BlockRegion place, final boolean craftable, final boolean show, final Vector location) {
-        this.team = team;
-        this.name = name;
+    protected WoolObjective(final String id, final boolean required, final TeamModule team, final DyeColor color, final BlockRegion monument, final boolean craftable, final boolean show, final Vector location, final ProximityMetric woolProximityMetric, final boolean woolProximityHorizontal, final ProximityMetric monumentProximityMetric, final boolean monumentProximityHorizontal) {
         this.id = id;
+        this.required = required;
+        this.team = team;
         this.color = color;
-        this.place = place;
+        this.monument = monument;
         this.craftable = craftable;
         this.show = show;
         this.location = location;
+        this.woolProximityMetric = woolProximityMetric;
+        this.woolProximityHorizontal = woolProximityHorizontal;
+        this.monumentProximityMetric = monumentProximityMetric;
+        this.monumentProximityHorizontal = monumentProximityHorizontal;
 
-        this.proximity = Double.POSITIVE_INFINITY;
 
         this.playersTouched = new HashSet<>();
-
+        this.proximity = Double.POSITIVE_INFINITY;
         this.scoreboardHandler = new GameObjectiveScoreboardHandler(this);
     }
 
@@ -88,18 +96,32 @@ public class WoolObjective implements GameObjective {
     }
 
     @Override
-    public TeamModule getTeam() {
-        return team;
-    }
-
-    @Override
     public String getName() {
-        return this.name;
+        return color == null ? "Wool" : color.name() + " Wool";
     }
 
     @Override
     public String getId() {
         return id;
+    }
+
+    @Override
+    public boolean isRequired() {
+        return required;
+    }
+
+    @Override
+    public TeamModule getTeam() {
+        return team;
+    }
+
+    public DyeColor getColor() {
+        return color;
+    }
+
+    @Override
+    public boolean show() {
+        return show;
     }
 
     @Override
@@ -113,130 +135,157 @@ public class WoolObjective implements GameObjective {
     }
 
     @Override
-    public boolean showOnScoreboard() {
-        return show;
-    }
-
-    public DyeColor getColor() {
-        return color;
-    }
-
-    @Override
     public GameObjectiveScoreboardHandler getScoreboardHandler() {
         return scoreboardHandler;
     }
 
+    // Used for keeping track of when players touch a wool by taking it from an inventory.
     @EventHandler
     public void onWoolPickup(InventoryClickEvent event) {
-        Player player = (Player) event.getWhoClicked();
-        if (!this.complete && GameHandler.getGameHandler().getMatch().isRunning()) {
-            try {
-                if (event.getCurrentItem().getType() == Material.WOOL && event.getCurrentItem().getData().getData() == color.getData()) {
-                    if (Teams.getTeamByPlayer(player).orNull() == team) {
-                        boolean touchMessage = false;
-                        if (!this.playersTouched.contains(player.getUniqueId())) {
-                            this.playersTouched.add(player.getUniqueId());
-                            if (this.show && !this.complete) {
-                                Teams.getTeamChannel(Optional.of(team)).sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED_FOR, team.getColor() + player.getName() + ChatColor.WHITE, MiscUtil.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.WHITE, team.getCompleteName() + ChatColor.WHITE)));
-                                for (Player player1 : Bukkit.getOnlinePlayers()) {
-                                    if (Teams.getTeamByPlayer(player1).isPresent() && Teams.getTeamByPlayer(player1).get().isObserver()) {
-                                        player1.sendMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED_FOR, team.getColor() + player.getName() + ChatColor.GRAY, MiscUtil.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.GRAY, team.getCompleteName() + ChatColor.GRAY)).getMessage(player1.getLocale()));
-                                    }
-                                }
-                                touchMessage = true;
-                            }
-                        }
-                        boolean oldState = this.touched;
-                        this.touched = true;
-                        if (touchMessage) {
-                            if (!oldState) {
-                                proximity = Double.POSITIVE_INFINITY;
-                            }
-                        }
-                        ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !oldState, touchMessage);
-                        Bukkit.getServer().getPluginManager().callEvent(touchEvent);
-                    }
+        handleWoolPickup((Player) event.getWhoClicked(), event.getCurrentItem());
+    }
+
+    // Used for keeping track of when players touch a wool by picking it up off of the ground.
+    @EventHandler
+    public void onWoolPickup(PlayerPickupItemEvent event) {
+        handleWoolPickup(event.getPlayer(), event.getItem().getItemStack());
+    }
+
+    private void handleWoolPickup(Player player, ItemStack item) {
+        if (GameHandler.getGameHandler().getMatch().isRunning() && !complete &&
+                item != null && item.getType().equals(Material.WOOL) &&
+                item.getData().getData() == color.getData() &&
+                Teams.getTeamByPlayer(player).orNull() == team) {
+
+            boolean touchMessage = false;
+            if (!playersTouched.contains(player.getUniqueId())) {
+                playersTouched.add(player.getUniqueId());
+                if (show) {
+                    Teams.getTeamChannel(Optional.of(team)).sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED_FOR, team.getColor() + player.getName() + ChatColor.WHITE, MiscUtil.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " ") + ChatColor.WHITE, team.getCompleteName() + ChatColor.WHITE)));
+                    Teams.getTeamChannel(Teams.getTeamById("observers")).sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED_FOR, team.getColor() + player.getName() + ChatColor.GRAY, MiscUtil.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " ") + ChatColor.GRAY, team.getCompleteName() + ChatColor.GRAY)));
+                    touchMessage = true;
                 }
-            } catch (NullPointerException e) {
+            }
+            if (!touched) {
+                proximity = monumentProximityMetric.equals(ProximityMetric.CLOSEST_PLAYER) ? MiscUtil.getDistance(player.getLocation().toVector(), monument.getVector(), monumentProximityHorizontal) : Double.POSITIVE_INFINITY;
+            }
+            ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !touched, touchMessage);
+            touched = true;
+            Bukkit.getServer().getPluginManager().callEvent(touchEvent);
+
+        }
+    }
+
+    // Used for keeping track of when players move to a location closer to a proximity location.
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        if (touched) {
+            handleMovementProximity(monumentProximityMetric, monumentProximityHorizontal, event.getPlayer(), monument.getVector());
+        } else if (location != null) {
+            handleMovementProximity(woolProximityMetric, woolProximityHorizontal, event.getPlayer(), location);
+        }
+    }
+
+    private void handleMovementProximity(ProximityMetric proximityMetric, boolean proximityHorizontal, Player player, Vector location) {
+        if (proximityMetric.equals(ProximityMetric.CLOSEST_PLAYER) && location != null) {
+            double distance = MiscUtil.getDistance(player.getLocation().toVector(), location, proximityHorizontal);
+            if (distance < proximity) {
+                ObjectiveProximityEvent proximityEvent = new ObjectiveProximityEvent(this, player, proximity, distance);
+                proximity = distance;
+                Bukkit.getServer().getPluginManager().callEvent(proximityEvent);
             }
         }
     }
 
-    @EventHandler
-    public void onWoolPickup(PlayerPickupItemEvent event) {
-        Player player = event.getPlayer();
-        if (!this.complete && GameHandler.getGameHandler().getMatch().isRunning()) {
-            try {
-                if (event.getItem().getItemStack().getType() == Material.WOOL && event.getItem().getItemStack().getData().getData() == color.getData()) {
-                    if (Teams.getTeamByPlayer(player).orNull() == team) {
-                        boolean touchMessage = false;
-                        if (!this.playersTouched.contains(player.getUniqueId())) {
-                            this.playersTouched.add(player.getUniqueId());
-                            if (this.show && !this.complete) {
-                                Teams.getTeamChannel(Optional.of(team)).sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED, team.getColor() + player.getName() + ChatColor.WHITE, MiscUtil.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.WHITE, team.getCompleteName() + ChatColor.WHITE)));
-                                for (Player player1 : Bukkit.getOnlinePlayers()) {
-                                    if (Teams.getTeamByPlayer(player1).isPresent() && Teams.getTeamByPlayer(player1).get().isObserver()) {
-                                        player1.sendMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED_FOR, team.getColor() + player.getName() + ChatColor.GRAY, MiscUtil.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.GRAY, team.getCompleteName() + ChatColor.GRAY)).getMessage(player1.getLocale()));
-                                    }
-                                }
-                                touchMessage = true;
-                            }
-                        }
-                        boolean oldState = this.touched;
-                        this.touched = true;
-                        if (touchMessage && !oldState) {
-                                proximity = Double.POSITIVE_INFINITY;
-                        }
-                        ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !oldState, touchMessage);
-                        Bukkit.getServer().getPluginManager().callEvent(touchEvent);
+    // Used for keeping track of when players place a block on the ground at a location closer to the proximity location.
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onBlockPlaceProximity(BlockPlaceEvent event) {
+        if (!event.isCancelled() && Teams.getTeamByPlayer(event.getPlayer()).orNull() == team) {
+            if (touched && monumentProximityMetric.equals(ProximityMetric.CLOSEST_BLOCK)) {
+                if (event.getBlock().getType().equals(Material.WOOL) && ((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
+                    double distance = MiscUtil.getDistance(event.getBlockPlaced().getLocation(), monument.getLocation(), monumentProximityHorizontal);
+                    if (distance < proximity) {
+                        ObjectiveProximityEvent proximityEvent = new ObjectiveProximityEvent(this, event.getPlayer(), proximity, distance);
+                        proximity = distance;
+                        Bukkit.getServer().getPluginManager().callEvent(proximityEvent);
                     }
                 }
-            } catch (NullPointerException e) {
+            } else if (location != null && woolProximityMetric.equals(ProximityMetric.CLOSEST_BLOCK)) {
+                double distance = MiscUtil.getDistance(event.getBlockPlaced().getLocation(), location, woolProximityHorizontal);
+                if (distance < proximity) {
+                    ObjectiveProximityEvent proximityEvent = new ObjectiveProximityEvent(this, event.getPlayer(), proximity, distance);
+                    proximity = distance;
+                    Bukkit.getServer().getPluginManager().callEvent(proximityEvent);
+                }
             }
+        }
+    }
+
+    // Used for keeping track of when players kill their opponents at a location closer to the proximity location
+    @EventHandler
+    public void onCardinalDeath(CardinalDeathEvent event) {
+        Player killer = event.getKiller();
+        if (GameHandler.getGameHandler().getMatch().isRunning() &&
+                killer != null &&
+                Teams.getTeamByPlayer(killer).orNull() == this.team) {
+
+            if (touched && monumentProximityMetric.equals(ProximityMetric.CLOSEST_KILL)) {
+                double distance = MiscUtil.getDistance(killer.getLocation(), monument.getVector(), monumentProximityHorizontal);
+                if (distance < proximity) {
+                    ObjectiveProximityEvent proximityEvent = new ObjectiveProximityEvent(this, event.getKiller(), proximity, distance);
+                    proximity = distance;
+                    Bukkit.getServer().getPluginManager().callEvent(proximityEvent);
+                }
+            } else if (location != null && woolProximityMetric.equals(ProximityMetric.CLOSEST_KILL)) {
+                double distance = MiscUtil.getDistance(killer.getLocation(), location, woolProximityHorizontal);
+                if (distance < proximity) {
+                    ObjectiveProximityEvent proximityEvent = new ObjectiveProximityEvent(this, event.getKiller(), proximity, distance);
+                    proximity = distance;
+                    Bukkit.getServer().getPluginManager().callEvent(proximityEvent);
+                }
+            }
+
         }
     }
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        while (playersTouched.contains(event.getEntity().getUniqueId())) {
-            playersTouched.remove(event.getEntity().getUniqueId());
+        UUID uuid = event.getEntity().getUniqueId();
+        while (playersTouched.contains(uuid)) {
+            playersTouched.remove(uuid);
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (event.getBlock().equals(place.getBlock())) {
+        if (event.getBlock().equals(monument.getBlock())) {
+            Player player = event.getPlayer();
             if (event.getBlock().getType().equals(Material.WOOL)) {
                 if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
                     if (Teams.getTeamByPlayer(event.getPlayer()).orNull() == team) {
-                        this.complete = true;
-                        if (this.show)
-                            ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PLACED, team.getColor() + event.getPlayer().getName() + ChatColor.WHITE, team.getCompleteName() + ChatColor.WHITE, MiscUtil.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.WHITE)));
-                        Fireworks.spawnFirework(event.getPlayer().getLocation(), event.getPlayer().getWorld(), MiscUtil.convertChatColorToColor(MiscUtil.convertDyeColorToChatColor(color)));
-                        ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
-                        Bukkit.getServer().getPluginManager().callEvent(compEvent);
+                        complete = true;
+                        if (this.show) ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PLACED, team.getColor() + event.getPlayer().getName() + ChatColor.WHITE, team.getCompleteName() + ChatColor.WHITE, MiscUtil.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " ") + ChatColor.WHITE)));
+                        Fireworks.spawnFirework(player.getLocation(), player.getWorld(), MiscUtil.convertChatColorToColor(MiscUtil.convertDyeColorToChatColor(color)));
+                        Bukkit.getServer().getPluginManager().callEvent(new ObjectiveCompleteEvent(this, player));
                         event.setCancelled(false);
                     } else {
                         event.setCancelled(true);
-                        if (this.show)
-                            ChatUtil.sendWarningMessage(event.getPlayer(), "You may not complete the other team's objective.");
+                        if (show) ChatUtil.sendWarningMessage(player, ChatConstant.ERROR_CANNOT_COMPLETE_OBJECTIVE.asMessage());
                     }
                 } else {
                     event.setCancelled(true);
-                    if (this.show)
-                        ChatUtil.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_BLOCK_PLACE, MiscUtil.convertDyeColorToChatColor(color) + color.name().toUpperCase().replaceAll("_", " ") + " WOOL" + ChatColor.RED));
+                    if (show) ChatUtil.sendWarningMessage(player, new LocalizedChatMessage(ChatConstant.ERROR_BLOCK_PLACE, MiscUtil.convertDyeColorToChatColor(color) + color.name().toUpperCase().replaceAll("_", " ") + " WOOL" + ChatColor.RED));
                 }
             } else {
                 event.setCancelled(true);
-                if (this.show)
-                    ChatUtil.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_BLOCK_PLACE, MiscUtil.convertDyeColorToChatColor(color) + color.name().toUpperCase().replaceAll("_", " ") + " WOOL" + ChatColor.RED));
+                if (show) ChatUtil.sendWarningMessage(player, new LocalizedChatMessage(ChatConstant.ERROR_BLOCK_PLACE, MiscUtil.convertDyeColorToChatColor(color) + color.name().toUpperCase().replaceAll("_", " ") + " WOOL" + ChatColor.RED));
             }
         }
     }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (event.getBlock().equals(place.getBlock())) {
+        if (event.getBlock().equals(monument.getBlock())) {
             event.setCancelled(true);
         }
     }
@@ -244,11 +293,11 @@ public class WoolObjective implements GameObjective {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPistonPush(BlockPistonExtendEvent event) {
         if (!event.isCancelled()) {
-            if (event.getBlock().getRelative(event.getDirection()).equals(place.getBlock())) {
+            if (event.getBlock().getRelative(event.getDirection()).equals(monument.getBlock())) {
                 event.setCancelled(true);
             } else {
                 for (Block block : event.getBlocks()) {
-                    if (block.equals(place.getBlock()) || block.equals(place.getBlock().getRelative(event.getDirection().getOppositeFace()))) {
+                    if (block.equals(monument.getBlock()) || block.equals(monument.getBlock().getRelative(event.getDirection().getOppositeFace()))) {
                         event.setCancelled(true);
                     }
                 }
@@ -260,7 +309,7 @@ public class WoolObjective implements GameObjective {
     public void onPistonRetract(BlockPistonRetractEvent event) {
         if (!event.isCancelled()) {
             for (Block block : event.getBlocks()) {
-                if (block.equals(place.getBlock()) || block.equals(place.getBlock().getRelative(event.getDirection().getOppositeFace()))) {
+                if (block.equals(monument.getBlock()) || block.equals(monument.getBlock().getRelative(event.getDirection().getOppositeFace()))) {
                     event.setCancelled(true);
                 }
             }
@@ -269,42 +318,15 @@ public class WoolObjective implements GameObjective {
 
     @EventHandler
     public void onEntityChangeBlock(EntityChangeBlockEvent event) {
-        if (place.getBlock().equals(event.getBlock()))
+        if (monument.getBlock().equals(event.getBlock())) {
             event.setCancelled(true);
+        }
     }
 
     @EventHandler
     public void onCraftWool(CraftItemEvent event) {
-        if (event.getRecipe().getResult().equals(new ItemStack(Material.WOOL, 1, color.getData())) && !this.craftable) {
+        if (event.getRecipe().getResult().equals(new ItemStack(Material.WOOL, 1, color.getData())) && !craftable) {
             event.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void onCardinalDeath(CardinalDeathEvent event) {
-        if (event.getKiller() != null && location != null && GameHandler.getGameHandler().getMatch().isRunning() && !this.touched && Teams.getTeamByPlayer(event.getKiller()).isPresent() && Teams.getTeamByPlayer(event.getKiller()).get() == this.team) {
-            if (event.getKiller().getLocation().toVector().distance(location) < proximity) {
-                double old = proximity;
-                proximity = event.getKiller().getLocation().toVector().distance(location);
-                Bukkit.getServer().getPluginManager().callEvent(new ObjectiveProximityEvent(this, event.getKiller(), old, proximity));
-            }
-        }
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onSafetyPlace(BlockPlaceEvent event) {
-        if (!event.isCancelled() && this.touched) {
-            if (event.getBlock().getType().equals(Material.WOOL)) {
-                if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
-                    if (Teams.getTeamByPlayer(event.getPlayer()).orNull() == team) {
-                        if (event.getBlockPlaced().getLocation().distance(place.getLocation()) < proximity) {
-                            double old = proximity;
-                            proximity = event.getBlockPlaced().getLocation().distance(place.getLocation());
-                            Bukkit.getServer().getPluginManager().callEvent(new ObjectiveProximityEvent(this, event.getPlayer(), old, proximity));
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -318,15 +340,15 @@ public class WoolObjective implements GameObjective {
 
     @EventHandler
     public void onWoolTouch(ObjectiveTouchEvent event) {
-        if (event.getObjective().equals(this) && event.displayTouchMessage()) {
-            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getPlayer(), Snowflakes.ChangeReason.WOOL_TOUCH, 8, MiscUtil.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.GRAY));
+        if (event.getObjective().equals(this) && event.hasTouchMessage()) {
+            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getPlayer(), Snowflakes.ChangeReason.WOOL_TOUCH, 8, MiscUtil.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " ") + ChatColor.GRAY));
         }
     }
 
     @EventHandler
     public void onWoolPlace(ObjectiveCompleteEvent event) {
-        if (event.getObjective().equals(this) && event.getObjective().showOnScoreboard()) {
-            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getPlayer(), Snowflakes.ChangeReason.WOOL_PLACE, 15, MiscUtil.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.GRAY));
+        if (event.getObjective().equals(this) && event.getObjective().show()) {
+            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getPlayer(), Snowflakes.ChangeReason.WOOL_PLACE, 15, MiscUtil.convertDyeColorToChatColor(color) + getName().toUpperCase().replaceAll("_", " ") + ChatColor.GRAY));
         }
     }
 }

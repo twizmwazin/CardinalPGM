@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.util;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -116,4 +117,12 @@ public class MiscUtil {
         }
         return types;
     }
+
+    public static double getDistance(Vector location1, Vector location2, boolean horizontal) {
+        if (horizontal) {
+            return location1.clone().setY(0).distance(location2.clone().setY(0));
+        }
+        return location1.distance(location2);
+    }
+
 }

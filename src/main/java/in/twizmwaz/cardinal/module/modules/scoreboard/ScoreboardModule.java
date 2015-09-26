@@ -331,7 +331,7 @@ public class ScoreboardModule implements Module {
     public String getDisplayTitle() {
         boolean hasObjectives = false;
         for (GameObjective obj : GameHandler.getGameHandler().getMatch().getModules().getModules(GameObjective.class)) {
-            if (obj.showOnScoreboard()) {
+            if (obj.show()) {
                 hasObjectives = true;
             }
         }

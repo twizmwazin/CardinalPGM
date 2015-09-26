@@ -44,11 +44,7 @@ public class ObjectiveTouchEvent extends ObjectiveEvent implements Cancellable {
         return player;
     }
 
-    public boolean updateScoreboard() {
-        return updateScoreboard;
-    }
-
-    public boolean displayTouchMessage() {
+    public boolean hasTouchMessage() {
         return touchMessage;
     }
 }

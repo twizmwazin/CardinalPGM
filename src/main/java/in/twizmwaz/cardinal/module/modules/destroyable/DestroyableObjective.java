@@ -122,7 +122,7 @@ public class DestroyableObjective implements GameObjective {
     }
 
     @Override
-    public boolean showOnScoreboard() {
+    public boolean show() {
         return show;
     }
 

@@ -5,18 +5,29 @@ import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 
 public interface GameObjective extends Module {
 
-    public TeamModule getTeam();
+    String getName();
 
-    public String getName();
+    String getId();
 
-    public String getId();
+    boolean isRequired();
 
-    public boolean isTouched();
+    TeamModule getTeam();
 
-    public boolean isComplete();
+    boolean isTouched();
 
-    public boolean showOnScoreboard();
+    boolean isComplete();
 
-    public GameObjectiveScoreboardHandler getScoreboardHandler();
+    boolean show();
+
+    GameObjectiveScoreboardHandler getScoreboardHandler();
+
+    enum ProximityMetric {
+        CLOSEST_PLAYER, CLOSEST_BLOCK, CLOSEST_KILL;
+
+        public static ProximityMetric matchProximityMetric(String metric) {
+            if (metric == null) return null;
+            return ProximityMetric.valueOf(metric.toUpperCase().replaceAll(" ", "_"));
+        }
+    }
 
 }

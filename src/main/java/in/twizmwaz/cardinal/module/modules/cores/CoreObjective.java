@@ -151,7 +151,7 @@ public class CoreObjective implements GameObjective {
     }
 
     @Override
-    public boolean showOnScoreboard() {
+    public boolean show() {
         return show;
     }
 
@@ -398,7 +398,7 @@ public class CoreObjective implements GameObjective {
 
     @EventHandler
     public void onCoreLeak(ObjectiveCompleteEvent event) {
-        if (event.getObjective().equals(this) && event.getObjective().showOnScoreboard()) {
+        if (event.getObjective().equals(this) && event.getObjective().show()) {
             for (UUID player : playersCompleted) {
                 if (Bukkit.getOfflinePlayer(player).isOnline()) {
                     Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(Bukkit.getPlayer(player), Snowflakes.ChangeReason.CORE_LEAK, 15, ChatColor.RED + name + ChatColor.GRAY));

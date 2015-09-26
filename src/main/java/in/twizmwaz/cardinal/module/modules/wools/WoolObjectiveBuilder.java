@@ -2,9 +2,11 @@ package in.twizmwaz.cardinal.module.modules.wools;
 
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.BuilderData;
+import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
+import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
@@ -36,25 +38,41 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
     }
 
     private WoolObjective getWool(Element... elements) {
+        String id = Parser.getOrderedAttribute("id", elements);
+        boolean required = Numbers.parseBoolean(Parser.getOrderedAttribute("required", elements), true);
         TeamModule team = Teams.getTeamById(Parser.getOrderedAttribute("team", elements)).orNull();
         DyeColor color = Parser.parseDyeColor(Parser.getOrderedAttribute("color", elements));
-        BlockRegion place = RegionModuleBuilder.getRegion(elements[0].getChildren().get(0)).getCenterBlock();
-        String name = color == null ? "Wool" : color.name() + " Wool";
-        if (Parser.getOrderedAttribute("name", elements) != null) {
-            name = Parser.getOrderedAttribute("name", elements);
-        }
-        String id = Parser.getOrderedAttribute("id", elements);
         if (id == null) {
             id = Parser.getOrderedAttribute("color", elements);
         }
+        BlockRegion monument = null;
+        String monumentAttribute = Parser.getOrderedAttribute("monument", elements);
+        if (elements[0].getChildren().size() > 0) {
+            monument = RegionModuleBuilder.getRegion(elements[0].getChildren().get(0)).getCenterBlock();
+        } else if (monumentAttribute != null) {
+            RegionModule region = RegionModuleBuilder.getRegion(monumentAttribute);
+            if (region != null) {
+                monument = region.getCenterBlock();
+            }
+        }
         boolean craftable = Numbers.parseBoolean(Parser.getOrderedAttribute("craftable", elements), true);
         boolean show = Numbers.parseBoolean(Parser.getOrderedAttribute("show", elements), true);
-        String locationAttribute = Parser.getOrderedAttribute("location");
         Vector location = null;
+        String locationAttribute = Parser.getOrderedAttribute("location");
         if (locationAttribute != null) {
             location = new Vector(Numbers.parseDouble(locationAttribute.replaceAll(" ", ",").split(",")[0]), Numbers.parseDouble(locationAttribute.replaceAll(" ", ",").split(",")[1]), Numbers.parseDouble(locationAttribute.replaceAll(" ", ",").split(",")[2]));
         }
-        return new WoolObjective(team, name, id, color, place, craftable, show, location);
+        GameObjective.ProximityMetric woolProximityMetric = GameObjective.ProximityMetric.matchProximityMetric(Parser.getOrderedAttribute("woolproximity-metric"));
+        if (woolProximityMetric == null) {
+            woolProximityMetric = GameObjective.ProximityMetric.CLOSEST_KILL;
+        }
+        boolean woolProximityHorizontal = Numbers.parseBoolean(Parser.getOrderedAttribute("woolproximity-horizontal"), false);
+        GameObjective.ProximityMetric monumentProximityMetric = GameObjective.ProximityMetric.matchProximityMetric(Parser.getOrderedAttribute("monumentproximity-metric"));
+        if (monumentProximityMetric == null) {
+            monumentProximityMetric = GameObjective.ProximityMetric.CLOSEST_BLOCK;
+        }
+        boolean monumentProximityHorizontal = Numbers.parseBoolean(Parser.getOrderedAttribute("monumentproximity-horizontal"), false);
+        return new WoolObjective(id, required, team, color, monument, craftable, show, location, woolProximityMetric, woolProximityHorizontal, monumentProximityMetric, monumentProximityHorizontal);
     }
 
 }
