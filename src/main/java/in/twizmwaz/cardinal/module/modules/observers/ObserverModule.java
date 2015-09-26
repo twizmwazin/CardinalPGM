@@ -406,7 +406,7 @@ public class ObserverModule implements Module {
         inventory.setItem(6, potion);
         ItemStack food = Items.createItem(Material.SPECKLED_MELON, player.getFoodLevel(), (short) 0, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_HUNGER_LEVEL).getMessage(locale));
         inventory.setItem(7, food);
-        ItemStack health = Items.createItem(Material.POTION, (int) Math.ceil(player.getHealth()), (short) 16389, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_HEALTH_LEVEL).getMessage(locale));
+        ItemStack health = Items.createItem(Material.REDSTONE, (int) Math.ceil(player.getHealth()), (short) 16389, ChatColor.AQUA + "" + ChatColor.ITALIC + new LocalizedChatMessage(ChatConstant.UI_HEALTH_LEVEL).getMessage(locale));
         inventory.setItem(8, health);
         for (int i = 36; i <= 44; i++) {
             inventory.setItem(i, player.getInventory().getItem(i - 36));
