@@ -35,6 +35,7 @@
         <playerCommand>You must be a player to use this command.</playerCommand>
         <noMapMatch>No maps matched query.</noMapMatch>
         <noTeamMatch>No teams matched query.</noTeamMatch>
+        <multipleTeamMatch>Multiple teams matched query: {0}</multipleTeamMatch>
         <noRotMatch>No rotations matched query.</noRotMatch>
         <noPlayerMatch>No players matched query.</noPlayerMatch>
         <noRankMatch>No ranks matched query.</noRankMatch>
