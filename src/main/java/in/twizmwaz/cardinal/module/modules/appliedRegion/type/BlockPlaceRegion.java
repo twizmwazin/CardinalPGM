@@ -53,9 +53,14 @@ public class BlockPlaceRegion extends AppliedRegion {
 
     @EventHandler
     public void onBlockPistonExtend(BlockPistonExtendEvent event) {
-        for (Block block : event.getBlocks()) {
-            if (region.contains(block.getRelative(event.getDirection()).getLocation().toVector()) && filter.evaluate(block, event).equals(FilterState.DENY)) {
-                event.setCancelled(true);
+        if (region.contains(event.getBlock().getRelative(event.getDirection()).getLocation().toVector()) && filter.evaluate(event.getBlock().getRelative(event.getDirection()), event).equals(FilterState.DENY)) {
+            event.setCancelled(true);
+        } else {
+            for (Block block : event.getBlocks()) {
+                if (region.contains(block.getRelative(event.getDirection()).getLocation().toVector()) && filter.evaluate(block.getRelative(event.getDirection()), event).equals(FilterState.DENY)) {
+                    event.setCancelled(true);
+                    break;
+                }
             }
         }
     }
@@ -63,8 +68,9 @@ public class BlockPlaceRegion extends AppliedRegion {
     @EventHandler
     public void onBlockPistonRetract(BlockPistonRetractEvent event) {
         for (Block block : event.getBlocks()) {
-            if (region.contains(block.getRelative(event.getDirection()).getLocation().toVector()) && filter.evaluate(block, event).equals(FilterState.DENY)) {
+            if (region.contains(block.getRelative(event.getDirection()).getLocation().toVector()) && filter.evaluate(block.getRelative(event.getDirection()), event).equals(FilterState.DENY)) {
                 event.setCancelled(true);
+                break;
             }
         }
     }
