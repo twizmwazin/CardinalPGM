@@ -19,6 +19,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -151,28 +152,36 @@ public class WhitelistCommands {
         ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", ChatConstant.GENERIC_KICKED_NOT_WHITELISTED.asMessage()));
     }
 
-    @Command(aliases = {"team"}, desc = "Adds everyone on a team to the whitelist.", max = 1, min = 1)
+    @Command(aliases = {"team"}, desc = "Adds everyone on a team to the whitelist.", min = 1)
     @CommandPermissions("cardinal.whitelist.team")
     public static void team(final CommandContext args, final CommandSender sender) throws CommandException {
         int count = 0;
-        String msg = "";
-        for (int i = 2; i < args.argsLength(); i++) {
-            msg += args.getString(i) + " ";
+        List<String> teams = new ArrayList<>();
+        String msg = args.getJoinedStrings(0).toLowerCase().replace(" ","");
+        for (TeamModule team : Teams.getTeams()) {
+            if (team.getName().toLowerCase().replace(" ","").startsWith(msg)) {
+                teams.add(team.getCompleteName());
+            }
         }
-        msg = msg.trim();
-        if (Teams.getTeamByName(msg) == null) {
+        if (teams.size() == 0) {
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAM_MATCH).getMessage(ChatUtil.getLocale(sender)));
-        }
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            Optional<TeamModule> team = Teams.getTeamByPlayer(player);
-            if (team.isPresent() && team.get().getName().startsWith(msg)) {
-                if (!player.isWhitelisted()) {
+        } else if (teams.size() == 1) {
+            TeamModule team = Teams.getTeamByName(teams.get(0).substring(2)).get();
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (team.contains(player) && !player.isWhitelisted()) {
                     player.setWhitelisted(true);
                     count++;
                 }
             }
+            sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.GENERIC_ADDED_PLAYERS_WHITELIST, "" + ChatColor.GOLD + count + ChatColor.GREEN).getMessage(ChatUtil.getLocale(sender)));
+        } else {
+            String joinedTeams = "";
+            for (int i = 0; i < teams.size() - 1; i++) {
+                joinedTeams += teams.get(i) + ChatColor.RED + ", ";
+            }
+            joinedTeams += teams.get(teams.size() - 1) + ChatColor.RED + ".";
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_MULTIPLE_TEAM_MATCH, joinedTeams).getMessage(ChatUtil.getLocale(sender)));
         }
-        sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.GENERIC_ADDED_PLAYERS_WHITELIST, "" + ChatColor.GOLD + count + ChatColor.GREEN).getMessage(ChatUtil.getLocale(sender)));
     }
 
     public static OfflinePlayer matchSinglePlayer(CommandSender sender, String rawUsername) throws CommandException {

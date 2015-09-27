@@ -38,6 +38,7 @@ public enum ChatConstant {
     ERROR_PLAYER_COMMAND("error.playerCommand"),
     ERROR_NO_MAP_MATCH("error.noMapMatch"),
     ERROR_NO_TEAM_MATCH("error.noTeamMatch"),
+    ERROR_MULTIPLE_TEAM_MATCH("error.multipleTeamMatch"),
     ERROR_NO_ROT_MATCH("error.noRotMatch"),
     ERROR_NO_PLAYER_MATCH("error.noPlayerMatch"),
     ERROR_NO_RANK_MATCH("error.noRankMatch"),
