@@ -108,6 +108,8 @@ public enum ChatConstant {
     ERROR_CANNOT_CALCULATE_SCORES("error.cannotCalculateScores"),
     ERROR_PROXIMITY_OBS_ONLY("error.proximityObsOnly"),
     ERROR_PROXIMITY_NO_SCORING("error.proximityNoScoring"),
+    ERROR_BREAK_FLAG("error.breakFlag"),
+    ERROR_BREAK_BLOCK_UNDER_FLAG("error.breakBlockUnderFlag"),
 
     GENERIC_MAP_SET("generic.mapSet"),
     GENERIC_MARKED_FOR_RELOADING("generic.markedForReloading"),
@@ -310,6 +312,10 @@ public enum ChatConstant {
     UI_DEFAULT_CHANNEL_TEAM("userInterface.defaultChannelTeam"),
     UI_TIME_ELAPSED("userInterface.timeElapsed"),
     UI_MODE_IN_TIME("userInterface.modeInTime"),
+    UI_FLAG_CAPTURED("userInterface.flagCaptured"),
+    UI_FLAG_PICKED_UP("userInterface.flagPickedUp"),
+    UI_FLAG_DROPPED("userInterface.flagDropped"),
+    UI_FLAG_RESPAWNED("userInterface.flagRespawned"),
 
     SNOWFLAKES_SNOWFLAKE("snowflakes.snowflake"),
     SNOWFLAKES_SNOWFLAKES("snowflakes.snowflakes");

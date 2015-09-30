@@ -25,7 +25,6 @@ import org.jdom2.Element;
 
 import java.util.List;
 
-@BuilderData(load = ModuleLoadTime.LATE)
 public class FlagBuilder implements ModuleBuilder {
 
     @Override

@@ -68,6 +68,10 @@ public class Net implements Module {
         HandlerList.unregisterAll(this);
     }
 
+    public String getId() {
+        return id;
+    }
+
     public FilterModule getCaptureFilter() {
         return captureFilter;
     }
@@ -92,11 +96,15 @@ public class Net implements Module {
 
     @EventHandler
     public void onEnterNet(NetEnterEvent event) {
-        if (event.getNet().equals(this)) {
+        if (event.getNet().equals(this) && flagObjectives.contains(event.getFlag())) {
             TeamModule own = owner == null ? Teams.getTeamByPlayer(event.getPlayer()).get() : owner;
             FlagObjective flagObjective = Flags.getFlag(this);
             if (flagObjective != null && flagObjective.getPicker() != null && flagObjective.getPicker().equals(event.getPlayer())) {
-                if (captureFilter == null || captureFilter.evaluate(event.getPlayer()).equals(FilterState.ALLOW)) {
+                FilterModule captureFilt = null;
+                if (getCaptureFilter() != null || flagObjective.getCaptureFilter() != null) {
+                    captureFilt = getCaptureFilter() != null ? getCaptureFilter() : flagObjective.getCaptureFilter();
+                }
+                if (captureFilt == null || captureFilt.evaluate(event.getPlayer()).equals(FilterState.ALLOW)) {
                     FlagCaptureEvent e = new FlagCaptureEvent(event.getPlayer(), Flags.getFlag(this), this);
                     Bukkit.getServer().getPluginManager().callEvent(e);
                 }

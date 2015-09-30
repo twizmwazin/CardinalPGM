@@ -13,7 +13,6 @@ import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Flags;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -113,17 +112,28 @@ public class Post implements Module {
         return yaw;
     }
 
+    public int getPointsRate() {
+        return pointsRate;
+    }
+
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
         Player p = event.getPlayer();
-        if ((Teams.getTeamByPlayer(p).isPresent() && !Teams.getTeamByPlayer(p).get().isObserver()) && GameHandler.getGameHandler().getMatch().isRunning()) {
-            for (RegionModule region : getRegions()) {
-                if (region.contains(event.getTo()) && currentBlock.equals(region.getCenterBlock().getBlock())) {
-                    if (pickupFilter == null || (pickupFilter != null && pickupFilter.evaluate(event.getPlayer()).equals(FilterState.ALLOW))) {
-                        FlagObjective flagObjective = Flags.getFlag(this);
-                        if (flagObjective != null && !flagObjective.isCarried()) {
-                            FlagPickupEvent e = new FlagPickupEvent(p, flagObjective);
-                            Bukkit.getServer().getPluginManager().callEvent(e);
+        FlagObjective flagObjective = Flags.getFlag(this);
+        if (flagObjective != null) {
+            if ((Teams.getTeamByPlayer(p).isPresent() && !Teams.getTeamByPlayer(p).get().isObserver()) && GameHandler.getGameHandler().getMatch().isRunning()) {
+                TeamModule team = Teams.getTeamByPlayer(p).get();
+                for (RegionModule region : getRegions()) {
+                    if (region.contains(event.getTo()) && !region.contains(event.getFrom()) && currentBlock.equals(region.getCenterBlock().getBlock())) {
+                        FilterModule pickupFilt = null;
+                        if (getPickupFilter() != null || flagObjective.getPickupFilter() != null) {
+                            pickupFilt = getPickupFilter() != null ? getPickupFilter() : flagObjective.getPickupFilter();
+                        }
+                        if (pickupFilt == null || pickupFilt.evaluate(event.getPlayer()).equals(FilterState.ALLOW)) {
+                            if (!flagObjective.isCarried() && (flagObjective.isShared() || flagObjective.getTeam().equals(team))) {
+                                FlagPickupEvent e = new FlagPickupEvent(p, flagObjective);
+                                Bukkit.getServer().getPluginManager().callEvent(e);
+                            }
                         }
                     }
                 }
@@ -133,7 +143,7 @@ public class Post implements Module {
 
     @EventHandler
     public void onFlagDrop(FlagDropEvent event) {
-        setCurrentBlock(event.getFlagObjective().getCurrentFlagBlock());
+        setCurrentBlock(event.getFlag().getCurrentFlagBlock());
     }
 
     @EventHandler

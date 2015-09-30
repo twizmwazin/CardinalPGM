@@ -1,6 +1,8 @@
 package in.twizmwaz.cardinal.module.modules.ctf;
 
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.event.ScoreUpdateEvent;
 import in.twizmwaz.cardinal.event.flag.FlagDropEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
@@ -33,6 +35,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -119,7 +122,7 @@ public class FlagObjective implements TaskedModule, GameObjective {
         }
 
         currentFlagBlock = getPost().getInitialBlock();
-        originalFace = ((org.bukkit.material.Banner) currentFlagBlock.getState().getMaterialData()).getFacing();
+        originalFace = Flags.yawToFace(getPost().getYaw());
         respawning = false;
         onGround = false;
         scoreboardHandler = new GameObjectiveScoreboardHandler(this);
@@ -200,8 +203,20 @@ public class FlagObjective implements TaskedModule, GameObjective {
         return respawning;
     }
 
+    public boolean isShared() {
+        return shared;
+    }
+
     public Block getCurrentFlagBlock() {
         return currentFlagBlock;
+    }
+
+    public FilterModule getPickupFilter() {
+        return pickupFilter;
+    }
+
+    public FilterModule getCaptureFilter() {
+        return captureFilter;
     }
 
     public void respawnFlag() {
@@ -216,7 +231,9 @@ public class FlagObjective implements TaskedModule, GameObjective {
             spawnFlag(block, true);
             FlagRespawnEvent e = new FlagRespawnEvent(this, getPost(), block);
             Bukkit.getServer().getPluginManager().callEvent(e);
-            Bukkit.broadcastMessage(getDisplayName() + ChatColor.RESET + " has respawned");
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                p.sendMessage(new LocalizedChatMessage(ChatConstant.UI_FLAG_RESPAWNED, getDisplayName() + ChatColor.RESET).getMessage(p.getLocale()));
+            }
             respawning = false;
         }
     }
@@ -249,7 +266,8 @@ public class FlagObjective implements TaskedModule, GameObjective {
 
     @EventHandler
     public void onPlayerPickupFlag(FlagPickupEvent event) {
-        if (event.getFlagObjective().equals(this)) {
+        if (event.getFlag().equals(this)) {
+            if (pickupKit != null) pickupKit.apply(event.getPlayer());
             pickerHelmet = event.getPlayer().getInventory().getHelmet();
             ItemStack bannerItem = new ItemStack(Material.BANNER);
             BannerMeta meta = (BannerMeta) bannerItem.getItemMeta();
@@ -258,21 +276,34 @@ public class FlagObjective implements TaskedModule, GameObjective {
             bannerItem.setItemMeta(meta);
             event.getPlayer().getInventory().setHelmet(bannerItem);
             event.getPlayer().getWorld().getBlockAt(currentFlagBlock.getLocation()).setType(Material.AIR);
-            Bukkit.broadcastMessage(getDisplayName() + ChatColor.RESET + " picked up by " + Teams.getTeamByPlayer(event.getPlayer()).get().getColor() + event.getPlayer().getName());
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                p.sendMessage(new LocalizedChatMessage(ChatConstant.UI_FLAG_PICKED_UP, getDisplayName() + ChatColor.RESET, Teams.getTeamByPlayer(event.getPlayer()).get().getColor() + event.getPlayer().getName()).getMessage(p.getLocale()));
+            }
             setPicker(event.getPlayer());
             onGround = false;
         }
     }
 
     @EventHandler
+    public void onDropFlag(FlagDropEvent event) {
+        if (event.getFlag().equals(this)) {
+            if (dropKit != null) dropKit.apply(event.getPlayer());
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                p.sendMessage(new LocalizedChatMessage(ChatConstant.UI_FLAG_DROPPED, getDisplayName() + ChatColor.RESET).getMessage(p.getLocale()));
+            }
+        }
+    }
+
+    @EventHandler
     public void onCaptureFlag(FlagCaptureEvent event) {
         Player p = event.getPlayer();
-        if (event.getFlagObjective().equals(this)) {
+        if (event.getFlag().equals(this)) {
             setPicker(null);
             p.getInventory().setHelmet(pickerHelmet);
             pickerHelmet = null;
-            Bukkit.broadcastMessage(getDisplayName() + ChatColor.RESET + " captured by " + Teams.getTeamByPlayer(p).get().getColor() + p.getName());
-
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.sendMessage(new LocalizedChatMessage(ChatConstant.UI_FLAG_CAPTURED, getDisplayName() + ChatColor.RESET, Teams.getTeamByPlayer(p).get().getColor() + p.getName()).getMessage(player.getLocale()));
+            }
             if (points > 0 || event.getNet().getPoints() > 0) {
                 for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
                     TeamModule scored = owner != null ? owner : Teams.getTeamByPlayer(p).get();
@@ -289,10 +320,15 @@ public class FlagObjective implements TaskedModule, GameObjective {
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
-        if (onGround) {
-            if (event.getTo().getBlock().equals(currentFlagBlock) && !event.getFrom().getBlock().equals(currentFlagBlock)) {
-                FlagPickupEvent e = new FlagPickupEvent(event.getPlayer(), this);
-                Bukkit.getServer().getPluginManager().callEvent(e);
+        if (onGround && GameHandler.getGameHandler().getMatch().isRunning()) {
+            if (Teams.getTeamByPlayer(event.getPlayer()).isPresent() && !Teams.getTeamByPlayer(event.getPlayer()).get().isObserver()) {
+                TeamModule team = Teams.getTeamByPlayer(event.getPlayer()).get();
+                if (!team.equals(owner) && event.getPlayer().getHealth() > 0) {
+                    if (event.getTo().getBlock().equals(currentFlagBlock) && !event.getFrom().getBlock().equals(currentFlagBlock)) {
+                        FlagPickupEvent e = new FlagPickupEvent(event.getPlayer(), this);
+                        Bukkit.getServer().getPluginManager().callEvent(e);
+                    }
+                }
             }
         }
     }
@@ -303,11 +339,11 @@ public class FlagObjective implements TaskedModule, GameObjective {
         if (event.getBlock().equals(currentFlagBlock)) {
             if (type.equals(Material.BANNER) || type.equals(Material.STANDING_BANNER) || type.equals(Material.WALL_BANNER)) {
                 event.setCancelled(true);
-                event.getPlayer().sendMessage(ChatColor.RED + "You can not break flags.");
+                event.getPlayer().sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_BREAK_FLAG).getMessage(event.getPlayer().getLocale()));
             }
         } else if (event.getBlock().equals(currentFlagBlock.getRelative(BlockFace.DOWN))) {
             event.setCancelled(true);
-            event.getPlayer().sendMessage(ChatColor.RED + "You can not break the block under the flag.");
+            event.getPlayer().sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_BREAK_BLOCK_UNDER_FLAG).getMessage(event.getPlayer().getLocale()));
         }
     }
 
@@ -333,18 +369,25 @@ public class FlagObjective implements TaskedModule, GameObjective {
         }
     }
 
+    @EventHandler
+    public void onItemSpawn(ItemSpawnEvent event) {
+        if (event.getEntity().getItemStack().getData().equals(banner)) {
+            event.getEntity().remove();
+        }
+    }
+
     @Override
     public void run() {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
             if (seconds <= MatchTimer.getTimeInSeconds()) {
-                seconds ++;
+                seconds++;
                 if (respawning) {
                     if (respawnTime == 0) {
                         respawnFlag();
                         respawning = false;
                         respawnTime = getPost().getRespawnTime();
                     }
-                    respawnTime --;
+                    respawnTime--;
                 }
 
                 if (onGround) {
@@ -354,15 +397,18 @@ public class FlagObjective implements TaskedModule, GameObjective {
                         recoverTime = getPost().getRecoverTime();
                         currentFlagBlock.setType(Material.AIR);
                     }
-                    recoverTime --;
+                    recoverTime--;
                 }
 
-                if (isCarried() && pointsRate > 0) {
-                    for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
-                        TeamModule scored = owner != null ? owner : Teams.getTeamByPlayer(getPicker()).get();
-                        if (scored != null && scored == score.getTeam()) {
-                            score.setScore(score.getScore() + pointsRate);
-                            Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(score));
+                if (isCarried()) {
+                    if (pointsRate > 0 || getPost().getPointsRate() > 0) {
+                        int points = pointsRate > 0 ? pointsRate : getPost().getPointsRate();
+                        for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
+                            TeamModule scored = owner != null ? owner : Teams.getTeamByPlayer(getPicker()).get();
+                            if (scored != null && scored == score.getTeam()) {
+                                score.setScore(score.getScore() + points);
+                                Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(score));
+                            }
                         }
                     }
                 }

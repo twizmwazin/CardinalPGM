@@ -8,12 +8,11 @@ public class NetEnterEvent extends FlagEvent {
 
     private Player player;
     private Net net;
-    private FlagObjective flagObjective;
 
     public NetEnterEvent(Player player, Net net, FlagObjective flagObjective) {
+        super(flagObjective);
         this.player = player;
         this.net = net;
-        this.flagObjective = flagObjective;
     }
 
     public Player getPlayer() {
@@ -22,10 +21,5 @@ public class NetEnterEvent extends FlagEvent {
 
     public Net getNet() {
         return net;
-    }
-
-    @Override
-    public FlagObjective getFlagObjective() {
-        return flagObjective;
     }
 }

@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.ctf.net;
 
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.Module;
@@ -14,13 +15,15 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.util.Flags;
 import in.twizmwaz.cardinal.util.Numbers;
 import in.twizmwaz.cardinal.util.Teams;
 import org.jdom2.Element;
 
+import java.util.HashSet;
 import java.util.Set;
 
-@BuilderData(load = ModuleLoadTime.LATER)
+@BuilderData(load = ModuleLoadTime.LATE)
 public class NetBuilder implements ModuleBuilder {
 
     @Override
@@ -41,7 +44,7 @@ public class NetBuilder implements ModuleBuilder {
 
     public static Net parseNet(Element element) {
         Net net = null;
-        if (element.getName().toLowerCase().equals("net")) {
+        if (element.getName().equals("net")) {
             String id = element.getAttributeValue("id") == null ? null : element.getAttributeValue("id");
             RegionModule region;
             if (element.getAttributeValue("region") != null) {
@@ -52,10 +55,29 @@ public class NetBuilder implements ModuleBuilder {
             TeamModule owner = element.getAttributeValue("owner") == null ? null : Teams.getTeamById(element.getAttributeValue("owner")).orNull();
             int points = Numbers.parseInt(element.getAttributeValue("points", "0"));
             Post post = element.getAttributeValue("post") == null ? null : PostBuilder.getPost(element.getAttributeValue("post"));
-            Set<FlagObjective> flagObjectives = null;
-            Set<FlagObjective> rescue = null;
-            // TODO : Flags;
-            // TODO : rescue;
+            Set<FlagObjective> flagObjectives = new HashSet<>();
+            Set<FlagObjective> rescue = new HashSet<>();
+            if (element.getAttributeValue("flag") != null || element.getAttributeValue("flags") != null) {
+                String flags = element.getAttributeValue("flag") != null ? element.getAttributeValue("flag") : element.getAttributeValue("flags");
+                for (String str : flags.split(" ")) {
+                    try {
+                        flagObjectives.add(Flags.getFlagById(str));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                flagObjectives.addAll(GameHandler.getGameHandler().getMatch().getModules().getModules(FlagObjective.class));
+            }
+            if (element.getAttributeValue("rescue") != null) {
+                for (String str : element.getAttributeValue("rescue").split(" ")) {
+                    try {
+                        rescue.add(Flags.getFlagById(str));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
             boolean sticky = Boolean.parseBoolean(element.getAttributeValue("sticky", "true"));
             FilterModule captureFilter = null;
             if (element.getAttributeValue("capture-filter") != null) {

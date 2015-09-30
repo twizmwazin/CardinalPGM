@@ -6,20 +6,14 @@ import org.bukkit.entity.Player;
 public class FlagPickupEvent extends FlagEvent {
 
     private Player player;
-    private FlagObjective flagObjective;
 
     public FlagPickupEvent(Player player, FlagObjective flagObjective) {
+        super(flagObjective);
         this.player = player;
-        this.flagObjective = flagObjective;
     }
 
     public Player getPlayer() {
         return player;
-    }
-
-    @Override
-    public FlagObjective getFlagObjective() {
-        return flagObjective;
     }
 
 }

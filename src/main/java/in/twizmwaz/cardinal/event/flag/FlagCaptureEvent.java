@@ -7,22 +7,16 @@ import org.bukkit.entity.Player;
 public class FlagCaptureEvent extends FlagEvent {
 
     private Player player;
-    private FlagObjective flagObjective;
     private Net net;
 
     public FlagCaptureEvent(Player player, FlagObjective flagObjective, Net net) {
+        super(flagObjective);
         this.player = player;
-        this.flagObjective = flagObjective;
         this.net = net;
     }
 
     public Player getPlayer() {
         return player;
-    }
-
-    @Override
-    public FlagObjective getFlagObjective() {
-        return flagObjective;
     }
 
     public Net getNet() {

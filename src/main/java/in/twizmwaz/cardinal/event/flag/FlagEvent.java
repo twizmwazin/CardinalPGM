@@ -4,11 +4,19 @@ import in.twizmwaz.cardinal.module.modules.ctf.FlagObjective;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public abstract class FlagEvent extends Event {
+public class FlagEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
 
-    public abstract FlagObjective getFlagObjective();
+    private FlagObjective flag;
+
+    public FlagEvent(FlagObjective flag) {
+        this.flag = flag;
+    }
+
+    public FlagObjective getFlag() {
+        return flag;
+    }
 
     public static HandlerList getHandlerList() {
         return handlers;
