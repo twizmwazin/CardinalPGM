@@ -13,7 +13,6 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -40,16 +39,12 @@ public class Tnt implements Module {
         HandlerList.unregisterAll(this);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockPlace(BlockPlaceEvent event) {
         Block block = event.getBlock();
-        if (block.getType().equals(Material.TNT) && instantIgnite) {
-            event.setCancelled(true);
-            ItemStack tntStack = event.getPlayer().getItemInHand();
-            tntStack.setAmount(tntStack.getAmount() - 1);
-            event.getPlayer().setItemInHand(tntStack);
+        if (block.getType().equals(Material.TNT) && instantIgnite && !event.isCancelled()) {
+            event.getBlock().setType(Material.AIR);
             TNTPrimed tnt = (TNTPrimed) GameHandler.getGameHandler().getMatchWorld().spawnEntity(block.getLocation().add(new Vector(0.5, 0.5, 0.5)), EntityType.PRIMED_TNT);
-            tnt.setYield((float) power);
             Bukkit.getServer().getPluginManager().callEvent(new ExplosionPrimeEvent(tnt, (float) power * 10, false));
         }
     }
@@ -70,13 +65,9 @@ public class Tnt implements Module {
     public void onEntityExplode(EntityExplodeEvent event) {
         if (event.getEntity() instanceof TNTPrimed) {
             if (!blockDamage) {
-                List<Block> toRemove = new ArrayList<>();
-                for (Block block : event.blockList()) {
-                    toRemove.add(block);
-                }
-                for (Block block : toRemove) {
-                    event.blockList().remove(block);
-                }
+                event.blockList().clear();
+            } else if (yield != 0.3){
+                event.setYield((float)yield);
             }
         }
     }
