@@ -51,6 +51,7 @@ public class ItemDrop implements Module {
                 player.getWorld().dropItemNaturally(player.getLocation().add(0, 0.5, 0), stack);
             }
         }
+        player.getInventory().clear();
     }
 
 }
