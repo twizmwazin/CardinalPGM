@@ -7,8 +7,10 @@ import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import com.sk89q.minecraft.util.commands.CommandPermissionsException;
 import com.sk89q.minecraft.util.commands.CommandUsageException;
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Numbers;
 import in.twizmwaz.cardinal.util.Teams;
@@ -25,7 +27,7 @@ public class TeleportCommands {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (cmd.argsLength() == 1) {
-                if (sender.hasPermission("cardinal.teleport") || (Teams.getTeamByPlayer(player).isPresent() && Teams.getTeamByPlayer(player).get().isObserver())) {
+                if (sender.hasPermission("cardinal.teleport") || !GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING) ||(Teams.getTeamByPlayer(player).isPresent() && Teams.getTeamByPlayer(player).get().isObserver())) {
                     try {
                         Player target = Bukkit.getPlayer(cmd.getString(0));
                         player.teleport(target);
