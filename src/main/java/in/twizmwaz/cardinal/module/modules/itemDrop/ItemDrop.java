@@ -52,6 +52,7 @@ public class ItemDrop implements Module {
             }
         }
         player.getInventory().clear();
+        player.getInventory().setArmorContents(null);
     }
 
 }
