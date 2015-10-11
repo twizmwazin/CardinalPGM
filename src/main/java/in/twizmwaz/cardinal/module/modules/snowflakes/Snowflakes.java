@@ -78,7 +78,7 @@ public class Snowflakes implements Module {
                             for (TeamModule team : Teams.getTeams()) {
                                 if (!team.isObserver() && Teams.getTeamByPlayer(player).orNull() != team) {
                                     for (GameObjective obj : Teams.getShownObjectives(team)) {
-                                        if (obj instanceof WoolObjective && item.getItemStack().getData().getData() == ((WoolObjective) obj).getColor().getData() && (!destroyed.containsKey(player) || !destroyed.get(player).contains(((WoolObjective) obj).getColor()))) {
+                                        if (obj instanceof WoolObjective && item.getItemStack().getData().getData() == ((WoolObjective) obj).getColor().getData() && (!destroyed.containsKey(player) || !destroyed.get(player).contains(((WoolObjective) obj).getColor())) && !obj.isComplete()) {
                                             if (!destroyed.containsKey(player)) {
                                                 destroyed.put(player, new ArrayList<DyeColor>());
                                             }
@@ -120,7 +120,7 @@ public class Snowflakes implements Module {
                 for (TeamModule team : Teams.getTeams()) {
                     if (!team.isObserver() && Teams.getTeamByPlayer(player).orNull() != team) {
                         for (GameObjective obj : Teams.getShownObjectives(team)) {
-                            if (obj instanceof WoolObjective && item.getData().getData() == ((WoolObjective) obj).getColor().getData() && (!destroyed.containsKey(player) || !destroyed.get(player).contains(((WoolObjective) obj).getColor()))) {
+                            if (obj instanceof WoolObjective && item.getData().getData() == ((WoolObjective) obj).getColor().getData() && (!destroyed.containsKey(player) || !destroyed.get(player).contains(((WoolObjective) obj).getColor())) && !obj.isComplete()) {
                                 if (!destroyed.containsKey(player)) {
                                     destroyed.put(player, new ArrayList<DyeColor>());
                                 }
