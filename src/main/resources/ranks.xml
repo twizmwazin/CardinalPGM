@@ -35,4 +35,8 @@
         <permission>cardinal.punish.mute</permission>
         <permission>minecraft.command.pardon</permission>
     </rank>
+      <rank name="Administrator" staff="true" flair="`6❖" parent="Moderator">
+        <permission>cardinal.*</permission>
+        <permission>minecraft.command.pardon</permission>
+    </rank>
 </ranks>
