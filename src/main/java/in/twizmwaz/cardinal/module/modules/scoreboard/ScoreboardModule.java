@@ -274,7 +274,7 @@ public class ScoreboardModule implements Module {
         if (minTdmScore == -1) {
             update();
         } else {
-            renderTeamBlitz();
+            renderTeamScore();
         }
     }
 
