@@ -49,6 +49,7 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -92,6 +93,7 @@ public class ObserverModule implements Module {
 
     private void resetPlayer(Player player, boolean clear) {
         player.setGameMode(GameMode.CREATIVE);
+        player.setFlying(true);
         player.setAffectsSpawning(false);
         player.setCollidesWithEntities(false);
         player.setCanPickupItems(false);
@@ -108,6 +110,7 @@ public class ObserverModule implements Module {
             ItemStack shears = Items.createItem(Material.SHEARS, 1, (short) 0, ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
             player.getInventory().setItem(5, shears);
         }
+        player.closeInventory();
 
         try {
             player.updateInventory();
@@ -174,56 +177,56 @@ public class ObserverModule implements Module {
             }
             if (event.getClickedBlock() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 if (event.getClickedBlock().getType().equals(Material.CHEST) || event.getClickedBlock().getType().equals(Material.TRAPPED_CHEST)) {
-                    Inventory chest = Bukkit.createInventory(null, ((Chest) event.getClickedBlock().getState()).getInventory().getSize(), (((Chest) event.getClickedBlock().getState()).getInventory().getSize() == 54 ? "Large Chest" : "Chest"));
+                    Inventory chest = Bukkit.createInventory(null, ((Chest) event.getClickedBlock().getState()).getInventory().getSize());
                     for (int i = 0; i < ((Chest) event.getClickedBlock().getState()).getInventory().getSize(); i++) {
                         chest.setItem(i, ((Chest) event.getClickedBlock().getState()).getInventory().getItem(i));
                     }
                     event.getPlayer().openInventory(chest);
                 }
                 if (event.getClickedBlock().getType().equals(Material.FURNACE)) {
-                    Inventory furnace = Bukkit.createInventory(null, InventoryType.FURNACE, "Furnace");
+                    Inventory furnace = Bukkit.createInventory(null, InventoryType.FURNACE);
                     for (int i = 0; i < ((Furnace) event.getClickedBlock().getState()).getInventory().getSize(); i++) {
                         furnace.setItem(i, ((Furnace) event.getClickedBlock().getState()).getInventory().getItem(i));
                     }
                     event.getPlayer().openInventory(furnace);
                 }
                 if (event.getClickedBlock().getType().equals(Material.BURNING_FURNACE)) {
-                    Inventory furnace = Bukkit.createInventory(null, InventoryType.FURNACE, "Furnace");
+                    Inventory furnace = Bukkit.createInventory(null, InventoryType.FURNACE);
                     for (int i = 0; i < ((Furnace) event.getClickedBlock().getState()).getInventory().getSize(); i++) {
                         furnace.setItem(i, ((Furnace) event.getClickedBlock().getState()).getInventory().getItem(i));
                     }
                     event.getPlayer().openInventory(furnace);
                 }
                 if (event.getClickedBlock().getType().equals(Material.DISPENSER)) {
-                    Inventory dispenser = Bukkit.createInventory(null, InventoryType.DISPENSER, "Dispenser");
+                    Inventory dispenser = Bukkit.createInventory(null, InventoryType.DISPENSER);
                     for (int i = 0; i < ((Dispenser) event.getClickedBlock().getState()).getInventory().getSize(); i++) {
                         dispenser.setItem(i, ((Dispenser) event.getClickedBlock().getState()).getInventory().getItem(i));
                     }
                     event.getPlayer().openInventory(dispenser);
                 }
                 if (event.getClickedBlock().getType().equals(Material.DROPPER)) {
-                    Inventory dropper = Bukkit.createInventory(null, InventoryType.DROPPER, "Dropper");
+                    Inventory dropper = Bukkit.createInventory(null, InventoryType.DROPPER);
                     for (int i = 0; i < ((Dropper) event.getClickedBlock().getState()).getInventory().getSize(); i++) {
                         dropper.setItem(i, ((Dropper) event.getClickedBlock().getState()).getInventory().getItem(i));
                     }
                     event.getPlayer().openInventory(dropper);
                 }
                 if (event.getClickedBlock().getType().equals(Material.HOPPER)) {
-                    Inventory hopper = Bukkit.createInventory(null, InventoryType.HOPPER, "Hopper");
+                    Inventory hopper = Bukkit.createInventory(null, InventoryType.HOPPER);
                     for (int i = 0; i < ((Hopper) event.getClickedBlock().getState()).getInventory().getSize(); i++) {
                         hopper.setItem(i, ((Hopper) event.getClickedBlock().getState()).getInventory().getItem(i));
                     }
                     event.getPlayer().openInventory(hopper);
                 }
                 if (event.getClickedBlock().getType().equals(Material.BREWING_STAND)) {
-                    Inventory brewingStand = Bukkit.createInventory(null, InventoryType.BREWING, "Brewing Stand");
+                    Inventory brewingStand = Bukkit.createInventory(null, InventoryType.BREWING);
                     for (int i = 0; i < ((BrewingStand) event.getClickedBlock().getState()).getInventory().getSize(); i++) {
                         brewingStand.setItem(i, ((BrewingStand) event.getClickedBlock().getState()).getInventory().getItem(i));
                     }
                     event.getPlayer().openInventory(brewingStand);
                 }
                 if (event.getClickedBlock().getType().equals(Material.BEACON)) {
-                    Inventory beacon = Bukkit.createInventory(null, InventoryType.BEACON, "Beacon");
+                    Inventory beacon = Bukkit.createInventory(null, InventoryType.BEACON);
                     for (int i = 0; i < ((Beacon) event.getClickedBlock().getState()).getInventory().getSize(); i++) {
                         beacon.setItem(i, ((Beacon) event.getClickedBlock().getState()).getInventory().getItem(i));
                     }
@@ -235,13 +238,10 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        if (testObserver(event.getPlayer())) {
-            if (event.getRightClicked() instanceof Player && !testObserver((Player) event.getRightClicked())) {
-                event.getPlayer().openInventory(getFakeInventory((Player) event.getRightClicked(), event.getPlayer().getLocale()));
-                setViewing(event.getPlayer().getUniqueId(), event.getRightClicked().getUniqueId());
-            } else if (event.getRightClicked() instanceof ItemFrame) {
-                event.setCancelled(true);
-            }
+        if (event.getRightClicked() instanceof Player){
+            openInventory(event.getPlayer(), (Player) event.getRightClicked(), false);
+        } else if (event.getRightClicked() instanceof ItemFrame) {
+            event.setCancelled(true);
         }
     }
 
@@ -258,6 +258,11 @@ public class ObserverModule implements Module {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onViewingInventoryClick(InventoryClickEvent event) {
+        refreshView(event.getWhoClicked().getUniqueId());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onViewingInventoryDrag(InventoryDragEvent event) {
         refreshView(event.getWhoClicked().getUniqueId());
     }
 
@@ -324,63 +329,62 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        if (viewing.containsKey(event.getPlayer().getUniqueId())) {
-            List<UUID> toClose = new ArrayList<>();
-            for (UUID uuid : viewing.get(event.getPlayer().getUniqueId())) {
-                if (Bukkit.getPlayer(uuid) != null) {
-                    toClose.add(uuid);
-                }
-            }
-            for (UUID uuid : toClose) {
-                Bukkit.getPlayer(uuid).closeInventory();
-            }
+        closeInventories(event.getPlayer().getUniqueId());
+    }
+
+    @EventHandler (priority = EventPriority.MONITOR)
+    public void onPlayerChangeTeamEvent(PlayerChangeTeamEvent event) {
+        if (event.getNewTeam().isPresent() && event.getNewTeam().get().isObserver()){
+            closeInventories(event.getPlayer().getUniqueId());
         }
     }
 
-    public void setViewing(UUID uuid, UUID view) {
-        if (!viewing.containsKey(view)) {
-            viewing.put(view, new ArrayList<UUID>());
+    public void openInventory(Player viewer, Player view, boolean message){
+        if (testObserver(viewer) && !testObserver(view)) {
+            viewer.openInventory(getFakeInventory(view, viewer.getLocale()));
+            if (!viewing.containsKey(view.getUniqueId())) {
+                viewing.put(view.getUniqueId(), new ArrayList<UUID>());
+            }
+            viewing.get(view.getUniqueId()).add(viewer.getUniqueId());
+        } else if (message){
+            viewer.sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_INVENTORY_NOT_VIEWABLE).getMessage(viewer.getLocale()));
         }
-        viewing.get(view).add(uuid);
+    }
+
+    public void closeInventories (UUID uuid) {
+        if (viewing.containsKey(uuid)) {
+            for (int i = 0; i < viewing.get(uuid).size(); i++) {
+                if (Bukkit.getPlayer(viewing.get(uuid).get(0)) != null) {
+                    Bukkit.getPlayer(viewing.get(uuid).get(0)).closeInventory();
+                }
+            }
+        }
     }
 
     public void refreshView(final UUID view) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(GameHandler.getGameHandler().getPlugin(), new Runnable() {
-            @Override
-            public void run() {
-                if (Bukkit.getPlayer(view) != null && viewing.containsKey(view)) {
-                    List<UUID> toOpen = new ArrayList<>();
-                    for (UUID uuid : viewing.get(view)) {
-                        if (Bukkit.getPlayer(uuid) != null) {
-                            toOpen.add(uuid);
+        if (Bukkit.getPlayer(view) != null && viewing.containsKey(view)) {
+            List<UUID> viewers = viewing.get(view);
+            for (int i = 0; i < viewers.size(); i++) {
+                Player player = Bukkit.getPlayer(viewers.get(i));
+                if (player != null && player.getOpenInventory().getTitle().contains(Bukkit.getPlayer(view).getName())) {
+                    Inventory fake = getFakeInventory(Bukkit.getPlayer(view), player.getLocale());
+                    for (int i2 = 0; i2 < 45; i2 ++) {
+                        try {
+                            player.getOpenInventory().setItem(i2, fake.getItem(i2));
+                        } catch (NullPointerException e) {
                         }
                     }
-                    for (UUID uuid : toOpen) {
-                        Bukkit.getPlayer(uuid).openInventory(getFakeInventory(Bukkit.getPlayer(view), Bukkit.getPlayer(uuid).getLocale()));
-                        setViewing(uuid, view);
-                    }
-                }
-
-                if (Bukkit.getPlayer(view) != null && viewing.containsKey(view)) {
-                    for (UUID uuid : viewing.get(view)) {
-                        Player player = Bukkit.getPlayer(uuid);
-                        if (player != null && player.getOpenInventory().getTitle().equals(Teams.getTeamColorByPlayer(Bukkit.getPlayer(view)) + Bukkit.getPlayer(view).getName())) {
-                            Inventory fake = getFakeInventory(Bukkit.getPlayer(view), player.getLocale());
-                            for (int i = 0; i < 36; i++) {
-                                try {
-                                    player.getOpenInventory().setItem(i, fake.getItem(i));
-                                } catch (NullPointerException e) {
-                                }
-                            }
-                        }
+                    if (!player.getOpenInventory().getTitle().equals(Bukkit.getPlayer(view).getDisplayName())){
+                        player.openInventory(fake);
+                        viewing.get(view).add(viewers.get(i));
                     }
                 }
             }
-        }, 0);
+        }
     }
 
     public Inventory getFakeInventory(Player player, String locale) {
-        Inventory inventory = Bukkit.createInventory(null, 45, Teams.getTeamColorByPlayer(player) + player.getName());
+        Inventory inventory = Bukkit.createInventory(null, 45, player.getDisplayName());
         inventory.setItem(0, player.getInventory().getHelmet());
         inventory.setItem(1, player.getInventory().getChestplate());
         inventory.setItem(2, player.getInventory().getLeggings());

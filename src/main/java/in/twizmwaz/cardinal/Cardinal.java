@@ -17,6 +17,7 @@ import in.twizmwaz.cardinal.command.CardinalCommand;
 import in.twizmwaz.cardinal.command.ChatCommands;
 import in.twizmwaz.cardinal.command.ClassCommands;
 import in.twizmwaz.cardinal.command.CycleCommand;
+import in.twizmwaz.cardinal.command.InventoryCommand;
 import in.twizmwaz.cardinal.command.JoinCommand;
 import in.twizmwaz.cardinal.command.ListCommand;
 import in.twizmwaz.cardinal.command.MapCommands;
@@ -123,6 +124,7 @@ public class Cardinal extends JavaPlugin {
         cmdRegister.register(ChatCommands.class);
         cmdRegister.register(ClassCommands.class);
         cmdRegister.register(CycleCommand.class);
+        cmdRegister.register(InventoryCommand.class);
         cmdRegister.register(JoinCommand.class);
         cmdRegister.register(ListCommand.class);
         cmdRegister.register(MapCommands.class);
