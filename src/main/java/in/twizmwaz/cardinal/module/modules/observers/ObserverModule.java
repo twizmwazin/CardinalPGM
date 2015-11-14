@@ -38,6 +38,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityCombustByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
@@ -365,7 +366,7 @@ public class ObserverModule implements Module {
                         Player player = Bukkit.getPlayer(uuid);
                         if (player != null && player.getOpenInventory().getTitle().equals(Teams.getTeamColorByPlayer(Bukkit.getPlayer(view)) + Bukkit.getPlayer(view).getName())) {
                             Inventory fake = getFakeInventory(Bukkit.getPlayer(view), player.getLocale());
-                            for (int i = 0; i < 36; i ++) {
+                            for (int i = 0; i < 36; i++) {
                                 try {
                                     player.getOpenInventory().setItem(i, fake.getItem(i));
                                 } catch (NullPointerException e) {
@@ -545,6 +546,13 @@ public class ObserverModule implements Module {
     public void PlayerInteractAtEntityEvent(PlayerInteractAtEntityEvent event) {
         if (testObserver(event.getPlayer())) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onEntityCombustEvent(EntityCombustByBlockEvent event) {
+        if (event.getEntity() instanceof Player && testObserver((Player)event.getEntity())){
+            event.getEntity().setFireTicks(0);
         }
     }
     
