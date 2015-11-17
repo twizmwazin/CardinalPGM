@@ -109,6 +109,12 @@ public enum ChatConstant {
     ERROR_CANNOT_CALCULATE_SCORES("error.cannotCalculateScores"),
     ERROR_PROXIMITY_OBS_ONLY("error.proximityObsOnly"),
     ERROR_PROXIMITY_NO_SCORING("error.proximityNoScoring"),
+    ERROR_TEAM_ALREADY_REGISTERED("error.teamAlreadyRegistered"),
+    ERROR_TEAM_ALREADY_REGISTERED_ALIAS("error.teamAlreadyRegisteredAlias"),
+    ERROR_CANT_REGISTER_MORE_TEAMS("error.cantRegisterMoreTeams"),
+    ERROR_CANT_FIND_ANY_REGISTERED_TEAM("error.cantFindAnyRegisteredTeam"),
+    ERROR_CANT_GET_TEAM_LIST("error.cantGetTeamList"),
+    ERROR_CANT_JOIN_TEAM_FULL("error.cantJoinTeamFull"),
 
     GENERIC_MAP_SET("generic.mapSet"),
     GENERIC_MARKED_FOR_RELOADING("generic.markedForReloading"),
@@ -201,6 +207,9 @@ public enum ChatConstant {
     GENERIC_MUTED_BY("generic.mutedBy"),
     GENERIC_UNMUTED("generic.unmuted"),
     GENERIC_UNMUTED_BY("generic.unmutedBy"),
+    GENERIC_TEAM_REGISTERED("generic.teamRegistered"),
+    GENERIC_TEAM_UNREGISTERED("generic.teamUnregistered"),
+    GENERIC_USER_KICKED_TEAM_UNREGISTERED("generic.userKickedTeamUnregistered"),
 
     MISC_ENEMY("misc.enemy"),
     MISC_FATE("misc.fate"),

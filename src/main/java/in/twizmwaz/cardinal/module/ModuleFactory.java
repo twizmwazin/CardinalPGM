@@ -62,6 +62,7 @@ import in.twizmwaz.cardinal.module.modules.tasker.TaskerModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.team.TeamModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.teamManager.TeamManagerModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.teamPicker.TeamPickerBuilder;
+import in.twizmwaz.cardinal.module.modules.teamRegister.TeamRegisterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimitBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLock.TimeLockBuilder;
 import in.twizmwaz.cardinal.module.modules.timeNotifications.TimeNotificationsBuilder;
@@ -162,7 +163,8 @@ public class ModuleFactory {
             InvisibleBlockBuilder.class,
             ItemDropBuilder.class,
             GuiKeepModuleBuilder.class,
-            RankModuleBuilder.class
+            RankModuleBuilder.class,
+            TeamRegisterModuleBuilder.class
     };
     private final List<ModuleBuilder> builders;
 
