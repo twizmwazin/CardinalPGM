@@ -30,6 +30,8 @@ import org.bukkit.block.Dispenser;
 import org.bukkit.block.Dropper;
 import org.bukkit.block.Furnace;
 import org.bukkit.block.Hopper;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHumanEntity;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -172,8 +174,9 @@ public class ObserverModule implements Module {
     @EventHandler
     public void onInteraction(PlayerInteractEvent event) {
         if (testObserver(event.getPlayer())) {
-            if (!(event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType().equals(Material.WRITTEN_BOOK) && event.getPlayer().getItemInHand().hasItemMeta() && event.getPlayer().getItemInHand().getItemMeta().hasDisplayName() && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().equals(ChatColor.AQUA + "" + ChatColor.BOLD + "Coming Soon"))) {
-                event.setCancelled(true);
+            event.setCancelled(true);
+            if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType().equals(Material.WRITTEN_BOOK))){
+                ((CraftHumanEntity) event.getPlayer()).getHandle().openBook(CraftItemStack.asNMSCopy(event.getPlayer().getItemInHand()));
             }
             if (event.getClickedBlock() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 if (event.getClickedBlock().getType().equals(Material.CHEST) || event.getClickedBlock().getType().equals(Material.TRAPPED_CHEST)) {
@@ -183,14 +186,7 @@ public class ObserverModule implements Module {
                     }
                     event.getPlayer().openInventory(chest);
                 }
-                if (event.getClickedBlock().getType().equals(Material.FURNACE)) {
-                    Inventory furnace = Bukkit.createInventory(null, InventoryType.FURNACE);
-                    for (int i = 0; i < ((Furnace) event.getClickedBlock().getState()).getInventory().getSize(); i++) {
-                        furnace.setItem(i, ((Furnace) event.getClickedBlock().getState()).getInventory().getItem(i));
-                    }
-                    event.getPlayer().openInventory(furnace);
-                }
-                if (event.getClickedBlock().getType().equals(Material.BURNING_FURNACE)) {
+                if (event.getClickedBlock().getType().equals(Material.FURNACE) || event.getClickedBlock().getType().equals(Material.BURNING_FURNACE)) {
                     Inventory furnace = Bukkit.createInventory(null, InventoryType.FURNACE);
                     for (int i = 0; i < ((Furnace) event.getClickedBlock().getState()).getInventory().getSize(); i++) {
                         furnace.setItem(i, ((Furnace) event.getClickedBlock().getState()).getInventory().getItem(i));
