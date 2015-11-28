@@ -10,12 +10,11 @@ import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -37,25 +36,9 @@ public class FriendlyFire implements Module {
     }
 
     @EventHandler
-    public void onBowShootEvent(EntityShootBowEvent event) {
-        if (event.getEntity() instanceof Player) {
-            Optional<TeamModule> team = Teams.getTeamByPlayer(((Player) event.getEntity()).getPlayer());
-            if (team.isPresent())
-                event.getEntity().setMetadata("team", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), team.get().getId()));
-        }
-    }
-
-    @EventHandler
     public void onEntityDamageEvent(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Arrow) {
-            if (((Arrow) event.getDamager()).getShooter() instanceof Player) {
-                if (event.getDamager().hasMetadata("team")) {
-                    Player shooter = (Player) ((Arrow) event.getDamager()).getShooter();
-                    if (Teams.getTeamByPlayer(shooter) == Teams.getTeamById(event.getDamager().getMetadata("team").get(0).toString())) {
-                        event.setCancelled(true);
-                    }
-                }
-            }
+        if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() == event.getEntity()){
+            event.setCancelled(true);
         }
     }
 
