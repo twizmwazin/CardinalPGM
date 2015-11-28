@@ -11,6 +11,7 @@ import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Players;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -29,6 +30,9 @@ public class PrivateMessageCommands {
         if (Settings.getSettingByName("PrivateMessages") == null || Settings.getSettingByName("PrivateMessages").getValueByPlayer(target).getValue().equalsIgnoreCase("all")) {
             target.sendMessage(ChatColor.GRAY + "(From " + Players.getName(sender) + ChatColor.GRAY + "): " + ChatColor.RESET + cmd.getJoinedStrings(1));
             sender.sendMessage(ChatColor.GRAY + "(To " + Players.getName(target) + ChatColor.GRAY + "): " + ChatColor.RESET + cmd.getJoinedStrings(1));
+            if (Settings.getSettingByName("PrivateMessageSounds") == null || Settings.getSettingByName("PrivateMessageSounds").getValueByPlayer(target).getValue().equalsIgnoreCase("on")) {
+                target.playSound(target.getLocation(), Sound.LEVEL_UP, 1, 1.5F);
+            }
             target.setMetadata("reply", new FixedMetadataValue(Cardinal.getInstance(), sender));
         } else {
             sender.sendMessage(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_DISABLED_PMS, Players.getName(target) + ChatColor.RED).getMessage(ChatUtil.getLocale(sender)));
@@ -51,6 +55,9 @@ public class PrivateMessageCommands {
         if (Settings.getSettingByName("PrivateMessages") == null || Settings.getSettingByName("PrivateMessages").getValueByPlayer(target).getValue().equalsIgnoreCase("all")) {
             target.sendMessage(ChatColor.GRAY + "(From " + Players.getName(sender) + ChatColor.GRAY + "): " + ChatColor.RESET + cmd.getJoinedStrings(0));
             sender.sendMessage(ChatColor.GRAY + "(To " + Players.getName(target) + ChatColor.GRAY + "): " + ChatColor.RESET + cmd.getJoinedStrings(0));
+            if (Settings.getSettingByName("PrivateMessageSounds") == null || Settings.getSettingByName("PrivateMessageSounds").getValueByPlayer(target).getValue().equalsIgnoreCase("on")) {
+                target.playSound(target.getLocation(), Sound.LEVEL_UP, 1, 1.5F);
+            }
             target.setMetadata("reply", new FixedMetadataValue(Cardinal.getInstance(), sender));
         } else {
             sender.sendMessage(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_DISABLED_PMS, Players.getName(target) + ChatColor.RED).getMessage(ChatUtil.getLocale(sender)));
