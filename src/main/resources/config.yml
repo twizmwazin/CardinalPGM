@@ -22,6 +22,7 @@ settings:
 - Observers
 - Picker
 - PrivateMessages
+- PrivateMessageSounds
 - Scoreboard
 - Sounds
 - Stats
@@ -69,11 +70,18 @@ setting:
     description: Open a helpful GUI for picking classes and teams
   PrivateMessages:
     aliases:
-    - pms
+    - pmr
     values:
     - none
     - all[default]
     description: Who can send you private messages
+  PrivateMessageSounds:
+    aliases:
+    - pms
+    values:
+    - 'off'
+    - on[default]
+    description: Hear sounds when a private message is sent to you
   Scoreboard:
     values:
     - 'off'
