@@ -42,7 +42,7 @@ import java.util.List;
 
 public class ScoreboardModule implements Module {
 
-    private TeamModule team;
+    private TeamModule team, prioritized;
     private Scoreboard scoreboard;
 
     private Objective objective;
@@ -51,6 +51,7 @@ public class ScoreboardModule implements Module {
 
     public ScoreboardModule(final TeamModule team) {
         this.team = team;
+        this.prioritized = team;
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         for (TeamModule teams : Teams.getTeams()) {
             Team prefixTeam = scoreboard.registerNewTeam(teams.getId());
@@ -138,6 +139,7 @@ public class ScoreboardModule implements Module {
             }
         }
         updateObjectivePrefix(event.getObjective());
+        updateObs();
     }
 
     @EventHandler
@@ -148,11 +150,13 @@ public class ScoreboardModule implements Module {
     @EventHandler
     public void onObjectiveTouch(ObjectiveTouchEvent event) {
         updateObjectivePrefix(event.getObjective());
+        updateObs();
     }
 
     @EventHandler
     public void onObjectiveComplete(ObjectiveCompleteEvent event) {
         updateObjectivePrefix(event.getObjective());
+        updateObs();
     }
 
     @EventHandler
@@ -171,8 +175,16 @@ public class ScoreboardModule implements Module {
         updateTeamScore();
     }
 
+    public void updateObs() {
+        if (this.team.isObserver()) {
+            TeamModule winner = TimeLimit.getMatchWinner();
+            if (winner != prioritized) {
+                prioritized = winner;
+                update();
+            }
+        }
+    }
     public void update() {
-        TeamModule prioritized = team.isObserver() ? TimeLimit.getMatchWinner() : team;
 
         objective = scoreboard.getObjective("scoreboard") == null ? scoreboard.registerNewObjective("scoreboard", "dummy") : scoreboard.getObjective("scoreboard");
         objective.setDisplayName(getDisplayTitle());
