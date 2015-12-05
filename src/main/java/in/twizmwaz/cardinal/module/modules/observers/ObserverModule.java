@@ -12,9 +12,9 @@ import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
+import in.twizmwaz.cardinal.module.modules.respawn.RespawnModule;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.module.modules.tutorial.Tutorial;
 import in.twizmwaz.cardinal.util.Items;
 import in.twizmwaz.cardinal.util.Teams;
 import org.apache.commons.lang.WordUtils;
@@ -104,14 +104,7 @@ public class ObserverModule implements Module {
             player.getInventory().clear();
         }
 
-        player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
-        ItemStack howTo = Items.createBook(Material.WRITTEN_BOOK, 1, ChatColor.AQUA + "" + ChatColor.BOLD + "Coming Soon", ChatColor.GOLD + "CardinalPGM");
-        player.getInventory().setItem(1, howTo);
-        player.getInventory().setItem(3, Tutorial.getEmerald(player));
-        if (player.hasPermission("tnt.defuse")) {
-            ItemStack shears = Items.createItem(Material.SHEARS, 1, (short) 0, ChatColor.RED + new LocalizedChatMessage(ChatConstant.UI_TNT_DEFUSER).getMessage(player.getLocale()));
-            player.getInventory().setItem(5, shears);
-        }
+        GameHandler.getGameHandler().getMatch().getModules().getModule(RespawnModule.class).giveObserversKit(player);
         player.closeInventory();
 
         try {
