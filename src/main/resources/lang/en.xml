@@ -312,6 +312,7 @@
         <defaultChannelTeam>Changed default channel to team chat.</defaultChannelTeam>
         <timeElapsed>Time Elapsed: {0}</timeElapsed>
         <modeInTime>{0} in {1}</modeInTime>
+        <compass>Teleport Tool</compass>
     </userInterface>
     <deathMsg>
         <explosionSelf>{0} 'sploded</explosionSelf>
