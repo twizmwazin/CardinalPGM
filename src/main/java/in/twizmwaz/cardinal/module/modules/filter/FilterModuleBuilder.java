@@ -84,6 +84,8 @@ public class FilterModuleBuilder implements ModuleBuilder {
                 return new HoldingFilter(new ItemFilterParser(element));
             case "kill-streak":
                 return new KillStreakFilter(new KillstreakFilterParser(element));
+            case "material":
+                return new BlockFilter(new BlockFilterParser(element));
             case "mob":
                 return new MobFilter(new MobFilterParser(element));
             case "objective":
