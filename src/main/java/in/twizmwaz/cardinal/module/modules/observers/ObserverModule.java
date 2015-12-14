@@ -380,7 +380,7 @@ public class ObserverModule implements Module {
     }
 
     public Inventory getFakeInventory(Player player, String locale) {
-        Inventory inventory = Bukkit.createInventory(null, 45, player.getDisplayName());
+        Inventory inventory = Bukkit.createInventory(null, 45, player.getDisplayName().length() > 32 ? Teams.getTeamColorByPlayer(player) + player.getName() : player.getDisplayName());
         inventory.setItem(0, player.getInventory().getHelmet());
         inventory.setItem(1, player.getInventory().getChestplate());
         inventory.setItem(2, player.getInventory().getLeggings());
