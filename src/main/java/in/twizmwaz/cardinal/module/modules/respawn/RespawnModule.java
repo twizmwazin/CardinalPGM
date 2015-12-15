@@ -110,7 +110,7 @@ public class RespawnModule implements Module {
                 Player player = event.getPlayer();
                 event.setRespawnLocation(chosen.getLocation());
                 Players.resetPlayer(player);
-                player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
+                player.getInventory().setItem(0, Items.createItem(Material.COMPASS, 1, (short) 0, ChatColor.BLUE + "" + ChatColor.BOLD + "Teleport Tool"));
                 ItemStack howTo = Items.createBook(Material.WRITTEN_BOOK, 1, ChatColor.AQUA.toString() + ChatColor.BOLD + "Coming Soon", ChatColor.GOLD + "CardinalPGM");
                 player.getInventory().setItem(1, howTo);
                 if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
@@ -162,7 +162,7 @@ public class RespawnModule implements Module {
             Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
             if (!spawnEvent.isCancelled()) {
                 Players.resetPlayer(player);
-                player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
+                player.getInventory().setItem(0, Items.createItem(Material.COMPASS, 1, (short) 0, ChatColor.BLUE + "" + ChatColor.BOLD + "Teleport Tool"));
                 ItemStack howTo = Items.createBook(Material.WRITTEN_BOOK, 1, ChatColor.AQUA.toString() + ChatColor.BOLD + "Coming Soon", ChatColor.GOLD + "CardinalPGM");
                 player.getInventory().setItem(1, howTo);
                 if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {

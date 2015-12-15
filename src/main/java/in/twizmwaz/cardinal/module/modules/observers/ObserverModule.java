@@ -104,7 +104,7 @@ public class ObserverModule implements Module {
             player.getInventory().clear();
         }
 
-        player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
+        player.getInventory().setItem(0, Items.createItem(Material.COMPASS, 1, (short) 0, ChatColor.BLUE + "" + ChatColor.BOLD + "Teleport Tool"));
         ItemStack howTo = Items.createBook(Material.WRITTEN_BOOK, 1, ChatColor.AQUA + "" + ChatColor.BOLD + "Coming Soon", ChatColor.GOLD + "CardinalPGM");
         player.getInventory().setItem(1, howTo);
         player.getInventory().setItem(3, Tutorial.getEmerald(player));
