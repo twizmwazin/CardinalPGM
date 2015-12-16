@@ -102,6 +102,11 @@ public class HillObjectiveBuilder implements ModuleBuilder {
             show = Numbers.parseBoolean(element.getParentElement().getAttributeValue("show"));
         if (element.getAttributeValue("show") != null)
             show = Numbers.parseBoolean(element.getAttributeValue("show"));
+        boolean required = show;
+        if (element.getParentElement().getAttributeValue("required") != null)
+            show = Numbers.parseBoolean(element.getParentElement().getAttributeValue("required"));
+        if (element.getAttributeValue("required") != null)
+            show = Numbers.parseBoolean(element.getAttributeValue("show"));
         String materials = element.getAttributeValue("visual-materials") == null ?
                 element.getParentElement().getAttributeValue("visual-materials") :
                 element.getAttributeValue("visual-materials");
@@ -115,6 +120,6 @@ public class HillObjectiveBuilder implements ModuleBuilder {
         RegionModule captured = element.getAttributeValue("captured") == null ?
                 RegionModuleBuilder.getRegion(element.getChild("captured")) :
                 RegionModuleBuilder.getRegion(element.getAttributeValue("captured"));
-        return new HillObjective(initialOwner, name, id, capturetime, points, pointsGrowth, captureRule, timeMultiplier, showProgress, neutralState, incremental, permanent, show, capture, progress, captured);
+        return new HillObjective(initialOwner, name, id, capturetime, points, pointsGrowth, captureRule, timeMultiplier, showProgress, neutralState, incremental, permanent, show, required, capture, progress, captured);
     }
 }

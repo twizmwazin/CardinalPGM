@@ -30,7 +30,7 @@ public class GameComplete implements TaskedModule {
     public void onObjectiveComplete(ObjectiveCompleteEvent event) {
         for (TeamModule team : Teams.getTeams()) {
             boolean skipTeam = false;
-            for (GameObjective condition : Teams.getShownObjectives(team)) {
+            for (GameObjective condition : Teams.getRequiredObjectives(team)) {
                 if (!condition.isComplete() && !condition.equals(event.getObjective())) skipTeam = true;
             }
             if (Teams.getShownObjectives(team).size() == 0 || skipTeam) continue;

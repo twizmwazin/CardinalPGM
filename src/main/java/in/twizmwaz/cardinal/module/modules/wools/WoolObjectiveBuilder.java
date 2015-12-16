@@ -51,13 +51,19 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
                 } else if (element.getAttributeValue("show") != null) {
                     show = !element.getAttributeValue("show").equalsIgnoreCase("false");
                 }
+                boolean required = show;
+                if (subElement.getAttributeValue("required") != null) {
+                    show = !subElement.getAttributeValue("required").equalsIgnoreCase("false");
+                } else if (element.getAttributeValue("required") != null) {
+                    show = !element.getAttributeValue("required").equalsIgnoreCase("false");
+                }
                 Vector location = null;
                 if (subElement.getAttributeValue("location") != null) {
                     location = new Vector(Numbers.parseDouble(subElement.getAttributeValue("location").replaceAll(" ", ",").split(",")[0]), Numbers.parseDouble(subElement.getAttributeValue("location").replaceAll(" ", ",").split(",")[1]), Numbers.parseDouble(subElement.getAttributeValue("location").replaceAll(" ", ",").split(",")[2]));
                 } else if (element.getAttributeValue("location") != null) {
                     location = new Vector(Numbers.parseDouble(element.getAttributeValue("location").replaceAll(" ", ",").split(",")[0]), Numbers.parseDouble(element.getAttributeValue("location").replaceAll(" ", ",").split(",")[1]), Numbers.parseDouble(element.getAttributeValue("location").replaceAll(" ", ",").split(",")[2]));
                 }
-                result.add(new WoolObjective(team, name, id, color, place, craftable, show, location));
+                result.add(new WoolObjective(team, name, id, color, place, craftable, show, required, location));
             }
             for (Element child : element.getChildren("wools")) {
                 for (Element subChild : child.getChildren("wool")) {
@@ -97,6 +103,14 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
                     } else if (element.getAttributeValue("show") != null) {
                         show = !element.getAttributeValue("show").equalsIgnoreCase("false");
                     }
+                    boolean required = show;
+                    if (subChild.getAttributeValue("required") != null) {
+                        show = !subChild.getAttributeValue("required").equalsIgnoreCase("false");
+                    } else if (child.getAttributeValue("required") != null) {
+                        show = !child.getAttributeValue("required").equalsIgnoreCase("false");
+                    } else if (element.getAttributeValue("required") != null) {
+                        show = !element.getAttributeValue("required").equalsIgnoreCase("false");
+                    }
                     Vector location = null;
                     if (subChild.getAttributeValue("location") != null) {
                         location = new Vector(Numbers.parseDouble(subChild.getAttributeValue("location").replaceAll(" ", ",").split(",")[0]), Numbers.parseDouble(subChild.getAttributeValue("location").replaceAll(" ", ",").split(",")[1]), Numbers.parseDouble(subChild.getAttributeValue("location").replaceAll(" ", ",").split(",")[2]));
@@ -105,7 +119,7 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
                     } else if (element.getAttributeValue("location") != null) {
                         location = new Vector(Numbers.parseDouble(element.getAttributeValue("location").replaceAll(" ", ",").split(",")[0]), Numbers.parseDouble(element.getAttributeValue("location").replaceAll(" ", ",").split(",")[1]), Numbers.parseDouble(element.getAttributeValue("location").replaceAll(" ", ",").split(",")[2]));
                     }
-                    result.add(new WoolObjective(team, name, id, color, place, craftable, show, location));
+                    result.add(new WoolObjective(team, name, id, color, place, craftable, show, required, location));
                 }
             }
 

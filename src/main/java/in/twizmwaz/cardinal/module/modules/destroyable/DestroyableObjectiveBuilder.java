@@ -96,11 +96,11 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                         }
                     }
                 }
-                double required = 1.0;
+                double completion = 1.0;
                 if (subElement.getAttributeValue("completion") != null) {
-                    required = Double.parseDouble(subElement.getAttributeValue("completion").replaceAll("%", "").replaceAll(" ", "")) / 100.0;
+                    completion = Double.parseDouble(subElement.getAttributeValue("completion").replaceAll("%", "").replaceAll(" ", "")) / 100.0;
                 } else if (element.getAttributeValue("completion") != null) {
-                    required = Double.parseDouble(element.getAttributeValue("completion").replaceAll("%", "").replaceAll(" ", "")) / 100.0;
+                    completion = Double.parseDouble(element.getAttributeValue("completion").replaceAll("%", "").replaceAll(" ", "")) / 100.0;
                 }
                 boolean showProgress = false;
                 if (subElement.getAttributeValue("show-progress") != null) {
@@ -120,13 +120,19 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                 } else if (element.getAttributeValue("show") != null) {
                     show = !element.getAttributeValue("show").equalsIgnoreCase("false");
                 }
+                boolean required = show;
+                if (subElement.getAttributeValue("required") != null) {
+                    required = !subElement.getAttributeValue("required").equalsIgnoreCase("false");
+                } else if (element.getAttributeValue("required") != null) {
+                    required = !element.getAttributeValue("required").equalsIgnoreCase("false");
+                }
                 boolean changesModes = false;
                 if (subElement.getAttributeValue("mode-changes") != null) {
                     changesModes = subElement.getAttributeValue("mode-changes").equalsIgnoreCase("true");
                 } else if (element.getAttributeValue("mode-changes") != null) {
                     changesModes = element.getAttributeValue("mode-changes").equalsIgnoreCase("true");
                 }
-                result.add(new DestroyableObjective(owner, name, id, new UnionRegion(null, regions), types, damageValues, required, show, changesModes, showProgress, repairable));
+                result.add(new DestroyableObjective(owner, name, id, new UnionRegion(null, regions), types, damageValues, completion, show, required, changesModes, showProgress, repairable));
             }
             for (Element child : element.getChildren("destroyables")) {
                 for (Element subChild : child.getChildren("destroyable")) {
@@ -230,13 +236,13 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                             }
                         }
                     }
-                    double required = 1.0;
+                    double completion = 1.0;
                     if (subChild.getAttributeValue("completion") != null) {
-                        required = Double.parseDouble(subChild.getAttributeValue("completion").replaceAll("%", "").replaceAll(" ", "")) / 100.0;
+                        completion = Double.parseDouble(subChild.getAttributeValue("completion").replaceAll("%", "").replaceAll(" ", "")) / 100.0;
                     } else if (child.getAttributeValue("completion") != null) {
-                        required = Double.parseDouble(child.getAttributeValue("completion").replaceAll("%", "").replaceAll(" ", "")) / 100.0;
+                        completion = Double.parseDouble(child.getAttributeValue("completion").replaceAll("%", "").replaceAll(" ", "")) / 100.0;
                     } else if (element.getAttributeValue("completion") != null) {
-                        required = Double.parseDouble(element.getAttributeValue("completion").replaceAll("%", "").replaceAll(" ", "")) / 100.0;
+                        completion = Double.parseDouble(element.getAttributeValue("completion").replaceAll("%", "").replaceAll(" ", "")) / 100.0;
                     }
                     boolean showProgress = false;
                     if (subChild.getAttributeValue("show-progress") != null) {
@@ -262,6 +268,14 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                     } else if (element.getAttributeValue("show") != null) {
                         show = !element.getAttributeValue("show").equalsIgnoreCase("false");
                     }
+                    boolean required = show;
+                    if (subChild.getAttributeValue("show") != null) {
+                        required = !subChild.getAttributeValue("required").equalsIgnoreCase("false");
+                    } else if (child.getAttributeValue("required") != null) {
+                        required = !child.getAttributeValue("required").equalsIgnoreCase("false");
+                    } else if (element.getAttributeValue("required") != null) {
+                        required = !element.getAttributeValue("required").equalsIgnoreCase("false");
+                    }
                     boolean changesModes = false;
                     if (subChild.getAttributeValue("mode-changes") != null) {
                         changesModes = subChild.getAttributeValue("mode-changes").equalsIgnoreCase("true");
@@ -270,7 +284,7 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                     } else if (element.getAttributeValue("mode-changes") != null) {
                         changesModes = element.getAttributeValue("mode-changes").equalsIgnoreCase("true");
                     }
-                    result.add(new DestroyableObjective(owner, name, id, new UnionRegion(null, regions), types, damageValues, required, show, changesModes, showProgress, repairable));
+                    result.add(new DestroyableObjective(owner, name, id, new UnionRegion(null, regions), types, damageValues, completion, show, required, changesModes, showProgress, repairable));
                 }
             }
         }

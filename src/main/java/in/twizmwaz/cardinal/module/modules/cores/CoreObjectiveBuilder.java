@@ -79,13 +79,19 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                 } else if (element.getAttributeValue("show") != null) {
                     show = !element.getAttributeValue("show").equalsIgnoreCase("false");
                 }
+                boolean required = show;
+                if (subElement.getAttributeValue("required") != null) {
+                    required = !subElement.getAttributeValue("required").equalsIgnoreCase("false");
+                } else if (element.getAttributeValue("required") != null) {
+                    required = !element.getAttributeValue("required").equalsIgnoreCase("false");
+                }
                 boolean changesModes = false;
                 if (subElement.getAttributeValue("mode-changes") != null) {
                     changesModes = subElement.getAttributeValue("mode-changes").equalsIgnoreCase("true");
                 } else if (element.getAttributeValue("mode-changes") != null) {
                     changesModes = element.getAttributeValue("mode-changes").equalsIgnoreCase("true");
                 }
-                result.add(new CoreObjective(team, name, id, new UnionRegion(null, regions), leak, type, damageValue, show, changesModes));
+                result.add(new CoreObjective(team, name, id, new UnionRegion(null, regions), leak, type, damageValue, show, required, changesModes));
             }
             for (Element child : element.getChildren("cores")) {
                 for (Element subChild : child.getChildren("core")) {
@@ -166,6 +172,14 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                     } else if (element.getAttributeValue("show") != null) {
                         show = !element.getAttributeValue("show").equalsIgnoreCase("false");
                     }
+                    boolean required = show;
+                    if (subChild.getAttributeValue("required") != null) {
+                        required = !subChild.getAttributeValue("required").equalsIgnoreCase("false");
+                    } else if (child.getAttributeValue("required") != null) {
+                        required = !child.getAttributeValue("required").equalsIgnoreCase("false");
+                    } else if (element.getAttributeValue("required") != null) {
+                        required = !element.getAttributeValue("required").equalsIgnoreCase("false");
+                    }
                     boolean changesModes = false;
                     if (subChild.getAttributeValue("mode-changes") != null) {
                         changesModes = subChild.getAttributeValue("mode-changes").equalsIgnoreCase("true");
@@ -174,7 +188,7 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                     } else if (element.getAttributeValue("mode-changes") != null) {
                         changesModes = element.getAttributeValue("mode-changes").equalsIgnoreCase("true");
                     }
-                    result.add(new CoreObjective(team, name, id, new UnionRegion(null, regions), leak, type, damageValue, show, changesModes));
+                    result.add(new CoreObjective(team, name, id, new UnionRegion(null, regions), leak, type, damageValue, show, required, changesModes));
                 }
             }
         }
