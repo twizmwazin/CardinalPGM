@@ -55,6 +55,7 @@ public class WoolObjective implements GameObjective {
     private final BlockRegion place;
     private final boolean craftable;
     private final boolean show;
+    private final boolean required;
 
     private Vector location;
     private double proximity;
@@ -65,7 +66,7 @@ public class WoolObjective implements GameObjective {
 
     private GameObjectiveScoreboardHandler scoreboardHandler;
 
-    protected WoolObjective(final TeamModule team, final String name, final String id, final DyeColor color, final BlockRegion place, final boolean craftable, final boolean show, final Vector location) {
+    protected WoolObjective(final TeamModule team, final String name, final String id, final DyeColor color, final BlockRegion place, final boolean craftable, final boolean show, final boolean required, final Vector location) {
         this.team = team;
         this.name = name;
         this.id = id;
@@ -73,6 +74,7 @@ public class WoolObjective implements GameObjective {
         this.place = place;
         this.craftable = craftable;
         this.show = show;
+        this.required = required;
         this.location = location;
 
         this.proximity = Double.POSITIVE_INFINITY;
@@ -115,6 +117,11 @@ public class WoolObjective implements GameObjective {
     @Override
     public boolean showOnScoreboard() {
         return show;
+    }
+
+    @Override
+    public boolean isRequired() {
+        return required;
     }
 
     public DyeColor getColor() {

@@ -17,6 +17,8 @@ public interface GameObjective extends Module {
 
     public boolean showOnScoreboard();
 
+    public boolean isRequired();
+
     public GameObjectiveScoreboardHandler getScoreboardHandler();
 
 }

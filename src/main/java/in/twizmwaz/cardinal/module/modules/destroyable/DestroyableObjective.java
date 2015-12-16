@@ -50,10 +50,11 @@ public class DestroyableObjective implements GameObjective {
     private final String name;
     private final String id;
     private final RegionModule region;
-    private final double required;
+    private final double completion;
     private final boolean showPercent;
     private final boolean repairable;
     private final boolean show;
+    private final boolean required;
     private List<Material> types;
     private List<Integer> damageValues;
     private boolean changesModes;
@@ -70,7 +71,7 @@ public class DestroyableObjective implements GameObjective {
 
     private GameObjectiveScoreboardHandler scoreboardHandler;
 
-    protected DestroyableObjective(final TeamModule team, final String name, final String id, final RegionModule region, List<Material> types, List<Integer> damageValues, final double required, final boolean show, boolean changesModes, boolean showPercent, boolean repairable) {
+    protected DestroyableObjective(final TeamModule team, final String name, final String id, final RegionModule region, List<Material> types, List<Integer> damageValues, final double completion, final boolean show, final boolean required, boolean changesModes, boolean showPercent, boolean repairable) {
         this.team = team;
         this.name = name;
         this.id = id;
@@ -80,8 +81,9 @@ public class DestroyableObjective implements GameObjective {
         this.showPercent = showPercent;
         this.repairable = repairable;
         this.complete = 0;
-        this.required = required;
+        this.completion = completion;
         this.show = show;
+        this.required = required;
         this.changesModes = changesModes;
         this.completed = false;
 
@@ -127,6 +129,11 @@ public class DestroyableObjective implements GameObjective {
     }
 
     @Override
+    public boolean isRequired() {
+        return required;
+    }
+
+    @Override
     public void unload() {
         HandlerList.unregisterAll(this);
     }
@@ -158,7 +165,7 @@ public class DestroyableObjective implements GameObjective {
                     boolean oldState = this.isTouched();
                     this.complete++;
                     this.playersCompleted.put(event.getPlayer().getUniqueId(), (playersCompleted.containsKey(event.getPlayer().getUniqueId()) ? playersCompleted.get(event.getPlayer().getUniqueId()) + 1 : 1));
-                    if ((this.complete / size) >= this.required && !this.completed) {
+                    if ((this.complete / size) >= this.completion && !this.completed) {
                         this.completed = true;
                         event.setCancelled(false);
                         if (this.show) {
@@ -239,7 +246,7 @@ public class DestroyableObjective implements GameObjective {
                     this.complete++;
                     if (eventPlayer != null)
                         this.playersCompleted.put(eventPlayer.getUniqueId(), (playersCompleted.containsKey(eventPlayer.getUniqueId()) ? playersCompleted.get(eventPlayer.getUniqueId()) + 1 : 1));
-                    if ((this.complete / size) >= this.required && !this.completed) {
+                    if ((this.complete / size) >= this.completion && !this.completed) {
                         this.completed = true;
                         if (this.show) {
                             for (Player player : Bukkit.getOnlinePlayers())
@@ -296,7 +303,7 @@ public class DestroyableObjective implements GameObjective {
     }
 
     public int getBlocksRequired() {
-        return (int) Math.ceil(size * required);
+        return (int) Math.ceil(size * completion);
     }
 
     public int getBlocksBroken() {
@@ -323,7 +330,7 @@ public class DestroyableObjective implements GameObjective {
     }
 
     public int getPercent() {
-        double blocksRequired = required * size;
+        double blocksRequired = completion * size;
         if (Math.floor((complete / blocksRequired) * 100) > 100) {
             return 100;
         }
@@ -334,7 +341,7 @@ public class DestroyableObjective implements GameObjective {
     }
 
     public int getPercentFromAmount(int amount) {
-        double blocksRequired = required * size;
+        double blocksRequired = completion * size;
         if (Math.floor((amount / blocksRequired) * 100) > 100) {
             return 100;
         }

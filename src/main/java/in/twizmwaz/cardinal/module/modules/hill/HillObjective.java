@@ -27,7 +27,7 @@ public class HillObjective implements TaskedModule, GameObjective {
     private final int captureTime, points;
     private final double pointsGrowth, timeMultiplier;
     private final CaptureRule captureRule;
-    private final boolean showProgress, neutralState, incremental, permanent, show;
+    private final boolean showProgress, neutralState, incremental, permanent, show, required;
     private final RegionModule capture, progress, captured;
     private final Set<Player> capturingPlayers;
     private TeamModule team, capturingTeam;
@@ -36,7 +36,7 @@ public class HillObjective implements TaskedModule, GameObjective {
     private int seconds = 1;
     private int tempPoints;
 
-    protected HillObjective(final TeamModule team, final String name, final String id, final int captureTime, final int points, final double pointsGrowth, final CaptureRule captureRule, final double timeMultiplier, final boolean showProgress, final boolean neutralState, final boolean incremental, final boolean permanent, final boolean show, final RegionModule capture, final RegionModule progress, final RegionModule captured) {
+    protected HillObjective(final TeamModule team, final String name, final String id, final int captureTime, final int points, final double pointsGrowth, final CaptureRule captureRule, final double timeMultiplier, final boolean showProgress, final boolean neutralState, final boolean incremental, final boolean permanent, final boolean show, final boolean required, final RegionModule capture, final RegionModule progress, final RegionModule captured) {
         this.team = team;
         this.name = name;
         this.id = id;
@@ -50,6 +50,7 @@ public class HillObjective implements TaskedModule, GameObjective {
         this.incremental = incremental;
         this.permanent = permanent;
         this.show = show;
+        this.required = required;
         this.capture = capture;
         this.progress = progress;
         this.captured = captured;
@@ -113,6 +114,11 @@ public class HillObjective implements TaskedModule, GameObjective {
     @Override
     public boolean showOnScoreboard() {
         return show;
+    }
+
+    @Override
+    public boolean isRequired() {
+        return required;
     }
 
     @Override

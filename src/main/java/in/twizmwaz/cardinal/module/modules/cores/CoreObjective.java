@@ -59,6 +59,7 @@ public class CoreObjective implements GameObjective {
     private final RegionModule region;
     private final int leak;
     private final boolean show;
+    private final boolean required;
     private boolean changesModes;
 
     private double proximity;
@@ -75,7 +76,7 @@ public class CoreObjective implements GameObjective {
 
     private GameObjectiveScoreboardHandler scoreboardHandler;
 
-    protected CoreObjective(final TeamModule team, final String name, final String id, final RegionModule region, final int leak, Material type, int damageValue, final boolean show, boolean changesModes) {
+    protected CoreObjective(final TeamModule team, final String name, final String id, final RegionModule region, final int leak, Material type, int damageValue, final boolean show, final boolean required, boolean changesModes) {
         this.team = team;
         this.name = name;
         this.id = id;
@@ -83,6 +84,7 @@ public class CoreObjective implements GameObjective {
         this.leak = leak;
         this.damageValue = damageValue;
         this.show = show;
+        this.required = required;
         this.changesModes = changesModes;
 
         this.proximity = Double.POSITIVE_INFINITY;
@@ -153,6 +155,11 @@ public class CoreObjective implements GameObjective {
     @Override
     public boolean showOnScoreboard() {
         return show;
+    }
+
+    @Override
+    public boolean isRequired() {
+        return required;
     }
 
     @Override

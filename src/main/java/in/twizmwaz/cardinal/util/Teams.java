@@ -101,6 +101,16 @@ public class Teams {
         return objectives;
     }
 
+    public static ModuleCollection<GameObjective> getRequiredObjectives(TeamModule team) {
+        ModuleCollection<GameObjective> objectives = new ModuleCollection<>();
+        for (GameObjective objective : getObjectives(team)) {
+            if (objective.isRequired()) {
+                objectives.add(objective);
+            }
+        }
+        return objectives;
+    }
+
     public static ChatChannel getTeamChannel(Optional<TeamModule> team) {
         if (team.isPresent()) {
             for (TeamChannel channel : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamChannel.class)) {
