@@ -123,6 +123,10 @@ public class FilterModuleBuilder implements ModuleBuilder {
                     }
                 } else {
                     switch (element.getAttributeValue("name").toLowerCase()) {
+                        case "always":
+                            return new AllEventFilter("always", true);
+                        case "never":
+                            return new AllEventFilter("never", false);
                         case "allow-all":
                             return new AllEventFilter("allow-all", true);
                         case "deny-all":
@@ -198,6 +202,8 @@ public class FilterModuleBuilder implements ModuleBuilder {
 
     @Override
     public ModuleCollection<FilterModule> load(Match match) {
+        match.getModules().add(new AllEventFilter("always", true));
+        match.getModules().add(new AllEventFilter("never", false));
         match.getModules().add(new AllEventFilter("allow-all", true));
         match.getModules().add(new AllEventFilter("deny-all", false));
         match.getModules().add(new AllPlayerFilter("allow-players", true));
