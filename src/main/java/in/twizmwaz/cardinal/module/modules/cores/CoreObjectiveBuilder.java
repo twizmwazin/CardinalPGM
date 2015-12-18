@@ -11,6 +11,7 @@ import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Numbers;
 import in.twizmwaz.cardinal.util.Teams;
+import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Material;
 import org.jdom2.Element;
 
@@ -58,20 +59,14 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                 int damageValue = -1;
                 if (subElement.getAttributeValue("material") != null) {
                     String material = subElement.getAttributeValue("material");
-                    if (material.contains(":")) {
-                        type = Material.matchMaterial(material.split(":")[0].trim());
-                        damageValue = Numbers.parseInt(material.split(":")[1].trim());
-                    } else {
-                        type = Material.matchMaterial(material.trim());
-                    }
+                    String materialType = material.split(":")[0].trim();
+                    type = (NumberUtils.isNumber(materialType) ? Material.getMaterial(Integer.parseInt(materialType)) : Material.matchMaterial(materialType));
+                    damageValue = material.contains(":") ? Numbers.parseInt(material.split(":")[1].trim()) : -1;
                 } else if (element.getAttributeValue("material") != null) {
                     String material = element.getAttributeValue("material");
-                    if (material.contains(":")) {
-                        type = Material.matchMaterial(material.split(":")[0].trim());
-                        damageValue = Numbers.parseInt(material.split(":")[1].trim());
-                    } else {
-                        type = Material.matchMaterial(material.trim());
-                    }
+                    String materialType = material.split(":")[0].trim();
+                    type = (NumberUtils.isNumber(materialType) ? Material.getMaterial(Integer.parseInt(materialType)) : Material.matchMaterial(materialType));
+                    damageValue = material.contains(":") ? Numbers.parseInt(material.split(":")[1].trim()) : -1;
                 }
                 boolean show = true;
                 if (subElement.getAttributeValue("show") != null) {
@@ -135,28 +130,19 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
                     int damageValue = -1;
                     if (subChild.getAttributeValue("material") != null) {
                         String material = subChild.getAttributeValue("material");
-                        if (material.contains(":")) {
-                            type = Material.matchMaterial(material.split(":")[0].trim());
-                            damageValue = Numbers.parseInt(material.split(":")[1].trim());
-                        } else {
-                            type = Material.matchMaterial(material.trim());
-                        }
+                        String materialType = material.split(":")[0].trim();
+                        type = (NumberUtils.isNumber(materialType) ? Material.getMaterial(Integer.parseInt(materialType)) : Material.matchMaterial(materialType));
+                        damageValue = material.contains(":") ? Numbers.parseInt(material.split(":")[1].trim()) : -1;
                     } else if (child.getAttributeValue("material") != null) {
                         String material = child.getAttributeValue("material");
-                        if (material.contains(":")) {
-                            type = Material.matchMaterial(material.split(":")[0].trim());
-                            damageValue = Numbers.parseInt(material.split(":")[1].trim());
-                        } else {
-                            type = Material.matchMaterial(material.trim());
-                        }
+                        String materialType = material.split(":")[0].trim();
+                        type = (NumberUtils.isNumber(materialType) ? Material.getMaterial(Integer.parseInt(materialType)) : Material.matchMaterial(materialType));
+                        damageValue = material.contains(":") ? Numbers.parseInt(material.split(":")[1].trim()) : -1;
                     } else if (element.getAttributeValue("material") != null) {
                         String material = element.getAttributeValue("material");
-                        if (material.contains(":")) {
-                            type = Material.matchMaterial(material.split(":")[0].trim());
-                            damageValue = Numbers.parseInt(material.split(":")[1].trim());
-                        } else {
-                            type = Material.matchMaterial(material.trim());
-                        }
+                        String materialType = material.split(":")[0].trim();
+                        type = (NumberUtils.isNumber(materialType) ? Material.getMaterial(Integer.parseInt(materialType)) : Material.matchMaterial(materialType));
+                        damageValue = material.contains(":") ? Numbers.parseInt(material.split(":")[1].trim()) : -1;
                     }
                     boolean show = true;
                     if (subChild.getAttributeValue("show") != null) {

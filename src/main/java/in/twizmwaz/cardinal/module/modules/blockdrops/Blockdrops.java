@@ -29,15 +29,17 @@ public class Blockdrops implements Module {
     private final RegionModule region;
     private final FilterModule filter;
     private final Set<ItemStack> drops;
-    private final Material replace;
+    private final Material replaceType;
+    private final int replaceDamage;
     private final int experience;
     private final boolean wrongTool;
 
-    protected Blockdrops(final RegionModule region, final FilterModule filter, final Set<ItemStack> drops, final Material replace, final int experience, final boolean wrongTool) {
+    protected Blockdrops(final RegionModule region, final FilterModule filter, final Set<ItemStack> drops, final Material replaceType, final int replaceDamage, final int experience, final boolean wrongTool) {
         this.region = region;
         this.filter = filter;
         this.drops = drops;
-        this.replace = replace;
+        this.replaceType = replaceType;
+        this.replaceDamage = replaceDamage;
         this.experience = experience;
         this.wrongTool = wrongTool;
     }
@@ -74,7 +76,8 @@ public class Blockdrops implements Module {
                         }
                     }
                     event.setCancelled(true);
-                    block.setType(replace);
+                    block.setType(replaceType);
+                    block.setData((byte) replaceDamage);
                 }
             }
         }
@@ -97,7 +100,8 @@ public class Blockdrops implements Module {
                                 xp.setExperience(this.experience);
                             }
                             toRemove.add(block);
-                            block.setType(replace);
+                            block.setType(replaceType);
+                            block.setData((byte) replaceDamage);
                         }
                     }
                 }
