@@ -2,17 +2,16 @@ package in.twizmwaz.cardinal.module.modules.kit;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.*;
+import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.BuilderData;
+import in.twizmwaz.cardinal.module.ModuleLoadTime;
+import in.twizmwaz.cardinal.module.ModuleBuilder;
+import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.util.ArmorType;
-import in.twizmwaz.cardinal.util.MiscUtil;
 import in.twizmwaz.cardinal.util.Numbers;
 import in.twizmwaz.cardinal.util.Parser;
-import in.twizmwaz.cardinal.util.Strings;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -47,27 +46,7 @@ public class KitBuilder implements ModuleBuilder {
             armors.addAll(element.getChildren("leggings"));
             armors.addAll(element.getChildren("boots"));
             for (Element piece : armors) {
-                ItemStack itemStack = new ItemStack(Material.matchMaterial(piece.getText()), 1);
-                if (piece.getAttributeValue("damage") != null) {
-                    itemStack.setDurability(Short.parseShort(piece.getAttributeValue("damage")));
-                }
-                if (itemStack.getItemMeta() instanceof LeatherArmorMeta && piece.getAttributeValue("color") != null) {
-                    LeatherArmorMeta meta = (LeatherArmorMeta) itemStack.getItemMeta();
-                    meta.setColor(MiscUtil.convertHexToRGB(piece.getAttributeValue("color")));
-                    itemStack.setItemMeta(meta);
-                }
-                try {
-                    for (String raw : piece.getAttributeValue("enchantment").split(";")) {
-                        String[] enchant = raw.split(":");
-                        try {
-                            itemStack.addUnsafeEnchantment(Enchantment.getByName(Strings.getTechnicalName(enchant[0])), Numbers.parseInt(enchant[1]));
-                        } catch (ArrayIndexOutOfBoundsException e) {
-                            itemStack.addUnsafeEnchantment(Enchantment.getByName(Strings.getTechnicalName(enchant[0])), 1);
-                        }
-                    }
-                } catch (NullPointerException e) {
-
-                }
+                ItemStack itemStack = Parser.getItem(piece);
                 ArmorType type = ArmorType.getArmorType(piece.getName());
                 armor.add(new KitArmor(itemStack, type));
             }
@@ -92,6 +71,15 @@ public class KitBuilder implements ModuleBuilder {
                 }
                 books.add(new KitBook(title, author, pages, slot));
             }
+            KitFly kitFly = null;
+            if (element.getChild("fly") != null) {
+                Element fly = element.getChild("fly");
+                boolean canFly = Boolean.parseBoolean(fly.getAttributeValue("can-fly", "true"));
+                boolean flying = Boolean.parseBoolean(fly.getAttributeValue("flying", "false"));
+                if (flying && !canFly) flying = false;
+                float flySpeed = Float.parseFloat(fly.getAttributeValue("fly-speed", "1"));
+                kitFly = new KitFly(canFly, flying, flySpeed);
+            }
             String parent = element.getAttributeValue("parents");
             boolean force = element.getAttributeValue("force") != null && Boolean.parseBoolean(element.getAttributeValue("force"));
             boolean potionParticles = element.getAttributeValue("potion-particles") != null && Numbers.parseBoolean(element.getAttributeValue("potion-particles"));
@@ -105,8 +93,7 @@ public class KitBuilder implements ModuleBuilder {
             float knockback = element.getChildText("knockback-reduction") == null ? 0F : Float.parseFloat(element.getChildText("knockback-reduction"));
             boolean jump = false;
             if (element.getChildren("double-jump").size() > 0) jump = true;
-            float flySpeed = element.getChildText("fly-speed") == null ? 0.2F : Float.parseFloat(element.getChildText("fly-speed")) / 5;
-            return new Kit(name, items, armor, potions, books, parent, force, potionParticles, resetPearls, clear, clearItems, health, saturation, foodLevel, walkSpeed, knockback, jump, flySpeed);
+            return new Kit(name, items, armor, potions, books, parent, force, potionParticles, resetPearls, clear, clearItems, health, saturation, foodLevel, walkSpeed, knockback, jump, kitFly);
         } else {
             return getKit(element.getParentElement(), document, true);
         }

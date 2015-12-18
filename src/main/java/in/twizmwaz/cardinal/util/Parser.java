@@ -9,9 +9,11 @@ import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.jdom2.Element;
 
 import java.util.ArrayList;
@@ -22,20 +24,12 @@ public class Parser {
     public static ItemStack getItem(Element element) {
         int amount = Numbers.parseInt(element.getAttributeValue("amount", "1"));
         ItemStack itemStack;
-        if (element.getText().contains(":"))
-            itemStack = new ItemStack(Material.matchMaterial(element.getText().split(":")[0]), amount, (short) Numbers.parseInt(element.getText().split(":")[1]));
-        else itemStack = new ItemStack(Material.matchMaterial(element.getText()), amount);
-        if (element.getAttributeValue("unbreakable") != null && Boolean.parseBoolean(element.getAttributeValue("unbreakable"))) {
-            try {
-                net.minecraft.server.v1_8_R3.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
-                NBTTagCompound tag = new NBTTagCompound();
-                tag.setBoolean("Unbreakable", true);
-                nmsStack.setTag(tag);
-                itemStack = CraftItemStack.asBukkitCopy(nmsStack);
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
-        }
+        String material;
+        if (element.getAttributeValue("material") != null) material = element.getAttributeValue("material");
+        else material = element.getText();
+        if (material.contains(":"))
+            itemStack = new ItemStack(Material.matchMaterial(material.split(":")[0]), amount, (short) Numbers.parseInt(material.split(":")[1]));
+        else itemStack = new ItemStack(Material.matchMaterial(material), amount);
         itemStack.setDurability(Short.parseShort(element.getAttributeValue("damage", "0")));
         if (element.getAttributeValue("enchantment") != null) {
             for (String raw : element.getAttributeValue("enchantment").split(";")) {
@@ -48,6 +42,9 @@ public class Parser {
             }
         }
         ItemMeta meta = itemStack.getItemMeta();
+        if (element.getAttributeValue("unbreakable") != null && Boolean.parseBoolean(element.getAttributeValue("unbreakable"))) {
+            meta.setUnbreakable(true);
+        }
         if (element.getAttributeValue("name") != null) {
             meta.setDisplayName(ChatColor.translateAlternateColorCodes('`', element.getAttributeValue("name")));
         }
@@ -58,6 +55,10 @@ public class Parser {
                 lore.add(colored);
             }
             meta.setLore(lore);
+        }
+        if (meta instanceof LeatherArmorMeta && element.getAttributeValue("color") != null) {
+            LeatherArmorMeta leatherMeta = (LeatherArmorMeta) meta;
+            leatherMeta.setColor(MiscUtil.convertHexToRGB(element.getAttributeValue("color")));
         }
         if (element.getAttributeValue("potions") != null) {
             String potions = element.getAttributeValue("potions");
@@ -136,6 +137,9 @@ public class Parser {
 
     public static PotionEffect getPotion(Element potion) {
         PotionEffectType type = PotionEffectType.getByName(Strings.getTechnicalName(potion.getText()));
+        if (type == null) {
+            type = PotionType.valueOf(Strings.getTechnicalName(potion.getText())).getEffectType();
+        }
         int duration = Numbers.parseInt(potion.getAttributeValue("duration")) == Integer.MAX_VALUE ? Numbers.parseInt(potion.getAttributeValue("duration")) : Numbers.parseInt(potion.getAttributeValue("duration")) * 20;
         int amplifier = 0;
         boolean ambient = false;
