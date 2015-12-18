@@ -40,6 +40,7 @@ import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimerBuilder;
 import in.twizmwaz.cardinal.module.modules.mob.MobModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.monumentModes.MonumentModesBuilder;
 import in.twizmwaz.cardinal.module.modules.motd.MOTDBuilder;
+import in.twizmwaz.cardinal.module.modules.multitrade.MultitradeBuilder;
 import in.twizmwaz.cardinal.module.modules.observers.ObserverModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.playable.PlayableBuilder;
@@ -162,7 +163,8 @@ public class ModuleFactory {
             InvisibleBlockBuilder.class,
             ItemDropBuilder.class,
             GuiKeepModuleBuilder.class,
-            RankModuleBuilder.class
+            RankModuleBuilder.class,
+            MultitradeBuilder.class
     };
     private final List<ModuleBuilder> builders;
 
