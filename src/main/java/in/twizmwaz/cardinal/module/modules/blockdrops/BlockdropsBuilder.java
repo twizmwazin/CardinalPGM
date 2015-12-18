@@ -9,6 +9,7 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.util.Numbers;
 import in.twizmwaz.cardinal.util.Parser;
+import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jdom2.Element;
@@ -37,9 +38,13 @@ public class BlockdropsBuilder implements ModuleBuilder {
                         drops.add(Parser.getItem(item));
                     }
                 }
-                Material replace = Material.AIR;
+                Material replaceType = Material.AIR;
+                int replaceDamage = -1;
                 for (Element replaceElement : rule.getChildren("replacement")) {
-                    replace = Material.matchMaterial(replaceElement.getText());
+                    String material = replaceElement.getText();
+                    String materialType = material.split(":")[0].trim();
+                    replaceType = (NumberUtils.isNumber(materialType) ? Material.getMaterial(Integer.parseInt(materialType)) : Material.matchMaterial(materialType));
+                    replaceDamage = material.contains(":") ? Numbers.parseInt(material.split(":")[1].trim()) : -1;
                 }
                 int experience = 0;
                 for (Element experienceElement : rule.getChildren("experience")) {
@@ -49,7 +54,7 @@ public class BlockdropsBuilder implements ModuleBuilder {
                 for (Element wrongToolElement : rule.getChildren("wrongtool")) {
                     wrongTool = Numbers.parseBoolean(wrongToolElement.getText());
                 }
-                results.add(new Blockdrops(region, filter, drops, replace, experience, wrongTool));
+                results.add(new Blockdrops(region, filter, drops, replaceType, replaceDamage, experience, wrongTool));
             }
 
         }

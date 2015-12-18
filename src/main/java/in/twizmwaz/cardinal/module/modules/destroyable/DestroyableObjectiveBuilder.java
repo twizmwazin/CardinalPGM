@@ -11,6 +11,7 @@ import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Numbers;
 import in.twizmwaz.cardinal.util.Teams;
+import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Material;
 import org.jdom2.Element;
 
@@ -55,45 +56,19 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                 List<Integer> damageValues = new ArrayList<>();
                 if (subElement.getAttributeValue("materials") != null) {
                     String materials = subElement.getAttributeValue("materials");
-                    if (materials.contains(";")) {
-                        for (String material : materials.split(";")) {
-                            if (material.contains(":")) {
-                                types.add(Material.matchMaterial(material.split(":")[0].trim()));
-                                damageValues.add(Numbers.parseInt(material.split(":")[1].trim()));
-                            } else {
-                                types.add(Material.matchMaterial(material.trim()));
-                                damageValues.add(-1);
-                            }
-                        }
-                    } else {
-                        if (materials.contains(":")) {
-                            types.add(Material.matchMaterial(materials.split(":")[0].trim()));
-                            damageValues.add(Numbers.parseInt(materials.split(":")[1].trim()));
-                        } else {
-                            types.add(Material.matchMaterial(materials.trim()));
-                            damageValues.add(-1);
-                        }
+                    for (String material : materials.split(";")){
+                        String type = material.split(":")[0].trim();
+                        Integer damageValue = material.contains(":") ? Numbers.parseInt(material.split(":")[1].trim()) : -1;
+                        types.add(NumberUtils.isNumber(type) ? Material.getMaterial(Integer.parseInt(type)) : Material.matchMaterial(type));
+                        damageValues.add(damageValue);
                     }
                 } else if (element.getAttributeValue("materials") != null) {
                     String materials = element.getAttributeValue("materials");
-                    if (materials.contains(";")) {
-                        for (String material : materials.split(";")) {
-                            if (material.contains(":")) {
-                                types.add(Material.matchMaterial(material.split(":")[0].trim()));
-                                damageValues.add(Numbers.parseInt(material.split(":")[1].trim()));
-                            } else {
-                                types.add(Material.matchMaterial(material.trim()));
-                                damageValues.add(0);
-                            }
-                        }
-                    } else {
-                        if (materials.contains(":")) {
-                            types.add(Material.matchMaterial(materials.split(":")[0].trim()));
-                            damageValues.add(Numbers.parseInt(materials.split(":")[1].trim()));
-                        } else {
-                            types.add(Material.matchMaterial(materials.trim()));
-                            damageValues.add(0);
-                        }
+                    for (String material : materials.split(";")){
+                        String type = material.split(":")[0].trim();
+                        Integer damageValue = material.contains(":") ? Numbers.parseInt(material.split(":")[1].trim()) : -1;
+                        types.add(NumberUtils.isNumber(type) ? Material.getMaterial(Integer.parseInt(type)) : Material.matchMaterial(type));
+                        damageValues.add(damageValue);
                     }
                 }
                 double completion = 1.0;
@@ -174,66 +149,27 @@ public class DestroyableObjectiveBuilder implements ModuleBuilder {
                     List<Integer> damageValues = new ArrayList<>();
                     if (subChild.getAttributeValue("materials") != null) {
                         String materials = subChild.getAttributeValue("materials");
-                        if (materials.contains(";")) {
-                            for (String material : materials.split(";")) {
-                                if (material.contains(":")) {
-                                    types.add(Material.matchMaterial(material.split(":")[0].trim()));
-                                    damageValues.add(Numbers.parseInt(material.split(":")[1].trim()));
-                                } else {
-                                    types.add(Material.matchMaterial(material.trim()));
-                                    damageValues.add(-1);
-                                }
-                            }
-                        } else {
-                            if (materials.contains(":")) {
-                                types.add(Material.matchMaterial(materials.split(":")[0].trim()));
-                                damageValues.add(Numbers.parseInt(materials.split(":")[1].trim()));
-                            } else {
-                                types.add(Material.matchMaterial(materials.trim()));
-                                damageValues.add(-1);
-                            }
+                        for (String material : materials.split(";")){
+                            String type = material.split(":")[0].trim();
+                            Integer damageValue = material.contains(":") ? Numbers.parseInt(material.split(":")[1].trim()) : -1;
+                            types.add(NumberUtils.isNumber(type) ? Material.getMaterial(Integer.parseInt(type)) : Material.matchMaterial(type));
+                            damageValues.add(damageValue);
                         }
                     } else if (child.getAttributeValue("materials") != null) {
                         String materials = child.getAttributeValue("materials");
-                        if (materials.contains(";")) {
-                            for (String material : materials.split(";")) {
-                                if (material.contains(":")) {
-                                    types.add(Material.matchMaterial(material.split(":")[0].trim()));
-                                    damageValues.add(Numbers.parseInt(material.split(":")[1].trim()));
-                                } else {
-                                    types.add(Material.matchMaterial(material.trim()));
-                                    damageValues.add(-1);
-                                }
-                            }
-                        } else {
-                            if (materials.contains(":")) {
-                                types.add(Material.matchMaterial(materials.split(":")[0].trim()));
-                                damageValues.add(Numbers.parseInt(materials.split(":")[1].trim()));
-                            } else {
-                                types.add(Material.matchMaterial(materials.trim()));
-                                damageValues.add(0);
-                            }
+                        for (String material : materials.split(";")){
+                            String type = material.split(":")[0].trim();
+                            Integer damageValue = material.contains(":") ? Numbers.parseInt(material.split(":")[1].trim()) : -1;
+                            types.add(NumberUtils.isNumber(type) ? Material.getMaterial(Integer.parseInt(type)) : Material.matchMaterial(type));
+                            damageValues.add(damageValue);
                         }
                     } else if (element.getAttributeValue("materials") != null) {
                         String materials = element.getAttributeValue("materials");
-                        if (materials.contains(";")) {
-                            for (String material : materials.split(";")) {
-                                if (material.contains(":")) {
-                                    types.add(Material.matchMaterial(material.split(":")[0].trim()));
-                                    damageValues.add(Numbers.parseInt(material.split(":")[1].trim()));
-                                } else {
-                                    types.add(Material.matchMaterial(material.trim()));
-                                    damageValues.add(0);
-                                }
-                            }
-                        } else {
-                            if (materials.contains(":")) {
-                                types.add(Material.matchMaterial(materials.split(":")[0].trim()));
-                                damageValues.add(Numbers.parseInt(materials.split(":")[1].trim()));
-                            } else {
-                                types.add(Material.matchMaterial(materials.trim()));
-                                damageValues.add(0);
-                            }
+                        for (String material : materials.split(";")){
+                            String type = material.split(":")[0].trim();
+                            Integer damageValue = material.contains(":") ? Numbers.parseInt(material.split(":")[1].trim()) : -1;
+                            types.add(NumberUtils.isNumber(type) ? Material.getMaterial(Integer.parseInt(type)) : Material.matchMaterial(type));
+                            damageValues.add(damageValue);
                         }
                     }
                     double completion = 1.0;

@@ -8,6 +8,7 @@ import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.cores.CoreObjective;
 import in.twizmwaz.cardinal.util.Numbers;
 import in.twizmwaz.cardinal.util.Strings;
+import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.jdom2.Element;
@@ -25,19 +26,15 @@ public class MonumentModesBuilder implements ModuleBuilder {
                 if (mode.getAttributeValue("show-before") != null) {
                     showBefore = Strings.timeStringToSeconds(mode.getAttributeValue("show-before"));
                 }
-                Material material;
-                int damageValue = 0;
-                if (mode.getAttributeValue("material").contains(":")) {
-                    material = Material.matchMaterial(mode.getAttributeValue("material").split(":")[0]);
-                    damageValue = Numbers.parseInt(mode.getAttributeValue("material").split(":")[1]);
-                } else {
-                    material = Material.matchMaterial(mode.getAttributeValue("material"));
-                }
-                String name = material.name().replaceAll("_", " ") + " MODE";
+                String material = mode.getAttributeValue("material");
+                String materialType = material.split(":")[0].trim();
+                Material type = (NumberUtils.isNumber(materialType) ? Material.getMaterial(Integer.parseInt(materialType)) : Material.matchMaterial(materialType));
+                int damageValue = material.contains(":") ? Numbers.parseInt(material.split(":")[1].trim()) : -1;
+                String name = type.name().replaceAll("_", " ") + " MODE";
                 if (mode.getAttributeValue("name") != null) {
                     name = ChatColor.translateAlternateColorCodes('`', mode.getAttributeValue("name"));
                 }
-                results.add(new MonumentModes(after, material, damageValue, name, showBefore));
+                results.add(new MonumentModes(after, type, damageValue, name, showBefore));
             }
         }
         boolean core = match.getModules().getModules(CoreObjective.class).size() > 0;
