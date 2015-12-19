@@ -11,7 +11,7 @@ public class SphereParser extends RegionParser {
     private double radius;
 
     public SphereParser(Element element) {
-        super(element.getAttributeValue("name"));
+        super(element.getAttributeValue("name") != null ? element.getAttributeValue("name") : element.getAttributeValue("id"));
         String origin = element.getAttributeValue("origin");
         String[] origina = origin.contains(",") ? origin.split(",") : origin.trim().replaceAll(" ", ",").split(",");
         this.origin = new Vector(Numbers.parseDouble(origina[0].trim()), Numbers.parseDouble(origina[1].trim()), Numbers.parseDouble(origina[2].trim()));

@@ -11,6 +11,7 @@ import in.twizmwaz.cardinal.module.modules.regions.parsers.CircleParser;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.CuboidParser;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.CylinderParser;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.EmptyParser;
+import in.twizmwaz.cardinal.module.modules.regions.parsers.EverywhereParser;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.PointParser;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.RectangleParser;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.SphereParser;
@@ -22,6 +23,7 @@ import in.twizmwaz.cardinal.module.modules.regions.type.CircleRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.CuboidRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.CylinderRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.EmptyRegion;
+import in.twizmwaz.cardinal.module.modules.regions.type.EverywhereRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.RectangleRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.SphereRegion;
@@ -62,6 +64,14 @@ public class RegionModuleBuilder implements ModuleBuilder {
                 return region;
             case "empty":
                 region = new EmptyRegion(new EmptyParser(element));
+                if (region.getName() != null) GameHandler.getGameHandler().getMatch().getModules().add(region);
+                return region;
+            case "nowhere":
+                region = new EmptyRegion(new EmptyParser(element));
+                if (region.getName() != null) GameHandler.getGameHandler().getMatch().getModules().add(region);
+                return region;
+            case "everywhere":
+                region = new EverywhereRegion(new EverywhereParser(element));
                 if (region.getName() != null) GameHandler.getGameHandler().getMatch().getModules().add(region);
                 return region;
             case "rectangle":
@@ -108,6 +118,12 @@ public class RegionModuleBuilder implements ModuleBuilder {
                             return regionModule;
                         }
                     }
+                } else if (element.getAttributeValue("id") != null) {
+                    for (RegionModule regionModule : GameHandler.getGameHandler().getMatch().getModules().getModules(RegionModule.class)) {
+                        if (element.getAttributeValue("id").equalsIgnoreCase(regionModule.getName())) {
+                            return regionModule;
+                        }
+                    }
                 } else if (element.getAttributeValue("region") != null) {
                     for (RegionModule regionModule : GameHandler.getGameHandler().getMatch().getModules().getModules(RegionModule.class)) {
                         if (element.getAttributeValue("region").equalsIgnoreCase(regionModule.getName())) {
@@ -134,6 +150,8 @@ public class RegionModuleBuilder implements ModuleBuilder {
 
     @Override
     public ModuleCollection<RegionModule> load(Match match) {
+        match.getModules().add(new EverywhereRegion("everywhere"));
+        match.getModules().add(new EmptyRegion("nowhere"));
         ModuleCollection<RegionModule> results = new ModuleCollection<>();
         for (Element element : match.getDocument().getRootElement().getChildren("regions")) {
             for (Element givenRegion : element.getChildren()) {

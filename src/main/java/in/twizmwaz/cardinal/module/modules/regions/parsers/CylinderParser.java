@@ -11,7 +11,7 @@ public class CylinderParser extends RegionParser {
     private final double radius, height;
 
     public CylinderParser(Element element) {
-        super(element.getAttributeValue("name"));
+        super(element.getAttributeValue("name") != null ? element.getAttributeValue("name") : element.getAttributeValue("id"));
         this.radius = Numbers.parseDouble(element.getAttributeValue("radius").trim());
         this.height = Numbers.parseDouble(element.getAttributeValue("height").trim());
         String[] split = element.getAttributeValue("base").contains(",") ? element.getAttributeValue("base").split(",") : element.getAttributeValue("base").replaceAll(" ", ",").split(",");

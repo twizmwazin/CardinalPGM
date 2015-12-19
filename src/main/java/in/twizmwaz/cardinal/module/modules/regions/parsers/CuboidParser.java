@@ -14,7 +14,7 @@ public class CuboidParser extends RegionParser {
     private final Vector min, max;
 
     public CuboidParser(Element element) {
-        super(element.getAttributeValue("name"));
+        super(element.getAttributeValue("name") != null ? element.getAttributeValue("name") : element.getAttributeValue("id"));
         List<String> values = new ArrayList<>();
         values.addAll(Arrays.asList(element.getAttributeValue("min").contains(",") ?
                 element.getAttributeValue("min").trim().split(",") : element.getAttributeValue("min").trim().split(" ")));

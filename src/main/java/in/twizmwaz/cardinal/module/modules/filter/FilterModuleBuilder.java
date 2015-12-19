@@ -121,7 +121,7 @@ public class FilterModuleBuilder implements ModuleBuilder {
                     } else {
                         return getFilter(element.getChildren().get(0));
                     }
-                } else {
+                } else if (element.getAttributeValue("name") != null) {
                     switch (element.getAttributeValue("name").toLowerCase()) {
                         case "always":
                             return new AllEventFilter("always", true);
@@ -160,17 +160,65 @@ public class FilterModuleBuilder implements ModuleBuilder {
                         case "deny":
                             return new DenyFilter(new ChildrenFilterParser(element));
                         default:
-                            if (element.getAttributeValue("name") != null) {
-                                for (Element filterElement : document.getRootElement().getChildren("filters")) {
-                                    for (Element givenFilter : filterElement.getChildren()) {
-                                        if (givenFilter.getAttributeValue("name").equalsIgnoreCase(element.getAttributeValue("name")))
-                                            return getFilter(givenFilter.getChildren().get(0));
-                                    }
+                            for (Element filterElement : document.getRootElement().getChildren("filters")) {
+                                for (Element givenFilter : filterElement.getChildren()) {
+                                    if (givenFilter.getAttributeValue("name").equalsIgnoreCase(element.getAttributeValue("name")))
+                                        return getFilter(givenFilter.getChildren().get(0));
+                                    if (givenFilter.getAttributeValue("id").equalsIgnoreCase(element.getAttributeValue("id")))
+                                        return getFilter(givenFilter.getChildren().get(0));
                                 }
-                            } else {
-                                return getFilter(element.getChildren().get(0));
                             }
                     }
+                } else if (element.getAttributeValue("id") != null) {
+                    switch (element.getAttributeValue("id").toLowerCase()) {
+                        case "always":
+                            return new AllEventFilter("always", true);
+                        case "never":
+                            return new AllEventFilter("never", false);
+                        case "allow-all":
+                            return new AllEventFilter("allow-all", true);
+                        case "deny-all":
+                            return new AllEventFilter("deny-all", false);
+                        case "allow-players":
+                            return new AllPlayerFilter("allow-players", true);
+                        case "deny-players":
+                            return new AllPlayerFilter("deny-players", false);
+                        case "allow-blocks":
+                            return new AllBlockFilter("allow-blocks", true);
+                        case "deny-blocks":
+                            return new AllBlockFilter("deny-blocks", false);
+                        case "allow-world":
+                            return new AllWorldFilter("allow-world", true);
+                        case "deny-world":
+                            return new AllWorldFilter("deny-world", false);
+                        case "allow-spawns":
+                            return new AllSpawnFilter("allow-spawns", true);
+                        case "deny-spawns":
+                            return new AllSpawnFilter("deny-spawns", false);
+                        case "allow-entities":
+                            return new AllEntitiesFilter("allow-entities", true);
+                        case "deny-entities":
+                            return new AllEntitiesFilter("deny-entities", false);
+                        case "allow-mobs":
+                            return new AllMobFilter("allow-mobs", true);
+                        case "deny-mobs":
+                            return new AllMobFilter("deny-mobs", false);
+                        case "allow":
+                            return new AllowFilter(new ChildrenFilterParser(element));
+                        case "deny":
+                            return new DenyFilter(new ChildrenFilterParser(element));
+                        default:
+                            for (Element filterElement : document.getRootElement().getChildren("filters")) {
+                                for (Element givenFilter : filterElement.getChildren()) {
+                                    if (givenFilter.getAttributeValue("name").equalsIgnoreCase(element.getAttributeValue("name")))
+                                        return getFilter(givenFilter.getChildren().get(0));
+                                    if (givenFilter.getAttributeValue("id").equalsIgnoreCase(element.getAttributeValue("id")))
+                                        return getFilter(givenFilter.getChildren().get(0));
+                                }
+                            }
+                    }
+                } else {
+                    return getFilter(element.getChildren().get(0));
                 }
             default:
                 return null;
