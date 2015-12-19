@@ -9,7 +9,7 @@ public class CircleParser extends RegionParser {
     private final double centerX, centerZ, radius;
 
     public CircleParser(Element element) {
-        super(element.getAttributeValue("name"));
+        super(element.getAttributeValue("name") != null ? element.getAttributeValue("name") : element.getAttributeValue("id"));
         String[] centArray = element.getAttributeValue("center").contains(",") ?
                 element.getAttributeValue("center").trim().replaceAll(" ", "").split(",") :
                 element.getAttributeValue("center").trim().replaceAll(" ", ",").split(",");

@@ -13,7 +13,7 @@ public class PointParser extends RegionParser {
     private float yaw, pitch;
 
     public PointParser(Element element) {
-        super(element.getAttributeValue("name"));
+        super(element.getAttributeValue("name") != null ? element.getAttributeValue("name") : element.getAttributeValue("id"));
         double x, y, z;
         if (element.getChildren().size() > 0) {
             PointRegion subPoint = RegionModuleBuilder.getRegion(element.getChildren().get(0)).getRandomPoint();

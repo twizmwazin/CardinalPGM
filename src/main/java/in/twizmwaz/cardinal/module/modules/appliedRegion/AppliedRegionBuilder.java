@@ -34,7 +34,7 @@ public class AppliedRegionBuilder implements ModuleBuilder {
         ModuleCollection<AppliedRegion> results = new ModuleCollection<>();
         for (Element regionElement : match.getDocument().getRootElement().getChildren("regions")) {
             for (Element applied : regionElement.getChildren("apply")) {
-                RegionModule region;
+                RegionModule region = RegionModuleBuilder.getRegion("everywhere");
                 if (applied.getAttributeValue("region") != null) {
                     region = RegionModuleBuilder.getRegion(applied.getAttributeValue("region"));
                 } else {
@@ -42,7 +42,7 @@ public class AppliedRegionBuilder implements ModuleBuilder {
                     for (Element element : applied.getChildren()) {
                         regions.add(RegionModuleBuilder.getRegion(element));
                     }
-                    region = new UnionRegion(null, regions);
+                    if (regions.size() > 0) region = new UnionRegion(null, regions);
                 }
                 String message = (applied.getAttributeValue("message") != null ? ChatColor.translateAlternateColorCodes('`', applied.getAttributeValue("message")) : null);
                 if (applied.getAttributeValue("velocity") != null) {

@@ -10,7 +10,7 @@ public class BlockParser extends RegionParser {
     private final Vector vector;
 
     public BlockParser(Element element) {
-        super(element.getAttributeValue("name"));
+        super(element.getAttributeValue("name") != null ? element.getAttributeValue("name") : element.getAttributeValue("id"));
         double x, y, z;
         String working = element.getAttributeValue("location") == null ? element.getText() : element.getAttributeValue("location");
         if (element.getText().contains(",")) {
