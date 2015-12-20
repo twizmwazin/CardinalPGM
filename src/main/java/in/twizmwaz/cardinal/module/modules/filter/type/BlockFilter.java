@@ -30,7 +30,9 @@ public class BlockFilter extends FilterModule {
                     return ALLOW;
                 else return DENY;
             } else if (object instanceof Material) {
-
+                if ((object).equals(material))
+                    return ALLOW;
+                else return DENY;
             }
         }
         return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));
