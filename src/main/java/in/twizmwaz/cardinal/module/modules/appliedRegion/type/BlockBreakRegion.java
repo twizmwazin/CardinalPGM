@@ -47,7 +47,7 @@ public class BlockBreakRegion extends AppliedRegion {
         Set<Block> blocksToRemove = new HashSet<>();
         for (Block block : event.blockList()) {
             if (region.contains(new BlockRegion(null, block.getLocation().toVector()))) {
-                if (filter.evaluate(block, event).equals(FilterState.DENY)) {
+                if (filter.evaluate(block, event.getEntity(), event).equals(FilterState.DENY)) {
                     blocksToRemove.add(block);
                 }
             }
