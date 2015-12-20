@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.util;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,8 +22,6 @@ public class GitUtil {
     }
 
     public static String getUpdateMessage(String url) throws IOException {
-        JsonParser parser = new JsonParser();
-        JsonElement jsonElement = parser.parse(new InputStreamReader(new URL(url).openStream()));
-        return jsonElement.toString();
+        return IOUtils.toString(new InputStreamReader(new URL(url).openStream()));
     }
 }

@@ -4,7 +4,6 @@ import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
-import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
@@ -18,6 +17,7 @@ import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.tutorial.Tutorial;
+import in.twizmwaz.cardinal.module.modules.cardinalNotifications.CardinalNotifications;
 import in.twizmwaz.cardinal.util.Items;
 import in.twizmwaz.cardinal.util.Players;
 import in.twizmwaz.cardinal.util.Teams;
@@ -211,8 +211,8 @@ public class RespawnModule implements Module {
     }
 
     public void giveObserversKit(Player player) {
-        player.getInventory().setItem(0, Items.createItem(Material.COMPASS, 1, (short) 0,ChatColor.BLUE + "" + ChatColor.BOLD + ChatConstant.UI_COMPASS.getMessage(player.getLocale())));
-        player.getInventory().setItem(1, Items.createBook(Material.WRITTEN_BOOK, 1, ChatColor.AQUA + "" + ChatColor.BOLD + "Coming Soon", ChatColor.GOLD + "CardinalPGM"));
+        player.getInventory().setItem(0, Items.createItem(Material.COMPASS, 1, (short) 0, ChatColor.BLUE + "" + ChatColor.BOLD + ChatConstant.UI_COMPASS.getMessage(player.getLocale())));
+        player.getInventory().setItem(1, CardinalNotifications.book);
         if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) && !(Blitz.matchIsBlitz() && GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING))) {
             player.getInventory().setItem(2, Items.createItem(Material.LEATHER_HELMET, 1, (short) 0,
                     ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? ChatConstant.UI_TEAM_CLASS_SELECTION.getMessage(player.getLocale()) : ChatConstant.UI_TEAM_SELECTION.getMessage(player.getLocale())),
