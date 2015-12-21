@@ -4,7 +4,9 @@ import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Items;
@@ -146,21 +148,13 @@ public class TeamPicker implements Module {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
-        if (team.isPresent() && team.get().isObserver() || !GameHandler.getGameHandler().getMatch().isRunning()) {
-            if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-                if (event.getPlayer().getItemInHand() != null) {
-                    if (event.getPlayer().getItemInHand().getType().equals(Material.LEATHER_HELMET)) {
-                        if (event.getPlayer().getItemInHand().hasItemMeta()) {
-                            if (event.getPlayer().getItemInHand().getItemMeta().hasDisplayName()) {
-                                if (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().equals(ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(event.getPlayer().getLocale())) || ChatColor.stripColor(event.getPlayer().getItemInHand().getItemMeta().getDisplayName()).equals(new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(event.getPlayer().getLocale()))) {
-                                    event.getPlayer().openInventory(getTeamPicker(event.getPlayer()));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) && !(Blitz.matchIsBlitz() && GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING)) &&
+                (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) &&
+                event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType().equals(Material.LEATHER_HELMET) &&
+                event.getPlayer().getItemInHand().hasItemMeta() && event.getPlayer().getItemInHand().getItemMeta().hasDisplayName() &&
+                (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().equals(ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(event.getPlayer().getLocale())) ||
+                        ChatColor.stripColor(event.getPlayer().getItemInHand().getItemMeta().getDisplayName()).equals(new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(event.getPlayer().getLocale())))) {
+                    event.getPlayer().openInventory(getTeamPicker(event.getPlayer()));
         }
     }
 
