@@ -6,11 +6,13 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
+import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
 import in.twizmwaz.cardinal.module.modules.respawn.RespawnModule;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
@@ -114,6 +116,17 @@ public class ObserverModule implements Module {
     }
 
     @EventHandler
+    public void onMatchStart(MatchStartEvent event) {
+        if (Blitz.matchIsBlitz()){
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (testObserver(player)) {
+                    player.getInventory().setItem(2, null);
+                }
+            }
+        }
+    }
+
+    @EventHandler
     public void onMatchEnd(MatchEndEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             resetPlayer(player, true);
@@ -171,7 +184,7 @@ public class ObserverModule implements Module {
             if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType().equals(Material.WRITTEN_BOOK))){
                 ((CraftHumanEntity) event.getPlayer()).getHandle().openBook(CraftItemStack.asNMSCopy(event.getPlayer().getItemInHand()));
             }
-            if (event.getClickedBlock() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            if (event.getClickedBlock() != null && !event.getPlayer().isSneaking() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 if (event.getClickedBlock().getType().equals(Material.CHEST) || event.getClickedBlock().getType().equals(Material.TRAPPED_CHEST)) {
                     Inventory chest = Bukkit.createInventory(null, ((Chest) event.getClickedBlock().getState()).getInventory().getSize());
                     for (int i = 0; i < ((Chest) event.getClickedBlock().getState()).getInventory().getSize(); i++) {
@@ -227,7 +240,7 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        if (event.getRightClicked() instanceof Player){
+        if (event.getRightClicked() instanceof Player && !event.getPlayer().isSneaking()){
             openInventory(event.getPlayer(), (Player) event.getRightClicked(), false);
         } else if (event.getRightClicked() instanceof ItemFrame) {
             event.setCancelled(true);
