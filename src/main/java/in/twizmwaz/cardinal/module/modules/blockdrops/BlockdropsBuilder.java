@@ -14,7 +14,9 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jdom2.Element;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class BlockdropsBuilder implements ModuleBuilder {
@@ -22,7 +24,10 @@ public class BlockdropsBuilder implements ModuleBuilder {
     @Override
     public ModuleCollection<Blockdrops> load(Match match) {
         ModuleCollection<Blockdrops> results = new ModuleCollection<>();
-        for (Element element : match.getDocument().getRootElement().getChildren("blockdrops")) {
+        List<Element> blockdrops = new ArrayList<>();
+        blockdrops.addAll(match.getDocument().getRootElement().getChildren("blockdrops"));
+        blockdrops.addAll(match.getDocument().getRootElement().getChildren("block-drops"));
+        for (Element element : blockdrops) {
             for (Element rule : element.getChildren("rule")) {
                 RegionModule region = null;
                 if (rule.getChild("region") != null) {
