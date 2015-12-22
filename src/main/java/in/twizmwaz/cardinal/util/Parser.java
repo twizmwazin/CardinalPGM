@@ -21,10 +21,12 @@ public class Parser {
 
     public static ItemStack getItem(Element element) {
         int amount = Numbers.parseInt(element.getAttributeValue("amount", "1"));
-        ItemStack itemStack;
-        if (element.getText().contains(":"))
-            itemStack = new ItemStack(Material.matchMaterial(element.getText().split(":")[0]), amount, (short) Numbers.parseInt(element.getText().split(":")[1]));
-        else itemStack = new ItemStack(Material.matchMaterial(element.getText()), amount);
+        short damage = element.getAttributeValue("damage") != null ? Short.parseShort(element.getAttributeValue("damage")) : element.getText() != null && element.getText().contains(":") ? Short.parseShort(element.getText().split(":")[1]) : 0 ;
+        ItemStack itemStack = null;
+        if (element.getAttribute("material") != null)
+            itemStack = new ItemStack(Material.matchMaterial(element.getAttributeValue("material")), amount, damage);
+        if (element.getText() != "")
+            itemStack = new ItemStack(Material.matchMaterial(element.getText().split(":")[0]), amount, damage);
         if (element.getAttributeValue("unbreakable") != null && Boolean.parseBoolean(element.getAttributeValue("unbreakable"))) {
             try {
                 net.minecraft.server.v1_8_R3.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
@@ -36,7 +38,6 @@ public class Parser {
                 e.printStackTrace();
             }
         }
-        itemStack.setDurability(Short.parseShort(element.getAttributeValue("damage", "0")));
         if (element.getAttributeValue("enchantment") != null) {
             for (String raw : element.getAttributeValue("enchantment").split(";")) {
                 String[] enchant = raw.split(":");
