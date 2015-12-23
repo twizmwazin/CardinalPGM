@@ -4,6 +4,7 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.event.ScoreUpdateEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
+import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
@@ -69,7 +70,7 @@ public class GameComplete implements TaskedModule {
 
     @Override
     public void run() {
-        if (TimeLimit.getMatchTimeLimit() != 0 && MatchTimer.getTimeInSeconds() >= TimeLimit.getMatchTimeLimit()) {
+        if (TimeLimit.getMatchTimeLimit() != 0 && MatchTimer.getTimeInSeconds() >= TimeLimit.getMatchTimeLimit() && GameHandler.getGameHandler().getMatch().getState() == MatchState.PLAYING) {
             GameHandler.getGameHandler().getMatch().end(TimeLimit.getMatchWinner());
         }
     }
