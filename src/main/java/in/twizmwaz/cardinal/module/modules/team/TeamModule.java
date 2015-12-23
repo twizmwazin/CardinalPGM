@@ -159,4 +159,9 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
         this.ready = ready;
     }
 
+    @Override
+    public boolean equals(Object obj){
+        return super.equals(obj) && obj instanceof TeamModule && ((TeamModule) obj).getId().equals(this.id);
+    }
+
 }

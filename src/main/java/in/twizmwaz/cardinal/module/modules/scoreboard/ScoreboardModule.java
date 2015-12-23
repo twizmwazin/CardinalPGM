@@ -44,6 +44,7 @@ public class ScoreboardModule implements Module {
 
     private TeamModule team, prioritized;
     private Scoreboard scoreboard;
+    private List<TeamModule> sortedTeams;
 
     private Objective objective;
     private int currentScore, currentHillScore, minBlitzScore = -1, minTdmScore = -1;
@@ -51,7 +52,8 @@ public class ScoreboardModule implements Module {
 
     public ScoreboardModule(final TeamModule team) {
         this.team = team;
-        this.prioritized = team;
+        this.prioritized = team.isObserver() ? null : team;
+        this.sortedTeams = Teams.getTeams();
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         for (TeamModule teams : Teams.getTeams()) {
             Team prefixTeam = scoreboard.registerNewTeam(teams.getId());
@@ -139,7 +141,7 @@ public class ScoreboardModule implements Module {
             }
         }
         updateObjectivePrefix(event.getObjective());
-        updateObs();
+        updateTeamOrder();
     }
 
     @EventHandler
@@ -150,13 +152,13 @@ public class ScoreboardModule implements Module {
     @EventHandler
     public void onObjectiveTouch(ObjectiveTouchEvent event) {
         updateObjectivePrefix(event.getObjective());
-        updateObs();
+        updateTeamOrder();
     }
 
     @EventHandler
     public void onObjectiveComplete(ObjectiveCompleteEvent event) {
         updateObjectivePrefix(event.getObjective());
-        updateObs();
+        updateTeamOrder();
     }
 
     @EventHandler
@@ -176,13 +178,11 @@ public class ScoreboardModule implements Module {
         updateTeamScore();
     }
 
-    public void updateObs() {
-        if (this.team.isObserver()) {
-            TeamModule winner = TimeLimit.getMatchWinner();
-            if (winner != prioritized) {
-                prioritized = winner;
-                update();
-            }
+    public void updateTeamOrder() {
+        List<TeamModule> newList = TimeLimit.getSortedTeams();
+        if (sortedTeams != newList){
+            sortedTeams = newList;
+            update();
         }
     }
 
@@ -193,7 +193,7 @@ public class ScoreboardModule implements Module {
         currentHillScore = (getSpecificObjective() != null && getSpecificObjective().equals(HillObjective.class)) && !ScoreModule.matchHasScoring() ? 0 : -1;
         used = new ArrayList<>();
 
-        for (TeamModule team : Teams.getTeams()) {
+        for (TeamModule team : sortedTeams) {
             if (!team.isObserver() && team != prioritized && Teams.getShownObjectives(team).size() > 0) {
                 if (currentScore != 0) {
                     setBlankSlot(currentScore);
@@ -209,7 +209,7 @@ public class ScoreboardModule implements Module {
                 renderTeamTitle(team);
             }
         }
-        if (prioritized != null && !prioritized.isObserver() && Teams.getShownObjectives(prioritized).size() > 0) {
+        if (prioritized != null && Teams.getShownObjectives(prioritized).size() > 0) {
             if (currentScore != 0) {
                 setBlankSlot(currentScore);
                 currentScore++;
