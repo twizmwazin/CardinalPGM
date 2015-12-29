@@ -148,9 +148,9 @@ public class StartTimer implements TaskedModule, Cancellable {
             }
         }
         if (neededPlayers() == 1) {
-            return new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.UI_WAITING_PLAYER, ChatColor.AQUA + "" + count + ChatColor.RED, count == 1 ? team.getCompleteName() : ""));
+            return new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.UI_WAITING_PLAYER, ChatColor.AQUA + "" + neededPlayers() + ChatColor.RED, count == 1 ? team.getCompleteName() : ""));
         } else {
-            return new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.UI_WAITING_PLAYERS, ChatColor.AQUA + "" + count + ChatColor.RED, count == 1 ? team.getCompleteName() : ""));
+            return new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.UI_WAITING_PLAYERS, ChatColor.AQUA + "" + neededPlayers() + ChatColor.RED, count == 1 ? team.getCompleteName() : ""));
         }
     }
 
