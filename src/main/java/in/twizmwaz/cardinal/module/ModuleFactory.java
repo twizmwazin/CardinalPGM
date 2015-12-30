@@ -80,100 +80,108 @@ import in.twizmwaz.cardinal.module.modules.worldFreeze.WorldFreezeBuilder;
 import org.bukkit.Bukkit;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.ArrayList;
 import java.util.logging.Level;
 
 public class ModuleFactory {
 
-    private static Class[] builderClasses = {
-            BuildHeightBuilder.class,
-            WoolObjectiveBuilder.class,
-            CoreObjectiveBuilder.class,
-            DestroyableObjectiveBuilder.class,
-            ItemRemoveBuilder.class,
-            ToolRepairBuilder.class,
-            DisableDamageBuilder.class,
-            GamerulesBuilder.class,
-            KitBuilder.class,
-            TimeLockBuilder.class,
-            FriendlyFireBuilder.class,
-            HungerBuilder.class,
-            MapDifficultyBuilder.class,
-            HungerBuilder.class,
-            ProjectilesBuilder.class,
-            TntTrackerBuilder.class,
-            VisibilityBuilder.class,
-            MOTDBuilder.class,
-            WorldFreezeBuilder.class,
-            TeamManagerModuleBuilder.class,
-            RespawnModuleBuilder.class,
-            ObserverModuleBuilder.class,
-            KillStreakBuilder.class,
-            TeamPickerBuilder.class,
-            ScoreboardModuleBuilder.class,
-            TeamModuleBuilder.class,
-            SpawnModuleBuilder.class,
-            DeathMessagesBuilder.class,
-            TntDefuseBuilder.class,
-            ScoreModuleBuilder.class,
-            GameCompleteBuilder.class,
-            RegionModuleBuilder.class,
-            DoubleKillPatchBuilder.class,
-            TaskerModuleBuilder.class,
-            MatchTimerBuilder.class,
-            ItemKeepBuilder.class,
-            ArmorKeepBuilder.class,
-            BroadcastModuleBuilder.class,
-            MatchModuleBuilder.class,
-            TimeNotificationsBuilder.class,
-            HillObjectiveBuilder.class,
-            ChatModuleBuilder.class,
-            MonumentModesBuilder.class,
-            RageBuilder.class,
-            BlitzBuilder.class,
-            MapNotificationBuilder.class,
-            FilterModuleBuilder.class,
-            AppliedRegionBuilder.class,
-            KillRewardBuilder.class,
-            PortalBuilder.class,
-            ClassModuleBuilder.class,
-            TrackerBuilder.class,
-            ScoreboxBuilder.class,
-            BlockdropsBuilder.class,
-            ProximityAlarmBuilder.class,
-            /* BloodBuilder.class, */
-            PermissionModuleBuilder.class,
-            ChatChannelModuleBuilder.class,
-            TntBuilder.class,
-            MobModuleBuilder.class,
-            DeathTrackerBuilder.class,
-            SnowflakesBuilder.class,
-            SoundModuleBuilder.class,
-            StartTimerBuilder.class,
-            HeaderModuleBuilder.class,
-            CycleTimerModuleBuilder.class,
-            TimeLimitBuilder.class,
-            PlayableBuilder.class,
-            TutorialBuilder.class,
-            WildCardBuilder.class,
-            BossBarBuilder.class,
-            UpdateNotificationBuilder.class,
-            PotionRemoverBuilder.class,
-            InvisibleBlockBuilder.class,
-            ItemDropBuilder.class,
-            GuiKeepModuleBuilder.class,
-            RankModuleBuilder.class,
-            MultitradeBuilder.class
-    };
+    private Set<Class<? extends ModuleBuilder>> builderClasses;
     private final List<ModuleBuilder> builders;
 
-    @SuppressWarnings("unchecked")
+    private void addBuilders() {
+        this.builderClasses.addAll(Arrays.asList(
+                BuildHeightBuilder.class,
+                WoolObjectiveBuilder.class,
+                CoreObjectiveBuilder.class,
+                DestroyableObjectiveBuilder.class,
+                ItemRemoveBuilder.class,
+                ToolRepairBuilder.class,
+                DisableDamageBuilder.class,
+                GamerulesBuilder.class,
+                KitBuilder.class,
+                TimeLockBuilder.class,
+                FriendlyFireBuilder.class,
+                HungerBuilder.class,
+                MapDifficultyBuilder.class,
+                HungerBuilder.class,
+                ProjectilesBuilder.class,
+                TntTrackerBuilder.class,
+                VisibilityBuilder.class,
+                MOTDBuilder.class,
+                WorldFreezeBuilder.class,
+                TeamManagerModuleBuilder.class,
+                RespawnModuleBuilder.class,
+                ObserverModuleBuilder.class,
+                KillStreakBuilder.class,
+                TeamPickerBuilder.class,
+                ScoreboardModuleBuilder.class,
+                TeamModuleBuilder.class,
+                SpawnModuleBuilder.class,
+                DeathMessagesBuilder.class,
+                TntDefuseBuilder.class,
+                ScoreModuleBuilder.class,
+                GameCompleteBuilder.class,
+                RegionModuleBuilder.class,
+                DoubleKillPatchBuilder.class,
+                TaskerModuleBuilder.class,
+                MatchTimerBuilder.class,
+                ItemKeepBuilder.class,
+                ArmorKeepBuilder.class,
+                BroadcastModuleBuilder.class,
+                MatchModuleBuilder.class,
+                TimeNotificationsBuilder.class,
+                HillObjectiveBuilder.class,
+                ChatModuleBuilder.class,
+                MonumentModesBuilder.class,
+                RageBuilder.class,
+                BlitzBuilder.class,
+                MapNotificationBuilder.class,
+                FilterModuleBuilder.class,
+                AppliedRegionBuilder.class,
+                KillRewardBuilder.class,
+                PortalBuilder.class,
+                ClassModuleBuilder.class,
+                TrackerBuilder.class,
+                ScoreboxBuilder.class,
+                BlockdropsBuilder.class,
+                ProximityAlarmBuilder.class,
+                /* BloodBuilder.class, */
+                PermissionModuleBuilder.class,
+                ChatChannelModuleBuilder.class,
+                TntBuilder.class,
+                MobModuleBuilder.class,
+                DeathTrackerBuilder.class,
+                SnowflakesBuilder.class,
+                SoundModuleBuilder.class,
+                StartTimerBuilder.class,
+                HeaderModuleBuilder.class,
+                CycleTimerModuleBuilder.class,
+                TimeLimitBuilder.class,
+                PlayableBuilder.class,
+                TutorialBuilder.class,
+                WildCardBuilder.class,
+                BossBarBuilder.class,
+                UpdateNotificationBuilder.class,
+                PotionRemoverBuilder.class,
+                InvisibleBlockBuilder.class,
+                ItemDropBuilder.class,
+                GuiKeepModuleBuilder.class,
+                RankModuleBuilder.class,
+                MultitradeBuilder.class
+        ));
+    }
+
     public ModuleFactory() {
         this.builders = new ArrayList<>();
-        for (Class clazz : builderClasses) {
+        this.builderClasses = new HashSet<>();
+        this.addBuilders();
+        for (Class<? extends ModuleBuilder> clazz : builderClasses) {
             try {
-                builders.add((ModuleBuilder) clazz.getConstructor().newInstance());
+                builders.add(clazz.getConstructor().newInstance());
             } catch (NoSuchMethodException e) {
                 Bukkit.getLogger().log(Level.SEVERE, clazz.getName() + " is an invalid ModuleBuilder.");
                 e.printStackTrace();
