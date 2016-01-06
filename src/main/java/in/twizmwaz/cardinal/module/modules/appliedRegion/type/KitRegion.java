@@ -26,7 +26,7 @@ public class KitRegion extends AppliedRegion {
     public void onPlayerMove(PlayerMoveEvent event) {
         Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
         if (event.isCancelled() || (team.isPresent() && team.get().isObserver())) return;
-        if (region.contains(event.getTo().toVector()) && !region.contains(event.getFrom().toVector()) && (filter == null || filter.evaluate(event.getPlayer(), event.getTo(), event).equals(FilterState.ALLOW))) {
+        if (region.contains(event.getTo().toVector()) && !region.contains(event.getFrom().toVector()) && filter.evaluate(event.getPlayer(), event.getTo(), event).equals(FilterState.ALLOW)) {
             kit.apply(event.getPlayer());
         }
     }
@@ -35,7 +35,7 @@ public class KitRegion extends AppliedRegion {
     public void onPlayerMove(PlayerTeleportEvent event) {
         Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
         if (event.isCancelled() || (team.isPresent() && team.get().isObserver())) return;
-        if (region.contains(event.getTo().toVector()) && !region.contains(event.getFrom().toVector()) && (filter == null || filter.evaluate(event.getPlayer(), event.getTo(), event).equals(FilterState.ALLOW))) {
+        if (region.contains(event.getTo().toVector()) && !region.contains(event.getFrom().toVector()) && filter.evaluate(event.getPlayer(), event.getTo(), event).equals(FilterState.ALLOW)) {
             kit.apply(event.getPlayer());
         }
     }

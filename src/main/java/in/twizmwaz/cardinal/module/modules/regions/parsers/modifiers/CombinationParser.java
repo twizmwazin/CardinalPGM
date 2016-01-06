@@ -12,7 +12,7 @@ public class CombinationParser extends RegionParser {
     private final ModuleCollection<RegionModule> regions = new ModuleCollection<>();
 
     public CombinationParser(Element element, Document document) {
-        super(element.getAttributeValue("name"));
+        super(element.getAttributeValue("name") != null ? element.getAttributeValue("name") : element.getAttributeValue("id"));
         for (Element child : element.getChildren()) regions.add(RegionModuleBuilder.getRegion(child, document));
     }
 

@@ -26,12 +26,11 @@ public class KitBuilder implements ModuleBuilder {
     public static Kit getKit(Element element, Document document, boolean proceed) {
         if (element.getName().equalsIgnoreCase("kit") || proceed) {
             String name = null;
-            if (element.getAttributeValue("name") != null) {
-                name = element.getAttributeValue("name");
-                for (Kit kit : GameHandler.getGameHandler().getMatch().getModules().getModules(Kit.class)) {
-                    if (kit.getName().equalsIgnoreCase(name)) {
-                        return kit;
-                    }
+            if (element.getAttributeValue("name") != null) name = element.getAttributeValue("name");
+            if (element.getAttributeValue("id") != null) name = element.getAttributeValue("id");
+            for (Kit kit : GameHandler.getGameHandler().getMatch().getModules().getModules(Kit.class)) {
+                if (kit.getName().equalsIgnoreCase(name)) {
+                    return kit;
                 }
             }
             List<KitItem> items = new ArrayList<>(36);

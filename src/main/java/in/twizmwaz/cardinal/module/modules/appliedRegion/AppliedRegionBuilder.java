@@ -73,7 +73,7 @@ public class AppliedRegionBuilder implements ModuleBuilder {
                     results.add(new UseRegion(region, getFilter(applied.getAttributeValue("use")), message));
                 }
                 if (applied.getAttributeValue("kit") != null) {
-                    results.add(new KitRegion(region, (applied.getAttributeValue("filter") != null ? getFilter(applied.getAttributeValue("filter")) : null), message, Kit.getKitByName(applied.getAttributeValue("kit"))));
+                    results.add(new KitRegion(region, (applied.getAttributeValue("filter") != null ? getFilter(applied.getAttributeValue("filter")) : getFilter("always")), message, Kit.getKitByName(applied.getAttributeValue("kit"))));
                 }
             }
         }
