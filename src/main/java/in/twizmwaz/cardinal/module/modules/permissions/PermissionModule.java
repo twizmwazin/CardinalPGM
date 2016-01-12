@@ -129,7 +129,7 @@ public class PermissionModule implements Module {
     }
 
     public void disablePermission(Player player, String permission) {
-        attachmentMap.get(player).unsetPermission(permission);
+        attachmentMap.get(player).setPermission(permission, false);
     }
 
     public void enablePermission(Player player, String permission) {
