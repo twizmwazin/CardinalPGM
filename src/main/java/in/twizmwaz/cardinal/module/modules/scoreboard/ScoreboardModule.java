@@ -161,6 +161,7 @@ public class ScoreboardModule implements Module {
 
     @EventHandler
     public void onTeamNameChange(TeamNameChangeEvent event) {
+        if (event.getTeam().isObserver()) return;
         updateTeamTitle(event.getTeam());
         if (Blitz.matchIsBlitz()) {
             updateTeamBlitz();
@@ -184,8 +185,8 @@ public class ScoreboardModule implements Module {
             }
         }
     }
-    public void update() {
 
+    public void update() {
         objective = scoreboard.getObjective("scoreboard") == null ? scoreboard.registerNewObjective("scoreboard", "dummy") : scoreboard.getObjective("scoreboard");
         objective.setDisplayName(getDisplayTitle());
         currentScore = 0;
@@ -274,6 +275,7 @@ public class ScoreboardModule implements Module {
         team.setPrefix(teamModule.getColor() + Strings.trimTo(teamModule.getName(), 0, 14));
         team.setSuffix(Strings.trimTo(teamModule.getName(), 14, 30));
     }
+
     public void updateTeamBlitz() {
         if (minBlitzScore == -1) {
             update();
