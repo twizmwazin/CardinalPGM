@@ -103,7 +103,11 @@ public class TeamPicker implements Module {
                                     event.setCancelled(true);
                                     player.closeInventory();
                                     player.playSound(player.getLocation(), Sound.BLOCK_DISPENSER_DISPENSE, 1, 2);
-                                    Bukkit.dispatchCommand(player, "join");
+                                    try {
+                                        Teams.setPlayerTeam(player, "");
+                                    } catch (Exception e) {
+                                        player.sendMessage(com.sk89q.minecraft.util.commands.ChatColor.RED + e.getMessage());
+                                    }
                                 }
                             }
                         }
@@ -114,7 +118,11 @@ public class TeamPicker implements Module {
                                     event.setCancelled(true);
                                     player.closeInventory();
                                     player.playSound(player.getLocation(), Sound.BLOCK_DISPENSER_DISPENSE, 1, 2);
-                                    Bukkit.dispatchCommand(player, "leave");
+                                    try {
+                                        Teams.setPlayerTeam(player, Teams.getTeamById("observers").get().getName());
+                                    } catch (Exception e) {
+                                        player.sendMessage(com.sk89q.minecraft.util.commands.ChatColor.RED + e.getMessage());
+                                    }
                                 }
                             }
                         }
@@ -125,7 +133,12 @@ public class TeamPicker implements Module {
                                     event.setCancelled(true);
                                     player.closeInventory();
                                     player.playSound(player.getLocation(), Sound.BLOCK_DISPENSER_DISPENSE, 1, 2);
-                                    Bukkit.dispatchCommand(player, "join " + ChatColor.stripColor(item.getItemMeta().getDisplayName()));
+                                    try {
+                                        Bukkit.getConsoleSender().sendMessage(player.getName() + " joined " + ChatColor.stripColor(item.getItemMeta().getDisplayName()));
+                                        Teams.setPlayerTeam(player, ChatColor.stripColor(item.getItemMeta().getDisplayName()));
+                                    } catch (Exception e) {
+                                        player.sendMessage(com.sk89q.minecraft.util.commands.ChatColor.RED + e.getMessage());
+                                    }
                                 } else {
                                     event.setCancelled(true);
                                     player.closeInventory();

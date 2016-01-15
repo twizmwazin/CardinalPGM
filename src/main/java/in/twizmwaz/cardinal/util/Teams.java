@@ -2,7 +2,10 @@ package in.twizmwaz.cardinal.util;
 
 import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.match.Match;
+import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannel;
@@ -149,5 +152,37 @@ public class Teams {
             if (!team.isObserver()) return false;
         }
         return true;
+    }
+
+    public static void setPlayerTeam(Player player, String team) throws Exception {
+        if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) || GameHandler.getGameHandler().getMatch().getState().equals(MatchState.CYCLING)) {
+            throw new Exception(ChatUtil.getWarningMessage(new LocalizedChatMessage(ChatConstant.ERROR_MATCH_OVER).getMessage(player.getLocale())));
+        }
+        Optional<TeamModule> originalTeam = Teams.getTeamByPlayer(player);
+        if (team.equals("") && originalTeam.isPresent() && !originalTeam.get().isObserver()) {
+            throw new Exception(ChatUtil.getWarningMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_JOINED, Teams.getTeamByPlayer(player).get().getCompleteName() + ChatColor.RED).getMessage(player.getLocale())));
+        }
+        Optional<TeamModule> destinationTeam;
+        if (!team.equals("")) {
+            destinationTeam = getTeamByName(team);
+            if (!destinationTeam.isPresent()) {
+                if ("observers".startsWith(team.toLowerCase())) {
+                    setPlayerTeam(player, getTeamById("observers").get().getName());
+                    return;
+                }
+                throw new Exception(ChatConstant.ERROR_NO_TEAM_MATCH.getMessage(ChatUtil.getLocale(player)));
+            }
+            if (destinationTeam.get().contains(player)) {
+                throw new Exception(ChatUtil.getWarningMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_JOINED, destinationTeam.get().getCompleteName() + ChatColor.RED).getMessage(ChatUtil.getLocale(player))));
+            }
+            destinationTeam.get().add(player, false);
+        } else {
+            destinationTeam = Teams.getTeamWithFewestPlayers(GameHandler.getGameHandler().getMatch());
+            if (destinationTeam.isPresent()) {
+                destinationTeam.get().add(player, false);
+            } else {
+                throw new Exception(ChatConstant.ERROR_TEAMS_FULL.getMessage(ChatUtil.getLocale(player)));
+            }
+        }
     }
 }
