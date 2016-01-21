@@ -41,6 +41,7 @@ import in.twizmwaz.cardinal.rank.Rank;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import in.twizmwaz.cardinal.settings.Setting;
 import in.twizmwaz.cardinal.settings.SettingValue;
+import in.twizmwaz.cardinal.tabList.TabList;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.DomUtil;
 import in.twizmwaz.cardinal.util.Numbers;
@@ -50,6 +51,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -72,6 +74,7 @@ public class Cardinal extends JavaPlugin {
     private static Database database;
     private CommandsManager<CommandSender> commands;
     private File databaseFile;
+    private TabList tabList;
 
     public static LocaleHandler getLocaleHandler() {
         return localeHandler;
@@ -83,6 +86,10 @@ public class Cardinal extends JavaPlugin {
 
     public static Database getCardinalDatabase() {
         return database;
+    }
+
+    public TabList getTabList() {
+        return tabList;
     }
 
     @Override
@@ -316,6 +323,8 @@ public class Cardinal extends JavaPlugin {
         registerSettings();
         registerRanks();
         setupCommands();
+        this.tabList = new TabList();
+        Bukkit.getPluginManager().registerEvents(tabList, this);
 
         try {
             gameHandler = new GameHandler();

@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.team;
 
 import com.google.common.base.Optional;
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -9,6 +10,7 @@ import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
+import in.twizmwaz.cardinal.tabList.TabList;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -118,6 +120,7 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
 
     public void setMax(int max) {
         this.max = max;
+        Cardinal.getInstance().getTabList().updateAll(this);
     }
 
     public int getMaxOverfill() {
