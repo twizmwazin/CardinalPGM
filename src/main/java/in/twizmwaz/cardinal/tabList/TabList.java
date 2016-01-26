@@ -16,6 +16,7 @@ import in.twizmwaz.cardinal.util.Strings;
 import in.twizmwaz.cardinal.util.Teams;
 import net.minecraft.server.v1_8_R3.DataWatcher;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
+import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_8_R3.PacketPlayOutNamedEntitySpawn;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
 import net.minecraft.server.v1_8_R3.PacketPlayOutScoreboardTeam;
@@ -316,7 +317,9 @@ public class TabList implements Listener {
         GameProfile profile = getPlayer(player);
         broadcastUpdateTabListSlot(profile, 80, 0);
         broadcastTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, profile, "", 0);
+        deletePlayerWithParts(profile);
         fakePlayer.remove(player);
+        entityIDs.remove(profile);
     }
 
     private GameProfile getTeam(TeamModule team) {
@@ -496,6 +499,12 @@ public class TabList implements Listener {
         DataWatcher.deepCopy(spawnPacket.j);// No idea what this is for, but the constructor for PacketPlayOutNamedEntitySpawn(EntityHuman) does it
 
         ((CraftPlayer) viewer).getHandle().playerConnection.sendPacket(spawnPacket);
+    }
+
+    private void deletePlayerWithParts(GameProfile profile) {
+        for (Player viewer : Bukkit.getOnlinePlayers()) {
+            ((CraftPlayer) viewer).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(Integer.MAX_VALUE - entityIDs.get(profile)));
+        }
     }
 
     private List<Player> getSortedPlayerList(TeamModule team) {
