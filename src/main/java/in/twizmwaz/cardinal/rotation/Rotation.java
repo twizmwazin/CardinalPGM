@@ -3,6 +3,8 @@ package in.twizmwaz.cardinal.rotation;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import in.twizmwaz.cardinal.Cardinal;
+import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.module.modules.header.HeaderModule;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
 import in.twizmwaz.cardinal.util.Contributor;
 import in.twizmwaz.cardinal.util.DomUtil;
@@ -10,6 +12,7 @@ import in.twizmwaz.cardinal.util.MojangUtil;
 import in.twizmwaz.cardinal.util.Numbers;
 import org.apache.commons.io.Charsets;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
@@ -101,11 +104,7 @@ public class Rotation {
                 }
             }
         }
-        try {
-            updatePlayers();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        updatePlayers();
         if (loaded.size() < 1)
             throw new RotationLoadException("No maps were loaded. Are there any maps in the repository?");
     }
@@ -219,44 +218,67 @@ public class Rotation {
     }
 
     @SuppressWarnings("unchecked")
-    private void updatePlayers() throws IOException, ClassNotFoundException {
-        HashMap<UUID, String> names;
-        try {
-            names = (HashMap<UUID, String>) new ObjectInputStream(new FileInputStream(new File(Cardinal.getInstance().getDataFolder().getPath() + ".names.ser"))).readObject();
-        } catch (FileNotFoundException e) {
-            names = Maps.newHashMap();
-        }
-        for (LoadedMap map : loaded) {
-            for (Contributor contributor : map.getAuthors()) {
-                if (contributor.getName() == null) {
-                    String localName = Bukkit.getOfflinePlayer(contributor.getUniqueId()).getName();
-                    if (localName != null) {
-                        contributor.setName(localName);
-                    } else if (names.containsKey(contributor.getUniqueId())) {
-                        contributor.setName(names.get(contributor.getUniqueId()));
-                    } else {
-                        names.put(contributor.getUniqueId(), MojangUtil.getName(contributor.getUniqueId()));
-                        contributor.setName(names.get(contributor.getUniqueId()));
+    private void updatePlayers() {
+        Bukkit.getScheduler().runTaskAsynchronously(Cardinal.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Bukkit.getLogger().log(Level.INFO, "Setting known map author names.");
+                    HashMap<UUID, String> names;
+                    try {
+                        names = (HashMap<UUID, String>) new ObjectInputStream(new FileInputStream(new File(Cardinal.getInstance().getDataFolder().getPath() + "/.names.ser"))).readObject();
+                    } catch (FileNotFoundException e) {
+                        names = Maps.newHashMap();
                     }
+                    for (LoadedMap map : loaded) {
+                        List<Contributor> contributors = new ArrayList<>();
+                        contributors.addAll(map.getAuthors());
+                        contributors.addAll(map.getContributors());
+                        for (Contributor contributor : contributors) {
+                            if (contributor.getName() == null && contributor.getUniqueId() != null) {
+                                if (!names.containsKey(contributor.getUniqueId())) names.put(contributor.getUniqueId(), "Unknown");
+                                contributor.setName(names.get(contributor.getUniqueId()));
+                            }
+                        }
+                    }
+                    Bukkit.getLogger().log(Level.INFO, "Updating map author names.");
+                    List<UUID> requested = Lists.newArrayList();
+                    for (LoadedMap map : loaded) {
+                        List<Contributor> contributors = new ArrayList<>();
+                        contributors.addAll(map.getAuthors());
+                        contributors.addAll(map.getContributors());
+                        for (Contributor contributor : contributors) {
+                            if (contributor.getUniqueId() == null) continue;
+                            if (requested.contains(contributor.getUniqueId())) {
+                                contributor.setName(names.get(contributor.getUniqueId()));
+                            } else {
+                                OfflinePlayer player = Bukkit.getOfflinePlayer(contributor.getUniqueId());
+                                if (player != null && player.getLastPlayed() + 180000 > System.currentTimeMillis()) {
+                                    names.put(contributor.getUniqueId(), player.getName());
+                                } else {
+                                    String name = MojangUtil.getName(contributor.getUniqueId());
+                                    if (name != null) {
+                                        names.put(contributor.getUniqueId(), name);
+                                        requested.add(contributor.getUniqueId());
+                                    }
+                                }
+                                contributor.setName(names.get(contributor.getUniqueId()));
+                            }
+                        }
+                        if (map.equals(GameHandler.getGameHandler().getMatch().getLoadedMap())) {
+                            GameHandler.getGameHandler().getMatch().getModules().getModule(HeaderModule.class).updateHeader();
+                            GameHandler.getGameHandler().getMatch().getModules().getModule(HeaderModule.class).updateAll();
+                        }
+                    }
+                    ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(Cardinal.getInstance().getDataFolder().getPath() + "/.names.ser")));
+                    out.writeObject(names);
+                    out.close();
+                    Bukkit.getLogger().log(Level.INFO, "Finnished updating map author names.");
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
             }
-            for (Contributor contributor : map.getContributors()) {
-                if (contributor.getName() == null) {
-                    String localName = Bukkit.getOfflinePlayer(contributor.getUniqueId()).getName();
-                    if (localName != null) {
-                        contributor.setName(localName);
-                    } else if (names.containsKey(contributor.getUniqueId())) {
-                        contributor.setName(names.get(contributor.getUniqueId()));
-                    } else {
-                        names.put(contributor.getUniqueId(), MojangUtil.getName(contributor.getUniqueId()));
-                        contributor.setName(names.get(contributor.getUniqueId()));
-                    }
-                }
-            }
-        }
-        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(Cardinal.getInstance().getDataFolder().getPath() + "/.names.ser")));
-        out.writeObject(names);
-        out.close();
+        });
     }
 
 }

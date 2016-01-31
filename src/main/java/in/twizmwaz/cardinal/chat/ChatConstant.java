@@ -202,6 +202,7 @@ public enum ChatConstant {
     GENERIC_MUTED_BY("generic.mutedBy"),
     GENERIC_UNMUTED("generic.unmuted"),
     GENERIC_UNMUTED_BY("generic.unmutedBy"),
+    GENERIC_CREATED_BY("generic.createdBy"),
 
     MISC_ENEMY("misc.enemy"),
     MISC_FATE("misc.fate"),

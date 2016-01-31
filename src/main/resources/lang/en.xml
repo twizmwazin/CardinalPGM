@@ -198,6 +198,7 @@
         <mutedBy>You were muted by {0}</mutedBy>
         <unmuted>You unmuted {0}</unmuted>
         <unmutedBy>You were unmuted by {0}</unmutedBy>
+        <createdBy>Created by</createdBy>
     </generic>
     <misc>
         <enemy>the enemy</enemy>

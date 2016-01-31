@@ -1,5 +1,9 @@
 package in.twizmwaz.cardinal.util;
 
+import in.twizmwaz.cardinal.rank.Rank;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+
 import java.util.UUID;
 
 public class Contributor {
@@ -26,13 +30,20 @@ public class Contributor {
         this(uniqueId, null);
     }
 
-
     public String getName() {
         return name;
     }
 
+    public String getDisplayName() {
+        if (uniqueId == null) return ChatColor.DARK_AQUA + name;
+        if (Bukkit.getOfflinePlayer(uniqueId).isOnline()) {
+            return Bukkit.getPlayer(uniqueId).getDisplayName();
+        } else {
+            return Rank.getPrefix(uniqueId) + ChatColor.DARK_AQUA + name;
+        }
+    }
+
     public void setName(String name) {
-        if (this.name != null) throw new UnsupportedOperationException("Contributor name is already set");
         this.name = name;
     }
 
