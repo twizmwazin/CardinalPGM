@@ -35,21 +35,21 @@ public class MapCommands {
             sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + ChatConstant.UI_MAP_AUTHORS.getMessage(ChatUtil.getLocale(sender)) + ":");
             for (Contributor contributor : mapInfo.getAuthors()) {
                 if (contributor.getContribution() != null) {
-                    sender.sendMessage("* " + ChatColor.RED + contributor.getName() + ChatColor.RESET + " " + ChatColor.GREEN + "" + ChatColor.ITALIC + "(" + contributor.getContribution() + ")");
+                    sender.sendMessage("  " + contributor.getDisplayName() + ChatColor.GRAY + " - " + ChatColor.ITALIC + contributor.getContribution());
                 } else {
-                    sender.sendMessage("* " + ChatColor.RED + contributor.getName());
+                    sender.sendMessage("  " + contributor.getDisplayName());
                 }
             }
         } else {
-            sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + ChatConstant.UI_MAP_AUTHOR.getMessage(ChatUtil.getLocale(sender)) + ": " + ChatColor.RESET + ChatColor.GOLD + mapInfo.getAuthors().get(0).getName());
+            sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + ChatConstant.UI_MAP_AUTHOR.getMessage(ChatUtil.getLocale(sender)) + ": " + mapInfo.getAuthors().get(0).getDisplayName());
         }
         if (mapInfo.getContributors().size() > 0) {
             sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + ChatConstant.UI_MAP_CONTRIBUTORS.getMessage(ChatUtil.getLocale(sender)) + ":");
             for (Contributor contributor : mapInfo.getContributors()) {
                 if (contributor.getContribution() != null) {
-                    sender.sendMessage("* " + ChatColor.RED + contributor.getName() + ChatColor.RESET + ChatColor.GREEN + "" + ChatColor.ITALIC + " (" + contributor.getContribution() + ")");
+                    sender.sendMessage("  " + contributor.getDisplayName() + ChatColor.GRAY + " - " + ChatColor.ITALIC + contributor.getContribution());
                 } else {
-                    sender.sendMessage("* " + ChatColor.RED + contributor.getName());
+                    sender.sendMessage("  " + contributor.getDisplayName());
                 }
             }
         }

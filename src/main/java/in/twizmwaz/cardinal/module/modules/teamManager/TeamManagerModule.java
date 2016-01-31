@@ -61,6 +61,30 @@ public class TeamManagerModule implements Module {
         }
         Bukkit.getConsoleSender().sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", new LocalizedChatMessage(ChatConstant.UI_PLAYER_JOIN, Teams.getTeamColorByPlayer(player) + player.getDisplayName() + ChatColor.YELLOW)).getMessage(Locale.getDefault().toString()));
 
+        sendMapMessage(player);
+    }
+
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        event.setQuitMessage(null);
+        for (Player player1 : Bukkit.getOnlinePlayers()) {
+            if (!player1.equals(player)) {
+                player1.sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", new LocalizedChatMessage(ChatConstant.UI_PLAYER_LEAVE, Teams.getTeamColorByPlayer(player) + player.getDisplayName() + ChatColor.YELLOW)).getMessage(player1.getLocale()));
+            }
+        }
+        Bukkit.getConsoleSender().sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", new LocalizedChatMessage(ChatConstant.UI_PLAYER_LEAVE, Teams.getTeamColorByPlayer(player) + player.getDisplayName() + ChatColor.YELLOW)).getMessage(Locale.getDefault().toString()));
+        removePlayer(player);
+    }
+
+    @EventHandler
+    public void onCycleComplete(CycleCompleteEvent event) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            sendMapMessage(player);
+        }
+    }
+
+    private void sendMapMessage(Player player) {
         player.sendMessage(ChatColor.STRIKETHROUGH + "--------" + ChatColor.AQUA + ChatColor.BOLD + " " + GameHandler.getGameHandler().getMatch().getLoadedMap().getName() + " " + ChatColor.RESET + ChatColor.STRIKETHROUGH + "--------");
         String line = "";
         if (GameHandler.getGameHandler().getMatch().getLoadedMap().getObjective().contains(" ")) {
@@ -82,15 +106,15 @@ public class TeamManagerModule implements Module {
             player.sendMessage(" " + line);
         }
         String locale = player.getLocale();
-        String result = ChatColor.DARK_GRAY + "Created by ";
+        String result = ChatColor.DARK_GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_CREATED_BY).getMessage(locale) + " ";
         List<Contributor> authors = GameHandler.getGameHandler().getMatch().getLoadedMap().getAuthors();
         for (Contributor author : authors) {
             if (authors.indexOf(author) < authors.size() - 2) {
-                result = result + ChatColor.GRAY + author.getName() + ChatColor.DARK_GRAY + ", ";
+                result = result + author.getDisplayName() + ChatColor.DARK_GRAY + ", ";
             } else if (authors.indexOf(author) == authors.size() - 2) {
-                result = result + ChatColor.GRAY + author.getName() + ChatColor.DARK_GRAY + " " + new LocalizedChatMessage(ChatConstant.MISC_AND).getMessage(locale) + " ";
+                result = result + author.getDisplayName() + ChatColor.DARK_GRAY + " " + new LocalizedChatMessage(ChatConstant.MISC_AND).getMessage(locale) + " ";
             } else if (authors.indexOf(author) == authors.size() - 1) {
-                result = result + ChatColor.GRAY + author.getName();
+                result = result + author.getDisplayName();
             }
         }
         if (result.contains(" ")) {
@@ -111,75 +135,6 @@ public class TeamManagerModule implements Module {
             player.sendMessage(ChatColor.DARK_GRAY + " " + line);
         }
         player.sendMessage(ChatColor.STRIKETHROUGH + "---------------------------");
-    }
-
-    @EventHandler
-    public void onPlayerLeave(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-        event.setQuitMessage(null);
-        for (Player player1 : Bukkit.getOnlinePlayers()) {
-            if (!player1.equals(player)) {
-                player1.sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", new LocalizedChatMessage(ChatConstant.UI_PLAYER_LEAVE, Teams.getTeamColorByPlayer(player) + player.getDisplayName() + ChatColor.YELLOW)).getMessage(player1.getLocale()));
-            }
-        }
-        Bukkit.getConsoleSender().sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", new LocalizedChatMessage(ChatConstant.UI_PLAYER_LEAVE, Teams.getTeamColorByPlayer(player) + player.getDisplayName() + ChatColor.YELLOW)).getMessage(Locale.getDefault().toString()));
-        removePlayer(player);
-    }
-
-    @EventHandler
-    public void onCycleComplete(CycleCompleteEvent event) {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            player.sendMessage(ChatColor.STRIKETHROUGH + "--------" + ChatColor.AQUA + ChatColor.BOLD + " " + GameHandler.getGameHandler().getMatch().getLoadedMap().getName() + " " + ChatColor.RESET + ChatColor.STRIKETHROUGH + "--------");
-            String line = "";
-            if (GameHandler.getGameHandler().getMatch().getLoadedMap().getObjective().contains(" ")) {
-                for (String word : GameHandler.getGameHandler().getMatch().getLoadedMap().getObjective().split(" ")) {
-                    line += word + " ";
-                    if (line.trim().length() > 32) {
-                        line = ChatColor.BLUE + "" + ChatColor.ITALIC + line.trim();
-                        player.sendMessage(" " + line);
-                        line = "";
-                    }
-                }
-                if (!line.trim().equals("")) {
-                    line = ChatColor.BLUE + "" + ChatColor.ITALIC + line.trim();
-                    player.sendMessage(" " + line);
-                    line = "";
-                }
-            } else {
-                line = ChatColor.BLUE + "" + ChatColor.ITALIC + GameHandler.getGameHandler().getMatch().getLoadedMap().getObjective();
-                player.sendMessage(" " + line);
-            }
-            String locale = player.getLocale();
-            String result = ChatColor.DARK_GRAY + "Created by ";
-            List<Contributor> authors = GameHandler.getGameHandler().getMatch().getLoadedMap().getAuthors();
-            for (Contributor author : authors) {
-                if (authors.indexOf(author) < authors.size() - 2) {
-                    result = result + ChatColor.GRAY + author.getName() + ChatColor.DARK_GRAY + ", ";
-                } else if (authors.indexOf(author) == authors.size() - 2) {
-                    result = result + ChatColor.GRAY + author.getName() + ChatColor.DARK_GRAY + " " + new LocalizedChatMessage(ChatConstant.MISC_AND).getMessage(locale) + " ";
-                } else if (authors.indexOf(author) == authors.size() - 1) {
-                    result = result + ChatColor.GRAY + author.getName();
-                }
-            }
-            if (result.contains(" ")) {
-                for (String word : result.split(" ")) {
-                    line += word + " ";
-                    if (line.trim().length() > 32) {
-                        line = line.trim();
-                        player.sendMessage(ChatColor.DARK_GRAY + " " + line);
-                        line = "";
-                    }
-                }
-                if (!line.trim().equals("")) {
-                    line = line.trim();
-                    player.sendMessage(ChatColor.DARK_GRAY + " " + line);
-                }
-            } else {
-                line = result;
-                player.sendMessage(ChatColor.DARK_GRAY + " " + line);
-            }
-            player.sendMessage(ChatColor.STRIKETHROUGH + "---------------------------");
-        }
     }
 
     @EventHandler

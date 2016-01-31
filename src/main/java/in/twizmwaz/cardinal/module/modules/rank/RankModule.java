@@ -47,6 +47,7 @@ public class RankModule implements Module {
 
     @EventHandler
     public void onRankChange(RankChangeEvent event) {
+        if (!event.isOnline()) return;
         Player player = event.getPlayer();
 
         Bukkit.getPluginManager().callEvent(new PlayerNameUpdateEvent(player));

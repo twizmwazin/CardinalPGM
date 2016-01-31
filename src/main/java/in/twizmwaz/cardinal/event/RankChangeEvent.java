@@ -11,11 +11,13 @@ public class RankChangeEvent extends Event {
     private final Player player;
     private Rank rank;
     private boolean adding;
+    private boolean online;
 
-    public RankChangeEvent(Player player, Rank rank, boolean adding) {
+    public RankChangeEvent(Player player, Rank rank, boolean adding, boolean online) {
         this.player = player;
         this.rank = rank;
         this.adding = adding;
+        this.online = online;
     }
 
     public static HandlerList getHandlerList() {
@@ -36,6 +38,10 @@ public class RankChangeEvent extends Event {
 
     public boolean isAdding() {
         return adding;
+    }
+
+    public boolean isOnline() {
+        return online;
     }
 
 }

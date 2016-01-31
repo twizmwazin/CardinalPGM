@@ -167,6 +167,7 @@ public class TabList implements Listener {
 
     @EventHandler
     public void onRankChange(RankChangeEvent event) {
+        if (!event.isOnline()) return;
         updateAll(null);
     }
 
@@ -519,6 +520,14 @@ public class TabList implements Listener {
                 if (PermissionModule.isDeveloper(uuid1) && !PermissionModule.isDeveloper(uuid2)) return -1;
                 if (!PermissionModule.isDeveloper(uuid1) && PermissionModule.isDeveloper(uuid2)) return 1;
                 for (Rank rank : Rank.getRanks()) {
+                    if (!rank.isStaffRank()) continue;
+                    if (rank.contains(uuid1) && !rank.contains(uuid2)) return -1;
+                    if (!rank.contains(uuid1) && rank.contains(uuid2)) return 1;
+                }
+                if (Rank.isMapAuthor(uuid1) && !Rank.isMapAuthor(uuid2)) return -1;
+                if (!Rank.isMapAuthor(uuid1) && Rank.isMapAuthor(uuid2)) return 1;
+                for (Rank rank : Rank.getRanks()) {
+                    if (rank.isStaffRank()) continue;
                     if (rank.contains(uuid1) && !rank.contains(uuid2)) return -1;
                     if (!rank.contains(uuid1) && rank.contains(uuid2)) return 1;
                 }

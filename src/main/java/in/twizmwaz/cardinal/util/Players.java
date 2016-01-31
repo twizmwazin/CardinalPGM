@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.util;
 
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
+import in.twizmwaz.cardinal.rank.Rank;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -39,14 +40,7 @@ public class Players {
     public static String getName(ServerOperator who, boolean flairs) {
         if (who instanceof OfflinePlayer) {
             OfflinePlayer player = (OfflinePlayer) who;
-            if (player.isOnline()) {
-                if (flairs) {
-                    return player.getPlayer().getDisplayName();
-                } else {
-                    return Teams.getTeamColorByPlayer(player) + player.getPlayer().getName();
-                }
-            }
-            return ChatColor.DARK_AQUA + player.getName();
+            return player.isOnline() ? (flairs ? player.getPlayer().getDisplayName() : Teams.getTeamColorByPlayer(player) + player.getPlayer().getName()) : Rank.getPrefix(player.getUniqueId()) + ChatColor.DARK_AQUA + player.getName();
         } else {
             return ChatColor.GOLD + "\u2756" + ChatColor.DARK_AQUA + "Console";
         }
