@@ -17,6 +17,7 @@ import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
 import in.twizmwaz.cardinal.module.modules.respawn.RespawnModule;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.rank.Rank;
 import in.twizmwaz.cardinal.util.Items;
 import in.twizmwaz.cardinal.util.Teams;
 import org.apache.commons.lang.WordUtils;
@@ -529,6 +530,8 @@ public class ObserverModule implements Module {
     public void onPlayerConnect(PlayerLoginEvent event) {
         if (Bukkit.getBanList(BanList.Type.NAME).isBanned(event.getPlayer().getName())) {
             event.disallow(PlayerLoginEvent.Result.KICK_BANNED, Bukkit.getBanList(BanList.Type.NAME).getBanEntry(event.getPlayer().getName()).getReason());
+        } else if (Rank.whitelistBypass(event.getPlayer().getUniqueId())) {
+            event.allow();
         }
     }
 
@@ -565,7 +568,6 @@ public class ObserverModule implements Module {
     private boolean testObserver(Player player) {
         Optional<TeamModule> team = Teams.getTeamByPlayer(player);
         return (team.isPresent() && team.get().isObserver()) || !match.isRunning();
-
     }
 
 }

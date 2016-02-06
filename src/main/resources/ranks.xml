@@ -29,6 +29,7 @@
         <permission>cardinal.whitelist.clear</permission>
         <permission>cardinal.whitelist.team</permission>
         <permission>cardinal.whitelist.kick</permission>
+        <permission>cardinal.whitelist.bypass</permission>
         <permission>cardinal.punish.warn</permission>
         <permission>cardinal.punish.kick</permission>
         <permission>cardinal.punish.ban</permission>

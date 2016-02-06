@@ -83,6 +83,13 @@ public class Rank {
         return false;
     }
 
+    public static boolean whitelistBypass(UUID uuid) {
+        for (Rank rank : getRanks(uuid)) {
+            if (rank.getPermissions().contains("cardinal.whitelist.bypass")) return true;
+        }
+        return false;
+    }
+
     public static String getPrefix(UUID uuid) {
         String prefix = "";
         String staffChar = "\u2756";

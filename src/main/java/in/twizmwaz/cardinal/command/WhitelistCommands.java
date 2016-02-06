@@ -1,6 +1,5 @@
 package in.twizmwaz.cardinal.command;
 
-import com.google.common.base.Optional;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
@@ -145,7 +144,7 @@ public class WhitelistCommands {
     @CommandPermissions("cardinal.whitelist.kick")
     public static void kick(final CommandContext args, final CommandSender sender) throws CommandException {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (!player.isWhitelisted() && !player.isOp()) {
+            if (!player.isWhitelisted() && !player.isOp() && !player.hasPermission("cardinal.whitelist.bypass")) {
                 player.kickPlayer(ChatColor.RED + ChatConstant.GENERIC_KICKED_NOT_WHITELISTED.getMessage(ChatUtil.getLocale(player)));
             }
         }
