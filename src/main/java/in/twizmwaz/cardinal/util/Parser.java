@@ -1,11 +1,13 @@
 package in.twizmwaz.cardinal.util;
 
+import net.minecraft.server.v1_8_R3.MobEffectList;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.NBTTagList;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_8_R3.potion.CraftPotionEffectType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -137,6 +139,7 @@ public class Parser {
 
     public static PotionEffect getPotion(Element potion) {
         PotionEffectType type = PotionEffectType.getByName(Strings.getTechnicalName(potion.getText()));
+        if (type == null) type = new CraftPotionEffectType(MobEffectList.b(potion.getText().toLowerCase().replace("_"," ")));
         int duration = Numbers.parseInt(potion.getAttributeValue("duration")) == Integer.MAX_VALUE ? Numbers.parseInt(potion.getAttributeValue("duration")) : Numbers.parseInt(potion.getAttributeValue("duration")) * 20;
         int amplifier = 0;
         boolean ambient = false;
