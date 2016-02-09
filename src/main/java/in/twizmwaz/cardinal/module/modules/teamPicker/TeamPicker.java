@@ -160,6 +160,7 @@ public class TeamPicker implements Module {
 
     @EventHandler
     public void onPlayerLocaleChange(PlayerLocaleChangeEvent event) {
+        if (event.getOldLocale() == null) return;
         for (ItemStack item : event.getPlayer().getInventory().getContents()) {
             if (item != null) {
                 if (item.getType().equals(Material.LEATHER_HELMET)) {
