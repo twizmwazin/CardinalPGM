@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.observers;
 
 import com.google.common.base.Optional;
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -50,6 +51,10 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.PotionEffectAddEvent;
+import org.bukkit.event.entity.PotionEffectEvent;
+import org.bukkit.event.entity.PotionEffectExpireEvent;
+import org.bukkit.event.entity.PotionEffectRemoveEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -75,6 +80,7 @@ import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -296,6 +302,36 @@ public class ObserverModule implements Module {
         if (event.getEntity() instanceof Player) {
             refreshView(event.getEntity().getUniqueId());
         }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onViewingEntityAddEffect(PotionEffectAddEvent event) {
+        if (event.getEntity() instanceof Player) {
+            updateNextTick((Player)event.getEntity());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onViewingEntityRemoveEffect(PotionEffectRemoveEvent event) {
+        if (event.getEntity() instanceof Player) {
+            updateNextTick((Player)event.getEntity());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onViewingEntityExpireEffect(PotionEffectExpireEvent event) {
+        if (event.getEntity() instanceof Player) {
+            updateNextTick((Player)event.getEntity());
+        }
+    }
+
+    private void updateNextTick(final Player player) {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                refreshView(player.getUniqueId());
+            }
+        });
     }
 
     @EventHandler(priority = EventPriority.HIGH)
