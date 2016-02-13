@@ -2,16 +2,19 @@ package in.twizmwaz.cardinal.module.modules.cores;
 
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.BuilderData;
+import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
+import in.twizmwaz.cardinal.module.modules.proximity.GameObjectiveProximityHandler;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Numbers;
+import in.twizmwaz.cardinal.util.Parser;
 import in.twizmwaz.cardinal.util.Teams;
-import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.bukkit.Material;
 import org.jdom2.Element;
 
@@ -19,165 +22,53 @@ import org.jdom2.Element;
 public class CoreObjectiveBuilder implements ModuleBuilder {
 
     @Override
-    public ModuleCollection<CoreObjective> load(Match match) {
-        ModuleCollection<CoreObjective> result = new ModuleCollection<>();
+    public ModuleCollection<? extends Module> load(Match match) {
+        ModuleCollection<Module> result = new ModuleCollection<>();
         for (Element element : match.getDocument().getRootElement().getChildren("cores")) {
             for (Element subElement : element.getChildren("core")) {
-                TeamModule team;
-                try {
-                    team = Teams.getTeamById(subElement.getAttributeValue("team")).orNull();
-                } catch (NullPointerException e) {
-                    team = Teams.getTeamById(element.getAttributeValue("team")).orNull();
-                }
-                String name = "Core";
-                if (subElement.getAttributeValue("name") != null) {
-                    name = subElement.getAttributeValue("name");
-                } else if (element.getAttributeValue("name") != null) {
-                    name = element.getAttributeValue("name");
-                }
-                String id = null;
-                if (subElement.getAttributeValue("id") != null) {
-                    id = subElement.getAttributeValue("id");
-                } else if (element.getAttributeValue("id") != null) {
-                    id = element.getAttributeValue("id");
-                }
-                ModuleCollection<RegionModule> regions = new ModuleCollection<>();
-                if (subElement.getAttributeValue("region") != null) {
-                    regions.add(RegionModuleBuilder.getRegion(subElement.getAttributeValue("region")));
-                } else {
-                    for (Element region : subElement.getChildren()) {
-                        regions.add(RegionModuleBuilder.getRegion(region));
-                    }
-                }
-                int leak = 5;
-                if (subElement.getAttributeValue("leak") != null) {
-                    leak = Numbers.parseInt(subElement.getAttributeValue("leak").replaceAll(" ", ""));
-                } else if (element.getAttributeValue("leak") != null) {
-                    leak = Numbers.parseInt(element.getAttributeValue("leak").replaceAll(" ", ""));
-                }
-                Material type = Material.OBSIDIAN;
-                int damageValue = -1;
-                if (subElement.getAttributeValue("material") != null) {
-                    String material = subElement.getAttributeValue("material");
-                    String materialType = material.split(":")[0].trim();
-                    type = (NumberUtils.isNumber(materialType) ? Material.getMaterial(Integer.parseInt(materialType)) : Material.matchMaterial(materialType));
-                    damageValue = material.contains(":") ? Numbers.parseInt(material.split(":")[1].trim()) : -1;
-                } else if (element.getAttributeValue("material") != null) {
-                    String material = element.getAttributeValue("material");
-                    String materialType = material.split(":")[0].trim();
-                    type = (NumberUtils.isNumber(materialType) ? Material.getMaterial(Integer.parseInt(materialType)) : Material.matchMaterial(materialType));
-                    damageValue = material.contains(":") ? Numbers.parseInt(material.split(":")[1].trim()) : -1;
-                }
-                boolean show = true;
-                if (subElement.getAttributeValue("show") != null) {
-                    show = !subElement.getAttributeValue("show").equalsIgnoreCase("false");
-                } else if (element.getAttributeValue("show") != null) {
-                    show = !element.getAttributeValue("show").equalsIgnoreCase("false");
-                }
-                boolean required = show;
-                if (subElement.getAttributeValue("required") != null) {
-                    required = !subElement.getAttributeValue("required").equalsIgnoreCase("false");
-                } else if (element.getAttributeValue("required") != null) {
-                    required = !element.getAttributeValue("required").equalsIgnoreCase("false");
-                }
-                boolean changesModes = false;
-                if (subElement.getAttributeValue("mode-changes") != null) {
-                    changesModes = subElement.getAttributeValue("mode-changes").equalsIgnoreCase("true");
-                } else if (element.getAttributeValue("mode-changes") != null) {
-                    changesModes = element.getAttributeValue("mode-changes").equalsIgnoreCase("true");
-                }
-                result.add(new CoreObjective(team, name, id, new UnionRegion(null, regions), leak, type, damageValue, show, required, changesModes));
+                result.addAll(getCore(subElement, element));
             }
             for (Element child : element.getChildren("cores")) {
                 for (Element subChild : child.getChildren("core")) {
-                    TeamModule team;
-                    try {
-                        team = Teams.getTeamById(subChild.getAttributeValue("team")).orNull();
-                    } catch (NullPointerException e) {
-                        try {
-                            team = Teams.getTeamById(child.getAttributeValue("team")).orNull();
-                        } catch (NullPointerException ex) {
-                            team = Teams.getTeamById(element.getAttributeValue("team")).orNull();
-                        }
-                    }
-                    String name = "Core";
-                    if (subChild.getAttributeValue("name") != null) {
-                        name = subChild.getAttributeValue("name");
-                    } else if (child.getAttributeValue("name") != null) {
-                        name = child.getAttributeValue("name");
-                    } else if (element.getAttributeValue("name") != null) {
-                        name = element.getAttributeValue("name");
-                    }
-                    String id = null;
-                    if (subChild.getAttributeValue("id") != null) {
-                        id = subChild.getAttributeValue("id");
-                    } else if (child.getAttributeValue("id") != null) {
-                        id = child.getAttributeValue("id");
-                    } else if (element.getAttributeValue("id") != null) {
-                        id = element.getAttributeValue("id");
-                    }
-                    ModuleCollection<RegionModule> regions = new ModuleCollection<>();
-                    if (subChild.getAttributeValue("region") != null) {
-                        regions.add(RegionModuleBuilder.getRegion(subChild));
-                    } else {
-                        for (Element region : subChild.getChildren()) {
-                            regions.add(RegionModuleBuilder.getRegion(region));
-                        }
-                    }
-                    int leak = 5;
-                    if (subChild.getAttributeValue("leak") != null) {
-                        leak = Numbers.parseInt(subChild.getAttributeValue("leak").replaceAll(" ", ""));
-                    } else if (child.getAttributeValue("leak") != null) {
-                        leak = Numbers.parseInt(child.getAttributeValue("leak").replaceAll(" ", ""));
-                    } else if (element.getAttributeValue("leak") != null) {
-                        leak = Numbers.parseInt(element.getAttributeValue("leak").replaceAll(" ", ""));
-                    }
-                    Material type = Material.OBSIDIAN;
-                    int damageValue = -1;
-                    if (subChild.getAttributeValue("material") != null) {
-                        String material = subChild.getAttributeValue("material");
-                        String materialType = material.split(":")[0].trim();
-                        type = (NumberUtils.isNumber(materialType) ? Material.getMaterial(Integer.parseInt(materialType)) : Material.matchMaterial(materialType));
-                        damageValue = material.contains(":") ? Numbers.parseInt(material.split(":")[1].trim()) : -1;
-                    } else if (child.getAttributeValue("material") != null) {
-                        String material = child.getAttributeValue("material");
-                        String materialType = material.split(":")[0].trim();
-                        type = (NumberUtils.isNumber(materialType) ? Material.getMaterial(Integer.parseInt(materialType)) : Material.matchMaterial(materialType));
-                        damageValue = material.contains(":") ? Numbers.parseInt(material.split(":")[1].trim()) : -1;
-                    } else if (element.getAttributeValue("material") != null) {
-                        String material = element.getAttributeValue("material");
-                        String materialType = material.split(":")[0].trim();
-                        type = (NumberUtils.isNumber(materialType) ? Material.getMaterial(Integer.parseInt(materialType)) : Material.matchMaterial(materialType));
-                        damageValue = material.contains(":") ? Numbers.parseInt(material.split(":")[1].trim()) : -1;
-                    }
-                    boolean show = true;
-                    if (subChild.getAttributeValue("show") != null) {
-                        show = !subChild.getAttributeValue("show").equalsIgnoreCase("false");
-                    } else if (child.getAttributeValue("show") != null) {
-                        show = !child.getAttributeValue("show").equalsIgnoreCase("false");
-                    } else if (element.getAttributeValue("show") != null) {
-                        show = !element.getAttributeValue("show").equalsIgnoreCase("false");
-                    }
-                    boolean required = show;
-                    if (subChild.getAttributeValue("required") != null) {
-                        required = !subChild.getAttributeValue("required").equalsIgnoreCase("false");
-                    } else if (child.getAttributeValue("required") != null) {
-                        required = !child.getAttributeValue("required").equalsIgnoreCase("false");
-                    } else if (element.getAttributeValue("required") != null) {
-                        required = !element.getAttributeValue("required").equalsIgnoreCase("false");
-                    }
-                    boolean changesModes = false;
-                    if (subChild.getAttributeValue("mode-changes") != null) {
-                        changesModes = subChild.getAttributeValue("mode-changes").equalsIgnoreCase("true");
-                    } else if (child.getAttributeValue("mode-changes") != null) {
-                        changesModes = child.getAttributeValue("mode-changes").equalsIgnoreCase("true");
-                    } else if (element.getAttributeValue("mode-changes") != null) {
-                        changesModes = element.getAttributeValue("mode-changes").equalsIgnoreCase("true");
-                    }
-                    result.add(new CoreObjective(team, name, id, new UnionRegion(null, regions), leak, type, damageValue, show, required, changesModes));
+                    result.addAll(getCore(subChild, child, element));
                 }
             }
         }
+        return result;
+    }
+
+    private ModuleCollection<? extends Module> getCore(Element... elements) {
+        TeamModule team = Teams.getTeamById(Parser.getOrderedAttribute("team", elements)).orNull();
+        String name = Parser.getOrderedAttribute("name", elements);
+        if (name == null) {
+            name = "Core";
+        }
+        String id = Parser.getOrderedAttribute("id", elements);
+        ModuleCollection<RegionModule> regions = new ModuleCollection<>();
+        if (elements[0].getAttributeValue("region") != null) {
+            regions.add(RegionModuleBuilder.getRegion(elements[0].getAttributeValue("region")));
+        } else {
+            for (Element region : elements[0].getChildren()) {
+                regions.add(RegionModuleBuilder.getRegion(region));
+            }
+        }
+        RegionModule region = new UnionRegion(null, regions);
+        int leak = Numbers.parseInt(Parser.getOrderedAttribute("leak", elements), 5);
+        ImmutablePair<Material, Integer> material = new ImmutablePair<>(Material.OBSIDIAN, -1);
+        String materialAttribute = Parser.getOrderedAttribute("material", elements);
+        if (materialAttribute != null) {
+            material = (ImmutablePair<Material, Integer>) Parser.parseMaterial(materialAttribute);
+        }
+        boolean show = Numbers.parseBoolean(Parser.getOrderedAttribute("show"), true);
+        boolean required = Numbers.parseBoolean(Parser.getOrderedAttribute("required", elements), show);
+        boolean modeChanges = Numbers.parseBoolean(Parser.getOrderedAttribute("mode-changes"), false);
+        String proximityMetric = Parser.getOrderedAttribute("proximity-metric", elements);
+        Boolean proximityHorizontal = Numbers.parseBoolean(Parser.getOrderedAttribute("proximity-horizontal", elements), false);
+        GameObjectiveProximityHandler proximity = new GameObjectiveProximityHandler(region.getCenterBlock().getVector(), proximityHorizontal, false,
+                proximityMetric == null ? GameObjectiveProximityHandler.ProximityMetric.CLOSEST_PLAYER : GameObjectiveProximityHandler.ProximityMetric.getByName(proximityMetric));
+        ModuleCollection<Module> result =  new ModuleCollection<>();
+        result.add(proximity);
+        result.add(new CoreObjective(team, name, id, region, leak, material, show, required, modeChanges, proximity));
         return result;
     }
 

@@ -261,6 +261,7 @@ public class ScoreboardModule implements Module {
     }
 
     public void updateObjectivePrefix(GameObjective objective) {
+        if (!objective.showOnScoreboard()) return;
         if (getSlots() < 16) {
             Team team = scoreboard.getTeam(objective.getScoreboardHandler().getNumber() + "-o");
             String prefix = objective.getScoreboardHandler().getPrefix(this.team);
@@ -402,6 +403,7 @@ public class ScoreboardModule implements Module {
     }
 
     public void renderObjective(GameObjective objective) {
+        if (!objective.showOnScoreboard()) return;
         int score = objective instanceof HillObjective ? currentHillScore : currentScore;
         Team team = scoreboard.getTeam(objective.getScoreboardHandler().getNumber() + "-o");
         String prefix = objective.getScoreboardHandler().getPrefix(this.team);

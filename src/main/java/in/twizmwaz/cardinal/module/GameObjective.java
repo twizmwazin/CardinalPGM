@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module;
 
+import in.twizmwaz.cardinal.module.modules.proximity.GameObjectiveProximityHandler;
 import in.twizmwaz.cardinal.module.modules.scoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 
@@ -20,5 +21,7 @@ public interface GameObjective extends Module {
     public boolean isRequired();
 
     public GameObjectiveScoreboardHandler getScoreboardHandler();
+
+    public GameObjectiveProximityHandler getProximityHandler();
 
 }

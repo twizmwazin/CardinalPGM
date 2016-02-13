@@ -3,6 +3,9 @@ package in.twizmwaz.cardinal.util;
 import net.minecraft.server.v1_8_R3.MobEffectList;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.NBTTagList;
+import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -152,5 +155,29 @@ public class Parser {
             ambient = Boolean.parseBoolean(potion.getAttributeValue("ambient").toUpperCase());
         }
         return new PotionEffect(type, duration, amplifier, ambient);
+    }
+
+    public static Pair<Material, Integer> parseMaterial(String material) {
+        String type = material.split(":")[0].trim();
+        Integer damageValue = material.contains(":") ? Numbers.parseInt(material.split(":")[1].trim()) : -1;
+        return new ImmutablePair<>(NumberUtils.isNumber(type) ? Material.getMaterial(Integer.parseInt(type)) : Material.matchMaterial(type), damageValue);
+    }
+
+    public static String getOrderedAttribute(String attribute, Element... elements) {
+        for (Element element : elements) {
+            if (element.getAttributeValue(attribute) != null && !element.getAttributeValue(attribute).equals("")) {
+                return element.getAttributeValue(attribute);
+            }
+        }
+        return null;
+    }
+
+    public static String getOrderedText(Element... elements) {
+        for (Element element : elements) {
+            if (element.getText() != null && !element.getText().equals("")) {
+                return element.getText();
+            }
+        }
+        return null;
     }
 }
