@@ -7,13 +7,13 @@ import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.SnowflakeChangeEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
-import in.twizmwaz.cardinal.event.objective.ObjectiveProximityEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannel;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
+import in.twizmwaz.cardinal.module.modules.proximity.GameObjectiveProximityHandler;
 import in.twizmwaz.cardinal.module.modules.scoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.snowflakes.Snowflakes;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
@@ -23,6 +23,8 @@ import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Fireworks;
 import in.twizmwaz.cardinal.util.MiscUtil;
 import in.twizmwaz.cardinal.util.Teams;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -34,15 +36,14 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockFromToEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -62,12 +63,11 @@ public class CoreObjective implements GameObjective {
     private final boolean required;
     private boolean changesModes;
 
-    private double proximity;
+    private GameObjectiveProximityHandler proximityHandler;
 
     private Set<UUID> playersTouched;
     private Set<UUID> playersCompleted;
-    private Material currentType;
-    private int damageValue;
+    private Pair<Material, Integer> material;
     private Set<Block> lava;
     private Set<Block> core;
 
@@ -76,22 +76,23 @@ public class CoreObjective implements GameObjective {
 
     private GameObjectiveScoreboardHandler scoreboardHandler;
 
-    protected CoreObjective(final TeamModule team, final String name, final String id, final RegionModule region, final int leak, Material type, int damageValue, final boolean show, final boolean required, boolean changesModes) {
+    protected CoreObjective(final TeamModule team, final String name, final String id, final RegionModule region, final int leak, Pair<Material, Integer> material,
+                            final boolean show, final boolean required, boolean changesModes, GameObjectiveProximityHandler proximityHandler) {
         this.team = team;
         this.name = name;
         this.id = id;
         this.region = region;
         this.leak = leak;
-        this.damageValue = damageValue;
         this.show = show;
         this.required = required;
         this.changesModes = changesModes;
 
-        this.proximity = Double.POSITIVE_INFINITY;
+        this.proximityHandler = proximityHandler;
+        this.proximityHandler.setObjective(this);
 
         this.playersTouched = new HashSet<>();
         this.playersCompleted = new HashSet<>();
-        this.currentType = type;
+        this.material = material;
 
         this.lava = new HashSet<>();
         this.core = new HashSet<>();
@@ -167,6 +168,11 @@ public class CoreObjective implements GameObjective {
         return scoreboardHandler;
     }
 
+    @Override
+    public GameObjectiveProximityHandler getProximityHandler() {
+        return isTouched() || isComplete() ? null : proximityHandler;
+    }
+
     @EventHandler
     public void onObsidianForm(BlockFormEvent event) {
         if (this.lava.contains(event.getBlock())) {
@@ -191,7 +197,6 @@ public class CoreObjective implements GameObjective {
                     boolean touchMessage = false;
                     if (!playersTouched.contains(event.getPlayer().getUniqueId())) {
                         playersTouched.add(event.getPlayer().getUniqueId());
-//
                         Optional<TeamModule> teamModule = Teams.getTeamByPlayer(event.getPlayer());
                         if (teamModule.isPresent()) {
                             ChatChannel channel = Teams.getTeamChannel(teamModule);
@@ -208,9 +213,7 @@ public class CoreObjective implements GameObjective {
                     }
                     if (!playersCompleted.contains(event.getPlayer().getUniqueId()))
                         playersCompleted.add(event.getPlayer().getUniqueId());
-                    boolean oldState = this.touched;
-                    this.touched = true;
-                    ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), !oldState, touchMessage);
+                    ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), touchMessage);
                     Bukkit.getServer().getPluginManager().callEvent(touchEvent);
                     event.setCancelled(false);
                 } else {
@@ -285,7 +288,7 @@ public class CoreObjective implements GameObjective {
                 }
             }
             if (!this.complete && blownUp) {
-                ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, !oldState, touchMessage);
+                ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, touchMessage);
                 Bukkit.getServer().getPluginManager().callEvent(touchEvent);
             }
         }
@@ -358,7 +361,7 @@ public class CoreObjective implements GameObjective {
     }
 
     public boolean partOfObjective(Block block) {
-        return currentType.equals(block.getType()) && (damageValue == -1 || damageValue == (int) block.getState().getData().getData());
+        return material.getLeft().equals(block.getType()) && (material.getRight() == -1 || material.getRight() == (int) block.getState().getData().getData());
     }
 
     public List<Block> getBlocks() {
@@ -384,24 +387,11 @@ public class CoreObjective implements GameObjective {
     }
 
     public void setMaterial(Material material, int damageValue) {
-        this.currentType = material;
-        this.damageValue = damageValue;
+        this.material = new ImmutablePair<>(material, damageValue);
     }
 
-    @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
-        Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
-        if (GameHandler.getGameHandler().getMatch().isRunning() && !this.touched && ((team.isPresent() && !team.get().isObserver() && team.get() != this.team) || !team.isPresent())) {
-            if (event.getPlayer().getLocation().toVector().distance(region.getCenterBlock().getVector()) < proximity) {
-                double old = proximity;
-                proximity = event.getPlayer().getLocation().toVector().distance(region.getCenterBlock().getVector());
-                Bukkit.getServer().getPluginManager().callEvent(new ObjectiveProximityEvent(this, event.getPlayer(), old, proximity));
-            }
-        }
-    }
-
-    public double getProximity() {
-        return proximity;
+    public Double getProximity() {
+        return proximityHandler.getProximity();
     }
 
     @EventHandler

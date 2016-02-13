@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
+import in.twizmwaz.cardinal.module.modules.proximity.GameObjectiveProximityHandler;
 import in.twizmwaz.cardinal.module.modules.scoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import org.bukkit.Bukkit;
@@ -17,6 +18,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.util.Vector;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -33,6 +35,7 @@ public class HillObjective implements TaskedModule, GameObjective {
     private TeamModule team, capturingTeam;
     private double controlTime;
     private GameObjectiveScoreboardHandler scoreboardHandler;
+    private GameObjectiveProximityHandler proximityHandler;
     private int seconds = 1;
     private int tempPoints;
 
@@ -59,6 +62,8 @@ public class HillObjective implements TaskedModule, GameObjective {
         this.controlTime = 0;
 
         scoreboardHandler = new GameObjectiveScoreboardHandler(this);
+        proximityHandler = new GameObjectiveProximityHandler(new Vector(0,0,0), false, false, GameObjectiveProximityHandler.ProximityMetric.NULL_PROXIMITY);
+        proximityHandler.setObjective(this);
         this.capturingPlayers = new HashSet<>();
         this.tempPoints = points;
     }
@@ -130,6 +135,11 @@ public class HillObjective implements TaskedModule, GameObjective {
     @Override
     public GameObjectiveScoreboardHandler getScoreboardHandler() {
         return scoreboardHandler;
+    }
+
+    @Override
+    public GameObjectiveProximityHandler getProximityHandler() {
+        return proximityHandler;
     }
 
     public double getPointsGrowth() {

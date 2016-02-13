@@ -7,10 +7,10 @@ import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.SnowflakeChangeEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
-import in.twizmwaz.cardinal.event.objective.ObjectiveProximityEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
+import in.twizmwaz.cardinal.module.modules.proximity.GameObjectiveProximityHandler;
 import in.twizmwaz.cardinal.module.modules.scoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.snowflakes.Snowflakes;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
@@ -20,6 +20,8 @@ import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Fireworks;
 import in.twizmwaz.cardinal.util.MiscUtil;
 import in.twizmwaz.cardinal.util.Teams;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -29,12 +31,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,12 +55,12 @@ public class DestroyableObjective implements GameObjective {
     private final boolean showPercent;
     private final boolean repairable;
     private final boolean show;
+
     private final boolean required;
-    private List<Material> types;
-    private List<Integer> damageValues;
+    private List<Pair<Material, Integer>> materials;
     private boolean changesModes;
 
-    private double proximity;
+    private GameObjectiveProximityHandler proximityHandler;
 
     private Set<UUID> playersTouched;
     private double size;
@@ -71,13 +72,13 @@ public class DestroyableObjective implements GameObjective {
 
     private GameObjectiveScoreboardHandler scoreboardHandler;
 
-    protected DestroyableObjective(final TeamModule team, final String name, final String id, final RegionModule region, List<Material> types, List<Integer> damageValues, final double completion, final boolean show, final boolean required, boolean changesModes, boolean showPercent, boolean repairable) {
+    protected DestroyableObjective(final TeamModule team, final String name, final String id, final RegionModule region, List<Pair<Material, Integer>> materials, final double completion,
+                                   final boolean show, final boolean required, boolean changesModes, boolean showPercent, boolean repairable, GameObjectiveProximityHandler proximityHandler) {
         this.team = team;
         this.name = name;
         this.id = id;
         this.region = region;
-        this.types = types;
-        this.damageValues = damageValues;
+        this.materials = materials;
         this.showPercent = showPercent;
         this.repairable = repairable;
         this.complete = 0;
@@ -87,8 +88,8 @@ public class DestroyableObjective implements GameObjective {
         this.changesModes = changesModes;
         this.completed = false;
 
-        this.proximity = Double.POSITIVE_INFINITY;
-
+        this.proximityHandler = proximityHandler;
+        this.proximityHandler.setObjective(this);
         this.playersTouched = new HashSet<>();
         this.playersCompleted = new HashMap<>();
 
@@ -143,6 +144,11 @@ public class DestroyableObjective implements GameObjective {
         return scoreboardHandler;
     }
 
+    @Override
+    public GameObjectiveProximityHandler getProximityHandler() {
+        return isTouched() || isComplete() ? null : proximityHandler;
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event) {
         if (!event.isCancelled()) {
@@ -162,7 +168,6 @@ public class DestroyableObjective implements GameObjective {
                             }
                         }
                     }
-                    boolean oldState = this.isTouched();
                     this.complete++;
                     this.playersCompleted.put(event.getPlayer().getUniqueId(), (playersCompleted.containsKey(event.getPlayer().getUniqueId()) ? playersCompleted.get(event.getPlayer().getUniqueId()) + 1 : 1));
                     if ((this.complete / size) >= this.completion && !this.completed) {
@@ -176,7 +181,7 @@ public class DestroyableObjective implements GameObjective {
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
                     } else if (!this.completed) {
-                        ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), !oldState || showPercent, touchMessage);
+                        ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), touchMessage);
                         Bukkit.getServer().getPluginManager().callEvent(touchEvent);
                     }
                 } else {
@@ -259,7 +264,7 @@ public class DestroyableObjective implements GameObjective {
                 }
             }
             if (!this.completed && blownUp) {
-                ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, !oldState || (getPercent() != originalPercent), touchMessage);
+                ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, touchMessage);
                 Bukkit.getServer().getPluginManager().callEvent(touchEvent);
             }
         }
@@ -352,8 +357,8 @@ public class DestroyableObjective implements GameObjective {
     }
 
     public boolean partOfObjective(Block block) {
-        for (int i = 0; i < types.size(); i++) {
-            if (types.get(i).equals(block.getType()) && (damageValues.get(i) == -1 || damageValues.get(i) == (int) block.getState().getData().getData())) {
+        for (Pair<Material, Integer> material : materials) {
+            if (material.getLeft().equals(block.getType()) && (material.getRight() == -1 || material.getRight() == (int) block.getState().getData().getData())) {
                 return true;
             }
         }
@@ -400,22 +405,8 @@ public class DestroyableObjective implements GameObjective {
     }
 
     public void setMaterial(Material material, int damageValue) {
-        this.types = new ArrayList<>();
-        this.damageValues = new ArrayList<>();
-        this.types.add(material);
-        this.damageValues.add(damageValue);
-    }
-
-    @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
-        Optional<TeamModule> playerTeam = Teams.getTeamByPlayer(event.getPlayer());
-        if (GameHandler.getGameHandler().getMatch().isRunning() && !this.isTouched() && ((playerTeam.isPresent() && !playerTeam.get().isObserver() && playerTeam.orNull() != this.team) || !playerTeam.isPresent())) {
-            if (event.getPlayer().getLocation().toVector().distance(region.getCenterBlock().getVector()) < proximity) {
-                double old = proximity;
-                proximity = event.getPlayer().getLocation().toVector().distance(region.getCenterBlock().getVector());
-                Bukkit.getServer().getPluginManager().callEvent(new ObjectiveProximityEvent(this, event.getPlayer(), old, proximity));
-            }
-        }
+        materials.clear();
+        materials.add(new ImmutablePair<>(material, damageValue));
     }
 
     @EventHandler
@@ -429,7 +420,7 @@ public class DestroyableObjective implements GameObjective {
         }
     }
 
-    public double getProximity() {
-        return proximity;
+    public Double getProximity() {
+        return getProximityHandler().getProximity();
     }
 }

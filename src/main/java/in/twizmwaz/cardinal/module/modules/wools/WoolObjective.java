@@ -5,13 +5,12 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
-import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.event.SnowflakeChangeEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
-import in.twizmwaz.cardinal.event.objective.ObjectiveProximityEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
+import in.twizmwaz.cardinal.module.modules.proximity.GameObjectiveProximityHandler;
 import in.twizmwaz.cardinal.module.modules.scoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.snowflakes.Snowflakes;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
@@ -57,8 +56,8 @@ public class WoolObjective implements GameObjective {
     private final boolean show;
     private final boolean required;
 
-    private Vector location;
-    private double proximity;
+    private GameObjectiveProximityHandler wool;
+    private GameObjectiveProximityHandler monument;
 
     private Set<UUID> playersTouched;
     private boolean touched;
@@ -66,7 +65,8 @@ public class WoolObjective implements GameObjective {
 
     private GameObjectiveScoreboardHandler scoreboardHandler;
 
-    protected WoolObjective(final TeamModule team, final String name, final String id, final DyeColor color, final BlockRegion place, final boolean craftable, final boolean show, final boolean required, final Vector location) {
+    protected WoolObjective(final TeamModule team, final String name, final String id, final DyeColor color, final BlockRegion place, final boolean craftable,
+                            final boolean show, final boolean required, GameObjectiveProximityHandler woolProximity, GameObjectiveProximityHandler monumentProximity) {
         this.team = team;
         this.name = name;
         this.id = id;
@@ -75,13 +75,15 @@ public class WoolObjective implements GameObjective {
         this.craftable = craftable;
         this.show = show;
         this.required = required;
-        this.location = location;
-
-        this.proximity = Double.POSITIVE_INFINITY;
 
         this.playersTouched = new HashSet<>();
 
         this.scoreboardHandler = new GameObjectiveScoreboardHandler(this);
+
+        this.wool = woolProximity;
+        this.wool.setObjective(this);
+        this.monument = monumentProximity;
+        this.monument.setObjective(this);
     }
 
     @Override
@@ -133,6 +135,11 @@ public class WoolObjective implements GameObjective {
         return scoreboardHandler;
     }
 
+    @Override
+    public GameObjectiveProximityHandler getProximityHandler() {
+        return touched ? monument: wool;
+    }
+
     @EventHandler
     public void onWoolPickup(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
@@ -153,14 +160,8 @@ public class WoolObjective implements GameObjective {
                                 touchMessage = true;
                             }
                         }
-                        boolean oldState = this.touched;
-                        this.touched = true;
-                        if (touchMessage) {
-                            if (!oldState) {
-                                proximity = Double.POSITIVE_INFINITY;
-                            }
-                        }
-                        ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !oldState, touchMessage);
+                        if (!touched) touched = true;
+                        ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, touchMessage);
                         Bukkit.getServer().getPluginManager().callEvent(touchEvent);
                     }
                 }
@@ -189,12 +190,8 @@ public class WoolObjective implements GameObjective {
                                 touchMessage = true;
                             }
                         }
-                        boolean oldState = this.touched;
-                        this.touched = true;
-                        if (touchMessage && !oldState) {
-                                proximity = Double.POSITIVE_INFINITY;
-                        }
-                        ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, !oldState, touchMessage);
+                        if (!touched) touched = true;
+                        ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, player, touchMessage);
                         Bukkit.getServer().getPluginManager().callEvent(touchEvent);
                     }
                 }
@@ -287,36 +284,8 @@ public class WoolObjective implements GameObjective {
         }
     }
 
-    @EventHandler
-    public void onCardinalDeath(CardinalDeathEvent event) {
-        if (event.getKiller() != null && location != null && GameHandler.getGameHandler().getMatch().isRunning() && !this.touched && Teams.getTeamByPlayer(event.getKiller()).isPresent() && Teams.getTeamByPlayer(event.getKiller()).get() == this.team) {
-            if (event.getKiller().getLocation().toVector().distance(location) < proximity) {
-                double old = proximity;
-                proximity = event.getKiller().getLocation().toVector().distance(location);
-                Bukkit.getServer().getPluginManager().callEvent(new ObjectiveProximityEvent(this, event.getKiller(), old, proximity));
-            }
-        }
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onSafetyPlace(BlockPlaceEvent event) {
-        if (!event.isCancelled() && this.touched) {
-            if (event.getBlock().getType().equals(Material.WOOL)) {
-                if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
-                    if (Teams.getTeamByPlayer(event.getPlayer()).orNull() == team) {
-                        if (event.getBlockPlaced().getLocation().distance(place.getLocation()) < proximity) {
-                            double old = proximity;
-                            proximity = event.getBlockPlaced().getLocation().distance(place.getLocation());
-                            Bukkit.getServer().getPluginManager().callEvent(new ObjectiveProximityEvent(this, event.getPlayer(), old, proximity));
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public double getProximity() {
-        return proximity;
+    public Double getProximity() {
+        return getProximityHandler().getProximity();
     }
 
     public boolean showProximity() {
