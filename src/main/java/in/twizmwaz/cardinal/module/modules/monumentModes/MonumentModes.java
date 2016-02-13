@@ -14,6 +14,7 @@ import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.settings.Settings;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.MiscUtil;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -27,16 +28,14 @@ import java.util.List;
 
 public class MonumentModes implements TaskedModule {
 
-    private final Material material;
-    private final int damageValue;
+    private final Pair<Material, Integer> material;
     private final String name;
     private int after, showBefore;
     private boolean ran;
 
-    public MonumentModes(int after, final Material material, final int damageValue, final String name, int showBefore) {
+    public MonumentModes(int after, final Pair<Material, Integer> material, final String name, int showBefore) {
         this.after = after;
         this.material = material;
-        this.damageValue = damageValue;
         this.name = name;
         this.showBefore = showBefore;
 
@@ -61,22 +60,22 @@ public class MonumentModes implements TaskedModule {
                     if (core.changesModes()) {
                         for (Block block : core.getCore()) {
                             if (core.partOfObjective(block)) {
-                                block.setType(this.material);
-                                block.setData((byte) this.damageValue);
+                                block.setType(this.material.getLeft());
+                                block.setData((byte)(int)this.material.getRight());
                             }
                         }
-                        core.setMaterial(this.material, this.damageValue);
+                        core.setMaterial(this.material.getLeft(), (byte)(int)this.material.getRight());
                     }
                 }
                 for (DestroyableObjective destroyable : GameHandler.getGameHandler().getMatch().getModules().getModules(DestroyableObjective.class)) {
                     if (destroyable.changesModes()) {
                         for (Block block : destroyable.getMonument()) {
                             if (destroyable.partOfObjective(block)) {
-                                block.setType(this.material);
-                                block.setData((byte) this.damageValue);
+                                block.setType(this.material.getLeft());
+                                block.setData((byte)(int)this.material.getRight());
                             }
                         }
-                        destroyable.setMaterial(this.material, this.damageValue);
+                        destroyable.setMaterial(this.material.getLeft(), (byte)(int)this.material.getRight());
                     }
                 }
                 for (Player player : Bukkit.getOnlinePlayers()) {
@@ -131,7 +130,7 @@ public class MonumentModes implements TaskedModule {
     }
 
     public Material getType() {
-        return material;
+        return material.getLeft();
     }
 
     public boolean hasRan() {
