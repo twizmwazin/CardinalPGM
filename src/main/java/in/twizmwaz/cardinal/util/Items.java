@@ -42,4 +42,10 @@ public class Items {
         return item;
     }
 
+    public static ItemStack toMaxDurability(ItemStack item) {
+        ItemStack item2 = new ItemStack(item);
+        item2.setDurability(item.getType().getMaxDurability());
+        return item2;
+    }
+
 }

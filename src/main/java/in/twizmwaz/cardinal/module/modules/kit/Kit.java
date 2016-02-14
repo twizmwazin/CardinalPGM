@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.module.modules.kit;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.util.Items;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -96,6 +97,10 @@ public class Kit implements Module {
             if (item.hasSlot()) {
                 if (player.getInventory().getItem(item.getSlot()) == null || force) {
                     player.getInventory().setItem(item.getSlot(), item.getItem());
+                } else if (Items.toMaxDurability(player.getInventory().getItem(item.getSlot())).equals(Items.toMaxDurability(item.getItem()))) {
+                    player.getInventory().setItem(item.getSlot(), item.getItem());
+                    int result = player.getInventory().getItem(item.getSlot()).getDurability() - (item.getItem().getType().getMaxDurability() - item.getItem().getDurability());
+                    player.getInventory().getItem(item.getSlot()).setDurability((short) (result < 0 ? 0 : result));
                 } else {
                     player.getInventory().addItem(item.getItem());
                 }
