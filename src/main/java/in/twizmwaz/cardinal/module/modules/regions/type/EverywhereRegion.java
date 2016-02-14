@@ -34,6 +34,11 @@ public class EverywhereRegion extends RegionModule {
     }
 
     @Override
+    public Vector getCenter() {
+        return new Vector(0, 0, 0);
+    }
+
+    @Override
     public List<Block> getBlocks() {
         return new ArrayList<Block>();
     }

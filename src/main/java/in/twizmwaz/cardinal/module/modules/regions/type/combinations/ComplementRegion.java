@@ -55,6 +55,11 @@ public class ComplementRegion extends RegionModule {
     }
 
     @Override
+    public Vector getCenter() {
+        return regions.get(0).getCenter();
+    }
+
+    @Override
     public List<Block> getBlocks() {
         List<Block> results = new ArrayList<>();
         try {

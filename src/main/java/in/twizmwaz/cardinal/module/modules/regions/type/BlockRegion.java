@@ -62,6 +62,11 @@ public class BlockRegion extends RegionModule {
     }
 
     @Override
+    public Vector getCenter() {
+        return getVector();
+    }
+
+    @Override
     public List<Block> getBlocks() {
         List<Block> results = new ArrayList<>();
         results.add(getBlock());
