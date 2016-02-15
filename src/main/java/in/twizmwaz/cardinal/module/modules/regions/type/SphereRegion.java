@@ -66,6 +66,11 @@ public class SphereRegion extends RegionModule {
     }
 
     @Override
+    public Vector getCenter() {
+        return origin.clone();
+    }
+
+    @Override
     public List<Block> getBlocks() {
         List<Block> results = new ArrayList<>();
         CuboidRegion bound = new CuboidRegion(null, getOriginX() - radius, getOriginY() - radius, getOriginZ() - radius, getOriginX() + radius, getOriginY() + radius, getOriginZ() + radius);

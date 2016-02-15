@@ -61,7 +61,12 @@ public class CylinderRegion extends RegionModule {
 
     @Override
     public BlockRegion getCenterBlock() {
-        return (new BlockRegion(null, new Vector(getBaseX(), getBaseY() + .5 * height, getBaseZ())));
+        return (new BlockRegion(null, getCenter()));
+    }
+
+    @Override
+    public Vector getCenter() {
+        return new Vector(getBaseX(), getBaseY() + .5 * height, getBaseZ());
     }
 
     @Override

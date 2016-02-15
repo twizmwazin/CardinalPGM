@@ -35,6 +35,7 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -172,7 +173,6 @@ public class DestroyableObjective implements GameObjective {
                             for (Player player : Bukkit.getOnlinePlayers())
                                 player.sendMessage(ChatColor.WHITE + new UnlocalizedChatMessage("{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DESTROYED, team.getCompleteName() + ChatColor.WHITE, name, getWhoDestroyed(player.getLocale()))).getMessage(player.getLocale()));
                         }
-                        Fireworks.spawnFirework(event.getPlayer().getLocation(), event.getPlayer().getWorld(), MiscUtil.convertChatColorToColor(team.getColor()));
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
                     } else if (!this.completed) {
@@ -370,6 +370,14 @@ public class DestroyableObjective implements GameObjective {
         return blocks;
     }
 
+    public double getRadius() {
+        List<Block> blocks = region.getBlocks();
+        Vector min = blocks.get(0).getLocation();
+        Vector max = blocks.get(blocks.size() - 1).getLocation();
+        max.setY(min.getY());
+        return min.distance(max) / 2;
+    }
+
     public List<Block> getMonument() {
         return monument;
     }
@@ -421,6 +429,7 @@ public class DestroyableObjective implements GameObjective {
     @EventHandler
     public void onMonumentDestroy(ObjectiveCompleteEvent event) {
         if (event.getObjective().equals(this)) {
+            Fireworks.spawnFireworks(region.getCenter().subtract(0.5,0.5,0.5), getRadius() * 1.1 + 1, 6, MiscUtil.convertChatColorToColor(team.getColor()), 1);
             for (UUID player : playersCompleted.keySet()) {
                 if (Bukkit.getOfflinePlayer(player).isOnline()) {
                     Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(Bukkit.getPlayer(player), Snowflakes.ChangeReason.MONUMENT_DESTROY, getPercentFromAmount(playersCompleted.get(player)) / 10, ChatColor.GREEN + "" + getPercentFromAmount(playersCompleted.get(player)) + ChatColor.GRAY, ChatColor.GREEN + name + ChatColor.GRAY));

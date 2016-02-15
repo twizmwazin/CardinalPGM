@@ -35,6 +35,8 @@ public abstract class RegionModule implements Module {
 
     public abstract BlockRegion getCenterBlock();
 
+    public abstract Vector getCenter();
+
     public abstract List<Block> getBlocks();
 
     @Override

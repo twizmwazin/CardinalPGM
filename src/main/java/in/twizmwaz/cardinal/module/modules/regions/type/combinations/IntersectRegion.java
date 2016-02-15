@@ -54,13 +54,18 @@ public class IntersectRegion extends RegionModule {
 
     @Override
     public BlockRegion getCenterBlock() {
+        return new BlockRegion(null, getCenter());
+    }
+
+    @Override
+    public Vector getCenter() {
         double xTotal = 0, yTotal = 0, zTotal = 0;
         for (RegionModule child : regions) {
             xTotal = xTotal + child.getCenterBlock().getX();
             yTotal = yTotal + child.getCenterBlock().getY();
             zTotal = zTotal + child.getCenterBlock().getZ();
         }
-        return new BlockRegion(null, xTotal / regions.size(), yTotal / regions.size(), zTotal / regions.size());
+        return new Vector(xTotal / regions.size(), yTotal / regions.size(), zTotal / regions.size());
     }
 
     @Override

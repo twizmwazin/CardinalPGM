@@ -34,9 +34,13 @@ public class EmptyRegion extends RegionModule {
     }
 
     @Override
+    public Vector getCenter() {
+        return null;
+    }
+
+    @Override
     public List<Block> getBlocks() {
         return new ArrayList<Block>();
     }
-
 
 }

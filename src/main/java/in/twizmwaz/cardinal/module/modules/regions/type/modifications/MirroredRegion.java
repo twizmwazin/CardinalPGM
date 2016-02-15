@@ -63,6 +63,11 @@ public class MirroredRegion extends RegionModule {
     }
 
     @Override
+    public Vector getCenter() {
+        return region.getCenter();
+    }
+
+    @Override
     public List<Block> getBlocks() {
         return region.getBlocks();
     }

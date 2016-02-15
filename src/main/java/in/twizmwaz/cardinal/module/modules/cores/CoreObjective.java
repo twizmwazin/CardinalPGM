@@ -311,7 +311,6 @@ public class CoreObjective implements GameObjective {
                         event.setCancelled(false);
                         if (this.show)
                             ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_LEAKED, team.getCompleteName() + ChatColor.RED, name)));
-                        Fireworks.spawnFirework(event.getBlock().getLocation(), event.getBlock().getWorld(), MiscUtil.convertChatColorToColor(team.getColor()));
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, null);
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
                     }
@@ -371,6 +370,14 @@ public class CoreObjective implements GameObjective {
         return blocks;
     }
 
+    public double getRadius() {
+        List<Block> blocks = region.getBlocks();
+        Vector min = blocks.get(0).getLocation();
+        Vector max = blocks.get(blocks.size() - 1).getLocation();
+        max.setY(min.getY());
+        return min.distance(max) / 2;
+    }
+
     public boolean showProximity() {
         return GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getTimeLimit() != 0 && GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getResult().equals(TimeLimit.Result.MOST_OBJECTIVES);
     }
@@ -407,6 +414,7 @@ public class CoreObjective implements GameObjective {
     @EventHandler
     public void onCoreLeak(ObjectiveCompleteEvent event) {
         if (event.getObjective().equals(this) && event.getObjective().showOnScoreboard()) {
+            Fireworks.spawnFireworks(region.getCenter().subtract(0.5,0.5,0.5), getRadius() * 1.1 + 1, 6, MiscUtil.convertChatColorToColor(team.getColor()), 1);
             for (UUID player : playersCompleted) {
                 if (Bukkit.getOfflinePlayer(player).isOnline()) {
                     Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(Bukkit.getPlayer(player), Snowflakes.ChangeReason.CORE_LEAK, 15, ChatColor.RED + name + ChatColor.GRAY));
