@@ -6,7 +6,6 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatMessage;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
-import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
 import net.minecraft.server.v1_8_R3.PlayerConnection;
 import org.apache.commons.lang.Validate;
@@ -42,12 +41,9 @@ public class BossBar implements Module {
     public void sendMessage(Player player, ChatMessage message, float percent) {
         Validate.isTrue(0F <= percent && percent <= 100F, "Percent must be between 0F and 100F, but was: ", percent);
         FakeWither wither = players.get(player);
-        if (GameHandler.getGameHandler().getMatch().getState() == MatchState.WAITING || GameHandler.getGameHandler().getMatch().getState() == MatchState.ENDED) {
-            BossBar.delete();
-        }
         if (wither == null) {
             addWither(player, message.getMessage(player.getLocale()), true);
-            handleTeleport(player, player.getLocation(), true);
+            handleTeleport(player, true);
             wither = players.get(player);
         }
         if (wither != null) {
@@ -64,25 +60,23 @@ public class BossBar implements Module {
         return message;
     }
 
-    public void handleTeleport(final Player player, final Location location, final boolean visible) {
-        if (GameHandler.getGameHandler().getMatch().getState() == MatchState.CYCLING || GameHandler.getGameHandler().getMatch().getState() == MatchState.STARTING || GameHandler.getGameHandler().getMatch().getState() == MatchState.PLAYING) {
-            if (players.containsKey(player)) {
-                Bukkit.getScheduler().runTaskLater(Cardinal.getInstance(), new Runnable() {
-                    @Override
-                    public void run() {
-                        FakeWither oldWither = getWither(player, "");
-                        float health = oldWither.health;
-                        String message = oldWither.name;
-                        if (oldWither.isVisible()) {
-                            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(getWither(player, "").getDestroyPacket());
-                        }
-                        players.remove(player);
-                        FakeWither wither = addWither(player, message, visible);
-                        wither.health = health;
-                        updateWither(wither, player);
-                    }
-                }, 1L);
-            }
+    public void handleTeleport(final Player player, final boolean visible) {
+        if (players.containsKey(player)) {
+            Bukkit.getScheduler().runTaskLater(Cardinal.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                FakeWither oldWither = getWither(player, "");
+                float health = oldWither.health;
+                String message = oldWither.name;
+                if (oldWither.isVisible()) {
+                    ((CraftPlayer) player).getHandle().playerConnection.sendPacket(getWither(player, "").getDestroyPacket());
+                }
+                players.remove(player);
+                FakeWither wither = addWither(player, message, visible);
+                wither.health = health;
+                updateWither(wither, player);
+                }
+            }, 1L);
         }
     }
 
@@ -145,16 +139,12 @@ public class BossBar implements Module {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerTeleport(final PlayerTeleportEvent event) {
-        if (players.get(event.getPlayer()) != null) {
-            handleTeleport(event.getPlayer(), event.getTo(), true);
-        }
+        handleTeleport(event.getPlayer(), true);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerRespawn(final PlayerRespawnEvent event) {
-        if (players.get(event.getPlayer()) != null) {
-            handleTeleport(event.getPlayer(), event.getPlayer().getLocation(), true);
-        }
+        handleTeleport(event.getPlayer(), true);
     }
 
     public static void sendGlobalBossBar(ChatMessage message, float percent) {
