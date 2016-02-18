@@ -17,6 +17,7 @@ import in.twizmwaz.cardinal.module.modules.cardinalNotifications.CardinalNotific
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.teamPicker.TeamPicker;
+import in.twizmwaz.cardinal.module.modules.titleRespawn.TitleRespawn;
 import in.twizmwaz.cardinal.module.modules.tutorial.Tutorial;
 import in.twizmwaz.cardinal.util.Items;
 import in.twizmwaz.cardinal.util.Players;
@@ -108,7 +109,6 @@ public class RespawnModule implements Module {
                 Player player = event.getPlayer();
                 event.setRespawnLocation(chosen.getLocation());
                 Players.resetPlayer(player);
-                giveObserversKit(player);
                 player.teleport(chosen.getLocation());
             }
         }
@@ -188,7 +188,6 @@ public class RespawnModule implements Module {
                     }
                 } else {
                     event.getPlayer().setMetadata("teamChange", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), "teamChange"));
-                    event.getPlayer().setHealth(0);
                 }
             } else {
                 Optional<TeamModule> teamModule = event.getNewTeam();
@@ -200,7 +199,6 @@ public class RespawnModule implements Module {
                 Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
                 if (!spawnEvent.isCancelled()) {
                     event.getPlayer().setMetadata("teamChange", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), "teamChange"));
-                    event.getPlayer().setHealth(0);
                 }
             }
 
@@ -209,6 +207,7 @@ public class RespawnModule implements Module {
     }
 
     public void giveObserversKit(Player player) {
+        if (GameHandler.getGameHandler().getMatch().getModules().getModule(TitleRespawn.class).isDeadUUID(player.getUniqueId())) return;
         player.getInventory().setItem(0, Items.createItem(Material.COMPASS, 1, (short) 0, ChatColor.BLUE + "" + ChatColor.BOLD + ChatConstant.UI_COMPASS.getMessage(player.getLocale())));
         player.getInventory().setItem(1, CardinalNotifications.book);
         if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) &&

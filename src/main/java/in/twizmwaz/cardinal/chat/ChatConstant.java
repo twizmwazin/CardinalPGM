@@ -321,6 +321,10 @@ public enum ChatConstant {
     UI_COMPASS("userInterface.compass"),
     UI_WAITING_PLAYER("userInterface.waitingPlayer"),
     UI_WAITING_PLAYERS("userInterface.waitingPlayers"),
+    UI_DEATH_RESPAWN_DIED("userInterface.deathRespawnDied"),
+    UI_DEATH_RESPAWN_CONFIRMED_TIME("userInterface.deathRespawnConfirmedTime"),
+    UI_DEATH_RESPAWN_UNCONFIRMED("userInterface.deathRespawnUnconfirmed"),
+    UI_DEATH_RESPAWN_UNCONFIRMED_TIME("userInterface.deathRespawnUnconfirmedTime"),
 
     SNOWFLAKES_SNOWFLAKE("snowflakes.snowflake"),
     SNOWFLAKES_SNOWFLAKES("snowflakes.snowflakes");

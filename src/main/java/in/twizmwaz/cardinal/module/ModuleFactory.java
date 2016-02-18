@@ -28,7 +28,6 @@ import in.twizmwaz.cardinal.module.modules.header.HeaderModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.hill.HillObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.hunger.HungerBuilder;
 import in.twizmwaz.cardinal.module.modules.invisibleBlock.InvisibleBlockBuilder;
-import in.twizmwaz.cardinal.module.modules.itemDrop.ItemDropBuilder;
 import in.twizmwaz.cardinal.module.modules.itemKeep.ItemKeepBuilder;
 import in.twizmwaz.cardinal.module.modules.itemRemove.ItemRemoveBuilder;
 import in.twizmwaz.cardinal.module.modules.killReward.KillRewardBuilder;
@@ -66,6 +65,7 @@ import in.twizmwaz.cardinal.module.modules.teamPicker.TeamPickerBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimitBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLock.TimeLockBuilder;
 import in.twizmwaz.cardinal.module.modules.timeNotifications.TimeNotificationsBuilder;
+import in.twizmwaz.cardinal.module.modules.titleRespawn.TitleRespawnBuilder;
 import in.twizmwaz.cardinal.module.modules.tnt.TntBuilder;
 import in.twizmwaz.cardinal.module.modules.tntDefuse.TntDefuseBuilder;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTrackerBuilder;
@@ -166,7 +166,7 @@ public class ModuleFactory {
                 CardinalNotificationsBuilder.class,
                 PotionRemoverBuilder.class,
                 InvisibleBlockBuilder.class,
-                ItemDropBuilder.class,
+                TitleRespawnBuilder.class,
                 GuiKeepModuleBuilder.class,
                 RankModuleBuilder.class,
                 MultitradeBuilder.class

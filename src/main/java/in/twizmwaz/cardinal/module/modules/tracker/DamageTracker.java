@@ -1,7 +1,9 @@
 package in.twizmwaz.cardinal.module.modules.tracker;
 
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.titleRespawn.TitleRespawn;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import in.twizmwaz.cardinal.module.modules.tracker.event.TrackerDamageEvent;
 import org.bukkit.Bukkit;
@@ -37,7 +39,7 @@ public class DamageTracker implements Module {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if (event.isCancelled()) return;
+        if (event.isCancelled() || GameHandler.getGameHandler().getMatch().getModules().getModule(TitleRespawn.class).isDeadUUID(event.getEntity().getUniqueId())) return;
         if (event.getEntity() instanceof Player) {
             TrackerDamageEvent damage;
             Description description = null;

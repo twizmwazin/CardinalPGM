@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.titleRespawn.TitleRespawn;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.event.EventHandler;
@@ -25,7 +26,8 @@ public class EnterRegion extends AppliedRegion {
                 && !region.contains(event.getFrom().toVector())
                 && filter.evaluate(event.getPlayer(), event).equals(FilterState.DENY)
                 && (!team.isPresent() || (team.isPresent() && !team.get().isObserver()))
-                && GameHandler.getGameHandler().getMatch().isRunning()) {
+                && GameHandler.getGameHandler().getMatch().isRunning()
+                && !GameHandler.getGameHandler().getMatch().getModules().getModule(TitleRespawn.class).isDeadUUID(event.getPlayer().getUniqueId())) {
             event.setTo(event.getFrom());
             ChatUtil.sendWarningMessage(event.getPlayer(), message);
         }
