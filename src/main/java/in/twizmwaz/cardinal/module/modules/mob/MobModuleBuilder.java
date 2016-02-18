@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.mob;
 
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
@@ -12,7 +13,7 @@ public class MobModuleBuilder implements ModuleBuilder {
         if (match.getDocument().getRootElement().getChild("mobs") != null) {
             results.add(new MobModule(FilterModuleBuilder.getFilter(match.getDocument().getRootElement().getChild("mobs").getChild("filter"))));
         } else {
-            results.add(new MobModule(FilterModuleBuilder.getFilter("deny-all")));
+            GameHandler.getGameHandler().getMatchWorld().setGameRuleValue("doMobSpawning", "false");
         }
         return results;
     }

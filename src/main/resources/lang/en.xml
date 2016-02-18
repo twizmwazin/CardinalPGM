@@ -217,6 +217,10 @@
         <score>Score</score>
     </misc>
     <userInterface>
+        <deathRespawnDied>You died!</deathRespawnDied>
+        <deathRespawnConfirmedTime>Respawning in {0}s</deathRespawnConfirmedTime>
+        <deathRespawnUnconfirmed>Left click to respawn</deathRespawnUnconfirmed>
+        <deathRespawnUnconfirmedTime>Left click to respawn in {0}s</deathRespawnUnconfirmedTime>
         <mapLoaded>Loaded Maps</mapLoaded>
         <mapObjective>Objective</mapObjective>
         <mapAuthor>Author</mapAuthor>

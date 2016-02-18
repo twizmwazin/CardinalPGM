@@ -18,6 +18,7 @@ import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
 import in.twizmwaz.cardinal.module.modules.respawn.RespawnModule;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.titleRespawn.TitleRespawn;
 import in.twizmwaz.cardinal.rank.Rank;
 import in.twizmwaz.cardinal.util.Items;
 import in.twizmwaz.cardinal.util.Teams;
@@ -50,9 +51,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.PotionEffectAddEvent;
-import org.bukkit.event.entity.PotionEffectEvent;
 import org.bukkit.event.entity.PotionEffectExpireEvent;
 import org.bukkit.event.entity.PotionEffectRemoveEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
@@ -80,7 +79,6 @@ import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -172,14 +170,14 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onBlockChange(BlockPlaceEvent event) {
-        if (testObserver(event.getPlayer())) {
+        if (testObserverOrDead(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockChange(BlockBreakEvent event) {
-        if (testObserver(event.getPlayer())) {
+        if (testObserverOrDead(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
@@ -242,12 +240,14 @@ public class ObserverModule implements Module {
                     event.getPlayer().openInventory(beacon);
                 }
             }
+        } else if (testObserver(event.getPlayer())) {
+            event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        if (event.getRightClicked() instanceof Player && !event.getPlayer().isSneaking()){
+        if (event.getRightClicked() instanceof Player && !event.getPlayer().isSneaking() && testObserver(event.getPlayer())){
             openInventory(event.getPlayer(), (Player) event.getRightClicked(), false);
         } else if (event.getRightClicked() instanceof ItemFrame) {
             event.setCancelled(true);
@@ -456,30 +456,28 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getWhoClicked() instanceof Player && testObserver((Player) event.getWhoClicked())) {
-            if (event.getInventory().getType() != InventoryType.PLAYER) {
-                event.setCancelled(true);
-            }
+        if (event.getWhoClicked() instanceof Player && testDead((Player) event.getWhoClicked()) || (testObserver((Player) event.getWhoClicked()) && event.getInventory().getType() != InventoryType.PLAYER)) {
+            event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onPlayerPickupExperience(PlayerPickupExperienceEvent event) {
-        if (testObserver(event.getPlayer())) {
+        if (testObserverOrDead(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
-        if (testObserver(event.getPlayer())) {
+        if (testObserverOrDead(event.getPlayer())) {
             event.getItemDrop().remove();
         }
     }
 
     @EventHandler
     public void onPlayerTeamChange(PlayerChangeTeamEvent event) {
-        if (testObserver(event.getPlayer())) {
+        if (testObserverOrDead(event.getPlayer())) {
             event.getPlayer().setGameMode(GameMode.CREATIVE);
             event.getPlayer().setAffectsSpawning(false);
         } else {
@@ -488,17 +486,9 @@ public class ObserverModule implements Module {
     }
 
     @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent event) {
-        if (testObserver(event.getEntity())) {
-            event.getDrops().clear();
-            event.setDroppedExp(0);
-        }
-    }
-
-    @EventHandler
     public void onEntityAttack(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {
-            if (testObserver((Player) event.getDamager())) {
+            if (testObserverOrDead((Player) event.getDamager())) {
                 event.setCancelled(true);
             }
         }
@@ -506,21 +496,21 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onVehicleDamage(VehicleDamageEvent event) {
-        if (event.getAttacker() instanceof Player && testObserver((Player) event.getAttacker())) {
+        if (event.getAttacker() instanceof Player && testObserverOrDead((Player) event.getAttacker())) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onVehicleEnter(VehicleEnterEvent event) {
-        if (event.getEntered() instanceof Player && testObserver((Player) event.getEntered())) {
+        if (event.getEntered() instanceof Player && testObserverOrDead((Player) event.getEntered())) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onVehicleExit(VehicleExitEvent event) {
-        if (event.getExited() instanceof Player && testObserver((Player) event.getExited())) {
+        if (event.getExited() instanceof Player && testObserverOrDead((Player) event.getExited())) {
             event.setCancelled(true);
         }
     }
@@ -556,7 +546,7 @@ public class ObserverModule implements Module {
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
-            if (testObserver((Player) event.getEntity())) {
+            if (testObserverOrDead((Player) event.getEntity())) {
                 event.setCancelled(true);
             }
         }
@@ -573,7 +563,7 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onHangingPlace(HangingPlaceEvent event) {
-        if (testObserver(event.getPlayer())) {
+        if (testObserverOrDead(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
@@ -581,7 +571,7 @@ public class ObserverModule implements Module {
     @EventHandler
     public void onHangingBreak(HangingBreakByEntityEvent event) {
         if (event.getEntity() instanceof Player) {
-            if (testObserver((Player) event.getRemover())) {
+            if (testObserverOrDead((Player) event.getRemover())) {
                 event.setCancelled(true);
             }
         }
@@ -589,7 +579,7 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void PlayerInteractAtEntityEvent(PlayerInteractAtEntityEvent event) {
-        if (testObserver(event.getPlayer())) {
+        if (testObserverOrDead(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
@@ -600,10 +590,18 @@ public class ObserverModule implements Module {
             event.getEntity().setFireTicks(0);
         }
     }
-    
+
+    private boolean testObserverOrDead(Player player) {
+        return testObserver(player) || testDead(player);
+    }
+
     private boolean testObserver(Player player) {
         Optional<TeamModule> team = Teams.getTeamByPlayer(player);
-        return (team.isPresent() && team.get().isObserver()) || !match.isRunning();
+        return (team.isPresent() && team.get().isObserver() || !match.isRunning());
+    }
+
+    private boolean testDead(Player player) {
+        return !match.isRunning() || GameHandler.getGameHandler().getMatch().getModules().getModule(TitleRespawn.class).isDeadUUID(player.getUniqueId());
     }
 
 }
