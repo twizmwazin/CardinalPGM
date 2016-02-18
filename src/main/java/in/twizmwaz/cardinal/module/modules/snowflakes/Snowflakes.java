@@ -9,6 +9,7 @@ import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
+import in.twizmwaz.cardinal.settings.Settings;
 import in.twizmwaz.cardinal.util.MiscUtil;
 import in.twizmwaz.cardinal.util.Numbers;
 import in.twizmwaz.cardinal.util.Teams;
@@ -181,6 +182,9 @@ public class Snowflakes implements Module {
             }
             event.getPlayer().sendMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "+" + event.getFinalAmount() + ChatColor.WHITE + " Snowflakes" + ChatColor.DARK_PURPLE + " | " + ChatColor.GOLD + "" + ChatColor.ITALIC + event.getMultiplier() + "x" + ChatColor.DARK_PURPLE + " | " + ChatColor.GRAY + reason).getMessage(event.getPlayer().getLocale()));
             event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1.5F);
+            if (Settings.getSettingByName("Sounds") != null && Settings.getSettingByName("Sounds").getValueByPlayer(event.getPlayer()).getValue().equalsIgnoreCase("on")) {
+                event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1.5F);
+            }
             if (Cardinal.getCardinalDatabase().get(event.getPlayer(), "snowflakes").equals("")) {
                 Cardinal.getCardinalDatabase().put(event.getPlayer(), "snowflakes", event.getFinalAmount() + "");
             } else {

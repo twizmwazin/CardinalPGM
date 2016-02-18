@@ -9,6 +9,7 @@ import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.titleRespawn.TitleRespawn;
 import in.twizmwaz.cardinal.util.Items;
 import in.twizmwaz.cardinal.util.MiscUtil;
 import in.twizmwaz.cardinal.util.Teams;
@@ -72,7 +73,7 @@ public class TeamPicker implements Module {
             }
         }
         item = size;
-        if (!(Teams.getTeamByPlayer(player).isPresent() && Teams.getTeamByPlayer(player).get().isObserver())){
+        if (!(Teams.getTeamByPlayer(player).isPresent() && Teams.getTeamByPlayer(player).get().isObserver()) || GameHandler.getGameHandler().getMatch().getModules().getModule(TitleRespawn.class).isDeadUUID(player.getUniqueId())){
             ItemStack leave = Items.createItem(Material.LEATHER_BOOTS, 1, (short) 0, ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_LEAVE).getMessage(player.getLocale()), Arrays.asList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_LEAVE_LORE).getMessage(player.getLocale())));
             picker.setItem(item - 1, leave);
         }
@@ -93,7 +94,7 @@ public class TeamPicker implements Module {
         Player player = (Player) event.getWhoClicked();
         if (item != null) {
             Optional<TeamModule> team = Teams.getTeamByPlayer(player);
-            if (team.isPresent() && team.get().isObserver() || !GameHandler.getGameHandler().getMatch().isRunning()) {
+            if (team.isPresent() && (team.get().isObserver() || GameHandler.getGameHandler().getMatch().getModules().getModule(TitleRespawn.class).isDeadUUID(event.getActor().getUniqueId()) || !GameHandler.getGameHandler().getMatch().isRunning())) {
                 if (event.getInventory().getName().equals(ChatColor.DARK_RED + new LocalizedChatMessage(ChatConstant.UI_TEAM_PICK).getMessage(player.getLocale()))) {
                     if (item.getType().equals(Material.CHAINMAIL_HELMET)) {
                         if (item.hasItemMeta()) {
@@ -155,6 +156,8 @@ public class TeamPicker implements Module {
         if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) &&
                 !GameHandler.getGameHandler().getMatch().getState().equals(MatchState.CYCLING) &&
                 !(Blitz.matchIsBlitz() && GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING)) &&
+                (GameHandler.getGameHandler().getMatch().getModules().getModule(TitleRespawn.class).isDeadUUID(event.getPlayer().getUniqueId()) ||
+                        (Teams.getTeamByPlayer(event.getPlayer()).get().isObserver() || !GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING))) &&
                 (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) &&
                 event.getItem() != null && event.getItem().equals(getTeamPicker(event.getPlayer().getLocale()))) {
             event.setCancelled(true);

@@ -1,6 +1,8 @@
 package in.twizmwaz.cardinal.module.modules.tracker;
 
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.titleRespawn.TitleRespawn;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import in.twizmwaz.cardinal.module.modules.tracker.event.TrackerDamageEvent;
 import org.bukkit.Bukkit;
@@ -38,7 +40,7 @@ public class SpleefTracker implements Module {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockBreak(BlockBreakEvent event) {
-        if (event.isCancelled()) return;
+        if (event.isCancelled() || GameHandler.getGameHandler().getMatch().getModules().getModule(TitleRespawn.class).isDeadUUID(event.getPlayer().getUniqueId())) return;
         for (Player player : Bukkit.getOnlinePlayers()) {
             Location location = event.getBlock().getLocation();
             location.setY(location.getY() + 1);
@@ -61,7 +63,7 @@ public class SpleefTracker implements Module {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEntityExplode(EntityExplodeEvent event) {
-        if (event.isCancelled()) return;
+        if (event.isCancelled() || GameHandler.getGameHandler().getMatch().getModules().getModule(TitleRespawn.class).isDeadUUID(event.getEntity().getUniqueId())) return;
         for (Block block : event.blockList()) {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 Location location = block.getLocation();
