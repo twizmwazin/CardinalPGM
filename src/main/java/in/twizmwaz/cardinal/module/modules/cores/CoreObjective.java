@@ -18,6 +18,7 @@ import in.twizmwaz.cardinal.module.modules.scoreboard.GameObjectiveScoreboardHan
 import in.twizmwaz.cardinal.module.modules.snowflakes.Snowflakes;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
+import in.twizmwaz.cardinal.module.modules.titleRespawn.TitleRespawn;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Fireworks;
@@ -391,7 +392,7 @@ public class CoreObjective implements GameObjective {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
-        if (GameHandler.getGameHandler().getMatch().isRunning() && !this.touched && ((team.isPresent() && !team.get().isObserver() && team.get() != this.team) || !team.isPresent())) {
+        if (GameHandler.getGameHandler().getMatch().isRunning() && !this.touched && ((team.isPresent() && !team.get().isObserver() && team.get() != this.team) || !team.isPresent()) && !GameHandler.getGameHandler().getMatch().getModules().getModule(TitleRespawn.class).isDeadUUID(event.getPlayer().getUniqueId())) {
             if (event.getPlayer().getLocation().toVector().distance(region.getCenterBlock().getVector()) < proximity) {
                 double old = proximity;
                 proximity = event.getPlayer().getLocation().toVector().distance(region.getCenterBlock().getVector());

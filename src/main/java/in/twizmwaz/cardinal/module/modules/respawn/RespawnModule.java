@@ -16,6 +16,7 @@ import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.titleRespawn.TitleRespawn;
 import in.twizmwaz.cardinal.module.modules.tutorial.Tutorial;
 import in.twizmwaz.cardinal.module.modules.cardinalNotifications.CardinalNotifications;
 import in.twizmwaz.cardinal.util.Items;
@@ -110,7 +111,6 @@ public class RespawnModule implements Module {
                 Player player = event.getPlayer();
                 event.setRespawnLocation(chosen.getLocation());
                 Players.resetPlayer(player);
-                giveObserversKit(player);
                 player.teleport(chosen.getLocation());
             }
         }
@@ -190,7 +190,6 @@ public class RespawnModule implements Module {
                     }
                 } else {
                     event.getPlayer().setMetadata("teamChange", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), "teamChange"));
-                    event.getPlayer().setHealth(0);
                 }
             } else {
                 Optional<TeamModule> teamModule = event.getNewTeam();
@@ -202,7 +201,6 @@ public class RespawnModule implements Module {
                 Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
                 if (!spawnEvent.isCancelled()) {
                     event.getPlayer().setMetadata("teamChange", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), "teamChange"));
-                    event.getPlayer().setHealth(0);
                 }
             }
 
@@ -211,12 +209,18 @@ public class RespawnModule implements Module {
     }
 
     public void giveObserversKit(Player player) {
-        player.getInventory().setItem(0, Items.createItem(Material.COMPASS, 1, (short) 0, ChatColor.BLUE + "" + ChatColor.BOLD + ChatConstant.UI_COMPASS.getMessage(player.getLocale())));
-        player.getInventory().setItem(1, CardinalNotifications.book);
-        if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) && !(Blitz.matchIsBlitz() && GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING))) {
-            player.getInventory().setItem(2, Items.createItem(Material.LEATHER_HELMET, 1, (short) 0,
-                    ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? ChatConstant.UI_TEAM_CLASS_SELECTION.getMessage(player.getLocale()) : ChatConstant.UI_TEAM_SELECTION.getMessage(player.getLocale())),
-                    Collections.singletonList(ChatColor.DARK_PURPLE + ChatConstant.UI_TEAM_JOIN_TIP.getMessage(player.getLocale()))));
+        if (!GameHandler.getGameHandler().getMatch().getModules().getModule(TitleRespawn.class).isDeadUUID(player.getUniqueId()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
+            player.getInventory().setItem(0, Items.createItem(Material.COMPASS, 1, (short) 0, ChatColor.BLUE + "" + ChatColor.BOLD + ChatConstant.UI_COMPASS.getMessage(player.getLocale())));
+            player.getInventory().setItem(1, CardinalNotifications.book);
+            if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) && !(Blitz.matchIsBlitz() && GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING))) {
+                player.getInventory().setItem(2, Items.createItem(Material.LEATHER_HELMET, 1, (short) 0,
+                        ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? ChatConstant.UI_TEAM_CLASS_SELECTION.getMessage(player.getLocale()) : ChatConstant.UI_TEAM_SELECTION.getMessage(player.getLocale())),
+                        Collections.singletonList(ChatColor.DARK_PURPLE + ChatConstant.UI_TEAM_JOIN_TIP.getMessage(player.getLocale()))));
+            }
+            player.getInventory().setItem(3, Tutorial.getEmerald(player));
+            if (player.hasPermission("tnt.defuse")) {
+                player.getInventory().setItem(5, Items.createItem(Material.SHEARS, 1, (short) 0, ChatColor.RED + ChatConstant.UI_TNT_DEFUSER.getMessage(player.getLocale())));
+            }
         }
         player.getInventory().setItem(3, Tutorial.getEmerald(player));
         if (player.hasPermission("tnt.defuse")) {
