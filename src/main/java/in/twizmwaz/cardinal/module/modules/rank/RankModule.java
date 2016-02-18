@@ -6,9 +6,11 @@ import in.twizmwaz.cardinal.event.PlayerNameUpdateEvent;
 import in.twizmwaz.cardinal.event.RankChangeEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
+import in.twizmwaz.cardinal.module.modules.titleRespawn.TitleRespawn;
 import in.twizmwaz.cardinal.rank.Rank;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -94,7 +96,11 @@ public class RankModule implements Module {
         Player player = event.getPlayer();
         String prefix = Rank.getPrefix(player.getUniqueId());
         player.setDisplayName(prefix + Teams.getTeamColorByPlayer(player) + player.getName());
-        player.setPlayerListName(prefix + Teams.getTeamColorByPlayer(player) + player.getName());
+        if (GameHandler.getGameHandler().getMatch().getModules().getModule(TitleRespawn.class).isDeadUUID(event.getPlayer().getUniqueId())) {
+            player.setPlayerListName(prefix + ChatColor.DARK_GRAY + player.getName());
+        } else {
+            player.setPlayerListName(prefix + Teams.getTeamColorByPlayer(player) + player.getName());
+        }
     }
 
 }

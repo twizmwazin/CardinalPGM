@@ -137,6 +137,10 @@
         <team>Equipo</team>
     </misc>
     <userInterface>
+        <deathRespawnDied>¡Has muerto!</deathRespawnDied>
+        <deathRespawnConfirmedTime>Reapareciendo en {0}s</deathRespawnConfirmedTime>
+        <deathRespawnUnconfirmed>Click izquierdo para reaparecer</deathRespawnUnconfirmed>
+        <deathRespawnUnconfirmedTime>Click izquierdo para reaparecer en {0}s</deathRespawnUnconfirmedTime>
         <mapLoaded>Mapas cargados</mapLoaded>
         <mapObjective>Objetivo</mapObjective>
         <mapAuthor>Autor</mapAuthor>
