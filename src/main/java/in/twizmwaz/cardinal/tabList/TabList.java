@@ -503,6 +503,7 @@ public class TabList implements Listener {
     }
 
     private void deletePlayerWithParts(GameProfile profile) {
+        if (!entityIDs.containsKey(profile)) return;
         for (Player viewer : Bukkit.getOnlinePlayers()) {
             ((CraftPlayer) viewer).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(Integer.MAX_VALUE - entityIDs.get(profile)));
         }

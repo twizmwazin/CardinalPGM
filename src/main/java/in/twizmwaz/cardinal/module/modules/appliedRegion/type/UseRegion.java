@@ -8,6 +8,7 @@ import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -17,9 +18,9 @@ public class UseRegion extends AppliedRegion {
         super(region, filter, message);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (event.getClickedBlock() == null || !event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
+        if (event.isCancelled() || event.getClickedBlock() == null || !event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
         if (region.contains(new BlockRegion(null, event.getClickedBlock().getLocation().toVector())) && filter.evaluate(event.getPlayer(), event.getClickedBlock(), event).equals(FilterState.DENY)) {
             event.setUseItemInHand(Event.Result.ALLOW);
             event.setUseInteractedBlock(Event.Result.DENY);
