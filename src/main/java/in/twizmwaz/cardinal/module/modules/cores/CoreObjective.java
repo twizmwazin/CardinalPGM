@@ -213,6 +213,7 @@ public class CoreObjective implements GameObjective {
                     }
                     if (!playersCompleted.contains(event.getPlayer().getUniqueId()))
                         playersCompleted.add(event.getPlayer().getUniqueId());
+                    this.touched = true;
                     ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), touchMessage);
                     Bukkit.getServer().getPluginManager().callEvent(touchEvent);
                     event.setCancelled(false);
@@ -242,7 +243,6 @@ public class CoreObjective implements GameObjective {
                     objectiveBlownUp.add(block);
                 }
             }
-            boolean oldState = this.touched;
             boolean blownUp = false;
             Player eventPlayer = null;
             boolean touchMessage = false;
