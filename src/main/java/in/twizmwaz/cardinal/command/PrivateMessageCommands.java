@@ -28,10 +28,10 @@ public class PrivateMessageCommands {
             throw new CommandException(ChatConstant.ERROR_PLAYER_NOT_FOUND.getMessage(ChatUtil.getLocale(sender)));
         }
         if (Settings.getSettingByName("PrivateMessages") == null || Settings.getSettingByName("PrivateMessages").getValueByPlayer(target).getValue().equalsIgnoreCase("all")) {
-            target.sendMessage(ChatColor.GRAY + "(From " + Players.getName(sender) + ChatColor.GRAY + "): " + ChatColor.RESET + cmd.getJoinedStrings(1));
-            sender.sendMessage(ChatColor.GRAY + "(To " + Players.getName(target) + ChatColor.GRAY + "): " + ChatColor.RESET + cmd.getJoinedStrings(1));
+            target.sendMessage(ChatColor.GRAY + "From " + Players.getName(sender) + ChatColor.GRAY + ": " + ChatColor.RESET + cmd.getJoinedStrings(1));
+            sender.sendMessage(ChatColor.GRAY + "To " + Players.getName(target) + ChatColor.GRAY + ": " + ChatColor.RESET + cmd.getJoinedStrings(1));
             if (Settings.getSettingByName("PrivateMessageSounds") == null || Settings.getSettingByName("PrivateMessageSounds").getValueByPlayer(target).getValue().equalsIgnoreCase("on")) {
-                target.playSound(target.getLocation(), Sound.LEVEL_UP, 1, 1.5F);
+                target.playSound(target.getLocation(), Sound.LEVEL_UP, 1, 2F);
             }
             target.setMetadata("reply", new FixedMetadataValue(Cardinal.getInstance(), sender));
         } else {
@@ -53,10 +53,10 @@ public class PrivateMessageCommands {
             throw new CommandException(ChatConstant.ERROR_PLAYER_NOT_FOUND.getMessage(ChatUtil.getLocale(sender)));
         }
         if (Settings.getSettingByName("PrivateMessages") == null || Settings.getSettingByName("PrivateMessages").getValueByPlayer(target).getValue().equalsIgnoreCase("all")) {
-            target.sendMessage(ChatColor.GRAY + "(From " + Players.getName(sender) + ChatColor.GRAY + "): " + ChatColor.RESET + cmd.getJoinedStrings(0));
-            sender.sendMessage(ChatColor.GRAY + "(To " + Players.getName(target) + ChatColor.GRAY + "): " + ChatColor.RESET + cmd.getJoinedStrings(0));
+            target.sendMessage(ChatColor.GRAY + "From " + Players.getName(sender) + ChatColor.GRAY + ": " + ChatColor.RESET + cmd.getJoinedStrings(0));
+            sender.sendMessage(ChatColor.GRAY + "To " + Players.getName(target) + ChatColor.GRAY + ": " + ChatColor.RESET + cmd.getJoinedStrings(0));
             if (Settings.getSettingByName("PrivateMessageSounds") == null || Settings.getSettingByName("PrivateMessageSounds").getValueByPlayer(target).getValue().equalsIgnoreCase("on")) {
-                target.playSound(target.getLocation(), Sound.LEVEL_UP, 1, 1.5F);
+                target.playSound(target.getLocation(), Sound.LEVEL_UP, 1, 2F);
             }
             target.setMetadata("reply", new FixedMetadataValue(Cardinal.getInstance(), sender));
         } else {
