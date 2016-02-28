@@ -160,7 +160,7 @@
         <matchStarted>La partita è cominciata!</matchStarted>
         <matchStartCancelled>L'inizio della partita è stato annullato</matchStartCancelled>
         <matchOver>Partita finita!</matchOver>
-        <matchWin>{0} ha vinto!</matchWin>
+        <matchWins>{0} ha vinto!</matchWins>
         <matchTeamWin>La tua squadra ha vinto!</matchTeamWin>
         <matchTeamLose>La tua squadra ha perso</matchTeamLose>
         <matchMaxScoreReached>Punteggio limite di {0} raggiunto</matchMaxScoreReached>

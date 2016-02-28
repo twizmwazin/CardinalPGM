@@ -258,7 +258,8 @@
         <matchStartTitle>Go!</matchStartTitle>
         <matchStartCancelled>Match start cancelled</matchStartCancelled>
         <matchOver>Game over!</matchOver>
-        <matchWin>{0} wins!</matchWin>
+        <matchWin>{0} win!</matchWin>
+        <matchWins>{0} wins!</matchWins>
         <matchTeamWin>Your team won!</matchTeamWin>
         <matchTeamLose>Your team lost</matchTeamLose>
         <matchMaxScoreReached>Score limit of {0} reached</matchMaxScoreReached>

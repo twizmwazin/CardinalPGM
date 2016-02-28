@@ -165,7 +165,7 @@
         <matchStarted>경기가 시작되었습니다!</matchStarted>
         <matchStartCancelled>경기가 취소되었습니다.</matchStartCancelled>
         <matchOver>경기가 끝났습니다!</matchOver>
-        <matchWin>{0}가 승리했습니다!</matchWin>
+        <matchWins>{0}가 승리했습니다!</matchWins>
         <matchTeamWin>당신의 팀이 승리했습니다!</matchTeamWin>
         <matchTeamLose>당신의 팀이 패배하였습니다</matchTeamLose>
         <matchMaxScoreReached>{0}의 점수가 다 찼습니다.</matchMaxScoreReached>

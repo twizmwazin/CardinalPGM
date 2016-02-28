@@ -32,9 +32,10 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
     private int maxOverfill;
     private int respawnLimit;
     private ChatColor color;
+    private boolean plural;
     private boolean ready;
 
-    protected TeamModule(Match match, String name, String id, int min, int max, int maxOverfill, int respawnLimit, ChatColor color, boolean observer) {
+    protected TeamModule(Match match, String name, String id, int min, int max, int maxOverfill, int respawnLimit, ChatColor color, boolean plural, boolean observer) {
         this.match = match;
         this.name = name;
         this.id = id;
@@ -43,6 +44,7 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
         this.maxOverfill = maxOverfill;
         this.respawnLimit = respawnLimit;
         this.color = color;
+        this.plural = plural;
         this.observer = observer;
         this.ready = false;
     }
@@ -145,6 +147,10 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
 
     public void setColor(ChatColor color) {
         this.color = color;
+    }
+
+    public boolean isPlural() {
+        return plural;
     }
 
     public boolean isObserver() {

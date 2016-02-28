@@ -261,6 +261,7 @@ public enum ChatConstant {
     UI_MATCH_START_CANCELLED("userInterface.matchStartCancelled"),
     UI_MATCH_OVER("userInterface.matchOver"),
     UI_MATCH_WIN("userInterface.matchWin"),
+    UI_MATCH_WINS("userInterface.matchWins"),
     UI_MATCH_TEAM_WIN("userInterface.matchTeamWin"),
     UI_MATCH_TEAM_LOSE("userInterface.matchTeamLose"),
     UI_MATCH_MAX_SCORE_REACHED("userInterface.matchMaxScoreReached"),
