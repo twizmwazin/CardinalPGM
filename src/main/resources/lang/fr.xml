@@ -254,7 +254,7 @@
         <matchStartedTitle>Go!</matchStartedTitle>
         <matchStartCancelled>Début de match annulé</matchStartCancelled>
         <matchOver>Fin du jeu!</matchOver>
-        <matchWin>{0} a remporté la victoire !</matchWin>
+        <matchWins>{0} a remporté la victoire !</matchWins>
         <matchTeamWin>Votre équipe a gagné !</matchTeamWin>
         <matchTeamLose>Votre équipe a perdu</matchTeamLose>
         <matchMaxScoreReached>La limite du score de {0} a été atteinte</matchMaxScoreReached>

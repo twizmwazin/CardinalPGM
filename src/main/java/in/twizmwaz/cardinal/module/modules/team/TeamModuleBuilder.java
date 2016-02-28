@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
+import in.twizmwaz.cardinal.util.Numbers;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
 import in.twizmwaz.cardinal.util.Parser;
 import org.apache.logging.log4j.core.helpers.Integers;
@@ -45,10 +46,13 @@ public class TeamModuleBuilder implements ModuleBuilder {
             } catch (NullPointerException ex) {
                 respawnLimit = -1;
             }
+            boolean plural = false;
+            if (teamNode.getAttributeValue("plural") != null)
+                plural = Numbers.parseBoolean(teamNode.getAttributeValue("plural"));
             ChatColor color = Parser.parseChatColor(teamNode.getAttribute("color").getValue());
-            results.add(new TeamModule(match, name, id, min, max, maxOverfill, respawnLimit, color, false));
+            results.add(new TeamModule(match, name, id, min, max, maxOverfill, respawnLimit, color, plural, false));
         }
-        results.add(new TeamModule(match, "Observers", "observers", 0, Integer.MAX_VALUE, Integer.MAX_VALUE, -1, ChatColor.AQUA, true));
+        results.add(new TeamModule(match, "Observers", "observers", 0, Integer.MAX_VALUE, Integer.MAX_VALUE, -1, ChatColor.AQUA, true, true));
         return results;
     }
 }

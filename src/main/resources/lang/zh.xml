@@ -157,7 +157,7 @@
         <matchStarted>比赛开始！</matchStarted>
         <matchStartCancelled>即将来临的比赛被取消了</matchStartCancelled>
         <matchOver>比赛完了</matchOver>
-        <matchWin>{0} 赢！</matchWin>
+        <matchWins>{0} 赢！</matchWins>
         <matchTeamWin>你的队赢了！</matchTeamWin>
         <matchTeamLose>你的队输了。</matchTeamLose>
         <matchMaxScoreReached>到了分数的限制， {0} 了。</matchMaxScoreReached>

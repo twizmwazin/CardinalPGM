@@ -160,7 +160,7 @@
         <matchStarted>Matchen har börjat!</matchStarted>
         <matchStartCancelled>Matchstart avbruten</matchStartCancelled>
         <matchOver>Spelet är slut!</matchOver>
-        <matchWin>{0} vinner!</matchWin>
+        <matchWins>{0} vinner!</matchWins>
         <matchTeamWin>Ditt lag vann!</matchTeamWin>
         <matchTeamLose>Ditt lag förlorade</matchTeamLose>
         <matchMaxScoreReached>Poänggränsen {0} nådd</matchMaxScoreReached>
