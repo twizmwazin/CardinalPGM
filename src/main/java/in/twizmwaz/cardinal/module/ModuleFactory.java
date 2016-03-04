@@ -42,6 +42,7 @@ import in.twizmwaz.cardinal.module.modules.itemRemove.ItemRemoveBuilder;
 import in.twizmwaz.cardinal.module.modules.killReward.KillRewardBuilder;
 import in.twizmwaz.cardinal.module.modules.killStreakCount.KillStreakBuilder;
 import in.twizmwaz.cardinal.module.modules.kit.KitBuilder;
+import in.twizmwaz.cardinal.module.modules.longTntRender.LongTntRenderBuilder;
 import in.twizmwaz.cardinal.module.modules.mapNotification.MapNotificationBuilder;
 import in.twizmwaz.cardinal.module.modules.match.MatchModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimerBuilder;
@@ -191,7 +192,8 @@ public class ModuleFactory {
                 StatsBuilder.class,
                 FallingBlocksBuilder.class,
                 SpectatorToolsBuilder.class,
-                ArrowModuleBuilder.class
+                ArrowModuleBuilder.class,
+                LongTntRenderBuilder.class
         ));
     }
 

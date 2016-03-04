@@ -16,6 +16,7 @@ settings:
 - Sounds
 - Speed
 - Stats
+- TntRendering
 setting:
   ArrowParticles:
     aliases:
@@ -131,3 +132,10 @@ setting:
     - 'boss bar'
     - off[default]
     description: See your Kills, Deaths and kd stats
+  TntRendering:
+    aliases:
+    - tnt
+    values:
+    - on[default]
+    - 'off'
+    description: How tnt further away from 64 blocks is displayed to you
