@@ -9,6 +9,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.block.BlockDispenseEntityEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
@@ -19,6 +20,7 @@ import java.util.UUID;
 
 public class TntTracker implements Module {
     private HashMap<String, UUID> tntPlaced = new HashMap<>();
+    private HashMap<String, UUID> dispenserPlaced = new HashMap<>();
 
     protected TntTracker() {
     }
@@ -42,6 +44,9 @@ public class TntTracker implements Module {
         if (event.getBlock().getType() == Material.TNT) {
             Location location = event.getBlock().getLocation();
             tntPlaced.put(location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ(), event.getPlayer().getUniqueId());
+        } else if (event.getBlock().getType() == Material.DISPENSER) {
+            Location location = event.getBlock().getLocation();
+            dispenserPlaced.put(location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ(), event.getPlayer().getUniqueId());
         }
     }
 
@@ -66,6 +71,19 @@ public class TntTracker implements Module {
                         Location location = block.getLocation();
                         tntPlaced.put(location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ(), getWhoPlaced(event.getEntity()));
                     }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onEntityDispense(BlockDispenseEntityEvent event){
+        if (event.getBlock().getType() == Material.DISPENSER){
+            if (event.getEntity().getType() == EntityType.PRIMED_TNT) {
+                Location location = event.getBlock().getLocation();
+                if (dispenserPlaced.containsKey(location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ())) {
+                    UUID player = dispenserPlaced.get(location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ());
+                    event.getEntity().setMetadata("source", new FixedMetadataValue(GameHandler.getGameHandler().getPlugin(), player));
                 }
             }
         }
