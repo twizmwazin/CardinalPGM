@@ -41,7 +41,11 @@ public class MapCommands {
                 }
             }
         } else {
-            sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + ChatConstant.UI_MAP_AUTHOR.getMessage(ChatUtil.getLocale(sender)) + ": " + mapInfo.getAuthors().get(0).getDisplayName());
+            if (mapInfo.getAuthors().get(0).getContribution() != null) {
+                sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + ChatConstant.UI_MAP_AUTHOR.getMessage(ChatUtil.getLocale(sender)) + ": " + mapInfo.getAuthors().get(0).getDisplayName() + ChatColor.GRAY + " - " + ChatColor.ITALIC + mapInfo.getAuthors().get(0).getContribution());
+            } else {
+                sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + ChatConstant.UI_MAP_AUTHOR.getMessage(ChatUtil.getLocale(sender)) + ": " + mapInfo.getAuthors().get(0).getDisplayName());
+            }
         }
         if (mapInfo.getContributors().size() > 0) {
             sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + ChatConstant.UI_MAP_CONTRIBUTORS.getMessage(ChatUtil.getLocale(sender)) + ":");
