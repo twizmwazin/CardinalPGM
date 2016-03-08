@@ -7,30 +7,21 @@ import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
 import in.twizmwaz.cardinal.module.modules.respawn.RespawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.module.modules.tutorial.Tutorial;
 import in.twizmwaz.cardinal.util.Contributor;
-import in.twizmwaz.cardinal.util.Items;
 import in.twizmwaz.cardinal.util.Players;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventoryPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -150,14 +141,7 @@ public class TeamManagerModule implements Module {
                 team.remove(player);
             }
         }
-        this.clearHeldAttribute(player);
-    }
-
-    private void clearHeldAttribute(Player player) {
-        CraftPlayer craftPlayer = (CraftPlayer) player;
-        if (player.getInventory().getItemInHand() != null && !player.getInventory().getItemInHand().getType().equals(Material.AIR)) {
-            craftPlayer.getHandle().getAttributeMap().a(((CraftInventoryPlayer) craftPlayer.getInventory()).getInventory().getItemInHand().B());
-        }
+        Players.resetPlayer(player);
     }
 
 }

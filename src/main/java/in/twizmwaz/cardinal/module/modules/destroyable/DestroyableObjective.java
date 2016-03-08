@@ -7,10 +7,11 @@ import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.SnowflakeChangeEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
+import in.twizmwaz.cardinal.event.objective.ObjectiveProximityEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
-import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.proximity.GameObjectiveProximityHandler;
+import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.scoreboard.GameObjectiveScoreboardHandler;
 import in.twizmwaz.cardinal.module.modules.snowflakes.Snowflakes;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
@@ -155,7 +156,6 @@ public class DestroyableObjective implements GameObjective {
             if (getBlocks().contains(event.getBlock())) {
                 Optional<TeamModule> playerTeam = Teams.getTeamByPlayer(event.getPlayer());
                 if (playerTeam.isPresent() && playerTeam.get() != team) {
-                    boolean touchMessage = false;
                     if (!playersTouched.contains(event.getPlayer().getUniqueId())) {
                         playersTouched.add(event.getPlayer().getUniqueId());
                         Optional<TeamModule> teamModule = Teams.getTeamByPlayer(event.getPlayer());
@@ -181,7 +181,7 @@ public class DestroyableObjective implements GameObjective {
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
                     } else if (!this.completed) {
-                        ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), touchMessage);
+                        ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, event.getPlayer(), false);
                         Bukkit.getServer().getPluginManager().callEvent(touchEvent);
                     }
                 } else {
@@ -198,14 +198,12 @@ public class DestroyableObjective implements GameObjective {
         if (!event.isCancelled()) {
             List<Block> objectiveBlownUp = new ArrayList<>();
             for (Block block : event.blockList()) {
-                if (getBlocks().contains(block)) {
+                if (region.contains(block.getLocation()) && partOfObjective(block)) {
                     objectiveBlownUp.add(block);
                 }
             }
-            boolean oldState = this.isTouched();
             boolean blownUp = false;
             Player eventPlayer = null;
-            int originalPercent = getPercent();
             boolean touchMessage = false;
             for (Block block : objectiveBlownUp) {
                 boolean blockDestroyed = false;
@@ -251,35 +249,41 @@ public class DestroyableObjective implements GameObjective {
                     this.complete++;
                     if (eventPlayer != null)
                         this.playersCompleted.put(eventPlayer.getUniqueId(), (playersCompleted.containsKey(eventPlayer.getUniqueId()) ? playersCompleted.get(eventPlayer.getUniqueId()) + 1 : 1));
-                    if ((this.complete / size) >= this.completion && !this.completed) {
-                        this.completed = true;
-                        if (this.show) {
-                            for (Player player : Bukkit.getOnlinePlayers())
-                                player.sendMessage(ChatColor.WHITE + new UnlocalizedChatMessage("{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DESTROYED, team.getCompleteName() + ChatColor.WHITE, name, getWhoDestroyed(player.getLocale()))).getMessage(player.getLocale()));
-                            Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + new UnlocalizedChatMessage("{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DESTROYED, team.getCompleteName() + ChatColor.WHITE, name, getWhoDestroyed(Locale.getDefault().toString()))).getMessage(Locale.getDefault().toString()));
-                        }
-                        ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, eventPlayer);
-                        Bukkit.getServer().getPluginManager().callEvent(compEvent);
-                    }
                 }
             }
-            if (!this.completed && blownUp) {
-                ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, touchMessage);
-                Bukkit.getServer().getPluginManager().callEvent(touchEvent);
+            if (blownUp) {
+                if ((this.complete / size) >= this.completion && !this.completed) {
+                    this.completed = true;
+                    if (this.show) {
+                        for (Player player : Bukkit.getOnlinePlayers())
+                            player.sendMessage(ChatColor.WHITE + new UnlocalizedChatMessage("{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DESTROYED, team.getCompleteName() + ChatColor.WHITE, name, getWhoDestroyed(player.getLocale()))).getMessage(player.getLocale()));
+                        Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + new UnlocalizedChatMessage("{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DESTROYED, team.getCompleteName() + ChatColor.WHITE, name, getWhoDestroyed(Locale.getDefault().toString()))).getMessage(Locale.getDefault().toString()));
+                    }
+                    ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, eventPlayer);
+                    Bukkit.getServer().getPluginManager().callEvent(compEvent);
+                }
+                if (!this.completed) {
+                    ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, eventPlayer, touchMessage);
+                    Bukkit.getServer().getPluginManager().callEvent(touchEvent);
+                }
             }
         }
     }
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (!repairable && !isComplete()) {
-            if (region.contains(event.getBlock().getLocation()) && partOfObjective(event.getBlock())) {
+        if (!isComplete()) {
+            if (monument.contains(event.getBlock()) && partOfObjective(event.getBlockPlaced())) {
                 if (Teams.getTeamByPlayer(event.getPlayer()).orNull() != team) {
                     ChatUtil.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_ENEMY_OBJECTIVE));
                     event.setCancelled(true);
-                } else {
+                } else if (!isRepairable()) {
                     ChatUtil.sendWarningMessage(event.getPlayer(), new LocalizedChatMessage(ChatConstant.ERROR_REPAIR_OBJECTIVE));
                     event.setCancelled(true);
+                } else {
+                    complete--;
+                    ObjectiveTouchEvent touchEvent = new ObjectiveTouchEvent(this, null, false);
+                    Bukkit.getServer().getPluginManager().callEvent(touchEvent);
                 }
             }
         }

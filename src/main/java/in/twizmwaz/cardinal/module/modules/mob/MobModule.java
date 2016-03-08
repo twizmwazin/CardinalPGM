@@ -22,7 +22,7 @@ public class MobModule implements Module {
 
     @EventHandler
     public void onMobSpawn(CreatureSpawnEvent event) {
-        if (filter.evaluate(event.getSpawnReason(), event.getCreatureType(), event.getEntity().getType()).equals(FilterState.DENY))
+        if (filter.evaluate(event.getSpawnReason(), event.getEntityType(), event.getEntity()).equals(FilterState.DENY))
             event.setCancelled(true);
     }
 }

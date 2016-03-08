@@ -14,12 +14,12 @@ import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
-import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
 import in.twizmwaz.cardinal.module.modules.respawn.RespawnModule;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.rank.Rank;
 import in.twizmwaz.cardinal.util.Items;
+import in.twizmwaz.cardinal.util.Players;
 import in.twizmwaz.cardinal.util.Teams;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.BanList;
@@ -34,10 +34,9 @@ import org.bukkit.block.Dispenser;
 import org.bukkit.block.Dropper;
 import org.bukkit.block.Furnace;
 import org.bukkit.block.Hopper;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHumanEntity;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
@@ -52,16 +51,21 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.PotionEffectAddEvent;
-import org.bukkit.event.entity.PotionEffectEvent;
 import org.bukkit.event.entity.PotionEffectExpireEvent;
 import org.bukkit.event.entity.PotionEffectRemoveEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryInteractEvent;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
@@ -73,14 +77,12 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -111,6 +113,7 @@ public class ObserverModule implements Module {
 
         if (clear) {
             player.getInventory().clear();
+            Players.resetPlayer(player, false);
         }
 
         GameHandler.getGameHandler().getMatch().getModules().getModule(RespawnModule.class).giveObserversKit(player);
@@ -161,12 +164,6 @@ public class ObserverModule implements Module {
             }
         } else {
             resetPlayer(event.getPlayer(), false);
-            if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
-                ItemStack picker = Items.createItem(Material.LEATHER_HELMET, 1, (short) 0,
-                        ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(event.getPlayer().getLocale()) : new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(event.getPlayer().getLocale())),
-                        Collections.singletonList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(event.getPlayer().getLocale())));
-                event.getPlayer().getInventory().setItem(2, picker);
-            }
         }
     }
 
@@ -188,8 +185,9 @@ public class ObserverModule implements Module {
     public void onInteraction(PlayerInteractEvent event) {
         if (testObserver(event.getPlayer())) {
             event.setCancelled(true);
-            if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType().equals(Material.WRITTEN_BOOK))){
-                ((CraftHumanEntity) event.getPlayer()).getHandle().openBook(CraftItemStack.asNMSCopy(event.getPlayer().getItemInHand()));
+            if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && (event.getPlayer().getInventory().getItemInMainHand() != null && event.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.WRITTEN_BOOK))){
+                event.setUseInteractedBlock(Event.Result.DENY);
+                event.setUseItemInHand(Event.Result.ALLOW);
             }
             if (event.getClickedBlock() != null && !event.getPlayer().isSneaking() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 if (event.getClickedBlock().getType().equals(Material.CHEST) || event.getClickedBlock().getType().equals(Material.TRAPPED_CHEST)) {
@@ -247,10 +245,12 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        if (event.getRightClicked() instanceof Player && !event.getPlayer().isSneaking()){
-            openInventory(event.getPlayer(), (Player) event.getRightClicked(), false);
-        } else if (event.getRightClicked() instanceof ItemFrame) {
-            event.setCancelled(true);
+        if (testObserver(event.getPlayer())) {
+            if (event.getRightClicked() instanceof Player && !event.getPlayer().isSneaking()){
+                openInventory(event.getPlayer(), (Player) event.getRightClicked(), false);
+            } else if (event.getRightClicked() instanceof ItemFrame) {
+                event.setCancelled(true);
+            }
         }
     }
 
@@ -266,13 +266,23 @@ public class ObserverModule implements Module {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onViewingInventoryClick(InventoryClickEvent event) {
-        refreshView(event.getWhoClicked().getUniqueId());
+    public void onViewingInventoryClick(CraftItemEvent event) {
+        updateNextTick(event.getActor());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onViewingInventoryDrag(InventoryDragEvent event) {
-        refreshView(event.getWhoClicked().getUniqueId());
+    public void onViewingInventoryMoveItem(InventoryClickEvent event) {
+        updateNextTick(event.getActor());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onViewingInventoryClick(InventoryCreativeEvent event) {
+        updateNextTick(event.getActor());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onViewingInventoryMoveItem(InventoryDragEvent event) {
+        updateNextTick(event.getActor());
     }
 
     @EventHandler
@@ -428,6 +438,7 @@ public class ObserverModule implements Module {
         inventory.setItem(1, player.getInventory().getChestplate());
         inventory.setItem(2, player.getInventory().getLeggings());
         inventory.setItem(3, player.getInventory().getBoots());
+        inventory.setItem(4, player.getInventory().getItemInOffHand());
 
         ItemStack potion;
         if (player.getActivePotionEffects().size() > 0){
@@ -480,10 +491,11 @@ public class ObserverModule implements Module {
     @EventHandler
     public void onPlayerTeamChange(PlayerChangeTeamEvent event) {
         if (testObserver(event.getPlayer())) {
-            event.getPlayer().setGameMode(GameMode.CREATIVE);
-            event.getPlayer().setAffectsSpawning(false);
+            resetPlayer(event.getPlayer(), true);
         } else {
             event.getPlayer().setAffectsSpawning(true);
+            event.getPlayer().setCollidesWithEntities(true);
+            event.getPlayer().setCanPickupItems(true);
         }
     }
 
@@ -580,7 +592,7 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onHangingBreak(HangingBreakByEntityEvent event) {
-        if (event.getEntity() instanceof Player) {
+        if (event.getRemover() instanceof Player) {
             if (testObserver((Player) event.getRemover())) {
                 event.setCancelled(true);
             }

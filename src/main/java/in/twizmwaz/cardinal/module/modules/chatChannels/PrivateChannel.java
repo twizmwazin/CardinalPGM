@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.module.modules.chatChannels;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.permissions.Permission;
 
 import java.util.Collection;
@@ -16,6 +17,11 @@ public abstract class PrivateChannel implements ChatChannel {
     public PrivateChannel(Permission permission, PermissionModule permissionModule) {
         this.permission = permission;
         this.permissionModule = permissionModule;
+    }
+
+    @Override
+    public void unload() {
+        HandlerList.unregisterAll(this);
     }
 
     @Override

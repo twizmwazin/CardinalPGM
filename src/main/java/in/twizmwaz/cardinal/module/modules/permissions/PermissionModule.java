@@ -15,6 +15,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -31,20 +32,19 @@ import java.util.UUID;
 
 public class PermissionModule implements Module {
 
-    private final Plugin plugin;
-    private final Map<Player, PermissionAttachment> attachmentMap;
+    private static Plugin plugin;
+    private static Map<UUID, PermissionAttachment> attachmentMap = new HashMap<>();
 
-    private List<UUID> developers = Arrays.asList(
+    private static List<UUID> developers = Arrays.asList(
             UUID.fromString("670223bb-7560-48c8-8f01-2f463549b917") /* twiz_mwazin */,
             UUID.fromString("33a703d0-3237-4337-9ddd-3dbf33b3d8a6") /* iEli2tyree011 */,
             UUID.fromString("208c84af-790a-41da-bf7e-eb184f17bdf8") /* Elly */,
             UUID.fromString("260004f0-996b-4539-ba21-df4ee6336b63") /* Elliott_ */,
             UUID.fromString("e82603df-417d-4a95-bd1f-1720648be0b4") /* Pablete1234 */);
-    private List<OfflinePlayer> muted = new ArrayList<>();
+    private static List<OfflinePlayer> muted = new ArrayList<>();
 
     public PermissionModule(Plugin plugin) {
-        this.plugin = plugin;
-        this.attachmentMap = new HashMap<>();
+        PermissionModule.plugin = plugin;
     }
 
     public static boolean isDeveloper(UUID player) {
@@ -53,11 +53,7 @@ public class PermissionModule implements Module {
 
     @Override
     public void unload() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            player.removeAttachment(attachmentMap.get(player));
-        }
-
-        attachmentMap.clear();
+        HandlerList.unregisterAll(this);
     }
 
     public List<UUID> getDevelopers() {
@@ -66,28 +62,23 @@ public class PermissionModule implements Module {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        attachmentMap.put(event.getPlayer(), event.getPlayer().addAttachment(plugin));
-
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onCycleComplete(CycleCompleteEvent event) {
-        for (Player player : Bukkit.getOnlinePlayers())
-            attachmentMap.put(player, player.addAttachment(plugin));
+        attachmentMap.put(event.getPlayer().getUniqueId(), event.getPlayer().addAttachment(plugin));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerLeave(PlayerQuitEvent event) {
-        if (attachmentMap.get(event.getPlayer()) != null) {
-            event.getPlayer().removeAttachment(attachmentMap.get(event.getPlayer()));
-            attachmentMap.remove(event.getPlayer());
+        if (attachmentMap.containsKey(event.getPlayer().getUniqueId())) {
+            event.getPlayer().removeAttachment(attachmentMap.get(event.getPlayer().getUniqueId()));
+            attachmentMap.remove(event.getPlayer().getUniqueId());
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerKick(PlayerKickEvent event) {
-        event.getPlayer().removeAttachment(attachmentMap.get(event.getPlayer()));
-        attachmentMap.remove(event.getPlayer());
+        if (attachmentMap.containsKey(event.getPlayer().getUniqueId())) {
+            event.getPlayer().removeAttachment(attachmentMap.get(event.getPlayer().getUniqueId()));
+            attachmentMap.remove(event.getPlayer().getUniqueId());
+        }
     }
 
     @EventHandler
@@ -125,15 +116,15 @@ public class PermissionModule implements Module {
     }
 
     public PermissionAttachment getPlayerAttachment(Player player) {
-        return attachmentMap.get(player);
+        return attachmentMap.get(player.getUniqueId());
     }
 
     public void disablePermission(Player player, String permission) {
-        attachmentMap.get(player).unsetPermission(permission);
+        attachmentMap.get(player.getUniqueId()).unsetPermission(permission);
     }
 
     public void enablePermission(Player player, String permission) {
-        attachmentMap.get(player).setPermission(permission, true);
+        attachmentMap.get(player.getUniqueId()).setPermission(permission, true);
     }
 
     public void mute(Player player) {
@@ -157,13 +148,13 @@ public class PermissionModule implements Module {
     }
 
     public void setWorldeditPermissions(Player player, boolean state) {
-        attachmentMap.get(player).setPermission("worldedit.navigation.jumpto.tool", state);
-        attachmentMap.get(player).setPermission("worldedit.navigation.thru.tool", state);
+        attachmentMap.get(player.getUniqueId()).setPermission("worldedit.navigation.jumpto.tool", state);
+        attachmentMap.get(player.getUniqueId()).setPermission("worldedit.navigation.thru.tool", state);
 
-        attachmentMap.get(player).setPermission("worldedit.navigation.jumpto.command", state);
-        attachmentMap.get(player).setPermission("worldedit.navigation.thru.command", state);
+        attachmentMap.get(player.getUniqueId()).setPermission("worldedit.navigation.jumpto.command", state);
+        attachmentMap.get(player.getUniqueId()).setPermission("worldedit.navigation.thru.command", state);
 
-        attachmentMap.get(player).setPermission("worldedit.navigation.unstuck", state);
+        attachmentMap.get(player.getUniqueId()).setPermission("worldedit.navigation.unstuck", state);
     }
 
 }

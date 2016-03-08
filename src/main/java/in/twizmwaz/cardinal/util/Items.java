@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.util;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -21,6 +22,7 @@ public class Items {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(name);
         meta.setLore(lore);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_POTION_EFFECTS);
         item.setItemMeta(meta);
         return item;
     }

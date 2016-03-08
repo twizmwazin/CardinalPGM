@@ -48,8 +48,8 @@ public class HeaderModule implements TaskedModule {
 
     @Override
     public void run() {
-        if (Math.round(MatchTimer.getTimeInSeconds()) > last) {
-            last = (int) Math.round(MatchTimer.getTimeInSeconds());
+        if (last != (int)MatchTimer.getTimeInSeconds()) {
+            last = (int)MatchTimer.getTimeInSeconds();
             updateFooter();
             for (Player player : Bukkit.getOnlinePlayers()) {
                 updatePlayer(player, player.getLocale());
