@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.potion.PotionEffect;
@@ -64,13 +65,14 @@ public class Kit implements Module {
 
     @Override
     public void unload() {
+        HandlerList.unregisterAll(this);
     }
 
     public void apply(final Player player) {
         if (clear || clearItems) player.getInventory().clear();
         if (clear) {
             for (ItemStack armor : player.getInventory().getArmorContents()) {
-                armor.setAmount(0);
+                if (armor != null) armor.setAmount(0);
             }
         }
         try {
@@ -91,7 +93,7 @@ public class Kit implements Module {
             if (force) player.setFoodLevel(foodLevel);
             else if (player.getFoodLevel() < foodLevel) player.setFoodLevel(foodLevel);
         }
-        player.setWalkSpeed(walkSpeed);
+        if (walkSpeed != -1F) player.setWalkSpeed(walkSpeed);
         player.setKnockbackReduction(knockback);
         for (KitItem item : this.items) {
             if (item.hasSlot()) {

@@ -15,6 +15,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -56,8 +57,8 @@ public class PermissionModule implements Module {
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.removeAttachment(attachmentMap.get(player));
         }
-
         attachmentMap.clear();
+        HandlerList.unregisterAll(this);
     }
 
     public List<UUID> getDevelopers() {
@@ -67,7 +68,6 @@ public class PermissionModule implements Module {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         attachmentMap.put(event.getPlayer(), event.getPlayer().addAttachment(plugin));
-
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

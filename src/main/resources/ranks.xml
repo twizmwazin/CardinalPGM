@@ -8,6 +8,8 @@
         <permission>cardinal.broadcast</permission>
         <permission>cardinal.mod</permission>
         <permission>tnt.defuse</permission>
+        <permission>cardinal.reload</permission>
+        <permission>cardinal.newmaps</permission>
         <permission>cardinal.cancel</permission>
         <permission>cardinal.chat.admin</permission>
         <permission>cardinal.match.setnext</permission>

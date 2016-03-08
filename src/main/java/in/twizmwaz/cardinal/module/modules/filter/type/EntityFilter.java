@@ -23,7 +23,7 @@ public class EntityFilter extends FilterModule {
     public FilterState evaluate(final Object... objects) {
         for (Object object : objects) {
             if (object instanceof Entity) {
-                if (((Entity) object).getType().equals(entity))
+                if (entity.equals(((Entity) object).getType()))
                     return ALLOW;
                 else
                     return DENY;

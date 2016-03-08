@@ -116,6 +116,9 @@
         <skippedFromTo>Successfully skipped {0} to {1}</skippedFromTo>
         <skippedTo>Successfully skipped to {0}</skippedTo>
         <configReload>Configuration successfully reloaded.</configReload>
+        <ranksReload>Ranks successfully reloaded.</ranksReload>
+        <repoReload>Successfully reloaded the repository, maps found: {0}</repoReload>
+        <repoReloadFailed>Failed to reload the repository, maps found: {0}</repoReloadFailed>
         <mapNext>Next map: {0}</mapNext>
         <rotationSet>Current rotation set to {0}</rotationSet>
         <rotationReload>Successfully reloaded the rotation</rotationReload>

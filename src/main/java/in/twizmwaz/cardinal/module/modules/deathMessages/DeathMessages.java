@@ -13,6 +13,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 public class DeathMessages implements Module {
@@ -22,7 +23,7 @@ public class DeathMessages implements Module {
 
     @Override
     public void unload() {
-
+        HandlerList.unregisterAll(this);
     }
 
     @EventHandler
@@ -62,6 +63,8 @@ public class DeathMessages implements Module {
                         Player killer = event.getKiller();
                         if (damageEvent.getType().equals(Type.SHOT)) {
                             deathMessage = name + ChatColor.GRAY + " was " + damageEvent.getType().name().toLowerCase() + (damageEvent.getDistance() == -1 ? "" : " (" + damageEvent.getDistance() + " blocks)") + " off a high place " + "(" + fallDistance + " blocks)" + " by " + Teams.getTeamColorByPlayer(killer) + killer.getName();
+                        } else if (damageEvent.getType().equals(Type.BLOWN)) {
+                            deathMessage = name + ChatColor.GRAY + " was blown off a high place (" + fallDistance + " blocks)" + " by " + Teams.getTeamColorByPlayer(killer) + killer.getName() + ChatColor.GRAY + "'s TNT";
                         } else {
                             deathMessage = name + ChatColor.GRAY + " was " + damageEvent.getType().name().toLowerCase() + " off a high place " + "(" + fallDistance + " blocks)" + " by " + Teams.getTeamColorByPlayer(killer) + killer.getName() + ChatColor.GRAY + "'s " + (damageEvent.getItem().getType().equals(Material.AIR) ? "fists of fury" : (damageEvent.getItem().getEnchantments() != null && damageEvent.getItem().getEnchantments().size() > 0 ? "enchanted " : "") + damageEvent.getItem().getType().name().replaceAll("_", " ").toLowerCase());
                         }
@@ -200,6 +203,7 @@ public class DeathMessages implements Module {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

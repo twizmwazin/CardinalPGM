@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.filter;
 
 import in.twizmwaz.cardinal.module.Module;
+import org.bukkit.event.HandlerList;
 
 public abstract class FilterModule implements Module {
 
@@ -23,7 +24,7 @@ public abstract class FilterModule implements Module {
 
     @Override
     public void unload() {
-
+        HandlerList.unregisterAll(this);
     }
 
     /**

@@ -4,27 +4,28 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
-import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.event.MatchEndEvent;
+import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.module.TaskedModule;
-import in.twizmwaz.cardinal.module.modules.bossBar.BossBar;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
-import in.twizmwaz.cardinal.module.modules.monumentModes.MonumentModes;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.util.ChatUtil;
-import in.twizmwaz.cardinal.util.MiscUtil;
 import in.twizmwaz.cardinal.util.Strings;
+import in.twizmwaz.cardinal.util.bossBar.BossBars;
 import org.bukkit.ChatColor;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-
-import java.util.HashMap;
-import java.util.List;
 
 public class TimeNotifications implements TaskedModule {
 
     private static int nextTimeMessage;
+    public String bossBar;
 
     protected TimeNotifications() {
         nextTimeMessage = TimeLimit.getMatchTimeLimit();
+        this.bossBar = BossBars.addBroadcastedBossBar(new UnlocalizedChatMessage(""), BarColor.BLUE, BarStyle.SOLID, false);
     }
 
     public static void resetNextMessage() {
@@ -35,8 +36,27 @@ public class TimeNotifications implements TaskedModule {
         }
     }
 
+    public void changeTime(int timeLimit) {
+        BossBars.setVisible(bossBar, GameHandler.getGameHandler().getMatch().isRunning() && timeLimit > 0);
+    }
+
+    @EventHandler
+    public void onMatchStart(MatchStartEvent event) {
+        if (TimeLimit.getMatchTimeLimit() > 0) {
+            int timeRemaining = TimeLimit.getMatchTimeLimit();
+            BossBars.setTitle(bossBar, new UnlocalizedChatMessage(ChatColor.AQUA + "{0} " + ChatUtil.getTimerColor(timeRemaining) + "{1}", new LocalizedChatMessage(ChatConstant.UI_TIMER), new UnlocalizedChatMessage(Strings.formatTime(timeRemaining))));
+            BossBars.setVisible(bossBar, true);
+        }
+    }
+
+    @EventHandler
+    public void onMatchEnd(MatchEndEvent event) {
+        BossBars.removeBroadcastedBossBar(bossBar);
+    }
+
     @Override
     public void unload() {
+        BossBars.removeBroadcastedBossBar(bossBar);
         HandlerList.unregisterAll(this);
     }
 
@@ -44,7 +64,7 @@ public class TimeNotifications implements TaskedModule {
     public void run() {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
             double time = MatchTimer.getTimeInSeconds();
-            double timeRemaining;
+            double timeRemaining = TimeLimit.getMatchTimeLimit() - time;
             if (TimeLimit.getMatchTimeLimit() == 0) {
                 if (time >= nextTimeMessage) {
                     ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.AQUA + "{0}", new LocalizedChatMessage(ChatConstant.UI_TIME_ELAPSED, new UnlocalizedChatMessage(ChatColor.GREEN + Strings.formatTime(nextTimeMessage)))));
@@ -52,37 +72,16 @@ public class TimeNotifications implements TaskedModule {
                 }
                 return;
             }
-            timeRemaining = TimeLimit.getMatchTimeLimit() - time;
-            if (GameHandler.getGameHandler().getMatch().getModules().getModule(MonumentModes.class) != null) {
-                ModuleCollection<MonumentModes> modes = GameHandler.getGameHandler().getMatch().getModules().getModules(MonumentModes.class);
-                HashMap<MonumentModes, Integer> modesWithTime = new HashMap<>();
-                for (MonumentModes modeForTime : modes) {
-                    modesWithTime.put(modeForTime, modeForTime.getTimeAfter());
+            if (TimeLimit.getMatchTimeLimit() > 0) {
+                BossBars.setTitle(bossBar, new UnlocalizedChatMessage(ChatColor.AQUA + "{0} " + ChatUtil.getTimerColor(timeRemaining) + "{1}", new LocalizedChatMessage(ChatConstant.UI_TIMER), new UnlocalizedChatMessage(Strings.formatTime(timeRemaining + 1))));
+                BossBars.setProgress(bossBar, timeRemaining / TimeLimit.getMatchTimeLimit());
+                if (timeRemaining < 30) {
+                    BossBars.broadcastedBossBars.get(bossBar).setColor(BarColor.RED);
+                } else if (timeRemaining < 60) {
+                    BossBars.broadcastedBossBars.get(bossBar).setColor(BarColor.YELLOW);
+                } else {
+                    BossBars.broadcastedBossBars.get(bossBar).setColor(BarColor.GREEN);
                 }
-                List<MonumentModes> sortedModes = MiscUtil.getSortedHashMapKeyset(modesWithTime);
-                int timeBeforeMode = 1;
-                int showBefore = 60;
-                String name = MonumentModes.getModeName();
-                for (MonumentModes mode : sortedModes) {
-                    if (!mode.hasRan()) {
-                        timeBeforeMode = mode.getTimeAfter() - (int) MatchTimer.getTimeInSeconds();
-                        name = mode.getName();
-                        showBefore = mode.getShowBefore();
-                    }
-                }
-                int timeLeft = TimeLimit.getMatchTimeLimit() - (int) MatchTimer.getTimeInSeconds();
-                if (((timeBeforeMode > showBefore) || (name == null)) && (TimeLimit.getMatchTimeLimit() > 0)) {
-                    int percent = (int) ((100F * timeLeft) / TimeLimit.getMatchTimeLimit());
-                    BossBar.sendGlobalBossBar(new UnlocalizedChatMessage(ChatColor.AQUA + "{0} " + ChatUtil.getTimerColor(timeRemaining) + "{1}", new LocalizedChatMessage(ChatConstant.UI_TIMER), new UnlocalizedChatMessage(Strings.formatTime(timeRemaining + 1))), percent);
-                }
-                if (timeBeforeMode == showBefore || timeBeforeMode <= 0) {
-                    BossBar.delete();
-                }
-            } else if (TimeLimit.getMatchTimeLimit() > 0) {
-                int timeLeft = ((TimeLimit.getMatchTimeLimit() - (int) MatchTimer.getTimeInSeconds()));
-                int percent = (int) ((100F * timeLeft) / TimeLimit.getMatchTimeLimit());
-                if (percent == 0) percent = 1;
-                BossBar.sendGlobalBossBar(new UnlocalizedChatMessage(ChatColor.AQUA + "{0} " + ChatUtil.getTimerColor(timeRemaining) + "{1}", new LocalizedChatMessage(ChatConstant.UI_TIMER), new UnlocalizedChatMessage(Strings.formatTime(timeRemaining + 1))), percent);
             }
             if (nextTimeMessage >= timeRemaining) {
                 if (nextTimeMessage <= 5) {

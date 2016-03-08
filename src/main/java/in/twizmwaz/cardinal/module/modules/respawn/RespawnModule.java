@@ -13,11 +13,11 @@ import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
-import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
+import in.twizmwaz.cardinal.module.modules.cardinalNotifications.CardinalNotifications;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.teamPicker.TeamPicker;
 import in.twizmwaz.cardinal.module.modules.tutorial.Tutorial;
-import in.twizmwaz.cardinal.module.modules.cardinalNotifications.CardinalNotifications;
 import in.twizmwaz.cardinal.util.Items;
 import in.twizmwaz.cardinal.util.Players;
 import in.twizmwaz.cardinal.util.Teams;
@@ -33,8 +33,6 @@ import org.bukkit.event.player.PlayerInitialSpawnEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.metadata.FixedMetadataValue;
-
-import java.util.Collections;
 
 public class RespawnModule implements Module {
 
@@ -213,10 +211,10 @@ public class RespawnModule implements Module {
     public void giveObserversKit(Player player) {
         player.getInventory().setItem(0, Items.createItem(Material.COMPASS, 1, (short) 0, ChatColor.BLUE + "" + ChatColor.BOLD + ChatConstant.UI_COMPASS.getMessage(player.getLocale())));
         player.getInventory().setItem(1, CardinalNotifications.book);
-        if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) && !(Blitz.matchIsBlitz() && GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING))) {
-            player.getInventory().setItem(2, Items.createItem(Material.LEATHER_HELMET, 1, (short) 0,
-                    ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? ChatConstant.UI_TEAM_CLASS_SELECTION.getMessage(player.getLocale()) : ChatConstant.UI_TEAM_SELECTION.getMessage(player.getLocale())),
-                    Collections.singletonList(ChatColor.DARK_PURPLE + ChatConstant.UI_TEAM_JOIN_TIP.getMessage(player.getLocale()))));
+        if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) &&
+                !GameHandler.getGameHandler().getMatch().getState().equals(MatchState.CYCLING) &&
+                !(Blitz.matchIsBlitz() && GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING))) {
+            player.getInventory().setItem(2, TeamPicker.getTeamPicker(player.getLocale()));
         }
         player.getInventory().setItem(3, Tutorial.getEmerald(player));
         if (player.hasPermission("tnt.defuse")) {
