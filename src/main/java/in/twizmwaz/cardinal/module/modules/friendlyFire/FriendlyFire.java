@@ -7,11 +7,11 @@ import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.scoreboard.ScoreboardModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Teams;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
@@ -20,11 +20,11 @@ import org.bukkit.potion.PotionEffectType;
 
 public class FriendlyFire implements Module {
 
-    private Match match;
+    private boolean enabled;
     private boolean arrowReturn;
 
-    protected FriendlyFire(Match match, boolean enabled, boolean arrowReturn) {
-        this.match = match;
+    protected FriendlyFire(boolean enabled, boolean arrowReturn) {
+        this.enabled = enabled;
         this.arrowReturn = arrowReturn;
         if (enabled) {
             for (TeamModule team : Teams.getTeams()) {
@@ -35,8 +35,9 @@ public class FriendlyFire implements Module {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onEntityDamageEvent(EntityDamageByEntityEvent event) {
+        if (!enabled) return;
         if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() == event.getEntity()){
             event.setCancelled(true);
         }

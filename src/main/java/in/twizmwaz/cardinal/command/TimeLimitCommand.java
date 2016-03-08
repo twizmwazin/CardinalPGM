@@ -11,8 +11,6 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.TimeLimitChangeEvent;
-import in.twizmwaz.cardinal.match.MatchState;
-import in.twizmwaz.cardinal.module.modules.bossBar.BossBar;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.module.modules.timeNotifications.TimeNotifications;
@@ -45,7 +43,6 @@ public class TimeLimitCommand {
                     throw new CommandException(ChatConstant.ERROR_TIME_FORMAT_STRING.getMessage(ChatUtil.getLocale(sender)));
                 }
                 time = 0;
-                if (GameHandler.getGameHandler().getMatch().getState() == MatchState.PLAYING) BossBar.delete();
             }
             for (TimeLimit module : GameHandler.getGameHandler().getMatch().getModules().getModules(TimeLimit.class)) {
                 if (cmd.getString(0).equalsIgnoreCase("set")) {
@@ -88,7 +85,6 @@ public class TimeLimitCommand {
                 throw new CommandUsageException(ChatConstant.ERROR_TOO_FEW_ARGUMENTS.getMessage(ChatUtil.getLocale(sender)), "/timelimit <add, set> <time> [result]");
             }
             Bukkit.dispatchCommand(sender, "timelimit set cancel");
-            if (GameHandler.getGameHandler().getMatch().getState() == MatchState.PLAYING) BossBar.delete();
         }
     }
 

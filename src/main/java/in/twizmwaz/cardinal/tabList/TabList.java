@@ -14,17 +14,19 @@ import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.rank.Rank;
 import in.twizmwaz.cardinal.util.Strings;
 import in.twizmwaz.cardinal.util.Teams;
-import net.minecraft.server.v1_8_R3.DataWatcher;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_8_R3.PacketPlayOutNamedEntitySpawn;
-import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
-import net.minecraft.server.v1_8_R3.PacketPlayOutScoreboardTeam;
-import net.minecraft.server.v1_8_R3.WorldSettings;
+import net.minecraft.server.DataWatcher;
+import net.minecraft.server.DataWatcherRegistry;
+import net.minecraft.server.IChatBaseComponent;
+import net.minecraft.server.PacketPlayOutEntityDestroy;
+import net.minecraft.server.PacketPlayOutNamedEntitySpawn;
+import net.minecraft.server.PacketPlayOutPlayerInfo;
+import net.minecraft.server.PacketPlayOutScoreboardTeam;
+import net.minecraft.server.ScoreboardTeam;
+import net.minecraft.server.WorldSettings;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -34,9 +36,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerSkinPartsChangeEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -71,7 +73,7 @@ public class TabList implements Listener {
 
     private int columnsPerTeam = 0;
 
-    private HashMap<Player, GameProfile> fakePlayer = new HashMap<>();
+    private HashMap<UUID, GameProfile> fakePlayer = new HashMap<>();
     private HashMap<String, GameProfile> teamTitles = new HashMap<>();
     private List<GameProfile> emptyPlayers = new ArrayList<>();
     private HashMap<GameProfile, Integer> entityIDs = new HashMap<>();
@@ -95,9 +97,9 @@ public class TabList implements Listener {
                 for (Player viewer : Bukkit.getOnlinePlayers()) {
                     for (TeamModule team : Teams.getTeams()) {
                         if (team.isObserver()) continue;
-                        DataWatcher data = new DataWatcher(((CraftPlayer)viewer).getHandle());
-                        data.a(10, (byte)127);
-                        createPlayerWithParts(data, viewer, getTeam(team));
+                        List<DataWatcher.Item<?>> items = Lists.newArrayList();
+                        items.add(new DataWatcher.Item<>(DataWatcherRegistry.a.a(12), (byte) 127));
+                        createPlayerWithParts(items, viewer, getTeam(team));
                     }
                 }
             }
@@ -108,9 +110,9 @@ public class TabList implements Listener {
                 for (Player viewer : Bukkit.getOnlinePlayers()) {
                     for (TeamModule team : Teams.getTeams()) {
                         if (team.isObserver()) continue;
-                        DataWatcher data = new DataWatcher(((CraftPlayer)viewer).getHandle());
-                        data.a(10, (byte)0);
-                        createPlayerWithParts(data, viewer, getTeam(team));
+                        List<DataWatcher.Item<?>> items = Lists.newArrayList();
+                        items.add(new DataWatcher.Item<>(DataWatcherRegistry.a.a(12), (byte) 0));
+                        createPlayerWithParts(items, viewer, getTeam(team));
                     }
                 }
             }
@@ -136,7 +138,7 @@ public class TabList implements Listener {
     }
 
     @EventHandler (priority = EventPriority.LOWEST)
-    public void onPlayerJoin(final PlayerJoinEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) {
         updateAll(event.getPlayer());
         sendPlayersParts(event.getPlayer());
     }
@@ -179,24 +181,21 @@ public class TabList implements Listener {
     private void setupPlayer(Player player) {
         playerView.put(player, new ArrayList<GameProfile>());
         for (int i = 0; i < 81; i++) {
-            sendTeamPacket(player, "", i, 0);
+            sendTeamPacket(player, null, i, 0);
         }
         for (int i = 0; i < 80; i++) {
             GameProfile fakePlayer = getFakePlayer(player);
             sendTeamPacket(player, fakePlayer.getName(), i, 3);
             playerView.get(player).add(fakePlayer);
         }
-        for (Map.Entry<Player, GameProfile> entry : fakePlayer.entrySet()) {
-            sendTabListPacket(player, PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, entry.getValue(), "", getPlayerPing(player));
-            sendTabListPacket(player, PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, entry.getValue(), entry.getKey().getPlayerListName(), getPlayerPing(player));
+        for (Map.Entry<UUID, GameProfile> entry : fakePlayer.entrySet()) {
+            sendTabListPacket(player, PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, entry.getValue(), Bukkit.getPlayer(entry.getKey()).getPlayerListName(), getPlayerPing(Bukkit.getPlayer(entry.getKey())));
         }
         for (Map.Entry<String, GameProfile> entry : teamTitles.entrySet()) {
-            sendTabListPacket(player, PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, entry.getValue(), "", 1000);
-            sendTabListPacket(player, PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, entry.getValue(), getTeamTitle(Teams.getTeamById(entry.getKey()).get()), 1000);
+            sendTabListPacket(player, PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, entry.getValue(), getTeamTitle(Teams.getTeamById(entry.getKey()).get()), 1000);
         }
         for (GameProfile emptyPlayer : emptyPlayers) {
-            sendTabListPacket(player, PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, emptyPlayer, "", 1000);
-            sendTabListPacket(player, PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, emptyPlayer, defaultName, 1000);
+            sendTabListPacket(player, PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, emptyPlayer, defaultName, 1000);
         }
     }
 
@@ -303,23 +302,22 @@ public class TabList implements Listener {
     }
 
     private GameProfile getPlayer(Player player) {
-        if (!fakePlayer.containsKey(player)) {
+        if (!fakePlayer.containsKey(player.getUniqueId())) {
             GameProfile profile = getProfile(getPlayerSkin(player));
             broadcastTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, profile, player.getPlayerListName(), getPlayerPing(player));
-            broadcastTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, profile, player.getPlayerListName(), getPlayerPing(player));
             broadcastTeamPacket(profile.getName(), 80, 3);
-            fakePlayer.put(player, profile);
+            fakePlayer.put(player.getUniqueId(), profile);
         }
-        return fakePlayer.get(player);
+        return fakePlayer.get(player.getUniqueId());
     }
 
     private void removePlayer(Player player) {
-        if (!fakePlayer.containsKey(player)) return;
+        if (!fakePlayer.containsKey(player.getUniqueId())) return;
         GameProfile profile = getPlayer(player);
         broadcastUpdateTabListSlot(profile, 80, 0);
         broadcastTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, profile, "", 0);
         deletePlayerWithParts(profile);
-        fakePlayer.remove(player);
+        fakePlayer.remove(player.getUniqueId());
         entityIDs.remove(profile);
     }
 
@@ -401,24 +399,10 @@ public class TabList implements Listener {
     }
 
     private void sendTabListPacket(Player player, PacketPlayOutPlayerInfo.EnumPlayerInfoAction action, GameProfile game, String displayName, int ping) {
-        PacketPlayOutPlayerInfo listPacket = new PacketPlayOutPlayerInfo();
-
-        try {
-            Field a = listPacket.getClass().getDeclaredField("a");
-            a.setAccessible(true);
-            a.set(listPacket, action);
-
-            Field b = listPacket.getClass().getDeclaredField("b");
-            b.setAccessible(true);
-            List<PacketPlayOutPlayerInfo.PlayerInfoData> dataList = Lists.newArrayList();
-
-            if (displayName.equals(player.getPlayerListName())) displayName = displayName.replace(player.getName(), ChatColor.BOLD + player.getName());
-            dataList.add(new PacketPlayOutPlayerInfo.PlayerInfoData(game, ping < 0 ? 1000 : ping, WorldSettings.EnumGamemode.SURVIVAL, IChatBaseComponent.ChatSerializer.a("{text:\"" + StringEscapeUtils.escapeJava(displayName) + "\"}")));
-
-            b.set(listPacket, dataList);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        PacketPlayOutPlayerInfo listPacket = new PacketPlayOutPlayerInfo(action);
+        if (displayName.equals(player.getPlayerListName())) displayName = displayName.replace(player.getName(), ChatColor.BOLD + player.getName());
+        PacketPlayOutPlayerInfo.PlayerInfoData playerInfo = listPacket.new PlayerInfoData(game, ping < 0 ? 1000 : ping, WorldSettings.EnumGamemode.SURVIVAL, IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + StringEscapeUtils.escapeJava(displayName) + "\"}"));
+        listPacket.add(playerInfo);
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(listPacket);
     }
 
@@ -429,17 +413,9 @@ public class TabList implements Listener {
     }
 
     private void sendTeamPacket(Player player, String fakePlayer, int slot, int action) {
-        PacketPlayOutScoreboardTeam teamPacket = new PacketPlayOutScoreboardTeam();
-        teamPacket.a = "\000TabView" + (slot < 10 ? "0" + slot : slot);                                       // team name
-        teamPacket.b = "\000TabView" + (slot < 10 ? "0" + slot : slot);                                       // team display name
-        teamPacket.c = "";                                                                                    // team prefix
-        teamPacket.d = "";                                                                                    // team suffix
-        teamPacket.e = "never";                                                                               // name tag visibility
-        teamPacket.f = -1;                                                                                    // color
-        teamPacket.g = action == 0 ? Collections.<String>emptyList() : Collections.singletonList(fakePlayer); // list of player names (string list)
-        teamPacket.h = action;                                                                                // action (0 to add team, 3 to add player, 4 to remove player)
-        teamPacket.i = 0;                                                                                     // allowFriendlyFire() + canSeeFriendlyInvisibles()
-
+        String team = "\000TabView" + (slot < 10 ? "0" + slot : slot);
+        Collection<String> players = action == 0 ? Collections.<String>emptyList() : Collections.singletonList(fakePlayer);
+        PacketPlayOutScoreboardTeam teamPacket = action == 0 ? new PacketPlayOutScoreboardTeam(action, team, team, "", "", -1, "never", "never", 0, players) : new PacketPlayOutScoreboardTeam(new ScoreboardTeam(null, team), players, action);
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(teamPacket);
     }
 
@@ -480,25 +456,14 @@ public class TabList implements Listener {
     }
 
     private void createPlayerWithParts(Player realPlayer, Player viewer, GameProfile profile) {
-        createPlayerWithParts(((CraftPlayer)realPlayer).getHandle().getDataWatcher(), viewer, profile);
+        createPlayerWithParts(((CraftPlayer)realPlayer).getHandle().getDataWatcher().c(), viewer, profile);
     }
 
-    private void createPlayerWithParts(DataWatcher data, Player viewer, GameProfile profile) {
+    private void createPlayerWithParts(List<DataWatcher.Item<?>> data, Player viewer, GameProfile profile) {
         if (!entityIDs.containsKey(profile)) entityIDs.put(profile, Collections.max(entityIDs.values()) + 1);
-
-        PacketPlayOutNamedEntitySpawn spawnPacket = new PacketPlayOutNamedEntitySpawn();
-        spawnPacket.a = Integer.MAX_VALUE - entityIDs.get(profile);
-        spawnPacket.b = profile.getId();
-        spawnPacket.c = 0;                  //x
-        spawnPacket.d = -32000;             //y (NMS coordinates, players will be at 0, -1000, 0)
-        spawnPacket.e = 0;                  //z
-        spawnPacket.f = 0;                  // yaw
-        spawnPacket.g = 0;                  // pitch
-        spawnPacket.h = 0;                  // item in hand
-        spawnPacket.i = data;               // DataWatcher
-        spawnPacket.j = spawnPacket.i.c();  // List<WatchableObject>, from DataWatcher
-        DataWatcher.deepCopy(spawnPacket.j);// No idea what this is for, but the constructor for PacketPlayOutNamedEntitySpawn(EntityHuman) does it
-
+        int id = Integer.MAX_VALUE - entityIDs.get(profile);
+        UUID uuid = profile.getId();
+        PacketPlayOutNamedEntitySpawn spawnPacket = new PacketPlayOutNamedEntitySpawn(id, uuid, 0, -1000, 0, (byte)0, (byte)0, data);
         ((CraftPlayer) viewer).getHandle().playerConnection.sendPacket(spawnPacket);
     }
 

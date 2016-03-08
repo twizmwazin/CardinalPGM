@@ -28,7 +28,7 @@ public class FriendlyFireBuilder implements ModuleBuilder {
         } catch (NullPointerException e) {
 
         }
-        results.add(new FriendlyFire(match, enabled, arrowReturn));
+        results.add(new FriendlyFire(enabled, arrowReturn));
         return results;
     }
 

@@ -34,11 +34,6 @@ public class TeamChannel extends PrivateChannel {
         }
     }
 
-    @Override
-    public void unload() {
-        resetMembers();
-    }
-
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
         if (team.equals(event.getNewTeam().orNull())) addMember(event.getPlayer());

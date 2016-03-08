@@ -2,7 +2,11 @@ package in.twizmwaz.cardinal.module.modules.kit;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.*;
+import in.twizmwaz.cardinal.module.BuilderData;
+import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.ModuleBuilder;
+import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.util.ArmorType;
 import in.twizmwaz.cardinal.util.MiscUtil;
 import in.twizmwaz.cardinal.util.Numbers;
@@ -100,7 +104,7 @@ public class KitBuilder implements ModuleBuilder {
             int health = element.getChildText("health") == null ? -1 : Numbers.parseInt(element.getChild("health").getText());
             float saturation = element.getChildText("saturation") == null ? 0 : Float.parseFloat(element.getChildText("saturation"));
             int foodLevel = element.getChildText("foodlevel") == null ? -1 : Numbers.parseInt(element.getChildText("foodlevel"));
-            float walkSpeed = element.getChildText("walk-speed") == null ? 0.2F : Float.parseFloat(element.getChildText("walk-speed")) / 5;
+            float walkSpeed = element.getChildText("walk-speed") == null ? -1F : Float.parseFloat(element.getChildText("walk-speed")) / 5;
             float knockback = element.getChildText("knockback-reduction") == null ? 0F : Float.parseFloat(element.getChildText("knockback-reduction"));
             boolean jump = false;
             if (element.getChildren("double-jump").size() > 0) jump = true;

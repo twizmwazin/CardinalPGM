@@ -9,6 +9,7 @@ import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjective;
 import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.timeNotifications.TimeNotifications;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.event.HandlerList;
@@ -182,6 +183,7 @@ public class TimeLimit implements Module {
 
     public void setTimeLimit(int time) {
         this.time = time;
+        GameHandler.getGameHandler().getMatch().getModules().getModule(TimeNotifications.class).changeTime(time);
     }
 
     public Result getResult() {

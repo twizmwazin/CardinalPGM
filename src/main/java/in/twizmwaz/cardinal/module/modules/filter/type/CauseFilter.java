@@ -6,7 +6,9 @@ import in.twizmwaz.cardinal.module.modules.filter.parsers.CauseFilterParser;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 
-import static in.twizmwaz.cardinal.module.modules.filter.FilterState.*;
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ABSTAIN;
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ALLOW;
+import static in.twizmwaz.cardinal.module.modules.filter.FilterState.DENY;
 
 public class CauseFilter extends FilterModule {
 

@@ -35,7 +35,7 @@ public class DamageTracker implements Module {
         HandlerList.unregisterAll(this);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.isCancelled()) return;
         if (event.getEntity() instanceof Player) {
@@ -57,7 +57,7 @@ public class DamageTracker implements Module {
                 }
                 damage = new TrackerDamageEvent((Player) event.getEntity(), source, null, Cause.PLAYER, description, Type.SHOT);
             } else if (event.getDamager() instanceof Player) {
-                damage = new TrackerDamageEvent((Player) event.getEntity(), (Player) event.getDamager(), ((Player) event.getDamager()).getItemInHand(), Cause.PLAYER, description, Type.KNOCKED);
+                damage = new TrackerDamageEvent((Player) event.getEntity(), (Player) event.getDamager(), ((Player) event.getDamager()).getInventory().getItemInMainHand(), Cause.PLAYER, description, Type.KNOCKED);
             } else if (event.getDamager() instanceof TNTPrimed) {
                 UUID uuid = TntTracker.getWhoPlaced(event.getDamager());
                 if (uuid != null) {

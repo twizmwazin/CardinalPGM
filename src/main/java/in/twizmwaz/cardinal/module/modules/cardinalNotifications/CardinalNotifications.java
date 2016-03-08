@@ -5,15 +5,15 @@ import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.util.GitUtil;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
-import net.minecraft.server.v1_8_R3.Item;
-import net.minecraft.server.v1_8_R3.ItemStack;
-import net.minecraft.server.v1_8_R3.MojangsonParseException;
-import net.minecraft.server.v1_8_R3.MojangsonParser;
-import net.minecraft.server.v1_8_R3.NBTBase;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import net.minecraft.server.Item;
+import net.minecraft.server.ItemStack;
+import net.minecraft.server.MojangsonParseException;
+import net.minecraft.server.MojangsonParser;
+import net.minecraft.server.NBTBase;
+import net.minecraft.server.NBTTagCompound;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -25,8 +25,8 @@ public class CardinalNotifications implements Module {
     private final String notificationUrl = "https://raw.githubusercontent.com/twizmwazin/CardinalNotifications/master/update.json";
     private final String bookUrl = "https://raw.githubusercontent.com/twizmwazin/CardinalNotifications/master/book";
 
-    public static BaseComponent[] chat;
-    public static org.bukkit.inventory.ItemStack book;
+    public static BaseComponent[] chat = null;
+    public static org.bukkit.inventory.ItemStack book = null;
 
     protected CardinalNotifications () {
         UpdateNotificationAndBook();
@@ -39,7 +39,7 @@ public class CardinalNotifications implements Module {
 
     @EventHandler
     public void onPlayerJoin(final PlayerJoinEvent event) {
-        event.getPlayer().sendMessage(chat);
+        if (chat != null) event.getPlayer().sendMessage(chat);
     }
 
     public void UpdateNotificationAndBook(){

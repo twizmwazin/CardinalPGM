@@ -6,6 +6,7 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Location;
+import org.bukkit.event.HandlerList;
 import org.bukkit.util.Vector;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class SpawnModule implements Module {
 
     @Override
     public void unload() {
+        HandlerList.unregisterAll(this);
     }
 
     public TeamModule getTeam() {

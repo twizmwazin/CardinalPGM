@@ -43,7 +43,7 @@ public class DisplayHandler {
 
 
         if (stage == this.tutorial.getPrefix() || stage == this.tutorial.getSuffix()) {
-            this.player.playSound(this.player.getLocation(), Sound.PISTON_EXTEND, 0.5f, 2);
+            this.player.playSound(this.player.getLocation(), Sound.BLOCK_PISTON_EXTEND, 0.5f, 2);
             if (stage == this.tutorial.getPrefix()) {
                 this.player.sendMessage("");
             }
@@ -65,7 +65,7 @@ public class DisplayHandler {
             } else {
                 this.player.setFlying(true);
                 this.player.teleport(stage.getTeleport().getRandomPoint().getLocation());
-                this.player.playSound(this.player.getLocation(), Sound.ENDERMAN_TELEPORT, 0.5f, 1);
+                this.player.playSound(this.player.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1);
             }
         }
 

@@ -39,8 +39,13 @@ public class Rotation {
     private List<LoadedMap> loaded;
     private int position;
     private File repo;
+    private static List<String> requirements = Arrays.asList("map.xml", "region", "level.dat");
 
     public Rotation() throws RotationLoadException {
+        setupRotation();
+    }
+
+    public void setupRotation() throws RotationLoadException {
         this.rotationFile = new File(Cardinal.getInstance().getConfig().getString("rotation"));
         try {
             refreshRepo();
@@ -59,9 +64,14 @@ public class Rotation {
         loaded = new ArrayList<>();
         this.repo = new File(Cardinal.getInstance().getConfig().getString("repo"));
         if (!repo.exists()) repo.mkdir();
-        List<String> requirements = Arrays.asList("map.xml", "region", "level.dat");
-        if (repo.listFiles() != null) {
-            for (File map : repo.listFiles()) {
+        loadMapsIn(repo);
+        updatePlayers();
+        if (loaded.size() < 1) throw new RotationLoadException("No maps were loaded. Are there any maps in the repository?");
+    }
+
+    public void loadMapsIn(File file) {
+        if (file.listFiles() != null) {
+            for (File map : file.listFiles()) {
                 if (map.isFile()) continue;
                 if (Arrays.asList(map.list()).containsAll(requirements)) {
                     try {
@@ -101,12 +111,11 @@ public class Rotation {
                             e.printStackTrace();
                         }
                     }
+                } else {
+                    loadMapsIn(map);
                 }
             }
         }
-        updatePlayers();
-        if (loaded.size() < 1)
-            throw new RotationLoadException("No maps were loaded. Are there any maps in the repository?");
     }
 
     /**
@@ -265,7 +274,7 @@ public class Rotation {
                                 contributor.setName(names.get(contributor.getUniqueId()));
                             }
                         }
-                        if (map.equals(GameHandler.getGameHandler().getMatch().getLoadedMap())) {
+                        if (GameHandler.getGameHandler().getMatch() != null && map.equals(GameHandler.getGameHandler().getMatch().getLoadedMap())) {
                             GameHandler.getGameHandler().getMatch().getModules().getModule(HeaderModule.class).updateHeader();
                             GameHandler.getGameHandler().getMatch().getModules().getModule(HeaderModule.class).updateAll();
                         }

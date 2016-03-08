@@ -26,9 +26,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerLocaleChangeEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 public class TeamPicker implements Module {
 
@@ -40,9 +40,14 @@ public class TeamPicker implements Module {
         HandlerList.unregisterAll(this);
     }
 
+    public static ItemStack getTeamPicker(String locale) {
+        return Items.createItem(Material.LEATHER_HELMET, 1, (short) 0,
+                ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(locale) : new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(locale)),
+                Collections.singletonList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(locale)));
+    }
 
     public Inventory getTeamPicker(Player player) {
-        int size = (((GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class).size() + (Teams.getTeamByPlayer(player).isPresent() && Teams.getTeamByPlayer(player).get().isObserver() ? 0 : 1 )) / 9) + 1) * 9;
+        int size = ((GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class).size() + (Teams.getTeamByPlayer(player).isPresent() && Teams.getTeamByPlayer(player).get().isObserver() ? 0 : 1 ) + 8) / 9) * 9;
         int classesSize = ((GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class).size() + 8) / 9) * 9;
         Inventory picker = Bukkit.createInventory(null, size + classesSize, ChatColor.DARK_RED + new LocalizedChatMessage(ChatConstant.UI_TEAM_PICK).getMessage(player.getLocale()));
         int item = 0;
@@ -61,6 +66,7 @@ public class TeamPicker implements Module {
         for (TeamModule team : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
             if (!team.isObserver()) {
                 ItemStack teamStack = Items.createLeatherArmor(Material.LEATHER_HELMET, 1, team.getColor() + "" + ChatColor.BOLD + team.getName(), Arrays.asList((team.size() >= team.getMax() ? ChatColor.RED + "" : ChatColor.GREEN + "") + team.size() + ChatColor.GOLD + " / " + ChatColor.RED + "" + team.getMax(), ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.UI_TEAM_CAN_PICK).getMessage(player.getLocale())), MiscUtil.convertChatColorToColor(team.getColor()));
+                if (Teams.getTeamByPlayer(player).isPresent() && Teams.getTeamByPlayer(player).get().equals(team)) teamStack.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
                 picker.setItem(item, teamStack);
                 item++;
             }
@@ -72,11 +78,9 @@ public class TeamPicker implements Module {
         }
         for (ClassModule classModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class)) {
             ItemStack classStack = Items.createItem(classModule.getIcon(), 1, (short) 0, ChatColor.GREEN + classModule.getName(), Arrays.asList(ChatColor.GOLD + classModule.getLongDescription()));
-            ItemMeta classMeta = classStack.getItemMeta();
             if (classModule.equals(ClassModule.getClassByPlayer(player))) {
-                classStack.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
+                classStack.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
             }
-            classStack.setItemMeta(classMeta);
             picker.setItem(item, classStack);
             item++;
         }
@@ -97,7 +101,7 @@ public class TeamPicker implements Module {
                                 if (item.getItemMeta().getDisplayName().equals(ChatColor.GRAY + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_AUTO).getMessage(player.getLocale()))) {
                                     event.setCancelled(true);
                                     player.closeInventory();
-                                    player.playSound(player.getLocation(), Sound.CLICK, 1, 2);
+                                    player.playSound(player.getLocation(), Sound.BLOCK_DISPENSER_DISPENSE, 1, 2);
                                     Bukkit.dispatchCommand(player, "join");
                                 }
                             }
@@ -108,7 +112,7 @@ public class TeamPicker implements Module {
                                 if (item.getItemMeta().getDisplayName().equals(ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_LEAVE).getMessage(player.getLocale()))) {
                                     event.setCancelled(true);
                                     player.closeInventory();
-                                    player.playSound(player.getLocation(), Sound.CLICK, 1, 2);
+                                    player.playSound(player.getLocation(), Sound.BLOCK_DISPENSER_DISPENSE, 1, 2);
                                     Bukkit.dispatchCommand(player, "leave");
                                 }
                             }
@@ -119,12 +123,12 @@ public class TeamPicker implements Module {
                                 if (Teams.getTeamByName(ChatColor.stripColor(item.getItemMeta().getDisplayName())) != null) {
                                     event.setCancelled(true);
                                     player.closeInventory();
-                                    player.playSound(player.getLocation(), Sound.CLICK, 1, 2);
+                                    player.playSound(player.getLocation(), Sound.BLOCK_DISPENSER_DISPENSE, 1, 2);
                                     Bukkit.dispatchCommand(player, "join " + ChatColor.stripColor(item.getItemMeta().getDisplayName()));
                                 } else {
                                     event.setCancelled(true);
                                     player.closeInventory();
-                                    player.playSound(player.getLocation(), Sound.CLICK, 1, 2);
+                                    player.playSound(player.getLocation(), Sound.BLOCK_DISPENSER_DISPENSE, 1, 2);
                                     Bukkit.dispatchCommand(player, "class " + ChatColor.stripColor(item.getItemMeta().getDisplayName()));
                                 }
                             }
@@ -135,7 +139,7 @@ public class TeamPicker implements Module {
                                 if (ClassModule.getClassByName(ChatColor.stripColor(item.getItemMeta().getDisplayName())) != null) {
                                     event.setCancelled(true);
                                     player.closeInventory();
-                                    player.playSound(player.getLocation(), Sound.CLICK, 1, 2);
+                                    player.playSound(player.getLocation(), Sound.BLOCK_DISPENSER_DISPENSE, 1, 2);
                                     Bukkit.dispatchCommand(player, "class " + ChatColor.stripColor(item.getItemMeta().getDisplayName()));
                                 }
                             }
@@ -148,47 +152,23 @@ public class TeamPicker implements Module {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) && !(Blitz.matchIsBlitz() && GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING)) &&
+        if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) &&
+                !GameHandler.getGameHandler().getMatch().getState().equals(MatchState.CYCLING) &&
+                !(Blitz.matchIsBlitz() && GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING)) &&
                 (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) &&
-                event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType().equals(Material.LEATHER_HELMET) &&
-                event.getPlayer().getItemInHand().hasItemMeta() && event.getPlayer().getItemInHand().getItemMeta().hasDisplayName() &&
-                (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().equals(ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(event.getPlayer().getLocale())) ||
-                        ChatColor.stripColor(event.getPlayer().getItemInHand().getItemMeta().getDisplayName()).equals(new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(event.getPlayer().getLocale())))) {
-                    event.getPlayer().openInventory(getTeamPicker(event.getPlayer()));
+                event.getItem() != null && event.getItem().equals(getTeamPicker(event.getPlayer().getLocale()))) {
+            event.setCancelled(true);
+            event.getPlayer().openInventory(getTeamPicker(event.getPlayer()));
         }
     }
 
     @EventHandler
     public void onPlayerLocaleChange(PlayerLocaleChangeEvent event) {
-        if (event.getOldLocale() == null) return;
+        ItemStack oldItem = getTeamPicker(event.getOldLocale() != null ? event.getOldLocale() : "en_US");
+        ItemStack newItem = getTeamPicker(event.getNewLocale());
         for (ItemStack item : event.getPlayer().getInventory().getContents()) {
-            if (item != null) {
-                if (item.getType().equals(Material.LEATHER_HELMET)) {
-                    if (item.hasItemMeta()) {
-                        if (item.getItemMeta().hasDisplayName()) {
-                            ItemMeta meta = item.getItemMeta();
-
-                            StringBuilder name = new StringBuilder();
-                            name.append(ChatColor.GREEN);
-                            name.append(ChatColor.BOLD);
-
-                            StringBuilder lore = new StringBuilder();
-                            lore.append(ChatColor.DARK_PURPLE);
-                            lore.append(new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(event.getPlayer().getLocale()));
-
-                            if (item.getItemMeta().getDisplayName().equals(ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(event.getOldLocale()))) {
-                                name.append(new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(event.getNewLocale()));
-                                meta.setDisplayName(name.toString());
-                                meta.setLore(Arrays.asList(lore.toString()));
-                            } else if (item.getItemMeta().getDisplayName().equals(ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(event.getOldLocale()))) {
-                                name.append(new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(event.getNewLocale()));
-                                meta.setDisplayName(name.toString());
-                                meta.setLore(Arrays.asList(lore.toString()));
-                            }
-                            item.setItemMeta(meta);
-                        }
-                    }
-                }
+            if (item != null && item.equals(oldItem)) {
+                item.setItemMeta(newItem.getItemMeta());
             }
         }
     }
