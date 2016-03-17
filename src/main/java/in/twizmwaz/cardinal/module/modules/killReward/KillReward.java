@@ -5,17 +5,17 @@ import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
-import in.twizmwaz.cardinal.module.modules.kit.Kit;
+import in.twizmwaz.cardinal.module.modules.kit.KitCollection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 
 public class KillReward implements Module {
 
-    private final ModuleCollection<Kit> kits;
+    private final ModuleCollection<KitCollection> kits;
     private final ModuleCollection<FilterModule> filters;
 
-    protected KillReward(final ModuleCollection<Kit> kits, final ModuleCollection<FilterModule> filters) {
+    protected KillReward(final ModuleCollection<KitCollection> kits, final ModuleCollection<FilterModule> filters) {
         this.kits = kits;
         this.filters = filters;
     }
@@ -36,8 +36,8 @@ public class KillReward implements Module {
                 }
             }
             if (proceed) {
-                for (Kit kit : kits) {
-                    kit.apply(killer);
+                for (KitCollection kit : kits) {
+                    kit.apply(killer, null);
                 }
             }
         }

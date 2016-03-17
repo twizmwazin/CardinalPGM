@@ -13,13 +13,17 @@ import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.potion.CraftPotionEffectType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jdom2.Element;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 public class Parser {
@@ -32,6 +36,9 @@ public class Parser {
             itemStack = new ItemStack(Material.matchMaterial(element.getAttributeValue("material")), amount, damage);
         } else if (!element.getTextTrim().equals("")) {
             itemStack = new ItemStack(Material.matchMaterial(element.getText().split(":")[0]), amount, damage);
+        }
+        if (element.getName().equalsIgnoreCase("book")) {
+            itemStack = new ItemStack(Material.BOOK, amount, damage);
         }
         if (element.getAttributeValue("unbreakable") != null && Boolean.parseBoolean(element.getAttributeValue("unbreakable"))) {
             try {
@@ -84,6 +91,25 @@ public class Parser {
             meta.addAttributeModifier(attribute.getText(), new AttributeModifier(UUID.randomUUID(), attribute.getText(), Double.parseDouble(attribute.getAttributeValue("amount", "0.0")), getOperation(attribute.getAttributeValue("operation", "add"))));
         }
         itemStack.setItemMeta(meta);
+        
+        if (element.getName().equalsIgnoreCase("book")) {
+            BookMeta bookMeta = (BookMeta) itemStack.getItemMeta();
+            bookMeta.setTitle(ChatColor.translateAlternateColorCodes('`',element.getChildText("author")));
+            bookMeta.setAuthor(ChatColor.translateAlternateColorCodes('`',element.getChildText("author")));
+            List<String> pages = new ArrayList<>();
+            for (Element page : element.getChild("pages").getChildren("page")) {
+                pages.add(ChatColor.translateAlternateColorCodes('`', page.getText()).replace("\u0009", ""));
+            }
+            bookMeta.setPages(pages);
+            itemStack.setItemMeta(bookMeta);
+        }
+
+        if (element.getAttributeValue("color") != null) {
+            LeatherArmorMeta leatherMeta = (LeatherArmorMeta) itemStack.getItemMeta();
+            leatherMeta.setColor(MiscUtil.convertHexToRGB(element.getAttributeValue("color")));
+            itemStack.setItemMeta(leatherMeta);
+        }
+
         return itemStack;
     }
 

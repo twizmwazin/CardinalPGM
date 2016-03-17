@@ -7,16 +7,22 @@ import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
+import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
+import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.kit.kitTypes.ArmorKit;
+import in.twizmwaz.cardinal.module.modules.kit.kitTypes.ClearKit;
+import in.twizmwaz.cardinal.module.modules.kit.kitTypes.GameModeKit;
+import in.twizmwaz.cardinal.module.modules.kit.kitTypes.HealthKit;
+import in.twizmwaz.cardinal.module.modules.kit.kitTypes.ItemKit;
+import in.twizmwaz.cardinal.module.modules.kit.kitTypes.KitArmor;
+import in.twizmwaz.cardinal.module.modules.kit.kitTypes.KitItem;
+import in.twizmwaz.cardinal.module.modules.kit.kitTypes.PotionKit;
 import in.twizmwaz.cardinal.util.ArmorType;
-import in.twizmwaz.cardinal.util.MiscUtil;
 import in.twizmwaz.cardinal.util.Numbers;
 import in.twizmwaz.cardinal.util.Parser;
-import in.twizmwaz.cardinal.util.Strings;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -27,22 +33,30 @@ import java.util.List;
 @BuilderData(load = ModuleLoadTime.EARLIER)
 public class KitBuilder implements ModuleBuilder {
 
-    public static Kit getKit(Element element, Document document, boolean proceed) {
+    public static KitCollection getKit(Element element, Document document, boolean proceed) {
         if (element.getName().equalsIgnoreCase("kit") || proceed) {
+            List<Kit> kits = new ArrayList<>();
             String name = null;
             if (element.getAttributeValue("name") != null) name = element.getAttributeValue("name");
             if (element.getAttributeValue("id") != null) name = element.getAttributeValue("id");
-            for (Kit kit : GameHandler.getGameHandler().getMatch().getModules().getModules(Kit.class)) {
+            for (KitCollection kit : GameHandler.getGameHandler().getMatch().getModules().getModules(KitCollection.class)) {
                 if (kit.getName().equalsIgnoreCase(name)) {
                     return kit;
                 }
             }
+
+            Boolean clear = element.getChildren("clear").size() > 0;
+            Boolean clearItems = element.getChildren("clear-items").size() > 0;
+            if (clear || clearItems) kits.add(new ClearKit(clear, clearItems));
+
             List<KitItem> items = new ArrayList<>(36);
             for (Element item : element.getChildren("item")) {
                 ItemStack itemStack = Parser.getItem(item);
                 int slot = item.getAttributeValue("slot") != null ? Numbers.parseInt(item.getAttributeValue("slot")) : -1;
                 items.add(new KitItem(itemStack, slot));
             }
+            if (!items.isEmpty()) kits.add(new ItemKit(items));
+
             List<KitArmor> armor = new ArrayList<>(4);
             List<Element> armors = new ArrayList<>();
             armors.addAll(element.getChildren("helmet"));
@@ -50,72 +64,68 @@ public class KitBuilder implements ModuleBuilder {
             armors.addAll(element.getChildren("leggings"));
             armors.addAll(element.getChildren("boots"));
             for (Element piece : armors) {
-                ItemStack itemStack = new ItemStack(Material.matchMaterial(piece.getText()), 1);
-                if (piece.getAttributeValue("damage") != null) {
-                    itemStack.setDurability(Short.parseShort(piece.getAttributeValue("damage")));
-                }
-                if (itemStack.getItemMeta() instanceof LeatherArmorMeta && piece.getAttributeValue("color") != null) {
-                    LeatherArmorMeta meta = (LeatherArmorMeta) itemStack.getItemMeta();
-                    meta.setColor(MiscUtil.convertHexToRGB(piece.getAttributeValue("color")));
-                    itemStack.setItemMeta(meta);
-                }
-                try {
-                    for (String raw : piece.getAttributeValue("enchantment").split(";")) {
-                        String[] enchant = raw.split(":");
-                        try {
-                            itemStack.addUnsafeEnchantment(Enchantment.getByName(Strings.getTechnicalName(enchant[0])), Numbers.parseInt(enchant[1]));
-                        } catch (ArrayIndexOutOfBoundsException e) {
-                            itemStack.addUnsafeEnchantment(Enchantment.getByName(Strings.getTechnicalName(enchant[0])), 1);
-                        }
-                    }
-                } catch (NullPointerException e) {
-
-                }
+                ItemStack itemStack = Parser.getItem(piece);
                 ArmorType type = ArmorType.getArmorType(piece.getName());
-                armor.add(new KitArmor(itemStack, type));
+                Boolean locked = Numbers.parseBoolean(element.getAttributeValue("locked"), false);
+                armor.add(new KitArmor(itemStack, type, locked));
             }
+            if (!armor.isEmpty()) kits.add(new ArmorKit(armor));
+
+            if (element.getChildText("game-mode") != null) {
+                GameMode gameMode;
+                switch (element.getChildText("game-mode").toLowerCase()) {
+                    case("creative"):
+                        gameMode = GameMode.CREATIVE;
+                        break;
+                    case("survival"):
+                        gameMode = GameMode.SURVIVAL;
+                        break;
+                    case("spectator"):
+                        gameMode = GameMode.SPECTATOR;
+                        break;
+                    case("adventure"):
+                        gameMode = GameMode.ADVENTURE;
+                        break;
+                    default:
+                        gameMode = null;
+                        break;
+                }
+                if (gameMode != null) kits.add(new GameModeKit(gameMode));
+            }
+
+            int health = element.getChildText("health") == null ? -1 : Numbers.parseInt(element.getChildText("health"));
+            int foodLevel = element.getChildText("foodlevel") == null ? -1 : Numbers.parseInt(element.getChildText("foodlevel"));
+            float saturation = element.getChildText("saturation") == null ? 0 : Float.parseFloat(element.getChildText("saturation"));
+            if (health != -1 || foodLevel != -1 || saturation != 0) {
+                kits.add(new HealthKit(health, foodLevel, saturation));
+            }
+
             List<PotionEffect> potions = new ArrayList<>();
             for (Element potion : element.getChildren("potion")) {
                 potions.add(Parser.getPotion(potion));
             }
-            List<KitBook> books = new ArrayList<>();
-            for (Element book : element.getChildren("book")) {
-                String title = null;
-                if (book.getChildText("title") != null) {
-                    title = book.getChildText("title");
-                }
-                String author = null;
-                if (book.getChildText("author") != null) {
-                    author = book.getChildText("author");
-                }
-                int slot = book.getAttributeValue("slot") != null ? Numbers.parseInt(book.getAttributeValue("slot")) : -1;
-                List<String> pages = new ArrayList<>();
-                for (Element page : book.getChild("pages").getChildren("page")) {
-                    pages.add(ChatColor.translateAlternateColorCodes('`', page.getText()).replace("\u0009", ""));
-                }
-                books.add(new KitBook(title, author, pages, slot));
-            }
-            String parent = element.getAttributeValue("parents");
-            boolean force = element.getAttributeValue("force") != null && Boolean.parseBoolean(element.getAttributeValue("force"));
-            boolean potionParticles = element.getAttributeValue("potion-particles") != null && Numbers.parseBoolean(element.getAttributeValue("potion-particles"));
-            boolean resetPearls = element.getAttributeValue("reset-ender-pearls") != null && Numbers.parseBoolean(element.getAttributeValue("reset-ender-pearls"));
-            boolean clear = element.getChildren("clear").size() > 0;
-            boolean clearItems = element.getChildren("clear-items").size() > 0;
-            int health = element.getChildText("health") == null ? -1 : Numbers.parseInt(element.getChild("health").getText());
-            float saturation = element.getChildText("saturation") == null ? 0 : Float.parseFloat(element.getChildText("saturation"));
-            int foodLevel = element.getChildText("foodlevel") == null ? -1 : Numbers.parseInt(element.getChildText("foodlevel"));
-            float walkSpeed = element.getChildText("walk-speed") == null ? -1F : Float.parseFloat(element.getChildText("walk-speed")) / 5;
-            float knockback = element.getChildText("knockback-reduction") == null ? 0F : Float.parseFloat(element.getChildText("knockback-reduction"));
-            boolean jump = false;
-            if (element.getChildren("double-jump").size() > 0) jump = true;
-            float flySpeed = element.getChildText("fly-speed") == null ? 0.2F : Float.parseFloat(element.getChildText("fly-speed")) / 5;
-            return new Kit(name, items, armor, potions, books, parent, force, potionParticles, resetPearls, clear, clearItems, health, saturation, foodLevel, walkSpeed, knockback, jump, flySpeed);
+            if (!potions.isEmpty()) kits.add(new PotionKit(potions));
+
+
+            //float walkSpeed = element.getChildText("walk-speed") == null ? -1F : Float.parseFloat(element.getChildText("walk-speed")) / 5;
+            //float knockback = element.getChildText("knockback-reduction") == null ? 0F : Float.parseFloat(element.getChildText("knockback-reduction"));
+            //boolean jump = false;
+            //if (element.getChildren("double-jump").size() > 0) jump = true;
+            //float flySpeed = element.getChildText("fly-speed") == null ? 0.2F : Float.parseFloat(element.getChildText("fly-speed")) / 5;
+
+            FilterModule filter = FilterModuleBuilder.getFilter(element.getAttributeValue("filter", "always"));
+            String parent = element.getAttributeValue("parents", "");
+            boolean force = Numbers.parseBoolean(element.getAttributeValue("force"), false);
+            boolean potionParticles = Numbers.parseBoolean(element.getAttributeValue("potion-particles"), false);
+            boolean discardPotionBottles = Numbers.parseBoolean(element.getAttributeValue("discard-potion-bottles"), true);
+            boolean resetPearls = Numbers.parseBoolean(element.getAttributeValue("reset-ender-pearls"), false);
+            return new KitCollection(name, filter, force, potionParticles, discardPotionBottles, resetPearls, kits, parent);
         } else {
             return getKit(element.getParentElement(), document, true);
         }
     }
 
-    public static Kit getKit(Element element) {
+    public static KitCollection getKit(Element element) {
         return getKit(element, GameHandler.getGameHandler().getMatch().getDocument(), false);
     }
 
