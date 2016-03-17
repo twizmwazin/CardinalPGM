@@ -5,9 +5,9 @@ import in.twizmwaz.cardinal.module.modules.appliedRegion.AppliedRegionBuilder;
 import in.twizmwaz.cardinal.module.modules.armorKeep.ArmorKeepBuilder;
 import in.twizmwaz.cardinal.module.modules.blitz.BlitzBuilder;
 import in.twizmwaz.cardinal.module.modules.blockdrops.BlockdropsBuilder;
-import in.twizmwaz.cardinal.module.modules.bossBar.BossBarBuilder;
 import in.twizmwaz.cardinal.module.modules.broadcasts.BroadcastModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.buildHeight.BuildHeightBuilder;
+import in.twizmwaz.cardinal.module.modules.cardinalNotifications.CardinalNotificationsBuilder;
 import in.twizmwaz.cardinal.module.modules.chat.ChatModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannelModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModuleBuilder;
@@ -72,7 +72,6 @@ import in.twizmwaz.cardinal.module.modules.tntTracker.TntTrackerBuilder;
 import in.twizmwaz.cardinal.module.modules.toolRepair.ToolRepairBuilder;
 import in.twizmwaz.cardinal.module.modules.tracker.TrackerBuilder;
 import in.twizmwaz.cardinal.module.modules.tutorial.TutorialBuilder;
-import in.twizmwaz.cardinal.module.modules.cardinalNotifications.CardinalNotificationsBuilder;
 import in.twizmwaz.cardinal.module.modules.visibility.VisibilityBuilder;
 import in.twizmwaz.cardinal.module.modules.wildcard.WildCardBuilder;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjectiveBuilder;
@@ -80,11 +79,11 @@ import in.twizmwaz.cardinal.module.modules.worldFreeze.WorldFreezeBuilder;
 import org.bukkit.Bukkit;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.ArrayList;
 import java.util.logging.Level;
 
 public class ModuleFactory {
@@ -164,7 +163,6 @@ public class ModuleFactory {
                 PlayableBuilder.class,
                 TutorialBuilder.class,
                 WildCardBuilder.class,
-                BossBarBuilder.class,
                 CardinalNotificationsBuilder.class,
                 PotionRemoverBuilder.class,
                 InvisibleBlockBuilder.class,

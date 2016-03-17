@@ -17,9 +17,9 @@ public class KitApplier implements Module {
     public void onPgmSpawn(CardinalSpawnEvent event) {
         if (event.getSpawn().getKit() != null) {
             if (event.getTeam().isObserver()) {
-                event.getSpawn().getKit().apply(event.getPlayer());
+                event.getSpawn().getKit().apply(event.getPlayer(), null);
             } else if (GameHandler.getGameHandler().getMatch().isRunning())
-                event.getSpawn().getKit().apply(event.getPlayer());
+                event.getSpawn().getKit().apply(event.getPlayer(), null);
         }
     }
 

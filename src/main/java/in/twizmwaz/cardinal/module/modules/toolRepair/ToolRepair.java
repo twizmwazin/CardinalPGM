@@ -33,7 +33,7 @@ public class ToolRepair implements Module {
                     if (item2 != null && Items.toMaxDurability(item1).equals(Items.toMaxDurability(item2))) {
                         event.setCancelled(true);
                         event.getItem().remove();
-                        event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ITEM_PICKUP, 0.1F, 1);
+                        event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.1F, 1);
                         int result = item2.getDurability() - (item1.getType().getMaxDurability() - item1.getDurability());
                         item2.setDurability((short) (result < 0 ? 0 : result));
                         break;

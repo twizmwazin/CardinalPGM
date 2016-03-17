@@ -7,7 +7,6 @@ import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import in.twizmwaz.cardinal.util.Contributor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +32,10 @@ public class Rank {
         this.parent = parent;
 
         ranks.add(this);
+    }
+
+    public static void clearRanks() {
+        ranks = new ArrayList<>();
     }
 
     public static List<Rank> getRanks() {
@@ -134,24 +137,17 @@ public class Rank {
     }
 
     public void add(UUID uuid) {
-        FileConfiguration config = Cardinal.getInstance().getConfig();
-        List<String> players = config.contains("ranks." + name + ".players") ? config.getStringList("ranks." + name + ".players") : new ArrayList<String>();
-        players.add(uuid.toString());
-        config.set("ranks." + name + ".players", players);
+        Cardinal.getCardinalDatabase().put(this, uuid);
         Bukkit.getPluginManager().callEvent(new RankChangeEvent(Bukkit.getPlayer(uuid), this, true, Bukkit.getOfflinePlayer(uuid).isOnline()));
     }
 
     public void remove(UUID uuid) {
-        FileConfiguration config = Cardinal.getInstance().getConfig();
-        List<String> players = config.contains("ranks." + name + ".players") ? config.getStringList("ranks." + name + ".players") : new ArrayList<String>();
-        players.remove(uuid.toString());
-        config.set("ranks." + name + ".players", players);
+        Cardinal.getCardinalDatabase().remove(this, uuid);
         Bukkit.getPluginManager().callEvent(new RankChangeEvent(Bukkit.getPlayer(uuid), this, false, Bukkit.getOfflinePlayer(uuid).isOnline()));
     }
 
     public boolean contains(UUID uuid) {
-        FileConfiguration config = Cardinal.getInstance().getConfig();
-        return config.contains("ranks." + name + ".players") && config.getStringList("ranks." + name + ".players").contains(uuid.toString());
+        return Cardinal.getCardinalDatabase().get(this, uuid);
     }
 
     public List<String> getPermissions() {

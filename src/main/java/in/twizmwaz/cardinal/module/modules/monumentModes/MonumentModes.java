@@ -2,29 +2,28 @@ package in.twizmwaz.cardinal.module.modules.monumentModes;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.ChatMessage;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
-import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.module.TaskedModule;
-import in.twizmwaz.cardinal.module.modules.bossBar.BossBar;
 import in.twizmwaz.cardinal.module.modules.cores.CoreObjective;
 import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjective;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
-import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.settings.Settings;
 import in.twizmwaz.cardinal.util.ChatUtil;
-import in.twizmwaz.cardinal.util.MiscUtil;
+import in.twizmwaz.cardinal.util.bossBar.BossBars;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-
-import java.util.HashMap;
-import java.util.List;
 
 public class MonumentModes implements TaskedModule {
 
@@ -32,6 +31,7 @@ public class MonumentModes implements TaskedModule {
     private final String name;
     private int after, showBefore;
     private boolean ran;
+    private String bossBar;
 
     public MonumentModes(int after, final Pair<Material, Integer> material, final String name, int showBefore) {
         this.after = after;
@@ -40,11 +40,19 @@ public class MonumentModes implements TaskedModule {
         this.showBefore = showBefore;
 
         this.ran = false;
+
+        this.bossBar = BossBars.addBroadcastedBossBar(new UnlocalizedChatMessage(""), BarColor.BLUE, BarStyle.SOLID, false);
     }
 
     @Override
     public void unload() {
+        BossBars.removeBroadcastedBossBar(bossBar);
         HandlerList.unregisterAll(this);
+    }
+
+    @EventHandler
+    public void onMatchEnd(MatchEndEvent event) {
+        BossBars.removeBroadcastedBossBar(bossBar);
     }
 
     @Override
@@ -80,53 +88,25 @@ public class MonumentModes implements TaskedModule {
                 }
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (Settings.getSettingByName("Sounds") != null && Settings.getSettingByName("Sounds").getValueByPlayer(player).getValue().equalsIgnoreCase("on")) {
-                        player.playSound(player.getLocation(), Sound.ZOMBIE_REMEDY, (float) 0.15, (float) 1.2);
+                        player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, (float) 0.15, (float) 1.2);
                     }
                 }
                 ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "> > > > " + ChatColor.RED + name + ChatColor.DARK_AQUA + " < < < <"));
                 this.ran = true;
+                BossBars.removeBroadcastedBossBar(bossBar);
             }
-            ModuleCollection<MonumentModes> modes = GameHandler.getGameHandler().getMatch().getModules().getModules(MonumentModes.class);
-            HashMap<MonumentModes, Integer> modesWithTime = new HashMap<>();
-            for (MonumentModes modeForTime : modes) {
-                modesWithTime.put(modeForTime, modeForTime.getTimeAfter());
-            }
-            List<MonumentModes> sortedModes = MiscUtil.getSortedHashMapKeyset(modesWithTime);
-            int timeBeforeMode = 1;
-            int showBefore = (after < 60 ? after : 60);
-            String name = MonumentModes.getModeName();
-            for (MonumentModes mode : sortedModes) {
-                if (!mode.hasRan()) {
-                    timeBeforeMode = mode.getTimeAfter() - (int) MatchTimer.getTimeInSeconds();
-                    name = mode.getName();
-                    showBefore = mode.getShowBefore();
-                }
-            }
-            if (timeBeforeMode > 0 && timeBeforeMode <= showBefore && name != null) {
-                int percent = (int) (timeBeforeMode * 100F) / showBefore;
-                if (timeBeforeMode <= 1) percent = 0;
-                BossBar.sendGlobalBossBar(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.UI_MODE_IN_TIME, new UnlocalizedChatMessage(ChatColor.RED + name + ChatColor.AQUA)), ((timeBeforeMode) == 1 ? new LocalizedChatMessage(ChatConstant.UI_SECOND, ChatColor.DARK_AQUA + "1" + ChatColor.AQUA) : new LocalizedChatMessage(ChatConstant.UI_SECONDS, ChatColor.DARK_AQUA + String.valueOf(timeBeforeMode) + ChatColor.AQUA))), percent);
-            }
-            if (timeBeforeMode <= 0 || (TimeLimit.getMatchTimeLimit() == 0 && (timeBeforeMode > showBefore || timeBeforeMode <= 0))) {
-                BossBar.delete();
+            double timeBeforeMode = getTimeAfter() - MatchTimer.getTimeInSeconds();
+            if (timeBeforeMode > 0 && timeBeforeMode <= showBefore && name != null && !ran) {
+                String time = String.valueOf((int)timeBeforeMode + 1);
+                BossBars.setVisible(bossBar, true);
+                ChatMessage message;
+                if (timeBeforeMode > 3600) message = new UnlocalizedChatMessage(ChatColor.RED + name + ChatColor.AQUA);
+                else message = new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.UI_MODE_IN_TIME, new UnlocalizedChatMessage(ChatColor.RED + name + ChatColor.AQUA)),
+                            new LocalizedChatMessage(time.equals("1") ? ChatConstant.UI_SECOND : ChatConstant.UI_SECONDS, ChatColor.DARK_AQUA + time + ChatColor.AQUA));
+                BossBars.setTitle(bossBar, message);
+                BossBars.setProgress(bossBar, timeBeforeMode / showBefore);
             }
         }
-    }
-
-    public static String getModeName() {
-        for (MonumentModes module : GameHandler.getGameHandler().getMatch().getModules().getModules(MonumentModes.class)) {
-            if (!MonumentModes.hasRanMode()) {
-                return module.getName();
-            }
-        }
-        return null;
-    }
-
-    public static boolean hasRanMode() {
-        for (MonumentModes module : GameHandler.getGameHandler().getMatch().getModules().getModules(MonumentModes.class)) {
-            return module.hasRan();
-        }
-        return false;
     }
 
     public Material getType() {
@@ -143,10 +123,6 @@ public class MonumentModes implements TaskedModule {
 
     public String getName() {
         return name;
-    }
-
-    public int getShowBefore() {
-        return showBefore;
     }
 
     public void setTimeAfter(int after) {

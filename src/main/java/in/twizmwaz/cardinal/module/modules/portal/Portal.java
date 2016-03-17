@@ -57,7 +57,7 @@ public class Portal implements Module {
                 if (destination != null) {
                     event.getPlayer().teleport(destination.getRandomPoint().getLocation());
                     if (sound)
-                        event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2F, 1);
+                        event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 0.2F, 1);
                 } else {
                     Location newLocation = event.getTo();
                     newLocation.setX(location.getX() + (xRelative ? newLocation.getX() : 0));
@@ -67,7 +67,7 @@ public class Portal implements Module {
                     newLocation.setPitch(pitch + (pitchRelative ? newLocation.getPitch() : 0));
                     event.getPlayer().teleport(newLocation);
                     if (sound)
-                        event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2F, 1);
+                        event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 0.2F, 1);
                 }
             }
         }
@@ -76,7 +76,7 @@ public class Portal implements Module {
             if (filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW) || (team.isPresent() && team.get().isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
                 event.getPlayer().teleport(region.getRandomPoint().getLocation());
                 if (sound)
-                    event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2F, 1);
+                    event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 0.2F, 1);
             }
 
         }

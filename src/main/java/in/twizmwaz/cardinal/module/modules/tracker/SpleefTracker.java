@@ -79,7 +79,7 @@ public class SpleefTracker implements Module {
                         description = Description.OUT_OF_THE_LAVA;
                     }
                     OfflinePlayer damager = (TntTracker.getWhoPlaced(event.getEntity()) != null ? Bukkit.getOfflinePlayer(TntTracker.getWhoPlaced(event.getEntity())) : null);
-                    Bukkit.getServer().getPluginManager().callEvent(new TrackerDamageEvent(player, damager, damager != null && damager.getPlayer() != null ? ((Player) damager).getItemInHand() : new ItemStack(Material.AIR), Cause.TNT, description, Type.SPLEEFED));
+                    Bukkit.getServer().getPluginManager().callEvent(new TrackerDamageEvent(player, damager, damager != null && damager.getPlayer() != null ? ((Player) damager).getInventory().getItemInMainHand() : new ItemStack(Material.AIR), Cause.TNT, description, Type.SPLEEFED));
                 }
             }
         }

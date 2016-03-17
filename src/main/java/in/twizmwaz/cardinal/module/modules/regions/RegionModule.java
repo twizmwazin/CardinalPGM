@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.event.HandlerList;
 import org.bukkit.util.Vector;
 
 import java.util.List;
@@ -39,6 +40,7 @@ public abstract class RegionModule implements Module {
 
     @Override
     public void unload() {
+        HandlerList.unregisterAll(this);
     }
 
 }

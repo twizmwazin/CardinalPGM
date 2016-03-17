@@ -4,7 +4,7 @@ import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.module.modules.appliedRegion.AppliedRegion;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
-import in.twizmwaz.cardinal.module.modules.kit.Kit;
+import in.twizmwaz.cardinal.module.modules.kit.KitCollection;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Teams;
@@ -15,9 +15,9 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class KitRegion extends AppliedRegion {
 
-    private final Kit kit;
+    private final KitCollection kit;
 
-    public KitRegion(RegionModule region, FilterModule filter, String message, Kit kit) {
+    public KitRegion(RegionModule region, FilterModule filter, String message, KitCollection kit) {
         super(region, filter, message);
         this.kit = kit;
     }
@@ -27,7 +27,7 @@ public class KitRegion extends AppliedRegion {
         Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
         if (event.isCancelled() || (team.isPresent() && team.get().isObserver())) return;
         if (region.contains(event.getTo().toVector()) && !region.contains(event.getFrom().toVector()) && filter.evaluate(event.getPlayer(), event.getTo(), event).equals(FilterState.ALLOW)) {
-            kit.apply(event.getPlayer());
+            kit.apply(event.getPlayer(), null);
         }
     }
 
@@ -36,7 +36,7 @@ public class KitRegion extends AppliedRegion {
         Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
         if (event.isCancelled() || (team.isPresent() && team.get().isObserver())) return;
         if (region.contains(event.getTo().toVector()) && !region.contains(event.getFrom().toVector()) && filter.evaluate(event.getPlayer(), event.getTo(), event).equals(FilterState.ALLOW)) {
-            kit.apply(event.getPlayer());
+            kit.apply(event.getPlayer(), null);
         }
     }
 }

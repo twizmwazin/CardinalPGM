@@ -1,40 +1,48 @@
 package in.twizmwaz.cardinal.util;
 
-import net.minecraft.server.v1_8_R3.MobEffectList;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
-import net.minecraft.server.v1_8_R3.NBTTagList;
+import net.minecraft.server.MobEffectList;
+import net.minecraft.server.NBTTagCompound;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_8_R3.potion.CraftPotionEffectType;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.potion.CraftPotionEffectType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jdom2.Element;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 public class Parser {
 
     public static ItemStack getItem(Element element) {
         int amount = Numbers.parseInt(element.getAttributeValue("amount", "1"));
         short damage = element.getAttributeValue("damage") != null ? Short.parseShort(element.getAttributeValue("damage")) : element.getText() != null && element.getText().contains(":") ? Short.parseShort(element.getText().split(":")[1]) : 0 ;
-        ItemStack itemStack = null;
-        if (element.getAttribute("material") != null)
+        ItemStack itemStack = new ItemStack(Material.AIR);
+        if (element.getAttribute("material") != null) {
             itemStack = new ItemStack(Material.matchMaterial(element.getAttributeValue("material")), amount, damage);
-        if (element.getText() != "")
+        } else if (!element.getTextTrim().equals("")) {
             itemStack = new ItemStack(Material.matchMaterial(element.getText().split(":")[0]), amount, damage);
+        }
+        if (element.getName().equalsIgnoreCase("book")) {
+            itemStack = new ItemStack(Material.BOOK, amount, damage);
+        }
         if (element.getAttributeValue("unbreakable") != null && Boolean.parseBoolean(element.getAttributeValue("unbreakable"))) {
             try {
-                net.minecraft.server.v1_8_R3.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+                net.minecraft.server.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
                 NBTTagCompound tag = new NBTTagCompound();
                 tag.setBoolean("Unbreakable", true);
                 nmsStack.setTag(tag);
@@ -79,51 +87,46 @@ public class Parser {
                 ((PotionMeta) meta).addCustomEffect(effect, true);
             }
         }
-        itemStack.setItemMeta(meta);
-        String attributes = element.getAttributeValue("attributes");
-        if (attributes != null) {
-            //TODO: This needs to be converted to the attribute API
-            itemStack = setAttributes(itemStack, attributes);
+        for (Element attribute : element.getChildren("attribute")) {
+            meta.addAttributeModifier(attribute.getText(), new AttributeModifier(UUID.randomUUID(), attribute.getText(), Double.parseDouble(attribute.getAttributeValue("amount", "0.0")), getOperation(attribute.getAttributeValue("operation", "add"))));
         }
+        itemStack.setItemMeta(meta);
+        
+        if (element.getName().equalsIgnoreCase("book")) {
+            BookMeta bookMeta = (BookMeta) itemStack.getItemMeta();
+            bookMeta.setTitle(ChatColor.translateAlternateColorCodes('`',element.getChildText("author")));
+            bookMeta.setAuthor(ChatColor.translateAlternateColorCodes('`',element.getChildText("author")));
+            List<String> pages = new ArrayList<>();
+            for (Element page : element.getChild("pages").getChildren("page")) {
+                pages.add(ChatColor.translateAlternateColorCodes('`', page.getText()).replace("\u0009", ""));
+            }
+            bookMeta.setPages(pages);
+            itemStack.setItemMeta(bookMeta);
+        }
+
+        if (element.getAttributeValue("color") != null) {
+            LeatherArmorMeta leatherMeta = (LeatherArmorMeta) itemStack.getItemMeta();
+            leatherMeta.setColor(MiscUtil.convertHexToRGB(element.getAttributeValue("color")));
+            itemStack.setItemMeta(leatherMeta);
+        }
+
         return itemStack;
     }
 
-    private static ItemStack setAttributes(ItemStack itemStack, String attributes) {
-        net.minecraft.server.v1_8_R3.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
-        if (nmsStack.getTag() == null) {
-            nmsStack.setTag(new NBTTagCompound());
+    private static AttributeModifier.Operation getOperation(String operation) {
+        if (NumberUtils.isNumber(operation)) {
+            return AttributeModifier.Operation.fromOpcode(Integer.parseInt(operation));
+        } else {
+            switch (operation.toLowerCase()) {
+                case("add"):
+                    return AttributeModifier.Operation.ADD_NUMBER;
+                case("base"):
+                    return AttributeModifier.Operation.ADD_SCALAR;
+                case("multiply"):
+                    return AttributeModifier.Operation.MULTIPLY_SCALAR_1;
+            }
         }
-        NBTTagCompound tag = nmsStack.getTag();
-
-        NBTTagList attributeList = tag.getList("AttributeModifiers", 10);
-        for (AttributeModifier modifier : parseAttributes(attributes)) {
-            NBTTagCompound attributeTag = new NBTTagCompound();
-            attributeTag.setString("AttributeName", modifier.getAttributeType().getName());
-            attributeTag.setString("Name", modifier.getAttributeType().getName());
-            attributeTag.setDouble("Amount", modifier.getValue());
-            attributeTag.setInt("Operation", modifier.getOperationValue());
-            attributeTag.setLong("UUIDLeast", AttributeType.modifierUUID.getLeastSignificantBits());
-            attributeTag.setLong("UUIDMost", AttributeType.modifierUUID.getMostSignificantBits());
-            attributeList.add(attributeTag);
-        }
-
-        tag.set("AttributeModifiers", attributeList);
-        nmsStack.setTag(tag);
-        return CraftItemStack.asCraftMirror(nmsStack);
-    }
-
-    private static List<AttributeModifier> parseAttributes(String attributes) {
-        List<AttributeModifier> modifiers = new ArrayList<>();
-        for (String attribute : attributes.split(";")) {
-            String[] components = attribute.split(":");
-            String name = components[0];
-            String operation = components[1];
-            double value = Double.parseDouble(components[2]);
-
-            AttributeType type = AttributeType.fromName(name);
-            modifiers.add(new AttributeModifier(type, value, operation));
-        }
-        return modifiers;
+        return AttributeModifier.Operation.ADD_NUMBER;
     }
 
     public static ChatColor parseChatColor(String string) {
@@ -142,7 +145,7 @@ public class Parser {
 
     public static PotionEffect getPotion(Element potion) {
         PotionEffectType type = PotionEffectType.getByName(Strings.getTechnicalName(potion.getText()));
-        if (type == null) type = new CraftPotionEffectType(MobEffectList.b(potion.getText().toLowerCase().replace("_"," ")));
+        if (type == null) type = new CraftPotionEffectType(MobEffectList.getByName(potion.getText().toLowerCase().replace(" ","_")));
         int duration = Numbers.parseInt(potion.getAttributeValue("duration")) == Integer.MAX_VALUE ? Numbers.parseInt(potion.getAttributeValue("duration")) : Numbers.parseInt(potion.getAttributeValue("duration")) * 20;
         int amplifier = 0;
         boolean ambient = false;
