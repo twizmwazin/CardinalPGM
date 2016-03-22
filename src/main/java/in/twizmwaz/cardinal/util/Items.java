@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.util;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -44,9 +45,14 @@ public class Items {
         return item;
     }
 
+    public static boolean itemsEqual(ItemStack item1, ItemStack item2) {
+        if (!item1.getType().equals(item2.getType())) return false;
+        return toMaxDurability(item1).isSimilar(toMaxDurability(item2)) || CraftItemStack.asCraftCopy(item1).getHandle().getTag().equals(CraftItemStack.asCraftCopy(item2).getHandle().getTag());
+    }
+
     public static ItemStack toMaxDurability(ItemStack item) {
-        ItemStack item2 = new ItemStack(item);
-        item2.setDurability(item.getType().getMaxDurability());
+        ItemStack item2 = item.clone();
+        item2.setDurability((short)0);
         return item2;
     }
 

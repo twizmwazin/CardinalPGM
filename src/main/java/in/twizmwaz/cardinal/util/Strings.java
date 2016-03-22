@@ -8,34 +8,36 @@ import java.text.DecimalFormat;
 public class Strings {
 
     public static int timeStringToSeconds(String input) {
+        return (int)timeStringToExactSeconds(input);
+    }
+
+    public static double timeStringToExactSeconds(String input) {
         if (input.equals("oo"))
             return (int) Double.POSITIVE_INFINITY;
         if (input.equals("-oo"))
             return (int) Double.NEGATIVE_INFINITY;
-        int time = 0;
+        double time = 0;
         String currentUnit = "";
         String current = "";
-        boolean negative = false;
         for (int i = 0; i < input.length(); i++) {
             char c = input.charAt(i);
             if (Character.isDigit(c) && !currentUnit.equals("")) {
-                time += convert(Numbers.parseInt(current) * (negative ? -1 : 1), currentUnit);
+                time += convert(Numbers.parseDouble(current), currentUnit);
                 current = "";
                 currentUnit = "";
             }
-            if (c == '-') {
-                negative = true;
-            } else if (Character.isDigit(c)) {
-                current += Numbers.parseInt(c + "");
-            } else {
+            if (Character.isDigit(c) || c == '.') {
+                current += c + "";
+            } else if (c != '-') {
                 currentUnit += c + "";
             }
         }
-        time += convert(Numbers.parseInt(current) * (negative ? -1 : 1), currentUnit);
+        time += convert(Numbers.parseInt(current), currentUnit);
+        if (input.startsWith("-")) time *= -1;
         return time;
     }
 
-    private static int convert(int value, String unit) {
+    private static double convert(double value, String unit) {
         switch (unit) {
             case "y":
                 return value * 365 * 60 * 60 * 24;

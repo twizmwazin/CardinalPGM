@@ -17,7 +17,7 @@ import in.twizmwaz.cardinal.module.modules.appliedRegion.type.VelocityRegion;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.filter.type.logic.AllFilter;
-import in.twizmwaz.cardinal.module.modules.kit.Kit;
+import in.twizmwaz.cardinal.module.modules.kit.KitNode;
 import in.twizmwaz.cardinal.module.modules.portal.Portal;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
@@ -73,7 +73,10 @@ public class AppliedRegionBuilder implements ModuleBuilder {
                     results.add(new UseRegion(region, getFilter(applied.getAttributeValue("use")), message));
                 }
                 if (applied.getAttributeValue("kit") != null) {
-                    results.add(new KitRegion(region, (applied.getAttributeValue("filter") != null ? getFilter(applied.getAttributeValue("filter")) : getFilter("always")), message, Kit.getKitByName(applied.getAttributeValue("kit"))));
+                    results.add(new KitRegion(region, (applied.getAttributeValue("filter") != null ? getFilter(applied.getAttributeValue("filter")) : getFilter("always")), message, KitNode.getKitByName(applied.getAttributeValue("kit")), false));
+                }
+                if (applied.getAttributeValue("lend-kit") != null) {
+                    results.add(new KitRegion(region, (applied.getAttributeValue("filter") != null ? getFilter(applied.getAttributeValue("filter")) : getFilter("always")), message, KitNode.getKitByName(applied.getAttributeValue("lend-kit")), true));
                 }
             }
         }

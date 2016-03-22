@@ -1,13 +1,13 @@
-package in.twizmwaz.cardinal.module.modules.kit;
+package in.twizmwaz.cardinal.module.modules.kit.kitTypes;
 
 import org.bukkit.inventory.ItemStack;
 
-class KitItem {
+public class KitItem {
 
     private final int slot;
     private final ItemStack item;
 
-    protected KitItem(ItemStack item, int slot) {
+    public KitItem(ItemStack item, int slot) {
         this.slot = slot;
         this.item = item;
     }
@@ -23,4 +23,9 @@ class KitItem {
     public ItemStack getItem() {
         return item;
     }
+
+    public KitItem getCopy() {
+        return new KitItem(this.item.clone(), this.slot);
+    }
+
 }

@@ -7,7 +7,7 @@ import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.event.ClassChangeEvent;
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.module.modules.kit.Kit;
+import in.twizmwaz.cardinal.module.modules.kit.KitNode;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.ChatColor;
@@ -32,9 +32,9 @@ public class ClassModule implements Module {
     private final boolean defaultClass;
     private final boolean restrict;
 
-    private final Kit kit;
+    private final KitNode kit;
 
-    protected ClassModule(final String name, final String description, final String longDescription, final Material icon, final boolean sticky, final boolean defaultClass, final boolean restrict, final Kit kit) {
+    protected ClassModule(final String name, final String description, final String longDescription, final Material icon, final boolean sticky, final boolean defaultClass, final boolean restrict, final KitNode kit) {
         this.name = name;
         this.description = description;
         this.longDescription = longDescription;
@@ -89,7 +89,7 @@ public class ClassModule implements Module {
         if (!playerClass.containsKey(event.getPlayer().getUniqueId()) && (this.defaultClass || (!defaultClassPresent() && GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class).equals(this))))
             playerClass.put(event.getPlayer().getUniqueId(), this);
         if (playerClass.containsKey(event.getPlayer().getUniqueId()) && playerClass.get(event.getPlayer().getUniqueId()).equals(this)) {
-            if (kit != null) kit.apply(event.getPlayer());
+            if (kit != null) kit.apply(event.getPlayer(), null);
         }
     }
 
