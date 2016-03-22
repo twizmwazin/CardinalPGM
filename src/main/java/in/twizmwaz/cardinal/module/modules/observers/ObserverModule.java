@@ -56,13 +56,10 @@ import org.bukkit.event.entity.PotionEffectRemoveEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryInteractEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -106,6 +103,7 @@ public class ObserverModule implements Module {
 
     private void resetPlayer(Player player, boolean clear) {
         player.setGameMode(GameMode.CREATIVE);
+        player.setAllowFlight(true);
         player.setFlying(true);
         player.setAffectsSpawning(false);
         player.setCollidesWithEntities(false);
