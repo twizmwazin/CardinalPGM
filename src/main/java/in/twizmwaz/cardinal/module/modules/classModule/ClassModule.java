@@ -86,6 +86,7 @@ public class ClassModule implements Module {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPgmSpawn(CardinalSpawnEvent event) {
+        if (event.isCancelled()) return;
         if (!playerClass.containsKey(event.getPlayer().getUniqueId()) && (this.defaultClass || (!defaultClassPresent() && GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class).equals(this))))
             playerClass.put(event.getPlayer().getUniqueId(), this);
         if (playerClass.containsKey(event.getPlayer().getUniqueId()) && playerClass.get(event.getPlayer().getUniqueId()).equals(this)) {

@@ -6,6 +6,8 @@ import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
+import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
+import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.kit.KitNode;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
@@ -46,7 +48,13 @@ public class SpawnModuleBuilder implements ModuleBuilder {
                 for (KitNode kitModule : match.getModules().getModules(KitNode.class)) {
                     if (kitModule.getName().equals(kits)) kit = kitModule;
                 }
-                results.add(new SpawnModule(team, regions, kit, true, true));
+                String filters = null;
+                if (spawns.getAttributeValue("filter") != null)
+                    filters = spawns.getAttributeValue("filter");
+                if (spawn.getAttributeValue("filter") != null)
+                    filters = spawn.getAttributeValue("filter");
+                FilterModule filter = filters == null ? null : FilterModuleBuilder.getFilter(filters);
+                results.add(new SpawnModule(team, regions, kit, true, true, filter));
             }
             for (Element spawn : spawns.getChildren("default")) {
                 TeamModule team = Teams.getTeamById("observers").get();
@@ -70,7 +78,13 @@ public class SpawnModuleBuilder implements ModuleBuilder {
                 for (KitNode kitModule : match.getModules().getModules(KitNode.class)) {
                     if (kitModule.getName().equals(kits)) kit = kitModule;
                 }
-                results.add(new SpawnModule(team, regions, kit, true, true));
+                String filters = null;
+                if (spawns.getAttributeValue("filter") != null)
+                    filters = spawns.getAttributeValue("filter");
+                if (spawn.getAttributeValue("filter") != null)
+                    filters = spawn.getAttributeValue("filter");
+                FilterModule filter = filters == null ? null : FilterModuleBuilder.getFilter(filters);
+                results.add(new SpawnModule(team, regions, kit, true, true, filter));
             }
             for (Element element : spawns.getChildren("spawns")) {
                 for (Element spawn : element.getChildren("spawn")) {
@@ -98,7 +112,15 @@ public class SpawnModuleBuilder implements ModuleBuilder {
                     for (KitNode kitModule : match.getModules().getModules(KitNode.class)) {
                         if (kitModule.getName().equals(kits)) kit = kitModule;
                     }
-                    results.add(new SpawnModule(team, regions, kit, true, true));
+                    String filters = null;
+                    if (spawns.getAttributeValue("filter") != null)
+                        filters = spawns.getAttributeValue("filter");
+                    if (element.getAttributeValue("filter") != null)
+                        filters = element.getAttributeValue("filter");
+                    if (spawn.getAttributeValue("filter") != null)
+                        filters = spawn.getAttributeValue("filter");
+                    FilterModule filter = filters == null ? null : FilterModuleBuilder.getFilter(filters);
+                    results.add(new SpawnModule(team, regions, kit, true, true, filter));
                 }
             }
         }

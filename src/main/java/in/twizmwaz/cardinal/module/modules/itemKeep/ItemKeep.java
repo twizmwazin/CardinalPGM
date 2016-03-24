@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.itemKeep;
 
+import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.Material;
@@ -7,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -33,8 +33,8 @@ public class ItemKeep implements Module {
     }
 
     @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent event) {
-        Player player = event.getEntity();
+    public void onPlayerDeath(CardinalDeathEvent event) {
+        Player player = event.getPlayer();
         Inventory inventory = player.getInventory();
         HashMap<Integer, ItemStack> itemsToKeep = new HashMap<>();
         if (inventory.getContents() != null) {
@@ -43,6 +43,7 @@ public class ItemKeep implements Module {
                     ItemStack item = inventory.getItem(i);
                     if (item.getType().equals(type) && item.getDurability() == damageValue) {
                         itemsToKeep.put(i, item);
+                        inventory.clear(i);
                     }
                 }
             }
@@ -50,7 +51,7 @@ public class ItemKeep implements Module {
         items.put(player, itemsToKeep);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPgmSpawn(CardinalSpawnEvent event) {
         Player player = event.getPlayer();
         Inventory inventory = player.getInventory();

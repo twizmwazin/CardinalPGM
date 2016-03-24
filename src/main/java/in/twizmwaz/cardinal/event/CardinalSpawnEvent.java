@@ -11,9 +11,15 @@ public class CardinalSpawnEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
     private final Player player;
-    private final SpawnModule spawn;
-    private final TeamModule team;
+    private SpawnModule spawn;
+    private TeamModule team;
     private boolean cancelled;
+
+    public CardinalSpawnEvent(final Player player, final TeamModule team) {
+        this.player = player;
+        this.spawn = null;
+        this.team = team;
+    }
 
     public CardinalSpawnEvent(final Player player, final SpawnModule spawn, final TeamModule team) {
         this.player = player;
@@ -33,8 +39,16 @@ public class CardinalSpawnEvent extends Event implements Cancellable {
         return spawn;
     }
 
+    public void setSpawn(SpawnModule spawn) {
+        this.spawn = spawn;
+    }
+
     public TeamModule getTeam() {
         return team;
+    }
+
+    public void setTeam(TeamModule team) {
+        this.team = team;
     }
 
     public boolean isCancelled() {

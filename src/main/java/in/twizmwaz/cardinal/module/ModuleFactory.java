@@ -18,7 +18,6 @@ import in.twizmwaz.cardinal.module.modules.deathTracker.DeathTrackerBuilder;
 import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.difficulty.MapDifficultyBuilder;
 import in.twizmwaz.cardinal.module.modules.disableDamage.DisableDamageBuilder;
-import in.twizmwaz.cardinal.module.modules.doubleKillPatch.DoubleKillPatchBuilder;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.friendlyFire.FriendlyFireBuilder;
 import in.twizmwaz.cardinal.module.modules.gameComplete.GameCompleteBuilder;
@@ -125,7 +124,6 @@ public class ModuleFactory {
                 ScoreModuleBuilder.class,
                 GameCompleteBuilder.class,
                 RegionModuleBuilder.class,
-                DoubleKillPatchBuilder.class,
                 TaskerModuleBuilder.class,
                 MatchTimerBuilder.class,
                 ItemKeepBuilder.class,
