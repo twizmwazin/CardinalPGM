@@ -2,6 +2,8 @@ package in.twizmwaz.cardinal.module.modules.scoreboard;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
+import in.twizmwaz.cardinal.event.MatchEndEvent;
+import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.event.ScoreUpdateEvent;
 import in.twizmwaz.cardinal.event.TeamNameChangeEvent;
@@ -31,6 +33,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scoreboard.CollisionRule;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -58,6 +61,7 @@ public class ScoreboardModule implements Module {
         for (TeamModule teams : Teams.getTeams()) {
             Team prefixTeam = scoreboard.registerNewTeam(teams.getId());
             prefixTeam.setPrefix(teams.getColor() + "");
+            prefixTeam.setCollisionRule(CollisionRule.NEVER);
             if (!teams.isObserver()) {
                 scoreboard.registerNewTeam(teams.getId() + "-t");
             }
@@ -81,13 +85,13 @@ public class ScoreboardModule implements Module {
 
     public static void add(TeamModule team, Player player) {
         for (ScoreboardModule scoreboard : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreboardModule.class)) {
-            scoreboard.getScoreboard().getTeam(team.getId()).addPlayer(player);
+            scoreboard.getScoreboard().getTeam(team.getId()).addEntry(player.getName());
         }
     }
 
     public static void remove(TeamModule team, Player player) {
         for (ScoreboardModule scoreboard : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreboardModule.class)) {
-            scoreboard.getScoreboard().getTeam(team.getId()).removePlayer(player);
+            scoreboard.getScoreboard().getTeam(team.getId()).addEntry(player.getName());
         }
     }
 
@@ -102,6 +106,22 @@ public class ScoreboardModule implements Module {
     @Override
     public void unload() {
         HandlerList.unregisterAll(this);
+    }
+
+    @EventHandler
+    public void onMatchStartEvent(MatchStartEvent event) {
+        for (TeamModule team : Teams.getTeams()) {
+            Team scoreboardTeam = scoreboard.getTeam(team.getId());
+            if (!team.isObserver()) scoreboardTeam.setCollisionRule(CollisionRule.PUSH_OWN_TEAM);
+        }
+    }
+
+    @EventHandler
+    public void onMatchEndEvent(MatchEndEvent event) {
+        for (TeamModule team : Teams.getTeams()) {
+            Team scoreboardTeam = scoreboard.getTeam(team.getId());
+            if (!team.isObserver()) scoreboardTeam.setCollisionRule(CollisionRule.NEVER);
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

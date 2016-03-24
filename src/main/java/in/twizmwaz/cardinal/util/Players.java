@@ -5,15 +5,23 @@ import in.twizmwaz.cardinal.rank.Rank;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.ServerOperator;
 import org.bukkit.potion.PotionEffect;
 
+import java.util.UUID;
+
 public class Players {
 
     public static void resetPlayer(Player player) {
-        player.setHealth(player.getMaxHealth());
+        resetPlayer(player, true);
+    }
+
+    public static void resetPlayer(Player player, boolean heal) {
+        if (heal) player.setHealth(player.getMaxHealth());
         player.setFoodLevel(20);
         player.setSaturation(20);
         player.getInventory().clear();
@@ -29,6 +37,14 @@ public class Players {
         player.setPotionParticles(true);
         player.setWalkSpeed(0.2F);
         player.setFlySpeed(0.1F);
+
+        for (Attribute attribute : Attribute.values()) {
+            if (player.getAttribute(attribute) == null) continue;
+            for (AttributeModifier modifier : player.getAttribute(attribute).getModifiers()) {
+                player.getAttribute(attribute).removeModifier(modifier);
+            }
+        }
+        player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).addModifier(new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 1024.0D, AttributeModifier.Operation.ADD_NUMBER));
     }
 
     public static double getSnowflakeMultiplier(OfflinePlayer player) {

@@ -6,7 +6,7 @@ import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
-import in.twizmwaz.cardinal.module.modules.kit.Kit;
+import in.twizmwaz.cardinal.module.modules.kit.KitNode;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.PointParser;
@@ -42,8 +42,8 @@ public class SpawnModuleBuilder implements ModuleBuilder {
                     kits = spawns.getAttributeValue("kit");
                 if (spawn.getAttributeValue("kit") != null)
                     kits = spawn.getAttributeValue("kit");
-                Kit kit = null;
-                for (Kit kitModule : match.getModules().getModules(Kit.class)) {
+                KitNode kit = null;
+                for (KitNode kitModule : match.getModules().getModules(KitNode.class)) {
                     if (kitModule.getName().equals(kits)) kit = kitModule;
                 }
                 results.add(new SpawnModule(team, regions, kit, true, true));
@@ -66,8 +66,8 @@ public class SpawnModuleBuilder implements ModuleBuilder {
                     kits = spawns.getAttributeValue("kit");
                 if (spawn.getAttributeValue("kit") != null)
                     kits = spawn.getAttributeValue("kit");
-                Kit kit = null;
-                for (Kit kitModule : match.getModules().getModules(Kit.class)) {
+                KitNode kit = null;
+                for (KitNode kitModule : match.getModules().getModules(KitNode.class)) {
                     if (kitModule.getName().equals(kits)) kit = kitModule;
                 }
                 results.add(new SpawnModule(team, regions, kit, true, true));
@@ -94,8 +94,8 @@ public class SpawnModuleBuilder implements ModuleBuilder {
                         kits = element.getAttributeValue("kit");
                     if (spawn.getAttributeValue("kit") != null)
                         kits = spawn.getAttributeValue("kit");
-                    Kit kit = null;
-                    for (Kit kitModule : match.getModules().getModules(Kit.class)) {
+                    KitNode kit = null;
+                    for (KitNode kitModule : match.getModules().getModules(KitNode.class)) {
                         if (kitModule.getName().equals(kits)) kit = kitModule;
                     }
                     results.add(new SpawnModule(team, regions, kit, true, true));

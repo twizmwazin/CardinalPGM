@@ -45,6 +45,7 @@ import in.twizmwaz.cardinal.tabList.TabList;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.DomUtil;
 import in.twizmwaz.cardinal.util.Numbers;
+import in.twizmwaz.cardinal.util.bossBar.BossBars;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -61,11 +62,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class Cardinal extends JavaPlugin {
 
-    private final static String CRAFTBUKKIT_VERSION = "v1_8_R3";
-    private final static String MINECRAFT_VERSION = "1.8.7";
+    private final static String CRAFTBUKKIT_VERSION = "1.9-R0.1-SNAPSHOT";
+    private final static String MINECRAFT_VERSION = "1.9";
 
     private static Cardinal instance;
     private static GameHandler gameHandler;
@@ -156,12 +158,11 @@ public class Cardinal extends JavaPlugin {
     }
 
     private void checkCraftVersion() {
-        String craftVer = Bukkit.getServer().getClass().getPackage().getName();
-        if (!("org.bukkit.craftbukkit." + CRAFTBUKKIT_VERSION).equals(craftVer)) {
+        if (!Bukkit.getServer().getBukkitVersion().equals(CRAFTBUKKIT_VERSION)) {
             getLogger().warning("########################################");
             getLogger().warning("#####  YOUR VERSION OF SPORTBUKKIT #####");
             getLogger().warning("#####  IS NOT SUPPORTED. PLEASE    #####");
-            getLogger().warning("#####  USE  SPORTBUKKIT " + MINECRAFT_VERSION + "      #####");
+            getLogger().warning("#####  USE  SPORTBUKKIT " + MINECRAFT_VERSION + "        #####");
             getLogger().warning("########################################");
         }
     }
@@ -218,6 +219,7 @@ public class Cardinal extends JavaPlugin {
             }
         }
         try {
+            Rank.clearRanks();
             Document document = DomUtil.parse(file);
             for (Element rank : document.getRootElement().getChildren("rank")) {
                 String name = rank.getAttributeValue("name");
@@ -324,12 +326,12 @@ public class Cardinal extends JavaPlugin {
         setupCommands();
         this.tabList = new TabList();
         Bukkit.getPluginManager().registerEvents(tabList, this);
-
+        Bukkit.getPluginManager().registerEvents(new BossBars(), this);
         try {
             gameHandler = new GameHandler();
         } catch (RotationLoadException e) {
             e.printStackTrace();
-            getLogger().severe("Failed to initialize because of an invalid rotation configuration.");
+            getLogger().severe(new LocalizedChatMessage(ChatConstant.GENERIC_REPO_RELOAD_FAIL, "" + GameHandler.getGameHandler().getRotation().getLoaded().size()).getMessage(Locale.getDefault().toString()));
             setEnabled(false);
             return;
         }

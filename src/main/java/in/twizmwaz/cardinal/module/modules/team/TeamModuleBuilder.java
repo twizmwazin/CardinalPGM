@@ -6,7 +6,6 @@ import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.util.Numbers;
-import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
 import in.twizmwaz.cardinal.util.Parser;
 import org.apache.logging.log4j.core.helpers.Integers;
 import org.bukkit.ChatColor;

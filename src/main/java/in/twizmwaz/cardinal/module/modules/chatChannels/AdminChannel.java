@@ -26,8 +26,4 @@ public class AdminChannel extends PrivateChannel {
         }
     }
 
-    @Override
-    public void unload() {
-        resetMembers();
-    }
 }

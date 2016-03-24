@@ -1,9 +1,9 @@
 package in.twizmwaz.cardinal.module.modules.filter.type.constant;
 
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
+import net.minecraft.server.EntityInsentient;
+import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 
 import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ABSTAIN;
 
@@ -18,7 +18,7 @@ public class AllMobFilter extends AllEventFilter {
         boolean abstain = true;
         for (Object object : objects) {
             if (object instanceof Entity) {
-                if (object instanceof LivingEntity && !(object instanceof Player)) {
+                if (((CraftEntity)object).getHandle() instanceof EntityInsentient) {
                     return allow ? FilterState.ALLOW : FilterState.DENY;
                 }
                 abstain = false;

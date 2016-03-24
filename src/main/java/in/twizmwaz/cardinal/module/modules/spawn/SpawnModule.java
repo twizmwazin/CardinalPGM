@@ -1,11 +1,12 @@
 package in.twizmwaz.cardinal.module.modules.spawn;
 
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.module.modules.kit.Kit;
+import in.twizmwaz.cardinal.module.modules.kit.KitNode;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Location;
+import org.bukkit.event.HandlerList;
 import org.bukkit.util.Vector;
 
 import java.util.List;
@@ -15,13 +16,13 @@ public class SpawnModule implements Module {
 
     private final TeamModule team;
     private final List<Pair<RegionModule, Vector>> regions;
-    private final Kit kit;
+    private final KitNode kit;
     private final boolean safe;
     private final boolean sequential;
     //private final Filter filter;
     private int position;
 
-    public SpawnModule(TeamModule team, List<Pair<RegionModule, Vector>> regions, Kit kit, boolean safe, boolean sequential) {
+    public SpawnModule(TeamModule team, List<Pair<RegionModule, Vector>> regions, KitNode kit, boolean safe, boolean sequential) {
         this.team = team;
         this.regions = regions;
         this.kit = kit;
@@ -32,6 +33,7 @@ public class SpawnModule implements Module {
 
     @Override
     public void unload() {
+        HandlerList.unregisterAll(this);
     }
 
     public TeamModule getTeam() {
@@ -42,7 +44,7 @@ public class SpawnModule implements Module {
         return regions;
     }
 
-    public Kit getKit() {
+    public KitNode getKit() {
         return kit;
     }
 

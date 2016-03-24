@@ -12,7 +12,7 @@ public class MobModuleBuilder implements ModuleBuilder {
         if (match.getDocument().getRootElement().getChild("mobs") != null) {
             results.add(new MobModule(FilterModuleBuilder.getFilter(match.getDocument().getRootElement().getChild("mobs").getChild("filter"))));
         } else {
-            results.add(new MobModule(FilterModuleBuilder.getFilter("deny-all")));
+            results.add(new MobModule(FilterModuleBuilder.getFilter("deny-mobs")));
         }
         return results;
     }

@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.module.modules.chatChannels;
 import in.twizmwaz.cardinal.chat.ChatMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 
 import java.util.Collection;
 import java.util.Locale;
@@ -41,6 +42,7 @@ public class GlobalChannel implements ChatChannel {
 
     @Override
     public void unload() {
-        resetMembers();
+        HandlerList.unregisterAll(this);
     }
+
 }

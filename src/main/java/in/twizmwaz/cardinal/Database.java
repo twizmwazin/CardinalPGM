@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal;
 
+import in.twizmwaz.cardinal.rank.Rank;
 import org.bukkit.OfflinePlayer;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
@@ -63,13 +64,41 @@ public final class Database {
         return getKey(getPlayerElement(player), key).getAttributeValue("value");
     }
 
+    public void put(Rank rank, UUID player) {
+        Element rankElement = getRankElement(rank);
+        if (!rankContainsPlayer(rankElement, player)) {
+            Element newPlayer = new Element("player").setAttribute(new Attribute("uuid", player.toString()));
+            rankElement.addContent(newPlayer);
+        }
+    }
+
+    public boolean get(Rank rank, UUID player) {
+        return rankContainsPlayer(getRankElement(rank), player);
+    }
+
+    public void remove(Rank rank, UUID player) {
+        Element rankElement = getRankElement(rank);
+        if (rankContainsPlayer(rankElement, player)) {
+            rankElement.removeContent(getRankPlayer(rankElement, player));
+        }
+    }
+
     private Element getPlayerElement(OfflinePlayer player) {
         for (Element element : document.getRootElement().getChildren()) {
-            if (player.getUniqueId().equals(UUID.fromString(element.getAttributeValue("uuid")))) return element;
+            if (element.getAttributeValue("uuid") != null && player.getUniqueId().equals(UUID.fromString(element.getAttributeValue("uuid")))) return element;
         }
         Element newPlayer = new Element("player").setAttribute(new Attribute("uuid", player.getUniqueId().toString()));
         document.getRootElement().addContent(newPlayer);
         return newPlayer;
+    }
+
+    private Element getRankElement(Rank rank) {
+        for (Element element : document.getRootElement().getChildren("rank")) {
+            if (rank.getName().equals(element.getAttributeValue("name"))) return element;
+        }
+        Element newRank = new Element("rank").setAttribute(new Attribute("name", rank.getName()));
+        document.getRootElement().addContent(newRank);
+        return newRank;
     }
 
     private Element getKey(Element element, String key) {
@@ -79,6 +108,17 @@ public final class Database {
         Element newElement = new Element(("data")).setAttribute(new Attribute("key", key)).setAttribute("value", "");
         element.addContent(newElement);
         return newElement;
+    }
+
+    private boolean rankContainsPlayer(Element element, UUID player) {
+        return getRankPlayer(element, player) != null;
+    }
+
+    private Element getRankPlayer(Element element, UUID player) {
+        for (Element child : element.getChildren("player")) {
+            if (player.equals(UUID.fromString(child.getAttributeValue("uuid")))) return child;
+        }
+        return null;
     }
 
 }

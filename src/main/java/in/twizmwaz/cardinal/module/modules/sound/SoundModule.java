@@ -31,9 +31,9 @@ public class SoundModule implements Module {
                 if (Teams.getTeamByPlayer(player).get().isObserver() ||
                         (event.getObjective() instanceof WoolObjective && Teams.getTeamByPlayer(player).get().equals(event.getObjective().getTeam())) ||
                         ((event.getObjective() instanceof CoreObjective || event.getObjective() instanceof DestroyableObjective) && !Teams.getTeamByPlayer(player).get().equals(event.getObjective().getTeam()))) {
-                    player.playSound(player.getLocation(), Sound.PORTAL_TRAVEL, 0.7f, 2f);
+                    player.playSound(player.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 0.7f, 2f);
                 } else {
-                    player.playSound(player.getLocation(), Sound.BLAZE_DEATH, 0.8f, 0.8f);
+                    player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_DEATH, 0.8f, 0.8f);
                 }
             }
         }
@@ -44,9 +44,9 @@ public class SoundModule implements Module {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (Settings.getSettingByName("Sounds") != null && Settings.getSettingByName("Sounds").getValueByPlayer(player).getValue().equalsIgnoreCase("on")) {
                 if (Teams.getTeamByPlayer(player) == event.getTeam()) {
-                    player.playSound(player.getLocation(), Sound.WITHER_DEATH, 1, 1);
+                    player.playSound(player.getLocation(), Sound.ENTITY_WITHER_DEATH, 1, 1);
                 } else {
-                    player.playSound(player.getLocation(), Sound.WITHER_SPAWN, 1, 1);
+                    player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SPAWN, 1, 1);
                 }
             }
         }
