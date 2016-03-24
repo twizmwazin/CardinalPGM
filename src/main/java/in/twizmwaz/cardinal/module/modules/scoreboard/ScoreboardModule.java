@@ -33,7 +33,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scoreboard.CollisionRule;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -61,7 +60,7 @@ public class ScoreboardModule implements Module {
         for (TeamModule teams : Teams.getTeams()) {
             Team prefixTeam = scoreboard.registerNewTeam(teams.getId());
             prefixTeam.setPrefix(teams.getColor() + "");
-            prefixTeam.setCollisionRule(CollisionRule.NEVER);
+            prefixTeam.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
             if (!teams.isObserver()) {
                 scoreboard.registerNewTeam(teams.getId() + "-t");
             }
@@ -112,7 +111,7 @@ public class ScoreboardModule implements Module {
     public void onMatchStartEvent(MatchStartEvent event) {
         for (TeamModule team : Teams.getTeams()) {
             Team scoreboardTeam = scoreboard.getTeam(team.getId());
-            if (!team.isObserver()) scoreboardTeam.setCollisionRule(CollisionRule.PUSH_OWN_TEAM);
+            if (!team.isObserver()) scoreboardTeam.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.ALWAYS);
         }
     }
 
@@ -120,7 +119,7 @@ public class ScoreboardModule implements Module {
     public void onMatchEndEvent(MatchEndEvent event) {
         for (TeamModule team : Teams.getTeams()) {
             Team scoreboardTeam = scoreboard.getTeam(team.getId());
-            if (!team.isObserver()) scoreboardTeam.setCollisionRule(CollisionRule.NEVER);
+            if (!team.isObserver()) scoreboardTeam.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
         }
     }
 

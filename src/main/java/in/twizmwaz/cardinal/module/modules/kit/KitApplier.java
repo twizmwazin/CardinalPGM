@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 
 public class KitApplier implements Module {
@@ -16,7 +17,7 @@ public class KitApplier implements Module {
         HandlerList.unregisterAll(this);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPgmSpawn(CardinalSpawnEvent event) {
         final Kit kit = event.getSpawn().getKit();
         final Player player = event.getPlayer();

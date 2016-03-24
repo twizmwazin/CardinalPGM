@@ -153,6 +153,7 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onPlayerSpawn(CardinalSpawnEvent event) {
+        if (event.isCancelled()) return;
         if (!event.getTeam().isObserver()) {
             if (match.isRunning()) {
                 event.getPlayer().setGameMode(GameMode.SURVIVAL);
@@ -238,6 +239,8 @@ public class ObserverModule implements Module {
                     event.getPlayer().openInventory(beacon);
                 }
             }
+        } else if (testObserver(event.getPlayer())) {
+            event.setCancelled(true);
         }
     }
 
@@ -465,7 +468,7 @@ public class ObserverModule implements Module {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getWhoClicked() instanceof Player && testDead((Player) event.getWhoClicked()) || (testObserver((Player) event.getWhoClicked()) && event.getInventory().getType() != InventoryType.PLAYER)) {
+        if (event.getWhoClicked() instanceof Player && (testDead((Player) event.getWhoClicked()) || (testObserver((Player) event.getWhoClicked()) && !event.getInventory().getType().equals(InventoryType.PLAYER)))) {
             event.setCancelled(true);
         }
     }
@@ -601,17 +604,17 @@ public class ObserverModule implements Module {
         }
     }
 
-    private boolean testObserverOrDead(Player player) {
+    public static boolean testObserverOrDead(Player player) {
         return testObserver(player) || testDead(player);
     }
 
-    private boolean testObserver(Player player) {
+    public static boolean testObserver(Player player) {
         Optional<TeamModule> team = Teams.getTeamByPlayer(player);
-        return (team.isPresent() && team.get().isObserver() || !match.isRunning());
+        return (team.isPresent() && team.get().isObserver() || !GameHandler.getGameHandler().getMatch().isRunning());
     }
 
-    private boolean testDead(Player player) {
-        return !match.isRunning() || GameHandler.getGameHandler().getMatch().getModules().getModule(TitleRespawn.class).isDeadUUID(player.getUniqueId());
+    public static boolean testDead(Player player) {
+        return GameHandler.getGameHandler().getMatch().isRunning() && GameHandler.getGameHandler().getMatch().getModules().getModule(TitleRespawn.class).isDeadUUID(player.getUniqueId());
     }
 
 }

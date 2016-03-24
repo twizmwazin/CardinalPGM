@@ -1,6 +1,5 @@
 package in.twizmwaz.cardinal.module.modules.deathTracker;
 
-import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.tracker.DamageTracker;
@@ -10,8 +9,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class DeathTracker implements Module {
 
@@ -23,29 +22,20 @@ public class DeathTracker implements Module {
         HandlerList.unregisterAll(this);
     }
 
-    @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent event) {
-        if (!event.getEntity().hasMetadata("teamChange")) {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                player.playSound(event.getEntity().getLocation(), Sound.ENTITY_IRONGOLEM_DEATH, 1, 1.2F);
-            }
-            Player killer = null;
-            TrackerDamageEvent tracker = DamageTracker.getEvent(event.getEntity());
-            boolean time = tracker != null && System.currentTimeMillis() - tracker.getTime() <= 7500;
-            if (tracker != null && (tracker.getType().equals(Type.KNOCKED) || tracker.getType().equals(Type.SHOT)) && event.getEntity().getKiller() != null && event.getEntity().getKiller().equals(tracker.getDamager())) {
-                killer = tracker.getDamager().getPlayer();
-            } else if (time) {
-                killer = tracker.getDamager().getPlayer();
-            }
-            CardinalDeathEvent deathEvent = new CardinalDeathEvent(event.getEntity(), killer);
-            if (time && tracker.getDamager().getPlayer() != null) {
-                deathEvent.setTrackerDamageEvent(tracker);
-            }
-            Bukkit.getServer().getPluginManager().callEvent(deathEvent);
-        } else {
-            event.getEntity().removeMetadata("teamChange", GameHandler.getGameHandler().getPlugin());
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerDeath(CardinalDeathEvent event) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.playSound(event.getPlayer().getLocation(), Sound.ENTITY_IRONGOLEM_DEATH, 1, 1.2F);
         }
-        event.setDeathMessage(null);
+        if (event.getKiller() == null) {
+            Player killer = null;
+            TrackerDamageEvent tracker = DamageTracker.getEvent(event.getPlayer());
+            boolean time = tracker != null && System.currentTimeMillis() - tracker.getTime() <= 7500;
+            if (tracker != null && (tracker.getType().equals(Type.KNOCKED) || tracker.getType().equals(Type.SHOT)) || time) {
+                killer = tracker.getDamager().getPlayer();
+            }
+            event.setKiller(killer);
+        }
     }
 
 }

@@ -58,6 +58,7 @@ public class Blitz implements Module {
 
     @EventHandler
     public void onPgmSpawn(CardinalSpawnEvent event) {
+        if (event.isCancelled()) return;
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
             Player player = event.getPlayer();
             Optional<TeamModule> team = Teams.getTeamByPlayer(player);
