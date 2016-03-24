@@ -1,69 +1,89 @@
 package in.twizmwaz.cardinal.module.modules.titleRespawn;
 
 import com.google.common.base.Optional;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import in.twizmwaz.cardinal.event.CardinalDeathEvent;
+import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.event.PlayerNameUpdateEvent;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.TaskedModule;
-
-import java.lang.reflect.Field;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
+import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
+import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.respawn.RespawnModule;
+import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Items;
 import in.twizmwaz.cardinal.util.Players;
 import in.twizmwaz.cardinal.util.Teams;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_8_R3.DataWatcher;
-import net.minecraft.server.v1_8_R3.EntityArmorStand;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.PacketPlayOutAttachEntity;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityMetadata;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityStatus;
-import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
-import net.minecraft.server.v1_8_R3.PacketPlayOutSpawnEntityLiving;
-import net.minecraft.server.v1_8_R3.PacketPlayOutWorldBorder;
-import net.minecraft.server.v1_8_R3.WorldBorder;
+import net.md_5.bungee.api.chat.TranslatableComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
+import net.minecraft.server.DataWatcher;
+import net.minecraft.server.DataWatcherRegistry;
+import net.minecraft.server.EntityPlayer;
+import net.minecraft.server.EnumItemSlot;
+import net.minecraft.server.Packet;
+import net.minecraft.server.PacketPlayOutAnimation;
+import net.minecraft.server.PacketPlayOutEntityDestroy;
+import net.minecraft.server.PacketPlayOutEntityEquipment;
+import net.minecraft.server.PacketPlayOutEntityMetadata;
+import net.minecraft.server.PacketPlayOutEntityStatus;
+import net.minecraft.server.PacketPlayOutMount;
+import net.minecraft.server.PacketPlayOutSpawnEntityLiving;
+import net.minecraft.server.PacketPlayOutWorldBorder;
+import net.minecraft.server.WorldBorder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByBlockEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLocaleChangeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.lang.reflect.Field;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 public class TitleRespawn implements TaskedModule {
 
@@ -76,8 +96,8 @@ public class TitleRespawn implements TaskedModule {
 
     DecimalFormat formatter = new DecimalFormat("0.0");
 
-    private final Map<UUID, Boolean> hasLeftClicked = new HashMap<>();
-    private final Map<UUID, Long> deadPlayers = new HashMap<>();
+    public Set<UUID> hasLeftClicked = new HashSet<>();
+    public Map<UUID, Long> deadPlayers = new HashMap<>();
 
     public TitleRespawn(int delay, boolean auto, boolean blackout, boolean spectate, boolean bed, String message) {
         this.delay = delay;
@@ -108,68 +128,105 @@ public class TitleRespawn implements TaskedModule {
     }
 
     private boolean hasLeftClicked(UUID id) {
-        return hasLeftClicked.get(id);
+        return hasLeftClicked.contains(id);
     }
 
     public void getSubtitleLogic() {
-        for (UUID id : this.deadPlayers.keySet()) {
+        List<UUID> deadClone = new ArrayList<>();
+        for (UUID uuid : this.deadPlayers.keySet()) deadClone.add(uuid);
+        for (UUID id : deadClone) {
             double timeLeftToRespawn = this.delay - ((System.currentTimeMillis() - deadPlayers.get(id)) / 1000.0);
             Player player = Bukkit.getPlayer(id);
             if (timeLeftToRespawn > 0) {
-                if (hasLeftClicked(id) || this.auto) {
+                if (hasLeftClicked(id)) {
                     player.setSubtitle(TextComponent.fromLegacyText(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.UI_DEATH_RESPAWN_CONFIRMED_TIME, ChatColor.AQUA + formatter.format(timeLeftToRespawn).replace(",", ".") + ChatColor.GREEN).getMessage(player.getLocale())));
                 } else {
                     player.setSubtitle(TextComponent.fromLegacyText(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.UI_DEATH_RESPAWN_UNCONFIRMED_TIME, ChatColor.AQUA + formatter.format(timeLeftToRespawn).replace(",",".") + ChatColor.GREEN).getMessage(player.getLocale())));
                 }
             } else if (isAllowedToRespawn(id)) {
-                if (player.getInventory().getItem(2) == null || !player.getInventory().getItem(2).getType().equals(Material.LEATHER_HELMET)) {
-                    ItemStack picker = Items.createItem(Material.LEATHER_HELMET, 1, (short) 0,
-                            ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(player.getLocale()) : new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(player.getLocale())),
-                            Collections.singletonList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(player.getLocale())));
-                    player.getInventory().setItem(2, picker);
-                }
-                if ((hasLeftClicked(id) || this.auto) /*&& filter allows to respawn*/) {
+                if (hasLeftClicked(id) && playerCanRespawn(player)) {
                     respawnPlayer(player);
                 } else {
-                    /*if (this.message != null && filter doesn't allow respawn) {
-                        setSubtitleMessage(player);
+                    if (hasLeftClicked(id)) {
+                        if (message == null) {
+                            player.setSubtitle(TextComponent.fromLegacyText(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.UI_DEATH_RESPAWN_CONFIRMED_WAITING).getMessage(player.getLocale())));
+                        } else {
+                            player.setSubtitle(getSubtitleMessage(player.getLocale()));
+                        }
                     } else {
-                        player.setSubtitle(TextComponent.fromLegacyText(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.UI_RESPAWN_CLICK).getMessage(player.getLocale())));
-                    }*/
-                    player.setSubtitle(TextComponent.fromLegacyText(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.UI_DEATH_RESPAWN_UNCONFIRMED).getMessage(player.getLocale())));
+                        player.setSubtitle(TextComponent.fromLegacyText(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.UI_DEATH_RESPAWN_UNCONFIRMED).getMessage(player.getLocale())));
+                    }
+                    if (player.getInventory().getItem(2) == null || !player.getInventory().getItem(2).getType().equals(Material.LEATHER_HELMET)) {
+                        ItemStack picker = Items.createItem(Material.LEATHER_HELMET, 1, (short) 0,
+                                ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(player.getLocale()) : new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(player.getLocale())),
+                                Collections.singletonList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(player.getLocale())));
+                        player.getInventory().setItem(2, picker);
+                    }
                 }
             }
         }
     }
 
-    public void setSubtitleMessage(Player player) {
-        player.setSubtitle(TextComponent.fromLegacyText(ChatColor.GREEN + this.message));
+    private boolean playerCanRespawn(Player player) {
+        TeamModule team = Teams.getTeamByPlayer(player).get();
+        for (SpawnModule spawnModule : GameHandler.getGameHandler().getMatch().getModules().getModules(SpawnModule.class)) {
+            FilterModule filter = spawnModule.getFilter();
+            if (spawnModule.getTeam().equals(team) && (filter == null || filter.evaluate(player).equals(FilterState.ALLOW))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private BaseComponent[] getSubtitleMessage(String locale) {
+        JsonParser parser = new JsonParser();
+        JsonObject object = translateJson(parser.parse(message).getAsJsonObject(), locale);
+        BaseComponent[] components = ComponentSerializer.parse(object.toString());
+        components[0].setColor(net.md_5.bungee.api.ChatColor.GREEN);
+        return components;
+    }
+
+    private JsonObject translateJson(JsonObject object, String locale) {
+        if (object.get("translate") != null) {
+            ChatConstant chatConstant = ChatConstant.fromPath(object.get("translate").getAsString());
+            if (chatConstant != null) {
+                object.addProperty("text", new LocalizedChatMessage(ChatConstant.fromPath(object.get("translate").getAsString())).getMessage(locale));
+                object.remove("translate");
+            }
+        }
+        if (object.get("extra") != null) {
+            for (JsonElement extra : object.getAsJsonArray("extra")) {
+                translateJson(extra.getAsJsonObject(), locale);
+            }
+        }
+        return object;
     }
 
     private void dropInventory(Player player) {
         Optional<TeamModule> team = Teams.getTeamByPlayer(player);
         if (!team.get().isObserver() && !isDeadUUID(player.getUniqueId()) && GameHandler.getGameHandler().getMatch().isRunning()) {
-            for (ItemStack stack : player.getInventory().getArmorContents()) {
-                if (stack != null && stack.getType() != Material.AIR) {
-                    player.getWorld().dropItemNaturally(player.getLocation().add(0, 0.5, 0), stack);
-                }
-            }
-            for (int i = 0; i < 36; i++) {
-                ItemStack stack = player.getInventory().getItem(i);
+            for (ItemStack stack : player.getInventory().getContents()) {
                 if (stack != null && stack.getType() != Material.AIR) {
                     player.getWorld().dropItemNaturally(player.getLocation().add(0, 0.5, 0), stack);
                 }
             }
             player.getInventory().clear();
             player.getInventory().setArmorContents(null);
+            player.getInventory().setExtraContents(null);
         }
     }
 
-    public void setBlood(Player player, Boolean active) {
+    private void setBlood(Player player, Boolean active) {
         sendWorldBorderPacket(player, active ? Integer.MAX_VALUE : GameHandler.getGameHandler().getMatchWorld().getWorldBorder().getWarningDistance());
     }
 
-    protected void sendWorldBorderPacket(Player player, int warningBlocks) {
+    private void sendTitle(Player player) {
+        TranslatableComponent title = new TranslatableComponent("deathScreen.title");
+        title.setColor(net.md_5.bungee.api.ChatColor.RED);
+        player.showTitle(title, new TextComponent(""), 0, Integer.MAX_VALUE, 0);
+    }
+
+    private void sendWorldBorderPacket(Player player, int warningBlocks) {
         EntityPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
         WorldBorder playerWorldBorder = nmsPlayer.world.getWorldBorder();
         PacketPlayOutWorldBorder worldBorder = new PacketPlayOutWorldBorder(playerWorldBorder, PacketPlayOutWorldBorder.EnumWorldBorderAction.SET_WARNING_BLOCKS);
@@ -186,68 +243,81 @@ public class TitleRespawn implements TaskedModule {
         nmsPlayer.playerConnection.sendPacket(worldBorder);
     }
 
-    public void playDeathAnimation(Player player) {
-        EntityPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
-        DataWatcher data = new DataWatcher(nmsPlayer);
-        data.a(6, 0.0F);
+    private void playDeathAnimation(final Player player) {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                EntityPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
+                DataWatcher data = new DataWatcher(nmsPlayer);
+                data.register(DataWatcherRegistry.c.a(6), 0.0F); // Creates player health metadata with 0.0F
 
-        PacketPlayOutEntityMetadata metadata = new PacketPlayOutEntityMetadata(nmsPlayer.getId(), nmsPlayer.getDataWatcher(), false);
-        PacketPlayOutEntityStatus packet = new PacketPlayOutEntityStatus(nmsPlayer, (byte) 3);
+                List<Packet> packets = new ArrayList<>();
+                for (EnumItemSlot slot : EnumItemSlot.values()) {
+                    packets.add(new PacketPlayOutEntityEquipment(nmsPlayer.getId(), slot, null));  // Removes armor, otherwise, a client-side glitch makes items
+                }
+                packets.add(new PacketPlayOutEntityMetadata(nmsPlayer.getId(), nmsPlayer.getDataWatcher(), false));
+                packets.add(new PacketPlayOutEntityStatus(nmsPlayer, (byte) 3));
 
-        for (Player online : Bukkit.getOnlinePlayers()) {
-            if (!online.equals(player)){
-                ((CraftPlayer) online).getHandle().playerConnection.sendPacket(metadata);
-                ((CraftPlayer) online).getHandle().playerConnection.sendPacket(packet);
+                for (Player online : Bukkit.getOnlinePlayers()) {
+                    if (!online.equals(player)){
+                        for (Packet packet : packets) {
+                            ((CraftPlayer) online).getHandle().playerConnection.sendPacket(packet);
+                        }
+                    }
+                }
             }
-        }
-
-        nmsPlayer.setSize(0.2F, 0.2F);
-        nmsPlayer.motY = 0.10000000149011612D;
+        }, 1L);
     }
 
-    public void sendArmorStandPacket(Player player) {
-        try {
-            EntityPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
+    private void sendArmorStandPacket(Player player) {
+        EntityPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
+        Location loc = player.getLocation();
 
-            EntityArmorStand entityArmorStand = new EntityArmorStand(((CraftWorld) GameHandler.getGameHandler().getMatchWorld()).getHandle());
-            entityArmorStand.setHealth(1.0F);
-            entityArmorStand.setInvisible(true);
+        List<DataWatcher.Item<?>> dataItems = new ArrayList<>();
+        dataItems.add(new DataWatcher.Item<>(DataWatcherRegistry.a.a(0), (byte)32)); // Sets invisible
+        dataItems.add(new DataWatcher.Item<>(DataWatcherRegistry.c.a(6), 20.0F));    // Sets health
 
-            PacketPlayOutSpawnEntityLiving armorStand = new PacketPlayOutSpawnEntityLiving(entityArmorStand);
+        PacketPlayOutSpawnEntityLiving spawnPacket = new PacketPlayOutSpawnEntityLiving(
+                Integer.MAX_VALUE, UUID.randomUUID(),     // Entity id and Entity UUID
+                30,                                       // Entity type id (ArmorStand)
+                loc.getX(), loc.getY() - 1.1D, loc.getZ(),// X, Y and Z Position
+                0, 0, 0,                                  // X, Y and Z Motion
+                (byte)2, (byte)0, (byte)2,                // Yaw, Pitch and Head Pitch
+                dataItems                                 // Metadata
+        );
 
-            armorStand.a = Integer.MAX_VALUE; //Entity ID
-            armorStand.c = (int) (player.getLocation().getX() * 32.0D); // X
-            armorStand.d = (int) ((player.getLocation().getY() - 1.1D) * 32.0D); // Y
-            armorStand.e = (int) (player.getLocation().getZ() * 32.0D);// Z
+        PacketPlayOutMount mountPacket = new PacketPlayOutMount(Integer.MAX_VALUE, nmsPlayer.getId());
 
-            PacketPlayOutAttachEntity attachEntity = new PacketPlayOutAttachEntity();
-            attachEntity.b = nmsPlayer.getId();
-            attachEntity.c = Integer.MAX_VALUE;
-
-            nmsPlayer.playerConnection.sendPacket(armorStand);
-            nmsPlayer.playerConnection.sendPacket(attachEntity);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        nmsPlayer.playerConnection.sendPacket(spawnPacket);
+        nmsPlayer.playerConnection.sendPacket(mountPacket);
     }
 
-    public void destroyArmorStandPacket(Player player) {
+    private void destroyArmorStandPacket(Player player) {
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(Integer.MAX_VALUE));
     }
 
-    public void respawnPlayer(final Player player) {
-        boolean bedLocation = false;
-        Location location = player.getWorld().getSpawnLocation();
-        if (this.bed && player.getBedSpawnLocation() != null) {
-            bedLocation = true;
-            location = player.getBedSpawnLocation();
+    private void respawnPlayer(final Player player) {
+        UUID uuid = player.getUniqueId();
+        if (playerCanRespawn(player)) {
+            this.deadPlayers.remove(uuid);
+            this.hasLeftClicked.remove(uuid);
+        } else {
+            if (!deadPlayers.containsKey(uuid)) {
+                deadPlayers.put(uuid, 0L);
+                hasLeftClicked.add(uuid);
+                player.showTitle(new TextComponent(""), new TextComponent(""), 0, Integer.MAX_VALUE, 0);
+                for (Player online : Bukkit.getServer().getOnlinePlayers()) {
+                    online.hidePlayer(player);
+                }
+            }
+            return;
         }
+
+        CardinalSpawnEvent respawnEvent = new CardinalSpawnEvent(player, Teams.getTeamByPlayer(player).get());
+        GameHandler.getGameHandler().getPlugin().getServer().getPluginManager().callEvent(respawnEvent);
 
         destroyArmorStandPacket(player);
         Players.resetPlayer(player);
-
-        PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(player, location, bedLocation);
-        GameHandler.getGameHandler().getPlugin().getServer().getPluginManager().callEvent(respawnEvent);
 
         if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING) && !Teams.getTeamByPlayer(player).get().isObserver()) {
             player.setGameMode(GameMode.SURVIVAL);
@@ -256,17 +326,17 @@ public class TitleRespawn implements TaskedModule {
         }
 
         player.setTitleTimes(0, 0, 10);
-        player.resetTitle();
 
         setBlood(player, false);
-
-        this.deadPlayers.remove(player.getUniqueId());
-        this.hasLeftClicked.put(player.getUniqueId(), false);
 
         PlayerNameUpdateEvent nameUpdateEvent = new PlayerNameUpdateEvent(player);
         Bukkit.getServer().getPluginManager().callEvent(nameUpdateEvent);
 
-        player.teleport(respawnEvent.getRespawnLocation(), PlayerTeleportEvent.TeleportCause.UNKNOWN);
+        if (this.bed && player.getBedSpawnLocation() != null) {
+            player.teleport(player.getBedSpawnLocation(), PlayerTeleportEvent.TeleportCause.UNKNOWN);
+        } else {
+            player.teleport(respawnEvent.getSpawn().getLocation(), PlayerTeleportEvent.TeleportCause.UNKNOWN);
+        }
 
         Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(Cardinal.getInstance(), new Runnable() {
             public void run() {
@@ -276,52 +346,38 @@ public class TitleRespawn implements TaskedModule {
                 }
             }
         }, 1L);
-
-        for (Player online : Bukkit.getOnlinePlayers()) {
-            if (GameHandler.getGameHandler().getMatch().isRunning() && !isDeadUUID(player.getUniqueId())) {
-                online.showPlayer(player);
-            }
-        }
     }
 
-    public void killPlayer(final Player player) {
-        PlayerDeathEvent deathEvent = new PlayerDeathEvent(player, new ArrayList<ItemStack>(), player.getExpToLevel(), 0, 0, 0, ChatColor.GRAY + "" + ChatColor.BOLD + "%s died from unknown causes");
+    private void killPlayer(final Player player, Player killer, EntityDamageEvent.DamageCause cause) {
+        CardinalDeathEvent cardinalDeathEvent = new CardinalDeathEvent(player, killer, cause);
+        Bukkit.getServer().getPluginManager().callEvent(cardinalDeathEvent);
+
+        dropInventory(player);
+
+        PlayerDeathEvent deathEvent = new PlayerDeathEvent(player, new ArrayList<ItemStack>(), player.getExpToLevel(), 0, 0, 0, null);
+        deathEvent.setDeathMessage(null);
         Bukkit.getServer().getPluginManager().callEvent(deathEvent);
 
-        if (deathEvent.getDeathMessage() != null) {
-            Bukkit.getServer().broadcastMessage(String.format(deathEvent.getDeathMessage(), player.getDisplayName() + ChatColor.RESET));
-        }
-
-        player.playSound(player.getLocation(), Sound.IRONGOLEM_HIT, 2, 1);
         player.setAffectsSpawning(false);
         player.setCollidesWithEntities(false);
         player.setCanPickupItems(false);
         player.setPotionParticles(false);
 
-        dropInventory(player);
-
         this.deadPlayers.put(player.getUniqueId(), System.currentTimeMillis());
         PlayerNameUpdateEvent nameUpdateEvent = new PlayerNameUpdateEvent(player);
         Bukkit.getServer().getPluginManager().callEvent(nameUpdateEvent);
 
-        String title = new LocalizedChatMessage(ChatConstant.UI_DEATH_RESPAWN_DIED).getMessage(player.getLocale());
-        player.showTitle(new TextComponent(ChatColor.RED + title), new TextComponent(""), 0, Integer.MAX_VALUE, 0);
+        sendTitle(player);
 
         player.setGameMode(GameMode.CREATIVE);
         Players.resetPlayer(player);
         setBlood(player, true);
         playDeathAnimation(player);
 
-        if (!this.spectate) {
-            sendArmorStandPacket(player);
-        }
+        if (!this.spectate) sendArmorStandPacket(player);
 
-        player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 120, 0));
-        if (this.blackout) {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 0));
-        } else {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20, 0));
-        }
+        player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 100, 0), false);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, this.blackout ? Integer.MAX_VALUE : 20, 0), false);
 
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(), new Runnable() {
             public void run() {
@@ -331,58 +387,76 @@ public class TitleRespawn implements TaskedModule {
                 }
             }
         }, 20L);
+        if (this.auto) hasLeftClicked.add(player.getUniqueId());
     }
 
-    @EventHandler(priority = EventPriority.LOW)
-    public void onEntityDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-            if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING) && !Teams.getTeamByPlayer(player).get().isObserver()) {
-                double finalHealth = player.getHealth() - event.getDamage();
-                if (finalHealth > 0.0) {
-                    return;
-                }
-                player.getWorld().playSound(player.getLocation(), Sound.IRONGOLEM_HIT, 1, 1.2F);
-                player.setLastDamageCause(event);
-                killPlayer(player);
-
-            } else {
+    @EventHandler
+    public void onMatchStart(MatchStartEvent event) {
+        for (final Player player : Bukkit.getOnlinePlayers()) {
+            Optional<TeamModule> team = Teams.getTeamByPlayer(player);
+            if (!team.isPresent() || !team.get().isObserver()) {
                 respawnPlayer(player);
-            }
-        }
-    }
-
-    @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerInteract(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-        UUID id = event.getPlayer().getUniqueId();
-        boolean action = event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK;
-        if (isDeadUUID(id)) {
-            event.setCancelled(true);
-            if (!this.auto && action) {
-                if (isAllowedToRespawn(id)) {
-                    respawnPlayer(player);
-                } else {
-                    this.hasLeftClicked.put(id, true);
-                }
+                Bukkit.getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(), new Runnable() {
+                    @Override
+                    public void run() {
+                        if (TitleRespawn.this.isDeadUUID(player.getUniqueId())) {
+                            player.showTitle(new TextComponent(""), new TextComponent(""), 0, Integer.MAX_VALUE, 0);
+                            player.setSubtitle(getSubtitleMessage(player.getLocale()));
+                        }
+                    }
+                }, 1L);
             }
         }
     }
 
     @EventHandler
-    public void onMatchStart(MatchStartEvent event) {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            this.hasLeftClicked.put(player.getUniqueId(), false);
+    public void onLocaleChange(PlayerLocaleChangeEvent event) {
+        if (isDeadUUID(event.getPlayer().getUniqueId()) && deadPlayers.get(event.getPlayer().getUniqueId()) != 0) sendTitle(event.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onEntityDamage(EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof Player)) return;
+        Player player = (Player) event.getEntity();
+        double finalHealth = player.getHealth() - event.getFinalDamage();
+        if (finalHealth > 0.01) return;
+        player.setHealth(20);
+        event.setDamage(1);
+        player.setLastDamageCause(event);
+        killPlayer(player, null, event.getCause());
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onEntityDamage(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player)) return;
+        Player player = (Player) event.getEntity();
+        double finalHealth = player.getHealth() - event.getFinalDamage();
+        if (finalHealth > 0.01) return;
+        player.setHealth(20);
+        event.setDamage(1);
+        player.setLastDamageCause(event);
+        if (event.getActor() instanceof Player) {
+            killPlayer(player, (Player)event.getActor(), event.getCause());
+        } else if (event.getActor() instanceof Projectile && ((Projectile) event.getActor()).getShooter() instanceof Player) {
+            killPlayer(player, (Player)((Projectile) event.getActor()).getShooter(), event.getCause());
+        } else {
+            killPlayer(player, null, event.getCause());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        UUID id = event.getPlayer().getUniqueId();
+        boolean action = event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK;
+        if (isDeadUUID(id)) {
+            event.setCancelled(true);
+            if (action && !hasLeftClicked.contains(id)) hasLeftClicked.add(id);
         }
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         respawnPlayer(event.getPlayer());
-        this.hasLeftClicked.put(event.getPlayer().getUniqueId(), false);
-        for (UUID id : this.deadPlayers.keySet()) {
-            event.getPlayer().hidePlayer(Bukkit.getPlayer(id));
-        }
     }
 
     @EventHandler
@@ -417,15 +491,12 @@ public class TitleRespawn implements TaskedModule {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
             respawnPlayer(event.getPlayer());
         }
-        this.deadPlayers.remove(event.getPlayer().getUniqueId());
-        this.hasLeftClicked.put(event.getPlayer().getUniqueId(), false);
     }
 
     @EventHandler
     public void onPlayerSwitchTeam2(PlayerChangeTeamEvent event) {
-        if (GameHandler.getGameHandler().getMatch().isRunning()) {
-            dropInventory(event.getPlayer());
-        }
+        if (!GameHandler.getGameHandler().getMatch().isRunning() || (event.getOldTeam().isPresent() && event.getOldTeam().get().isObserver())) return;
+        dropInventory(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

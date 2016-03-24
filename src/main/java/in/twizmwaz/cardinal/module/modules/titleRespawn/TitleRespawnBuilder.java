@@ -3,7 +3,6 @@ package in.twizmwaz.cardinal.module.modules.titleRespawn;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
-
 import in.twizmwaz.cardinal.util.Strings;
 import org.jdom2.Element;
 
@@ -21,13 +20,8 @@ public class TitleRespawnBuilder implements ModuleBuilder {
                 boolean spectate = Boolean.parseBoolean(element.getAttributeValue("spectate", "false"));
                 boolean bed = Boolean.parseBoolean(element.getAttributeValue("bed", "false"));
 
-                String message = element.getAttributeValue("message") != null ? element.getAttributeValue("message") : null;
-                for (Element subElement : element.getChildren("message")) {
-                    message = subElement.getAttributeValue("message") != null ? subElement.getAttributeValue("message") : null;
-                }
-
-                //TODO Parse JSON
-                if (message != null) message = Strings.getTechnicalName(message.replace(".", "_"));
+                String message = element.getAttributeValue("message", "");
+                if (message.equals("")) message = element.getChildText("message");
 
                 int delay = Strings.timeStringToSeconds(element.getAttributeValue("delay", "2"));
                 if (delay < 1) delay = 1;
