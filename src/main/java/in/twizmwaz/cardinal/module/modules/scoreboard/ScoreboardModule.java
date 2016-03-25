@@ -111,7 +111,7 @@ public class ScoreboardModule implements Module {
     public void onMatchStartEvent(MatchStartEvent event) {
         for (TeamModule team : Teams.getTeams()) {
             Team scoreboardTeam = scoreboard.getTeam(team.getId());
-            if (!team.isObserver()) scoreboardTeam.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.ALWAYS);
+            if (!team.isObserver()) scoreboardTeam.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
         }
     }
 

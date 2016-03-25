@@ -61,6 +61,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerAttackEntityEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -511,6 +512,13 @@ public class ObserverModule implements Module {
             if (testObserver((Player) event.getDamager())) {
                 event.setCancelled(true);
             }
+        }
+    }
+
+    @EventHandler
+    public void onEntityAttack(PlayerAttackEntityEvent event) {
+        if (testObserver(event.getPlayer())) {
+            event.setCancelled(true);
         }
     }
 
