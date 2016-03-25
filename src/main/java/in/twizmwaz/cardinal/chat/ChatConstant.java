@@ -322,6 +322,12 @@ public enum ChatConstant {
     UI_WAITING_PLAYER("userInterface.waitingPlayer"),
     UI_WAITING_PLAYERS("userInterface.waitingPlayers"),
 
+    UI_DEATH_RESPAWN_UNCONFIRMED("userInterface.deathRespawnUnconfirmed"),
+    UI_DEATH_RESPAWN_UNCONFIRMED_TIME("userInterface.deathRespawnUnconfirmedTime"),
+    UI_DEATH_RESPAWN_CONFIRMED_TIME("userInterface.deathRespawnConfirmedTime"),
+    UI_DEATH_RESPAWN_CONFIRMED_WAITING("userInterface.deathRespawnConfirmedWaiting"),
+    UI_DEATH_RESPAWN_CONFIRMED_WAITING_FLAG_DROPPED("userInterface.deathRespawnConfirmedWaitingFlagDropped"),
+
     SNOWFLAKES_SNOWFLAKE("snowflakes.snowflake"),
     SNOWFLAKES_SNOWFLAKES("snowflakes.snowflakes");
 
@@ -331,6 +337,19 @@ public enum ChatConstant {
         this.path = path;
     }
 
+    public static ChatConstant fromPath(String path) {
+        if (path != null) {
+            path = path.replace(".","");
+            path = "userInterface." + path;
+            for (ChatConstant chatConstant : ChatConstant.values()) {
+                if (path.equalsIgnoreCase(chatConstant.path)) {
+                    return chatConstant;
+                }
+            }
+        }
+        return null;
+    }
+
     public String getMessage(String locale) {
         Document localized = Cardinal.getLocaleHandler().getLocaleDocument(locale.split("_")[0]);
         String message = null;
@@ -338,7 +357,7 @@ public enum ChatConstant {
         try {
             for (String element : this.path.split("\\.")) {
                 work = work.getChild(element);
-                message = work.getText();
+                message = work.getTextNormalize();
             }
         } catch (NullPointerException e) {
             message = getMessage("en_US");

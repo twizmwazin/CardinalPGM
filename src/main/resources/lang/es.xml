@@ -231,6 +231,12 @@
         <globalMuteEnabled>Silenciado global activado</globalMuteEnabled>
         <globalMuteDisabled>Silenciado global desactivado</globalMuteDisabled>
         <modeInTime>{0} en {1}</modeInTime>
+
+        <deathRespawnUnconfirmed>Click izquierdo para reaparecer</deathRespawnUnconfirmed>
+        <deathRespawnUnconfirmedTime>Click izquierdo para reaparecer en {0}s</deathRespawnUnconfirmedTime>
+        <deathRespawnConfirmedTime>Reapareciendo en {0}s</deathRespawnConfirmedTime>
+        <deathRespawnConfirmedWaiting>Reaparecerás tan pronto como sea posible...</deathRespawnConfirmedWaiting>
+        <deathRespawnConfirmedWaitingFlagDropped>Reaparecerás cuando la bandera sea soltada...</deathRespawnConfirmedWaitingFlagDropped>
     </userInterface>
     <deathMsg>
         <explosionSelf>{0} se ha explotado</explosionSelf>

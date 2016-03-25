@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.spawn;
 
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.kit.KitNode;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
@@ -19,15 +20,16 @@ public class SpawnModule implements Module {
     private final KitNode kit;
     private final boolean safe;
     private final boolean sequential;
-    //private final Filter filter;
+    private FilterModule filter;
     private int position;
 
-    public SpawnModule(TeamModule team, List<Pair<RegionModule, Vector>> regions, KitNode kit, boolean safe, boolean sequential) {
+    public SpawnModule(TeamModule team, List<Pair<RegionModule, Vector>> regions, KitNode kit, boolean safe, boolean sequential, FilterModule filter) {
         this.team = team;
         this.regions = regions;
         this.kit = kit;
         this.safe = safe;
         this.sequential = sequential;
+        this.filter = filter;
         this.position = 0;
     }
 
@@ -54,6 +56,10 @@ public class SpawnModule implements Module {
 
     public boolean isSequential() {
         return sequential;
+    }
+
+    public FilterModule getFilter() {
+        return this.filter;
     }
 
     public Location getLocation() {

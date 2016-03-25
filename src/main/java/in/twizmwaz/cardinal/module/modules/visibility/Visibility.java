@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.visibility;
 
 import com.google.common.base.Optional;
+import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
@@ -8,6 +9,7 @@ import in.twizmwaz.cardinal.event.PlayerVisibilityChangeEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.observers.ObserverModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.settings.Settings;
 import in.twizmwaz.cardinal.util.Teams;
@@ -37,6 +39,11 @@ public class Visibility implements Module {
     }
 
     private void resetVisibility(Player viewer, Player toSee, Optional<TeamModule> newTeam) {
+        if (ObserverModule.testDead(toSee)) {
+            Bukkit.getConsoleSender().sendMessage(toSee + "is dead, hidding him for:" + viewer);
+            viewer.hidePlayer(toSee);
+            return;
+        }
         try {
             if (match.getState().equals(MatchState.PLAYING)) {
                 Optional<TeamModule> viewerTeam = Teams.getTeamByPlayer(viewer);
@@ -75,6 +82,13 @@ public class Visibility implements Module {
         }
     }
 
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerRespawn(CardinalSpawnEvent event) {
+        for (Player viewer : Bukkit.getOnlinePlayers()) {
+            this.resetVisibility(viewer, event.getPlayer(), Teams.getTeamByPlayer(event.getPlayer()));
+        }
+    }
+
     @EventHandler
     public void onMatchStart(MatchStartEvent event) {
         for (Player viewer : Bukkit.getOnlinePlayers()) {
@@ -93,7 +107,7 @@ public class Visibility implements Module {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
         Player switched = event.getPlayer();
         for (Player viewer : Bukkit.getOnlinePlayers()) {

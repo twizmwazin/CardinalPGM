@@ -320,6 +320,11 @@
         <compass>Teleport Tool</compass>
         <waitingPlayer>Waiting for {0} more player to join {1}</waitingPlayer>
         <waitingPlayers>Waiting for {0} more players to join {1}</waitingPlayers>
+        <deathRespawnUnconfirmed>Left click to respawn</deathRespawnUnconfirmed>
+        <deathRespawnUnconfirmedTime>Left click to respawn in {0}s</deathRespawnUnconfirmedTime>
+        <deathRespawnConfirmedTime>Respawning in {0}s</deathRespawnConfirmedTime>
+        <deathRespawnConfirmedWaiting>You will respawn as soon as possible...</deathRespawnConfirmedWaiting>
+        <deathRespawnConfirmedWaitingFlagDropped>You will respawn when the flag is dropped...</deathRespawnConfirmedWaitingFlagDropped>
     </userInterface>
     <deathMsg>
         <explosionSelf>{0} 'sploded</explosionSelf>

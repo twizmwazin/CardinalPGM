@@ -50,26 +50,30 @@ public class ArmorKeep implements Module {
         if (inventory.getHelmet() != null) {
             if (inventory.getHelmet().getType().equals(type) && inventory.getHelmet().getDurability() == damageValue) {
                 helmet.put(player, inventory.getHelmet());
+                inventory.setHelmet(null);
             }
         }
         if (inventory.getChestplate() != null) {
             if (inventory.getChestplate().getType().equals(type) && inventory.getChestplate().getDurability() == damageValue) {
                 chestplate.put(player, inventory.getChestplate());
+                inventory.setChestplate(null);
             }
         }
         if (inventory.getLeggings() != null) {
             if (inventory.getLeggings().getType().equals(type) && inventory.getLeggings().getDurability() == damageValue) {
                 leggings.put(player, inventory.getLeggings());
+                inventory.setLeggings(null);
             }
         }
         if (inventory.getBoots() != null) {
             if (inventory.getBoots().getType().equals(type) && inventory.getBoots().getDurability() == damageValue) {
                 boots.put(player, inventory.getBoots());
+                inventory.setBoots(null);
             }
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPgmSpawn(CardinalSpawnEvent event) {
         Player player = event.getPlayer();
         PlayerInventory inventory = player.getInventory();

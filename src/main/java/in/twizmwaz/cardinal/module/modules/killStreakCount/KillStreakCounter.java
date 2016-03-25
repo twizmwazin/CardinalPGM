@@ -30,6 +30,7 @@ public class KillStreakCounter implements Module {
 
     @EventHandler
     public void onPgmSpawn(CardinalSpawnEvent event) {
+        if (event.isCancelled()) return;
         try {
             event.getPlayer().removeMetadata("killstreak", Cardinal.getInstance());
         } catch (NullPointerException e) {
