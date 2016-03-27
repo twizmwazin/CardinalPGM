@@ -164,6 +164,7 @@ public class TabList implements Listener {
 
     @EventHandler (priority = EventPriority.HIGHEST)
     public void onDisplayNameChange(PlayerNameUpdateEvent event) {
+        if (!playerView.containsKey(event.getPlayer())) return;
         broadcastTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, getPlayer(event.getPlayer()), event.getPlayer().getPlayerListName(), 0);
     }
 
@@ -181,22 +182,26 @@ public class TabList implements Listener {
     private void setupPlayer(Player player) {
         playerView.put(player, new ArrayList<GameProfile>());
         for (int i = 0; i < 81; i++) {
-            sendTeamPacket(player, null, i, 0);
-        }
-        for (int i = 0; i < 80; i++) {
+            if (i == 80) {
+                sendTeamPacket(player, null, i, 0);
+                continue;
+            }
             GameProfile fakePlayer = getFakePlayer(player);
-            sendTeamPacket(player, fakePlayer.getName(), i, 3);
+            sendTeamPacket(player, fakePlayer.getName(), i, 0);
             playerView.get(player).add(fakePlayer);
         }
+        PacketPlayOutPlayerInfo listPacket = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER);
         for (Map.Entry<UUID, GameProfile> entry : fakePlayer.entrySet()) {
-            sendTabListPacket(player, PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, entry.getValue(), Bukkit.getPlayer(entry.getKey()).getPlayerListName(), getPlayerPing(Bukkit.getPlayer(entry.getKey())));
+            listPacket.add(getPlayerInfo(listPacket, entry.getValue(), Bukkit.getPlayer(entry.getKey()).getPlayerListName(), getPlayerPing(Bukkit.getPlayer(entry.getKey()))));
+            sendTeamPacket(player, entry.getValue().getName(), 80, 3);
         }
         for (Map.Entry<String, GameProfile> entry : teamTitles.entrySet()) {
-            sendTabListPacket(player, PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, entry.getValue(), getTeamTitle(Teams.getTeamById(entry.getKey()).get()), 1000);
+            listPacket.add(getPlayerInfo(listPacket, entry.getValue(), getTeamTitle(Teams.getTeamById(entry.getKey()).get()), 1000));
         }
         for (GameProfile emptyPlayer : emptyPlayers) {
-            sendTabListPacket(player, PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, emptyPlayer, defaultName, 1000);
+            listPacket.add(getPlayerInfo(listPacket, emptyPlayer, defaultName, 1000));
         }
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(listPacket);
     }
 
     private void updateAll(Player prioritized) {
@@ -401,9 +406,12 @@ public class TabList implements Listener {
     private void sendTabListPacket(Player player, PacketPlayOutPlayerInfo.EnumPlayerInfoAction action, GameProfile game, String displayName, int ping) {
         PacketPlayOutPlayerInfo listPacket = new PacketPlayOutPlayerInfo(action);
         if (displayName.equals(player.getPlayerListName())) displayName = displayName.replace(player.getName(), ChatColor.BOLD + player.getName());
-        PacketPlayOutPlayerInfo.PlayerInfoData playerInfo = listPacket.new PlayerInfoData(game, ping < 0 ? 1000 : ping, WorldSettings.EnumGamemode.SURVIVAL, IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + StringEscapeUtils.escapeJava(displayName) + "\"}"));
-        listPacket.add(playerInfo);
+        listPacket.add(getPlayerInfo(listPacket, game, displayName, ping));
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(listPacket);
+    }
+
+    private PacketPlayOutPlayerInfo.PlayerInfoData getPlayerInfo(PacketPlayOutPlayerInfo listPacket, GameProfile game, String displayName, int ping) {
+        return listPacket.new PlayerInfoData(game, ping < 0 ? 1000 : ping, WorldSettings.EnumGamemode.SURVIVAL, IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + StringEscapeUtils.escapeJava(displayName) + "\"}"));
     }
 
     private void broadcastTeamPacket(String fakePlayer, int slot, int action) {
@@ -414,8 +422,8 @@ public class TabList implements Listener {
 
     private void sendTeamPacket(Player player, String fakePlayer, int slot, int action) {
         String team = "\000TabView" + (slot < 10 ? "0" + slot : slot);
-        Collection<String> players = action == 0 ? Collections.<String>emptyList() : Collections.singletonList(fakePlayer);
-        PacketPlayOutScoreboardTeam teamPacket = action == 0 ? new PacketPlayOutScoreboardTeam(action, team, team, "", "", -1, "never", "never", 0, players) : new PacketPlayOutScoreboardTeam(new ScoreboardTeam(null, team), players, action);
+        Collection<String> players = fakePlayer == null ? Collections.<String>emptyList() : Collections.singletonList(fakePlayer);
+        PacketPlayOutScoreboardTeam teamPacket = new PacketPlayOutScoreboardTeam(action, team, team, "", "", -1, "never", "never", 0, players);
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(teamPacket);
     }
 
