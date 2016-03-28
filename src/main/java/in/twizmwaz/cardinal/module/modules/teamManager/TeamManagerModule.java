@@ -12,7 +12,6 @@ import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Align;
 import in.twizmwaz.cardinal.util.ChatUtil;
-import in.twizmwaz.cardinal.module.modules.teamRegister.TeamRegisterModule;
 import in.twizmwaz.cardinal.util.Contributor;
 import in.twizmwaz.cardinal.util.Players;
 import in.twizmwaz.cardinal.util.Teams;
@@ -29,7 +28,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
-import java.util.Map;
 
 public class TeamManagerModule implements Module {
 
@@ -48,12 +46,12 @@ public class TeamManagerModule implements Module {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         Players.resetPlayer(player);
-        String playerName = event.getPlayer().getName();
-        Map<String, String> playerTeams = GameHandler.getGameHandler().getMatch().getModules().getModule(TeamRegisterModule.class).getPlayersTeams();
         Teams.getTeamById("observers").get().add(player, true, false);
-        if(playerTeams.containsKey(playerName)) {
-            Teams.getTeamByName(playerTeams.get(playerName)).get().add(player);
-        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerJoin2(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
         event.setJoinMessage(null);
         for (Player player1 : Bukkit.getOnlinePlayers()) {
             if (!player1.equals(player)) {

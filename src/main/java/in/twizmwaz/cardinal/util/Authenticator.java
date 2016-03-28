@@ -1,34 +1,32 @@
 package in.twizmwaz.cardinal.util;
 
 import com.google.common.collect.Maps;
+import in.twizmwaz.cardinal.module.modules.teamRegister.TeamRegisterModule;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.UUID;
+import java.util.regex.Pattern;
 
 public class Authenticator {
 
-    static Map<String, String> teamsDocuments = Maps.newHashMap();
+    private static Map<String, String> teamDocuments = Maps.newHashMap();
 
-    public static boolean authenticateTeam(String p, String team) {
-        if (teamsDocuments.containsKey(team) && teamsDocuments.get(team).contains("avatar.oc.tc/" + p + "/")) {
-            return true;
-        }
-        return false;
+    public static boolean authenticateTeam(UUID player, String team) {
+        Pattern regex = Pattern.compile(Config.playerRegex
+                .replace("{team}", TeamRegisterModule.filterTeam(team))
+                .replace("{uuid}", TeamRegisterModule.filterUuid(player.toString())));
+        return teamDocuments.containsKey(team) && regex.matcher(teamDocuments.get(team)).find();
     }
-    public static void downloadTeamDocument(String team) throws IOException {
-        if (teamsDocuments.containsKey(team)) {
-            return;
-        } else {
-            Document doc = Jsoup.connect("http://oc.tc/teams/" + team.toLowerCase().replace(" ", "").replace("_", "")).get();
-            Document doc2 = Jsoup.connect("http://oc.tc/teams/" + team.toLowerCase().replace(" ", "").replace("_", "") + "?page=2").get();
-            if (doc.toString() == doc2.toString()) {
-                teamsDocuments.put(team, doc.toString());
-            } else if (doc.toString() != doc2.toString()) {
-                teamsDocuments.put(team, doc.toString() + doc2.toString());
-            }
-        }
+    public static void downloadTeamDocument(String teamName) throws IOException {
+        Document doc = Jsoup.connect(Config.teamUrl.replace("{team}", TeamRegisterModule.filterTeam(teamName))).get();
+        teamDocuments.put(teamName, doc.toString());
+    }
+
+    public static void removeTeamDocument(String teamName) {
+        teamDocuments.remove(teamName);
     }
 
 }

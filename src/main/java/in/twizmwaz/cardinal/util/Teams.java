@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.match.Match;
+import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannel;
@@ -14,6 +15,7 @@ import in.twizmwaz.cardinal.module.modules.ctf.FlagObjective;
 import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.teamRegister.TeamRegisterModule;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -183,27 +185,30 @@ public class Teams {
         if (team.equals("") && originalTeam.isPresent() && !originalTeam.get().isObserver()) {
             throw new Exception(ChatUtil.getWarningMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_JOINED, Teams.getTeamByPlayer(player).get().getCompleteName() + ChatColor.RED).getMessage(player.getLocale())));
         }
-        Optional<TeamModule> destinationTeam;
-        if (!team.equals("")) {
-            destinationTeam = getTeamByName(team);
-            if (!destinationTeam.isPresent()) {
-                if ("observers".startsWith(team.toLowerCase())) {
-                    setPlayerTeam(player, getTeamById("observers").get().getName());
-                    return;
-                }
-                throw new Exception(ChatConstant.ERROR_NO_TEAM_MATCH.getMessage(ChatUtil.getLocale(player)));
-            }
-            if (destinationTeam.get().contains(player)) {
-                throw new Exception(ChatUtil.getWarningMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_JOINED, destinationTeam.get().getCompleteName() + ChatColor.RED).getMessage(ChatUtil.getLocale(player))));
-            }
-            destinationTeam.get().add(player, false);
-        } else {
+        Optional<TeamModule> destinationTeam = getTeamByName(team);
+        if (team.equals("")) {
             destinationTeam = Teams.getTeamWithFewestPlayers(GameHandler.getGameHandler().getMatch());
-            if (destinationTeam.isPresent()) {
-                destinationTeam.get().add(player, false);
-            } else {
+            if (!destinationTeam.isPresent())
                 throw new Exception(ChatConstant.ERROR_TEAMS_FULL.getMessage(ChatUtil.getLocale(player)));
-            }
+        } else if (!destinationTeam.isPresent() && "observers".startsWith(team.toLowerCase())) {
+            destinationTeam = getTeamById("observers");
         }
+        if (!destinationTeam.isPresent())
+            throw new Exception(ChatConstant.ERROR_NO_TEAM_MATCH.getMessage(ChatUtil.getLocale(player)));
+        setPlayerTeam(player, destinationTeam.get());
     }
+
+    public static void setPlayerTeam(Player player, TeamModule team) throws Exception {
+        if (TeamRegisterModule.getRegisteredPlayers().contains(player.getUniqueId()) || TeamRegisterModule.isRegistered(team)) {
+            throw new Exception(new LocalizedChatMessage(ChatConstant.ERROR_NO_PERMISSION).getMessage(player.getLocale()));
+        }
+        if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) || GameHandler.getGameHandler().getMatch().getState().equals(MatchState.CYCLING)) {
+            throw new Exception(ChatUtil.getWarningMessage(new LocalizedChatMessage(ChatConstant.ERROR_MATCH_OVER).getMessage(player.getLocale())));
+        }
+        if (team.contains(player)) {
+            throw new Exception(ChatUtil.getWarningMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_JOINED, team.getCompleteName() + ChatColor.RED).getMessage(ChatUtil.getLocale(player))));
+        }
+        team.add(player, false);
+    }
+
 }

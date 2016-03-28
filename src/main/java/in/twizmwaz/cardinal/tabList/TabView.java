@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.tabList;
 import com.google.common.collect.Lists;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.teamRegister.TeamRegisterModule;
 import in.twizmwaz.cardinal.rank.Rank;
 import in.twizmwaz.cardinal.tabList.entries.EmptyTabEntry;
 import in.twizmwaz.cardinal.tabList.entries.SkinTabEntry;
@@ -143,13 +144,14 @@ public class TabView {
     }
 
     private void renderObs(int row) {
+        boolean canSeeObs = TeamRegisterModule.canSeeObs(viewer);
         TeamModule team = Teams.getTeamById("observers").get();
         boolean hasPlayer = team.contains(viewer);
         int col = hasPlayer ? 1 : 0;
         if (hasPlayer) updateTabListSlot(TabList.getPlayer(viewer), row > 19 ? 80 : row, 0);
         for (Player render : getSortedPlayerList(team)) {
             if (render.equals(viewer)) continue;
-            if (row > 19) {
+            if (row > 19 || !canSeeObs) {
                 updateTabListSlot(TabList.getPlayer(render), 80, 0);
             } else {
                 updateTabListSlot(TabList.getPlayer(render), row, col);

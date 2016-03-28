@@ -115,7 +115,7 @@
         <breakBlockUnderFlag>You can not break the block under the flag.</breakBlockUnderFlag>
         <teamAlreadyRegistered>You have already registered this team.</teamAlreadyRegistered>
         <teamAlreadyRegisteredAlias>This team is registered. Use /unregister to be able to change the name</teamAlreadyRegisteredAlias>
-        <cantRegisterMoreTeams>You can't register more teams. Try to unregister using /unregister</cantRegisterMoreTeams>
+        <cantRegisterMoreTeams>You can't register more teams.</cantRegisterMoreTeams>
         <cantFindAnyRegisteredTeam>No registered teams matched query. Only found: {0}</cantFindAnyRegisteredTeam>
         <cantGetTeamList>Could not get the team list</cantGetTeamList>
         <cantJoinTeamFull>Your team already has {0} players</cantJoinTeamFull>
