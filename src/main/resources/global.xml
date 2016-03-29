@@ -1,2 +1,49 @@
 <map>
+    <item-mods>
+        <rule>
+            <match>
+                <material>iron sword</material>
+            </match>
+            <modify>
+                <attribute amount="5" slot="slot.weapon.mainhand">generic.attackDamage</attribute>
+                <attribute amount="-3.2" slot="slot.weapon.mainhand">generic.attackSpeed</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>wood axe</material>
+            </match>
+            <modify>
+                <attribute amount="5" slot="slot.weapon.mainhand">generic.attackDamage</attribute>
+                <attribute amount="-3.2" slot="slot.weapon.mainhand">generic.attackSpeed</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>stone axe</material>
+            </match>
+            <modify>
+                <attribute amount="6" slot="slot.weapon.mainhand">generic.attackDamage</attribute>
+                <attribute amount="-3.2" slot="slot.weapon.mainhand">generic.attackSpeed</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>iron axe</material>
+            </match>
+            <modify>
+                <attribute amount="7" slot="slot.weapon.mainhand">generic.attackDamage</attribute>
+                <attribute amount="-3.1" slot="slot.weapon.mainhand">generic.attackSpeed</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>gold axe</material>
+            </match>
+            <modify>
+                <attribute amount="5" slot="slot.weapon.mainhand">generic.attackDamage</attribute>
+                <attribute amount="-3" slot="slot.weapon.mainhand">generic.attackSpeed</attribute>
+            </modify>
+        </rule>
+    </item-mods>
 </map>
