@@ -30,6 +30,7 @@ import in.twizmwaz.cardinal.module.modules.hill.HillObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.hunger.HungerBuilder;
 import in.twizmwaz.cardinal.module.modules.invisibleBlock.InvisibleBlockBuilder;
 import in.twizmwaz.cardinal.module.modules.itemKeep.ItemKeepBuilder;
+import in.twizmwaz.cardinal.module.modules.itemMods.ItemModsBuilder;
 import in.twizmwaz.cardinal.module.modules.itemRemove.ItemRemoveBuilder;
 import in.twizmwaz.cardinal.module.modules.killReward.KillRewardBuilder;
 import in.twizmwaz.cardinal.module.modules.killStreakCount.KillStreakBuilder;
@@ -171,7 +172,8 @@ public class ModuleFactory {
                 RankModuleBuilder.class,
                 MultitradeBuilder.class,
                 AttackSpeedBuilder.class,
-                DamageIndicatorBuilder.class
+                DamageIndicatorBuilder.class,
+                ItemModsBuilder.class
         ));
     }
 

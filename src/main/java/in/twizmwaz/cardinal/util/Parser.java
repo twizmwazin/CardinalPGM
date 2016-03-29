@@ -1,5 +1,7 @@
 package in.twizmwaz.cardinal.util;
 
+import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.module.modules.itemMods.ItemMods;
 import in.twizmwaz.cardinal.module.modules.kit.kitTypes.KitItem;
 import net.minecraft.server.CommandReplaceItem;
 import net.minecraft.server.MobEffectList;
@@ -82,18 +84,6 @@ public class Parser {
                 }
             }
         }
-        for (Element enchant : element.getChildren("enchantment")) {
-            String ench = enchant.getText();
-            Enchantment enchantment = Enchantment.getByName(Strings.getTechnicalName(ench));
-            int lvl =  Numbers.parseInt(enchant.getAttributeValue("level"), 1);
-            if (enchantment == null) {
-                net.minecraft.server.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
-                nmsStack.addEnchantment(net.minecraft.server.Enchantment.b(ench.toLowerCase().replace(" ","_")), lvl); // Enchantment.b(String) gets Enchantment by name
-                itemStack = CraftItemStack.asBukkitCopy(nmsStack);
-            } else {
-                itemStack.addUnsafeEnchantment(enchantment, lvl);
-            }
-        }
         ItemMeta meta = itemStack.getItemMeta();
         if (element.getAttributeValue("unbreakable") != null && Boolean.parseBoolean(element.getAttributeValue("unbreakable"))) {
             meta.setUnbreakable(true);
@@ -113,9 +103,6 @@ public class Parser {
             for (PotionEffect effect : parseEffects(element.getAttributeValue("potions"))) {
                 ((PotionMeta) meta).addCustomEffect(effect, true);
             }
-        }
-        for (Element effect : element.getChildren("effect")) {
-            ((PotionMeta) meta).addCustomEffect(getPotion(effect), true);
         }
         if (element.getAttributeValue("attributes") != null) {
             for (ItemAttributeModifier attribute : parseAttributes((element.getAttributeValue("attributes")))) {
@@ -137,13 +124,41 @@ public class Parser {
             bookMeta.setPages(pages);
             itemStack.setItemMeta(bookMeta);
         }
-
         if (element.getAttributeValue("color") != null) {
             LeatherArmorMeta leatherMeta = (LeatherArmorMeta) itemStack.getItemMeta();
             leatherMeta.setColor(MiscUtil.convertHexToRGB(element.getAttributeValue("color")));
             itemStack.setItemMeta(leatherMeta);
         }
 
+        return GameHandler.getGameHandler().getMatch().getModules().getModule(ItemMods.class).applyRules(applyMeta(itemStack, element));
+    }
+
+    public static ItemStack applyMeta(ItemStack itemStack, Element element) {
+        for (Element enchant : element.getChildren("enchantment")) {
+            String ench = enchant.getText();
+            Enchantment enchantment = Enchantment.getByName(Strings.getTechnicalName(ench));
+            int lvl =  Numbers.parseInt(enchant.getAttributeValue("level"), 1);
+            if (enchantment == null) {
+                net.minecraft.server.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+                nmsStack.addEnchantment(net.minecraft.server.Enchantment.b(ench.toLowerCase().replace(" ","_")), lvl); // Enchantment.b(String) gets Enchantment by name
+                itemStack = CraftItemStack.asBukkitCopy(nmsStack);
+            } else {
+                itemStack.addUnsafeEnchantment(enchantment, lvl);
+            }
+        }
+        ItemMeta meta = itemStack.getItemMeta();
+        for (Element effect : element.getChildren("effect")) {
+            PotionEffect potionEffect = getPotion(effect);
+            if (!((PotionMeta) meta).getCustomEffects().contains(potionEffect)) ((PotionMeta) meta).addCustomEffect(potionEffect, true);
+        }
+        for (Element attribute : element.getChildren("attribute")) {
+            ItemAttributeModifier itemAttribute = getAttribute(attribute);
+            if (!meta.getModifiedAttributes().contains(attribute.getText())) meta.addAttributeModifier(attribute.getText(), itemAttribute);
+        }
+        /* TODO: can-destroy & can-place-on, and all attributes
+         * @link https://docs.oc.tc/modules/item_mods#itemmeta
+         */
+        itemStack.setItemMeta(meta);
         return itemStack;
     }
 
@@ -181,7 +196,7 @@ public class Parser {
     }
 
     public static ItemAttributeModifier getAttribute(Element attribute) {
-        return new ItemAttributeModifier(getEquipmentSlot(attribute.getAttributeValue("slot")),
+        return new ItemAttributeModifier(getEquipmentSlot(attribute.getAttributeValue("slot", "")),
                 new AttributeModifier(UUID.randomUUID(), attribute.getText(), Double.parseDouble(attribute.getAttributeValue("amount", "0.0")), getOperation(attribute.getAttributeValue("operation", "add"))));
     }
 
@@ -202,15 +217,15 @@ public class Parser {
     }
 
     public static EquipmentSlot getEquipmentSlot(String slotName) {
-        if (slotName == null || slotName.split(".").length != 3) return null;
-
+        if (!slotName.startsWith("slot.")) slotName = "slot." + slotName;
         EquipmentSlot equipmentSlot = null;
-        String[] path = slotName.split(".");
-        if (path[1].toLowerCase().equals("armor")) {
+        String[] path = slotName.split("\\.");
+        if (path.length != 3) return null;
+        if (path[1].equalsIgnoreCase("armor")) {
             equipmentSlot = EquipmentSlot.valueOf(Strings.getTechnicalName(path[2]));
-        } else if (path[1].toLowerCase().equals("weapon")) {
-            if (path[2].equals("mainhand")) equipmentSlot = EquipmentSlot.HAND;
-            if (path[2].equals("offhand")) equipmentSlot = EquipmentSlot.OFF_HAND;
+        } else if (path[1].equalsIgnoreCase("weapon")) {
+            if (path[2].equalsIgnoreCase("mainhand")) equipmentSlot = EquipmentSlot.HAND;
+            if (path[2].equalsIgnoreCase("offhand")) equipmentSlot = EquipmentSlot.OFF_HAND;
         }
         return equipmentSlot;
     }
