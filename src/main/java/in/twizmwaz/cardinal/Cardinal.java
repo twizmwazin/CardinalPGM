@@ -66,8 +66,8 @@ import java.util.Locale;
 
 public class Cardinal extends JavaPlugin {
 
-    private final static String CRAFTBUKKIT_VERSION = "1.9-R0.1-SNAPSHOT";
-    private final static String MINECRAFT_VERSION = "1.9";
+    private final static String CRAFTBUKKIT_VERSION = "1.9.2-R0.1-SNAPSHOT";
+    private final static String MINECRAFT_VERSION = "1.9.2";
 
     private static Cardinal instance;
     private static GameHandler gameHandler;
@@ -162,7 +162,7 @@ public class Cardinal extends JavaPlugin {
             getLogger().warning("########################################");
             getLogger().warning("#####  YOUR VERSION OF SPORTBUKKIT #####");
             getLogger().warning("#####  IS NOT SUPPORTED. PLEASE    #####");
-            getLogger().warning("#####  USE  SPORTBUKKIT " + MINECRAFT_VERSION + "        #####");
+            getLogger().warning("#####  USE  SPORTBUKKIT " + MINECRAFT_VERSION + "      #####");
             getLogger().warning("########################################");
         }
     }

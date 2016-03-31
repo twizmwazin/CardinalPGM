@@ -46,7 +46,7 @@ public class Players {
                 player.getAttribute(attribute).removeModifier(modifier);
             }
         }
-        player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).addModifier(new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 1024.0D, AttributeModifier.Operation.ADD_NUMBER));
+        player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).addModifier(new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 3.0D, AttributeModifier.Operation.ADD_SCALAR));
     }
 
     public static double getSnowflakeMultiplier(OfflinePlayer player) {
