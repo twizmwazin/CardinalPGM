@@ -215,7 +215,7 @@ public class WoolObjective implements GameObjective {
                         this.complete = true;
                         if (this.show)
                             ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PLACED, team.getColor() + event.getPlayer().getName() + ChatColor.WHITE, team.getCompleteName() + ChatColor.WHITE, MiscUtil.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.WHITE)));
-                        Fireworks.spawnFirework(event.getPlayer().getLocation(), event.getPlayer().getWorld(), MiscUtil.convertChatColorToColor(MiscUtil.convertDyeColorToChatColor(color)));
+                        Fireworks.spawnFireworks(place.getCenterBlock().getAlignedVector(), 3, 6, MiscUtil.convertChatColorToColor(MiscUtil.convertDyeColorToChatColor(color)), 1);
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
                         event.setCancelled(false);

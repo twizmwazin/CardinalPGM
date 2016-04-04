@@ -67,7 +67,6 @@ public class Scorebox implements Module {
                 for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
                     if (score.getTeam() == playerTeam.get()) {
                         score.setScore(score.getScore() + points);
-                        Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(score));
                         ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}",
                                 new LocalizedChatMessage(ChatConstant.UI_SCORED_FOR,
                                         new UnlocalizedChatMessage(playerTeam.get().getColor() + event.getPlayer().getName() + ChatColor.GRAY),

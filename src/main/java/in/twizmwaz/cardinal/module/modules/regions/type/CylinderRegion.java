@@ -67,10 +67,21 @@ public class CylinderRegion extends RegionModule {
     @Override
     public List<Block> getBlocks() {
         List<Block> results = new ArrayList<>();
-        CuboidRegion bound = new CuboidRegion(null, getBaseX() - radius, getBaseY(), getBaseZ() - radius, getBaseX() + radius, getBaseY() + height, getBaseZ() + radius);
+        CuboidRegion bound = new CuboidRegion(null, getMin(), getMax());
         for (Block block : bound.getBlocks()) {
             if (contains(new BlockRegion(null, block.getX(), block.getY(), block.getZ()))) results.add(block);
         }
         return results;
     }
+
+    @Override
+    public Vector getMin() {
+        return new Vector(getBaseX() - radius, getBaseY(), getBaseZ() - radius);
+    }
+
+    @Override
+    public Vector getMax() {
+        return new Vector(getBaseX() + radius, getBaseY() + height, getBaseZ() + radius);
+    }
+
 }

@@ -22,6 +22,7 @@ import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
+import in.twizmwaz.cardinal.util.MiscUtil;
 import in.twizmwaz.cardinal.util.Scoreboards;
 import in.twizmwaz.cardinal.util.Strings;
 import in.twizmwaz.cardinal.util.Teams;
@@ -430,9 +431,9 @@ public class ScoreboardModule implements Module {
         if (team.getEntries().size() > 0) {
             setScore(this.objective, new ArrayList<>(team.getEntries()).get(0), score);
         } else {
-            String raw = ChatColor.RESET + " " + WordUtils.capitalizeFully(objective.getName().replaceAll("_", " "));
+            String raw = (objective instanceof HillObjective ? "" : ChatColor.RESET) + " " + WordUtils.capitalizeFully(objective.getName().replaceAll("_", " "));
             while (used.contains(raw)) {
-                raw = ChatColor.RESET + raw;
+                raw =  raw + ChatColor.RESET;
             }
             team.addEntry(raw);
             setScore(this.objective, raw, score);
@@ -542,7 +543,8 @@ public class ScoreboardModule implements Module {
             team.setPrefix(Strings.trimTo(fullNames.get(i), 0, 16));
             team.setSuffix(Strings.trimTo(fullNames.get(i), 16, 32));
             if (team.getEntries().size() > 0) {
-                setScore(objective, new ArrayList<>(team.getEntries()).get(0), minTdmScore + i);
+                if (objective.getScore(new ArrayList<>(team.getEntries()).get(0)).getScore() != minTdmScore + i)
+                    setScore(objective, new ArrayList<>(team.getEntries()).get(0), minTdmScore + i);
             } else {
                 String color = teamCompleteName.substring(0, 2);
                 String name = color + "";

@@ -84,7 +84,9 @@ public class Teams {
                 if (objective.getTeam() == team) {
                     objectives.add(objective);
                 }
-            } else if (objective.getTeam() != team && !(objective instanceof HillObjective)) {
+            } else if(objective instanceof HillObjective) {
+                objectives.add(objective);
+            } else if (objective.getTeam() != team) {
                 objectives.add(objective);
             }
         }
@@ -94,7 +96,7 @@ public class Teams {
     public static ModuleCollection<GameObjective> getShownObjectives(TeamModule team) {
         ModuleCollection<GameObjective> objectives = new ModuleCollection<>();
         for (GameObjective objective : getObjectives(team)) {
-            if (objective.showOnScoreboard()) {
+            if (objective.showOnScoreboard() && !(objective instanceof HillObjective)) {
                 objectives.add(objective);
             }
         }

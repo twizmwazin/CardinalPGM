@@ -38,5 +38,14 @@ public class EverywhereRegion extends RegionModule {
         return new ArrayList<Block>();
     }
 
+    @Override
+    public Vector getMin() {
+        return new Vector(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
+    }
+
+    @Override
+    public Vector getMax() {
+        return new Vector(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
+    }
 
 }

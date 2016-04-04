@@ -16,7 +16,7 @@ public class ScoreModule implements Module {
     private final int pointsPerKill;
     private final int pointsPerDeath;
     private final int max;
-    private int score;
+    private double score;
 
     public ScoreModule(final TeamModule team, final int pointsPerKill, final int pointsPerDeath, final int max) {
         this.team = team;
@@ -71,11 +71,21 @@ public class ScoreModule implements Module {
     }
 
     public int getScore() {
-        return score;
+        return (int)score;
     }
 
     public void setScore(int score) {
+        int oldPoints = getScore();
         this.score = score;
+        if (getScore() != oldPoints)
+            Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
+    }
+
+    public void addScore(double score) {
+        int oldPoints = getScore();
+        this.score += score;
+        if (getScore() != oldPoints)
+            Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
     }
 
     public int getPointsPerKill() {

@@ -8,6 +8,7 @@ import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
+import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
@@ -30,12 +31,13 @@ public class GameComplete implements TaskedModule {
     @EventHandler
     public void onObjectiveComplete(ObjectiveCompleteEvent event) {
         for (TeamModule team : Teams.getTeams()) {
-            boolean skipTeam = false;
+            boolean win = true;
             for (GameObjective condition : Teams.getRequiredObjectives(team)) {
-                if (!condition.isComplete() && !condition.equals(event.getObjective())) skipTeam = true;
+                win = win && condition.isComplete() && (!(condition instanceof HillObjective) || (!ScoreModule.matchHasScoring() && condition.getTeam().equals(team)));
             }
-            if (Teams.getShownObjectives(team).size() == 0 || skipTeam) continue;
+            if (Teams.getRequiredObjectives(team).size() == 0 || !win) continue;
             GameHandler.getGameHandler().getMatch().end(team);
+            break;
         }
     }
 

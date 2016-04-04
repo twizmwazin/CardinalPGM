@@ -93,7 +93,7 @@ public class GameObjectiveScoreboardHandler {
                 prefix = ChatColor.RESET + " \u29BF" + (hill.getTeam() != null ? hill.getTeam().getColor() : "");
             } else if (hill.isTouched()) {
                 if (hill.showProgress()) {
-                    prefix = ChatColor.RESET + " " + (hill.getCapturingTeam() != null ? hill.getCapturingTeam().getColor() : ChatColor.RESET) + "" + hill.getPercent() + "%" + (hill.getTeam() != null ? hill.getTeam().getColor() : "");
+                    prefix = (hill.getCapturingTeam() != null ? hill.getCapturingTeam().getColor() : ChatColor.RESET) + " " + hill.getPercent() + "%" + (hill.getTeam() != null ? hill.getTeam().getColor() : ChatColor.RESET);
                 } else {
                     prefix = ChatColor.RESET + " \u29BF" + (hill.getTeam() != null ? hill.getTeam().getColor() : "");
                 }

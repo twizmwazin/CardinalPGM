@@ -315,7 +315,6 @@ public class CoreObjective implements GameObjective {
                         event.setCancelled(false);
                         if (this.show)
                             ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_LEAKED, team.getCompleteName() + ChatColor.RED, name)));
-                        Fireworks.spawnFirework(event.getBlock().getLocation(), event.getBlock().getWorld(), MiscUtil.convertChatColorToColor(team.getColor()));
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, null);
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
                     }
@@ -398,6 +397,7 @@ public class CoreObjective implements GameObjective {
     @EventHandler
     public void onCoreLeak(ObjectiveCompleteEvent event) {
         if (event.getObjective().equals(this) && event.getObjective().showOnScoreboard()) {
+            Fireworks.spawnFireworks(region.getCenterBlock().getAlignedVector(), (region.getMax().minus(region.getMin()).length()) * 0.55 + 1, 6, MiscUtil.convertChatColorToColor(team.getColor()), 1);
             for (UUID player : playersCompleted) {
                 if (Bukkit.getOfflinePlayer(player).isOnline()) {
                     Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(Bukkit.getPlayer(player), Snowflakes.ChangeReason.CORE_LEAK, 15, ChatColor.RED + name + ChatColor.GRAY));

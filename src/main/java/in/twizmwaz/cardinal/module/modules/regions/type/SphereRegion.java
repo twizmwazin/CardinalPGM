@@ -68,10 +68,21 @@ public class SphereRegion extends RegionModule {
     @Override
     public List<Block> getBlocks() {
         List<Block> results = new ArrayList<>();
-        CuboidRegion bound = new CuboidRegion(null, getOriginX() - radius, getOriginY() - radius, getOriginZ() - radius, getOriginX() + radius, getOriginY() + radius, getOriginZ() + radius);
+        CuboidRegion bound = new CuboidRegion(null, getMin(), getMax());
         for (Block block : bound.getBlocks()) {
             if (contains(new BlockRegion(null, block.getX(), block.getY(), block.getZ()))) results.add(block);
         }
         return results;
     }
+
+    @Override
+    public Vector getMin() {
+        return new Vector(getOriginX() - radius, getOriginY() - radius, getOriginZ() - radius);
+    }
+
+    @Override
+    public Vector getMax() {
+        return new Vector(getOriginX() + radius, getOriginY() + radius, getOriginZ() + radius);
+    }
+
 }
