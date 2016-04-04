@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.ServerOperator;
@@ -46,7 +47,9 @@ public class Players {
                 player.getAttribute(attribute).removeModifier(modifier);
             }
         }
-        player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).addModifier(new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 3.0D, AttributeModifier.Operation.ADD_SCALAR));
+        player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).addModifier(new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 4.001D, AttributeModifier.Operation.ADD_SCALAR));
+        player.getAttribute(Attribute.ARROW_ACCURACY).addModifier(new AttributeModifier(UUID.randomUUID(), "sportbukkit.arrowAccuracy", -1D, AttributeModifier.Operation.ADD_NUMBER));
+        player.getAttribute(Attribute.ARROW_VELOCITY_TRANSFER).addModifier(new AttributeModifier(UUID.randomUUID(), "sportbukkit.arrowVelocityTransfer", -1D, AttributeModifier.Operation.ADD_NUMBER));
     }
 
     public static double getSnowflakeMultiplier(OfflinePlayer player) {

@@ -16,13 +16,13 @@ import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.event.PlayerNameUpdateEvent;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.TaskedModule;
-import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.respawn.RespawnModule;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.Items;
+import in.twizmwaz.cardinal.module.modules.teamPicker.TeamPicker;
+import in.twizmwaz.cardinal.util.PacketUtils;
 import in.twizmwaz.cardinal.util.Players;
 import in.twizmwaz.cardinal.util.Teams;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -34,7 +34,6 @@ import net.minecraft.server.DataWatcherRegistry;
 import net.minecraft.server.EntityPlayer;
 import net.minecraft.server.EnumItemSlot;
 import net.minecraft.server.Packet;
-import net.minecraft.server.PacketPlayOutAnimation;
 import net.minecraft.server.PacketPlayOutEntityDestroy;
 import net.minecraft.server.PacketPlayOutEntityEquipment;
 import net.minecraft.server.PacketPlayOutEntityMetadata;
@@ -48,17 +47,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -69,7 +64,6 @@ import org.bukkit.event.player.PlayerLocaleChangeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -77,7 +71,6 @@ import org.bukkit.potion.PotionEffectType;
 import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -94,10 +87,10 @@ public class TitleRespawn implements TaskedModule {
     private final boolean bed;
     private final String message;
 
-    DecimalFormat formatter = new DecimalFormat("0.0");
+    private DecimalFormat formatter = new DecimalFormat("0.0");
 
-    public Set<UUID> hasLeftClicked = new HashSet<>();
-    public Map<UUID, Long> deadPlayers = new HashMap<>();
+    private Set<UUID> hasLeftClicked = new HashSet<>();
+    private Map<UUID, Long> deadPlayers = new HashMap<>();
 
     public TitleRespawn(int delay, boolean auto, boolean blackout, boolean spectate, boolean bed, String message) {
         this.delay = delay;
@@ -118,7 +111,7 @@ public class TitleRespawn implements TaskedModule {
         getSubtitleLogic();
     }
 
-    public boolean isAllowedToRespawn(UUID id) {
+    private boolean isAllowedToRespawn(UUID id) {
         double timeLeftToRespawn = this.delay - ((System.currentTimeMillis() - deadPlayers.get(id)) / 1000.0);
         return this.isDeadUUID(id) && timeLeftToRespawn <= 0;
     }
@@ -131,7 +124,7 @@ public class TitleRespawn implements TaskedModule {
         return hasLeftClicked.contains(id);
     }
 
-    public void getSubtitleLogic() {
+    private void getSubtitleLogic() {
         List<UUID> deadClone = new ArrayList<>();
         for (UUID uuid : this.deadPlayers.keySet()) deadClone.add(uuid);
         for (UUID id : deadClone) {
@@ -157,9 +150,7 @@ public class TitleRespawn implements TaskedModule {
                         player.setSubtitle(TextComponent.fromLegacyText(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.UI_DEATH_RESPAWN_UNCONFIRMED).getMessage(player.getLocale())));
                     }
                     if (player.getInventory().getItem(2) == null || !player.getInventory().getItem(2).getType().equals(Material.LEATHER_HELMET)) {
-                        ItemStack picker = Items.createItem(Material.LEATHER_HELMET, 1, (short) 0,
-                                ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(player.getLocale()) : new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(player.getLocale())),
-                                Collections.singletonList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(player.getLocale())));
+                        ItemStack picker = TeamPicker.getTeamPicker(player.getLocale());
                         player.getInventory().setItem(2, picker);
                     }
                 }
@@ -240,7 +231,7 @@ public class TitleRespawn implements TaskedModule {
             e.printStackTrace();
         }
 
-        nmsPlayer.playerConnection.sendPacket(worldBorder);
+        PacketUtils.sendPacket(player, worldBorder);
     }
 
     private void playDeathAnimation(final Player player) {
@@ -261,7 +252,7 @@ public class TitleRespawn implements TaskedModule {
                 for (Player online : Bukkit.getOnlinePlayers()) {
                     if (!online.equals(player)){
                         for (Packet packet : packets) {
-                            ((CraftPlayer) online).getHandle().playerConnection.sendPacket(packet);
+                            PacketUtils.sendPacket(online, packet);
                         }
                     }
                 }
@@ -286,14 +277,12 @@ public class TitleRespawn implements TaskedModule {
                 dataItems                                 // Metadata
         );
 
-        PacketPlayOutMount mountPacket = new PacketPlayOutMount(Integer.MAX_VALUE, nmsPlayer.getId());
-
-        nmsPlayer.playerConnection.sendPacket(spawnPacket);
-        nmsPlayer.playerConnection.sendPacket(mountPacket);
+        PacketUtils.sendPacket(player, spawnPacket);
+        PacketUtils.sendPacket(player, new PacketPlayOutMount(Integer.MAX_VALUE, nmsPlayer.getId()));
     }
 
     private void destroyArmorStandPacket(Player player) {
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(Integer.MAX_VALUE));
+        PacketUtils.sendPacket(player, new PacketPlayOutEntityDestroy(Integer.MAX_VALUE));
     }
 
     private void respawnPlayer(final Player player) {
@@ -500,17 +489,10 @@ public class TitleRespawn implements TaskedModule {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerToggleSneakEvent(PlayerToggleSneakEvent event) {
-        Player player = event.getPlayer();
-        if (player.isSneaking() && isDeadUUID(player.getUniqueId()) && !this.spectate) {
-            sendArmorStandPacket(player);
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        if (!this.spectate && isDeadUUID(player.getUniqueId())) {
+        if (!this.spectate && isDeadUUID(player.getUniqueId()) && event.getTo().distance(event.getFrom()) != 0) {
+            event.setCancelled(true);
             sendArmorStandPacket(player);
         }
     }
