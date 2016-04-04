@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.module;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.modules.appliedRegion.AppliedRegionBuilder;
 import in.twizmwaz.cardinal.module.modules.armorKeep.ArmorKeepBuilder;
+import in.twizmwaz.cardinal.module.modules.attackSpeed.AttackSpeedBuilder;
 import in.twizmwaz.cardinal.module.modules.blitz.BlitzBuilder;
 import in.twizmwaz.cardinal.module.modules.blockdrops.BlockdropsBuilder;
 import in.twizmwaz.cardinal.module.modules.broadcasts.BroadcastModuleBuilder;
@@ -13,6 +14,7 @@ import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannelModuleBuilder
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.cores.CoreObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.cycleTimer.CycleTimerModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.damageIndicator.DamageIndicatorBuilder;
 import in.twizmwaz.cardinal.module.modules.deathMessages.DeathMessagesBuilder;
 import in.twizmwaz.cardinal.module.modules.deathTracker.DeathTrackerBuilder;
 import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjectiveBuilder;
@@ -167,7 +169,9 @@ public class ModuleFactory {
                 TitleRespawnBuilder.class,
                 GuiKeepModuleBuilder.class,
                 RankModuleBuilder.class,
-                MultitradeBuilder.class
+                MultitradeBuilder.class,
+                AttackSpeedBuilder.class,
+                DamageIndicatorBuilder.class
         ));
     }
 

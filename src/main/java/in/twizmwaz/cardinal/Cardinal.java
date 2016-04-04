@@ -46,12 +46,14 @@ import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.DomUtil;
 import in.twizmwaz.cardinal.util.Numbers;
 import in.twizmwaz.cardinal.util.bossBar.BossBars;
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -59,6 +61,7 @@ import org.jdom2.JDOMException;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -181,7 +184,7 @@ public class Cardinal extends JavaPlugin {
     }
 
     private void registerSettings() {
-        FileConfiguration config = getConfig();
+        FileConfiguration config = YamlConfiguration.loadConfiguration(new InputStreamReader(this.getResource("settings.yml"), Charsets.UTF_8));
         if (config.contains("settings")) {
             for (String settingName : config.getStringList("settings")) {
                 List<String> names = new ArrayList<>();
@@ -317,6 +320,9 @@ public class Cardinal extends JavaPlugin {
         }
 
         FileConfiguration config = getConfig();
+        config.set("settings", null);
+        config.set("setting", null);
+        config.set("ranks", null);
         config.options().copyDefaults(true);
         saveConfig();
 

@@ -12,6 +12,7 @@ import in.twizmwaz.cardinal.event.TeamNameChangeEvent;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.rank.Rank;
+import in.twizmwaz.cardinal.util.PacketUtils;
 import in.twizmwaz.cardinal.util.Strings;
 import in.twizmwaz.cardinal.util.Teams;
 import net.minecraft.server.DataWatcher;
@@ -201,7 +202,7 @@ public class TabList implements Listener {
         for (GameProfile emptyPlayer : emptyPlayers) {
             listPacket.add(getPlayerInfo(listPacket, emptyPlayer, defaultName, 1000));
         }
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(listPacket);
+        PacketUtils.sendPacket(player, listPacket);
     }
 
     private void updateAll(Player prioritized) {
@@ -407,7 +408,7 @@ public class TabList implements Listener {
         PacketPlayOutPlayerInfo listPacket = new PacketPlayOutPlayerInfo(action);
         if (displayName.equals(player.getPlayerListName())) displayName = displayName.replace(player.getName(), ChatColor.BOLD + player.getName());
         listPacket.add(getPlayerInfo(listPacket, game, displayName, ping));
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(listPacket);
+        PacketUtils.sendPacket(player, listPacket);
     }
 
     private PacketPlayOutPlayerInfo.PlayerInfoData getPlayerInfo(PacketPlayOutPlayerInfo listPacket, GameProfile game, String displayName, int ping) {
@@ -424,7 +425,7 @@ public class TabList implements Listener {
         String team = "\000TabView" + (slot < 10 ? "0" + slot : slot);
         Collection<String> players = fakePlayer == null ? Collections.<String>emptyList() : Collections.singletonList(fakePlayer);
         PacketPlayOutScoreboardTeam teamPacket = new PacketPlayOutScoreboardTeam(action, team, team, "", "", -1, "never", "never", 0, players);
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(teamPacket);
+        PacketUtils.sendPacket(player, teamPacket);
     }
 
     private Property getPlayerSkin(Player player) {
@@ -472,14 +473,12 @@ public class TabList implements Listener {
         int id = Integer.MAX_VALUE - entityIDs.get(profile);
         UUID uuid = profile.getId();
         PacketPlayOutNamedEntitySpawn spawnPacket = new PacketPlayOutNamedEntitySpawn(id, uuid, 0, -1000, 0, (byte)0, (byte)0, data);
-        ((CraftPlayer) viewer).getHandle().playerConnection.sendPacket(spawnPacket);
+        PacketUtils.sendPacket(viewer, spawnPacket);
     }
 
     private void deletePlayerWithParts(GameProfile profile) {
         if (!entityIDs.containsKey(profile)) return;
-        for (Player viewer : Bukkit.getOnlinePlayers()) {
-            ((CraftPlayer) viewer).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(Integer.MAX_VALUE - entityIDs.get(profile)));
-        }
+        PacketUtils.broadcastPacket(new PacketPlayOutEntityDestroy(Integer.MAX_VALUE - entityIDs.get(profile)));
     }
 
     private List<Player> getSortedPlayerList(TeamModule team) {
