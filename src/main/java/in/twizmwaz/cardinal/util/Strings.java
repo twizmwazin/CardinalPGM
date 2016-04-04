@@ -32,7 +32,7 @@ public class Strings {
                 currentUnit += c + "";
             }
         }
-        time += convert(Numbers.parseInt(current), currentUnit);
+        time += convert(Numbers.parseDouble(current), currentUnit);
         if (input.startsWith("-")) time *= -1;
         return time;
     }

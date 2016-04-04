@@ -77,6 +77,15 @@ public class TimeLimit implements Module {
                             if (!obj.getTeam().equals(team2)) touchedObjectives2++;
                         }
                     }
+                    if (obj instanceof HillObjective) {
+                        if (obj.getTeam() != null) {
+                            if (obj.getTeam().equals(team1)) completedObjectives1++;
+                            if (obj.getTeam().equals(team2)) completedObjectives2++;
+                        } else if (((HillObjective)obj).getCapturingTeam() != null) {
+                            if (((HillObjective)obj).getCapturingTeam().equals(team1)) touchedObjectives1++;
+                            if (((HillObjective)obj).getCapturingTeam().equals(team2)) touchedObjectives2++;
+                        }
+                    }
                 }
                 if (completedObjectives1 != completedObjectives2) return completedObjectives1 - completedObjectives2;
                 if (touchedObjectives1 != touchedObjectives2) return touchedObjectives1 - touchedObjectives2;

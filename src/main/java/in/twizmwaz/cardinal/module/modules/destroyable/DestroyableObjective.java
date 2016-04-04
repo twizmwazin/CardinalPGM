@@ -178,7 +178,6 @@ public class DestroyableObjective implements GameObjective {
                             for (Player player : Bukkit.getOnlinePlayers())
                                 player.sendMessage(ChatColor.WHITE + new UnlocalizedChatMessage("{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_DESTROYED, team.getCompleteName() + ChatColor.WHITE, name, getWhoDestroyed(player.getLocale()))).getMessage(player.getLocale()));
                         }
-                        Fireworks.spawnFirework(event.getPlayer().getLocation(), event.getPlayer().getWorld(), MiscUtil.convertChatColorToColor(team.getColor()));
                         ObjectiveCompleteEvent compEvent = new ObjectiveCompleteEvent(this, event.getPlayer());
                         Bukkit.getServer().getPluginManager().callEvent(compEvent);
                     } else if (!this.completed) {
@@ -416,7 +415,8 @@ public class DestroyableObjective implements GameObjective {
 
     @EventHandler
     public void onMonumentDestroy(ObjectiveCompleteEvent event) {
-        if (event.getObjective().equals(this)) {
+        if (event.getObjective().equals(this) && showOnScoreboard()) {
+            Fireworks.spawnFireworks(region.getCenterBlock().getAlignedVector(), (region.getMax().minus(region.getMin()).length()) * 0.55 + 1, 6, MiscUtil.convertChatColorToColor(team.getColor()), 1);
             for (UUID player : playersCompleted.keySet()) {
                 if (Bukkit.getOfflinePlayer(player).isOnline()) {
                     Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(Bukkit.getPlayer(player), Snowflakes.ChangeReason.MONUMENT_DESTROY, getPercentFromAmount(playersCompleted.get(player)) / 10, ChatColor.GREEN + "" + getPercentFromAmount(playersCompleted.get(player)) + ChatColor.GRAY, ChatColor.GREEN + name + ChatColor.GRAY));

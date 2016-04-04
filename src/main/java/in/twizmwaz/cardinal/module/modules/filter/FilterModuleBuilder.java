@@ -51,6 +51,7 @@ import in.twizmwaz.cardinal.module.modules.filter.type.logic.NotFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.logic.OneFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.old.AllowFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.old.DenyFilter;
+import in.twizmwaz.cardinal.util.Parser;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
@@ -116,7 +117,7 @@ public class FilterModuleBuilder implements ModuleBuilder {
                 return new AllowFilter(new ChildrenFilterParser(element));
             case "deny":
                 return new DenyFilter(new ChildrenFilterParser(element));
-            case "filter":
+            default:
                 if (element.getChildren().size() > 0) {
                     if (element.getChildren().size() > 1) {
                         return new AllFilter(new ChildrenFilterParser(element));
@@ -174,9 +175,8 @@ public class FilterModuleBuilder implements ModuleBuilder {
                 } else {
                     return getFilter(element.getChildren().get(0));
                 }
-            default:
-                return null;
         }
+        return null;
     }
 
     /**
@@ -196,10 +196,28 @@ public class FilterModuleBuilder implements ModuleBuilder {
      * @return
      */
     public static FilterModule getFilter(String string) {
+        if (string == null) return null;
         for (FilterModule filterModule : GameHandler.getGameHandler().getMatch().getModules().getModules(FilterModule.class)) {
             if (string.equalsIgnoreCase(filterModule.getName())) return filterModule;
         }
         return null;
+    }
+
+    public static FilterModule getAttributeOrChild(String name, Element... elements) {
+        String attr = Parser.getOrderedAttribute(name, elements);
+        if (attr != null) return getFilter(attr);
+        else if (elements[0].getChild(name) != null) return getFilter(elements[0].getChild(name));
+        return null;
+    }
+
+    public static FilterModule getAttributeOrChild(String name, String fallback, Element... elements) {
+        FilterModule region = getAttributeOrChild(name, elements);
+        return region == null ? getFilter(fallback) : region;
+    }
+
+    public static FilterModule getAttributeOrChild(String name, FilterModule fallback, Element... elements) {
+        FilterModule region = getAttributeOrChild(name, elements);
+        return region == null ? fallback : region;
     }
 
     @Override
@@ -221,12 +239,8 @@ public class FilterModuleBuilder implements ModuleBuilder {
         match.getModules().add(new AllMobFilter("allow-mobs", true));
         match.getModules().add(new AllMobFilter("deny-mobs", false));
         for (Element element : match.getDocument().getRootElement().getChildren("filters")) {
-            for (Element filter : element.getChildren("filter")) {
-                if (filter.getChildren().size() > 1) {
-                    match.getModules().add(new AllFilter(new ChildrenFilterParser(filter)));
-                } else {
-                    match.getModules().add(getFilter(filter.getChildren().get(0)));
-                }
+            for (Element filter : element.getChildren()) {
+                match.getModules().add(getFilter(filter));
             }
         }
         return new ModuleCollection<>();

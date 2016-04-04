@@ -85,5 +85,14 @@ public class CuboidRegion extends RegionModule {
         return results;
     }
 
+    @Override
+    public Vector getMin() {
+        return min;
+    }
+
+    @Override
+    public Vector getMax() {
+        return max;
+    }
 
 }

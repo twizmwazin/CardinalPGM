@@ -77,6 +77,16 @@ public class TranslatedRegion extends RegionModule {
         return region.getBlocks();
     }
 
+    @Override
+    public Vector getMin() {
+        return region.getMin();
+    }
+
+    @Override
+    public Vector getMax() {
+        return region.getMax();
+    }
+
     @SuppressWarnings({"unchecked"})
     private <T extends RegionModule> T translateRegion(T region) {
 

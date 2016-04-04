@@ -44,6 +44,10 @@ public class BlockRegion extends RegionModule {
         return vector.clone().add(new Vector(0.5, 0.5, 0.5));
     }
 
+    public Vector getAlignedVector() {
+        return vector.clone().minus(new Vector(0.5, 0.5, 0.5));
+    }
+
     @Override
     public boolean contains(Vector vector) {
         return vector.getBlockX() == getVector().getBlockX() &&
@@ -66,6 +70,16 @@ public class BlockRegion extends RegionModule {
         List<Block> results = new ArrayList<>();
         results.add(getBlock());
         return results;
+    }
+
+    @Override
+    public Vector getMin() {
+        return getVector();
+    }
+
+    @Override
+    public Vector getMax() {
+        return getVector();
     }
 
     public Location getLocation() {

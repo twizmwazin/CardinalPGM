@@ -67,6 +67,16 @@ public class MirroredRegion extends RegionModule {
         return region.getBlocks();
     }
 
+    @Override
+    public Vector getMin() {
+        return region.getMin();
+    }
+
+    @Override
+    public Vector getMax() {
+        return region.getMax();
+    }
+
     @SuppressWarnings({"unchecked"})
     private <T extends RegionModule> T mirrorRegion(T region) {
 

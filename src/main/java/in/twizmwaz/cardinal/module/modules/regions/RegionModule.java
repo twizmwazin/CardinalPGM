@@ -38,6 +38,10 @@ public abstract class RegionModule implements Module {
 
     public abstract List<Block> getBlocks();
 
+    public abstract Vector getMin();
+
+    public abstract Vector getMax();
+
     @Override
     public void unload() {
         HandlerList.unregisterAll(this);

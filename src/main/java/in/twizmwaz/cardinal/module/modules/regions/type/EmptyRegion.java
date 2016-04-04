@@ -38,5 +38,14 @@ public class EmptyRegion extends RegionModule {
         return new ArrayList<Block>();
     }
 
+    @Override
+    public Vector getMin() {
+        return new Vector(0,0,0);
+    }
+
+    @Override
+    public Vector getMax() {
+        return new Vector(0,0,0);
+    }
 
 }

@@ -11,8 +11,8 @@ public class FilterParser {
         this.name =
                 element.getAttributeValue("name") != null ? element.getAttributeValue("name") :
                         element.getAttributeValue("id") != null ? element.getAttributeValue("id") :
-                                element.getParentElement().getAttributeValue("name") != null ? element.getParentElement().getAttributeValue("name") :
-                                        element.getParentElement().getAttributeValue("id");
+                                element.getParentElement() != null && element.getParentElement().getAttributeValue("name") != null ? element.getParentElement().getAttributeValue("name") :
+                                        element.getParentElement() != null && element.getParentElement().getAttributeValue("id") != null ? element.getParentElement().getAttributeValue("id") : null;
         parent = null;
         if (element.getAttributeValue("parents") != null) {
             parent = FilterModuleBuilder.getFilter(element.getAttributeValue("parents"));

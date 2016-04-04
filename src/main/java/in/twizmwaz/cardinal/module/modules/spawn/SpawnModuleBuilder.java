@@ -24,7 +24,7 @@ import org.jdom2.Element;
 import java.util.ArrayList;
 import java.util.List;
 
-@BuilderData(load = ModuleLoadTime.EARLY)
+@BuilderData(load = ModuleLoadTime.NORMAL)
 public class SpawnModuleBuilder implements ModuleBuilder {
 
     @Override

@@ -33,6 +33,11 @@ public class TeamFilter extends FilterModule {
                         return DENY;
                 else
                     return DENY;
+            } else if (object instanceof TeamModule) {
+                if (object == this.team)
+                    return ALLOW;
+                else
+                    return DENY;
             }
         }
         return (getParent() == null ? ABSTAIN : getParent().evaluate(objects));

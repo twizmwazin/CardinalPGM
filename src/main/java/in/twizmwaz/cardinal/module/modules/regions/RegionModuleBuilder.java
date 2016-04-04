@@ -33,6 +33,7 @@ import in.twizmwaz.cardinal.module.modules.regions.type.combinations.NegativeReg
 import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.modifications.MirroredRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.modifications.TranslatedRegion;
+import in.twizmwaz.cardinal.util.Parser;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
@@ -146,6 +147,23 @@ public class RegionModuleBuilder implements ModuleBuilder {
             if (string.equalsIgnoreCase(regionModule.getName())) return regionModule;
         }
         return null;
+    }
+
+    public static RegionModule getAttributeOrChild(String name, Element... elements) {
+        String attr = Parser.getOrderedAttribute(name, elements);
+        if (attr != null) return RegionModuleBuilder.getRegion(attr);
+        else if (elements[0].getChild(name) != null) return RegionModuleBuilder.getRegion(elements[0].getChild(name));
+        return null;
+    }
+
+    public static RegionModule getAttributeOrChild(String name, String fallback, Element... elements) {
+        RegionModule region = getAttributeOrChild(name, elements);
+        return region == null ? RegionModuleBuilder.getRegion(fallback) : region;
+    }
+
+    public static RegionModule getAttributeOrChild(String name, RegionModule fallback, Element... elements) {
+        RegionModule region = getAttributeOrChild(name, elements);
+        return region == null ? fallback : region;
     }
 
     @Override

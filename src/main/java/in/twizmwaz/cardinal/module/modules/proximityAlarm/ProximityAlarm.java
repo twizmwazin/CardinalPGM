@@ -9,9 +9,11 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.type.CylinderRegion;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Fireworks;
+import in.twizmwaz.cardinal.util.MiscUtil;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -56,7 +58,9 @@ public class ProximityAlarm implements Module {
             RegionModule radius = new CylinderRegion("radius", region.getCenterBlock().getVector(), flareRadius, 1);
             int flareAmount = new Random().nextInt(6);
             for (int f = 0; flareAmount > f; f++) {
-                Fireworks.spawnFirework(radius.getRandomPoint().getLocation(), event.getPlayer().getWorld());
+                Firework firework = Fireworks.spawnFirework(radius.getRandomPoint().getLocation(),
+                        Fireworks.getFireworkEffect(MiscUtil.convertChatColorToColor(Teams.getTeamColorByPlayer(event.getPlayer()))), 1);
+                Fireworks.explodeFirework(firework);
             }
         }
     }
