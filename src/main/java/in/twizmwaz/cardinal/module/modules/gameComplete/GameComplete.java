@@ -50,7 +50,7 @@ public class GameComplete implements TaskedModule {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
         if (Blitz.matchIsBlitz()) {
             boolean win = true;

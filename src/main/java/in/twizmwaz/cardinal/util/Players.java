@@ -35,9 +35,13 @@ public class Players {
         }
         player.setTotalExperience(0);
         player.setExp(0);
-        player.setPotionParticles(true);
+        player.setLevel(0);
+        player.setPotionParticles(false);
         player.setWalkSpeed(0.2F);
         player.setFlySpeed(0.1F);
+        player.setArrowsStuck(0);
+
+        player.hideTitle();
 
         player.setFastNaturalRegeneration(false);
 

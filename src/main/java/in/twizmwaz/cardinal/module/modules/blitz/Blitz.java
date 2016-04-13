@@ -50,7 +50,7 @@ public class Blitz implements Module {
             player.removeMetadata("lives", Cardinal.getInstance());
             player.setMetadata("lives", new LazyMetadataValue(Cardinal.getInstance(), LazyMetadataValue.CacheStrategy.NEVER_CACHE, new BlitzLives(oldMeta - 1)));
             if (this.getLives(player) == 0) {
-                Teams.getTeamById("observers").get().add(player, true);
+                Teams.getTeamById("observers").get().add(player, true, false);
                 player.removeMetadata("lives", Cardinal.getInstance());
             }
         }

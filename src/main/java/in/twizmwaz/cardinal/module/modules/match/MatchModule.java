@@ -30,7 +30,7 @@ public class MatchModule implements Module {
         HandlerList.unregisterAll(this);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onMatchEnd(MatchEndEvent event) {
         if (event.getTeam().isPresent()) {
             ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage("{0}", new LocalizedChatMessage(event.getTeam().get().isPlural() ? ChatConstant.UI_MATCH_WIN : ChatConstant.UI_MATCH_WINS, event.getTeam().get().getCompleteName() + ChatColor.WHITE)));

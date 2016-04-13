@@ -488,7 +488,7 @@ public class ObserverModule implements Module {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerTeamChange(PlayerChangeTeamEvent event) {
         if (testObserverOrDead(event.getPlayer())) {
             resetPlayer(event.getPlayer(), true);

@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.module.modules.visibility;
 
 import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.Cardinal;
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
@@ -39,7 +40,20 @@ public class Visibility implements Module {
         }
     }
 
+    public void showOrHideOthers(Player viewer) {
+        for (Player toSee : Bukkit.getOnlinePlayers()) {
+            resetVisibility(viewer, toSee, Teams.getTeamByPlayer(toSee));
+        }
+    }
+
+    public void showOrHide(Player toSee) {
+        for (Player viewer : Bukkit.getOnlinePlayers()) {
+            resetVisibility(viewer, toSee, Teams.getTeamByPlayer(toSee));
+        }
+    }
+
     private void resetVisibility(Player viewer, Player toSee, Optional<TeamModule> newTeam) {
+        if (viewer.equals(toSee)) return;
         try {
             boolean showObs = Settings.getSettingByName("Observers") == null || !Settings.getSettingByName("Observers").getValueByPlayer(viewer).getValue().equalsIgnoreCase("none");
             if (match.getState().equals(MatchState.PLAYING)) {
@@ -68,18 +82,18 @@ public class Visibility implements Module {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        for (Player viewer : Bukkit.getOnlinePlayers()) {
-            this.resetVisibility(viewer, event.getPlayer(), Teams.getTeamByPlayer(event.getPlayer()));
-            this.resetVisibility(event.getPlayer(), viewer, Teams.getTeamByPlayer(viewer));
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.hidePlayer(event.getPlayer());
+            event.getPlayer().hidePlayer(player);
         }
+        showOrHide(event.getPlayer());
+        showOrHideOthers(event.getPlayer());
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onMatchStart(MatchStartEvent event) {
-        for (Player viewer : Bukkit.getOnlinePlayers()) {
-            for (Player toSee : Bukkit.getOnlinePlayers()) {
-                this.resetVisibility(viewer, toSee, Teams.getTeamByPlayer(toSee));
-            }
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            showOrHide(player);
         }
     }
 
@@ -89,36 +103,28 @@ public class Visibility implements Module {
         Bukkit.getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(), new Runnable() {
             @Override
             public void run() {
-                for (Player viewer : Bukkit.getOnlinePlayers()) {
-                    resetVisibility(viewer, player, Teams.getTeamByPlayer(player));
-                }
+                showOrHide(player);
             }
         }, 5L);
 
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onMatchEnd(MatchEndEvent event) {
-        for (Player viewer : Bukkit.getOnlinePlayers()) {
-            for (Player toSee : Bukkit.getOnlinePlayers()) {
-                this.resetVisibility(viewer, toSee, Teams.getTeamByPlayer(toSee));
-            }
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            showOrHide(player);
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
         Player switched = event.getPlayer();
-        for (Player viewer : Bukkit.getOnlinePlayers()) {
-            this.resetVisibility(viewer, switched, event.getNewTeam());
-            this.resetVisibility(switched, viewer, Teams.getTeamByPlayer(viewer));
-        }
+        showOrHide(switched);
+        showOrHideOthers(switched);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerVisibilityChange(PlayerVisibilityChangeEvent event) {
-        for (Player toSee : Bukkit.getOnlinePlayers()) {
-            this.resetVisibility(event.getPlayer(), toSee, Teams.getTeamByPlayer(toSee));
-        }
+        showOrHideOthers(event.getPlayer());
     }
 }
