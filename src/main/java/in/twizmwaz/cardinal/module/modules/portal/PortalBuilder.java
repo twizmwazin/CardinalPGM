@@ -8,7 +8,9 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.util.Numbers;
-import org.bukkit.util.Vector;
+import in.twizmwaz.cardinal.util.Parser;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jdom2.Element;
 
 public class PortalBuilder implements ModuleBuilder {
@@ -18,98 +20,42 @@ public class PortalBuilder implements ModuleBuilder {
         ModuleCollection<Portal> results = new ModuleCollection<>();
         for (Element portals : match.getDocument().getRootElement().getChildren("portals")) {
             for (Element portal : portals.getChildren("portal")) {
-                double x = 0;
-                boolean xRelative = true;
-                if (portal.getAttributeValue("x") != null) {
-                    x = Numbers.parseDouble(portal.getAttributeValue("x").replaceAll("@", ""));
-                    xRelative = !portal.getAttributeValue("x").contains("@");
-                } else if (portals.getAttributeValue("x") != null) {
-                    x = Numbers.parseDouble(portals.getAttributeValue("x").replaceAll("@", ""));
-                    xRelative = !portals.getAttributeValue("x").contains("@");
+                results.add(parsePortal(portal, portals));
+            }
+            for (Element portalsChild : portals.getChildren("portals")) {
+                for (Element portal : portalsChild.getChildren("portal")) {
+                    results.add(parsePortal(portal, portalsChild, portals));
                 }
-                double y = 0;
-                boolean yRelative = true;
-                if (portal.getAttributeValue("y") != null) {
-                    y = Numbers.parseDouble(portal.getAttributeValue("y").replaceAll("@", ""));
-                    yRelative = !portal.getAttributeValue("y").contains("@");
-                } else if (portals.getAttributeValue("y") != null) {
-                    y = Numbers.parseDouble(portals.getAttributeValue("y").replaceAll("@", ""));
-                    yRelative = !portals.getAttributeValue("y").contains("@");
-                }
-                double z = 0;
-                boolean zRelative = true;
-                if (portal.getAttributeValue("z") != null) {
-                    z = Numbers.parseDouble(portal.getAttributeValue("z").replaceAll("@", ""));
-                    zRelative = !portal.getAttributeValue("z").contains("@");
-                } else if (portals.getAttributeValue("z") != null) {
-                    z = Numbers.parseDouble(portals.getAttributeValue("z").replaceAll("@", ""));
-                    zRelative = !portals.getAttributeValue("z").contains("@");
-                }
-                RegionModule region = null;
-                if (portal.getAttributeValue("region") != null) {
-                    region = RegionModuleBuilder.getRegion(portal);
-                } else if (portals.getAttributeValue("region") != null) {
-                    region = RegionModuleBuilder.getRegion(portals);
-                } else {
-                    for (Element child : portal.getChildren()) {
-                        if (!child.getName().equalsIgnoreCase("destination")) {
-                            region = RegionModuleBuilder.getRegion(child);
-                        }
-                    }
-                    if (region == null) {
-                        region = RegionModuleBuilder.getRegion(portal.getChild("region").getChildren().get(0));
-                    }
-                }
-                FilterModule filter = null;
-                if (portal.getAttributeValue("filter") != null) {
-                    filter = FilterModuleBuilder.getFilter(portal.getAttributeValue("filter"));
-                } else if (portals.getAttributeValue("filter") != null) {
-                    filter = FilterModuleBuilder.getFilter(portals.getAttributeValue("filter"));
-                }
-                boolean sound = true;
-                if (portal.getAttributeValue("sound") != null) {
-                    sound = !portal.getAttributeValue("sound").equalsIgnoreCase("false");
-                } else if (portals.getAttributeValue("sound") != null) {
-                    sound = !portals.getAttributeValue("sound").equalsIgnoreCase("false");
-                }
-                boolean protect = false;
-                if (portal.getAttributeValue("protect") != null) {
-                    protect = portal.getAttributeValue("protect").equalsIgnoreCase("true");
-                } else if (portals.getAttributeValue("protect") != null) {
-                    protect = portals.getAttributeValue("protect").equalsIgnoreCase("true");
-                }
-                boolean bidirectional = false;
-                if (portal.getAttributeValue("bidirectional") != null) {
-                    bidirectional = portal.getAttributeValue("bidirectional").equalsIgnoreCase("true");
-                } else if (portals.getAttributeValue("bidirectional") != null) {
-                    bidirectional = portals.getAttributeValue("bidirectional").equalsIgnoreCase("true");
-                }
-                int yaw = 0;
-                boolean yawRelative = true;
-                if (portal.getAttributeValue("yaw") != null) {
-                    yaw = (int) Numbers.parseDouble(portal.getAttributeValue("yaw").replaceAll("@", ""));
-                    yawRelative = !portal.getAttributeValue("yaw").contains("@");
-                } else if (portals.getAttributeValue("yaw") != null) {
-                    yaw = (int) Numbers.parseDouble(portals.getAttributeValue("yaw").replaceAll("@", ""));
-                    yawRelative = !portals.getAttributeValue("yaw").contains("@");
-                }
-                int pitch = 0;
-                boolean pitchRelative = true;
-                if (portal.getAttributeValue("pitch") != null) {
-                    pitch = (int) Numbers.parseDouble(portal.getAttributeValue("pitch").replaceAll("@", ""));
-                    pitchRelative = !portal.getAttributeValue("pitch").contains("@");
-                } else if (portals.getAttributeValue("pitch") != null) {
-                    pitch = (int) Numbers.parseDouble(portals.getAttributeValue("pitch").replaceAll("@", ""));
-                    pitchRelative = !portals.getAttributeValue("pitch").contains("@");
-                }
-                RegionModule destination = null;
-                if (portal.getChild("destination") != null) {
-                    destination = RegionModuleBuilder.getRegion(portal.getChild("destination").getChildren().get(0));
-                }
-                results.add(new Portal(new Vector(x, y, z), xRelative, yRelative, zRelative, region, filter, sound, protect, bidirectional, yaw, yawRelative, pitch, pitchRelative, destination));
             }
         }
         return results;
+    }
+
+    private Portal parsePortal(Element... elements) {
+        Pair<Boolean, Double>
+                x = getCoord("x", elements),
+                y = getCoord("y", elements),
+                z = getCoord("z", elements),
+                yaw = getCoord("yaw", elements),
+                pitch = getCoord("pitch", elements);
+
+        RegionModule region = RegionModuleBuilder.getAttributeOrChild("region", elements);
+        if (region == null) region = RegionModuleBuilder.getRegion(elements[0]);
+        FilterModule filter = FilterModuleBuilder.getAttributeOrChild("filter", "always", elements);
+        boolean sound = Numbers.parseBoolean(Parser.getOrderedAttribute("sound", elements), true);
+        boolean protect = Numbers.parseBoolean(Parser.getOrderedAttribute("protect", elements), false);
+        boolean bidirectional = Numbers.parseBoolean(Parser.getOrderedAttribute("bidirectional", elements), false);;
+        RegionModule destination = RegionModuleBuilder.getAttributeOrChild("destination", elements);
+
+        return new Portal(x, y, z, yaw, pitch, region, filter, sound, protect, bidirectional, destination);
+    }
+
+    private Pair<Boolean, Double> getCoord(String coord, Element... elements) {
+        String attr = Parser.getOrderedAttribute(coord, elements);
+        if (attr != null) {
+            return new ImmutablePair<>(!attr.contains("@"), Numbers.parseDouble(attr.replaceAll("@", "")));
+        }
+        return new ImmutablePair<>(true, 0D);
     }
 
 }
