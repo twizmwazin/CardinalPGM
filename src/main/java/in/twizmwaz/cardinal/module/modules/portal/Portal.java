@@ -1,46 +1,44 @@
 package in.twizmwaz.cardinal.module.modules.portal;
 
-import com.google.common.base.Optional;
-import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
+import in.twizmwaz.cardinal.module.modules.observers.ObserverModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
-import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.util.Teams;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.util.Vector;
 
 public class Portal implements Module {
 
-    private final Vector location;
-    private final boolean xRelative, yRelative, zRelative;
+    private final Pair<Boolean, Double> x, y, z, yaw, pitch;
     private final RegionModule region;
     private final FilterModule filter;
     private final boolean sound, protect, bidirectional;
-    private final int yaw, pitch;
-    private final boolean yawRelative, pitchRelative;
     private final RegionModule destination;
 
-    protected Portal(final Vector location, final boolean xRelative, final boolean yRelative, final boolean zRelative, final RegionModule region, final FilterModule filter, final boolean sound, final boolean protect, final boolean bidirectional, final int yaw, final boolean yawRelative, final int pitch, final boolean pitchRelative, final RegionModule destination) {
-        this.location = location;
-        this.xRelative = xRelative;
-        this.yRelative = yRelative;
-        this.zRelative = zRelative;
+    protected Portal(final Pair<Boolean, Double> x,
+                     final Pair<Boolean, Double> y,
+                     final Pair<Boolean, Double> z,
+                     final Pair<Boolean, Double> yaw,
+                     final Pair<Boolean, Double> pitch,
+                     final RegionModule region, final FilterModule filter, final boolean sound,
+                     final boolean protect, final boolean bidirectional, final RegionModule destination) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.yaw = yaw;
+        this.pitch = pitch;
         this.region = region;
         this.filter = filter;
         this.sound = sound;
         this.protect = protect;
         this.bidirectional = bidirectional;
-        this.yaw = yaw;
-        this.yawRelative = yawRelative;
-        this.pitch = pitch;
-        this.pitchRelative = pitchRelative;
         this.destination = destination;
     }
 
@@ -52,33 +50,26 @@ public class Portal implements Module {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerMove(PlayerMoveEvent event) {
         if (region.contains(event.getTo().toVector()) && !region.contains(event.getFrom().toVector())) {
-            Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
-            if ((filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW)) || (team.isPresent() && team.get().isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
-                if (destination != null) {
-                    event.getPlayer().teleport(destination.getRandomPoint().getLocation());
-                    if (sound)
-                        event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 0.2F, 1);
-                } else {
-                    Location newLocation = event.getTo();
-                    newLocation.setX(location.getX() + (xRelative ? newLocation.getX() : 0));
-                    newLocation.setY(location.getY() + (yRelative ? newLocation.getY() : 0));
-                    newLocation.setZ(location.getZ() + (zRelative ? newLocation.getZ() : 0));
-                    newLocation.setYaw(yaw + (yawRelative ? newLocation.getYaw() : 0));
-                    newLocation.setPitch(pitch + (pitchRelative ? newLocation.getPitch() : 0));
-                    event.getPlayer().teleport(newLocation);
-                    if (sound)
-                        event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 0.2F, 1);
-                }
-            }
+            tryTeleport(event.getPlayer(), event.getTo().clone(), destination, 1);
         }
-        if (destination != null && destination.contains(event.getTo().toVector()) && !destination.contains(event.getFrom().toVector()) && this.bidirectional) {
-            Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
-            if (filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW) || (team.isPresent() && team.get().isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
-                event.getPlayer().teleport(region.getRandomPoint().getLocation());
-                if (sound)
-                    event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 0.2F, 1);
-            }
+        if (this.bidirectional && destination != null && destination.contains(event.getTo().toVector()) && !destination.contains(event.getFrom().toVector())) {
+            tryTeleport(event.getPlayer(), event.getTo().clone(), region, -1);
+        }
+    }
 
+    private void tryTeleport(Player player, Location from, RegionModule destination, int dir) {
+        if ((filter == null || filter.evaluate(player).equals(FilterState.ALLOW)) || ObserverModule.testObserver(player)) {
+            if (destination != null) {
+                player.teleport(destination.getRandomPoint().getLocation());
+            } else {
+                from.setX(x.getLeft() ? from.getX() + (x.getRight() * dir) : x.getRight());
+                from.setY(y.getLeft() ? from.getY() + (y.getRight() * dir) : y.getRight());
+                from.setZ(z.getLeft() ? from.getZ() + (z.getRight() * dir) : z.getRight());
+                from.setYaw((float) (yaw.getLeft() ? from.getYaw() + (yaw.getRight() * dir) : yaw.getRight()));
+                from.setPitch((float) (pitch.getLeft() ? from.getPitch() + (pitch.getRight() * dir) : pitch.getRight()));
+                player.teleport(from);
+            }
+            if (sound) player.playSound(player.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 0.2F, 1);
         }
     }
 
