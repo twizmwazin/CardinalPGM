@@ -136,11 +136,9 @@ public class TeamManagerModule implements Module {
     }
 
     private void removePlayer(Player player) {
-        for (TeamModule team : match.getModules().getModules(TeamModule.class)) {
-            if (team.contains(player)) {
-                team.remove(player);
-            }
-        }
+        TeamModule observers = Teams.getTeamById("observers").get();
+        observers.add(player, true, false);
+        observers.remove(player);
         Players.resetPlayer(player);
     }
 

@@ -340,7 +340,7 @@ public class TitleRespawn implements TaskedModule {
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(), new Runnable() {
             public void run() {
                 Optional<TeamModule> team = Teams.getTeamByPlayer(player);
-                if (team.get().isObserver() || !GameHandler.getGameHandler().getMatch().isRunning()) {
+                if (team.isPresent() && (team.get().isObserver() || !GameHandler.getGameHandler().getMatch().isRunning())) {
                     GameHandler.getGameHandler().getMatch().getModules().getModule(RespawnModule.class).giveObserversKit(player);
                 }
             }
