@@ -11,7 +11,6 @@ settings:
 - PrivateMessageSounds
 - Scoreboard
 - Sounds
-- Stats
 setting:
   AttackSpeedometer:
     aliases:
@@ -92,8 +91,3 @@ setting:
     - 'off'
     - on[default]
     description: Hear sounds to alert you of the last three seconds of a countdown
-  Stats:
-    values:
-    - 'off'
-    - on[default]
-    description: See your statistics at the end of the game
