@@ -97,11 +97,7 @@ public class RegionModuleBuilder implements ModuleBuilder {
                 return region;
             case "union":
             case "regions":
-                CombinationParser parser = new CombinationParser(element, document);
-                for (RegionModule regionChild : parser.getRegions()) {
-                    GameHandler.getGameHandler().getMatch().getModules().add(regionChild);
-                }
-                region = new UnionRegion(parser);
+                region = new UnionRegion( new CombinationParser(element, document));
                 if (region.getName() != null) GameHandler.getGameHandler().getMatch().getModules().add(region);
                 return region;
             case "translate":
