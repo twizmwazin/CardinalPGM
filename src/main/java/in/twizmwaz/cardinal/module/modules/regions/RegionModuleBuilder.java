@@ -6,24 +6,30 @@ import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
+import in.twizmwaz.cardinal.module.modules.regions.parsers.AboveParser;
+import in.twizmwaz.cardinal.module.modules.regions.parsers.BelowParser;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.BlockParser;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.CircleParser;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.CuboidParser;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.CylinderParser;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.EmptyParser;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.EverywhereParser;
+import in.twizmwaz.cardinal.module.modules.regions.parsers.HalfParser;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.PointParser;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.RectangleParser;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.SphereParser;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.modifiers.CombinationParser;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.modifiers.MirrorParser;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.modifiers.TranslateParser;
+import in.twizmwaz.cardinal.module.modules.regions.type.AboveRegion;
+import in.twizmwaz.cardinal.module.modules.regions.type.BelowRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.CircleRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.CuboidRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.CylinderRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.EmptyRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.EverywhereRegion;
+import in.twizmwaz.cardinal.module.modules.regions.type.HalfRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.RectangleRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.SphereRegion;
@@ -81,6 +87,18 @@ public class RegionModuleBuilder implements ModuleBuilder {
                 return region;
             case "sphere":
                 region = new SphereRegion(new SphereParser(element));
+                if (region.getName() != null) GameHandler.getGameHandler().getMatch().getModules().add(region);
+                return region;
+            case "above":
+                region = new AboveRegion(new AboveParser(element));
+                if (region.getName() != null) GameHandler.getGameHandler().getMatch().getModules().add(region);
+                return region;
+            case "below":
+                region = new BelowRegion(new BelowParser(element));
+                if (region.getName() != null) GameHandler.getGameHandler().getMatch().getModules().add(region);
+                return region;
+            case "half":
+                region = new HalfRegion(new HalfParser(element));
                 if (region.getName() != null) GameHandler.getGameHandler().getMatch().getModules().add(region);
                 return region;
             case "complement":
