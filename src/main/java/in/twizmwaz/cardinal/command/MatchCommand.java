@@ -56,7 +56,7 @@ public class MatchCommand {
                     for (GameObjective objective : Teams.getShownObjectives(team)) {
                         objectives += (objective.isComplete() ? ChatColor.GREEN : ChatColor.DARK_RED) + WordUtils.capitalizeFully(objective.getName().replaceAll("_", " ")) + "  ";
                     }
-                    for (HillObjective hill : Scoreboards.getHills()) {
+                    for (GameObjective hill : Scoreboards.getHills()) {
                         objectives += (hill.getTeam() == team ? ChatColor.GREEN : ChatColor.DARK_RED) + WordUtils.capitalizeFully(hill.getName().replaceAll("_", " ") + "  ");
                     }
                     objectives = objectives.trim();

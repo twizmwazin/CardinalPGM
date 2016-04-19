@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.sound;
 
 import in.twizmwaz.cardinal.event.MatchEndEvent;
+import in.twizmwaz.cardinal.event.flag.FlagCaptureEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveUncompleteEvent;
 import in.twizmwaz.cardinal.module.Module;
@@ -49,6 +50,20 @@ public class SoundModule implements Module {
             if (Settings.getSettingByName("Sounds") != null && Settings.getSettingByName("Sounds").getValueByPlayer(player).getValue().equalsIgnoreCase("on")) {
                 TeamModule team = Teams.getTeamByPlayer(player).get();
                 if (team.isObserver() || !team.equals(event.getOldTeam())) {
+                    player.playSound(player.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 0.7f, 2f);
+                } else {
+                    player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_DEATH, 0.8f, 0.8f);
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onFlagComplete(FlagCaptureEvent event) {
+        TeamModule team = Teams.getTeamByPlayer(event.getPlayer()).get();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (Settings.getSettingByName("Sounds") != null && Settings.getSettingByName("Sounds").getValueByPlayer(player).getValue().equalsIgnoreCase("on")) {
+                if (Teams.getTeamByPlayer(player).get().isObserver() || Teams.getTeamByPlayer(player).get().equals(team)) {
                     player.playSound(player.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 0.7f, 2f);
                 } else {
                     player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_DEATH, 0.8f, 0.8f);

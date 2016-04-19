@@ -22,6 +22,6 @@ public interface GameObjective extends Module {
 
     public GameObjectiveScoreboardHandler getScoreboardHandler();
 
-    public GameObjectiveProximityHandler getProximityHandler();
+    public GameObjectiveProximityHandler getProximityHandler(TeamModule team);
 
 }

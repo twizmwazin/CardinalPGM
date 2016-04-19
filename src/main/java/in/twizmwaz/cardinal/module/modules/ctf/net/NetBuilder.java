@@ -1,6 +1,5 @@
 package in.twizmwaz.cardinal.module.modules.ctf.net;
 
-import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.Module;
@@ -9,7 +8,6 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.ctf.FlagObjective;
 import in.twizmwaz.cardinal.module.modules.ctf.post.Post;
-import in.twizmwaz.cardinal.module.modules.ctf.post.PostBuilder;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
@@ -17,12 +15,15 @@ import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Flags;
 import in.twizmwaz.cardinal.util.Numbers;
+import in.twizmwaz.cardinal.util.Parser;
 import in.twizmwaz.cardinal.util.Teams;
+import org.bukkit.util.Vector;
 import org.jdom2.Element;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@BuilderData(load = ModuleLoadTime.LATER)
 public class NetBuilder implements ModuleBuilder {
 
     @Override
@@ -30,71 +31,56 @@ public class NetBuilder implements ModuleBuilder {
         ModuleCollection<Net> results = new ModuleCollection<>();
         for (Element flags : match.getDocument().getRootElement().getChildren("flags")) {
             for (Element net : flags.getChildren("net")) {
-                results.add(parseNet(net));
+                results.add(parseNet(net, flags));
             }
             for (Element subFlags : flags.getChildren("flags")) {
                 for (Element net : subFlags.getChildren("net")) {
-                    results.add(parseNet(net));
+                    results.add(parseNet(net, subFlags, flags));
                 }
             }
         }
         return results;
     }
 
-    public static Net parseNet(Element element) {
-        Net net = null;
-        if (element.getName().equals("net")) {
-            String id = element.getAttributeValue("id") == null ? null : element.getAttributeValue("id");
-            RegionModule region;
-            if (element.getAttributeValue("region") != null) {
-                region = RegionModuleBuilder.getRegion(element.getAttributeValue("region"));
-            } else {
-                region = RegionModuleBuilder.getRegion(element.getChild("region"));
-            }
-            TeamModule owner = element.getAttributeValue("owner") == null ? null : Teams.getTeamById(element.getAttributeValue("owner")).orNull();
-            int points = Numbers.parseInt(element.getAttributeValue("points", "0"));
-            Post post = element.getAttributeValue("post") == null ? null : PostBuilder.getPost(element.getAttributeValue("post"));
+    public static Net parseNet(Element... elements) {
+        if (elements[0].getName().equals("net")) {
+            String id = elements[0].getAttributeValue("id") == null ? null : elements[0].getAttributeValue("id");
+            RegionModule region = RegionModuleBuilder.getAttributeOrChild("region", elements);
+            TeamModule owner = Parser.getOrderedAttribute("owner", elements) == null ? null : Teams.getTeamById(Parser.getOrderedAttribute("owner", elements)).orNull();
+            int points = Numbers.parseInt(Parser.getOrderedAttribute("points",elements), 0);
+            Post post = Flags.getPostById(Parser.getOrderedAttribute("post", elements));
+
             Set<FlagObjective> flagObjectives = new HashSet<>();
             Set<FlagObjective> rescue = new HashSet<>();
-            if (element.getAttributeValue("flag") != null || element.getAttributeValue("flags") != null) {
-                String flags = element.getAttributeValue("flag") != null ? element.getAttributeValue("flag") : element.getAttributeValue("flags");
-                for (String str : flags.split(" ")) {
-                    try {
-                        flagObjectives.add(Flags.getFlagById(str));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+            if (!elements[1].getName().equalsIgnoreCase("flag")) {
+                try {
+                    String flag = Parser.getOrderedAttribute("flag", elements);
+                    if (flag != null) for (String str : flag.split(" ")) flagObjectives.add(Flags.getFlagById(str));
+                    String flags = Parser.getOrderedAttribute("flags", elements);
+                    if (flags != null) for (String str : flags.split(" ")) flagObjectives.add(Flags.getFlagById(str));
+                    flagObjectives.remove(null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    flagObjectives.clear();
                 }
-            } else {
-                flagObjectives.addAll(GameHandler.getGameHandler().getMatch().getModules().getModules(FlagObjective.class));
+                if (flagObjectives.size() == 0) flagObjectives.addAll(Flags.getFlags());
             }
-            if (element.getAttributeValue("rescue") != null) {
-                for (String str : element.getAttributeValue("rescue").split(" ")) {
-                    try {
-                        rescue.add(Flags.getFlagById(str));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            boolean sticky = Boolean.parseBoolean(element.getAttributeValue("sticky", "true"));
-            FilterModule captureFilter = null;
-            if (element.getAttributeValue("capture-filter") != null) {
-                captureFilter = FilterModuleBuilder.getFilter(element.getAttributeValue("capture-filter"));
-            } else if (element.getChild("capture-filter") != null) {
-                captureFilter = FilterModuleBuilder.getFilter(element.getChild("capture-filter"));
-            }
-            String denyMessage = element.getAttributeValue("deny-message") == null ? null : element.getAttributeValue("deny-message");
-            boolean respawnTogether = Boolean.parseBoolean(element.getAttributeValue("respawn-together", "false"));
-            FilterModule respawnFilter = null;
-            if (element.getAttributeValue("respawn-filter") != null) {
-                respawnFilter = FilterModuleBuilder.getFilter(element.getAttributeValue("respawn-filter"));
-            } else if (element.getChild("respawn-filter") != null) {
-                respawnFilter = FilterModuleBuilder.getFilter(element.getChild("respawn-filter"));
-            }
-            String respawnMessage = element.getAttributeValue("respawn-message") == null ? null : element.getAttributeValue("respawn-message");
-            net = new Net(id, region, owner, points, post, flagObjectives, rescue, sticky, captureFilter, denyMessage, respawnTogether, respawnFilter, respawnMessage);
+            String rescueStr = Parser.getOrderedAttribute("rescue", elements);
+            if (rescueStr != null)
+                for (String str : rescueStr.split(" ")) flagObjectives.add(Flags.getFlagById(str));
+
+            boolean sticky = Numbers.parseBoolean(Parser.getOrderedAttribute("sticky", elements), true);
+            FilterModule captureFilter = FilterModuleBuilder.getAttributeOrChild("capture-filter", "always", elements);
+            String denyMessage = Parser.getOrderedAttributeOrChild("deny-message", elements);
+            boolean respawnTogether = Numbers.parseBoolean(Parser.getOrderedAttribute("respawn-together", elements), false);
+            FilterModule respawnFilter = FilterModuleBuilder.getAttributeOrChild("respawn-filter", "always", elements);
+            String respawnMessage = Parser.getOrderedAttributeOrChild("respawn-message", elements);
+            String loc = elements[0].getAttributeValue("location");
+            Vector location = loc != null ? Parser.parseVector(loc) : region.getCenterBlock().getAlignedVector();
+
+            return new Net(id, region, owner, points, post, flagObjectives, rescue, sticky, captureFilter, denyMessage, respawnTogether, respawnFilter, respawnMessage, location);
         }
-        return net;
+        return null;
     }
+
 }

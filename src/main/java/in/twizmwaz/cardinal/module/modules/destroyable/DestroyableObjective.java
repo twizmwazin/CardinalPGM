@@ -7,7 +7,6 @@ import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.SnowflakeChangeEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
-import in.twizmwaz.cardinal.event.objective.ObjectiveProximityEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.modules.proximity.GameObjectiveProximityHandler;
@@ -16,7 +15,6 @@ import in.twizmwaz.cardinal.module.modules.scoreboard.GameObjectiveScoreboardHan
 import in.twizmwaz.cardinal.module.modules.snowflakes.Snowflakes;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
-import in.twizmwaz.cardinal.module.modules.titleRespawn.TitleRespawn;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Fireworks;
@@ -44,6 +42,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -62,7 +61,7 @@ public class DestroyableObjective implements GameObjective {
     private List<Pair<Material, Integer>> materials;
     private boolean changesModes;
 
-    private GameObjectiveProximityHandler proximityHandler;
+    private Map<String, GameObjectiveProximityHandler> proximityHandlers;
 
     private Set<UUID> playersTouched;
     private double size;
@@ -75,7 +74,7 @@ public class DestroyableObjective implements GameObjective {
     private GameObjectiveScoreboardHandler scoreboardHandler;
 
     protected DestroyableObjective(final TeamModule team, final String name, final String id, final RegionModule region, List<Pair<Material, Integer>> materials, final double completion,
-                                   final boolean show, final boolean required, boolean changesModes, boolean showPercent, boolean repairable, GameObjectiveProximityHandler proximityHandler) {
+                                   final boolean show, final boolean required, boolean changesModes, boolean showPercent, boolean repairable, Map<String, GameObjectiveProximityHandler> proximityHandlers) {
         this.team = team;
         this.name = name;
         this.id = id;
@@ -90,8 +89,11 @@ public class DestroyableObjective implements GameObjective {
         this.changesModes = changesModes;
         this.completed = false;
 
-        this.proximityHandler = proximityHandler;
-        this.proximityHandler.setObjective(this);
+        this.proximityHandlers = proximityHandlers;
+        for (GameObjectiveProximityHandler proximityHandler : proximityHandlers.values()) {
+            proximityHandler.setObjective(this);
+        }
+
         this.playersTouched = new HashSet<>();
         this.playersCompleted = new HashMap<>();
 
@@ -147,8 +149,8 @@ public class DestroyableObjective implements GameObjective {
     }
 
     @Override
-    public GameObjectiveProximityHandler getProximityHandler() {
-        return isTouched() || isComplete() ? null : proximityHandler;
+    public GameObjectiveProximityHandler getProximityHandler(TeamModule team) {
+        return isTouched() || isComplete() ? null : proximityHandlers.get(team.getId());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -330,8 +332,10 @@ public class DestroyableObjective implements GameObjective {
         return showPercent;
     }
 
-    public boolean showProximity() {
-        return GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getTimeLimit() != 0 && GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getResult().equals(TimeLimit.Result.MOST_OBJECTIVES);
+    public boolean showProximity(TeamModule team) {
+        return GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getTimeLimit() != 0 &&
+                GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getResult().equals(TimeLimit.Result.MOST_OBJECTIVES) &&
+                (team.isObserver() && proximityHandlers.size() == 1) || (!team.isObserver() && !team.equals(this.team));
     }
 
     public boolean isRepairable() {
@@ -425,7 +429,8 @@ public class DestroyableObjective implements GameObjective {
         }
     }
 
-    public Double getProximity() {
-        return getProximityHandler().getProximity();
+    public Double getProximity(TeamModule team) {
+        return team.isObserver() ? (proximityHandlers.size() == 1 ? proximityHandlers.values().iterator().next().getProximity() : null) : (team.equals(this.team) ? null : proximityHandlers.get(team.getId()).getProximity());
     }
+
 }

@@ -1,15 +1,23 @@
 package in.twizmwaz.cardinal.module.modules.proximity;
 
+import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.event.CardinalDeathEvent;
+import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
+import in.twizmwaz.cardinal.event.flag.FlagCaptureEvent;
+import in.twizmwaz.cardinal.event.flag.FlagPickupEvent;
+import in.twizmwaz.cardinal.event.flag.FlagRespawnEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveCompleteEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveProximityEvent;
 import in.twizmwaz.cardinal.event.objective.ObjectiveTouchEvent;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.ctf.FlagObjective;
+import in.twizmwaz.cardinal.module.modules.ctf.net.Net;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
+import in.twizmwaz.cardinal.util.Flags;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -25,25 +33,23 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Wool;
 import org.bukkit.util.Vector;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class GameObjectiveProximityHandler implements Module {
 
     private GameObjective objective = null;
-    private Vector location;
-    private Boolean horizontal;
-    private Boolean needsTouch;
-    private ProximityMetric metric;
+    private TeamModule team;
+    private ProximityInfo info;
 
     private Boolean active;
 
     private Double proximity;
 
-    public GameObjectiveProximityHandler(Vector location, boolean horizontal, boolean needsTouch, ProximityMetric metric) {
-        this.location = location;
-        this.horizontal = horizontal;
-        this.needsTouch = needsTouch;
-        this.metric = metric;
+    public GameObjectiveProximityHandler(TeamModule team, ProximityInfo info) {
+        this.team = team;
+        this.info = info;
         this.proximity = Double.POSITIVE_INFINITY;
-        if (horizontal) this.location.setY(0);
 
         active = false;
     }
@@ -70,79 +76,139 @@ public class GameObjectiveProximityHandler implements Module {
     }
 
     public String getProximityName() {
-        return needsTouch ? metric.getTouchedName() : metric.getName();
+        return info.needsTouch ? info.metric.getTouchedName() : info.metric.getName();
     }
 
     private void setProximity(Location loc, Player player) {
-        if (location == null) return;
-        if (horizontal) {
+        if (info.locations == null) return;
+        if (info.horizontal) {
             loc = loc.clone();
             loc.setY(0);
         }
-        Double newProx = loc.distance(location);
-        if (newProx < proximity) {
+        double newProximity = proximity;
+        for (Vector proxLoc : info.locations) {
+            double prox = proxLoc.distance(loc);
+            if (prox < newProximity) {
+                newProximity = prox;
+            }
+        }
+        if (newProximity < proximity) {
             Double old = proximity;
-            proximity = newProx;
+            proximity = newProximity;
             Bukkit.getServer().getPluginManager().callEvent(new ObjectiveProximityEvent(objective, player, old, proximity));
         }
     }
 
     private void tryUpdate(Player player, Block block) {
-        TeamModule team = Teams.getTeamByPlayer(player).get();
-        if ((Teams.getTeamByPlayer(player).isPresent() && Teams.getTeamByPlayer(player).get().isObserver())) return;
+        if (!teamAllowsUpdate(Teams.getTeamByPlayer(player))) return;
+        boolean update = true;
         if (objective instanceof WoolObjective) {
-            if (team.equals(objective.getTeam())) {
-                boolean update = !needsTouch;
-                if (needsTouch) {
-                    if (metric.equals(ProximityMetric.CLOSEST_BLOCK)) {
-                        if (block.getType().equals(Material.WOOL) && ((Wool) block.getState().getData()).getColor().equals(((WoolObjective) objective).getColor())) update = true;
-                    } else {
-                        ItemStack item = new ItemStack(Material.WOOL, 1, ((WoolObjective) objective).getColor().getWoolData());
-                        if (player.getInventory().containsAtLeast(item, 1)) update = true;
-                    }
+            update = !info.needsTouch;
+            if (info.needsTouch) {
+                if (info.metric.equals(ProximityMetric.CLOSEST_BLOCK)) {
+                    if (block.getType().equals(Material.WOOL) && ((Wool) block.getState().getData()).getColor().equals(((WoolObjective) objective).getColor()))
+                        update = true;
+                } else {
+                    ItemStack item = new ItemStack(Material.WOOL, 1, ((WoolObjective) objective).getColor().getWoolData());
+                    if (player.getInventory().containsAtLeast(item, 1)) update = true;
                 }
-                if (update) setProximity(player.getLocation(), player);
             }
-        } else {
-            if (!team.equals(objective.getTeam())) {
-                setProximity(player.getLocation(), player);
+        } else if (objective instanceof FlagObjective) {
+            if (info.needsTouch) {
+                update = Flags.getFlag(player) == objective;
             }
+        }
+        if (update) setProximity(player.getLocation(), player);
+    }
+
+    public boolean teamAllowsUpdate(Optional<TeamModule> team) {
+        return !(team.isPresent() && team.get().isObserver()) && team.orNull() == this.team;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public void reset() {
+        this.proximity = Double.POSITIVE_INFINITY;
+        setActive(false);
+    }
+
+    public void setLocation(Location location) {
+        Set<Vector> locations = new HashSet<>();
+        locations.add(location);
+        this.info.setLocations(locations);
+    }
+
+    public void setLocations(Set<Vector> locations) {
+        this.info.setLocations(locations);
+    }
+
+    @EventHandler
+    public void onCycleComplete(CycleCompleteEvent event) {
+        if (objective instanceof FlagObjective && info.needsTouch) {
+            Set<Net> nets = Flags.getNetsByFlag((FlagObjective) objective);
+            Set<Vector> locations = new HashSet<>();
+            for (Net net : nets) locations.add(net.getLocation());
+            setLocations(locations);
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onMove(PlayerMoveEvent event) {
-        if (!active || !metric.equals(ProximityMetric.CLOSEST_PLAYER)) return;
+        if (!active || !info.metric.equals(ProximityMetric.CLOSEST_PLAYER)) return;
         tryUpdate(event.getPlayer(), null);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlaceBlock(BlockPlaceEvent event) {
-        if (!active || !metric.equals(ProximityMetric.CLOSEST_BLOCK)) return;
+        if (!active || !info.metric.equals(ProximityMetric.CLOSEST_BLOCK)) return;
         tryUpdate(event.getPlayer(), event.getBlockPlaced());
     }
 
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onKill(CardinalDeathEvent event) {
-        if (!active || !metric.equals(ProximityMetric.CLOSEST_KILL) || event.getKiller() == null
+        if (!active || !info.metric.equals(ProximityMetric.CLOSEST_KILL) || event.getKiller() == null
                 || Teams.getTeamByPlayer(event.getKiller()).orNull() == Teams.getTeamByPlayer(event.getPlayer()).orNull()) return;
         tryUpdate(event.getKiller(), null);
     }
 
     @EventHandler
     public void onMatchStart(MatchStartEvent event) {
-        this.active = !needsTouch;
+        this.active = !info.needsTouch;
     }
 
     @EventHandler
     public void onTouchEvent(ObjectiveTouchEvent event) {
-        if (event.getObjective().equals(objective)) this.active = needsTouch;
+        if (event.getObjective().equals(objective)) this.active = info.needsTouch;
     }
 
     @EventHandler
     public void onObjectiveComplete(ObjectiveCompleteEvent event) {
         if (event.getObjective().equals(objective)) this.active = false;
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onFlagRespawn(FlagRespawnEvent event) {
+        if (event.getFlag().equals(this.objective)) {
+            this.active = !info.needsTouch;
+            if (this.active) setLocation(event.getPost().getCurrentBlock().getLocation());
+        }
+    }
+
+    @EventHandler
+    public void onFlagPickUp(FlagPickupEvent event) {
+        if (event.getFlag().equals(this.objective)) {
+            this.active = info.needsTouch;
+        }
+    }
+
+    @EventHandler
+    public void onFlagCapture(FlagCaptureEvent event) {
+        if (event.getFlag().equals(this.objective)) {
+            this.reset();
+        }
     }
 
     @EventHandler

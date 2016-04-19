@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.util;
 
 import in.twizmwaz.cardinal.GameHandler;
+import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import org.bukkit.scoreboard.Objective;
@@ -75,8 +76,8 @@ public class Scoreboards {
         return null;
     }
 
-    public static ModuleCollection<HillObjective> getHills() {
-        ModuleCollection<HillObjective> objectives = new ModuleCollection<>();
+    public static ModuleCollection<GameObjective> getHills() {
+        ModuleCollection<GameObjective> objectives = new ModuleCollection<>();
         for (HillObjective hill : GameHandler.getGameHandler().getMatch().getModules().getModules(HillObjective.class)) {
             objectives.add(hill);
         }

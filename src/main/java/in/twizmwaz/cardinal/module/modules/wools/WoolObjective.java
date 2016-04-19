@@ -135,7 +135,7 @@ public class WoolObjective implements GameObjective {
     }
 
     @Override
-    public GameObjectiveProximityHandler getProximityHandler() {
+    public GameObjectiveProximityHandler getProximityHandler(TeamModule team) {
         return touched ? monument: wool;
     }
 
@@ -284,7 +284,7 @@ public class WoolObjective implements GameObjective {
     }
 
     public Double getProximity() {
-        return getProximityHandler().getProximity();
+        return getProximityHandler(null).getProximity();
     }
 
     public boolean showProximity() {

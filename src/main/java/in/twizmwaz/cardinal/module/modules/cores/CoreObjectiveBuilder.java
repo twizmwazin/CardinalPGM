@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.proximity.GameObjectiveProximityHandler;
+import in.twizmwaz.cardinal.module.modules.proximity.ProximityInfo;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
@@ -17,6 +18,9 @@ import in.twizmwaz.cardinal.util.Teams;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.bukkit.Material;
 import org.jdom2.Element;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @BuilderData(load = ModuleLoadTime.EARLIER)
 public class CoreObjectiveBuilder implements ModuleBuilder {
@@ -64,11 +68,17 @@ public class CoreObjectiveBuilder implements ModuleBuilder {
         boolean modeChanges = Numbers.parseBoolean(Parser.getOrderedAttribute("mode-changes", elements), false);
         String proximityMetric = Parser.getOrderedAttribute("proximity-metric", elements);
         Boolean proximityHorizontal = Numbers.parseBoolean(Parser.getOrderedAttribute("proximity-horizontal", elements), false);
-        GameObjectiveProximityHandler proximity = new GameObjectiveProximityHandler(region.getCenterBlock().getVector(), proximityHorizontal, false,
+        ProximityInfo proximityInfo = new ProximityInfo(region.getCenterBlock().getVector(), proximityHorizontal, false,
                 proximityMetric == null ? GameObjectiveProximityHandler.ProximityMetric.CLOSEST_PLAYER : GameObjectiveProximityHandler.ProximityMetric.getByName(proximityMetric));
+        Map<String, GameObjectiveProximityHandler> proximityHandlers = new HashMap<>();
         ModuleCollection<Module> result =  new ModuleCollection<>();
-        result.add(proximity);
-        result.add(new CoreObjective(team, name, id, region, leak, material, show, required, modeChanges, proximity));
+        for (TeamModule offender : Teams.getTeams()) {
+            if (offender.isObserver() || offender.equals(team)) continue;
+            GameObjectiveProximityHandler proximityHandler = new GameObjectiveProximityHandler(offender, proximityInfo);
+            proximityHandlers.put(offender.getId(), proximityHandler);
+            result.add(proximityHandler);
+        }
+        result.add(new CoreObjective(team, name, id, region, leak, material, show, required, modeChanges, proximityHandlers));
         return result;
     }
 

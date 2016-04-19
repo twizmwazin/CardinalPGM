@@ -20,7 +20,6 @@ public class TimeLimitBuilder implements ModuleBuilder {
         TeamModule team = null;
         for (Element time : match.getDocument().getRootElement().getChildren("time")) {
             timeLimit = Strings.timeStringToSeconds(time.getText());
-            result = TimeLimit.Result.TIE;
             if (time.getAttributeValue("result") != null) {
                 if (time.getAttributeValue("result").equalsIgnoreCase("objectives")) {
                     result = TimeLimit.Result.MOST_OBJECTIVES;
@@ -33,22 +32,12 @@ public class TimeLimitBuilder implements ModuleBuilder {
             }
         }
         for (Element score : match.getDocument().getRootElement().getChildren("score")) {
-            if (timeLimit <= 0) {
-                result = TimeLimit.Result.HIGHEST_SCORE;
-            }
-            if (score.getChild("time") != null) {
-                timeLimit = Strings.timeStringToSeconds(score.getChild("time").getText());
-                result = TimeLimit.Result.HIGHEST_SCORE;
-            }
+            if (result == null) result = TimeLimit.Result.HIGHEST_SCORE;
+            if (score.getChild("time") != null) timeLimit = Strings.timeStringToSeconds(score.getChild("time").getText());
         }
         for (Element blitz : match.getDocument().getRootElement().getChildren("blitz")) {
-            if (timeLimit <= 0) {
-                result = TimeLimit.Result.MOST_PLAYERS;
-            }
-            if (blitz.getChild("time") != null) {
-                timeLimit = Strings.timeStringToSeconds(blitz.getChild("time").getText());
-                result = TimeLimit.Result.MOST_PLAYERS;
-            }
+            if (result == null) result = TimeLimit.Result.MOST_PLAYERS;
+            if (blitz.getChild("time") != null) timeLimit = Strings.timeStringToSeconds(blitz.getChild("time").getText());
         }
         if (timeLimit < 0) {
             timeLimit = 0;
@@ -56,6 +45,7 @@ public class TimeLimitBuilder implements ModuleBuilder {
         if (result == null && GameHandler.getGameHandler().getMatch().getModules().getModules(GameObjective.class).size() > 0) {
             result = TimeLimit.Result.MOST_OBJECTIVES;
         }
+        if (result == null) result = TimeLimit.Result.TIE;
         results.add(new TimeLimit(timeLimit, result, team));
         return results;
     }

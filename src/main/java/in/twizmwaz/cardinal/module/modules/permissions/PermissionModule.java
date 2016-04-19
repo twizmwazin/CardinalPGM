@@ -3,7 +3,6 @@ package in.twizmwaz.cardinal.module.modules.permissions;
 import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
