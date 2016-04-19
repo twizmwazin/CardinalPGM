@@ -11,6 +11,7 @@ import in.twizmwaz.cardinal.module.modules.startTimer.StartTimer;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
 import in.twizmwaz.cardinal.util.DomUtil;
+import in.twizmwaz.cardinal.util.Proto;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -32,6 +33,7 @@ public class Match {
     private int number;
     private MatchState state;
     private Document document;
+    private Proto proto;
 
     public Match(UUID id, LoadedMap map) {
         this.uuid = id;
@@ -41,6 +43,7 @@ public class Match {
         } catch (JDOMException | IOException e) {
             e.printStackTrace();
         }
+        this.proto = Proto.parseProto(document.getRootElement().getAttributeValue("proto"));
         this.state = MatchState.WAITING;
         this.loadedMap = map;
         this.number = matchNumber;
@@ -62,6 +65,10 @@ public class Match {
 
     public Match getMatch() {
         return this;
+    }
+
+    public Proto getProto() {
+        return proto;
     }
 
     public boolean isRunning() {

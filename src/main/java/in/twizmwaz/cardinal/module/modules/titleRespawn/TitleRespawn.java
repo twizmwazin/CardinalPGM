@@ -35,6 +35,7 @@ import net.minecraft.server.DataWatcherRegistry;
 import net.minecraft.server.EntityPlayer;
 import net.minecraft.server.EnumItemSlot;
 import net.minecraft.server.Packet;
+import net.minecraft.server.PacketPlayOutAbilities;
 import net.minecraft.server.PacketPlayOutEntityDestroy;
 import net.minecraft.server.PacketPlayOutEntityEquipment;
 import net.minecraft.server.PacketPlayOutEntityMetadata;
@@ -42,6 +43,7 @@ import net.minecraft.server.PacketPlayOutEntityStatus;
 import net.minecraft.server.PacketPlayOutMount;
 import net.minecraft.server.PacketPlayOutSpawnEntityLiving;
 import net.minecraft.server.PacketPlayOutWorldBorder;
+import net.minecraft.server.PlayerAbilities;
 import net.minecraft.server.WorldBorder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -306,6 +308,14 @@ public class TitleRespawn implements TaskedModule {
             if (!deadPlayers.containsKey(uuid)) {
                 deadPlayers.put(uuid, 0L);
                 hasLeftClicked.add(uuid);
+
+                Players.resetPlayer(player);
+
+                player.setAffectsSpawning(false);
+                player.setCollidesWithEntities(false);
+                player.setCanPickupItems(false);
+                player.setPotionParticles(false);
+
                 player.showTitle(new TextComponent(""), new TextComponent(""), 0, Integer.MAX_VALUE, 0);
                 GameHandler.getGameHandler().getMatch().getModules().getModule(Visibility.class).showOrHide(player);
             }
@@ -348,6 +358,7 @@ public class TitleRespawn implements TaskedModule {
     }
 
     private void killPlayer(final Player player, Player killer, EntityDamageEvent.DamageCause cause) {
+        if (deadPlayers.containsKey(player.getUniqueId())) return;
         this.deadPlayers.put(player.getUniqueId(), System.currentTimeMillis());
 
         CardinalDeathEvent cardinalDeathEvent = new CardinalDeathEvent(player, killer, cause);
@@ -402,7 +413,7 @@ public class TitleRespawn implements TaskedModule {
                     public void run() {
                         if (TitleRespawn.this.isDeadUUID(player.getUniqueId())) {
                             player.showTitle(new TextComponent(""), new TextComponent(""), 0, Integer.MAX_VALUE, 0);
-                            player.setSubtitle(getSubtitleMessage(player.getLocale()));
+                            getSubtitleLogic();
                         }
                     }
                 }, 1L);
@@ -421,7 +432,8 @@ public class TitleRespawn implements TaskedModule {
         Player player = (Player) event.getEntity();
         double finalHealth = player.getHealth() - event.getFinalDamage();
         if (finalHealth > 0.01) return;
-        player.setHealth(20);
+        player.setMaxHealth(20);
+        player.setHealth(player.getMaxHealth());
         event.setDamage(1);
         player.setLastDamageCause(event);
         killPlayer(player, null, event.getCause());
@@ -433,7 +445,8 @@ public class TitleRespawn implements TaskedModule {
         Player player = (Player) event.getEntity();
         double finalHealth = player.getHealth() - event.getFinalDamage();
         if (finalHealth > 0.01) return;
-        player.setHealth(20);
+        player.setMaxHealth(20);
+        player.setHealth(player.getMaxHealth());
         event.setDamage(1);
         player.setLastDamageCause(event);
         if (event.getActor() instanceof Player) {
@@ -486,6 +499,16 @@ public class TitleRespawn implements TaskedModule {
     public void onPlayerSwitchTeam(PlayerChangeTeamEvent event) {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
             respawnPlayer(event.getPlayer(), !(event.getNewTeam().get().isObserver() && isDeadUUID(event.getPlayer().getUniqueId())));
+            final Player player = event.getPlayer();
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    if (TitleRespawn.this.isDeadUUID(player.getUniqueId())) {
+                        player.showTitle(new TextComponent(""), new TextComponent(""), 0, Integer.MAX_VALUE, 0);
+                        getSubtitleLogic();
+                    }
+                }
+            }, 1L);
         }
     }
 
@@ -498,7 +521,8 @@ public class TitleRespawn implements TaskedModule {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        if (!this.spectate && isDeadUUID(player.getUniqueId()) && event.getTo().distance(event.getFrom()) != 0) {
+        if (!this.spectate && (isDeadUUID(player.getUniqueId()) && deadPlayers.get(player.getUniqueId()) != 0)
+                && event.getTo().distance(event.getFrom()) != 0) {
             event.setCancelled(true);
             sendArmorStandPacket(player);
         }
