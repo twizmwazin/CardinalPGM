@@ -11,6 +11,7 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannel;
 import in.twizmwaz.cardinal.module.modules.chatChannels.GlobalChannel;
 import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
+import in.twizmwaz.cardinal.module.modules.ctf.FlagObjective;
 import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
@@ -99,9 +100,17 @@ public class Teams {
     public static ModuleCollection<GameObjective> getShownObjectives(TeamModule team) {
         ModuleCollection<GameObjective> objectives = new ModuleCollection<>();
         for (GameObjective objective : getObjectives(team)) {
-            if (objective.showOnScoreboard() && !(objective instanceof HillObjective)) {
+            if (objective.showOnScoreboard() && !(objective instanceof HillObjective) && !(objective instanceof FlagObjective && ((FlagObjective)objective).multipleAttackers())) {
                 objectives.add(objective);
             }
+        }
+        return objectives;
+    }
+
+    public static ModuleCollection<GameObjective> getShownSharedObjectives() {
+        ModuleCollection<GameObjective> objectives = new ModuleCollection<>();
+        for (FlagObjective flag : GameHandler.getGameHandler().getMatch().getModules().getModules(FlagObjective.class)) {
+            if (flag.showOnScoreboard() && flag.multipleAttackers()) objectives.add(flag);
         }
         return objectives;
     }

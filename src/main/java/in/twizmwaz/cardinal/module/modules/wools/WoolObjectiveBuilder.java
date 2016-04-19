@@ -7,6 +7,7 @@ import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.proximity.GameObjectiveProximityHandler;
+import in.twizmwaz.cardinal.module.modules.proximity.ProximityInfo;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
@@ -59,13 +60,15 @@ public class WoolObjectiveBuilder implements ModuleBuilder {
         }
         String woolMetric = Parser.getOrderedAttribute("woolproximity-metric", elements);
         Boolean woolHorizontal = Numbers.parseBoolean(Parser.getOrderedAttribute("woolproximity-horizontal", elements), false);
-        GameObjectiveProximityHandler woolProximity = new GameObjectiveProximityHandler(location, woolHorizontal, false,
+        ProximityInfo woolInfo = new ProximityInfo(location, woolHorizontal, false,
                 woolMetric == null ? GameObjectiveProximityHandler.ProximityMetric.CLOSEST_KILL : GameObjectiveProximityHandler.ProximityMetric.getByName(woolMetric));
         String monumentMetric = Parser.getOrderedAttribute("monumentproximity-metric", elements);
         Boolean monumentHorizontal = Numbers.parseBoolean(Parser.getOrderedAttribute("monumentproximity-horizontal", elements), false);
-        GameObjectiveProximityHandler monumentProximity = new GameObjectiveProximityHandler(place.getVector(), monumentHorizontal, true,
+        ProximityInfo monumentInfo = new ProximityInfo(place.getVector(), monumentHorizontal, true,
                 monumentMetric == null ? GameObjectiveProximityHandler.ProximityMetric.CLOSEST_BLOCK : GameObjectiveProximityHandler.ProximityMetric.getByName(monumentMetric));
         ModuleCollection<Module> result =  new ModuleCollection<>();
+        GameObjectiveProximityHandler woolProximity = new GameObjectiveProximityHandler(team, woolInfo);
+        GameObjectiveProximityHandler monumentProximity = new GameObjectiveProximityHandler(team, monumentInfo);
         result.add(woolProximity);
         result.add(monumentProximity);
         result.add(new WoolObjective(team, name, id, color, place, craftable, show, required, woolProximity, monumentProximity));

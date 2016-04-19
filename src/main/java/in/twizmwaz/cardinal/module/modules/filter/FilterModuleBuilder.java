@@ -8,9 +8,12 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.BlockFilterParser;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.CauseFilterParser;
+import in.twizmwaz.cardinal.module.modules.filter.parsers.ChildFilterParser;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.ChildrenFilterParser;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.ClassFilterParser;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.EntityFilterParser;
+import in.twizmwaz.cardinal.module.modules.filter.parsers.FlagFilterParser;
+import in.twizmwaz.cardinal.module.modules.filter.parsers.FlagFilterPostParser;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.GenericFilterParser;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.ItemFilterParser;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.KillstreakFilterParser;
@@ -33,6 +36,7 @@ import in.twizmwaz.cardinal.module.modules.filter.type.KillStreakFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.MobFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.ObjectiveFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.RandomFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.SameTeamFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.SpawnFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.TeamFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.TimeFilter;
@@ -45,6 +49,11 @@ import in.twizmwaz.cardinal.module.modules.filter.type.constant.AllMobFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.constant.AllPlayerFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.constant.AllSpawnFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.constant.AllWorldFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.flag.FlagCapturedFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.flag.FlagCarriedFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.flag.FlagCarryingFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.flag.FlagDroppedFilter;
+import in.twizmwaz.cardinal.module.modules.filter.type.flag.FlagReturnedFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.logic.AllFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.logic.AnyFilter;
 import in.twizmwaz.cardinal.module.modules.filter.type.logic.NotFilter;
@@ -105,6 +114,18 @@ public class FilterModuleBuilder implements ModuleBuilder {
                 return new VoidFilter(new GenericFilterParser(element));
             case "wearing":
                 return new WearingFilter(new ItemFilterParser(element));
+            case "flag-carried":
+                return new FlagCarriedFilter(new FlagFilterPostParser(element));
+            case "flag-dropped":
+                return new FlagDroppedFilter(new FlagFilterPostParser(element));
+            case "flag-returned":
+                return new FlagReturnedFilter(new FlagFilterPostParser(element));
+            case "flag-captured":
+                return new FlagCapturedFilter(new FlagFilterPostParser(element));
+            case "carrying-flag":
+                return new FlagCarryingFilter(new FlagFilterParser(element));
+            case "same-team":
+                return new SameTeamFilter(new ChildFilterParser(element));
             case "all":
                 return new AllFilter(new ChildrenFilterParser(element));
             case "any":

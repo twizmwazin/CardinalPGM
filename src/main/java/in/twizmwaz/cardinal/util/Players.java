@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.util;
 
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
+import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.rank.Rank;
 import in.twizmwaz.cardinal.settings.Settings;
 import org.bukkit.Bukkit;
@@ -12,7 +13,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.ServerOperator;
@@ -82,6 +82,10 @@ public class Players {
         }
     }
 
+    public static void playSoundEffect(Player player, Sound sound, float volume, float pitch) {
+        playSoundEffect(player, player.getLocation(), sound, volume, pitch);
+    }
+
     public static void broadcastSoundEffect(Location loc, Sound sound, float volume, float pitch) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             playSoundEffect(player, loc, sound, volume, pitch);
@@ -90,7 +94,21 @@ public class Players {
 
     public static void broadcastSoundEffect(Sound sound, float volume, float pitch) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            playSoundEffect(player, player.getLocation(), sound, volume, pitch);
+            playSoundEffect(player, sound, volume, pitch);
+        }
+    }
+
+    public static void broadcastSoundEffect(TeamModule team, Location loc, Sound sound, float volume, float pitch) {
+        if (team == null) return;
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (team.contains(player)) playSoundEffect(player, loc, sound, volume, pitch);
+        }
+    }
+
+    public static void broadcastSoundEffect(TeamModule team, Sound sound, float volume, float pitch) {
+        if (team == null) return;
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (team.contains(player)) playSoundEffect(player, sound, volume, pitch);
         }
     }
 

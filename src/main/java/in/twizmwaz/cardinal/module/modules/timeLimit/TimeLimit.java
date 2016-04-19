@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.cores.CoreObjective;
+import in.twizmwaz.cardinal.module.modules.ctf.FlagObjective;
 import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjective;
 import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
@@ -33,7 +34,7 @@ public class TimeLimit implements Module {
 
     public static TeamModule getMatchWinner() {
         ModuleCollection <TeamModule> sortedTeams = TimeLimit.getSortedTeams();
-        return (sortedTeams.size() < 2 || getWinningTeam(sortedTeams.get(sortedTeams.size() - 1), sortedTeams.get(sortedTeams.size() - 2)) != 0) ? sortedTeams.get(sortedTeams.size() - 1) : null;
+        return (sortedTeams.size() < 2 || getWinningTeam(sortedTeams.get(sortedTeams.size() - 1), sortedTeams.get(sortedTeams.size() - 2), null) != 0) ? sortedTeams.get(sortedTeams.size() - 1) : null;
     }
 
     public static ModuleCollection<TeamModule> getSortedTeams() {
@@ -41,21 +42,22 @@ public class TimeLimit implements Module {
         Collections.sort(winnerList, new Comparator<TeamModule>() {
             @Override
             public int compare(TeamModule team1, TeamModule team2) {
-                return getWinningTeam(team1, team2);
+                return getWinningTeam(team1, team2, null);
             }
         });
         return winnerList;
     }
 
-    public static int getWinningTeam(TeamModule team1, TeamModule team2){
+    public static int getWinningTeam(TeamModule team1, TeamModule team2, Result result){
         if (team1.isObserver()) return -1;
         if (team2.isObserver()) return 1;
         TimeLimit timeLimit = GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class);
+        if (result == null) result = timeLimit.getResult();
         if (timeLimit != null) {
-            if (timeLimit.getResult().equals(Result.TEAM)) {
+            if (result.equals(Result.TEAM)) {
                 if (team1.equals(timeLimit.getTeam())) return 1;
                 if (team2.equals(timeLimit.getTeam())) return -1;
-            } else if (timeLimit.getResult().equals(Result.MOST_OBJECTIVES)) {
+            } else if (result.equals(Result.MOST_OBJECTIVES)) {
                 int completedObjectives1 = 0, completedObjectives2 = 0;
                 int touchedObjectives1 = 0, touchedObjectives2 = 0;
 
@@ -64,7 +66,7 @@ public class TimeLimit implements Module {
                         if (obj instanceof WoolObjective){
                             if (obj.getTeam().equals(team1)) completedObjectives1++;
                             if (obj.getTeam().equals(team2)) completedObjectives2++;
-                        } else if (!(obj instanceof HillObjective)){
+                        } else if (!(obj instanceof HillObjective || obj instanceof FlagObjective)){
                             if (!obj.getTeam().equals(team1)) completedObjectives1++;
                             if (!obj.getTeam().equals(team2)) completedObjectives2++;
                         }
@@ -112,6 +114,15 @@ public class TimeLimit implements Module {
                             } else if (obj instanceof DestroyableObjective){
                                 if (!obj.getTeam().equals(team1)) closestCompletion1.add(((DestroyableObjective) obj).getPercent());
                                 if (!obj.getTeam().equals(team2)) closestCompletion2.add(((DestroyableObjective) obj).getPercent());
+                            } else if (obj instanceof FlagObjective) {
+                                if (!obj.getTeam().equals(team1)) {
+                                    closestCompletion1.add(50);
+                                    proximity1.add(((FlagObjective) obj).getProximity(team1));
+                                }
+                                if (obj.getTeam().equals(team2)) {
+                                    closestCompletion2.add(50);
+                                    proximity2.add(((FlagObjective) obj).getProximity(team2));
+                                }
                             }
                         }
                     }
@@ -137,11 +148,14 @@ public class TimeLimit implements Module {
                             if (obj.getTeam().equals(team1)) proximity1.add(((WoolObjective) obj).getProximity());
                             if (obj.getTeam().equals(team2)) proximity2.add(((WoolObjective) obj).getProximity());
                         } else if (obj instanceof CoreObjective){
-                            if (!obj.getTeam().equals(team1)) proximity1.add(((CoreObjective) obj).getProximity());
-                            if (!obj.getTeam().equals(team2)) proximity2.add(((CoreObjective) obj).getProximity());
+                            if (!obj.getTeam().equals(team1)) proximity1.add(((CoreObjective) obj).getProximity(team1));
+                            if (!obj.getTeam().equals(team2)) proximity2.add(((CoreObjective) obj).getProximity(team2));
                         } else if (obj instanceof DestroyableObjective){
-                            if (!obj.getTeam().equals(team1)) proximity1.add(((DestroyableObjective) obj).getProximity());
-                            if (!obj.getTeam().equals(team2)) proximity2.add(((DestroyableObjective) obj).getProximity());
+                            if (!obj.getTeam().equals(team1)) proximity1.add(((DestroyableObjective) obj).getProximity(team1));
+                            if (!obj.getTeam().equals(team2)) proximity2.add(((DestroyableObjective) obj).getProximity(team2));
+                        } else if (obj instanceof FlagObjective){
+                            if (!obj.getTeam().equals(team1)) proximity1.add(((FlagObjective) obj).getProximity(team1));
+                            if (!obj.getTeam().equals(team2)) proximity2.add(((FlagObjective) obj).getProximity(team2));
                         }
                     }
                 }
@@ -158,16 +172,19 @@ public class TimeLimit implements Module {
                     }
                     if (!prox1.equals(prox2)) return prox1 < prox2 ? 1 : -1;
                 }
-            } else if (timeLimit.getResult().equals(Result.TIE)) {
                 return 0;
-            } else if (timeLimit.getResult().equals(Result.MOST_PLAYERS)) {
+            } else if (result.equals(Result.TIE)) {
+                return 0;
+            } else if (result.equals(Result.MOST_PLAYERS)) {
+                if (team1.size() == team2.size()) return getWinningTeam(team1, team2, Result.MOST_OBJECTIVES);
                 return team1.size() - team2.size();
-            } else if (timeLimit.getResult().equals(Result.HIGHEST_SCORE)) {
+            } else if (result.equals(Result.HIGHEST_SCORE)) {
                 int score1 = Integer.MIN_VALUE,score2 = Integer.MIN_VALUE;
                 for (ScoreModule scoreModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
                     if (scoreModule.getTeam().equals(team1)) score1 = scoreModule.getScore();
                     if (scoreModule.getTeam().equals(team2)) score2 = scoreModule.getScore();
                 }
+                if (score1 - score2 == 0) return getWinningTeam(team1, team2, Result.MOST_OBJECTIVES);
                 return score1 - score2;
             }
         }

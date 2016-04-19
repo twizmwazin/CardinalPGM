@@ -22,7 +22,6 @@ import net.minecraft.server.PacketPlayOutEntityDestroy;
 import net.minecraft.server.PacketPlayOutNamedEntitySpawn;
 import net.minecraft.server.PacketPlayOutPlayerInfo;
 import net.minecraft.server.PacketPlayOutScoreboardTeam;
-import net.minecraft.server.ScoreboardTeam;
 import net.minecraft.server.WorldSettings;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;

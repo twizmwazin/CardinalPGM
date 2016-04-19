@@ -50,7 +50,7 @@ public class RectangleRegion extends CuboidRegion {
 
     @Override
     public BlockRegion getCenterBlock() {
-        return new BlockRegion(null, new Vector(getXMin(), 0, getXMax()).midpoint(new Vector(getXMax(), 256, getZMax())));
+        return new BlockRegion(null, new Vector(getXMin(), 0, getZMin()).midpoint(new Vector(getXMax(), 256, getZMax())));
     }
 
 }

@@ -25,7 +25,7 @@ public class TeamModuleBuilder implements ModuleBuilder {
         List<Element> teamElements = teams.getChildren();
         for (Element teamNode : teamElements) {
             String name = teamNode.getText();
-            String id = teamNode.getAttributeValue("id") == null ? name.toLowerCase().split(" ")[0] : teamNode.getAttribute("id").getValue();
+            String id = teamNode.getAttributeValue("id") == null ? name.toLowerCase() : teamNode.getAttributeValue("id");
             int min;
             try {
                 min = Integers.parseInt(teamNode.getAttribute("min").getValue(), doc.getRootElement().getChildren("blitz").size() != 0 ? 1 : 0);

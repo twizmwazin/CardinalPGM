@@ -50,24 +50,24 @@ public class Proto {
                 && this.patch == ((Proto) object).getPatch();
     }
 
-    public boolean biggerThan(Proto proto) {
+    public boolean greaterThan(Proto proto) {
         return this.major > proto.getMajor()
                 || (this.major == proto.getMajor() && (this.minor > proto.getMinor()
                 || (this.minor == proto.getMinor() && this.patch > proto.getPatch())));
     }
 
-    public boolean biggerOrEqualTo(Proto proto) {
-        return this.equals(proto) || this.biggerThan(proto);
+    public boolean greaterOrEqualTo(Proto proto) {
+        return this.equals(proto) || this.greaterThan(proto);
     }
 
-    public boolean smallerThan(Proto proto) {
+    public boolean lessThan(Proto proto) {
         return this.major < proto.getMajor()
                 || (this.major == proto.getMajor() && (this.minor < proto.getMinor()
                 || (this.minor == proto.getMinor() && this.patch < proto.getPatch())));
     }
 
-    public boolean smallerOrEqualTo(Proto proto) {
-        return this.equals(proto) || this.smallerThan(proto);
+    public boolean lessOrEqualTo(Proto proto) {
+        return this.equals(proto) || this.lessThan(proto);
     }
 
 }

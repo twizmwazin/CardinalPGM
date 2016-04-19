@@ -2,7 +2,6 @@ package in.twizmwaz.cardinal.module.modules.friendlyFire;
 
 import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.scoreboard.ScoreboardModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;

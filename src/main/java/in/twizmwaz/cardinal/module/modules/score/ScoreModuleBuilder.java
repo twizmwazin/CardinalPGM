@@ -28,7 +28,7 @@ public class ScoreModuleBuilder implements ModuleBuilder {
                 if (max < 0) max = 0;
             }
             if ((max > 0 || score.getChild("time") != null || score.getChild("king") != null) &&
-                    match.getProto().smallerThan(new Proto(1, 3, 6))) {
+                    match.getProto().lessThan(new Proto(1, 3, 6))) {
                     pointsPerKill = 1;
                     pointsPerDeath = 1;
             }

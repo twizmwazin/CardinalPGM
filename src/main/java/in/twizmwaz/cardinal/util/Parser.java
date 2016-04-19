@@ -26,6 +26,7 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 import org.jdom2.Element;
 
 import java.lang.reflect.InvocationTargetException;
@@ -268,6 +269,12 @@ public class Parser {
         return null;
     }
 
+    public static String getOrderedAttributeOrChild(String attribute, Element... elements) {
+        if (getOrderedAttribute(attribute, elements) != null) return getOrderedAttribute(attribute, elements);
+        if (elements[0].getChild(attribute) != null) return elements[0].getChildText(attribute);
+        return null;
+    }
+
     public static String getOrderedText(Element... elements) {
         for (Element element : elements) {
             if (element.getText() != null && !element.getText().equals("")) {
@@ -276,4 +283,14 @@ public class Parser {
         }
         return null;
     }
+
+    public static Vector parseVector(String string) {
+        String[] split = string.split(",");
+        return new Vector(toDouble(split[0]), toDouble(split[1]), toDouble(split[2]));
+    }
+
+    private static double toDouble (String s) {
+        return Numbers.parseDouble(s.replace(" ", ""));
+    }
+
 }

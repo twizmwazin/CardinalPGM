@@ -37,7 +37,7 @@ public class ProximityCommand {
                     if (!team.isObserver()) {
                         sender.sendMessage(team.getCompleteName());
                         for (GameObjective objective : Teams.getShownObjectives(team)) {
-                            GameObjectiveProximityHandler proximityHandler = objective.getProximityHandler();
+                            GameObjectiveProximityHandler proximityHandler = objective.getProximityHandler(team);
                             String message = "  ";
                             if (objective instanceof WoolObjective) message += MiscUtil.convertDyeColorToChatColor(((WoolObjective)objective).getColor());
                             message += WordUtils.capitalizeFully(objective.getName().replaceAll("_", " ")) + " ";

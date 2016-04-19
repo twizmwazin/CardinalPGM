@@ -18,7 +18,6 @@ import in.twizmwaz.cardinal.module.modules.scoreboard.GameObjectiveScoreboardHan
 import in.twizmwaz.cardinal.module.modules.snowflakes.Snowflakes;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
-import in.twizmwaz.cardinal.module.modules.titleRespawn.TitleRespawn;
 import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Fireworks;
@@ -50,6 +49,7 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -64,7 +64,7 @@ public class CoreObjective implements GameObjective {
     private final boolean required;
     private boolean changesModes;
 
-    private GameObjectiveProximityHandler proximityHandler;
+    private Map<String, GameObjectiveProximityHandler> proximityHandlers;
 
     private Set<UUID> playersTouched;
     private Set<UUID> playersCompleted;
@@ -78,7 +78,7 @@ public class CoreObjective implements GameObjective {
     private GameObjectiveScoreboardHandler scoreboardHandler;
 
     protected CoreObjective(final TeamModule team, final String name, final String id, final RegionModule region, final int leak, Pair<Material, Integer> material,
-                            final boolean show, final boolean required, boolean changesModes, GameObjectiveProximityHandler proximityHandler) {
+                            final boolean show, final boolean required, boolean changesModes, Map<String, GameObjectiveProximityHandler> proximityHandlers) {
         this.team = team;
         this.name = name;
         this.id = id;
@@ -88,8 +88,10 @@ public class CoreObjective implements GameObjective {
         this.required = required;
         this.changesModes = changesModes;
 
-        this.proximityHandler = proximityHandler;
-        this.proximityHandler.setObjective(this);
+        this.proximityHandlers = proximityHandlers;
+        for (GameObjectiveProximityHandler proximityHandler : proximityHandlers.values()) {
+            proximityHandler.setObjective(this);
+        }
 
         this.playersTouched = new HashSet<>();
         this.playersCompleted = new HashSet<>();
@@ -170,8 +172,8 @@ public class CoreObjective implements GameObjective {
     }
 
     @Override
-    public GameObjectiveProximityHandler getProximityHandler() {
-        return isTouched() || isComplete() ? null : proximityHandler;
+    public GameObjectiveProximityHandler getProximityHandler(TeamModule team) {
+        return isTouched() || isComplete() ? null : proximityHandlers.get(team.getId());
     }
 
     @EventHandler
@@ -374,8 +376,10 @@ public class CoreObjective implements GameObjective {
         return blocks;
     }
 
-    public boolean showProximity() {
-        return GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getTimeLimit() != 0 && GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getResult().equals(TimeLimit.Result.MOST_OBJECTIVES);
+    public boolean showProximity(TeamModule team) {
+        return GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getTimeLimit() != 0 &&
+                GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getResult().equals(TimeLimit.Result.MOST_OBJECTIVES) &&
+                ((team.isObserver() && proximityHandlers.size() == 1) || (!team.isObserver() && !team.equals(this.team)));
     }
 
     public boolean changesModes() {
@@ -390,8 +394,8 @@ public class CoreObjective implements GameObjective {
         this.material = new ImmutablePair<>(material, damageValue);
     }
 
-    public Double getProximity() {
-        return proximityHandler.getProximity();
+    public Double getProximity(TeamModule team) {
+        return team.isObserver() ? (proximityHandlers.size() == 1 ? proximityHandlers.values().iterator().next().getProximity() : null) : (team.equals(this.team) ? null : proximityHandlers.get(team.getId()).getProximity());
     }
 
     @EventHandler

@@ -31,7 +31,6 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.util.BlockVector;
-import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -90,8 +89,7 @@ public class HillObjective implements TaskedModule, GameObjective {
         this.controlTime = 0;
 
         scoreboardHandler = new GameObjectiveScoreboardHandler(this);
-        proximityHandler = new GameObjectiveProximityHandler(new Vector(0, 0, 0), false, false, GameObjectiveProximityHandler.ProximityMetric.NULL_PROXIMITY);
-        proximityHandler.setObjective(this);
+
         this.capturingPlayers = new HashSet<>();
 
         renderBlocks();
@@ -174,8 +172,8 @@ public class HillObjective implements TaskedModule, GameObjective {
     }
 
     @Override
-    public GameObjectiveProximityHandler getProximityHandler() {
-        return proximityHandler;
+    public GameObjectiveProximityHandler getProximityHandler(TeamModule team) {
+        return null;
     }
 
     public int getPointsGrowth() {
