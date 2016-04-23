@@ -83,6 +83,7 @@ public class KitNode implements KitRemovable {
                 }
             }
         }
+        player.updateInventory();
     }
 
     @Override
@@ -93,6 +94,7 @@ public class KitNode implements KitRemovable {
         for (KitNode kit : parentKits) {
             kit.remove(player);
         }
+        player.updateInventory();
     }
 
     public String getName() {

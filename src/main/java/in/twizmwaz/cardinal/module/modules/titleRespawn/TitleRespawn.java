@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.titleRespawn;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -26,24 +27,26 @@ import in.twizmwaz.cardinal.module.modules.visibility.Visibility;
 import in.twizmwaz.cardinal.util.PacketUtils;
 import in.twizmwaz.cardinal.util.Players;
 import in.twizmwaz.cardinal.util.Teams;
+import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
+import net.minecraft.server.AttributeInstance;
+import net.minecraft.server.AttributeModifier;
 import net.minecraft.server.DataWatcher;
 import net.minecraft.server.DataWatcherRegistry;
 import net.minecraft.server.EntityPlayer;
 import net.minecraft.server.EnumItemSlot;
 import net.minecraft.server.Packet;
-import net.minecraft.server.PacketPlayOutAbilities;
 import net.minecraft.server.PacketPlayOutEntityDestroy;
 import net.minecraft.server.PacketPlayOutEntityEquipment;
 import net.minecraft.server.PacketPlayOutEntityMetadata;
 import net.minecraft.server.PacketPlayOutEntityStatus;
 import net.minecraft.server.PacketPlayOutMount;
 import net.minecraft.server.PacketPlayOutSpawnEntityLiving;
+import net.minecraft.server.PacketPlayOutUpdateAttributes;
 import net.minecraft.server.PacketPlayOutWorldBorder;
-import net.minecraft.server.PlayerAbilities;
 import net.minecraft.server.WorldBorder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -280,8 +283,24 @@ public class TitleRespawn implements TaskedModule {
                 dataItems                                 // Metadata
         );
 
+        // Create a packet to send attributes for the Armor Stand (with no modifiers)
+        PacketPlayOutUpdateAttributes attributePacket = new PacketPlayOutUpdateAttributes(Integer.MAX_VALUE, new ArrayList<AttributeInstance>());
+
+        try {
+            Field field = attributePacket.getClass().getDeclaredField("b");
+            field.setAccessible(true);
+
+            // Add a max health attribute with 0, so that health doesn't display
+            ((List<PacketPlayOutUpdateAttributes.AttributeSnapshot>) field.get(attributePacket)).add(
+                    attributePacket.new AttributeSnapshot("generic.maxHealth", 0D, Lists.<AttributeModifier>newArrayList()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         PacketUtils.sendPacket(player, spawnPacket);
+        PacketUtils.sendPacket(player, attributePacket);
         PacketUtils.sendPacket(player, new PacketPlayOutMount(Integer.MAX_VALUE, nmsPlayer.getId()));
+        player.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""));
     }
 
     private void destroyArmorStandPacket(Player player) {
