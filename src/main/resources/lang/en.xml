@@ -104,6 +104,8 @@
         <proximityObsOnly>The /proximity command is only available to observers.</proximityObsOnly>
         <proximityNoScoring>There are no objectives that track proximity.</proximityNoScoring>
         <inventoryNotViewable>Player's inventory is not currently viewable</inventoryNotViewable>
+        <playerAlreadyFrozen>{0} is already frozen!</playerAlreadyFrozen>
+        <playerNotFrozen>{0} is not frozen!</playerNotFrozen>
     </error>
     <generic>
         <mapSet>Next map set to {0}</mapSet>
@@ -203,6 +205,10 @@
         <unmuted>You unmuted {0}</unmuted>
         <unmutedBy>You were unmuted by {0}</unmutedBy>
         <createdBy>Created by</createdBy>
+        <frozenBy>You have been frozen by {0}</frozenBy>
+        <unfrozenBy>You have been unfrozen by {0}</unfrozenBy>
+        <froze>{0} froze {1}</froze>
+        <unfroze>{0} unfroze {1}</unfroze>
     </generic>
     <misc>
         <enemy>the enemy</enemy>
@@ -331,6 +337,7 @@
         <deathRespawnConfirmedTime>Respawning in {0}s</deathRespawnConfirmedTime>
         <deathRespawnConfirmedWaiting>You will respawn as soon as possible...</deathRespawnConfirmedWaiting>
         <deathRespawnConfirmedWaitingFlagDropped>You will respawn when the flag is dropped...</deathRespawnConfirmedWaitingFlagDropped>
+        <freezeItem>Player freezer</freezeItem>
     </userInterface>
     <deathMsg>
         <explosionSelf>{0} 'sploded</explosionSelf>

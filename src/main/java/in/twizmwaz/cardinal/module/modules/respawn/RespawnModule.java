@@ -83,5 +83,8 @@ public class RespawnModule implements Module {
         if (player.hasPermission("tnt.defuse")) {
             player.getInventory().setItem(5, Items.createItem(Material.SHEARS, 1, (short) 0, ChatColor.RED + ChatConstant.UI_TNT_DEFUSER.getMessage(player.getLocale())));
         }
+        if (player.hasPermission("cardinal.punish.freeze")) {
+            player.getInventory().setItem(6, Items.createItem(Material.ICE, 1, (short) 0, ChatColor.AQUA + ChatConstant.UI_FREEZE_ITEM.getMessage(player.getLocale())));
+        }
     }
 }
