@@ -36,6 +36,7 @@
         <permission>cardinal.punish.kick</permission>
         <permission>cardinal.punish.ban</permission>
         <permission>cardinal.punish.mute</permission>
+        <permission>cardinal.punish.freeze</permission>
         <permission>minecraft.command.pardon</permission>
     </rank>
 </ranks>

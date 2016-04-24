@@ -263,7 +263,7 @@ public class TitleRespawn implements TaskedModule {
         }, 1L);
     }
 
-    private void sendArmorStandPacket(Player player) {
+    public void sendArmorStandPacket(Player player) {
         EntityPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
         Location loc = player.getLocation();
 
@@ -284,7 +284,7 @@ public class TitleRespawn implements TaskedModule {
         PacketUtils.sendPacket(player, new PacketPlayOutMount(Integer.MAX_VALUE, nmsPlayer.getId()));
     }
 
-    private void destroyArmorStandPacket(Player player) {
+    public void destroyArmorStandPacket(Player player) {
         PacketUtils.sendPacket(player, new PacketPlayOutEntityDestroy(Integer.MAX_VALUE));
     }
 
@@ -518,13 +518,11 @@ public class TitleRespawn implements TaskedModule {
         dropInventory(event.getPlayer());
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerMove(PlayerMoveEvent event) {
+    @EventHandler
+    public void onPlayerMove(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
-        if (!this.spectate && (isDeadUUID(player.getUniqueId()) && deadPlayers.get(player.getUniqueId()) != 0)
-                && event.getTo().distance(event.getFrom()) != 0) {
+        if (!this.spectate && (isDeadUUID(player.getUniqueId()) && deadPlayers.get(player.getUniqueId()) != 0)) {
             event.setCancelled(true);
-            sendArmorStandPacket(player);
         }
     }
 

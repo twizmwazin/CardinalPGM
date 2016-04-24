@@ -78,6 +78,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -240,16 +241,14 @@ public class ObserverModule implements Module {
                     event.getPlayer().openInventory(beacon);
                 }
             }
-        } else if (testObserver(event.getPlayer())) {
-            event.setCancelled(true);
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         if (testObserver(event.getPlayer())) {
             if (event.getRightClicked() instanceof Player && !event.getPlayer().isSneaking()){
-                openInventory(event.getPlayer(), (Player) event.getRightClicked(), false);
+                if (event.getHand().equals(EquipmentSlot.HAND)) openInventory(event.getPlayer(), (Player) event.getRightClicked(), false);
             } else if (event.getRightClicked() instanceof ItemFrame) {
                 event.setCancelled(true);
             }

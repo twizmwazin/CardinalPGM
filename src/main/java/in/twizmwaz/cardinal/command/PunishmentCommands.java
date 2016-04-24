@@ -10,6 +10,7 @@ import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.module.modules.chatChannels.AdminChannel;
 import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannel;
+import in.twizmwaz.cardinal.module.modules.freeze.FreezeModule;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Players;
@@ -119,4 +120,42 @@ public class PunishmentCommands {
             ChatUtil.getGlobalChannel().sendLocalizedMessage(ChatConstant.UI_GLOBAL_MUTE_DISABLED.asMessage(ChatColor.AQUA));
         }
     }
+
+    @Command(aliases = {"f"}, usage = "<player>", desc = "Toggles a player freeze", min = 1, max = 1)
+    @CommandPermissions("cardinal.punish.freeze")
+    public static void f(CommandContext cmd, CommandSender sender) throws CommandException {
+        Player player = Bukkit.getPlayer(cmd.getString(0));
+        if (player == null)
+            throw new CommandException(ChatConstant.ERROR_NO_PLAYER_MATCH.getMessage(ChatUtil.getLocale(sender)));
+        FreezeModule freezeModule = GameHandler.getGameHandler().getMatch().getModules().getModule(FreezeModule.class);
+        freezeModule.togglePlayerFreeze(player, sender);
+    }
+
+    @Command(aliases = {"freeze"}, usage = "<player>", desc = "Freeze a player", min = 1, max = 1)
+    @CommandPermissions("cardinal.punish.freeze")
+    public static void freeze(CommandContext cmd, CommandSender sender) throws CommandException {
+        Player player = Bukkit.getPlayer(cmd.getString(0));
+        if (player == null)
+            throw new CommandException(ChatConstant.ERROR_NO_PLAYER_MATCH.getMessage(ChatUtil.getLocale(sender)));
+        FreezeModule freezeModule = GameHandler.getGameHandler().getMatch().getModules().getModule(FreezeModule.class);
+        if (freezeModule.getFrozenPlayers().contains(player)) {
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_ALREADY_FROZEN, player.getDisplayName() + ChatColor.RED).getMessage(ChatUtil.getLocale(sender)));
+        }
+        freezeModule.togglePlayerFreeze(player, sender);
+    }
+
+
+    @Command(aliases = {"unfreeze"}, usage = "<player>", desc = "Unfreeze a frozen player", min = 1, max = 1)
+    @CommandPermissions("cardinal.punish.freeze")
+    public static void unfreeze(CommandContext cmd, CommandSender sender) throws CommandException {
+        Player player = Bukkit.getPlayer(cmd.getString(0));
+        if (player == null)
+            throw new CommandException(ChatConstant.ERROR_NO_PLAYER_MATCH.getMessage(ChatUtil.getLocale(sender)));
+        FreezeModule freezeModule = GameHandler.getGameHandler().getMatch().getModules().getModule(FreezeModule.class);
+        if (!freezeModule.getFrozenPlayers().contains(player)) {
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_PLAYER_NOT_FROZEN, player.getDisplayName() + ChatColor.RED).getMessage(ChatUtil.getLocale(sender)));
+        }
+        freezeModule.togglePlayerFreeze(player, sender);
+    }
+
 }
