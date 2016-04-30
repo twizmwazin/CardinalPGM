@@ -398,24 +398,13 @@ public class ScoreboardModule implements Module {
 
     public Class getSpecificObjective() {
         Class objective = null;
-        boolean checkHills = true;
-        for (TeamModule team : Teams.getTeams()) {
-            for (GameObjective obj : Teams.getShownObjectives(team)) {
+        for (GameObjective obj : GameHandler.getGameHandler().getMatch().getModules().getModules(GameObjective.class)) {
+            if (obj.showOnScoreboard()) {
                 if (objective == null) {
                     objective = obj.getClass();
                 } else if (objective != obj.getClass()) {
                     objective = null;
-                    checkHills = false;
                     break;
-                }
-            }
-        }
-        if (checkHills) {
-            for (GameObjective obj : Scoreboards.getHills()) {
-                if (objective == null) {
-                    objective = obj.getClass();
-                } else if (objective != obj.getClass()) {
-                    objective = null;
                 }
             }
         }

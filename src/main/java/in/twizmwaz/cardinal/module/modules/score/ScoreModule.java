@@ -12,13 +12,15 @@ import org.bukkit.event.HandlerList;
 
 public class ScoreModule implements Module {
 
+    private final boolean scoring;
     private final TeamModule team;
     private final int pointsPerKill;
     private final int pointsPerDeath;
     private final int max;
     private double score;
 
-    public ScoreModule(final TeamModule team, final int pointsPerKill, final int pointsPerDeath, final int max) {
+    public ScoreModule(final boolean scoring, final TeamModule team, final int pointsPerKill, final int pointsPerDeath, final int max) {
+        this.scoring = scoring;
         this.team = team;
         this.score = 0;
         this.pointsPerKill = pointsPerKill;
@@ -27,25 +29,7 @@ public class ScoreModule implements Module {
     }
 
     public static boolean matchHasScoring() {
-        return matchHasPointsPerKill() || matchHasPointsPerDeath() || matchHasMax();
-    }
-
-    public static boolean matchHasPointsPerKill() {
-        for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
-            if (score.getPointsPerKill() != 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean matchHasPointsPerDeath() {
-        for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
-            if (score.getPointsPerDeath() != 0) {
-                return true;
-            }
-        }
-        return false;
+        return GameHandler.getGameHandler().getMatch().getModules().getModule(ScoreModule.class).scoring;
     }
 
     public static boolean matchHasMax() {
@@ -107,16 +91,10 @@ public class ScoreModule implements Module {
     @EventHandler
     public void onCardinalDeath(CardinalDeathEvent event) {
         if (matchHasScoring()) {
-            if (event.getKiller() != null) {
-                if (Teams.getTeamByPlayer(event.getKiller()).isPresent() && Teams.getTeamByPlayer(event.getKiller()).get().equals(team)) {
-                    score += pointsPerKill;
-                    Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
-                }
-            } else {
-                if (Teams.getTeamByPlayer(event.getPlayer()).isPresent() && Teams.getTeamByPlayer(event.getPlayer()).get().equals(team)) {
-                    score -= pointsPerKill;
-                    Bukkit.getServer().getPluginManager().callEvent(new ScoreUpdateEvent(this));
-                }
+            if (event.getKiller() != null && Teams.getTeamByPlayer(event.getKiller()).orNull() == team) {
+                addScore(pointsPerKill);
+            } else if (Teams.getTeamByPlayer(event.getPlayer()).orNull() == team) {
+                addScore(pointsPerDeath * -1);
             }
         }
     }
