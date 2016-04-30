@@ -102,28 +102,6 @@ public class ObserverModule implements Module {
         HandlerList.unregisterAll(this);
     }
 
-    private void resetPlayer(Player player, boolean clear) {
-        player.setGameMode(GameMode.CREATIVE);
-        player.setAllowFlight(true);
-        player.setFlying(true);
-        player.setAffectsSpawning(false);
-        player.setCollidesWithEntities(false);
-        player.setCanPickupItems(false);
-
-        if (clear) {
-            player.getInventory().clear();
-            Players.resetPlayer(player, false);
-        }
-
-        GameHandler.getGameHandler().getMatch().getModules().getModule(RespawnModule.class).giveObserversKit(player);
-        player.closeInventory();
-
-        try {
-            player.updateInventory();
-        } catch (NullPointerException ignored) {
-        }
-    }
-
     @EventHandler
     public void onMatchStart(MatchStartEvent event) {
         if (Blitz.matchIsBlitz()){
@@ -136,34 +114,13 @@ public class ObserverModule implements Module {
     }
 
     @EventHandler
-    public void onMatchEnd(MatchEndEvent event) {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            resetPlayer(player, true);
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerRespawn(PlayerRespawnEvent event) {
-        if (match.getState().equals(MatchState.ENDED) || match.getState().equals(MatchState.CYCLING)) {
-            if (event.getPlayer().getGameMode().equals(GameMode.SURVIVAL)) {
-                Player player = event.getPlayer();
-                resetPlayer(player, true);
-            }
-        }
-    }
-
-    @EventHandler
-    public void onPlayerSpawn(CardinalSpawnEvent event) {
-        if (event.isCancelled()) return;
-        if (!event.getTeam().isObserver()) {
-            if (match.isRunning()) {
-                event.getPlayer().setGameMode(GameMode.SURVIVAL);
-                event.getPlayer().setAffectsSpawning(true);
-                event.getPlayer().setCollidesWithEntities(true);
-                event.getPlayer().setCanPickupItems(true);
-            }
+    public void onCardinalSpawn(CardinalSpawnEvent event) {
+        if (GameHandler.getGameHandler().getMatch().isRunning() && !event.getTeam().isObserver()) {
+            Players.resetPlayer(event.getPlayer());
+            event.getPlayer().setGameMode(GameMode.SURVIVAL);
+            Players.canInteract(event.getPlayer(), true);
         } else {
-            resetPlayer(event.getPlayer(), false);
+            Players.setObserver(event.getPlayer());
         }
     }
 
@@ -485,17 +442,6 @@ public class ObserverModule implements Module {
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         if (testObserverOrDead(event.getPlayer())) {
             event.getItemDrop().remove();
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerTeamChange(PlayerChangeTeamEvent event) {
-        if (testObserverOrDead(event.getPlayer())) {
-            resetPlayer(event.getPlayer(), true);
-        } else {
-            event.getPlayer().setAffectsSpawning(true);
-            event.getPlayer().setCollidesWithEntities(true);
-            event.getPlayer().setCanPickupItems(true);
         }
     }
 

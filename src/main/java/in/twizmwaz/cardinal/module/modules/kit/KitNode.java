@@ -99,7 +99,7 @@ public class KitNode implements KitRemovable {
         return name;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onCycleComplete(CycleCompleteEvent event) {
         if (!preParents.equals("")) {
             for (String parent : preParents.split(",")) {

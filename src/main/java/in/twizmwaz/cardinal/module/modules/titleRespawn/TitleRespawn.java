@@ -10,6 +10,7 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
+import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
@@ -293,11 +294,13 @@ public class TitleRespawn implements TaskedModule {
         if (!teleport) {
             this.deadPlayers.remove(uuid);
             this.hasLeftClicked.remove(uuid);
-            PlayerNameUpdateEvent nameUpdateEvent = new PlayerNameUpdateEvent(player);
-            Bukkit.getServer().getPluginManager().callEvent(nameUpdateEvent);
             Players.resetPlayer(player);
             setBlood(player, false);
             destroyArmorStandPacket(player);
+            CardinalSpawnEvent respawnEvent = new CardinalSpawnEvent(player, Teams.getTeamByPlayer(player).get());
+            GameHandler.getGameHandler().getPlugin().getServer().getPluginManager().callEvent(respawnEvent);
+            PlayerNameUpdateEvent nameUpdateEvent = new PlayerNameUpdateEvent(player);
+            Bukkit.getServer().getPluginManager().callEvent(nameUpdateEvent);
             return;
         }
 
@@ -309,12 +312,7 @@ public class TitleRespawn implements TaskedModule {
                 deadPlayers.put(uuid, 0L);
                 hasLeftClicked.add(uuid);
 
-                Players.resetPlayer(player);
-
-                player.setAffectsSpawning(false);
-                player.setCollidesWithEntities(false);
-                player.setCanPickupItems(false);
-                player.setPotionParticles(false);
+                Players.setObserver(player);
 
                 player.showTitle(new TextComponent(""), new TextComponent(""), 0, Integer.MAX_VALUE, 0);
                 GameHandler.getGameHandler().getMatch().getModules().getModule(Visibility.class).showOrHide(player);
@@ -322,18 +320,10 @@ public class TitleRespawn implements TaskedModule {
             return;
         }
 
+        setBlood(player, false);
         destroyArmorStandPacket(player);
-        Players.resetPlayer(player);
-
-        if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING) && !Teams.getTeamByPlayer(player).get().isObserver()) {
-            player.setGameMode(GameMode.SURVIVAL);
-        } else {
-            player.setGameMode(GameMode.CREATIVE);
-        }
 
         player.setTitleTimes(0, 0, 10);
-
-        setBlood(player, false);
 
         CardinalSpawnEvent respawnEvent = new CardinalSpawnEvent(player, Teams.getTeamByPlayer(player).get());
         GameHandler.getGameHandler().getPlugin().getServer().getPluginManager().callEvent(respawnEvent);
@@ -346,15 +336,6 @@ public class TitleRespawn implements TaskedModule {
         } else {
             player.teleport(respawnEvent.getSpawn().getLocation(), PlayerTeleportEvent.TeleportCause.UNKNOWN);
         }
-
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(), new Runnable() {
-            public void run() {
-                Optional<TeamModule> team = Teams.getTeamByPlayer(player);
-                if (team.isPresent() && (team.get().isObserver() || !GameHandler.getGameHandler().getMatch().isRunning())) {
-                    GameHandler.getGameHandler().getMatch().getModules().getModule(RespawnModule.class).giveObserversKit(player);
-                }
-            }
-        }, 1L);
     }
 
     private void killPlayer(final Player player, Player killer, EntityDamageEvent.DamageCause cause) {
@@ -372,12 +353,7 @@ public class TitleRespawn implements TaskedModule {
 
         if (!isDeadUUID(player.getUniqueId())) return;
 
-        Players.resetPlayer(player);
-
-        player.setAffectsSpawning(false);
-        player.setCollidesWithEntities(false);
-        player.setCanPickupItems(false);
-        player.setPotionParticles(false);
+        Players.setObserver(player);
 
         PlayerNameUpdateEvent nameUpdateEvent = new PlayerNameUpdateEvent(player);
         Bukkit.getServer().getPluginManager().callEvent(nameUpdateEvent);
@@ -475,15 +451,8 @@ public class TitleRespawn implements TaskedModule {
 
     @EventHandler
     public void onMatchEnd(MatchEndEvent event) {
-        for (final Player player : Bukkit.getOnlinePlayers()) {
-            if (isDeadUUID(player.getUniqueId())) {
-                respawnPlayer(player, false);
-            }
-            Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(Cardinal.getInstance(), new Runnable() {
-                public void run() {
-                    GameHandler.getGameHandler().getMatch().getModules().getModule(RespawnModule.class).giveObserversKit(player);
-                }
-            }, 1L);
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            respawnPlayer(player, false);
         }
     }
 
@@ -497,19 +466,7 @@ public class TitleRespawn implements TaskedModule {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerSwitchTeam(PlayerChangeTeamEvent event) {
-        if (GameHandler.getGameHandler().getMatch().isRunning()) {
-            respawnPlayer(event.getPlayer(), !(event.getNewTeam().get().isObserver() && isDeadUUID(event.getPlayer().getUniqueId())));
-            final Player player = event.getPlayer();
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                    if (TitleRespawn.this.isDeadUUID(player.getUniqueId())) {
-                        player.showTitle(new TextComponent(""), new TextComponent(""), 0, Integer.MAX_VALUE, 0);
-                        getSubtitleLogic();
-                    }
-                }
-            }, 1L);
-        }
+        respawnPlayer(event.getPlayer(), GameHandler.getGameHandler().getMatch().isRunning() && !(event.getNewTeam().get().isObserver() && isDeadUUID(event.getPlayer().getUniqueId())));
     }
 
     @EventHandler
@@ -533,6 +490,13 @@ public class TitleRespawn implements TaskedModule {
         boolean material = event.getBucket().equals(Material.WATER_BUCKET) || event.getBucket().equals(Material.LAVA_BUCKET) || event.getBucket().equals(Material.LAVA) || event.getBucket().equals(Material.WATER) || event.getBucket().equals(Material.AIR);
         if (material && isDeadUUID(event.getPlayer().getUniqueId())) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onCycleComplete(CycleCompleteEvent event) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            respawnPlayer(player, true);
         }
     }
 

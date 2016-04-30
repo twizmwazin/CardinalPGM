@@ -185,7 +185,7 @@ public class Parser {
     public static PotionEffect getPotion(Element potion) {
         PotionEffectType type = PotionEffectType.getByName(Strings.getTechnicalName(potion.getText()));
         if (type == null) type = new CraftPotionEffectType(MobEffectList.getByName(potion.getText().toLowerCase().replace(" ","_")));
-        int duration = Numbers.parseInt(potion.getAttributeValue("duration")) == Integer.MAX_VALUE ? Numbers.parseInt(potion.getAttributeValue("duration")) : Numbers.parseInt(potion.getAttributeValue("duration")) * 20;
+        int duration = (int) (Strings.timeStringToExactSeconds(potion.getAttributeValue("duration")) * 20);
         int amplifier = 0;
         boolean ambient = false;
         if (potion.getAttributeValue("amplifier") != null)

@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.util;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import in.twizmwaz.cardinal.rank.Rank;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.attribute.Attribute;
@@ -54,6 +55,22 @@ public class Players {
         player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).addModifier(new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 4.001D, AttributeModifier.Operation.ADD_SCALAR));
         player.getAttribute(Attribute.ARROW_ACCURACY).addModifier(new AttributeModifier(UUID.randomUUID(), "sportbukkit.arrowAccuracy", -1D, AttributeModifier.Operation.ADD_NUMBER));
         player.getAttribute(Attribute.ARROW_VELOCITY_TRANSFER).addModifier(new AttributeModifier(UUID.randomUUID(), "sportbukkit.arrowVelocityTransfer", -1D, AttributeModifier.Operation.ADD_NUMBER));
+    }
+
+    public static void canInteract(Player player, boolean state) {
+        player.setAffectsSpawning(state);
+        player.setCollidesWithEntities(state);
+        player.setCanPickupItems(state);
+    }
+
+    public static void setObserver(Player player) {
+        player.setGameMode(GameMode.CREATIVE);
+        player.setAllowFlight(true);
+        player.setFlying(true);
+        canInteract(player, false);
+        resetPlayer(player, false);
+        player.closeInventory();
+
     }
 
     public static double getSnowflakeMultiplier(OfflinePlayer player) {

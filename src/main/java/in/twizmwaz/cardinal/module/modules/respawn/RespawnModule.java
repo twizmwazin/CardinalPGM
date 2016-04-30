@@ -70,20 +70,7 @@ public class RespawnModule implements Module {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onCycleComplete(CycleCompleteEvent event) {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            CardinalSpawnEvent spawnEvent = new CardinalSpawnEvent(player, Teams.getTeamById("observers").get());
-            Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
-            if (!spawnEvent.isCancelled()) {
-                Players.resetPlayer(player);
-                giveObserversKit(player);
-                player.teleport(spawnEvent.getSpawn().getLocation());
-            }
-        }
-    }
-
-    public void giveObserversKit(Player player) {
+    public static void giveObserversKit(Player player) {
         if (GameHandler.getGameHandler().getMatch().getModules().getModule(TitleRespawn.class).isDeadUUID(player.getUniqueId())) return;
         player.getInventory().setItem(0, Items.createItem(Material.COMPASS, 1, (short) 0, ChatColor.BLUE + "" + ChatColor.BOLD + ChatConstant.UI_COMPASS.getMessage(player.getLocale())));
         player.getInventory().setItem(1, CardinalNotifications.book);

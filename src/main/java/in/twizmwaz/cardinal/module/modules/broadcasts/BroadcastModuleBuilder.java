@@ -19,7 +19,7 @@ public class BroadcastModuleBuilder implements ModuleBuilder {
                 int timeAfter;
                 int every = -1;
                 int count = 1;
-                message = ChatColor.translateAlternateColorCodes('`', element.getText());
+                message = ChatColor.translateAlternateColorCodes('`', element.getTextTrim());
                 timeAfter = Strings.timeStringToSeconds(element.getAttributeValue("after"));
                 if (element.getAttributeValue("every") != null) {
                     every = Strings.timeStringToSeconds(element.getAttributeValue("every"));
@@ -36,7 +36,7 @@ public class BroadcastModuleBuilder implements ModuleBuilder {
                 int timeAfter;
                 int every = -1;
                 int count = 1;
-                message = ChatColor.translateAlternateColorCodes('`', element.getText());
+                message = ChatColor.translateAlternateColorCodes('`', element.getTextTrim());
                 timeAfter = Strings.timeStringToSeconds(element.getAttributeValue("after"));
                 if (element.getAttributeValue("every") != null) {
                     every = Strings.timeStringToSeconds(element.getAttributeValue("every"));
