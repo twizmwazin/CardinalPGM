@@ -240,8 +240,10 @@ public class HillObjective implements TaskedModule, GameObjective {
         }
 
         TeamModule team1 = null, team2 = null;
+        int allowedPlayers = 0;
         for(Player player : capturingPlayers) {
-            if (!playerFilter.evaluate(player).equals(FilterState.ALLOW)) return;
+            if (!playerFilter.evaluate(player).equals(FilterState.ALLOW)) continue;
+            allowedPlayers++;
             TeamModule team = Teams.getTeamByPlayer(player).get();
             int playerCount = playerCounts.get(team) + 1;
             playerCounts.put(team, playerCount);
@@ -255,9 +257,8 @@ public class HillObjective implements TaskedModule, GameObjective {
             }
         }
 
-
         int team1Players = team1 == null ? 0 : playerCounts.get(team1);
-        int otherPlayers = capturingPlayers.size() - team1Players;
+        int otherPlayers = allowedPlayers - team1Players;
 
         if (captureRule.equals(CaptureRule.EXCLUSIVE) && otherPlayers > 0) team1Players = 0;
         if (captureRule.equals(CaptureRule.MAJORITY)) team1Players -= otherPlayers;
