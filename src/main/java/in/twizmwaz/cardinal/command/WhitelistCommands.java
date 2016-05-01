@@ -69,9 +69,9 @@ public class WhitelistCommands {
     public static void status(final CommandContext args, final CommandSender sender) throws CommandException {
         Set<OfflinePlayer> whitelisted = Bukkit.getServer().getWhitelistedPlayers();
 
-        int whitelistedPlayers = whitelisted.size();
         int onlinePlayers = Bukkit.getOnlinePlayers().size();
         int onlineWhitelistedPlayers = 0;
+        int whitelistedPlayers = whitelisted.size();
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (whitelisted.contains(player)) {
@@ -80,9 +80,15 @@ public class WhitelistCommands {
         }
 
         sender.sendMessage(Bukkit.getServer().hasWhitelist() ? ChatColor.GREEN + ChatConstant.GENERIC_WHITELIST_ENABLED.getMessage(ChatUtil.getLocale(sender)) : ChatColor.RED + ChatConstant.GENERIC_WHITELIST_DISABLED.getMessage(ChatUtil.getLocale(sender)));
-        sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(onlinePlayers == 1 ? ChatConstant.GENERIC_PLAYER_ONLINE : ChatConstant.GENERIC_PLAYERS_ONLINE, "" + ChatColor.GOLD + onlinePlayers + ChatColor.GREEN).getMessage(ChatUtil.getLocale(sender)));
-        sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(whitelistedPlayers == 1 ? ChatConstant.GENERIC_WHITELISTED_PLAYER_ONLINE : ChatConstant.GENERIC_WHITELISTED_PLAYERS_ONLINE, "" + ChatColor.GOLD + whitelistedPlayers + ChatColor.GREEN).getMessage(ChatUtil.getLocale(sender)));
-        sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(onlineWhitelistedPlayers == 1 ? ChatConstant.GENERIC_WHITELISTED_PLAYER_OUT_OF_ONLINE : ChatConstant.GENERIC_WHITELISTED_PLAYERS_OUT_OF_ONLINE, "" + ChatColor.GOLD + onlineWhitelistedPlayers + ChatColor.GREEN).getMessage(ChatUtil.getLocale(sender)));
+        //sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(onlinePlayers == 1 ? ChatConstant.GENERIC_PLAYER_ONLINE : ChatConstant.GENERIC_PLAYERS_ONLINE, "" + ChatColor.GOLD + onlinePlayers + ChatColor.GREEN).getMessage(ChatUtil.getLocale(sender)));
+        //sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(whitelistedPlayers == 1 ? ChatConstant.GENERIC_WHITELISTED_PLAYER_ONLINE : ChatConstant.GENERIC_WHITELISTED_PLAYERS_ONLINE, "" + ChatColor.GOLD + whitelistedPlayers + ChatColor.GREEN).getMessage(ChatUtil.getLocale(sender)));
+        //sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(onlineWhitelistedPlayers == 1 ? ChatConstant.GENERIC_WHITELISTED_PLAYER_OUT_OF_ONLINE : ChatConstant.GENERIC_WHITELISTED_PLAYERS_OUT_OF_ONLINE, "" + ChatColor.GOLD + onlineWhitelistedPlayers + ChatColor.GREEN).getMessage(ChatUtil.getLocale(sender)));
+        sender.sendMessage(ChatColor.GREEN + new UnlocalizedChatMessage("{0} {1}",
+                new LocalizedChatMessage(onlinePlayers == 1 ? ChatConstant.GENERIC_WHITELIST_STATUS_1_SING : ChatConstant.GENERIC_WHITELIST_STATUS_1_PLUR, ChatColor.GOLD + "" + onlinePlayers + ChatColor.GREEN),
+                new LocalizedChatMessage(onlineWhitelistedPlayers == 1 ? ChatConstant.GENERIC_WHITELIST_STATUS_2_SING : ChatConstant.GENERIC_WHITELIST_STATUS_2_PLUR, ChatColor.GOLD + "" + onlineWhitelistedPlayers + ChatColor.GREEN)).getMessage(ChatUtil.getLocale(sender)));
+        sender.sendMessage(ChatColor.GREEN + new UnlocalizedChatMessage("{0} {1}",
+                new LocalizedChatMessage(whitelistedPlayers == 1 ? ChatConstant.GENERIC_WHITELIST_STATUS_3_SING : ChatConstant.GENERIC_WHITELIST_STATUS_3_PLUR, ChatColor.GOLD + "" + whitelistedPlayers + ChatColor.GREEN),
+                new LocalizedChatMessage(onlineWhitelistedPlayers == 1 ? ChatConstant.GENERIC_WHITELIST_STATUS_4_SING : ChatConstant.GENERIC_WHITELIST_STATUS_4_PLUR, ChatColor.GOLD + "" + onlineWhitelistedPlayers + ChatColor.GREEN)).getMessage(ChatUtil.getLocale(sender)));
     }
 
     @Command(aliases = {"add", "a"}, desc = "Add someone to the whitelist.", min = 1, max = 1)
