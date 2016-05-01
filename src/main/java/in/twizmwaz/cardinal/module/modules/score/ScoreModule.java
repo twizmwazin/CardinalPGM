@@ -8,6 +8,7 @@ import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 
 public class ScoreModule implements Module {
@@ -88,14 +89,17 @@ public class ScoreModule implements Module {
         return team;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onCardinalDeath(CardinalDeathEvent event) {
         if (matchHasScoring()) {
-            if (event.getKiller() != null && Teams.getTeamByPlayer(event.getKiller()).orNull() == team) {
+            TeamModule killer = event.getKiller() == null ? null : Teams.getTeamByPlayer(event.getKiller()).orNull();
+            TeamModule dead = Teams.getTeamByPlayer(event.getPlayer()).orNull();
+            if (killer != null && killer != dead && killer == team) {
                 addScore(pointsPerKill);
-            } else if (Teams.getTeamByPlayer(event.getPlayer()).orNull() == team) {
+            } else if (dead == team) {
                 addScore(pointsPerDeath * -1);
             }
         }
     }
+
 }

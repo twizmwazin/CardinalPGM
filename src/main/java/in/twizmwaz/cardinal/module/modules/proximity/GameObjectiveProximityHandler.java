@@ -17,6 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -109,22 +110,23 @@ public class GameObjectiveProximityHandler implements Module {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onMove(PlayerMoveEvent event) {
         if (!active || !metric.equals(ProximityMetric.CLOSEST_PLAYER)) return;
         tryUpdate(event.getPlayer(), null);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlaceBlock(BlockPlaceEvent event) {
         if (!active || !metric.equals(ProximityMetric.CLOSEST_BLOCK)) return;
         tryUpdate(event.getPlayer(), event.getBlockPlaced());
     }
-    
 
-    @EventHandler
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onKill(CardinalDeathEvent event) {
-        if (!active || !metric.equals(ProximityMetric.CLOSEST_KILL) || event.getKiller() == null) return;
+        if (!active || !metric.equals(ProximityMetric.CLOSEST_KILL) || event.getKiller() == null
+                || Teams.getTeamByPlayer(event.getKiller()).orNull() == Teams.getTeamByPlayer(event.getPlayer()).orNull()) return;
         tryUpdate(event.getKiller(), null);
     }
 
