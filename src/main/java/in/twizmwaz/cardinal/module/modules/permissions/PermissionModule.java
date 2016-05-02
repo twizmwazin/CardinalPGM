@@ -73,14 +73,6 @@ public class PermissionModule implements Module {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerKick(PlayerKickEvent event) {
-        if (attachmentMap.containsKey(event.getPlayer().getUniqueId())) {
-            event.getPlayer().removeAttachment(attachmentMap.get(event.getPlayer().getUniqueId()));
-            attachmentMap.remove(event.getPlayer().getUniqueId());
-        }
-    }
-
     @EventHandler
     public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
         if (Cardinal.getInstance().getConfig().getBoolean("worldEditPermissions")) {

@@ -110,6 +110,11 @@ public enum ChatConstant {
     ERROR_PROXIMITY_OBS_ONLY("error.proximityObsOnly"),
     ERROR_PROXIMITY_NO_SCORING("error.proximityNoScoring"),
     ERROR_INVENTORY_NOT_VIEWABLE("error.inventoryNotViewable"),
+    ERROR_POLL_NEED_ID("error.pollNeedId"),
+    ERROR_POLL_NO_POLLS("error.pollNoPolls"),
+    ERROR_POLL_NO_SUCH_POLL("error.pollNoSuchPoll"),
+    ERROR_POLL_ALREADY_VOTED("error.pollAlreadyVoted"),
+    ERROR_POLL_USAGE("error.pollUsage"),
 
     GENERIC_MAP_SET("generic.mapSet"),
     GENERIC_MARKED_FOR_RELOADING("generic.markedForReloading"),
@@ -206,6 +211,11 @@ public enum ChatConstant {
     GENERIC_UNMUTED("generic.unmuted"),
     GENERIC_UNMUTED_BY("generic.unmutedBy"),
     GENERIC_CREATED_BY("generic.createdBy"),
+    GENERIC_POLL_VOTED("generic.pollVoted"),
+    GENERIC_POLL_VOTED_AGAINST("generic.pollVotedAgainst"),
+    GENERIC_POLL_SUCCEEDED("generic.pollSucceeded"),
+    GENERIC_POLL_FAILED("generic.pollFailed"),
+    GENERIC_POLL_VETOED("generic.pollVetoed"),
 
     MISC_ENEMY("misc.enemy"),
     MISC_FATE("misc.fate"),
@@ -321,6 +331,7 @@ public enum ChatConstant {
     UI_COMPASS("userInterface.compass"),
     UI_WAITING_PLAYER("userInterface.waitingPlayer"),
     UI_WAITING_PLAYERS("userInterface.waitingPlayers"),
+    UI_POLL_BOSSBAR("userInterface.pollBossbar"),
 
     UI_DEATH_RESPAWN_UNCONFIRMED("userInterface.deathRespawnUnconfirmed"),
     UI_DEATH_RESPAWN_UNCONFIRMED_TIME("userInterface.deathRespawnUnconfirmedTime"),
