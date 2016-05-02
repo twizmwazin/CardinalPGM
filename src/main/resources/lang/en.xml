@@ -106,6 +106,10 @@
         <inventoryNotViewable>Player's inventory is not currently viewable</inventoryNotViewable>
         <playerAlreadyFrozen>{0} is already frozen!</playerAlreadyFrozen>
         <playerNotFrozen>{0} is not frozen!</playerNotFrozen>
+        <pollNeedId>Multiple polls are running, specify a poll id.</pollNeedId>
+        <pollNoPolls>No polls are running.</pollNoPolls>
+        <pollNoSuchPoll>Poll {0} is not running</pollNoSuchPoll>
+        <pollAlreadyVoted>You already voted.</pollAlreadyVoted>
     </error>
     <generic>
         <mapSet>Next map set to {0}</mapSet>
@@ -209,6 +213,11 @@
         <unfrozenBy>You have been unfrozen by {0}</unfrozenBy>
         <froze>{0} froze {1}</froze>
         <unfroze>{0} unfroze {1}</unfroze>
+        <pollVoted>You voted for Poll {0}</pollVoted>
+        <pollVotedAgainst>You voted against Poll {0}</pollVotedAgainst>
+        <pollSucceeded>Poll to {0} succeeded {1}</pollSucceeded>
+        <pollFailed>Poll to {0} failed {1}</pollFailed>
+        <pollVetoed>Poll to {0} was vetoed by {1}</pollVetoed>
     </generic>
     <misc>
         <enemy>the enemy</enemy>
@@ -338,6 +347,7 @@
         <deathRespawnConfirmedWaiting>You will respawn as soon as possible...</deathRespawnConfirmedWaiting>
         <deathRespawnConfirmedWaitingFlagDropped>You will respawn when the flag is dropped...</deathRespawnConfirmedWaitingFlagDropped>
         <freezeItem>Player freezer</freezeItem>
+        <pollBossbar>{0}Poll to {1} will end in {2} {3}</pollBossbar>
     </userInterface>
     <deathMsg>
         <explosionSelf>{0} 'sploded</explosionSelf>
