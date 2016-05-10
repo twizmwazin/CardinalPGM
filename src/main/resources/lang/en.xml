@@ -157,6 +157,7 @@
         <selfRankRemoved>You have removed your own {0} rank.</selfRankRemoved>
         <noRanks>There are no ranks.</noRanks>
         <ranks>Ranks:</ranks>
+        <rankInfo>Rank Info</rankInfo>
         <ranksMoreInfo>Use /rank info &lt;rank&gt; for more info about a certain rank.</ranksMoreInfo>
         <teleported>Teleported.</teleported>
         <teleportedBy>You've been teleported by {0}</teleportedBy>
@@ -218,6 +219,11 @@
         <online>Online</online>
         <offline>Offline</offline>
         <score>Score</score>
+        <name>Name</name>
+        <parent>Parent</parent>
+        <staff>Staff</staff>
+        <default>Default</default>
+        <permissions>Permissions</permissions>
     </misc>
     <userInterface>
         <mapLoaded>Loaded Maps</mapLoaded>

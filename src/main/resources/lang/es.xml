@@ -135,6 +135,7 @@
         <and>y</and>
         <by>por</by>
         <team>Equipo</team>
+        <name>Nombre</name>
     </misc>
     <userInterface>
         <mapLoaded>Mapas cargados</mapLoaded>
