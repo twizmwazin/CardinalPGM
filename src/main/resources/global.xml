@@ -2,15 +2,6 @@
     <item-mods>
         <rule>
             <match>
-                <material>iron sword</material>
-            </match>
-            <modify>
-                <attribute amount="5" slot="slot.weapon.mainhand">generic.attackDamage</attribute>
-                <attribute amount="-3.2" slot="slot.weapon.mainhand">generic.attackSpeed</attribute>
-            </modify>
-        </rule>
-        <rule>
-            <match>
                 <material>wood axe</material>
             </match>
             <modify>
