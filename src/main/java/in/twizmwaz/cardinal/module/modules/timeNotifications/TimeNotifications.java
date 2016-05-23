@@ -20,24 +20,19 @@ import org.bukkit.event.HandlerList;
 
 public class TimeNotifications implements TaskedModule {
 
-    private static int nextTimeMessage;
     public String bossBar;
+    private int lastSecond = 0;
 
     protected TimeNotifications() {
-        nextTimeMessage = TimeLimit.getMatchTimeLimit();
-        this.bossBar = BossBars.addBroadcastedBossBar(new UnlocalizedChatMessage(""), BarColor.BLUE, BarStyle.SOLID, false);
-    }
-
-    public static void resetNextMessage() {
-        if (TimeLimit.getMatchTimeLimit() == 0) {
-            nextTimeMessage = (int) Math.round(MatchTimer.getTimeInSeconds());
-        } else {
-            nextTimeMessage = (int) Math.round(TimeLimit.getMatchTimeLimit() - MatchTimer.getTimeInSeconds());
-        }
+        this.bossBar = BossBars.addBroadcastedBossBar(new UnlocalizedChatMessage(""), BarColor.GREEN, BarStyle.SOLID, false);
     }
 
     public void changeTime(int timeLimit) {
-        BossBars.setVisible(bossBar, GameHandler.getGameHandler().getMatch().isRunning() && timeLimit > 0);
+        if (GameHandler.getGameHandler().getMatch().isRunning()) {
+            lastSecond = 0;
+            BossBars.setVisible(bossBar, timeLimit > 0);
+            if (timeLimit <= 0) sendTimeElapsedMessage(MatchTimer.getTimeInSeconds());
+        }
     }
 
     @EventHandler
@@ -63,48 +58,31 @@ public class TimeNotifications implements TaskedModule {
     @Override
     public void run() {
         if (GameHandler.getGameHandler().getMatch().isRunning()) {
+            int timeLimit = TimeLimit.getMatchTimeLimit();
             double time = MatchTimer.getTimeInSeconds();
-            double timeRemaining = TimeLimit.getMatchTimeLimit() - time;
-            if (TimeLimit.getMatchTimeLimit() == 0) {
-                if (time >= nextTimeMessage) {
-                    ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.AQUA + "{0}", new LocalizedChatMessage(ChatConstant.UI_TIME_ELAPSED, new UnlocalizedChatMessage(ChatColor.GREEN + Strings.formatTime(nextTimeMessage)))));
-                    nextTimeMessage += 300;
-                }
-                return;
-            }
-            if (TimeLimit.getMatchTimeLimit() > 0) {
-                BossBars.setTitle(bossBar, new UnlocalizedChatMessage(ChatColor.AQUA + "{0} " + ChatUtil.getTimerColor(timeRemaining) + "{1}", new LocalizedChatMessage(ChatConstant.UI_TIMER), new UnlocalizedChatMessage(Strings.formatTime(timeRemaining + 1))));
-                BossBars.setProgress(bossBar, timeRemaining / TimeLimit.getMatchTimeLimit());
-                if (timeRemaining < 30) {
-                    BossBars.broadcastedBossBars.get(bossBar).setColor(BarColor.RED);
-                } else if (timeRemaining < 60) {
-                    BossBars.broadcastedBossBars.get(bossBar).setColor(BarColor.YELLOW);
-                } else {
-                    BossBars.broadcastedBossBars.get(bossBar).setColor(BarColor.GREEN);
-                }
-            }
-            if (nextTimeMessage >= timeRemaining) {
-                if (nextTimeMessage <= 5) {
-                    ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.AQUA + "{0} " + ChatColor.DARK_RED + Strings.formatTime(nextTimeMessage), new LocalizedChatMessage(ChatConstant.UI_TIMER)));
-                    nextTimeMessage--;
-                } else if (nextTimeMessage <= 30) {
-                    ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.AQUA + "{0} " + ChatColor.GOLD + Strings.formatTime(nextTimeMessage), new LocalizedChatMessage(ChatConstant.UI_TIMER)));
-                    nextTimeMessage -= 5;
-                } else if (nextTimeMessage <= 60) {
-                    ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.AQUA + "{0} " + ChatColor.YELLOW + Strings.formatTime(nextTimeMessage), new LocalizedChatMessage(ChatConstant.UI_TIMER)));
-                    nextTimeMessage -= 15;
-                } else {
-                    ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.AQUA + "{0} " + ChatColor.GREEN + Strings.formatTime(nextTimeMessage), new LocalizedChatMessage(ChatConstant.UI_TIMER)));
-                    if ((nextTimeMessage / 60) % 5 == 0 && nextTimeMessage != 300) {
-                        nextTimeMessage -= 300;
-                    } else if (nextTimeMessage % 60 == 0 && nextTimeMessage <= 300) {
-                        nextTimeMessage -= 60;
+            if (timeLimit > 0) {
+                double timeRemaining = timeLimit - time;
+                BossBars.setProgress(bossBar, timeRemaining / timeLimit);
+                if (lastSecond != (int) time) {
+                    lastSecond = (int) time;
+                    BossBars.setTitle(bossBar, new UnlocalizedChatMessage(ChatColor.AQUA + "{0} " + ChatUtil.getTimerColor(timeRemaining) + "{1}", new LocalizedChatMessage(ChatConstant.UI_TIMER), new UnlocalizedChatMessage(Strings.formatTime(timeRemaining + 1))));
+                    if (timeRemaining < 30) {
+                        BossBars.broadcastedBossBars.get(bossBar).setColor(BarColor.RED);
+                    } else if (timeRemaining < 60) {
+                        BossBars.broadcastedBossBars.get(bossBar).setColor(BarColor.YELLOW);
                     } else {
-                        nextTimeMessage = (nextTimeMessage / 300) * 300;
+                        BossBars.broadcastedBossBars.get(bossBar).setColor(BarColor.GREEN);
                     }
                 }
+            } else if (lastSecond != (int) time) {
+                lastSecond = (int) time;
+                if ((int)time % 300 == 0) sendTimeElapsedMessage(time);
             }
         }
+    }
+
+    private void sendTimeElapsedMessage(double time) {
+        ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.AQUA + "{0}", new LocalizedChatMessage(ChatConstant.UI_TIME_ELAPSED, new UnlocalizedChatMessage(ChatColor.GREEN + Strings.formatTime(time)))));
     }
 
 }

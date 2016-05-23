@@ -13,7 +13,6 @@ import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.TimeLimitChangeEvent;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
-import in.twizmwaz.cardinal.module.modules.timeNotifications.TimeNotifications;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Strings;
 import in.twizmwaz.cardinal.util.Teams;
@@ -31,27 +30,28 @@ public class TimeLimitCommand {
             } else {
                 sender.sendMessage(ChatColor.YELLOW + ChatConstant.GENERIC_NO_TIME_LIMIT.getMessage(ChatUtil.getLocale(sender)));
             }
+            return;
+        }
+        if (!sender.hasPermission("cardinal.timelimit")) {
+            throw new CommandPermissionsException();
+        }
+        if (cmd.argsLength() == 1 && cmd.getString(0).equalsIgnoreCase("cancel")) {
+            sender.sendMessage(ChatColor.YELLOW + ChatConstant.GENERIC_TIME_LIMIT_CANCELLED.getMessage(ChatUtil.getLocale(sender)));
+            GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).setTimeLimit(0);
+            Bukkit.getServer().getPluginManager().callEvent(new TimeLimitChangeEvent());
         } else if (cmd.argsLength() > 1 && (cmd.getString(0).equalsIgnoreCase("add") || cmd.getString(0).equalsIgnoreCase("set"))) {
-            if (!sender.hasPermission("cardinal.timelimit")) {
-                throw new CommandPermissionsException();
-            }
-            int time;
+            int time = cmd.getString(0).equalsIgnoreCase("add") ? TimeLimit.getMatchTimeLimit() : 0;
             try {
-                time = Strings.timeStringToSeconds(cmd.getString(1));
+                time += Strings.timeStringToSeconds(cmd.getString(1));
             } catch (NumberFormatException e) {
-                if (!cmd.getString(1).equalsIgnoreCase("cancel")) {
-                    throw new CommandException(ChatConstant.ERROR_TIME_FORMAT_STRING.getMessage(ChatUtil.getLocale(sender)));
-                }
-                time = 0;
+                throw new CommandException(ChatConstant.ERROR_TIME_FORMAT_STRING.getMessage(ChatUtil.getLocale(sender)));
             }
-            for (TimeLimit module : GameHandler.getGameHandler().getMatch().getModules().getModules(TimeLimit.class)) {
-                if (cmd.getString(0).equalsIgnoreCase("set")) {
-                    module.setTimeLimit(time);
-                } else {
-                    module.setTimeLimit(module.getTimeLimit() + time);
-                }
+            if (time != 0) {
+                sender.sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}" + " " + ChatColor.AQUA + "{1}" + ChatColor.YELLOW + " with the result " + ChatColor.WHITE + "{2}", "The time limit is", Strings.formatTimeWithMillis(TimeLimit.getMatchTimeLimit()), GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getResult().equals(TimeLimit.Result.TEAM) ? GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getTeam().getCompleteName() + " wins" : GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getResult().name().toLowerCase().replaceAll("_", " ")).getMessage(ChatUtil.getLocale(sender)));
+            } else {
+                sender.sendMessage(ChatColor.YELLOW + ChatConstant.GENERIC_TIME_LIMIT_CANCELLED.getMessage(ChatUtil.getLocale(sender)));
             }
-            TimeNotifications.resetNextMessage();
+            GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).setTimeLimit(time);
             if (cmd.argsLength() > 2) {
                 try {
                     if (TimeLimit.Result.valueOf(cmd.getJoinedStrings(2).toUpperCase().replaceAll(" ", "_")).equals(TimeLimit.Result.TEAM)) {
@@ -71,20 +71,9 @@ public class TimeLimitCommand {
                     }
                 }
             }
-            if (TimeLimit.getMatchTimeLimit() != 0) {
-                sender.sendMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}" + " " + ChatColor.AQUA + "{1}" + ChatColor.YELLOW + " with the result " + ChatColor.WHITE + "{2}", "The time limit is", Strings.formatTimeWithMillis(TimeLimit.getMatchTimeLimit()), GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getResult().equals(TimeLimit.Result.TEAM) ? GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getTeam().getCompleteName() + " wins" : GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getResult().name().toLowerCase().replaceAll("_", " ")).getMessage(ChatUtil.getLocale(sender)));
-            } else {
-                sender.sendMessage(ChatColor.YELLOW + ChatConstant.GENERIC_TIME_LIMIT_CANCELLED.getMessage(ChatUtil.getLocale(sender)));
-            }
             Bukkit.getServer().getPluginManager().callEvent(new TimeLimitChangeEvent());
         } else {
-            if (!sender.hasPermission("cardinal.timelimit")) {
-                throw new CommandPermissionsException();
-            }
-            if (!cmd.getString(0).equalsIgnoreCase("cancel")) {
-                throw new CommandUsageException(ChatConstant.ERROR_TOO_FEW_ARGUMENTS.getMessage(ChatUtil.getLocale(sender)), "/timelimit <add, set> <time> [result]");
-            }
-            Bukkit.dispatchCommand(sender, "timelimit set cancel");
+            throw new CommandUsageException(ChatConstant.ERROR_TOO_FEW_ARGUMENTS.getMessage(ChatUtil.getLocale(sender)), "/timelimit <cancel, add, set> <time> [result]");
         }
     }
 

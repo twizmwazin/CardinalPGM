@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.module.modules.cycleTimer;
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
+import in.twizmwaz.cardinal.chat.ChatMessage;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
@@ -41,20 +42,18 @@ public class CycleTimerModule implements TaskedModule, Cancellable {
     @Override
     public void run() {
         if (!isCancelled()) {
-            match.setState(MatchState.CYCLING);
-            if (time % 20 == 0 && time >= 1) {
-                BossBars.setTitle(bossBar, new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "{0}", new LocalizedChatMessage(ChatConstant.UI_CYCLING_TIMER, new UnlocalizedChatMessage(ChatColor.AQUA + GameHandler.getGameHandler().getCycle().getMap().getName() + ChatColor.DARK_AQUA), (this.time == 1 ? new LocalizedChatMessage(ChatConstant.UI_SECOND, ChatColor.DARK_RED + "1" + ChatColor.DARK_AQUA) : new LocalizedChatMessage(ChatConstant.UI_SECONDS, ChatColor.DARK_RED + (time / 20 + "") + ChatColor.DARK_AQUA)))));
-            } else if (time < 1 && time >= 0) {
-                BossBars.setTitle(bossBar, new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "{0}", new LocalizedChatMessage(ChatConstant.UI_CYCLED_TO, ChatColor.AQUA + GameHandler.getGameHandler().getCycle().getMap().getName())));
-            }
             BossBars.setProgress(bossBar, ((double)time / originalTime));
-            if ((time % 100 == 0 && time > 0) || (time < 100 && time > 0 && time % 20 == 0)) {
-                ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "{0}", new LocalizedChatMessage(ChatConstant.UI_CYCLING_TIMER, new UnlocalizedChatMessage(ChatColor.AQUA + GameHandler.getGameHandler().getCycle().getMap().getName() + ChatColor.DARK_AQUA), (this.time == 1 ? new LocalizedChatMessage(ChatConstant.UI_SECOND, ChatColor.DARK_RED + "1" + ChatColor.DARK_AQUA) : new LocalizedChatMessage(ChatConstant.UI_SECONDS, ChatColor.DARK_RED + (time / 20 + "") + ChatColor.DARK_AQUA)))));
-            }
-            if (time == 0 && match.getState() == MatchState.CYCLING) {
-                cancelled = true;
-                BossBars.setProgress(bossBar, 0D);
-                GameHandler.getGameHandler().cycleAndMakeMatch();
+            if (time % 20 == 0) {
+                if (time != 0) {
+                    BossBars.setTitle(bossBar, getCycleTimerMessage());
+                } else {
+                    BossBars.setTitle(bossBar, new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "{0}", new LocalizedChatMessage(ChatConstant.UI_CYCLED_TO, ChatColor.AQUA + GameHandler.getGameHandler().getCycle().getMap().getName())));
+                    if (match.getState() == MatchState.CYCLING) {
+                        cancelled = true;
+                        BossBars.setProgress(bossBar, 0D);
+                        GameHandler.getGameHandler().cycleAndMakeMatch();
+                    }
+                }
             }
             if (time < 0) {
                 setCancelled(true);
@@ -92,6 +91,13 @@ public class CycleTimerModule implements TaskedModule, Cancellable {
         this.originalState = state;
     }
 
+    private ChatMessage getCycleTimerMessage() {
+        int intTime = (time / 20);
+        return new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "{0}", new LocalizedChatMessage(ChatConstant.UI_CYCLING_TIMER,
+                new UnlocalizedChatMessage(ChatColor.AQUA + GameHandler.getGameHandler().getCycle().getMap().getName() + ChatColor.DARK_AQUA),
+                new LocalizedChatMessage(intTime == 1 ? ChatConstant.UI_SECOND : ChatConstant.UI_SECONDS, ChatColor.DARK_RED + "" + intTime + ChatColor.DARK_AQUA)));
+    }
+
     @Override
     public boolean isCancelled() {
         return cancelled;
@@ -105,6 +111,8 @@ public class CycleTimerModule implements TaskedModule, Cancellable {
             BossBars.setVisible(bossBar, false);
         } else {
             BossBars.setVisible(bossBar, true);
+            if (time >= 20) ChatUtil.getGlobalChannel().sendLocalizedMessage(getCycleTimerMessage());
+            match.setState(MatchState.CYCLING);
         }
     }
 

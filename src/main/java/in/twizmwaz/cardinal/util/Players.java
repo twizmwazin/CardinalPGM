@@ -2,10 +2,14 @@ package in.twizmwaz.cardinal.util;
 
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import in.twizmwaz.cardinal.rank.Rank;
+import in.twizmwaz.cardinal.settings.Settings;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
@@ -70,7 +74,24 @@ public class Players {
         canInteract(player, false);
         resetPlayer(player, false);
         player.closeInventory();
+    }
 
+    public static void playSoundEffect(Player player, Location loc, Sound sound, float volume, float pitch) {
+        if (Settings.getSettingByName("Sounds") != null && Settings.getSettingByName("Sounds").getValueByPlayer(player).getValue().equalsIgnoreCase("on")) {
+            player.playSound(loc, sound, volume, pitch);
+        }
+    }
+
+    public static void broadcastSoundEffect(Location loc, Sound sound, float volume, float pitch) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            playSoundEffect(player, loc, sound, volume, pitch);
+        }
+    }
+
+    public static void broadcastSoundEffect(Sound sound, float volume, float pitch) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            playSoundEffect(player, player.getLocation(), sound, volume, pitch);
+        }
     }
 
     public static double getSnowflakeMultiplier(OfflinePlayer player) {
