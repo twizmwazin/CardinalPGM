@@ -22,6 +22,7 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.material.MaterialData;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -248,6 +249,14 @@ public class Parser {
         String type = material.split(":")[0].trim();
         Integer damageValue = material.contains(":") ? Numbers.parseInt(material.split(":")[1].trim()) : -1;
         return new ImmutablePair<>(NumberUtils.isNumber(type) ? Material.getMaterial(Integer.parseInt(type)) : Material.matchMaterial(type), damageValue);
+    }
+
+    public static MaterialData parseMaterialData(String material) {
+        String type = material.split(":")[0].trim();
+        byte damageValue = (byte) (material.contains(":") ? Numbers.parseInt(material.split(":")[1].trim()) : -1);
+        return NumberUtils.isNumber(type) ?
+                new MaterialData(Material.getMaterial(Integer.parseInt(type)), damageValue):
+                new MaterialData(Material.matchMaterial(type), damageValue);
     }
 
     public static String getOrderedAttribute(String attribute, Element... elements) {
