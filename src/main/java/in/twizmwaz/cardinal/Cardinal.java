@@ -23,6 +23,7 @@ import in.twizmwaz.cardinal.command.ListCommand;
 import in.twizmwaz.cardinal.command.MapCommands;
 import in.twizmwaz.cardinal.command.MatchCommand;
 import in.twizmwaz.cardinal.command.ModesCommand;
+import in.twizmwaz.cardinal.command.PollCommands;
 import in.twizmwaz.cardinal.command.PrivateMessageCommands;
 import in.twizmwaz.cardinal.command.ProximityCommand;
 import in.twizmwaz.cardinal.command.PunishmentCommands;
@@ -156,6 +157,7 @@ public class Cardinal extends JavaPlugin {
         cmdRegister.register(TeleportCommands.class);
         cmdRegister.register(TimeLimitCommand.class);
         cmdRegister.register(WhitelistCommands.WhitelistParentCommand.class);
+        cmdRegister.register(PollCommands.class);
 
 
     }

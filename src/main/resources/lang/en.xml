@@ -104,6 +104,10 @@
         <proximityObsOnly>The /proximity command is only available to observers.</proximityObsOnly>
         <proximityNoScoring>There are no objectives that track proximity.</proximityNoScoring>
         <inventoryNotViewable>Player's inventory is not currently viewable</inventoryNotViewable>
+        <pollNeedId>Multiple polls are running, specify a poll id.</pollNeedId>
+        <pollNoPolls>No polls are running.</pollNoPolls>
+        <pollNoSuchPoll>Poll {0} is not running</pollNoSuchPoll>
+        <pollAlreadyVoted>You already voted.</pollAlreadyVoted>
     </error>
     <generic>
         <mapSet>Next map set to {0}</mapSet>
@@ -202,6 +206,11 @@
         <unmuted>You unmuted {0}</unmuted>
         <unmutedBy>You were unmuted by {0}</unmutedBy>
         <createdBy>Created by</createdBy>
+        <pollVoted>You voted for Poll {0}</pollVoted>
+        <pollVotedAgainst>You voted against Poll {0}</pollVotedAgainst>
+        <pollSucceeded>Poll to {0} succeeded {1}</pollSucceeded>
+        <pollFailed>Poll to {0} failed {1}</pollFailed>
+        <pollVetoed>Poll to {0} was vetoed by {1}</pollVetoed>
     </generic>
     <misc>
         <enemy>the enemy</enemy>
@@ -325,6 +334,7 @@
         <deathRespawnConfirmedTime>Respawning in {0}s</deathRespawnConfirmedTime>
         <deathRespawnConfirmedWaiting>You will respawn as soon as possible...</deathRespawnConfirmedWaiting>
         <deathRespawnConfirmedWaitingFlagDropped>You will respawn when the flag is dropped...</deathRespawnConfirmedWaitingFlagDropped>
+        <pollBossbar>{0}Poll to {1} will end in {2} {3}</pollBossbar>
     </userInterface>
     <deathMsg>
         <explosionSelf>{0} 'sploded</explosionSelf>
