@@ -110,6 +110,8 @@ public enum ChatConstant {
     ERROR_PROXIMITY_OBS_ONLY("error.proximityObsOnly"),
     ERROR_PROXIMITY_NO_SCORING("error.proximityNoScoring"),
     ERROR_INVENTORY_NOT_VIEWABLE("error.inventoryNotViewable"),
+    ERROR_PLAYER_ALREADY_FROZEN("error.playerAlreadyFrozen"),
+    ERROR_PLAYER_NOT_FROZEN("error.playerNotFrozen"),
 
     GENERIC_MAP_SET("generic.mapSet"),
     GENERIC_MARKED_FOR_RELOADING("generic.markedForReloading"),
@@ -206,6 +208,10 @@ public enum ChatConstant {
     GENERIC_UNMUTED("generic.unmuted"),
     GENERIC_UNMUTED_BY("generic.unmutedBy"),
     GENERIC_CREATED_BY("generic.createdBy"),
+    GENERIC_FROZEN_BY("generic.frozenBy"),
+    GENERIC_UNFROZEN_BY("generic.unfrozenBy"),
+    GENERIC_FROZE("generic.froze"),
+    GENERIC_UNFROZE("generic.unfroze"),
 
     MISC_ENEMY("misc.enemy"),
     MISC_FATE("misc.fate"),
@@ -321,6 +327,7 @@ public enum ChatConstant {
     UI_COMPASS("userInterface.compass"),
     UI_WAITING_PLAYER("userInterface.waitingPlayer"),
     UI_WAITING_PLAYERS("userInterface.waitingPlayers"),
+    UI_FREEZE_ITEM("userInterface.freezeItem"),
 
     UI_DEATH_RESPAWN_UNCONFIRMED("userInterface.deathRespawnUnconfirmed"),
     UI_DEATH_RESPAWN_UNCONFIRMED_TIME("userInterface.deathRespawnUnconfirmedTime"),
