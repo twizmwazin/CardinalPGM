@@ -23,7 +23,7 @@ public class JoinCommand {
         }
     }
 
-    @Command(aliases = {"leave"}, desc = "Leave the game.")
+    @Command(aliases = {"leave", "obs", "observe", "spectate"}, desc = "Leave the game.")
     public static void leave(final CommandContext cmd, CommandSender sender) throws CommandException {
         if (!(sender instanceof Player)) {
             throw new CommandException(ChatConstant.ERROR_CONSOLE_NO_USE.getMessage(ChatUtil.getLocale(sender)));
