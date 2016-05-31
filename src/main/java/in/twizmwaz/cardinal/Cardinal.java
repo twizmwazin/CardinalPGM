@@ -70,8 +70,8 @@ import java.util.Locale;
 
 public class Cardinal extends JavaPlugin {
 
-    private final static String CRAFTBUKKIT_VERSION = "1.9.2-R0.1-SNAPSHOT";
-    private final static String MINECRAFT_VERSION = "1.9.2";
+    private final static String CRAFTBUKKIT_VERSION = "1.9.4-R0.1-SNAPSHOT";
+    private final static String MINECRAFT_VERSION = "1.9.4";
 
     private static Cardinal instance;
     private static GameHandler gameHandler;
@@ -158,8 +158,6 @@ public class Cardinal extends JavaPlugin {
         cmdRegister.register(TimeLimitCommand.class);
         cmdRegister.register(WhitelistCommands.WhitelistParentCommand.class);
         cmdRegister.register(PollCommands.class);
-
-
     }
 
     private void checkCraftVersion() {

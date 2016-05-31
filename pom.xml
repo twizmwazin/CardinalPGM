@@ -30,23 +30,23 @@
         <dependency>
             <groupId>tc.oc</groupId>
             <artifactId>sportbukkit-api</artifactId>
-            <version>1.9.2-R0.1-SNAPSHOT</version>
+            <version>1.9.4-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>tc.oc</groupId>
             <artifactId>sportbukkit</artifactId>
-            <version>1.9.2-R0.1-SNAPSHOT</version>
+            <version>1.9.4-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.sk89q</groupId>
             <artifactId>command-framework-core</artifactId>
-            <version>0.6-SNAPSHOT</version>
+            <version>1.9-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>com.sk89q</groupId>
             <artifactId>command-framework-bukkit</artifactId>
-            <version>0.6-SNAPSHOT</version>
+            <version>1.9-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
         <dependency>
