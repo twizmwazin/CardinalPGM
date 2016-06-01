@@ -10,6 +10,7 @@ settings:
 - PrivateMessages
 - PrivateMessageSounds
 - Scoreboard
+- Snowflakes
 - Sounds
 setting:
   AttackSpeedometer:
@@ -86,6 +87,11 @@ setting:
     - 'off'
     - on[default]
     description: See the scoreboard with game information
+  Snowflakes:
+    values:
+    - 'off'
+    - on[default]
+    description: See snowflakes visual effects
   Sounds:
     values:
     - 'off'

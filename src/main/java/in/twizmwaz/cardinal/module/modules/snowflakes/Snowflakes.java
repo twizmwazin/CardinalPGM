@@ -1,5 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.snowflakes;
 
+import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalDeathEvent;
@@ -12,12 +14,21 @@ import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
 import in.twizmwaz.cardinal.settings.Settings;
 import in.twizmwaz.cardinal.util.MiscUtil;
 import in.twizmwaz.cardinal.util.Numbers;
+import in.twizmwaz.cardinal.util.PacketUtils;
 import in.twizmwaz.cardinal.util.Teams;
+import net.minecraft.server.DataWatcher;
+import net.minecraft.server.DataWatcherRegistry;
+import net.minecraft.server.EntityItem;
+import net.minecraft.server.Packet;
+import net.minecraft.server.PacketPlayOutEntityDestroy;
+import net.minecraft.server.PacketPlayOutEntityMetadata;
+import net.minecraft.server.PacketPlayOutSpawnEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,15 +40,24 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class Snowflakes implements Module {
 
     private HashMap<Player, List<Item>> items;
     private HashMap<Player, List<DyeColor>> destroyed;
+
+    private static DataWatcher snowflakeMetadata;
+
+    static {
+        snowflakeMetadata = new DataWatcher(new EntityItem(((CraftWorld) Bukkit.getWorlds().get(0)).getHandle()));
+        snowflakeMetadata.register(DataWatcherRegistry.f.a(6), Optional.of(new net.minecraft.server.ItemStack(net.minecraft.server.Item.getById(332), 0)));
+    }
 
     public Snowflakes() {
         this.items = new HashMap<>();
@@ -69,29 +89,37 @@ public class Snowflakes implements Module {
         }
     }
 
+    private Player getThrower(Item thrownItem) {
+        for (Player player : items.keySet()) {
+            if (player != null && Teams.getTeamByPlayer(player) != null) {
+                for (Item item : items.get(player)) {
+                    if (item.equals(thrownItem)) {
+                        return player;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     @EventHandler
     public void onItemDespawnInVoid(EntityDespawnInVoidEvent event) {
-        if (event.getEntity() instanceof Item) {
-            for (Player player : items.keySet()) {
-                if (player != null && Teams.getTeamByPlayer(player) != null) {
-                    for (Item item : items.get(player)) {
-                        if (item.equals(event.getEntity())) {
-                            for (TeamModule team : Teams.getTeams()) {
-                                if (!team.isObserver() && Teams.getTeamByPlayer(player).orNull() != team) {
-                                    for (GameObjective obj : Teams.getShownObjectives(team)) {
-                                        if (obj instanceof WoolObjective && item.getItemStack().getData().getData() == ((WoolObjective) obj).getColor().getData() && (!destroyed.containsKey(player) || !destroyed.get(player).contains(((WoolObjective) obj).getColor())) && !obj.isComplete()) {
-                                            if (!destroyed.containsKey(player)) {
-                                                destroyed.put(player, new ArrayList<DyeColor>());
-                                            }
-                                            List<DyeColor> list = destroyed.get(player);
-                                            list.add(((WoolObjective) obj).getColor());
-                                            destroyed.put(player, list);
-
-                                            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.DESTROY_WOOL, 8, MiscUtil.convertDyeColorToChatColor(((WoolObjective) obj).getColor()) + ((WoolObjective) obj).getColor().name().toUpperCase().replaceAll("_", " ") + " WOOL" + ChatColor.GRAY));
-                                        }
-                                    }
-                                }
+        if (!(event.getEntity() instanceof Item)) return;
+        Item item = (Item) event.getEntity();
+        Player player = getThrower(item);
+        if (player != null) {
+            for (TeamModule team : Teams.getTeams()) {
+                if (!team.isObserver() && Teams.getTeamByPlayer(player).orNull() != team) {
+                    for (GameObjective obj : Teams.getShownObjectives(team)) {
+                        if (obj instanceof WoolObjective && item.getItemStack().getData().getData() == ((WoolObjective) obj).getColor().getData() && (!destroyed.containsKey(player) || !destroyed.get(player).contains(((WoolObjective) obj).getColor())) && !obj.isComplete()) {
+                            if (!destroyed.containsKey(player)) {
+                                destroyed.put(player, new ArrayList<DyeColor>());
                             }
+                            List<DyeColor> list = destroyed.get(player);
+                            list.add(((WoolObjective) obj).getColor());
+                            destroyed.put(player, list);
+
+                            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.DESTROY_WOOL, 8, MiscUtil.convertDyeColorToChatColor(((WoolObjective) obj).getColor()) + ((WoolObjective) obj).getColor().name().toUpperCase().replaceAll("_", " ") + " WOOL" + ChatColor.GRAY));
                         }
                     }
                 }
@@ -190,7 +218,42 @@ public class Snowflakes implements Module {
             } else {
                 Cardinal.getCardinalDatabase().put(event.getPlayer(), "snowflakes", (Numbers.parseInt(Cardinal.getCardinalDatabase().get(event.getPlayer(), "snowflakes")) + event.getFinalAmount()) + "");
             }
+            if (Settings.getSettingByName("Snowflakes").getValueByPlayer(event.getPlayer()).getValue().equalsIgnoreCase("on"))
+                spawnSnowflakes(event.getPlayer(), event.getFinalAmount());
         }
+    }
+
+    private void spawnSnowflakes(Player player, int count) {
+        count = Math.min(12, Math.max(2, count));
+        int[] entities = new int[count];
+        List<Packet> packets = Lists.newArrayList();
+        Vector loc = player.getLocation().plus(0, 2, 0);
+        for (int i = 0; i < count; i++) {
+            int id = Bukkit.allocateEntityId();
+            entities[i] = id;
+            int motX = (int) ((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 8000),
+                    motY = (int) (0.2D * 8000),
+                    motZ = (int) ((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 8000);
+            packets.add(new PacketPlayOutSpawnEntity(
+                    id, UUID.randomUUID(),             // Entity id and Entity UUID
+                    loc.getX(), loc.getY(), loc.getZ(),// X, Y and Z Position
+                    motX, motY, motZ,                  // X, Y and Z Motion
+                    (byte)2, (byte)0,                  // Pitch, Yaw
+                    2, 0                               // Type and data
+            ));
+            packets.add(new PacketPlayOutEntityMetadata(id, snowflakeMetadata, true));
+        }
+        for (Packet packet : packets) PacketUtils.sendPacket(player, packet);
+        scheduleSnowflakeRemove(player, entities);
+    }
+
+    private void scheduleSnowflakeRemove(final Player player, final int... id) {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                PacketUtils.sendPacket(player, new PacketPlayOutEntityDestroy(id));
+            }
+        }, 100L);
     }
 
     public enum ChangeReason {
