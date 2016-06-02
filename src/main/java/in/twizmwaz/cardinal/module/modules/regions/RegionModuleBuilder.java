@@ -115,7 +115,7 @@ public class RegionModuleBuilder implements ModuleBuilder {
                 return region;
             case "union":
             case "regions":
-                region = new UnionRegion( new CombinationParser(element, document));
+                region = new UnionRegion(new CombinationParser(element, document));
                 if (region.getName() != null) GameHandler.getGameHandler().getMatch().getModules().add(region);
                 return region;
             case "translate":
@@ -145,8 +145,8 @@ public class RegionModuleBuilder implements ModuleBuilder {
                             return regionModule;
                         }
                     }
-                } else {
-                    return getRegion(element.getChildren().get(0));
+                } else if (element.getChildren().size() > 0) {
+                    return new UnionRegion(new CombinationParser(element, document));
                 }
                 return null;
         }

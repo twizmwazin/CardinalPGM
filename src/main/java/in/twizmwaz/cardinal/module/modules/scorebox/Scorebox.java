@@ -8,6 +8,7 @@ import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
+import in.twizmwaz.cardinal.module.modules.observers.ObserverModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
@@ -44,7 +45,7 @@ public class Scorebox implements Module {
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerMove(PlayerMoveEvent event) {
         if (GameHandler.getGameHandler().getMatch().isRunning() && region.contains(event.getTo().toVector()) && !region.contains(event.getFrom().toVector()) &&
-                (filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW)) && event.getPlayer().getHealth() > 0) {
+                (filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW)) && !ObserverModule.testObserverOrDead(event.getPlayer())) {
             int points = 0;
             if (redeemables.size() > 0) {
                 for (ItemStack item : redeemables.keySet()) {
@@ -64,15 +65,14 @@ public class Scorebox implements Module {
             if (points != 0 && playerTeam.isPresent()) {
                 for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
                     if (score.getTeam() == playerTeam.get()) {
-                        score.setScore(score.getScore() + points);
                         ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}",
                                 new LocalizedChatMessage(ChatConstant.UI_SCORED_FOR,
                                         new UnlocalizedChatMessage(playerTeam.get().getColor() + event.getPlayer().getName() + ChatColor.GRAY),
                                         new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "{0}" + ChatColor.GRAY, points == 1 ? new LocalizedChatMessage(ChatConstant.UI_ONE_POINT) : new LocalizedChatMessage(ChatConstant.UI_POINTS, points + "" + ChatColor.GRAY)),
                                         new UnlocalizedChatMessage(playerTeam.get().getCompleteName()))));
+                        score.addScore(points);
                     }
                 }
-
             }
         }
     }
