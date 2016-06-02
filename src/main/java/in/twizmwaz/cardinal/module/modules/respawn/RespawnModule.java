@@ -3,7 +3,6 @@ package in.twizmwaz.cardinal.module.modules.respawn;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
-import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
@@ -17,7 +16,6 @@ import in.twizmwaz.cardinal.module.modules.teamPicker.TeamPicker;
 import in.twizmwaz.cardinal.module.modules.titleRespawn.TitleRespawn;
 import in.twizmwaz.cardinal.module.modules.tutorial.Tutorial;
 import in.twizmwaz.cardinal.util.Items;
-import in.twizmwaz.cardinal.util.Players;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -55,12 +53,10 @@ public class RespawnModule implements Module {
         if (event.getSpawn() == null) {
             if (!match.getState().equals(MatchState.PLAYING)) event.setTeam(Teams.getTeamById("observers").get());
             ModuleCollection<SpawnModule> modules = new ModuleCollection<>();
-            for (SpawnModule spawnModule : match.getModules().getModules(SpawnModule.class)) {
+            for (SpawnModule spawnModule : Teams.getSpawns(event.getTeam())) {
                 FilterModule filter = spawnModule.getFilter();
-                if (spawnModule.getTeam().equals(event.getTeam()) &&
-                        (filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW))) {
+                if (filter == null || filter.evaluate(event.getPlayer()).equals(FilterState.ALLOW))
                     modules.add(spawnModule);
-                }
             }
             if (modules.size() > 0) {
                 event.setSpawn(modules.getRandom());

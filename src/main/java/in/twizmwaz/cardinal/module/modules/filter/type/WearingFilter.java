@@ -3,7 +3,6 @@ package in.twizmwaz.cardinal.module.modules.filter.type;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.ItemFilterParser;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -13,11 +12,11 @@ import static in.twizmwaz.cardinal.module.modules.filter.FilterState.DENY;
 
 public class WearingFilter extends FilterModule {
 
-    private final Material material;
+    private final ItemStack item;
 
     public WearingFilter(final ItemFilterParser parser) {
         super(parser.getName(), parser.getParent());
-        this.material = parser.getMaterial();
+        this.item = parser.getItem();
     }
 
     @Override
@@ -25,7 +24,7 @@ public class WearingFilter extends FilterModule {
         for (Object object : objects) {
             if (object instanceof Player) {
                 for (ItemStack armor : ((Player) object).getInventory().getArmorContents()) {
-                    if (armor.getType().equals(material))
+                    if (armor != null && armor.isSimilar(item))
                         return ALLOW;
                 }
                 return DENY;

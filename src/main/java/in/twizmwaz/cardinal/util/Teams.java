@@ -13,6 +13,7 @@ import in.twizmwaz.cardinal.module.modules.chatChannels.GlobalChannel;
 import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
 import in.twizmwaz.cardinal.module.modules.ctf.FlagObjective;
 import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
+import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
 import org.bukkit.ChatColor;
@@ -154,6 +155,18 @@ public class Teams {
             if (!team.isReady() && !team.isObserver()) return false;
         }
         return true;
+    }
+
+    public static ModuleCollection<SpawnModule> getSpawns(TeamModule team) {
+        ModuleCollection<SpawnModule> spawns = new ModuleCollection<>();
+        for (SpawnModule spawnModule : GameHandler.getGameHandler().getMatch().getModules().getModules(SpawnModule.class)) {
+            if (team.isObserver()) {
+                if (spawnModule.getTeam() != null && spawnModule.getTeam().isObserver()) spawns.add(spawnModule);
+            } else if (spawnModule.getTeam() == null || spawnModule.getTeam().equals(team)) {
+                spawns.add(spawnModule);
+            }
+        }
+        return spawns;
     }
 
     public static boolean isFFA(Match match) {

@@ -16,11 +16,9 @@ import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.event.PlayerNameUpdateEvent;
-import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
-import in.twizmwaz.cardinal.module.modules.respawn.RespawnModule;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.teamPicker.TeamPicker;
@@ -68,7 +66,6 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLocaleChangeEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
@@ -167,11 +164,9 @@ public class TitleRespawn implements TaskedModule {
 
     private boolean playerCanRespawn(Player player) {
         TeamModule team = Teams.getTeamByPlayer(player).get();
-        for (SpawnModule spawnModule : GameHandler.getGameHandler().getMatch().getModules().getModules(SpawnModule.class)) {
+        for (SpawnModule spawnModule : Teams.getSpawns(team)) {
             FilterModule filter = spawnModule.getFilter();
-            if (spawnModule.getTeam().equals(team) && (filter == null || filter.evaluate(player).equals(FilterState.ALLOW))) {
-                return true;
-            }
+            if (filter == null || filter.evaluate(player).equals(FilterState.ALLOW)) return true;
         }
         return false;
     }

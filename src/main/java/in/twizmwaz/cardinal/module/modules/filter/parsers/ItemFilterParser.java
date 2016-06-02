@@ -1,19 +1,20 @@
 package in.twizmwaz.cardinal.module.modules.filter.parsers;
 
 import in.twizmwaz.cardinal.module.modules.filter.FilterParser;
-import org.bukkit.Material;
+import in.twizmwaz.cardinal.util.Parser;
+import org.bukkit.inventory.ItemStack;
 import org.jdom2.Element;
 
 public class ItemFilterParser extends FilterParser {
 
-    private Material material;
+    private ItemStack item;
 
     public ItemFilterParser(final Element element) {
         super(element);
-        material = Material.matchMaterial(element.getChild("item").getText());
+        item = Parser.getItem(element.getChild("item"));
     }
 
-    public Material getMaterial() {
-        return material;
+    public ItemStack getItem() {
+        return item;
     }
 }
