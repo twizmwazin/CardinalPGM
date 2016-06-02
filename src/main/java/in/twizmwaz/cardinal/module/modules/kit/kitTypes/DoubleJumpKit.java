@@ -28,8 +28,9 @@ public class DoubleJumpKit implements KitRemovable {
 
     private boolean enabled;
     private int power;
-    private float rechargePerTick;
+    private double rechargeTime;
     private boolean rechargeBeforeLanding;
+    private long lastUpdate = 0L;
 
     List<UUID> players = new ArrayList<>();
     List<UUID> landed = new ArrayList<>();
@@ -37,24 +38,31 @@ public class DoubleJumpKit implements KitRemovable {
     public DoubleJumpKit(boolean enabled, int power, double rechargeTime, final boolean rechargeBeforeLanding) {
         this.enabled = enabled;
         this.power = power;
-        this.rechargePerTick = (float)(0.1D / rechargeTime);
+        this.rechargeTime = rechargeTime;
         this.rechargeBeforeLanding = rechargeBeforeLanding;
 
         Bukkit.getScheduler().runTaskTimer(Cardinal.getInstance(), new Runnable() {
             public void run() {
-                for(UUID uuid : players) {
-                    Player player = Bukkit.getPlayer(uuid);
-                    if(player.getExp() < 1.0f && (rechargeBeforeLanding || landed.contains(uuid))) {
-                        player.setExp(player.getExp() + rechargePerTick);
-                    } else if(player.getExp() > 1.0f) {
-                        player.setExp(1.0f);
-                    }
-                    if(player.getExp() >= 1.0f) {
-                        player.setAllowFlight(true);
-                    }
-                }
+                DoubleJumpKit.this.update();
             }
         }, 0, 2);
+    }
+
+    private void update() {
+        int diff = (int) (System.currentTimeMillis() - lastUpdate);
+        lastUpdate = System.currentTimeMillis();
+        float toAddExp = rechargeTime > 0 ? (float) (diff / (rechargeTime * 1000)) : 1.0f;
+        for(UUID uuid : players) {
+            Player player = Bukkit.getPlayer(uuid);
+            if(player.getExp() < 1.0f && (rechargeBeforeLanding || landed.contains(uuid))) {
+                player.setExp(player.getExp() + toAddExp > 1.0f ? 1.0f : player.getExp() + toAddExp);
+            } else if(player.getExp() > 1.0f) {
+                player.setExp(1.0f);
+            }
+            if(player.getExp() >= 1.0f) {
+                player.setAllowFlight(true);
+            }
+        }
     }
 
     @Override
@@ -113,6 +121,8 @@ public class DoubleJumpKit implements KitRemovable {
         event.getPlayer().setVelocity(normal);
 
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 0.5f, 1.8f);
+
+        update();
     }
 
 }
