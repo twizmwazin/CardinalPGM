@@ -4,7 +4,6 @@ import com.sk89q.minecraft.util.commands.ChatColor;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
-import com.sk89q.minecraft.util.commands.CommandPermissions;
 import com.sk89q.minecraft.util.commands.NestedCommand;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -22,15 +21,17 @@ import java.util.List;
 public class RankCommands {
 
     @Command(aliases = {"add", "give"}, desc = "Give a player a rank.", min = 2, usage = "<player> <rank>")
-    @CommandPermissions("ranks.add")
     public static void add(final CommandContext args, CommandSender sender) throws CommandException {
-        OfflinePlayer player = args.getString(0).startsWith("@") ? Bukkit.getOfflinePlayer(args.getString(0).substring(1)) : Bukkit.getPlayer(args.getString(0));
-        if (player == null) {
-            throw new CommandException(ChatConstant.ERROR_NO_PLAYER_MATCH.getMessage(ChatUtil.getLocale(sender)));
-        }
         Rank rank = Rank.getRank(args.getString(1));
         if (rank == null) {
             throw new CommandException(ChatConstant.ERROR_NO_RANK_MATCH.getMessage(ChatUtil.getLocale(sender)));
+        }
+        if (!sender.hasPermission("cardinal.ranks.add") && !sender.hasPermission("cardinal.ranks.add.*") && !sender.hasPermission("cardinal.ranks.add." + rank.getName().toLowerCase())) {
+            throw new CommandException(ChatConstant.ERROR_NO_PERMISSION.getMessage(ChatUtil.getLocale(sender)));
+        }
+        OfflinePlayer player = args.getString(0).startsWith("@") ? Bukkit.getOfflinePlayer(args.getString(0).substring(1)) : Bukkit.getPlayer(args.getString(0));
+        if (player == null) {
+            throw new CommandException(ChatConstant.ERROR_NO_PLAYER_MATCH.getMessage(ChatUtil.getLocale(sender)));
         }
         if (rank.contains(player.getUniqueId())) {
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_HAS_RANK, player.getName(), rank.getName()).getMessage(ChatUtil.getLocale(sender)));
@@ -46,15 +47,17 @@ public class RankCommands {
     }
 
     @Command(aliases = {"remove"}, desc = "Remove a player's rank.", min = 2, usage = "<player> <rank>")
-    @CommandPermissions("ranks.remove")
     public static void remove(final CommandContext args, CommandSender sender) throws CommandException {
-        OfflinePlayer player = args.getString(0).startsWith("@") ? Bukkit.getOfflinePlayer(args.getString(0).substring(1)) : Bukkit.getPlayer(args.getString(0));
-        if (player == null) {
-            throw new CommandException(ChatConstant.ERROR_NO_PLAYER_MATCH.getMessage(ChatUtil.getLocale(sender)));
-        }
         Rank rank = Rank.getRank(args.getString(1));
         if (rank == null) {
             throw new CommandException(ChatConstant.ERROR_NO_RANK_MATCH.getMessage(ChatUtil.getLocale(sender)));
+        }
+        if (!sender.hasPermission("cardinal.ranks.remove") && !sender.hasPermission("cardinal.ranks.remove.*") && !sender.hasPermission("cardinal.ranks.remove." + rank.getName().toLowerCase())) {
+            throw new CommandException(ChatConstant.ERROR_NO_PERMISSION.getMessage(ChatUtil.getLocale(sender)));
+        }
+        OfflinePlayer player = args.getString(0).startsWith("@") ? Bukkit.getOfflinePlayer(args.getString(0).substring(1)) : Bukkit.getPlayer(args.getString(0));
+        if (player == null) {
+            throw new CommandException(ChatConstant.ERROR_NO_PLAYER_MATCH.getMessage(ChatUtil.getLocale(sender)));
         }
         if (!rank.contains(player.getUniqueId())) {
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_DOESNT_HAVE_RANK, player.getName(), rank.getName()).getMessage(ChatUtil.getLocale(sender)));
@@ -73,29 +76,28 @@ public class RankCommands {
     public static void list(final CommandContext args, CommandSender sender) throws CommandException {
         if (Rank.getRanks().size() == 0) {
             sender.sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_NO_RANKS).getMessage(ChatUtil.getLocale(sender)));
-        } else {
+        } else if (args.argsLength() == 0) {
             sender.sendMessage(ChatColor.GOLD + new LocalizedChatMessage(ChatConstant.GENERIC_RANKS).getMessage(ChatUtil.getLocale(sender)));
-            if (args.argsLength() > 0) {
-                OfflinePlayer player = args.getString(0).startsWith("@") ? Bukkit.getOfflinePlayer(args.getString(0).substring(1)) : Bukkit.getPlayer(args.getString(0));
-                if (player == null) {
-                    throw new CommandException(ChatConstant.ERROR_NO_PLAYER_MATCH.getMessage(ChatUtil.getLocale(sender)));
-                }
-                List<Rank> playerRanks = new ArrayList<>();
-                for (Rank rank : Rank.getRanks()) {
-                    if (rank.contains(player.getUniqueId())) playerRanks.add(rank);
-                }
-                StringBuilder resultPlayerRanks = new StringBuilder().append(ChatColor.GRAY + " " + Players.getName(player) + ChatColor.GRAY + " - ");
-                for (int i = 0; i < playerRanks.size(); i++) {
-                    resultPlayerRanks.append(playerRanks.get(i).getFlair() + " " + ChatColor.GRAY).append(playerRanks.get(i).getName()).toString();
-                    if (i < playerRanks.size() - 1) resultPlayerRanks.append(", ");
-                }
-                sender.sendMessage(resultPlayerRanks.toString());
-            } else {
-                for (Rank rank : Rank.getRanks()) {
-                    sender.sendMessage(" " + (rank.getFlair().equals("") ? "" : rank.getFlair() + " ") + ChatColor.GRAY + rank.getName());
-                }
-                sender.sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_RANKS_MORE_INFO).getMessage(ChatUtil.getLocale(sender)));
+            for (Rank rank : Rank.getRanks()) {
+                sender.sendMessage(" " + (rank.getFlair().equals("") ? "" : rank.getFlair() + " ") + ChatColor.GRAY + rank.getName());
             }
+            sender.sendMessage(ChatColor.GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_RANKS_MORE_INFO).getMessage(ChatUtil.getLocale(sender)));
+        } else {
+            OfflinePlayer player = args.getString(0).startsWith("@") ? Bukkit.getOfflinePlayer(args.getString(0).substring(1)) : Bukkit.getPlayer(args.getString(0));
+            if (player == null) {
+                throw new CommandException(ChatConstant.ERROR_NO_PLAYER_MATCH.getMessage(ChatUtil.getLocale(sender)));
+            }
+            sender.sendMessage(ChatColor.GOLD + new LocalizedChatMessage(ChatConstant.GENERIC_RANKS).getMessage(ChatUtil.getLocale(sender)));
+            List<Rank> playerRanks = new ArrayList<>();
+            for (Rank rank : Rank.getRanks()) {
+                if (rank.contains(player.getUniqueId())) playerRanks.add(rank);
+            }
+            StringBuilder resultPlayerRanks = new StringBuilder().append(ChatColor.GRAY + " " + Players.getName(player) + ChatColor.GRAY + " - ");
+            for (int i = 0; i < playerRanks.size(); i++) {
+                resultPlayerRanks.append(playerRanks.get(i).getFlair() + " " + ChatColor.GRAY).append(playerRanks.get(i).getName()).toString();
+                if (i < playerRanks.size() - 1) resultPlayerRanks.append(", ");
+            }
+            sender.sendMessage(resultPlayerRanks.toString());
         }
     }
 
