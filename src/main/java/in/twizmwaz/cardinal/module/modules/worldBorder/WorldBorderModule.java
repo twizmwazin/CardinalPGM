@@ -1,20 +1,12 @@
 package in.twizmwaz.cardinal.module.modules.worldBorder;
 
-import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.event.MatchEndEvent;
-import in.twizmwaz.cardinal.event.MatchStartEvent;
-import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
-import org.bukkit.Bukkit;
 import org.bukkit.WorldBorder;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-
-import java.io.File;
 
 public class WorldBorderModule implements TaskedModule {
 
@@ -73,41 +65,21 @@ public class WorldBorderModule implements TaskedModule {
     public int getWarningTime() { return warningTime; }
 
     public void run() {
-        if (!alreadyCreated) {
-            boolean canCreatedBasedOnTime = false;
-            if (getAfter() != 0) {
-                if (MatchTimer.getTimeInSeconds() >= getAfter()) {
-                    canCreatedBasedOnTime = true;
-                }
+        if (!alreadyCreated && (when != null ? getWhen().evaluate().equals(FilterState.ALLOW) : MatchTimer.getTimeInSeconds() >= getAfter())) {
+            alreadyCreated = true;
+            border = GameHandler.getGameHandler().getMatchWorld().getWorldBorder();
+            border.setCenter(getX(), getZ());
+
+            if (getDuration() > 0) {
+                border.setSize(getSize(), getDuration());
             } else {
-                if (MatchTimer.getTimeInSeconds() == 0) {
-                    canCreatedBasedOnTime = true;
-                }
+                border.setSize(getSize());
             }
 
-            boolean canCreatedBasedOnFilter = false;
-            if (getWhen() != null) {
-                if (getWhen().evaluate().equals(FilterState.ALLOW)) {
-                    canCreatedBasedOnFilter = true;
-                }
-            } else canCreatedBasedOnFilter = true;
-
-            if (canCreatedBasedOnTime && canCreatedBasedOnFilter) {
-                alreadyCreated = true;
-                border = GameHandler.getGameHandler().getMatchWorld().getWorldBorder();
-                border.setCenter(getX(), getZ());
-
-                if (getDuration() != 0) {
-                    border.setSize(getSize(), getDuration());
-                } else {
-                    border.setSize(getSize());
-                }
-
-                border.setDamageAmount(getDamage());
-                border.setDamageBuffer(getBuffer());
-                border.setWarningDistance(getWarningDistance());
-                border.setWarningTime(getWarningTime());
-            }
+            border.setDamageAmount(getDamage());
+            border.setDamageBuffer(getBuffer());
+            border.setWarningDistance(getWarningDistance());
+            border.setWarningTime(getWarningTime());
         }
     }
 
