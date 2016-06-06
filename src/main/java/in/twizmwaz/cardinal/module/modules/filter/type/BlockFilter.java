@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.filter.parsers.BlockFilterParser;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.material.MaterialData;
 
 import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ABSTAIN;
 import static in.twizmwaz.cardinal.module.modules.filter.FilterState.ALLOW;
@@ -23,7 +24,6 @@ public class BlockFilter extends FilterModule {
 
     @Override
     public FilterState evaluate(final Object... objects) {
-
         for (Object object : objects) {
             if (object instanceof Block) {
                 if (((Block) object).getType().equals(material) && (damageValue == -1 || (int) ((Block) object).getState().getData().getData() == damageValue))
@@ -31,6 +31,10 @@ public class BlockFilter extends FilterModule {
                 else return DENY;
             } else if (object instanceof Material) {
                 if ((object).equals(material))
+                    return ALLOW;
+                else return DENY;
+            } else if (object instanceof MaterialData) {
+                if (((MaterialData) object).getItemType().equals(material) && (damageValue == -1 || (int) ((MaterialData) object).getData() == damageValue))
                     return ALLOW;
                 else return DENY;
             }
