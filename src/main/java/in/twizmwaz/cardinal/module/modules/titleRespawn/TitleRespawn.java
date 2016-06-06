@@ -196,8 +196,12 @@ public class TitleRespawn implements TaskedModule {
     }
 
     private void dropInventory(Player player) {
+        dropInventory(player, false);
+    }
+
+    private void dropInventory(Player player, boolean force) {
         Optional<TeamModule> team = Teams.getTeamByPlayer(player);
-        if (!team.get().isObserver() && !isDeadUUID(player.getUniqueId()) && GameHandler.getGameHandler().getMatch().isRunning()) {
+        if (GameHandler.getGameHandler().getMatch().isRunning() && (force || (!team.get().isObserver() && !isDeadUUID(player.getUniqueId())))) {
             for (ItemStack stack : player.getInventory().getContents()) {
                 if (stack != null && stack.getType() != Material.AIR) {
                     player.getWorld().dropItemNaturally(player.getLocation().add(0, 0.5, 0), stack);
@@ -359,7 +363,7 @@ public class TitleRespawn implements TaskedModule {
         CardinalDeathEvent cardinalDeathEvent = new CardinalDeathEvent(player, killer, cause);
         Bukkit.getServer().getPluginManager().callEvent(cardinalDeathEvent);
 
-        dropInventory(player);
+        dropInventory(player, true);
 
         PlayerDeathEvent deathEvent = new PlayerDeathEvent(player, new ArrayList<ItemStack>(), player.getExpToLevel(), 0, 0, 0, null);
         deathEvent.setDeathMessage(null);
@@ -483,7 +487,7 @@ public class TitleRespawn implements TaskedModule {
         respawnPlayer(event.getPlayer(), GameHandler.getGameHandler().getMatch().isRunning() && !(event.getNewTeam().get().isObserver() && isDeadUUID(event.getPlayer().getUniqueId())));
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerSwitchTeam2(PlayerChangeTeamEvent event) {
         if (!GameHandler.getGameHandler().getMatch().isRunning() || (event.getOldTeam().isPresent() && event.getOldTeam().get().isObserver())) return;
         dropInventory(event.getPlayer());
