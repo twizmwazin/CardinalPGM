@@ -225,6 +225,11 @@ public enum ChatConstant {
     GENERIC_POLL_SUCCEEDED("generic.pollSucceeded"),
     GENERIC_POLL_FAILED("generic.pollFailed"),
     GENERIC_POLL_VETOED("generic.pollVetoed"),
+    GENERIC_CHECKING_UPDATES("generic.checkingUpdates"),
+    GENERIC_ALREADY_DOWNLOADED("generic.alreadyDownloaded"),
+    GENERIC_DOWNLOAD_STARTING("generic.downloadStarting"),
+    GENERIC_DOWNLOAD_READY("generic.downloadReady"),
+    GENERIC_DOWNLOAD_FAILED("generic.downloadFailed"),
 
     MISC_ENEMY("misc.enemy"),
     MISC_FATE("misc.fate"),

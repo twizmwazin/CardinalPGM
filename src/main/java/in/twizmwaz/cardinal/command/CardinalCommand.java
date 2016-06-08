@@ -21,7 +21,7 @@ import java.util.Locale;
 
 public class CardinalCommand {
 
-    @Command(aliases = "cardinal", flags = "vr", desc = "Various functions related to Cardinal.", usage = "[-v, -r]")
+    @Command(aliases = "cardinal", flags = "vru", desc = "Various functions related to Cardinal.", min = 0, max = 0)
     public static void cardinal(final CommandContext cmd, CommandSender sender) throws CommandPermissionsException {
         if (cmd.hasFlag('v')) {
             sender.sendMessage(ChatColor.GOLD + ChatConstant.UI_VERSION.asMessage(new UnlocalizedChatMessage(Cardinal.getInstance().getDescription().getVersion())).getMessage(ChatUtil.getLocale(sender)));
@@ -33,6 +33,13 @@ public class CardinalCommand {
                 sender.sendMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "{0}", new LocalizedChatMessage(ChatConstant.GENERIC_CONFIG_RELOAD)).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
                 Cardinal.getInstance().registerRanks();
                 sender.sendMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "{0}", new LocalizedChatMessage(ChatConstant.GENERIC_RANKS_RELOAD)).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+            } else {
+                throw new CommandPermissionsException();
+            }
+        }
+        if (cmd.hasFlag('u')) {
+            if (sender.hasPermission("cardinal.update")) {
+                Bukkit.getScheduler().runTaskAsynchronously(Cardinal.getInstance(), UpdateHandler.getUpdateHandler().getUpdateTask(sender));
             } else {
                 throw new CommandPermissionsException();
             }

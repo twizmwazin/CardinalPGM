@@ -220,6 +220,11 @@
         <pollSucceeded>Poll to {0} succeeded {1}</pollSucceeded>
         <pollFailed>Poll to {0} failed {1}</pollFailed>
         <pollVetoed>Poll to {0} was vetoed by {1}</pollVetoed>
+        <checkingUpdates>Checking for updates...</checkingUpdates>
+        <alreadyDownloaded>Lastest version was already downloaded, restart the server to finish the update.</alreadyDownloaded>
+        <downloadStarting>New cardinal version was found, download starting...</downloadStarting>
+        <downloadReady>{0} is ready! Restart server to finish the update.</downloadReady>
+        <downloadFailed>{0} failed to update!</downloadFailed>
     </generic>
     <misc>
         <enemy>the enemy</enemy>
