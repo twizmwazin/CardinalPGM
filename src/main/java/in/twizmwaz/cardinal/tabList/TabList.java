@@ -73,12 +73,12 @@ public class TabList implements Listener {
 
     private int columnsPerTeam = 0;
 
-    private HashMap<UUID, GameProfile> fakePlayer = new HashMap<>();
-    private HashMap<String, GameProfile> teamTitles = new HashMap<>();
+    private Map<UUID, GameProfile> fakePlayer = new HashMap<>();
+    private Map<String, GameProfile> teamTitles = new HashMap<>();
     private List<GameProfile> emptyPlayers = new ArrayList<>();
-    private HashMap<GameProfile, Integer> entityIDs = new HashMap<>();
+    private Map<GameProfile, Integer> entityIDs = new HashMap<>();
 
-    private HashMap<Player, List<GameProfile>> playerView = new HashMap<>();
+    private Map<Player, List<GameProfile>> playerView = new HashMap<>();
 
     public TabList() {
         entityIDs.put(null, 100);

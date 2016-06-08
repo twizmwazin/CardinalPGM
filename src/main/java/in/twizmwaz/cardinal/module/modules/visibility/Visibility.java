@@ -6,7 +6,7 @@ import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
-import in.twizmwaz.cardinal.event.PlayerVisibilityChangeEvent;
+import in.twizmwaz.cardinal.event.PlayerSettingChangeEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
@@ -123,7 +123,8 @@ public class Visibility implements Module {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerVisibilityChange(PlayerVisibilityChangeEvent event) {
+    public void onPlayerVisibilityChange(PlayerSettingChangeEvent event) {
+        if (!event.getSetting().equals(Settings.getSettingByName("Observers"))) return;
         showOrHideOthers(event.getPlayer());
     }
 }

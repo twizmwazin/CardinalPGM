@@ -12,6 +12,7 @@ settings:
 - Scoreboard
 - Snowflakes
 - Sounds
+- Stats
 setting:
   AttackSpeedometer:
     aliases:
@@ -97,3 +98,12 @@ setting:
     - 'off'
     - on[default]
     description: Hear sounds to alert you of the last three seconds of a countdown
+  Stats:
+    aliases:
+    - kd
+    values:
+    - 'sidebar'
+    - 'action bar'
+    - 'boss bar'
+    - off[default]
+    description: See your Kills, Deaths and kd stats

@@ -5,7 +5,7 @@ import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
-import in.twizmwaz.cardinal.event.PlayerVisibilityChangeEvent;
+import in.twizmwaz.cardinal.event.PlayerSettingChangeEvent;
 import in.twizmwaz.cardinal.settings.Setting;
 import in.twizmwaz.cardinal.settings.SettingValue;
 import in.twizmwaz.cardinal.settings.Settings;
@@ -48,11 +48,11 @@ public class SettingCommands {
         if (value == null) {
             throw new CommandException(ChatConstant.ERROR_NO_VALUE_MATCH.getMessage(ChatUtil.getLocale(sender)));
         }
+        SettingValue oldValue = setting.getValueByPlayer((Player) sender);
         setting.setValueByPlayer((Player) sender, value);
         sender.sendMessage(ChatColor.YELLOW + setting.getNames().get(0) + ": " + ChatColor.WHITE + value.getValue());
-        if (Settings.getSettingByName("Observers") != null && setting.equals(Settings.getSettingByName("Observers"))) {
-            Bukkit.getServer().getPluginManager().callEvent(new PlayerVisibilityChangeEvent((Player) sender));
-        }
+
+        Bukkit.getServer().getPluginManager().callEvent(new PlayerSettingChangeEvent((Player) sender, setting, oldValue, value));
     }
 
     @Command(aliases = {"toggle"}, desc = "Toggle a setting.", usage = "<setting>", min = 1)

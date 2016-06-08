@@ -16,11 +16,12 @@ import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class TntTracker implements Module {
-    private HashMap<String, UUID> tntPlaced = new HashMap<>();
-    private HashMap<String, UUID> dispenserPlaced = new HashMap<>();
+    private Map<String, UUID> tntPlaced = new HashMap<>();
+    private Map<String, UUID> dispenserPlaced = new HashMap<>();
 
     protected TntTracker() {
     }

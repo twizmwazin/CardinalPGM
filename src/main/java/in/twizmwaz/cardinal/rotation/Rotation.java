@@ -27,8 +27,8 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -233,9 +233,9 @@ public class Rotation {
             public void run() {
                 try {
                     Bukkit.getLogger().log(Level.INFO, "Setting known map author names.");
-                    HashMap<UUID, String> names;
+                    Map<UUID, String> names;
                     try {
-                        names = (HashMap<UUID, String>) new ObjectInputStream(new FileInputStream(new File(Cardinal.getInstance().getDataFolder().getPath() + "/.names.ser"))).readObject();
+                        names = (Map<UUID, String>) new ObjectInputStream(new FileInputStream(new File(Cardinal.getInstance().getDataFolder().getPath() + "/.names.ser"))).readObject();
                     } catch (FileNotFoundException e) {
                         names = Maps.newHashMap();
                     }

@@ -21,6 +21,7 @@ import org.bukkit.command.CommandSender;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ModesCommand {
 
@@ -30,7 +31,7 @@ public class ModesCommand {
             throw new CommandException(ChatConstant.ERROR_NO_RESULT_MATCH.getMessage(ChatUtil.getLocale(sender)));
         }
             ModuleCollection<MonumentModes> modes = GameHandler.getGameHandler().getMatch().getModules().getModules(MonumentModes.class);
-            HashMap<MonumentModes, Integer> modesWithTime = new HashMap<>();
+            Map<MonumentModes, Integer> modesWithTime = new HashMap<>();
             for (MonumentModes modeForTime : modes) {
                 modesWithTime.put(modeForTime, modeForTime.getTimeAfter());
             }

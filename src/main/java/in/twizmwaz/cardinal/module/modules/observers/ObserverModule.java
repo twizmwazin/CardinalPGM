@@ -6,15 +6,12 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
-import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
-import in.twizmwaz.cardinal.module.modules.respawn.RespawnModule;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.titleRespawn.TitleRespawn;
@@ -87,12 +84,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class ObserverModule implements Module {
 
     private final Match match;
-    private HashMap<UUID, List<UUID>> viewing = new HashMap<>();
+    private Map<UUID, List<UUID>> viewing = new HashMap<>();
 
     protected ObserverModule(Match match) {
         this.match = match;

@@ -356,6 +356,7 @@ public enum ChatConstant {
     UI_FLAG_PICKED_UP("userInterface.flagPickedUp"),
     UI_FLAG_DROPPED("userInterface.flagDropped"),
     UI_FLAG_RESPAWNED("userInterface.flagRespawned"),
+    UI_STATS_DISPLAY("userInterface.statsDisplay"),
 
     UI_DEATH_RESPAWN_UNCONFIRMED("userInterface.deathRespawnUnconfirmed"),
     UI_DEATH_RESPAWN_UNCONFIRMED_TIME("userInterface.deathRespawnUnconfirmedTime"),

@@ -13,11 +13,12 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class BossBars implements Listener {
 
-    public static HashMap<String, LocalizedBossBar> broadcastedBossBars = new HashMap<>();
+    public static Map<String, LocalizedBossBar> broadcastedBossBars = new HashMap<>();
 
     public static String addBroadcastedBossBar(ChatMessage bossBarTitle, BarColor color, BarStyle style, Boolean shown, BarFlag... flags) {
         String id = UUID.randomUUID().toString();

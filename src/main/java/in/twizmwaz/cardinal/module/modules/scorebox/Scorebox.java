@@ -22,7 +22,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class Scorebox implements Module {
 
@@ -30,9 +30,9 @@ public class Scorebox implements Module {
     private final int points;
     private final FilterModule filter;
     private final boolean silent;
-    private final HashMap<ItemStack, Integer> redeemables;
+    private final Map<ItemStack, Integer> redeemables;
 
-    protected Scorebox(final RegionModule region, final int points, final FilterModule filter, final boolean silent, final HashMap<ItemStack, Integer> redeemables) {
+    protected Scorebox(final RegionModule region, final int points, final FilterModule filter, final boolean silent, final Map<ItemStack, Integer> redeemables) {
         this.region = region;
         this.points = points;
         this.filter = filter;
