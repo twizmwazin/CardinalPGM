@@ -11,3 +11,4 @@ cycle: -1
 matchTimeMillis: true
 observers-ready: true
 resetSpawnProtection: true
+auto-update: false
