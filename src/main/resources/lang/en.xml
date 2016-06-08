@@ -359,6 +359,7 @@
         <flagPickedUp>{0} picked up by {1}</flagPickedUp>
         <flagDropped>{0} has been dropped</flagDropped>
         <flagRespawned>{0} has respawned</flagRespawned>
+        <statsDisplay>Kills: {0}  Deaths: {1}  K/D: {2}</statsDisplay>
     </userInterface>
     <deathMsg>
         <explosionSelf>{0} 'sploded</explosionSelf>

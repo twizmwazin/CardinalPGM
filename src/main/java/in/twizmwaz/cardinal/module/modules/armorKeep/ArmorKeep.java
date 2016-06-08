@@ -12,16 +12,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class ArmorKeep implements Module {
 
     private final Material type;
     private final int damageValue;
 
-    private HashMap<Player, ItemStack> helmet;
-    private HashMap<Player, ItemStack> chestplate;
-    private HashMap<Player, ItemStack> leggings;
-    private HashMap<Player, ItemStack> boots;
+    private Map<Player, ItemStack> helmet;
+    private Map<Player, ItemStack> chestplate;
+    private Map<Player, ItemStack> leggings;
+    private Map<Player, ItemStack> boots;
 
     protected ArmorKeep(Material type, int damageValue) {
         this.type = type;
@@ -46,7 +47,7 @@ public class ArmorKeep implements Module {
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         PlayerInventory inventory = player.getInventory();
-        HashMap<Integer, ItemStack> itemsToKeep = new HashMap<>();
+        Map<Integer, ItemStack> itemsToKeep = new HashMap<>();
         if (inventory.getHelmet() != null) {
             if (inventory.getHelmet().getType().equals(type) && inventory.getHelmet().getDurability() == damageValue) {
                 helmet.put(player, inventory.getHelmet());

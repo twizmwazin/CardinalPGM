@@ -7,6 +7,7 @@ import org.bukkit.DyeColor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MiscUtil {
 
@@ -174,9 +175,9 @@ public class MiscUtil {
         return Color.fromRGB(Integer.valueOf(color.substring(0, 2), 16), Integer.valueOf(color.substring(2, 4), 16), Integer.valueOf(color.substring(4, 6), 16));
     }
 
-    public static <T> List<T> getSortedHashMapKeyset(HashMap<T, Integer> sorting) {
+    public static <T> List<T> getSortedHashMapKeyset(Map<T, Integer> sorting) {
         List<T> types = new ArrayList<>();
-        HashMap<T, Integer> clone = new HashMap<>();
+        Map<T, Integer> clone = new HashMap<>();
         for (T player : sorting.keySet()) {
             clone.put(player, sorting.get(player));
         }

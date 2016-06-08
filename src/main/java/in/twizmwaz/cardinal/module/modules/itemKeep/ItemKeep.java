@@ -12,13 +12,14 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class ItemKeep implements Module {
 
     private final Material type;
     private final int damageValue;
 
-    private HashMap<Player, HashMap<Integer, ItemStack>> items;
+    private Map<Player, Map<Integer, ItemStack>> items;
 
     protected ItemKeep(Material type, int damageValue) {
         this.type = type;
@@ -36,7 +37,7 @@ public class ItemKeep implements Module {
     public void onPlayerDeath(CardinalDeathEvent event) {
         Player player = event.getPlayer();
         Inventory inventory = player.getInventory();
-        HashMap<Integer, ItemStack> itemsToKeep = new HashMap<>();
+        Map<Integer, ItemStack> itemsToKeep = new HashMap<>();
         if (inventory.getContents() != null) {
             for (int i = 0; i < inventory.getSize(); i++) {
                 if (inventory.getItem(i) != null) {

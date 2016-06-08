@@ -19,11 +19,12 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class DamageTracker implements Module {
 
-    private static HashMap<UUID, TrackerDamageEvent> events = new HashMap<>();
+    private static Map<UUID, TrackerDamageEvent> events = new HashMap<>();
 
     protected DamageTracker() {
     }

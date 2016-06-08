@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jdom2.Element;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class ScoreboxBuilder implements ModuleBuilder {
 
@@ -24,7 +25,7 @@ public class ScoreboxBuilder implements ModuleBuilder {
                 RegionModule region = RegionModuleBuilder.getAttributeOrChild("region", RegionModuleBuilder.getRegion(box), box);
                 int points = Numbers.parseInt(Parser.getOrderedAttribute("points", box), Numbers.parseInt(box.getAttributeValue("value"), 0));
                 FilterModule filter = FilterModuleBuilder.getAttributeOrChild("filter", box);
-                HashMap<ItemStack, Integer> redeemables = new HashMap<>();
+                Map<ItemStack, Integer> redeemables = new HashMap<>();
                 boolean silent = Numbers.parseBoolean(Parser.getOrderedAttribute("silent", box), Numbers.parseBoolean(box.getAttributeValue("silent"), false));
                 for (Element child : box.getChildren("redeemables")) {
                     for (Element item : child.getChildren("item")) {

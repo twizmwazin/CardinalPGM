@@ -46,11 +46,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.Map;
 
 public class Snowflakes implements Module {
 
-    private HashMap<Player, List<Item>> items;
-    private HashMap<Player, List<DyeColor>> destroyed;
+    private Map<Player, List<Item>> items;
+    private Map<Player, List<DyeColor>> destroyed;
 
     private static DataWatcher snowflakeMetadata;
 

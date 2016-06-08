@@ -65,7 +65,7 @@ public class DestroyableObjective implements GameObjective {
 
     private Set<UUID> playersTouched;
     private double size;
-    private HashMap<UUID, Integer> playersCompleted;
+    private Map<UUID, Integer> playersCompleted;
     private List<Block> monument;
 
     private double complete;

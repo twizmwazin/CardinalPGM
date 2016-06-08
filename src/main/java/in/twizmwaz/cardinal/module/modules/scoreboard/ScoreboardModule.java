@@ -125,7 +125,7 @@ public class ScoreboardModule implements Module {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
         if (!event.isCancelled()) {
             if (event.getNewTeam().orNull() == this.team) {

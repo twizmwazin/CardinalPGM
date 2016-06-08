@@ -18,11 +18,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class ClassModule implements Module {
 
-    public static HashMap<UUID, ClassModule> playerClass = new HashMap<>();
+    public static Map<UUID, ClassModule> playerClass = new HashMap<>();
 
     private final String name;
     private final String description;

@@ -31,6 +31,7 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class DamageIndicator implements Module {
@@ -40,7 +41,7 @@ public class DamageIndicator implements Module {
 
     public static double OFFSET = (WIDTH - ZOMBIE_HIT_BOX) / 2;
 
-    private HashMap<UUID, PlayerBoundingBox> boundingBoxes = new HashMap<>();
+    private Map<UUID, PlayerBoundingBox> boundingBoxes = new HashMap<>();
 
     @Override
     public void unload() {

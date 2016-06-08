@@ -19,10 +19,11 @@ import org.bukkit.event.player.PlayerAttackEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class TntDefuse implements Module {
-    private HashMap<String, UUID> tntPlaced = new HashMap<>();
+    private Map<String, UUID> tntPlaced = new HashMap<>();
 
     protected TntDefuse() {
     }
