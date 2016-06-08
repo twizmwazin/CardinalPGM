@@ -201,7 +201,7 @@ public class TitleRespawn implements TaskedModule {
 
     private void dropInventory(Player player, boolean force) {
         Optional<TeamModule> team = Teams.getTeamByPlayer(player);
-        if (GameHandler.getGameHandler().getMatch().isRunning() && (force || (!team.get().isObserver() && !isDeadUUID(player.getUniqueId())))) {
+        if (GameHandler.getGameHandler().getMatch().isRunning() && (force || (team.isPresent() && !team.get().isObserver() && !isDeadUUID(player.getUniqueId())))) {
             for (ItemStack stack : player.getInventory().getContents()) {
                 if (stack != null && stack.getType() != Material.AIR) {
                     player.getWorld().dropItemNaturally(player.getLocation().add(0, 0.5, 0), stack);

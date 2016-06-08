@@ -21,7 +21,7 @@ public class ScoreboxBuilder implements ModuleBuilder {
         ModuleCollection<Scorebox> results = new ModuleCollection<>();
         for (Element score : match.getDocument().getRootElement().getChildren("score")) {
             for (Element box : score.getChildren("box")) {
-                RegionModule region = RegionModuleBuilder.getAttributeOrChild("region", box);
+                RegionModule region = RegionModuleBuilder.getAttributeOrChild("region", RegionModuleBuilder.getRegion(box), box);
                 int points = Numbers.parseInt(Parser.getOrderedAttribute("points", box), Numbers.parseInt(box.getAttributeValue("value"), 0));
                 FilterModule filter = FilterModuleBuilder.getAttributeOrChild("filter", box);
                 HashMap<ItemStack, Integer> redeemables = new HashMap<>();
