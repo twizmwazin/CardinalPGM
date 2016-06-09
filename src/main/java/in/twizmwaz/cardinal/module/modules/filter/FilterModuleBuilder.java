@@ -187,9 +187,9 @@ public class FilterModuleBuilder implements ModuleBuilder {
                             for (Element filterElement : document.getRootElement().getChildren("filters")) {
                                 for (Element givenFilter : filterElement.getChildren()) {
                                     if (givenFilter.getAttributeValue("name") != null && givenFilter.getAttributeValue("name").equalsIgnoreCase(id))
-                                        return getFilter(givenFilter.getChildren().get(0));
+                                        return getFilter(givenFilter);
                                     if (givenFilter.getAttributeValue("id") != null && givenFilter.getAttributeValue("id").equalsIgnoreCase(id))
-                                        return getFilter(givenFilter.getChildren().get(0));
+                                        return getFilter(givenFilter);
                                 }
                             }
                     }
