@@ -15,6 +15,7 @@ import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
@@ -28,12 +29,14 @@ public class Scorebox implements Module {
     private final RegionModule region;
     private final int points;
     private final FilterModule filter;
+    private final boolean silent;
     private final HashMap<ItemStack, Integer> redeemables;
 
-    protected Scorebox(final RegionModule region, final int points, final FilterModule filter, final HashMap<ItemStack, Integer> redeemables) {
+    protected Scorebox(final RegionModule region, final int points, final FilterModule filter, final boolean silent, final HashMap<ItemStack, Integer> redeemables) {
         this.region = region;
         this.points = points;
         this.filter = filter;
+        this.silent = silent;
         this.redeemables = redeemables;
     }
 
@@ -65,12 +68,15 @@ public class Scorebox implements Module {
             if (points != 0 && playerTeam.isPresent()) {
                 for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
                     if (score.getTeam() == playerTeam.get()) {
-                        ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}",
-                                new LocalizedChatMessage(ChatConstant.UI_SCORED_FOR,
-                                        new UnlocalizedChatMessage(playerTeam.get().getColor() + event.getPlayer().getName() + ChatColor.GRAY),
-                                        new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "{0}" + ChatColor.GRAY, points == 1 ? new LocalizedChatMessage(ChatConstant.UI_ONE_POINT) : new LocalizedChatMessage(ChatConstant.UI_POINTS, points + "" + ChatColor.GRAY)),
-                                        new UnlocalizedChatMessage(playerTeam.get().getCompleteName()))));
-                        score.addScore(points);
+                        if (!this.silent) {
+                            ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}",
+                                    new LocalizedChatMessage(ChatConstant.UI_SCORED_FOR,
+                                            new UnlocalizedChatMessage(playerTeam.get().getColor() + event.getPlayer().getName() + ChatColor.GRAY),
+                                            new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "{0}" + ChatColor.GRAY, points == 1 ? new LocalizedChatMessage(ChatConstant.UI_ONE_POINT) : new LocalizedChatMessage(ChatConstant.UI_POINTS, points + "" + ChatColor.GRAY)),
+                                            new UnlocalizedChatMessage(playerTeam.get().getCompleteName()))));
+                            score.addScore(points);
+                            event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+                        }
                     }
                 }
             }
