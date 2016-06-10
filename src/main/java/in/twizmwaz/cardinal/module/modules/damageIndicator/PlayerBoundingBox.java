@@ -149,7 +149,7 @@ class PlayerBoundingBox implements Listener {
 
         List<DataWatcher.Item<?>> dataItems = new ArrayList<>();
         dataItems.add(new DataWatcher.Item<>(DataWatcherRegistry.a.a(0), (byte) 32)); // Sets invisible
-        dataItems.add(new DataWatcher.Item<>(DataWatcherRegistry.c.a(6), 20.0F));    // Sets health
+        dataItems.add(new DataWatcher.Item<>(DataWatcherRegistry.c.a(7), 20.0F));    // Sets health
 
         int i = 0;
         for (int x = -1; x < 2; x += 2) {

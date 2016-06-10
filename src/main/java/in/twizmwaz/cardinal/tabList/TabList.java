@@ -17,12 +17,12 @@ import in.twizmwaz.cardinal.util.Strings;
 import in.twizmwaz.cardinal.util.Teams;
 import net.minecraft.server.DataWatcher;
 import net.minecraft.server.DataWatcherRegistry;
+import net.minecraft.server.EnumGamemode;
 import net.minecraft.server.IChatBaseComponent;
 import net.minecraft.server.PacketPlayOutEntityDestroy;
 import net.minecraft.server.PacketPlayOutNamedEntitySpawn;
 import net.minecraft.server.PacketPlayOutPlayerInfo;
 import net.minecraft.server.PacketPlayOutScoreboardTeam;
-import net.minecraft.server.WorldSettings;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -98,7 +98,7 @@ public class TabList implements Listener {
                     for (TeamModule team : Teams.getTeams()) {
                         if (team.isObserver()) continue;
                         List<DataWatcher.Item<?>> items = Lists.newArrayList();
-                        items.add(new DataWatcher.Item<>(DataWatcherRegistry.a.a(12), (byte) 127));
+                        items.add(new DataWatcher.Item<>(DataWatcherRegistry.a.a(13), (byte) 127));
                         createPlayerWithParts(items, viewer, getTeam(team));
                     }
                 }
@@ -111,7 +111,7 @@ public class TabList implements Listener {
                     for (TeamModule team : Teams.getTeams()) {
                         if (team.isObserver()) continue;
                         List<DataWatcher.Item<?>> items = Lists.newArrayList();
-                        items.add(new DataWatcher.Item<>(DataWatcherRegistry.a.a(12), (byte) 0));
+                        items.add(new DataWatcher.Item<>(DataWatcherRegistry.a.a(13), (byte) 0));
                         createPlayerWithParts(items, viewer, getTeam(team));
                     }
                 }
@@ -411,7 +411,7 @@ public class TabList implements Listener {
     }
 
     private PacketPlayOutPlayerInfo.PlayerInfoData getPlayerInfo(PacketPlayOutPlayerInfo listPacket, GameProfile game, String displayName, int ping) {
-        return listPacket.new PlayerInfoData(game, ping < 0 ? 1000 : ping, WorldSettings.EnumGamemode.SURVIVAL, IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + StringEscapeUtils.escapeJava(displayName) + "\"}"));
+        return listPacket.new PlayerInfoData(game, ping < 0 ? 1000 : ping, EnumGamemode.SURVIVAL, IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + StringEscapeUtils.escapeJava(displayName) + "\"}"));
     }
 
     private void broadcastTeamPacket(String fakePlayer, int slot, int action) {

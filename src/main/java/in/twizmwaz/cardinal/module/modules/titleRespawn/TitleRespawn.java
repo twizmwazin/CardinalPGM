@@ -35,6 +35,7 @@ import net.minecraft.server.AttributeInstance;
 import net.minecraft.server.AttributeModifier;
 import net.minecraft.server.DataWatcher;
 import net.minecraft.server.DataWatcherRegistry;
+import net.minecraft.server.EntityArmorStand;
 import net.minecraft.server.EntityPlayer;
 import net.minecraft.server.EnumItemSlot;
 import net.minecraft.server.Packet;
@@ -246,7 +247,7 @@ public class TitleRespawn implements TaskedModule {
             public void run() {
                 EntityPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
                 DataWatcher data = new DataWatcher(nmsPlayer);
-                data.register(DataWatcherRegistry.c.a(6), 0.0F); // Creates player health metadata with 0.0F
+                data.register(DataWatcherRegistry.c.a(7), 0.0F); // Creates player health metadata with 0.0F
 
                 List<Packet> packets = new ArrayList<>();
                 for (EnumItemSlot slot : EnumItemSlot.values()) {
@@ -272,7 +273,7 @@ public class TitleRespawn implements TaskedModule {
 
         List<DataWatcher.Item<?>> dataItems = new ArrayList<>();
         dataItems.add(new DataWatcher.Item<>(DataWatcherRegistry.a.a(0), (byte)32)); // Sets invisible
-        dataItems.add(new DataWatcher.Item<>(DataWatcherRegistry.c.a(6), 20.0F));    // Sets health
+        dataItems.add(new DataWatcher.Item<>(DataWatcherRegistry.c.a(7), 20.0F));    // Sets health
 
         PacketPlayOutSpawnEntityLiving spawnPacket = new PacketPlayOutSpawnEntityLiving(
                 Integer.MAX_VALUE, UUID.randomUUID(),     // Entity id and Entity UUID

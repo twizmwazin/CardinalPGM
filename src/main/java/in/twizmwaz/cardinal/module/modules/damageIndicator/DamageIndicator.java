@@ -108,8 +108,8 @@ public class DamageIndicator implements Module {
             dataItems.add(new DataWatcher.Item<>(DataWatcherRegistry.d.a(2),
                     "" + ChatColor.RED + ChatColor.BOLD + Math.round(event.getFinalDamage() / 0.2)));// Custom Name
             dataItems.add(new DataWatcher.Item<>(DataWatcherRegistry.h.a(3), true));                 // Custom Name visible
-            dataItems.add(new DataWatcher.Item<>(DataWatcherRegistry.a.a(10),(byte)0x10));           // Marker Armor Stand
-            dataItems.add(new DataWatcher.Item<>(DataWatcherRegistry.c.a(6), 20.0F));                // Sets health
+            dataItems.add(new DataWatcher.Item<>(DataWatcherRegistry.a.a(11),(byte)0x10));           // Marker Armor Stand
+            dataItems.add(new DataWatcher.Item<>(DataWatcherRegistry.c.a(7), 20.0F));                // Sets health
 
             int id = Bukkit.allocateEntityId();
             timeAndDestroyEntity(id, player);
