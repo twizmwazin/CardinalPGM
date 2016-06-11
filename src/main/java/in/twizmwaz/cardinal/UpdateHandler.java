@@ -101,7 +101,7 @@ public class UpdateHandler {
         public void run() {
             sender.sendMessage(new LocalizedChatMessage(ChatConstant.GENERIC_CHECKING_UPDATES).getMessage(ChatUtil.getLocale(sender)));
             String last = GitUtil.getLatestGitRevision();
-            if (last != null && last.equals(UpdateHandler.localGitRevision)) {
+            if (last != null && last.startsWith(UpdateHandler.localGitRevision)) {
                 sender.sendMessage(ChatColor.GOLD + ChatConstant.UI_LATEST_VERSION.asMessage().getMessage(ChatUtil.getLocale(sender)));
             } else if (downloadedRevision.equals(last)) {
                 sender.sendMessage(new LocalizedChatMessage(ChatConstant.GENERIC_ALREADY_DOWNLOADED).getMessage(ChatUtil.getLocale(sender)));
