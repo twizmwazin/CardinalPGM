@@ -11,6 +11,8 @@ import org.bukkit.ChatColor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 public class Rank {
 
@@ -118,6 +120,16 @@ public class Rank {
             }
         }
         return prefix;
+    }
+    
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event, UUID uuid) {
+        if (PermissionModule.isDeveloper(uuid)){
+            String lamamadezenzoh = ChatColor.YELLOW + "" + ChatColor.STRIKETHROUGH + "------" + ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH + "---------------" + ChatColor.YELLOW + "" + ChatColor.STRIKETHROUGH + "------";
+            Bukkit.broadcastMessage(lamamadezenzoh);
+            Bukkit.broadcastMessage(ChatColor.RED + "A developer joined the game.");
+            Bukkit.broadcastMessage(lamamadezenzoh);
+        }
     }
 
     public String getName() {
