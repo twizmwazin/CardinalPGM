@@ -94,8 +94,8 @@ public class ScoreModule implements Module {
         if (matchHasScoring()) {
             TeamModule killer = event.getKiller() == null ? null : Teams.getTeamByPlayer(event.getKiller()).orNull();
             TeamModule dead = Teams.getTeamByPlayer(event.getPlayer()).orNull();
-            if (killer != null && killer != dead && killer == team) {
-                addScore(pointsPerKill);
+            if (killer != null && killer != dead) {
+                if (killer == team) addScore(pointsPerKill);
             } else if (dead == team) {
                 addScore(pointsPerDeath * -1);
             }
