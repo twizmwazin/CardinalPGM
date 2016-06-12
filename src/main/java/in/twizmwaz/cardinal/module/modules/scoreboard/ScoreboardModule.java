@@ -343,15 +343,15 @@ public class ScoreboardModule implements Module {
         if (hasObjectives) {
             if (objective != null) {
                 if (objective.equals(WoolObjective.class)) {
-                    displayTitle = "Wools";
+                    displayTitle = "Objectives";
                 } else if (objective.equals(FlagObjective.class)) {
-                    displayTitle = "Flags";
+                    displayTitle = "Objectives";
                 } else if (objective.equals(CoreObjective.class)) {
-                    displayTitle = "Cores";
+                    displayTitle = "Objectives";
                 } else if (objective.equals(DestroyableObjective.class)) {
-                    displayTitle = "Monuments";
+                    displayTitle = "Objectives";
                 } else if (objective.equals(HillObjective.class)) {
-                    displayTitle = "Hills";
+                    displayTitle = "Scores";
                 }
             } else {
                 displayTitle = "Objectives";
