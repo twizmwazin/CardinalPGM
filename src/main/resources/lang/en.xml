@@ -360,6 +360,25 @@
         <flagDropped>{0} has been dropped</flagDropped>
         <flagRespawned>{0} has respawned</flagRespawned>
         <statsDisplay>Kills: {0}  Deaths: {1}  K/D: {2}</statsDisplay>
+        <spectatorTools>Spectator Tools</spectatorTools>
+        <spectatorToolsLore>Helpful tools for observers</spectatorToolsLore>
+        <teams>Teams</teams>
+        <teleportToTeamMember>Teleport to a team member</teleportToTeamMember>
+        <teleportToTeamMemberLore>Opens a GUI to teleport to any player</teleportToTeamMemberLore>
+        <toggleObservers>Toggle Observers</toggleObservers>
+        <toggleObserversLore>Shows/Hides other observers for you</toggleObserversLore>
+        <toggleElytra>Toggle Elytra</toggleElytra>
+        <toggleElytraLore>Gives/Removes your elytra while in observer mode</toggleElytraLore>
+        <changeEffects>Change effects</changeEffects>
+        <changeEffectsLore>Opens a GUI to change various effects</changeEffectsLore>
+        <toggleGamemode>Toggle Gamemode</toggleGamemode>
+        <toggleGamemodeLore>Toggles between Creative and Spectator mode</toggleGamemodeLore>
+        <toggleSpeed>x{0} Speed</toggleSpeed>
+        <toggleSpeedLore>Changes the speed you fly at</toggleSpeedLore>
+        <toggleNightVision>Toggle Night Vision</toggleNightVision>
+        <toggleNightVisionLore>Turns on/off the night vision effect for you</toggleNightVisionLore>
+        <goBack>Go Back!</goBack>
+        <goBackLore>Go back to the last menu you were on</goBackLore>
     </userInterface>
     <deathMsg>
         <explosionSelf>{0} 'sploded</explosionSelf>
