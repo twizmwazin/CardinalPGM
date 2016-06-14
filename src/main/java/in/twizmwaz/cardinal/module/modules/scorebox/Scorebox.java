@@ -74,9 +74,9 @@ public class Scorebox implements Module {
                                             new UnlocalizedChatMessage(playerTeam.get().getColor() + event.getPlayer().getName() + ChatColor.GRAY),
                                             new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "{0}" + ChatColor.GRAY, points == 1 ? new LocalizedChatMessage(ChatConstant.UI_ONE_POINT) : new LocalizedChatMessage(ChatConstant.UI_POINTS, points + "" + ChatColor.GRAY)),
                                             new UnlocalizedChatMessage(playerTeam.get().getCompleteName()))));
-                            score.addScore(points);
                             event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
                         }
+                        score.addScore(points);
                     }
                 }
             }
