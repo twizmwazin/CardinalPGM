@@ -27,7 +27,6 @@ import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.block.Banner;
-import org.bukkit.util.Vector;
 import org.jdom2.Element;
 
 import java.util.HashMap;
@@ -66,10 +65,7 @@ public class FlagBuilder implements ModuleBuilder {
         Set<Net> nets = new HashSet<>();
         if (elements[0].getChildren("net").size() > 0) {
             for (Element netEl : elements[0].getChildren("net")) {
-                Element[] newElements = new Element[elements.length + 1];
-                newElements[0] = netEl;
-                System.arraycopy(elements, 0, newElements, 1, elements.length);
-                Net net = NetBuilder.parseNet(newElements);
+                Net net = NetBuilder.parseNet(Parser.addElement(netEl, elements));
                 nets.add(net);
                 result.add(net);
             }

@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.util;
 
+import com.google.common.collect.Lists;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.itemMods.ItemMods;
 import in.twizmwaz.cardinal.module.modules.kit.kitTypes.KitItem;
@@ -291,6 +292,22 @@ public class Parser {
 
     private static double toDouble (String s) {
         return Numbers.parseDouble(s.replace(" ", ""));
+    }
+
+    @SafeVarargs
+    public static List<Element> getJoinedElements(List<Element>... elementLists) {
+        List<Element> result = Lists.newArrayList();
+        for (List<Element> elementList : elementLists) {
+            result.addAll(elementList);
+        }
+        return result;
+    }
+
+    public static Element[] addElement(Element element, Element... elements) {
+        Element[] newElements = new Element[elements.length + 1];
+        newElements[0] = element;
+        System.arraycopy(elements, 0, newElements, 1, elements.length);
+        return newElements;
     }
 
 }

@@ -10,14 +10,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 
+import java.util.List;
+
 public class KillReward implements Module {
 
-    private final KitItem item;
+    private final List<KitItem> items;
     private final KitNode kit;
     private final FilterModule filter;
 
-    protected KillReward(KitItem item, KitNode kit, final FilterModule filter) {
-        this.item = item;
+    protected KillReward(List<KitItem> items, KitNode kit, final FilterModule filter) {
+        this.items = items;
         this.kit = kit;
         this.filter = filter;
     }
@@ -33,7 +35,7 @@ public class KillReward implements Module {
             Player killer = event.getKiller();
             if (!filter.evaluate(killer).equals(FilterState.DENY)) {
                 if (kit != null) kit.apply(killer, null);
-                if (item != null) {
+                for (KitItem item : items) {
                     if (!item.hasSlot() || killer.getInventory().getItem(item.getSlot()) != null) {
                         killer.getInventory().addItem(item.getItem());
                     } else {
