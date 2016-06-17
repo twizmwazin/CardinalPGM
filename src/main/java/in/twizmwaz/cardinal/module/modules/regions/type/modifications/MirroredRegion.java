@@ -1,20 +1,12 @@
 package in.twizmwaz.cardinal.module.modules.regions.type.modifications;
 
-import in.twizmwaz.cardinal.module.ModuleCollection;
+import com.google.common.collect.Lists;
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.modifiers.MirrorParser;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
-import in.twizmwaz.cardinal.module.modules.regions.type.CircleRegion;
-import in.twizmwaz.cardinal.module.modules.regions.type.CuboidRegion;
-import in.twizmwaz.cardinal.module.modules.regions.type.CylinderRegion;
-import in.twizmwaz.cardinal.module.modules.regions.type.EmptyRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
-import in.twizmwaz.cardinal.module.modules.regions.type.RectangleRegion;
-import in.twizmwaz.cardinal.module.modules.regions.type.SphereRegion;
-import in.twizmwaz.cardinal.module.modules.regions.type.combinations.ComplementRegion;
-import in.twizmwaz.cardinal.module.modules.regions.type.combinations.IntersectRegion;
-import in.twizmwaz.cardinal.module.modules.regions.type.combinations.NegativeRegion;
-import in.twizmwaz.cardinal.module.modules.regions.type.combinations.UnionRegion;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
@@ -22,172 +14,64 @@ import java.util.List;
 
 public class MirroredRegion extends RegionModule {
 
-    private final RegionModule region;
-    private final Vector origin, normal;
+    private final RegionModule base;
+    private final Vector origin, normal, flippedNormal;
 
     public MirroredRegion(String name, RegionModule base, Vector origin, Vector normal) {
         super(name);
         this.origin = origin;
         this.normal = normal.normalize();
-        this.region = mirrorRegion(base);
-    }
-
-    public MirroredRegion(String name, RegionModule region) {
-        super(name);
-        this.origin = null;
-        this.normal = null;
-        this.region = region;
+        this.flippedNormal = new Vector(normal.getX() * -1, normal.getY() * -1, normal.getZ() * -1);
+        this.base = base;
     }
 
     public MirroredRegion(MirrorParser parser) {
         this(parser.getName(), parser.getBase(), parser.getOrigin(), parser.getNormal());
     }
 
-    public RegionModule getRegion() {
-        return region;
-    }
-
     @Override
     public boolean contains(Vector vector) {
-        return region.contains(vector);
+        return base.contains(mirrorVector(vector, origin, flippedNormal));
     }
 
     @Override
     public PointRegion getRandomPoint() {
-        return region.getRandomPoint();
+        return new PointRegion(null, mirrorVector(base.getRandomPoint().getVector(), origin, normal));
     }
 
     @Override
     public BlockRegion getCenterBlock() {
-        return region.getCenterBlock();
+        return new BlockRegion(null, mirrorVector(base.getCenterBlock().getVector(), origin, normal));
     }
 
     @Override
     public List<Block> getBlocks() {
-        return region.getBlocks();
+        List<Block> result = Lists.newArrayList();
+        World world = GameHandler.getGameHandler().getMatchWorld();
+        for (Block block : base.getBlocks()) {
+            result.add(mirrorVector(block.getLocation(), origin, normal).toLocation(world).getBlock());
+        }
+        return result;
     }
 
     @Override
     public Vector getMin() {
-        return region.getMin();
+        return mirrorVector(base.getMin(), origin, normal);
     }
 
     @Override
     public Vector getMax() {
-        return region.getMax();
+        return mirrorVector(base.getMax(), origin, normal);
     }
 
-    @SuppressWarnings({"unchecked"})
-    private <T extends RegionModule> T mirrorRegion(T region) {
-
-
-        if (region instanceof PointRegion) {
-
-            PointRegion rg = (PointRegion) region;
-            Vector v = getMirroredValues(rg.getX(), rg.getY(), rg.getZ());
-            return (T) new PointRegion(null, v.getX(), v.getY(), v.getZ());
-
-        } else if (region instanceof BlockRegion) {
-
-            BlockRegion rg = (BlockRegion) region;
-            Vector v = getMirroredValues(rg.getX(), rg.getY(), rg.getZ());
-            return (T) new BlockRegion(null, v.getX(), v.getY(), v.getZ());
-
-        } else if (region instanceof CircleRegion) {
-
-            CircleRegion rg = (CircleRegion) region;
-            Vector v = getMirroredValues(rg.getBaseX(), 0, rg.getBaseZ());
-            return (T) new CircleRegion(null, v.getX(), v.getZ(), rg.getRadius());
-
-        } else if (region instanceof CylinderRegion) {
-
-            CylinderRegion rg = (CylinderRegion) region;
-            Vector v = getMirroredValues(rg.getBaseX(), rg.getBaseY(), rg.getBaseZ());
-            return (T) new CylinderRegion(null, v, rg.getRadius(), rg.getHeight());
-
-        } else if (region instanceof RectangleRegion) {
-
-            RectangleRegion rg = (RectangleRegion) region;
-            Vector v1 = getMirroredValues(rg.getXMin(), 0, rg.getZMin());
-            Vector v2 = getMirroredValues(rg.getXMax(), 0, rg.getZMax());
-            return (T) new RectangleRegion(null, v1.getX(), v1.getZ(), v2.getX(), v2.getZ());
-
-        } else if (region instanceof CuboidRegion) {
-
-            CuboidRegion rg = (CuboidRegion) region;
-            Vector v1 = getMirroredValues(rg.getXMin(), rg.getYMin(), rg.getZMin());
-            Vector v2 = getMirroredValues(rg.getXMax(), rg.getYMax(), rg.getZMax());
-            return (T) new CuboidRegion(null, v1, v2);
-
-        } else if (region instanceof SphereRegion) {
-
-            SphereRegion rg = (SphereRegion) region;
-            Vector v = getMirroredValues(rg.getOriginX(), rg.getOriginY(), rg.getOriginZ());
-            return (T) new SphereRegion(null, v, rg.getRadius());
-
-        } else if (region instanceof EmptyRegion) {
-
-            return (T) new EmptyRegion("");
-
-        } else if (region instanceof ComplementRegion) {
-
-            ComplementRegion rg = (ComplementRegion) region;
-            ModuleCollection<RegionModule> regions = new ModuleCollection<>();
-            for (RegionModule rg1 : rg.getRegions()) {
-                regions.add(mirrorRegion(rg1));
-            }
-            return (T) new ComplementRegion(null, regions);
-
-        } else if (region instanceof IntersectRegion) {
-
-            IntersectRegion rg = (IntersectRegion) region;
-            ModuleCollection<RegionModule> regions = new ModuleCollection<>();
-            for (RegionModule rg1 : rg.getRegions()) {
-                regions.add(mirrorRegion(rg1));
-            }
-            return (T) new IntersectRegion(null, regions);
-
-        } else if (region instanceof NegativeRegion) {
-
-            NegativeRegion rg = (NegativeRegion) region;
-            ModuleCollection<RegionModule> regions = new ModuleCollection<>();
-            for (RegionModule rg1 : rg.getRegions()) {
-                regions.add(mirrorRegion(rg1));
-            }
-            return (T) new NegativeRegion(null, regions);
-
-        } else if (region instanceof UnionRegion) {
-
-            UnionRegion rg = (UnionRegion) region;
-            ModuleCollection<RegionModule> regions = new ModuleCollection<>();
-            for (RegionModule rg1 : rg.getRegions()) {
-                regions.add(mirrorRegion(rg1));
-            }
-            return (T) new UnionRegion(null, regions);
-
-        } else if (region instanceof TranslatedRegion) {
-
-            TranslatedRegion rg = (TranslatedRegion) region;
-            return (T) new TranslatedRegion(null, mirrorRegion(rg.getRegion()));
-
-        } else if (region instanceof MirroredRegion) {
-
-            MirroredRegion rg = (MirroredRegion) region;
-            return (T) new MirroredRegion(null, mirrorRegion(rg.getRegion()));
-
-        }
-        return null;
-
-    }
-
-    public Vector getMirroredValues(double x1, double y1, double z1) {
-        Vector vector = new Vector(x1, y1, z1).minus(origin);
+    public static Vector mirrorVector(Vector original, Vector origin, Vector normal) {
+        Vector vector = original.minus(origin);
         vector = vector.minus(normal.times(vector.dot(normal)).times(2)).add(origin);
         vector = new Vector(round(vector.getX()), round(vector.getY()), round(vector.getZ()));
         return vector;
     }
 
-    public double round(double d) {
+    public static double round(double d) {
         return (double) Math.round(d * 10) / 10D;
     }
 
