@@ -5,7 +5,9 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
+import in.twizmwaz.cardinal.module.modules.tntTracker.TntTracker;
 import in.twizmwaz.cardinal.util.ChatUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ItemFrame;
@@ -33,6 +35,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 public class BlockEventRegion extends AppliedRegion {
 
@@ -42,7 +45,7 @@ public class BlockEventRegion extends AppliedRegion {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (!event.isCancelled() && filter.evaluate(event.getPlayer(), event.getBlock()).equals(FilterState.DENY)
+        if (!event.isCancelled() && filter.evaluate(event, event.getPlayer(), event.getBlock()).equals(FilterState.DENY)
                 && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector()))) {
             event.setCancelled(true);
             ChatUtil.sendWarningMessage(event.getPlayer(), message);
@@ -150,7 +153,8 @@ public class BlockEventRegion extends AppliedRegion {
         Set<Block> blocksToRemove = new HashSet<>();
         for (Block block : event.blockList()) {
             if (region.contains(new BlockRegion(null, block.getLocation().toVector()))) {
-                if (filter.evaluate(block, event).equals(FilterState.DENY)) {
+                UUID id = TntTracker.getWhoPlaced(event.getEntity());
+                if (id != null ? filter.evaluate(block, event, Bukkit.getPlayer(id)).equals(FilterState.DENY) : filter.evaluate(block, event).equals(FilterState.DENY)) {
                     blocksToRemove.add(block);
                 }
             }
