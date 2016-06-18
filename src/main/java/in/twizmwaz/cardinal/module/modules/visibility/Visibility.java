@@ -99,6 +99,9 @@ public class Visibility implements Module {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerRespawn(CardinalSpawnEvent event) {
         final Player player = event.getPlayer();
+        for (Player viewer : Bukkit.getOnlinePlayers()) {
+            setVisibility(viewer, player, false);
+        }
         Bukkit.getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(), new Runnable() {
             @Override
             public void run() {
