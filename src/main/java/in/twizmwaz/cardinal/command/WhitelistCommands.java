@@ -5,10 +5,12 @@ import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import com.sk89q.minecraft.util.commands.NestedCommand;
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.util.AsyncCommand;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Players;
 import in.twizmwaz.cardinal.util.Teams;
@@ -88,17 +90,39 @@ public class WhitelistCommands {
     @Command(aliases = {"add", "a"}, desc = "Add someone to the whitelist.", min = 1, max = 1)
     @CommandPermissions("cardinal.whitelist.add")
     public static void add(final CommandContext args, final CommandSender sender) throws CommandException {
-        OfflinePlayer player = matchSinglePlayer(sender, args.getString(0));
-        player.setWhitelisted(true);
-        sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.GENERIC_PLAYER_ADD_WHITELIST, Players.getName(player) + ChatColor.GREEN).getMessage(ChatUtil.getLocale(sender)));
+        if (args.getString(0).startsWith("@")) {
+            Bukkit.getScheduler().runTaskAsynchronously(Cardinal.getInstance(), new AsyncCommand(args, sender) {
+                @Override
+                public void run() {
+                    OfflinePlayer player = Bukkit.getOfflinePlayer(args.getString(0).substring(1));
+                    player.setWhitelisted(true);
+                    sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.GENERIC_PLAYER_ADD_WHITELIST, Players.getName(player) + ChatColor.GREEN).getMessage(ChatUtil.getLocale(sender)));
+                }
+            });
+        } else {
+            OfflinePlayer player = matchSinglePlayer(sender, args.getString(0));
+            player.setWhitelisted(true);
+            sender.sendMessage(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.GENERIC_PLAYER_ADD_WHITELIST, Players.getName(player) + ChatColor.GREEN).getMessage(ChatUtil.getLocale(sender)));
+        }
     }
 
     @Command(aliases = {"remove", "r"}, desc = "Remove someone from the whitelist.", min = 1, max = 1)
     @CommandPermissions("cardinal.whitelist.remove")
     public static void remove(final CommandContext args, final CommandSender sender) throws CommandException {
-        OfflinePlayer player = matchSinglePlayer(sender, args.getString(0));
-        player.setWhitelisted(false);
-        sender.sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.GENERIC_PLAYER_REMOVE_WHITELIST, Players.getName(player) + ChatColor.RED).getMessage(ChatUtil.getLocale(sender)));
+        if (args.getString(0).startsWith("@")) {
+            Bukkit.getScheduler().runTaskAsynchronously(Cardinal.getInstance(), new AsyncCommand(args, sender) {
+                @Override
+                public void run() {
+                    OfflinePlayer player = Bukkit.getOfflinePlayer(args.getString(0).substring(1));
+                    player.setWhitelisted(false);
+                    sender.sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.GENERIC_PLAYER_REMOVE_WHITELIST, Players.getName(player) + ChatColor.RED).getMessage(ChatUtil.getLocale(sender)));
+                }
+            });
+        } else {
+            OfflinePlayer player = matchSinglePlayer(sender, args.getString(0));
+            player.setWhitelisted(false);
+            sender.sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.GENERIC_PLAYER_REMOVE_WHITELIST, Players.getName(player) + ChatColor.RED).getMessage(ChatUtil.getLocale(sender)));
+        }
     }
 
     @Command(aliases = {"all"}, desc = "Add everyone that's online to the whitelist.", min = 0, max = 0)
