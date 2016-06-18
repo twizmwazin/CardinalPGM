@@ -91,7 +91,6 @@ public class TimeLimit implements Module {
                 }
                 if (completedObjectives1 != completedObjectives2) return completedObjectives1 - completedObjectives2;
                 if (touchedObjectives1 != touchedObjectives2) return touchedObjectives1 - touchedObjectives2;
-
                 if (touchedObjectives1 != 0){
                     List<Integer> closestCompletion1 = new ArrayList<Integer>(){};
                     List<Integer> closestCompletion2 = new ArrayList<Integer>(){};
@@ -119,7 +118,7 @@ public class TimeLimit implements Module {
                                     closestCompletion1.add(50);
                                     proximity1.add(((FlagObjective) obj).getProximity(team1));
                                 }
-                                if (obj.getTeam().equals(team2)) {
+                                if (!obj.getTeam().equals(team2)) {
                                     closestCompletion2.add(50);
                                     proximity2.add(((FlagObjective) obj).getProximity(team2));
                                 }

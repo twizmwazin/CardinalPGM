@@ -8,6 +8,8 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.GameObjective;
+import in.twizmwaz.cardinal.module.modules.ctf.FlagObjective;
+import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import in.twizmwaz.cardinal.module.modules.proximity.GameObjectiveProximityHandler;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
@@ -28,7 +30,7 @@ public class ProximityCommand {
                 !GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING) || sender.hasPermission("cardinal.proximity")){
             boolean hasObjectives = false;
             for (GameObjective obj : GameHandler.getGameHandler().getMatch().getModules().getModules(GameObjective.class)) {
-                if (obj.showOnScoreboard()) {
+                if (obj.showOnScoreboard() && !(obj instanceof HillObjective) && !(obj instanceof FlagObjective && ((FlagObjective) obj).isShared())) {
                     hasObjectives = true;
                 }
             }
@@ -47,6 +49,20 @@ public class ProximityCommand {
                                 message += ChatColor.AQUA + proximityHandler.getProximityAsString();
                             }
                             sender.sendMessage(message);
+                        }
+                        for (GameObjective objective : Teams.getShownSharedObjectives()) {
+                            if (objective instanceof HillObjective || (objective instanceof FlagObjective && ((FlagObjective) objective).isShared())) continue;
+                            GameObjectiveProximityHandler proximityHandler = objective.getProximityHandler(team);
+                            if (proximityHandler != null) {
+                                String message = "  ";
+                                if (objective instanceof WoolObjective) message += MiscUtil.convertDyeColorToChatColor(((WoolObjective)objective).getColor());
+                                message += WordUtils.capitalizeFully(objective.getName().replaceAll("_", " ")) + " ";
+                                message += objective.isComplete() ? ChatColor.GREEN + "COMPLETE " : objective.isTouched() ? ChatColor.YELLOW + "TOUCHED " : ChatColor.RED + "UNTOUCHED ";
+                                message += ChatColor.GRAY + proximityHandler.getProximityName() + ": ";
+                                message += ChatColor.AQUA + proximityHandler.getProximityAsString();
+                                sender.sendMessage(message);
+                            }
+
                         }
                     }
                 }

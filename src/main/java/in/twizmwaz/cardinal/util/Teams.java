@@ -101,7 +101,7 @@ public class Teams {
     public static ModuleCollection<GameObjective> getShownObjectives(TeamModule team) {
         ModuleCollection<GameObjective> objectives = new ModuleCollection<>();
         for (GameObjective objective : getObjectives(team)) {
-            if (objective.showOnScoreboard() && !(objective instanceof HillObjective) && !(objective instanceof FlagObjective && ((FlagObjective)objective).multipleAttackers())) {
+            if (objective.showOnScoreboard() && !(objective instanceof HillObjective) && !(objective instanceof FlagObjective && ((FlagObjective) objective).multipleAttackers())) {
                 objectives.add(objective);
             }
         }
