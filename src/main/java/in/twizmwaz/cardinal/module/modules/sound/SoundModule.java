@@ -11,6 +11,7 @@ import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
 import in.twizmwaz.cardinal.settings.Settings;
+import in.twizmwaz.cardinal.util.Players;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -75,13 +76,8 @@ public class SoundModule implements Module {
     @EventHandler
     public void onMatchEnd(MatchEndEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (Settings.getSettingByName("Sounds") != null && Settings.getSettingByName("Sounds").getValueByPlayer(player).getValue().equalsIgnoreCase("on")) {
-                if (Teams.getTeamByPlayer(player) == event.getTeam()) {
-                    player.playSound(player.getLocation(), Sound.ENTITY_WITHER_DEATH, 1, 1);
-                } else {
-                    player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SPAWN, 1, 1);
-                }
-            }
+            Players.playSoundEffect(player, event.getTeam().isPresent()
+                    && event.getTeam().get().contains(player) ? Sound.ENTITY_WITHER_DEATH : Sound.ENTITY_WITHER_SPAWN, 1f, 1f);
         }
     }
 
