@@ -52,7 +52,7 @@ public class PostBuilder implements ModuleBuilder {
             boolean permanent = Boolean.parseBoolean(elements.getAttributeValue("permanent", "false"));
             boolean sequential = Boolean.parseBoolean(elements.getAttributeValue("sequential", "false"));
             int pointsRate = Numbers.parseInt(elements.getAttributeValue("points-rate", "0"));
-            FilterModule pickupFilter = FilterModuleBuilder.getAttributeOrChild("pickup-filter", elements);
+            FilterModule pickupFilter = FilterModuleBuilder.getAttributeOrChild("pickup-filter", "always", elements);
             int recoverTime = 30;
             if (elements.getAttributeValue("recover-time") != null) {
                 recoverTime = Strings.timeStringToSeconds(elements.getAttributeValue("recover-time"));

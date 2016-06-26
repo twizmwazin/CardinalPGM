@@ -79,7 +79,7 @@ public class FlagBuilder implements ModuleBuilder {
         int points = Numbers.parseInt(Parser.getOrderedAttribute("points", elements), 0);
         int pointsRate = Numbers.parseInt(Parser.getOrderedAttribute("points-rate", elements), 0);
         FilterModule pickupFilter = FilterModuleBuilder.getAttributeOrChild("pickup-filter", post.getPickupFilter(), elements);
-        FilterModule dropFilter = FilterModuleBuilder.getAttributeOrChild("drop-filter", post.getPickupFilter(), elements);
+        FilterModule dropFilter = FilterModuleBuilder.getAttributeOrChild("drop-filter", "always", elements);
         FilterModule captureFilter = FilterModuleBuilder.getAttributeOrChild("capture-filter", nets.size() > 0 ? nets.iterator().next().getCaptureFilter() : FilterModuleBuilder.getFilter("always"), elements);
         KitNode pickupKit = getKitOrChild("pickup-kit", result, elements);
         KitNode dropKit = getKitOrChild("drop-kit", result, elements);
@@ -100,7 +100,7 @@ public class FlagBuilder implements ModuleBuilder {
         Map<String, GameObjectiveProximityHandler> flagProximityHandlers = new HashMap<>();
         Map<String, GameObjectiveProximityHandler> netProximityHandlers = new HashMap<>();
         for (TeamModule offender : Teams.getTeams()) {
-            if (offender.isObserver() || offender.equals(owner) || !pickupFilter.evaluate(offender).equals(FilterState.ALLOW)) continue;
+            if (offender.isObserver() || offender == owner || !pickupFilter.evaluate(offender).equals(FilterState.ALLOW)) continue;
             GameObjectiveProximityHandler flagProximityHandler = new GameObjectiveProximityHandler(offender, flagProximityInfo);
             GameObjectiveProximityHandler netProximityHandler = new GameObjectiveProximityHandler(offender, netProximityInfo);
             flagProximityHandlers.put(offender.getId(), flagProximityHandler);
