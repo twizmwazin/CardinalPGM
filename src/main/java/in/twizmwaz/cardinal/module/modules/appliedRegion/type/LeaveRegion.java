@@ -1,14 +1,11 @@
 package in.twizmwaz.cardinal.module.modules.appliedRegion.type;
 
-import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.appliedRegion.AppliedRegion;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.observers.ObserverModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
-import in.twizmwaz.cardinal.module.modules.titleRespawn.TitleRespawn;
 import in.twizmwaz.cardinal.util.ChatUtil;
-import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 

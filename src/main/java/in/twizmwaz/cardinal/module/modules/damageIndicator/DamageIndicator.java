@@ -49,7 +49,7 @@ public class DamageIndicator implements Module {
 
     private PlayerBoundingBox getBoundingBox(Player player) {
         if (!boundingBoxes.containsKey(player.getUniqueId())) boundingBoxes.put(player.getUniqueId(),
-                new PlayerBoundingBox(player.getUniqueId(), Teams.getTeamByPlayer(player)));
+                new PlayerBoundingBox(player.getUniqueId(), Teams.getTeamOrPlayerByPlayer(player).get()));
         return boundingBoxes.get(player.getUniqueId());
     }
 
@@ -67,7 +67,7 @@ public class DamageIndicator implements Module {
     @EventHandler
     public void onMatchStart(MatchStartEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            Optional<TeamModule> team = Teams.getTeamByPlayer(player);
+            Optional<TeamModule> team = Teams.getTeamOrPlayerByPlayer(player);
             if (!team.isPresent() || !team.get().isObserver()) {
                 getBoundingBox(player);
             }

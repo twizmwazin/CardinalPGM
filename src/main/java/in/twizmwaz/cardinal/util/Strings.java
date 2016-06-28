@@ -3,6 +3,8 @@ package in.twizmwaz.cardinal.util;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.ChatMessage;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.ChatColor;
 
 import java.text.DecimalFormat;
@@ -151,6 +153,7 @@ public class Strings {
 
     public static String getCurrentChatColor(String str, int index) {
         String color = "\u00A7r";
+        if (index > str.length()) return color;
         for (int i = index - 1; i > 0; i--) {
             if (str.charAt(i - 1) == '\u00A7') {
                 color = "\u00A7" + str.charAt(i);
@@ -176,6 +179,30 @@ public class Strings {
      */
     public static boolean matchString(String string1, String string2) {
         return simplify(string1).startsWith(simplify(string2));
+    }
+
+    public static Pair<String, String> split(String string, ChatColor entry, boolean entryHalfColor) {
+        if (string.length() <= 16) return new ImmutablePair<>(string, "");
+        String prefix = Strings.trimTo(string, 0, 16);
+        String suffix = Strings.trimTo(string, 16, string.length());
+
+        if (prefix.endsWith("\u00A7")) {
+            prefix = prefix.substring(0, 15);
+            suffix = "\u00A7" + suffix;
+        }
+        if ((entryHalfColor || !getCurrentChatColor(prefix, prefix.length()).equals(entry + "")) && !suffix.startsWith("\u00A7")) {
+            suffix = getCurrentChatColor(prefix, prefix.length()) + suffix;
+        }
+        if (getCurrentChatColor(suffix, 2).equals(entry + "")) {
+            suffix = Strings.trimTo(suffix, 2, suffix.length());
+        }
+        if (entryHalfColor) {
+            if (suffix.startsWith("\u00A7")) suffix = Strings.trimTo(suffix, 1, 17);
+            else suffix = getCurrentChatColor(prefix, prefix.length()).substring(1) + Strings.trimTo(suffix, 1, 16);
+        }
+        else suffix = Strings.trimTo(suffix, 0, 16);
+
+        return new ImmutablePair<>(prefix, suffix);
     }
 
 }

@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.snowflakes;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
@@ -117,7 +118,7 @@ public class Snowflakes implements Module {
 
     @EventHandler
     public void onCardinalDeath(CardinalDeathEvent event) {
-        if (event.getKiller() != null && Teams.getTeamByPlayer(event.getPlayer()).orNull() != Teams.getTeamByPlayer(event.getKiller()).orNull()) {
+        if (event.getKiller() != null && Teams.getTeamOrPlayerByPlayer(event.getPlayer()).orNull() != Teams.getTeamOrPlayerByPlayer(event.getKiller()).orNull()) {
             Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(event.getKiller(), ChangeReason.PLAYER_KILL, 1, event.getPlayer().getName()));
         }
     }
@@ -125,10 +126,13 @@ public class Snowflakes implements Module {
     @EventHandler
     public void onMatchEnd(MatchEndEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (Teams.getTeamByPlayer(player).isPresent() && !Teams.getTeamByPlayer(player).get().isObserver() && event.getTeam().equals(Teams.getTeamByPlayer(player))) {
-                Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.TEAM_WIN, 15, Teams.getTeamByPlayer(player).get().getCompleteName()));
-            } else if (Teams.getTeamByPlayer(player).isPresent() && !Teams.getTeamByPlayer(player).get().isObserver() && !event.getTeam().equals(Teams.getTeamByPlayer(player))) {
-                Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.TEAM_LOYAL, 5, Teams.getTeamByPlayer(player).get().getCompleteName()));
+            Optional<TeamModule> team = Teams.getTeamOrPlayerByPlayer(player);
+            if (!team.get().isObserver()) {
+                if (event.getTeam().equals(team)) {
+                    Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.TEAM_WIN, 15, team.get().getCompleteName()));
+                } else {
+                    Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.TEAM_LOYAL, 5, team.get().getCompleteName()));
+                }
             }
         }
     }

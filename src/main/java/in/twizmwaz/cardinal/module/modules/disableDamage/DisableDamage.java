@@ -62,9 +62,9 @@ public class DisableDamage implements Module {
                     if (Bukkit.getOfflinePlayer(source).isOnline()) {
                         if (Bukkit.getPlayer(source).equals(player)) {
                             event.setCancelled(!blockExplosionSelf);
-                        } else if (Teams.getTeamByPlayer(Bukkit.getPlayer(source)) == Teams.getTeamByPlayer(player)) {
+                        } else if (Teams.getTeamOrPlayerByPlayer(Bukkit.getPlayer(source)) == Teams.getTeamOrPlayerByPlayer(player)) {
                             event.setCancelled(!blockExplosionAlly);
-                        } else if (Teams.getTeamByPlayer(Bukkit.getPlayer(source)) != Teams.getTeamByPlayer(player)) {
+                        } else if (Teams.getTeamOrPlayerByPlayer(Bukkit.getPlayer(source)) != Teams.getTeamOrPlayerByPlayer(player)) {
                             event.setCancelled(!blockExplosionEnemy);
                         } else {
                             event.setCancelled(!blockExplosionOther);

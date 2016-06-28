@@ -28,7 +28,15 @@ public class TabSlot {
         }
     }
 
+    private void deleteRemoved() {
+        if (entry != null && entry.delete(view.getViewer()))
+            entry = null;
+        if (newEntry != null && newEntry.delete(view.getViewer()))
+            newEntry = null;
+    }
+
     public void update() {
+        deleteRemoved();
         if (newEntry != entry && newEntry != null) {
             if (entry != null) view.hideEntry(entry);
             setSlot(newEntry);

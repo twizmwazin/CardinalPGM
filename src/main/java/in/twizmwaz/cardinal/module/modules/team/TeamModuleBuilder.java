@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.team;
 
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.LoadTime;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
@@ -12,8 +13,6 @@ import org.bukkit.ChatColor;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
-import java.util.List;
-
 @LoadTime(ModuleLoadTime.EARLIEST)
 public class TeamModuleBuilder implements ModuleBuilder {
 
@@ -22,36 +21,32 @@ public class TeamModuleBuilder implements ModuleBuilder {
         ModuleCollection<TeamModule> results = new ModuleCollection<>();
         Document doc = match.getDocument();
         Element teams = doc.getRootElement().getChild("teams");
-        List<Element> teamElements = teams.getChildren();
-        for (Element teamNode : teamElements) {
-            String name = teamNode.getText();
-            String id = teamNode.getAttributeValue("id") == null ? name.toLowerCase() : teamNode.getAttributeValue("id");
-            int min;
-            try {
-                min = Integers.parseInt(teamNode.getAttribute("min").getValue(), doc.getRootElement().getChildren("blitz").size() != 0 ? 1 : 0);
-            } catch (NullPointerException ex) {
-                min = doc.getRootElement().getChildren("blitz").size() != 0 ? 1 : 0;
+        Element players = doc.getRootElement().getChild("players");
+        if (teams != null) {
+            for (Element teamNode : teams.getChildren()) {
+                String name = teamNode.getText();
+                String id = teamNode.getAttributeValue("id") == null ? name.toLowerCase() : teamNode.getAttributeValue("id");
+                int min = Numbers.parseInt(Parser.getOrderedAttribute("min", teamNode, teams), doc.getRootElement().getChild("blitz") != null ? 1 : 0);
+                int max = Integers.parseInt(Parser.getOrderedAttribute("max", teamNode, teams));
+                int maxOverfill = Integers.parseInt(Parser.getOrderedAttribute("max-overfill"), (int) (1.25 * max));
+                boolean plural = Numbers.parseBoolean(Parser.getOrderedAttribute("plural", teamNode, teams), false);
+                ChatColor color = Parser.parseChatColor(Parser.getOrderedAttribute("color", teamNode, teams));
+                results.add(new TeamModule(match, name, id, min, max, maxOverfill, color, plural, false));
             }
-            int max = Integers.parseInt(teamNode.getAttribute("max").getValue());
-            int maxOverfill;
-            try {
-                maxOverfill = Integers.parseInt(teamNode.getAttribute("max-overfill").getValue(), (int) (1.25 * max));
-            } catch (NullPointerException ex) {
-                maxOverfill = (int) (1.25 * max);
-            }
-            int respawnLimit;
-            try {
-                respawnLimit = Integers.parseInt(teamNode.getAttribute("respawn-limit").getValue(), -1);
-            } catch (NullPointerException ex) {
-                respawnLimit = -1;
-            }
-            boolean plural = false;
-            if (teamNode.getAttributeValue("plural") != null)
-                plural = Numbers.parseBoolean(teamNode.getAttributeValue("plural"));
-            ChatColor color = Parser.parseChatColor(teamNode.getAttribute("color").getValue());
-            results.add(new TeamModule(match, name, id, min, max, maxOverfill, respawnLimit, color, plural, false));
         }
-        results.add(new TeamModule(match, "Observers", "observers", 0, Integer.MAX_VALUE, Integer.MAX_VALUE, -1, ChatColor.AQUA, true, true));
+        if (players != null) {
+            if (results.size() == 0) {
+                int min = Numbers.parseInt(Parser.getOrderedAttribute("min", players), 0);
+                int max = Numbers.parseInt(Parser.getOrderedAttribute("max", players));
+                int maxOverfill = Numbers.parseInt(Parser.getOrderedAttribute("max-overfill", players), (int) (1.25 * max));
+                boolean colors = Numbers.parseBoolean(Parser.getOrderedAttribute("colors", players), false);
+                results.add(new PlayerModuleManager(match, min, max, maxOverfill, colors));
+            } else {
+                Cardinal.getInstance().getLogger().warning("Teams and players modules can't be combined, only teams will be loaded");
+            }
+        }
+        results.add(new TeamModule(match, "Observers", "observers", 0, Integer.MAX_VALUE, Integer.MAX_VALUE, ChatColor.AQUA, true, true));
         return results;
     }
+
 }

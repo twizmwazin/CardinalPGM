@@ -31,7 +31,7 @@ public class Playable implements Module {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
+        Optional<TeamModule> team = Teams.getTeamOrPlayerByPlayer(event.getPlayer());
         if (GameHandler.getGameHandler().getMatch().isRunning() && team.isPresent() && !team.get().isObserver()) {
             if (region != null) {
                 if (region.contains(event.getTo().toVector()) && !region.contains(event.getFrom().toVector())) {
@@ -44,7 +44,7 @@ public class Playable implements Module {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
+        Optional<TeamModule> team = Teams.getTeamOrPlayerByPlayer(event.getPlayer());
         if (GameHandler.getGameHandler().getMatch().isRunning() && team.isPresent() && !team.get().isObserver()) {
             if (region != null) {
                 if (region.contains(event.getBlock().getLocation())) {
@@ -57,7 +57,7 @@ public class Playable implements Module {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
+        Optional<TeamModule> team = Teams.getTeamOrPlayerByPlayer(event.getPlayer());
         if (GameHandler.getGameHandler().getMatch().isRunning() && team.isPresent() && !team.get().isObserver()) {
             if (region != null) {
                 if (region.contains(event.getBlock().getLocation())) {
@@ -70,7 +70,7 @@ public class Playable implements Module {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
+        Optional<TeamModule> team = Teams.getTeamOrPlayerByPlayer(event.getPlayer());
         if (GameHandler.getGameHandler().getMatch().isRunning() && team.isPresent() && !team.get().isObserver()) {
             if (region != null && event.getClickedBlock() != null) {
                 if (region.contains(event.getClickedBlock().getLocation())) {

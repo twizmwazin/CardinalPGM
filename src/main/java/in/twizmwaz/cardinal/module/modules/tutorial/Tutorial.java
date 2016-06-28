@@ -71,8 +71,8 @@ public class Tutorial implements Module {
 
     @EventHandler
     public void onPlayerRightClick(PlayerInteractEvent event) {
-        boolean condition = Teams.getTeamByPlayer(event.getPlayer()).isPresent()
-                && Teams.getTeamByPlayer(event.getPlayer()).get().isObserver()
+        boolean condition = Teams.getTeamOrPlayerManagerByPlayer(event.getPlayer()).isPresent()
+                && Teams.getTeamOrPlayerManagerByPlayer(event.getPlayer()).get().isObserver()
                 && event.getPlayer().getItemInHand() != null
                 && event.getPlayer().getItemInHand().getType().equals(Material.EMERALD);
 

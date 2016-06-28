@@ -36,11 +36,11 @@ public class MatchModule implements Module {
             ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage("{0}", new LocalizedChatMessage(event.getTeam().get().isPlural() ? ChatConstant.UI_MATCH_WIN : ChatConstant.UI_MATCH_WINS, event.getTeam().get().getCompleteName() + ChatColor.WHITE)));
             for (Player player : Bukkit.getOnlinePlayers()) {
                 String title = new LocalizedChatMessage(event.getTeam().get().isPlural() ? ChatConstant.UI_MATCH_WIN : ChatConstant.UI_MATCH_WINS, event.getTeam().get().getCompleteName() + ChatColor.WHITE).getMessage(player.getLocale());
-                if (Teams.getTeamByPlayer(player).isPresent() && Teams.getTeamByPlayer(player).get() == event.getTeam().get()) {
+                if (Teams.getTeamOrPlayerByPlayer(player).isPresent() && Teams.getTeamOrPlayerByPlayer(player).get() == event.getTeam().get()) {
                     player.sendMessage(new UnlocalizedChatMessage(ChatColor.GREEN + "{0}", new LocalizedChatMessage(ChatConstant.UI_MATCH_TEAM_WIN)).getMessage(player.getLocale()));
                     String subtitle = new LocalizedChatMessage(ChatConstant.UI_MATCH_TEAM_WIN).getMessage(player.getLocale());
                     player.showTitle(new TextComponent(title),new TextComponent(ChatColor.GREEN + subtitle), 0, 40, 30);
-                } else if (!Teams.getTeamByPlayer(player).get().isObserver()) {
+                } else if (!Teams.getTeamOrPlayerByPlayer(player).get().isObserver()) {
                     player.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.UI_MATCH_TEAM_LOSE)).getMessage(player.getLocale()));
                     String subtitle = new LocalizedChatMessage(ChatConstant.UI_MATCH_TEAM_LOSE).getMessage(player.getLocale());
                     player.showTitle(new TextComponent(title), new TextComponent(ChatColor.RED + subtitle), 0, 40, 30);

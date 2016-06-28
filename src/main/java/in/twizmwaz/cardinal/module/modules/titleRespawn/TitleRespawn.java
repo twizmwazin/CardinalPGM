@@ -147,9 +147,8 @@ public class TitleRespawn implements TaskedModule {
                     } else {
                         player.setSubtitle(TextComponent.fromLegacyText(ChatColor.GREEN + new LocalizedChatMessage(ChatConstant.UI_DEATH_RESPAWN_UNCONFIRMED).getMessage(player.getLocale())));
                     }
-                    if (player.getInventory().getItem(2) == null || !player.getInventory().getItem(2).getType().equals(Material.LEATHER_HELMET)) {
-                        ItemStack picker = TeamPicker.getTeamPicker(player.getLocale());
-                        player.getInventory().setItem(2, picker);
+                    if (player.getInventory().getItem(2) == null || !player.getInventory().getItem(2).getType().equals(Material.AIR)) {
+                        player.getInventory().setItem(2, TeamPicker.getTeamPickerItem(player));
                     }
                 }
             }
@@ -157,8 +156,9 @@ public class TitleRespawn implements TaskedModule {
     }
 
     private boolean playerCanRespawn(Player player) {
-        TeamModule team = Teams.getTeamByPlayer(player).get();
-        for (SpawnModule spawnModule : Teams.getSpawns(team)) {
+        Optional<TeamModule> team = Teams.getTeamOrPlayerManagerByPlayer(player);
+        if (!team.isPresent()) return false;
+        for (SpawnModule spawnModule : Teams.getSpawns(team.get())) {
             FilterModule filter = spawnModule.getFilter();
             if (filter == null || filter.evaluate(player).equals(FilterState.ALLOW)) return true;
         }
@@ -194,7 +194,7 @@ public class TitleRespawn implements TaskedModule {
     }
 
     private void dropInventory(Player player, boolean force) {
-        Optional<TeamModule> team = Teams.getTeamByPlayer(player);
+        Optional<TeamModule> team = Teams.getTeamOrPlayerByPlayer(player);
         if (GameHandler.getGameHandler().getMatch().isRunning() && (force || (team.isPresent() && !team.get().isObserver() && !isDeadUUID(player.getUniqueId())))) {
             for (ItemStack stack : player.getInventory().getContents()) {
                 if (stack != null && stack.getType() != Material.AIR) {
@@ -289,7 +289,7 @@ public class TitleRespawn implements TaskedModule {
             Players.resetPlayer(player);
             setBlood(player, false);
             destroyArmorStandPacket(player);
-            CardinalSpawnEvent respawnEvent = new CardinalSpawnEvent(player, Teams.getTeamByPlayer(player).get());
+            CardinalSpawnEvent respawnEvent = new CardinalSpawnEvent(player, Teams.getTeamOrPlayerManagerByPlayer(player).orNull());
             GameHandler.getGameHandler().getPlugin().getServer().getPluginManager().callEvent(respawnEvent);
             PlayerNameUpdateEvent nameUpdateEvent = new PlayerNameUpdateEvent(player);
             Bukkit.getServer().getPluginManager().callEvent(nameUpdateEvent);
@@ -317,7 +317,7 @@ public class TitleRespawn implements TaskedModule {
 
         player.setTitleTimes(0, 0, 10);
 
-        CardinalSpawnEvent respawnEvent = new CardinalSpawnEvent(player, Teams.getTeamByPlayer(player).get());
+        CardinalSpawnEvent respawnEvent = new CardinalSpawnEvent(player, Teams.getTeamOrPlayerByPlayer(player).get());
         GameHandler.getGameHandler().getPlugin().getServer().getPluginManager().callEvent(respawnEvent);
 
         PlayerNameUpdateEvent nameUpdateEvent = new PlayerNameUpdateEvent(player);
@@ -373,7 +373,7 @@ public class TitleRespawn implements TaskedModule {
     @EventHandler
     public void onMatchStart(MatchStartEvent event) {
         for (final Player player : Bukkit.getOnlinePlayers()) {
-            Optional<TeamModule> team = Teams.getTeamByPlayer(player);
+            Optional<TeamModule> team = Teams.getTeamOrPlayerByPlayer(player);
             if (!team.isPresent() || !team.get().isObserver()) {
                 respawnPlayer(player, true);
                 Bukkit.getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(), new Runnable() {
@@ -450,7 +450,7 @@ public class TitleRespawn implements TaskedModule {
 
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerLeave(PlayerQuitEvent event) {
-        Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
+        Optional<TeamModule> team = Teams.getTeamOrPlayerByPlayer(event.getPlayer());
         if (!team.isPresent() || !team.get().isObserver()) dropInventory(event.getPlayer());
         this.deadPlayers.remove(event.getPlayer().getUniqueId());
         this.hasLeftClicked.remove(event.getPlayer().getUniqueId());

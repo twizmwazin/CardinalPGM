@@ -25,7 +25,7 @@ public class AttackSpeed implements Module {
 
     @EventHandler
     public void onClickEvent(PlayerInteractEvent event) {
-        Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
+        Optional<TeamModule> team = Teams.getTeamOrPlayerManagerByPlayer(event.getPlayer());
         if (GameHandler.getGameHandler().getMatch().isRunning() && (!team.isPresent() || !team.get().isObserver())
                 && (event.getAction().equals(Action.LEFT_CLICK_BLOCK) || event.getAction().equals(Action.LEFT_CLICK_AIR))) {
             sendActionBar(event.getPlayer());
@@ -34,7 +34,7 @@ public class AttackSpeed implements Module {
     
     @EventHandler
     public void onPlayerAttack(PlayerAttackEntityEvent event) {
-        Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
+        Optional<TeamModule> team = Teams.getTeamOrPlayerManagerByPlayer(event.getPlayer());
         if (GameHandler.getGameHandler().getMatch().isRunning() && (!team.isPresent() || !team.get().isObserver())) {
             sendActionBar(event.getPlayer());
         }

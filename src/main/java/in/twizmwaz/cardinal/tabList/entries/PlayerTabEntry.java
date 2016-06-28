@@ -24,11 +24,13 @@ public class PlayerTabEntry extends SkinTabEntry {
         return CraftChatMessage.fromComponent(((CraftPlayer) player).getHandle().listName, EnumChatFormat.WHITE);
     }
 
+    @Override
     public String getDisplayName(Player viewer) {
         if (viewer == player) return getDisplayName().replace(viewer.getName(), ChatColor.BOLD + viewer.getName());
         return getDisplayName();
     }
 
+    @Override
     public int getPing() {
         return ((CraftPlayer) player).getHandle().ping;
     }

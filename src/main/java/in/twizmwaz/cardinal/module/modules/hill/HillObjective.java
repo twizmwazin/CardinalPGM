@@ -233,7 +233,7 @@ public class HillObjective implements TaskedModule, GameObjective {
             return;
         }
         Map<TeamModule, Integer> playerCounts = new HashMap<>();
-        for (TeamModule team : Teams.getTeams()) {
+        for (TeamModule team : Teams.getTeamsAndPlayers()) {
             if (team.isObserver()) continue;
             playerCounts.put(team, 0);
         }
@@ -243,7 +243,7 @@ public class HillObjective implements TaskedModule, GameObjective {
         for(Player player : capturingPlayers) {
             if (!playerFilter.evaluate(player).equals(FilterState.ALLOW)) continue;
             allowedPlayers++;
-            TeamModule team = Teams.getTeamByPlayer(player).get();
+            TeamModule team = Teams.getTeamOrPlayerByPlayer(player).get();
             int playerCount = playerCounts.get(team) + 1;
             playerCounts.put(team, playerCount);
             if(team != team1) {

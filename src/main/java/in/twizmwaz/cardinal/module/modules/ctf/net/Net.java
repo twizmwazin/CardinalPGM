@@ -159,7 +159,7 @@ public class Net implements Module {
     
     public void tryCapture(FlagObjective flag) {
         Player player = flag.getPicker();
-        if (flagObjectives.contains(flag) && (owner == null || owner.equals(Teams.getTeamByPlayer(player).get()))) {
+        if (flagObjectives.contains(flag) && (owner == null || owner.equals(Teams.getTeamOrPlayerByPlayer(player).get()))) {
             FilterModule captureFilt = null;
             if (getCaptureFilter() != null || flag.getCaptureFilter() != null) {
                 captureFilt = getCaptureFilter() != null ? getCaptureFilter() : flag.getCaptureFilter();
@@ -202,11 +202,11 @@ public class Net implements Module {
         if (event.getNet().equals(this)) {
             Fireworks.spawnFireworks(region.getCenterBlock().getAlignedVector(), (region.getMax().minus(region.getMin()).length()) * 0.55 + 1, 6, MiscUtil.convertChatColorToColor(flag.getChatColor()), 1);
             for (Player message : Bukkit.getOnlinePlayers()) {
-                message.sendMessage(new LocalizedChatMessage(ChatConstant.UI_FLAG_CAPTURED, flag.getDisplayName() + ChatColor.RESET, Teams.getTeamByPlayer(player).get().getColor() + player.getName()).getMessage(player.getLocale()));
+                message.sendMessage(new LocalizedChatMessage(ChatConstant.UI_FLAG_CAPTURED, flag.getDisplayName() + ChatColor.RESET, Teams.getTeamOrPlayerByPlayer(player).get().getColor() + player.getName()).getMessage(player.getLocale()));
             }
             int pointsToAdd = points > 0 ? points : flag.getPoints();
             if (pointsToAdd > 0) {
-                TeamModule team = owner == null ? Teams.getTeamByPlayer(player).get() : owner;
+                TeamModule team = owner == null ? Teams.getTeamOrPlayerByPlayer(player).get() : owner;
                 for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
                     if (score.getTeam().equals(team)) {
                         score.setScore(score.getScore() + pointsToAdd);

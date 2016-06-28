@@ -54,7 +54,7 @@ public class Scorebox implements Module {
                 for (ItemStack item : redeemables.keySet()) {
                     if (event.getPlayer().getInventory().contains(item)) {
                         for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
-                            Optional<TeamModule> playerTeam = Teams.getTeamByPlayer(event.getPlayer());
+                            Optional<TeamModule> playerTeam = Teams.getTeamOrPlayerByPlayer(event.getPlayer());
                             if (playerTeam.isPresent() && score.getTeam() == playerTeam.get()) {
                                 event.getPlayer().getInventory().remove(item);
                                 points += redeemables.get(item);
@@ -64,16 +64,16 @@ public class Scorebox implements Module {
                 }
             }
             points += this.points;
-            Optional<TeamModule> playerTeam = Teams.getTeamByPlayer(event.getPlayer());
+            Optional<TeamModule> playerTeam = Teams.getTeamOrPlayerByPlayer(event.getPlayer());
             if (points != 0 && playerTeam.isPresent()) {
                 for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
                     if (score.getTeam() == playerTeam.get()) {
                         if (!this.silent) {
                             ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}",
-                                    new LocalizedChatMessage(ChatConstant.UI_SCORED_FOR,
+                                    new LocalizedChatMessage(Teams.isFFA() ? ChatConstant.UI_SCORED : ChatConstant.UI_SCORED_FOR,
                                             new UnlocalizedChatMessage(playerTeam.get().getColor() + event.getPlayer().getName() + ChatColor.GRAY),
-                                            new UnlocalizedChatMessage(ChatColor.DARK_AQUA + "{0}" + ChatColor.GRAY, points == 1 ? new LocalizedChatMessage(ChatConstant.UI_ONE_POINT) : new LocalizedChatMessage(ChatConstant.UI_POINTS, points + "" + ChatColor.GRAY)),
-                                            new UnlocalizedChatMessage(playerTeam.get().getCompleteName()))));
+                                            new LocalizedChatMessage(points == 1 ? ChatConstant.UI_ONE_POINT : ChatConstant.UI_POINTS, ChatColor.DARK_AQUA + "" + points + ChatColor.GRAY),
+                                            new UnlocalizedChatMessage(Teams.isFFA() ? "" : playerTeam.get().getCompleteName()))));
                             event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
                         }
                         score.addScore(points);

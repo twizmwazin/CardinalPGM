@@ -26,7 +26,7 @@ public class FriendlyFire implements Module {
         this.enabled = enabled;
         this.arrowReturn = arrowReturn;
         if (enabled) {
-            for (TeamModule team : Teams.getTeams()) {
+            for (TeamModule team : Teams.getTeamsAndPlayers()) {
                 for (ScoreboardModule scoreboard : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreboardModule.class)) {
                     scoreboard.getScoreboard().getTeam(team.getId()).setAllowFriendlyFire(false);
                 }
@@ -54,10 +54,10 @@ public class FriendlyFire implements Module {
                 proceed = true;
             }
         }
-        if (proceed && event.getPotion().getShooter() instanceof Player && Teams.getTeamByPlayer((Player) event.getPotion().getShooter()) != null) {
-            Optional<TeamModule> team = Teams.getTeamByPlayer((Player) event.getPotion().getShooter());
+        if (proceed && event.getPotion().getShooter() instanceof Player && Teams.getTeamOrPlayerByPlayer((Player) event.getPotion().getShooter()) != null) {
+            Optional<TeamModule> team = Teams.getTeamOrPlayerByPlayer((Player) event.getPotion().getShooter());
             for (LivingEntity affected : event.getAffectedEntities()) {
-                if (affected instanceof Player && Teams.getTeamByPlayer((Player) affected) != null && Teams.getTeamByPlayer((Player) affected).equals(team) && !affected.equals(event.getPotion().getShooter())) {
+                if (affected instanceof Player && Teams.getTeamOrPlayerByPlayer((Player) affected) != null && Teams.getTeamOrPlayerByPlayer((Player) affected).equals(team) && !affected.equals(event.getPotion().getShooter())) {
                     event.setIntensity(affected, 0);
                 }
             }

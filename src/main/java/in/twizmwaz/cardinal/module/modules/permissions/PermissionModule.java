@@ -86,7 +86,7 @@ public class PermissionModule implements Module {
     public void onMatchStart(MatchStartEvent event) {
         if (Config.worldEditPermissions) {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                Optional<TeamModule> team = Teams.getTeamByPlayer(player);
+                Optional<TeamModule> team = Teams.getTeamOrPlayerManagerByPlayer(player);
                 if ((team.isPresent() && team.get().isObserver())) {
                     setWorldeditPermissions(player, true);
                 } else {

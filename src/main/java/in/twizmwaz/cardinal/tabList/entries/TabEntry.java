@@ -3,7 +3,6 @@ package in.twizmwaz.cardinal.tabList.entries;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import in.twizmwaz.cardinal.tabList.TabList;
-import in.twizmwaz.cardinal.tabList.TabView;
 import in.twizmwaz.cardinal.util.PacketUtils;
 import in.twizmwaz.cardinal.util.Strings;
 import net.minecraft.server.ChatComponentText;
@@ -22,6 +21,8 @@ public abstract class TabEntry {
 
     protected GameProfile profile;
 
+    private Packet deletePacket;
+
     protected TabEntry(GameProfile profile) {
         this.profile = profile;
     }
@@ -32,11 +33,7 @@ public abstract class TabEntry {
     }
 
     public void destroy() {
-        this.hide();
-        broadcastTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER);
-        for (TabView view : TabList.getTabViews()) {
-            view.destroy(this, -1, true);
-        }
+        deletePacket = getTabListPacket(null, PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER);
     }
 
     public GameProfile getProfile() {
@@ -57,6 +54,14 @@ public abstract class TabEntry {
 
     protected void hide() {
         PacketUtils.broadcastPacket(TabList.getTeamPacket(profile.getName(), 80, 3));
+    }
+
+    public boolean delete(Player viewer) {
+        if (deletePacket != null) {
+            PacketUtils.sendPacket(viewer, deletePacket);
+            return true;
+        }
+        return false;
     }
 
     public void setSlot(Player viewer, int i) {
@@ -82,7 +87,7 @@ public abstract class TabEntry {
     public PacketPlayOutPlayerInfo.PlayerInfoData getPlayerInfo(Player viewer, PacketPlayOutPlayerInfo listPacket) {
         int ping = getPing();
         return listPacket.new PlayerInfoData(getProfile(), ping < 0 ? 1000 : ping, EnumGamemode.SURVIVAL,
-                new ChatComponentText(getDisplayName(viewer)));
+                new ChatComponentText(viewer != null ? getDisplayName(viewer) : ""));
     }
 
     public static GameProfile getProfile(Property texture) {

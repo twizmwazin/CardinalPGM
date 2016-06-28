@@ -175,7 +175,7 @@
         <objectivePickedFor>{0} 帮 {2} 拿了 {1}</objectivePickedFor>
         <objectivePicked>{0} 拿了 {1}</objectivePicked>
         <scoredFor>{0} 帮 {2} 取得 {1}</scoredFor>
-        <onePoint>一分</onePoint>
+        <onePoint>{0} 分</onePoint>
         <points>{0} 分</points>
         <amountRemaining>你剩下了 {0} 。</amountRemaining>
         <oneLife>一个命</oneLife>

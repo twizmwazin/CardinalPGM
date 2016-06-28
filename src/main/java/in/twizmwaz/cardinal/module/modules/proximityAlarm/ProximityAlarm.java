@@ -44,7 +44,7 @@ public class ProximityAlarm implements Module {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
+        Optional<TeamModule> team = Teams.getTeamOrPlayerByPlayer(event.getPlayer());
         if (region.contains(event.getTo().toVector()) && !region.contains(event.getFrom().toVector()) && team.isPresent() && !team.get().isObserver() && GameHandler.getGameHandler().getMatch().isRunning()) {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (notify == null) {

@@ -40,13 +40,13 @@ public class Visibility implements Module {
 
     public void showOrHideOthers(Player viewer) {
         for (Player toSee : Bukkit.getOnlinePlayers()) {
-            resetVisibility(viewer, toSee, Teams.getTeamByPlayer(toSee));
+            resetVisibility(viewer, toSee, Teams.getTeamOrPlayerManagerByPlayer(toSee));
         }
     }
 
     public void showOrHide(Player toSee) {
         for (Player viewer : Bukkit.getOnlinePlayers()) {
-            resetVisibility(viewer, toSee, Teams.getTeamByPlayer(toSee));
+            resetVisibility(viewer, toSee, Teams.getTeamOrPlayerManagerByPlayer(toSee));
         }
     }
 

@@ -12,6 +12,7 @@ import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.TeamNameChangeEvent;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.timers.StartTimer;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Players;
 import in.twizmwaz.cardinal.util.Teams;
@@ -29,6 +30,7 @@ public class TeamCommands {
     @Command(aliases = {"force"}, desc = "Forces a player onto the team specified.", usage = "<player> <team>", min = 2)
     @CommandPermissions("cardinal.team.force")
     public static void force(final CommandContext cmd, CommandSender sender) throws CommandException {
+        if (Teams.isFFA()) throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAMS).getMessage(ChatUtil.getLocale(sender)));
         Player player = Bukkit.getPlayer(cmd.getString(0));
         if (player == null) {
             throw new CommandException(ChatConstant.ERROR_NO_PLAYER_MATCH.getMessage(ChatUtil.getLocale(sender)));
@@ -48,6 +50,7 @@ public class TeamCommands {
     @Command(aliases = {"alias"}, desc = "Renames a the team specified.", usage = "<team> <name>", min = 2)
     @CommandPermissions("cardinal.team.alias")
     public static void alias(final CommandContext cmd, CommandSender sender) throws CommandException {
+        if (Teams.isFFA()) throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAMS).getMessage(ChatUtil.getLocale(sender)));
         Optional<TeamModule> team = Teams.getTeamByName(cmd.getString(0));
         if (!team.isPresent()) {
             throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAM_MATCH).getMessage(ChatUtil.getLocale(sender)));
@@ -61,6 +64,7 @@ public class TeamCommands {
     @Command(aliases = {"shuffle"}, desc = "Shuffles the teams.")
     @CommandPermissions("cardinal.team.shuffle")
     public static void shuffle(final CommandContext cmd, CommandSender sender) throws CommandException {
+        if (Teams.isFFA()) throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAMS).getMessage(ChatUtil.getLocale(sender)));
         if (GameHandler.getGameHandler().getMatch().isWaiting() || GameHandler.getGameHandler().getMatch().isStarting()) {
             List<Player> playersToShuffle = new ArrayList<>();
             for (Player player : Bukkit.getOnlinePlayers()) {
@@ -74,7 +78,7 @@ public class TeamCommands {
             }
             while (playersToShuffle.size() > 0) {
                 Player player = playersToShuffle.get(new Random().nextInt(playersToShuffle.size()));
-                Optional<TeamModule> team = Teams.getTeamWithFewestPlayers(GameHandler.getGameHandler().getMatch());
+                Optional<TeamModule> team = Teams.getTeamWithFewestPlayers();
                 if (team.isPresent()) team.get().add(player, true);
                 playersToShuffle.remove(player);
             }
@@ -85,9 +89,23 @@ public class TeamCommands {
         }
     }
 
-    @Command(aliases = {"size"}, desc = "Changes the specified team's size.", usage = "<team> <size>", min = 2)
+    @Command(aliases = {"min"}, desc = "Changes the specified team's size.", usage = "<team> <min>", min = 2, max = 2)
+    @CommandPermissions("cardinal.team.size")
+    public static void min(final CommandContext cmd, CommandSender sender) throws CommandException {
+        if (Teams.isFFA()) throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAMS).getMessage(ChatUtil.getLocale(sender)));
+        Optional<TeamModule> team = Teams.getTeamByName(cmd.getString(0));
+        if (!team.isPresent()) {
+            throw new CommandException(ChatConstant.ERROR_NO_TEAM_MATCH.getMessage(ChatUtil.getLocale(sender)));
+        }
+        team.get().setMin(Integer.parseInt(cmd.getString(1)));
+        sender.sendMessage(new LocalizedChatMessage(ChatConstant.GENERIC_TEAM_SIZE_CHANGED, team.get().getCompleteName() + ChatColor.WHITE, ChatColor.AQUA + cmd.getString(1)).getMessage(ChatUtil.getLocale(sender)));
+        GameHandler.getGameHandler().getMatch().getModules().getModule(StartTimer.class).updateNeededPlayers();
+    }
+
+    @Command(aliases = {"size", "max"}, desc = "Changes the specified team's size.", usage = "<team> <max>", min = 2, max = 2)
     @CommandPermissions("cardinal.team.size")
     public static void size(final CommandContext cmd, CommandSender sender) throws CommandException {
+        if (Teams.isFFA()) throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAMS).getMessage(ChatUtil.getLocale(sender)));
         Optional<TeamModule> team = Teams.getTeamByName(cmd.getString(0));
         if (!team.isPresent()) {
             throw new CommandException(ChatConstant.ERROR_NO_TEAM_MATCH.getMessage(ChatUtil.getLocale(sender)));
@@ -99,6 +117,7 @@ public class TeamCommands {
 
     @Command(aliases = {"myteam", "mt"}, desc = "Shows what team you are on", min = 0, max = 0)
     public static void myTeam(final CommandContext cmd, CommandSender sender) throws CommandException {
+        if (Teams.isFFA()) throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAMS).getMessage(ChatUtil.getLocale(sender)));
         if (!(sender instanceof Player)) {
             throw new CommandException(ChatConstant.ERROR_CONSOLE_NO_USE.getMessage(ChatUtil.getLocale(sender)));
         }
@@ -115,4 +134,5 @@ public class TeamCommands {
 
         }
     }
+
 }

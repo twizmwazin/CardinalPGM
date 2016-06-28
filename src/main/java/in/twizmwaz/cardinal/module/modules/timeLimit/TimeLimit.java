@@ -33,12 +33,13 @@ public class TimeLimit implements Module {
     }
 
     public static TeamModule getMatchWinner() {
-        ModuleCollection <TeamModule> sortedTeams = TimeLimit.getSortedTeams();
-        return (sortedTeams.size() < 2 || getWinningTeam(sortedTeams.get(sortedTeams.size() - 1), sortedTeams.get(sortedTeams.size() - 2), null) != 0) ? sortedTeams.get(sortedTeams.size() - 1) : null;
+        ModuleCollection<TeamModule> sortedTeams = TimeLimit.getSortedTeams();
+        return (sortedTeams.size() < 2 || getWinningTeam(sortedTeams.get(sortedTeams.size() - 1), sortedTeams.get(sortedTeams.size() - 2), null) != 0)
+                && !sortedTeams.get(sortedTeams.size() -1).isObserver() ? sortedTeams.get(sortedTeams.size() - 1) : null;
     }
 
     public static ModuleCollection<TeamModule> getSortedTeams() {
-        ModuleCollection <TeamModule> winnerList = Teams.getTeams();
+        ModuleCollection <TeamModule> winnerList = Teams.getTeamsAndPlayers();
         Collections.sort(winnerList, new Comparator<TeamModule>() {
             @Override
             public int compare(TeamModule team1, TeamModule team2) {

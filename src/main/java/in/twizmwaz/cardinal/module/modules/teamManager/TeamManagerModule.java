@@ -9,6 +9,8 @@ import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
+import in.twizmwaz.cardinal.module.modules.team.PlayerModule;
+import in.twizmwaz.cardinal.module.modules.team.PlayerModuleManager;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Align;
 import in.twizmwaz.cardinal.util.ChatUtil;
@@ -99,10 +101,24 @@ public class TeamManagerModule implements Module {
         }
     }
 
+    @EventHandler(priority = EventPriority.LOW)
+    public void onTeamSwitch(PlayerChangeTeamEvent event) {
+        if (!event.isCancelled() && event.getOldTeam().orNull() != null) {
+            if (event.getOldTeam().get() instanceof PlayerModule || event.getOldTeam().get() instanceof PlayerModuleManager) {
+                Teams.getPlayerManager().leave(event.getPlayer());
+            } else {
+                event.getOldTeam().get().leave(event.getPlayer());
+            }
+        }
+        if (event.getNewTeam().orNull() != null) {
+            event.getNewTeam().get().join(event.getPlayer());
+        }
+    }
+
     private void removePlayer(Player player) {
         TeamModule observers = Teams.getTeamById("observers").get();
         observers.add(player, true, false);
-        observers.remove(player);
+        observers.leave(player);
         Players.resetPlayer(player);
     }
 

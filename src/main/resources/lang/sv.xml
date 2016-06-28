@@ -178,7 +178,7 @@
         <objectivePickedFor>{0} plockade upp {2} för {1}</objectivePickedFor>
         <objectiveTouched>{0} plockade upp {1}</objectiveTouched>
         <scoredFor>{0} tog {1} poäng för {2}</scoredFor>
-        <onePoint>1 poäng</onePoint>
+        <onePoint>{0} poäng</onePoint>
         <points>Du har {0} kvar.</points>
         <amountRemaining>Du har {0} kvar.</amountRemaining>
         <oneLife>1 liv</oneLife>

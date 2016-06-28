@@ -39,9 +39,10 @@ public class ScoreModuleBuilder implements ModuleBuilder {
                 pointsPerDeath = Numbers.parseInt(score.getChild("deaths").getText());
             }
         }
+        ScoreModule.setup(scoring, pointsPerKill, pointsPerDeath, max);
         for (TeamModule team : Teams.getTeams()) {
             if (!team.isObserver()) {
-                results.add(new ScoreModule(scoring, team, pointsPerKill, pointsPerDeath, max));
+                results.add(new ScoreModule(team));
             }
         }
         return results;

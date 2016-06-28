@@ -13,41 +13,43 @@ import org.bukkit.event.HandlerList;
 
 public class ScoreModule implements Module {
 
-    private final boolean scoring;
+    private static boolean scoring = false;
+    private static int pointsPerKill;
+    private static int pointsPerDeath;
+    private static int max;
+
     private final TeamModule team;
-    private final int pointsPerKill;
-    private final int pointsPerDeath;
-    private final int max;
     private double score;
 
-    public ScoreModule(final boolean scoring, final TeamModule team, final int pointsPerKill, final int pointsPerDeath, final int max) {
-        this.scoring = scoring;
+    public ScoreModule(final TeamModule team) {
         this.team = team;
         this.score = 0;
-        this.pointsPerKill = pointsPerKill;
-        this.pointsPerDeath = pointsPerDeath;
-        this.max = max;
+    }
+
+    public static void setup(boolean scoring, int pointsPerKill, int pointsPerDeath, int max) {
+        ScoreModule.scoring = scoring;
+        ScoreModule.pointsPerKill = pointsPerKill;
+        ScoreModule.pointsPerDeath = pointsPerDeath;
+        ScoreModule.max = max;
     }
 
     public static boolean matchHasScoring() {
-        return GameHandler.getGameHandler().getMatch().getModules().getModule(ScoreModule.class).scoring;
+        return scoring;
     }
 
     public static boolean matchHasMax() {
-        for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
-            if (score.getMax() != 0) {
-                return true;
-            }
-        }
-        return false;
+        return max != 0;
     }
 
     public static int max() {
-        int max = 0;
-        for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
-            max = score.getMax();
-        }
         return max;
+    }
+
+    public static ScoreModule getScoreModule(TeamModule team) {
+        for (ScoreModule score : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
+            if (score.getTeam().equals(team)) return score;
+        }
+        return null;
     }
 
     @Override
@@ -92,8 +94,8 @@ public class ScoreModule implements Module {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onCardinalDeath(CardinalDeathEvent event) {
         if (matchHasScoring()) {
-            TeamModule killer = event.getKiller() == null ? null : Teams.getTeamByPlayer(event.getKiller()).orNull();
-            TeamModule dead = Teams.getTeamByPlayer(event.getPlayer()).orNull();
+            TeamModule killer = event.getKiller() == null ? null : Teams.getTeamOrPlayerByPlayer(event.getKiller()).orNull();
+            TeamModule dead = Teams.getTeamOrPlayerByPlayer(event.getPlayer()).orNull();
             if (killer != null && killer != dead) {
                 if (killer == team) addScore(pointsPerKill);
             } else if (dead == team) {

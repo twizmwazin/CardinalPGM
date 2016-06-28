@@ -31,7 +31,7 @@ public class GameComplete implements TaskedModule {
     @EventHandler
     public void onObjectiveComplete(ObjectiveCompleteEvent event) {
         TeamModule winner = null;
-        for (TeamModule team : Teams.getTeams()) {
+        for (TeamModule team : Teams.getTeamsAndPlayers()) {
             if (testWin(team)) {
                 if (winner == null) winner = team;
                 else {
@@ -65,7 +65,7 @@ public class GameComplete implements TaskedModule {
         if (Blitz.matchIsBlitz()) {
             boolean win = true;
             TeamModule winner = null;
-            for (TeamModule team : Teams.getTeams()) {
+            for (TeamModule team : Teams.getTeamsAndPlayers()) {
                 if (!team.isObserver()) {
                     if (winner == null && team.size() > 0) {
                         winner = team;

@@ -32,15 +32,15 @@ public class MatchCommand {
         sender.sendMessage(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TIME).getMessage(ChatUtil.getLocale(sender)) + ": " + ChatColor.GOLD + (Config.matchTimeMillis ? Strings.formatTimeWithMillis(MatchTimer.getTimeInSeconds()) : Strings.formatTime(MatchTimer.getTimeInSeconds())));
         String teams = "";
         boolean hasObjectives = false;
-        for (TeamModule team : Teams.getTeams()) {
-            teams += team.getCompleteName() + ChatColor.GRAY + ": " + ChatColor.RESET + team.size() + (team.isObserver() ? "" : ChatColor.GRAY + "/" + team.getMax() + ChatColor.DARK_GRAY + " | ");
+        for (TeamModule team : Teams.getTeamsAndPlayerManager()) {
+            teams += team.getCompleteName(ChatUtil.getLocale(sender)) + ChatColor.GRAY + ": " + ChatColor.RESET + team.size() + (team.isObserver() ? "" : ChatColor.GRAY + "/" + team.getMax() + ChatColor.DARK_GRAY + " | ");
             if (Teams.getShownObjectives(team).size() > 0) hasObjectives = true;
         }
         sender.sendMessage(teams);
         if (Scoreboards.getHills().size() > 0) hasObjectives = true;
         if (hasObjectives) {
             sender.sendMessage(ChatColor.DARK_AQUA + new LocalizedChatMessage(ChatConstant.UI_GOALS).getMessage(ChatUtil.getLocale(sender)) + ":");
-            for (TeamModule team : Teams.getTeams()) {
+            for (TeamModule team : Teams.getTeamsAndPlayerManager()) {
                 if (!team.isObserver() && (Teams.getShownObjectives(team).size() > 0 || Scoreboards.getHills().size() > 0)) {
                     String objectives = "";
                     for (GameObjective objective : Teams.getShownObjectives(team)) {
