@@ -45,5 +45,185 @@
                 <attribute amount="-2.5" slot="slot.weapon.mainhand">generic.attackSpeed</attribute>
             </modify>
         </rule>
+        <rule>
+            <match>
+                <material>leather boots</material>
+            </match>
+            <modify show-attributes="false">
+                <attribute amount="1" slot="slot.armor.feet">generic.armor</attribute>
+                <attribute amount="400" slot="slot.armor.feet">generic.armorToughness</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>leather leggings</material>
+            </match>
+            <modify show-attributes="false">
+                <attribute amount="2" slot="slot.armor.legs">generic.armor</attribute>
+                <attribute amount="400" slot="slot.armor.legs">generic.armorToughness</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>leather chestplate</material>
+            </match>
+            <modify show-attributes="false">
+                <attribute amount="3" slot="slot.armor.chest">generic.armor</attribute>
+                <attribute amount="400" slot="slot.armor.chest">generic.armorToughness</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>leather helmet</material>
+            </match>
+            <modify show-attributes="false">
+                <attribute amount="1" slot="slot.armor.head">generic.armor</attribute>
+                <attribute amount="400" slot="slot.armor.head">generic.armorToughness</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>gold boots</material>
+            </match>
+            <modify show-attributes="false">
+                <attribute amount="1" slot="slot.armor.feet">generic.armor</attribute>
+                <attribute amount="400" slot="slot.armor.feet">generic.armorToughness</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>gold leggings</material>
+            </match>
+            <modify show-attributes="false">
+                <attribute amount="3" slot="slot.armor.legs">generic.armor</attribute>
+                <attribute amount="400" slot="slot.armor.legs">generic.armorToughness</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>gold chestplate</material>
+            </match>
+            <modify show-attributes="false">
+                <attribute amount="5" slot="slot.armor.chest">generic.armor</attribute>
+                <attribute amount="400" slot="slot.armor.chest">generic.armorToughness</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>gold helmet</material>
+            </match>
+            <modify show-attributes="false">
+                <attribute amount="2" slot="slot.armor.head">generic.armor</attribute>
+                <attribute amount="400" slot="slot.armor.head">generic.armorToughness</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>chainmail boots</material>
+            </match>
+            <modify show-attributes="false">
+                <attribute amount="1" slot="slot.armor.feet">generic.armor</attribute>
+                <attribute amount="400" slot="slot.armor.feet">generic.armorToughness</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>chainmail leggings</material>
+            </match>
+            <modify show-attributes="false">
+                <attribute amount="4" slot="slot.armor.legs">generic.armor</attribute>
+                <attribute amount="400" slot="slot.armor.legs">generic.armorToughness</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>chainmail chestplate</material>
+            </match>
+            <modify show-attributes="false">
+                <attribute amount="5" slot="slot.armor.chest">generic.armor</attribute>
+                <attribute amount="400" slot="slot.armor.chest">generic.armorToughness</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>chainmail helmet</material>
+            </match>
+            <modify show-attributes="false">
+                <attribute amount="2" slot="slot.armor.head">generic.armor</attribute>
+                <attribute amount="400" slot="slot.armor.head">generic.armorToughness</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>iron boots</material>
+            </match>
+            <modify show-attributes="false">
+                <attribute amount="2" slot="slot.armor.feet">generic.armor</attribute>
+                <attribute amount="400" slot="slot.armor.feet">generic.armorToughness</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>iron leggings</material>
+            </match>
+            <modify show-attributes="false">
+                <attribute amount="5" slot="slot.armor.legs">generic.armor</attribute>
+                <attribute amount="400" slot="slot.armor.legs">generic.armorToughness</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>iron chestplate</material>
+            </match>
+            <modify show-attributes="false">
+                <attribute amount="6" slot="slot.armor.chest">generic.armor</attribute>
+                <attribute amount="400" slot="slot.armor.chest">generic.armorToughness</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>iron helmet</material>
+            </match>
+            <modify show-attributes="false">
+                <attribute amount="2" slot="slot.armor.head">generic.armor</attribute>
+                <attribute amount="400" slot="slot.armor.head">generic.armorToughness</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>diamond boots</material>
+            </match>
+            <modify show-attributes="false">
+                <attribute amount="3" slot="slot.armor.feet">generic.armor</attribute>
+                <attribute amount="400" slot="slot.armor.feet">generic.armorToughness</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>diamond leggings</material>
+            </match>
+            <modify show-attributes="false">
+                <attribute amount="6" slot="slot.armor.legs">generic.armor</attribute>
+                <attribute amount="400" slot="slot.armor.legs">generic.armorToughness</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>diamond chestplate</material>
+            </match>
+            <modify show-attributes="false">
+                <attribute amount="8" slot="slot.armor.chest">generic.armor</attribute>
+                <attribute amount="400" slot="slot.armor.chest">generic.armorToughness</attribute>
+            </modify>
+        </rule>
+        <rule>
+            <match>
+                <material>diamond helmet</material>
+            </match>
+            <modify show-attributes="false">
+                <attribute amount="3" slot="slot.armor.head">generic.armor</attribute>
+                <attribute amount="400" slot="slot.armor.head">generic.armorToughness</attribute>
+            </modify>
+        </rule>
     </item-mods>
 </map>
