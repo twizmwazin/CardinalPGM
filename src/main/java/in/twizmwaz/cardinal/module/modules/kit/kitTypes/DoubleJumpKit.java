@@ -27,7 +27,7 @@ import java.util.UUID;
 public class DoubleJumpKit implements KitRemovable {
 
     private boolean enabled;
-    private int power;
+    private double power;
     private double rechargeTime;
     private boolean rechargeBeforeLanding;
     private long lastUpdate = 0L;
@@ -35,7 +35,7 @@ public class DoubleJumpKit implements KitRemovable {
     List<UUID> players = new ArrayList<>();
     List<UUID> landed = new ArrayList<>();
 
-    public DoubleJumpKit(boolean enabled, int power, double rechargeTime, final boolean rechargeBeforeLanding) {
+    public DoubleJumpKit(boolean enabled, double power, double rechargeTime, final boolean rechargeBeforeLanding) {
         this.enabled = enabled;
         this.power = power;
         this.rechargeTime = rechargeTime;

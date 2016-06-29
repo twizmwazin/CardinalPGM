@@ -124,7 +124,7 @@ public class KitBuilder implements ModuleBuilder {
 
             for (Element jump : element.getChildren("double-jump")) {
                 boolean enabled = Numbers.parseBoolean(jump.getAttributeValue("enabled"), true);
-                int power = Numbers.parseInt(jump.getAttributeValue("power"), 3);
+                double power = Numbers.parseDouble(jump.getAttributeValue("power"), 3);
                 double rechargeTime = Strings.timeStringToExactSeconds(jump.getAttributeValue("recharge-time", "2.5s"));
                 boolean rechargeBeforeLanding = Numbers.parseBoolean(jump.getAttributeValue("recharge-before-landing"), false);
                 kits.add(new DoubleJumpKit(enabled, power, rechargeTime, rechargeBeforeLanding));
