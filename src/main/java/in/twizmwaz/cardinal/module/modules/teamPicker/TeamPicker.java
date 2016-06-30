@@ -1,6 +1,5 @@
 package in.twizmwaz.cardinal.module.modules.teamPicker;
 
-import com.google.common.base.Optional;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -8,6 +7,7 @@ import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
+import in.twizmwaz.cardinal.module.modules.observers.ObserverModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.titleRespawn.TitleRespawn;
 import in.twizmwaz.cardinal.util.Items;
@@ -47,10 +47,14 @@ public class TeamPicker implements Module {
                 Collections.singletonList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_TIP).getMessage(locale)));
     }
 
+    public static String getTeamPickerTitle(String locale) {
+        return ChatColor.DARK_RED + new LocalizedChatMessage(ChatConstant.UI_TEAM_PICK).getMessage(locale);
+    }
+
     public Inventory getTeamPicker(Player player) {
         int size = ((GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class).size() + (Teams.getTeamByPlayer(player).isPresent() && Teams.getTeamByPlayer(player).get().isObserver() ? 0 : 1 ) + 8) / 9) * 9;
         int classesSize = ((GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class).size() + 8) / 9) * 9;
-        Inventory picker = Bukkit.createInventory(null, size + classesSize, ChatColor.DARK_RED + new LocalizedChatMessage(ChatConstant.UI_TEAM_PICK).getMessage(player.getLocale()));
+        Inventory picker = Bukkit.createInventory(null, size + classesSize, getTeamPickerTitle(player.getLocale()));
         int item = 0;
 
         int maxPlayers = 0;
@@ -92,74 +96,43 @@ public class TeamPicker implements Module {
     public void onInventoryClick(InventoryClickEvent event) {
         ItemStack item = event.getCurrentItem();
         Player player = (Player) event.getWhoClicked();
-        if (item != null) {
-            Optional<TeamModule> team = Teams.getTeamByPlayer(player);
-            if (team.isPresent() && (team.get().isObserver() || GameHandler.getGameHandler().getMatch().getModules().getModule(TitleRespawn.class).isDeadUUID(event.getActor().getUniqueId()) || !GameHandler.getGameHandler().getMatch().isRunning())) {
-                if (event.getInventory().getName().equals(ChatColor.DARK_RED + new LocalizedChatMessage(ChatConstant.UI_TEAM_PICK).getMessage(player.getLocale()))) {
-                    if (item.getType().equals(Material.CHAINMAIL_HELMET)) {
-                        if (item.hasItemMeta()) {
-                            if (item.getItemMeta().hasDisplayName()) {
-                                if (item.getItemMeta().getDisplayName().equals(ChatColor.GRAY + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_AUTO).getMessage(player.getLocale()))) {
-                                    event.setCancelled(true);
-                                    player.closeInventory();
-                                    player.playSound(player.getLocation(), Sound.BLOCK_DISPENSER_DISPENSE, 1, 2);
-                                    try {
-                                        Teams.setPlayerTeam(player, "");
-                                    } catch (Exception e) {
-                                        player.sendMessage(com.sk89q.minecraft.util.commands.ChatColor.RED + e.getMessage());
-                                    }
-                                }
-                            }
-                        }
-                    } else if (item.getType().equals(Material.LEATHER_BOOTS)) {
-                        if (item.hasItemMeta()) {
-                            if (item.getItemMeta().hasDisplayName()) {
-                                if (item.getItemMeta().getDisplayName().equals(ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_LEAVE).getMessage(player.getLocale()))) {
-                                    event.setCancelled(true);
-                                    player.closeInventory();
-                                    player.playSound(player.getLocation(), Sound.BLOCK_DISPENSER_DISPENSE, 1, 2);
-                                    try {
-                                        Teams.setPlayerTeam(player, Teams.getTeamById("observers").get().getName());
-                                    } catch (Exception e) {
-                                        player.sendMessage(com.sk89q.minecraft.util.commands.ChatColor.RED + e.getMessage());
-                                    }
-                                }
-                            }
-                        }
-                    } else if (item.getType().equals(Material.LEATHER_HELMET)) {
-                        if (item.hasItemMeta()) {
-                            if (item.getItemMeta().hasDisplayName()) {
-                                if (Teams.getTeamByName(ChatColor.stripColor(item.getItemMeta().getDisplayName())) != null) {
-                                    event.setCancelled(true);
-                                    player.closeInventory();
-                                    player.playSound(player.getLocation(), Sound.BLOCK_DISPENSER_DISPENSE, 1, 2);
-                                    try {
-                                        Bukkit.getConsoleSender().sendMessage(player.getName() + " joined " + ChatColor.stripColor(item.getItemMeta().getDisplayName()));
-                                        Teams.setPlayerTeam(player, ChatColor.stripColor(item.getItemMeta().getDisplayName()));
-                                    } catch (Exception e) {
-                                        player.sendMessage(com.sk89q.minecraft.util.commands.ChatColor.RED + e.getMessage());
-                                    }
-                                } else {
-                                    event.setCancelled(true);
-                                    player.closeInventory();
-                                    player.playSound(player.getLocation(), Sound.BLOCK_DISPENSER_DISPENSE, 1, 2);
-                                    Bukkit.dispatchCommand(player, "class " + ChatColor.stripColor(item.getItemMeta().getDisplayName()));
-                                }
-                            }
-                        }
-                    } else {
-                        if (item.hasItemMeta()) {
-                            if (item.getItemMeta().hasDisplayName()) {
-                                if (ClassModule.getClassByName(ChatColor.stripColor(item.getItemMeta().getDisplayName())) != null) {
-                                    event.setCancelled(true);
-                                    player.closeInventory();
-                                    player.playSound(player.getLocation(), Sound.BLOCK_DISPENSER_DISPENSE, 1, 2);
-                                    Bukkit.dispatchCommand(player, "class " + ChatColor.stripColor(item.getItemMeta().getDisplayName()));
-                                }
-                            }
-                        }
-                    }
+        if (item != null && event.getInventory().getName().equals(getTeamPickerTitle(player.getLocale())) &&
+                ObserverModule.testObserverOrDead(player) && !item.isSimilar(getTeamPicker(player.getLocale())) &&
+                item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
+            boolean action = false;
+            if (item.getType().equals(Material.CHAINMAIL_HELMET) &&
+                    item.getItemMeta().getDisplayName().equals(ChatColor.GRAY + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_JOIN_AUTO).getMessage(player.getLocale()))) {
+                action = true;
+                try {
+                    Teams.setPlayerTeam(player, "");
+                } catch (Exception e) {
+                    player.sendMessage(ChatColor.RED + e.getMessage());
                 }
+            } else if (item.getType().equals(Material.LEATHER_BOOTS) &&
+                    item.getItemMeta().getDisplayName().equals(ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_LEAVE).getMessage(player.getLocale()))) {
+                action = true;
+                try {
+                    Teams.setPlayerTeam(player, Teams.getTeamById("observers").get().getName());
+                } catch (Exception e) {
+                    player.sendMessage(ChatColor.RED + e.getMessage());
+                }
+            } else if (item.getType().equals(Material.LEATHER_HELMET) &&
+                Teams.getTeamByName(ChatColor.stripColor(item.getItemMeta().getDisplayName())) != null) {
+                action = true;
+                try {
+                    Bukkit.getConsoleSender().sendMessage(player.getName() + " joined " + ChatColor.stripColor(item.getItemMeta().getDisplayName()));
+                    Teams.setPlayerTeam(player, ChatColor.stripColor(item.getItemMeta().getDisplayName()));
+                } catch (Exception e) {
+                    player.sendMessage(ChatColor.RED + e.getMessage());
+                }
+            } else if (ClassModule.getClassByName(ChatColor.stripColor(item.getItemMeta().getDisplayName())) != null) {
+                action = true;
+                Bukkit.dispatchCommand(player, "class " + ChatColor.stripColor(item.getItemMeta().getDisplayName()));
+            }
+            if (action) {
+                event.setCancelled(true);
+                player.closeInventory();
+                player.playSound(player.getLocation(), Sound.BLOCK_DISPENSER_DISPENSE, 1, 2);
             }
         }
     }
@@ -169,8 +142,7 @@ public class TeamPicker implements Module {
         if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) &&
                 !GameHandler.getGameHandler().getMatch().getState().equals(MatchState.CYCLING) &&
                 !(Blitz.matchIsBlitz() && GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING)) &&
-                (GameHandler.getGameHandler().getMatch().getModules().getModule(TitleRespawn.class).isDeadUUID(event.getPlayer().getUniqueId()) ||
-                        (Teams.getTeamByPlayer(event.getPlayer()).get().isObserver() || !GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING))) &&
+                ObserverModule.testObserverOrDead(event.getPlayer()) &&
                 (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) &&
                 event.getItem() != null && event.getItem().equals(getTeamPicker(event.getPlayer().getLocale()))) {
             event.setCancelled(true);
@@ -188,4 +160,5 @@ public class TeamPicker implements Module {
             }
         }
     }
+
 }

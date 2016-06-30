@@ -12,9 +12,11 @@ import in.twizmwaz.cardinal.module.modules.cardinalNotifications.CardinalNotific
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
+import in.twizmwaz.cardinal.module.modules.spectatorTools.SpectatorTools;
 import in.twizmwaz.cardinal.module.modules.teamPicker.TeamPicker;
 import in.twizmwaz.cardinal.module.modules.titleRespawn.TitleRespawn;
 import in.twizmwaz.cardinal.module.modules.tutorial.Tutorial;
+import in.twizmwaz.cardinal.settings.Settings;
 import in.twizmwaz.cardinal.util.Items;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
@@ -25,6 +27,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class RespawnModule implements Module {
 
@@ -82,5 +85,12 @@ public class RespawnModule implements Module {
         if (player.hasPermission("cardinal.punish.freeze")) {
             player.getInventory().setItem(6, Items.createItem(Material.ICE, 1, (short) 0, ChatColor.AQUA + ChatConstant.UI_FREEZE_ITEM.getMessage(player.getLocale())));
         }
+        player.getInventory().setItem(8, SpectatorTools.getSpectatorItem(player.getLocale()));
+
+        player.setFlySpeed(0.1f * Float.parseFloat(Settings.getSettingByName("Speed").getValueByPlayer(player).getValue()));
+        if (Settings.getSettingByName("Elytra").getValueByPlayer(player).getValue().equals("on")) {
+                player.getInventory().setChestplate(new ItemStack(Material.ELYTRA));
+        }
     }
+
 }
