@@ -24,6 +24,7 @@ import in.twizmwaz.cardinal.module.modules.deathTracker.DeathTrackerBuilder;
 import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.difficulty.MapDifficultyBuilder;
 import in.twizmwaz.cardinal.module.modules.disableDamage.DisableDamageBuilder;
+import in.twizmwaz.cardinal.module.modules.fallingBlocks.FallingBlocksBuilder;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.freeze.FreezeModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.friendlyFire.FriendlyFireBuilder;
@@ -185,7 +186,8 @@ public class ModuleFactory {
                 PostBuilder.class,
                 FlagBuilder.class,
                 NetBuilder.class,
-                StatsBuilder.class
+                StatsBuilder.class,
+                FallingBlocksBuilder.class
         ));
     }
 

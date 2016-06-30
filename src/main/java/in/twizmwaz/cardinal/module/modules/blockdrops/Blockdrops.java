@@ -83,7 +83,7 @@ public class Blockdrops implements Module {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityExplode(EntityExplodeEvent event) {
         if (!event.isCancelled()) {
             Player player = TntTracker.getWhoPlaced(event.getEntity()) != null && Bukkit.getOfflinePlayer(TntTracker.getWhoPlaced(event.getEntity())).isOnline() ? Bukkit.getPlayer(TntTracker.getWhoPlaced(event.getEntity())) : null;
