@@ -60,15 +60,16 @@ public class Portal implements Module {
     private void tryTeleport(Player player, Location from, RegionModule destination, int dir) {
         if ((filter == null || filter.evaluate(player).equals(FilterState.ALLOW)) || ObserverModule.testObserver(player)) {
             if (destination != null) {
-                player.teleport(destination.getRandomPoint().getLocation());
+                from.set(destination.getRandomPoint().getLocation().toVector());
             } else {
                 from.setX(x.getLeft() ? from.getX() + (x.getRight() * dir) : x.getRight());
                 from.setY(y.getLeft() ? from.getY() + (y.getRight() * dir) : y.getRight());
                 from.setZ(z.getLeft() ? from.getZ() + (z.getRight() * dir) : z.getRight());
-                from.setYaw((float) (yaw.getLeft() ? from.getYaw() + (yaw.getRight() * dir) : yaw.getRight()));
-                from.setPitch((float) (pitch.getLeft() ? from.getPitch() + (pitch.getRight() * dir) : pitch.getRight()));
-                player.teleport(from);
             }
+            from.setYaw((float) (yaw.getLeft() ? from.getYaw() + (yaw.getRight() * dir) : yaw.getRight()));
+            from.setPitch((float) (pitch.getLeft() ? from.getPitch() + (pitch.getRight() * dir) : pitch.getRight()));
+            player.setFallDistance(0);
+            player.teleport(from);
             if (sound) player.playSound(player.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 0.2F, 1);
         }
     }
