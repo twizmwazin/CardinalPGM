@@ -66,24 +66,18 @@ public class MonumentModes implements TaskedModule {
                 }
                 for (CoreObjective core : GameHandler.getGameHandler().getMatch().getModules().getModules(CoreObjective.class)) {
                     if (core.changesModes()) {
-                        for (Block block : core.getCore()) {
-                            if (core.partOfObjective(block)) {
-                                block.setType(this.material.getLeft());
-                                block.setData((byte)(int)this.material.getRight());
-                            }
+                        for (Block block : core.getBlocks()) {
+                            changeBlock(block);
                         }
-                        core.setMaterial(this.material.getLeft(), (byte)(int)this.material.getRight());
+                        core.setMaterial(this.material.getLeft(), this.material.getRight());
                     }
                 }
                 for (DestroyableObjective destroyable : GameHandler.getGameHandler().getMatch().getModules().getModules(DestroyableObjective.class)) {
                     if (destroyable.changesModes()) {
-                        for (Block block : destroyable.getMonument()) {
-                            if (destroyable.partOfObjective(block)) {
-                                block.setType(this.material.getLeft());
-                                block.setData((byte)(int)this.material.getRight());
-                            }
+                        for (Block block : destroyable.getBlocks()) {
+                            changeBlock(block);
                         }
-                        destroyable.setMaterial(this.material.getLeft(), (byte)(int)this.material.getRight());
+                        destroyable.setMaterial(this.material.getLeft(), this.material.getRight());
                     }
                 }
                 for (Player player : Bukkit.getOnlinePlayers()) {
@@ -127,6 +121,10 @@ public class MonumentModes implements TaskedModule {
 
     public void setTimeAfter(int after) {
         this.after = after;
+    }
+
+    public void changeBlock(Block block) {
+        block.setTypeIdAndData(this.material.getLeft().getId(), (byte) (int) this.material.getRight(), true);
     }
 
 }

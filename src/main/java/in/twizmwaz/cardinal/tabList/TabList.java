@@ -80,6 +80,8 @@ public class TabList implements Listener {
 
     private Map<Player, List<GameProfile>> playerView = new HashMap<>();
 
+    private boolean scheduledUpdate = false;
+
     public TabList() {
         entityIDs.put(null, 100);
         BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
@@ -139,8 +141,9 @@ public class TabList implements Listener {
 
     @EventHandler (priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        updateAll(event.getPlayer());
+        update(event.getPlayer());
         sendPlayersParts(event.getPlayer());
+        updateAll(null);
     }
 
     @EventHandler (priority = EventPriority.HIGHEST)
@@ -204,11 +207,20 @@ public class TabList implements Listener {
         PacketUtils.sendPacket(player, listPacket);
     }
 
-    private void updateAll(Player prioritized) {
-        if (prioritized != null) update(prioritized);
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (prioritized != null && player.equals(prioritized)) continue;
-            update(player);
+    private void updateAll(final Player prioritized) {
+        if (!scheduledUpdate) {
+            scheduledUpdate = true;
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    if (prioritized != null) update(prioritized);
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        if (prioritized != null && player.equals(prioritized)) continue;
+                        update(player);
+                    }
+                    scheduledUpdate = false;
+                }
+            }, 1L);
         }
     }
 
@@ -365,7 +377,7 @@ public class TabList implements Listener {
 
     private GameProfile getProfile(Property texture) {
         GameProfile game = new GameProfile(UUID.randomUUID(), Strings.trimTo(UUID.randomUUID().toString(),0,8));
-        if (Bukkit.getOnlineMode()) game.getProperties().put("textures", texture);
+        game.getProperties().put("textures", texture);
         return game;
     }
 

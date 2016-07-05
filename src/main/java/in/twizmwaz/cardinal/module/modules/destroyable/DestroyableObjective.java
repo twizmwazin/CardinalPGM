@@ -97,8 +97,13 @@ public class DestroyableObjective implements GameObjective {
         this.playersTouched = new HashSet<>();
         this.playersCompleted = new HashMap<>();
 
-        this.monument = this.getBlocks();
-        this.size = this.getBlocks().size();
+        this.monument = new ArrayList<>();
+        for (Block block : region.getBlocks()) {
+            if (partOfObjective(block)) {
+                monument.add(block);
+            }
+        }
+        this.size = monument.size();
 
         this.scoreboardHandler = new GameObjectiveScoreboardHandler(this);
     }
@@ -291,24 +296,20 @@ public class DestroyableObjective implements GameObjective {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPistonPush(BlockPistonExtendEvent event) {
-        if (!event.isCancelled()) {
-            for (Block block : event.getBlocks()) {
-                if (getBlocks().contains(block)) {
-                    event.setCancelled(true);
-                }
+        for (Block block : event.getBlocks()) {
+            if (monument.contains(block) && partOfObjective(block)) {
+                event.setCancelled(true);
             }
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPistonRetract(BlockPistonRetractEvent event) {
-        if (!event.isCancelled() && event.isSticky()) {
-            for (Block block : event.getBlocks()) {
-                if (getBlocks().contains(block)) {
-                    event.setCancelled(true);
-                }
+        for (Block block : event.getBlocks()) {
+            if (monument.contains(block) && partOfObjective(block)) {
+                event.setCancelled(true);
             }
         }
     }
@@ -375,7 +376,7 @@ public class DestroyableObjective implements GameObjective {
 
     public List<Block> getBlocks() {
         List<Block> blocks = new ArrayList<>();
-        for (Block block : region.getBlocks()) {
+        for (Block block : monument) {
             if (partOfObjective(block)) {
                 blocks.add(block);
             }

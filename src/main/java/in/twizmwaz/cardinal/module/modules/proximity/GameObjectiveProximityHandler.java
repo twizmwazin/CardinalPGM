@@ -156,7 +156,7 @@ public class GameObjectiveProximityHandler implements Module {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onMove(PlayerMoveEvent event) {
-        if (!active || !info.metric.equals(ProximityMetric.CLOSEST_PLAYER)) return;
+        if (!active || !info.metric.equals(ProximityMetric.CLOSEST_PLAYER) && event.getFrom().getBlock() != event.getTo().getBlock()) return;
         tryUpdate(event.getPlayer(), null);
     }
 

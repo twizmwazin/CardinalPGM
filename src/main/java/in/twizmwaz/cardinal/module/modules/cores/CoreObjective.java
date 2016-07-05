@@ -242,7 +242,7 @@ public class CoreObjective implements GameObjective {
         if (!event.isCancelled()) {
             List<Block> objectiveBlownUp = new ArrayList<>();
             for (Block block : event.blockList()) {
-                if (getBlocks().contains(block) || core.contains(block)) {
+                if (core.contains(block)) {
                     objectiveBlownUp.add(block);
                 }
             }
@@ -325,22 +325,20 @@ public class CoreObjective implements GameObjective {
         }
     }
      
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPistonPush(BlockPistonExtendEvent event) {
-        if (!event.isCancelled()) {
-            for (Block block : event.getBlocks()) {
-                if (getBlocks().contains(block)) {
-                    event.setCancelled(true);
-                }
+        for (Block block : event.getBlocks()) {
+            if (core.contains(block) && partOfObjective(block)) {
+                event.setCancelled(true);
             }
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPistonRetract(BlockPistonRetractEvent event) {
-        if (!event.isCancelled() && event.isSticky()) {
+        if (event.isSticky()) {
             for (Block block : event.getBlocks()) {
-                if (getBlocks().contains(block)) {
+                if (core.contains(block) && partOfObjective(block)) {
                     event.setCancelled(true);
                 }
             }
@@ -368,7 +366,7 @@ public class CoreObjective implements GameObjective {
 
     public List<Block> getBlocks() {
         List<Block> blocks = new ArrayList<>();
-        for (Block block : region.getBlocks()) {
+        for (Block block : core) {
             if (partOfObjective(block)) {
                 blocks.add(block);
             }
