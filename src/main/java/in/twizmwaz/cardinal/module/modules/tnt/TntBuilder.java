@@ -14,34 +14,13 @@ public class TntBuilder implements ModuleBuilder {
         ModuleCollection<Tnt> results = new ModuleCollection<>();
         if (match.getDocument().getRootElement().getChild("tnt") != null) {
             for (Element element : match.getDocument().getRootElement().getChildren("tnt")) {
-                boolean instantIgnite = false;
-                if (element.getChild("instantignite") != null) {
-                    instantIgnite = Numbers.parseBoolean(element.getChildText("instantignite"));
-                }
-                boolean blockDamage = true;
-                if (element.getChild("blockdamage") != null) {
-                    blockDamage = Numbers.parseBoolean(element.getChildText("blockdamage"));
-                }
-                double yield = 0.3;
-                if (element.getChild("yield") != null) {
-                    yield = Double.parseDouble(element.getChildText("yield"));
-                }
-                double power = 4.0;
-                if (element.getChild("power") != null) {
-                    power = Double.parseDouble(element.getChildText("power"));
-                }
-                int fuse = 4;
-                if (element.getChild("fuse") != null) {
-                    fuse = Strings.timeStringToSeconds(element.getChildText("fuse"));
-                }
-                int limit = 16;
-                if (element.getChild("dispenser-tnt-limit") != null) {
-                    limit = Strings.timeStringToSeconds(element.getChildText("dispenser-tnt-limit"));
-                }
-                double multiplier = 0.25;
-                if (element.getChild("dispenser-tnt-multiplier") != null) {
-                    multiplier = Double.parseDouble(element.getChildText("dispenser-tnt-multiplier"));
-                }
+                boolean instantIgnite = Numbers.parseBoolean(element.getChildText("instantignite"), false);
+                boolean blockDamage = Numbers.parseBoolean(element.getChildText("blockdamage"), true);
+                double yield = Numbers.limitDouble(0, 1, Numbers.parseDouble(element.getChildText("yield"), 0.3));
+                double power = Numbers.parseDouble(element.getChildText("power"), 4.0);
+                double fuse = element.getChild("fuse") != null ? Strings.timeStringToSeconds(element.getChildText("fuse")) : 4;
+                int limit = Numbers.parseInt(element.getChildText("dispenser-tnt-limit"),16);
+                double multiplier = Numbers.parseDouble(element.getChildText("dispenser-tnt-multiplier"), 0.25);
                 results.add(new Tnt(instantIgnite, blockDamage, yield, power, fuse, limit, multiplier));
             }
         } else results.add(new Tnt(false, true, 0.3, 4.0, 4, 16, 0.25));

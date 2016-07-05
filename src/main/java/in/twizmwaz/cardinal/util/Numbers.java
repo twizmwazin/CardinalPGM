@@ -47,6 +47,10 @@ public class Numbers {
         return parseBoolean(string);
     }
 
+    public static double limitDouble(double min, double max, double value) {
+        return Math.max(min, Math.min(max, value));
+    }
+
     public static String convertToSubscript(double number) {
         if (number == Double.POSITIVE_INFINITY) return "\u221E";
         if (number == Double.NEGATIVE_INFINITY) return "-\u221E";
