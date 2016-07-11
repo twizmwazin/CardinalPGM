@@ -8,20 +8,15 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
-import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.GameObjective;
-import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Scoreboards;
 import in.twizmwaz.cardinal.util.Strings;
 import in.twizmwaz.cardinal.util.Teams;
 import org.apache.commons.lang.WordUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -30,20 +25,15 @@ public class MatchCommand {
 
     @Command(aliases = {"matchinfo", "match"}, desc = "Shows information about the currently playing match.", usage = "")
     public static void match(final CommandContext args, CommandSender sender) throws CommandException {
-        sender.sendMessage(ChatColor.STRIKETHROUGH + "                              " + ChatColor.RESET + " " + new LocalizedChatMessage(ChatConstant.UI_MATCH_INFO).getMessage(ChatUtil.getLocale(sender)) + " " + ChatColor.STRIKETHROUGH + "                              ");
+        TeamModule senderTeam = Teams.getTeamById("observers").get();
+        if (sender instanceof Player) senderTeam = Teams.getTeamByPlayer((Player) sender).or(senderTeam);
+
+        sender.sendMessage(ChatColor.STRIKETHROUGH + "                              " + ChatColor.RESET + ChatColor.YELLOW + " " + new LocalizedChatMessage(ChatConstant.UI_MATCH, GameHandler.getGameHandler().getMatch().getNumber() + "").getMessage(ChatUtil.getLocale(sender)) + " " + ChatColor.RESET + ChatColor.STRIKETHROUGH + "                              ");
         sender.sendMessage(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TIME).getMessage(ChatUtil.getLocale(sender)) + ": " + ChatColor.GOLD + (Cardinal.getInstance().getConfig().getBoolean("matchTimeMillis") ? Strings.formatTimeWithMillis(MatchTimer.getTimeInSeconds()) : Strings.formatTime(MatchTimer.getTimeInSeconds())));
         String teams = "";
         boolean hasObjectives = false;
         for (TeamModule team : Teams.getTeams()) {
-            int players = 0;
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                if (Teams.getTeamByPlayer(player).isPresent()) {
-                    if (Teams.getTeamByPlayer(player).get() == team) {
-                        players++;
-                    }
-                }
-            }
-            teams += team.getCompleteName() + ChatColor.GRAY + ": " + ChatColor.RESET + players + (team.isObserver() ? "" : ChatColor.GRAY + "/" + team.getMax() + ChatColor.AQUA + " | ");
+            teams += team.getCompleteName() + ChatColor.GRAY + ": " + ChatColor.RESET + team.size() + (team.isObserver() ? "" : ChatColor.GRAY + "/" + team.getMax() + ChatColor.DARK_GRAY + " | ");
             if (Teams.getShownObjectives(team).size() > 0) hasObjectives = true;
         }
         sender.sendMessage(teams);
@@ -54,10 +44,10 @@ public class MatchCommand {
                 if (!team.isObserver() && (Teams.getShownObjectives(team).size() > 0 || Scoreboards.getHills().size() > 0)) {
                     String objectives = "";
                     for (GameObjective objective : Teams.getShownObjectives(team)) {
-                        objectives += (objective.isComplete() ? ChatColor.GREEN : ChatColor.DARK_RED) + WordUtils.capitalizeFully(objective.getName().replaceAll("_", " ")) + "  ";
+                        objectives += objective.getScoreboardHandler().getPrefix(senderTeam) + ChatColor.RESET + WordUtils.capitalizeFully(objective.getName().replaceAll("_", " ")) + "  ";
                     }
                     for (GameObjective hill : Scoreboards.getHills()) {
-                        objectives += (hill.getTeam() == team ? ChatColor.GREEN : ChatColor.DARK_RED) + WordUtils.capitalizeFully(hill.getName().replaceAll("_", " ") + "  ");
+                        objectives += hill.getScoreboardHandler().getPrefix(senderTeam) + WordUtils.capitalizeFully(hill.getName().replaceAll("_", " ") + "  ");
                     }
                     objectives = objectives.trim();
                     sender.sendMessage("  " + team.getCompleteName() + ChatColor.GRAY + ": " + objectives);

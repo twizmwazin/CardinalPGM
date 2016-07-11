@@ -261,6 +261,7 @@ public enum ChatConstant {
     UI_ROTATION_CURRENT("userInterface.rotationCurrent"),
     UI_ROTATION_LOADED("userInterface.rotationLoaded"),
     UI_MATCH_INFO("userInterface.matchInfo"),
+    UI_MATCH("userInterface.match"),
     UI_TIME("userInterface.time"),
     UI_MATCH_TIME("userInterface.matchTime"),
     UI_GOALS("userInterface.goals"),

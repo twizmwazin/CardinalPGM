@@ -258,6 +258,7 @@
         <rotationCurrent>Current Rotation</rotationCurrent>
         <rotationLoaded>Loaded Rotations</rotationLoaded>
         <matchInfo>Match Info</matchInfo>
+        <match>Match #{0}</match>
         <time>Time</time>
         <matchTime>Match Time</matchTime>
         <goals>Goals</goals>
