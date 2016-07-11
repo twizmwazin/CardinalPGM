@@ -44,10 +44,10 @@ public class MatchCommand {
                 if (!team.isObserver() && (Teams.getShownObjectives(team).size() > 0 || Scoreboards.getHills().size() > 0)) {
                     String objectives = "";
                     for (GameObjective objective : Teams.getShownObjectives(team)) {
-                        objectives += objective.getScoreboardHandler().getPrefix(senderTeam) + ChatColor.RESET + WordUtils.capitalizeFully(objective.getName().replaceAll("_", " ")) + "  ";
+                        objectives += objective.getScoreboardHandler().getPrefix(senderTeam) + " " + ChatColor.RESET + WordUtils.capitalizeFully(objective.getName().replaceAll("_", " ")) + "  ";
                     }
                     for (GameObjective hill : Scoreboards.getHills()) {
-                        objectives += hill.getScoreboardHandler().getPrefix(senderTeam) + WordUtils.capitalizeFully(hill.getName().replaceAll("_", " ") + "  ");
+                        objectives += hill.getScoreboardHandler().getPrefix(senderTeam) + " " + WordUtils.capitalizeFully(hill.getName().replaceAll("_", " ") + "  ");
                     }
                     objectives = objectives.trim();
                     sender.sendMessage("  " + team.getCompleteName() + ChatColor.GRAY + ": " + objectives);
