@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.util;
 
 import com.google.common.collect.Lists;
 import in.twizmwaz.cardinal.Cardinal;
+import in.twizmwaz.cardinal.rotation.Rotation;
 import org.bukkit.Bukkit;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -24,58 +25,49 @@ public class DomUtil {
         try {
             File globalFile = new File(Cardinal.getInstance().getConfig().getString("repo") + "/global.xml");
             Files.copy(Cardinal.getInstance().getResource("global.xml"), globalFile.toPath(), (CopyOption) StandardCopyOption.REPLACE_EXISTING);
-            SAXBuilder saxBuilder = new SAXBuilder();
-            global = saxBuilder.build(globalFile);
+            global = parse(globalFile);
         } catch (JDOMException | IOException e) {
+            global = new Document(new Element("map"));
         }
     }
 
     public static Document parse(File file) throws JDOMException, IOException {
         SAXBuilder saxBuilder = new SAXBuilder();
-        Document original = saxBuilder.build(file);
+        return saxBuilder.build(file);
+    }
+
+    public static Document parseMap(File file) throws JDOMException, IOException {
+        Document original = parse(file);
         merge(original, global);
         List<String> toInclude = Lists.newArrayList();
-        for (Element include : original.getRootElement().getChildren("include"))
-            toInclude.add(include.getAttributeValue("src"));
+        for (Element include : original.getRootElement().getChildren("include")) {
+            String src = include.getAttributeValue("src");
+            if (!src.equals("")) toInclude.add(src.substring(src.lastIndexOf('/') + 1));
+        }
         for (String include : toInclude) {
-            boolean found = false;
-            File path = file.getParentFile();
-            File including = new File(path, include);
-            if (including.exists()) {
-                found = true;
+            File including = Rotation.getInclude(include);
+
+            if (including != null)
                 merge(original, including);
-            } else {
-                while (include.startsWith("../")) {
-                    include = include.replace("../", "");
-                }
-                including = new File(path, include);
-                if (including.exists()) {
-                    found = true;
-                    merge(original, including);
-                }
-                including = new File(path.getParentFile(), include);
-                if (including.exists()) {
-                    found = true;
-                    merge(original, including);
-                }
-            }
-            if (!found)
-                Bukkit.getLogger().log(Level.WARNING, "File '" + including.getName() + "' was not found nor included!");
+            else
+                Bukkit.getLogger().log(Level.WARNING, "File '" + include + "' was not found nor included!");
         }
         return original;
     }
 
     public static Document merge(Document original, File copy) {
         try {
-            return merge(original, parse(copy));
+            return merge(original, parseMap(copy));
         } catch (JDOMException | IOException ignored) {
             return original;
         }
     }
 
     public static Document merge(Document original, Document copy) {
-        for (Element element : copy.getRootElement().getChildren()) {
-            original.getRootElement().addContent(element.clone().detach());
+        if (copy != null) {
+            for (Element element : copy.getRootElement().getChildren()) {
+                original.getRootElement().addContent(element.clone().detach());
+            }
         }
         return original;
     }

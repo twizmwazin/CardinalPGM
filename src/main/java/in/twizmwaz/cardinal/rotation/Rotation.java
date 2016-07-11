@@ -27,6 +27,7 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -41,8 +42,11 @@ public class Rotation {
     private File repo;
     private static List<String> requirements = Arrays.asList("map.xml", "region", "level.dat");
 
-    public Rotation() throws RotationLoadException {
-        setupRotation();
+    private Map<String, File> includes;
+
+    public static File getInclude(String name) {
+        Rotation rot = Cardinal.getInstance().getGameHandler().getRotation();
+        return rot.includes.containsKey(name) ? rot.includes.get(name) : null;
     }
 
     public void setupRotation() throws RotationLoadException {
@@ -61,21 +65,37 @@ public class Rotation {
      * @throws RotationLoadException
      */
     public void refreshRepo() throws RotationLoadException, IOException {
+        includes = new HashMap<>();
         loaded = new ArrayList<>();
         this.repo = new File(Cardinal.getInstance().getConfig().getString("repo"));
         if (!repo.exists()) repo.mkdir();
+        loadIncludes(repo);
         loadMapsIn(repo);
         updatePlayers();
         if (loaded.size() < 1) throw new RotationLoadException("No maps were loaded. Are there any maps in the repository?");
     }
 
-    public void loadMapsIn(File file) {
+    private void loadIncludes(File file) {
+        File[] children = file.listFiles();
+        if (children != null) {
+            for (File child : children) {
+                if (child.isFile()) {
+                    if (child.getName().endsWith(".xml") && !child.getName().equals("map.xml")) {
+                        includes.put(child.getName(), child);
+                    }
+                } else
+                    loadIncludes(child);
+            }
+        }
+    }
+
+    private void loadMapsIn(File file) {
         if (file.listFiles() != null) {
             for (File map : file.listFiles()) {
                 if (map.isFile()) continue;
                 if (Arrays.asList(map.list()).containsAll(requirements)) {
                     try {
-                        Document xml = DomUtil.parse(new File(map.getPath() + "/map.xml"));
+                        Document xml = DomUtil.parseMap(new File(map.getPath() + "/map.xml"));
                         String name = xml.getRootElement().getChild("name").getText();
                         String version = xml.getRootElement().getChild("version").getText();
                         String objective = xml.getRootElement().getChild("objective").getText();
