@@ -39,7 +39,7 @@ public class Match {
         this.uuid = id;
         this.modules = new ModuleCollection<>();
         try {
-            this.document = DomUtil.parse(new File(map.getFolder() + "/map.xml"));
+            this.document = DomUtil.parseMap(new File(map.getFolder() + "/map.xml"));
         } catch (JDOMException | IOException e) {
             e.printStackTrace();
         }

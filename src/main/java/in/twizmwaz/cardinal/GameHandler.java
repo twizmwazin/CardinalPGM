@@ -28,7 +28,11 @@ public class GameHandler {
     public GameHandler() throws RotationLoadException {
         handler = this;
         this.moduleFactory = new ModuleFactory();
+    }
+
+    public void load() throws RotationLoadException {
         rotation = new Rotation();
+        rotation.setupRotation();
         cycle = new Cycle(rotation.getNext(), UUID.randomUUID(), this);
         Bukkit.getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(), new Runnable() {
             @Override
@@ -36,7 +40,6 @@ public class GameHandler {
                 cycleAndMakeMatch();
             }
         });
-
     }
 
     public static GameHandler getGameHandler() {
