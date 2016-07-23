@@ -243,8 +243,11 @@ public class SpectatorTools implements Module {
             } else if (event.getSetting().equals(Settings.getSettingByName("Elytra"))) {
                 if (event.getNewValue().getValue().equals("on")) {
                     event.getPlayer().getInventory().setChestplate(new ItemStack(Material.ELYTRA));
-                } else if(event.getPlayer().getInventory().getChestplate().getType().equals(Material.ELYTRA)) {
-                    event.getPlayer().getInventory().setChestplate(new ItemStack(Material.AIR));
+                } else {
+                    ItemStack chestplate = event.getPlayer().getInventory().getChestplate();
+                    if (chestplate != null && chestplate.getType().equals(Material.ELYTRA)) {
+                        event.getPlayer().getInventory().setChestplate(new ItemStack(Material.AIR));
+                    }
                 }
             }
         }
