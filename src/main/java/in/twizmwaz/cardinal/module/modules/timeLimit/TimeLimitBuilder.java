@@ -2,14 +2,17 @@ package in.twizmwaz.cardinal.module.modules.timeLimit;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
+import in.twizmwaz.cardinal.module.BuilderData;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
+import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Strings;
 import in.twizmwaz.cardinal.util.Teams;
 import org.jdom2.Element;
 
+@BuilderData(load = ModuleLoadTime.LATE)
 public class TimeLimitBuilder implements ModuleBuilder {
 
     @Override
