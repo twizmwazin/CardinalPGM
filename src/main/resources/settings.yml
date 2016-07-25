@@ -4,6 +4,7 @@ settings:
 - DamageNumbers
 - DeathMessages
 - Elytra
+- Health
 - HighlightDeathMessages
 - JoinMessages
 - Observers
@@ -47,6 +48,13 @@ setting:
     - 'on'
     - off[default]
     description: Equips you with elytra when you are in observer mode
+  Health:
+    values:
+    - 'long'
+    - short[default]
+    - 'tiny'
+    - 'off'
+    description: See health of joined players when you are in observer mode
   HighlightDeathMessages:
     aliases:
     - hdms

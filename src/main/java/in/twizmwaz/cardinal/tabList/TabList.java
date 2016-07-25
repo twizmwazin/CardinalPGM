@@ -7,11 +7,14 @@ import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.event.PlayerNameUpdateEvent;
+import in.twizmwaz.cardinal.event.PlayerSettingChangeEvent;
 import in.twizmwaz.cardinal.event.RankChangeEvent;
 import in.twizmwaz.cardinal.event.TeamNameChangeEvent;
+import in.twizmwaz.cardinal.module.modules.observers.ObserverModule;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.rank.Rank;
+import in.twizmwaz.cardinal.settings.Settings;
 import in.twizmwaz.cardinal.util.PacketUtils;
 import in.twizmwaz.cardinal.util.Strings;
 import in.twizmwaz.cardinal.util.Teams;
@@ -19,6 +22,7 @@ import net.minecraft.server.DataWatcher;
 import net.minecraft.server.DataWatcherRegistry;
 import net.minecraft.server.EnumGamemode;
 import net.minecraft.server.IChatBaseComponent;
+import net.minecraft.server.Packet;
 import net.minecraft.server.PacketPlayOutEntityDestroy;
 import net.minecraft.server.PacketPlayOutNamedEntitySpawn;
 import net.minecraft.server.PacketPlayOutPlayerInfo;
@@ -31,6 +35,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerSkinPartsChangeEvent;
@@ -48,7 +54,7 @@ import java.util.UUID;
 
 public class TabList implements Listener {
 
-    private final String defaultName = "                        ";
+    private final String defaultName = "";
 
     private final Property defaultProperty = new Property("textures", "eyJ0aW1lc3RhbXAiOjE0MTEyNjg3OTI3NjUsInByb2ZpbGVJZCI6IjNmYmVjN2RkMGE1ZjQwYmY5ZDExODg1YTU0NTA3MTEyIiwicHJvZmlsZU5hbWUiOiJsYXN0X3VzZXJuYW1lIiwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzg0N2I1Mjc5OTg0NjUxNTRhZDZjMjM4YTFlM2MyZGQzZTMyOTY1MzUyZTNhNjRmMzZlMTZhOTQwNWFiOCJ9fX0=", "u8sG8tlbmiekrfAdQjy4nXIcCfNdnUZzXSx9BE1X5K27NiUvE1dDNIeBBSPdZzQG1kHGijuokuHPdNi/KXHZkQM7OJ4aCu5JiUoOY28uz3wZhW4D+KG3dH4ei5ww2KwvjcqVL7LFKfr/ONU5Hvi7MIIty1eKpoGDYpWj3WjnbN4ye5Zo88I2ZEkP1wBw2eDDN4P3YEDYTumQndcbXFPuRRTntoGdZq3N5EBKfDZxlw4L3pgkcSLU5rWkd5UH4ZUOHAP/VaJ04mpFLsFXzzdU4xNZ5fthCwxwVBNLtHRWO26k/qcVBzvEXtKGFJmxfLGCzXScET/OjUBak/JEkkRG2m+kpmBMgFRNtjyZgQ1w08U6HHnLTiAiio3JswPlW5v56pGWRHQT5XWSkfnrXDalxtSmPnB5LmacpIImKgL8V9wLnWvBzI7SHjlyQbbgd+kUOkLlu7+717ySDEJwsFJekfuR6N/rpcYgNZYrxDwe4w57uDPlwNL6cJPfNUHV7WEbIU1pMgxsxaXe8WSvV87qLsR7H06xocl2C0JFfe2jZR4Zh3k9xzEnfCeFKBgGb4lrOWBu1eDWYgtKV67M2Y+B3W5pjuAjwAxn0waODtEn/3jKPbc/sxbPvljUCw65X+ok0UUN1eOwXV5l2EGzn05t3Yhwq19/GxARg63ISGE8CKw=");
 
@@ -89,7 +95,7 @@ public class TabList implements Listener {
             @Override
             public void run() {
                 for (Player view : Bukkit.getOnlinePlayers()) {
-                    broadcastTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_LATENCY, getPlayer(view), view.getPlayerListName(), getPlayerPing(view));
+                    PacketUtils.broadcastPacket(getTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_LATENCY, getPlayer(view), "", 1000));
                 }
             }
         }, 0L, 600L);
@@ -139,8 +145,8 @@ public class TabList implements Listener {
         }
     }
 
-    @EventHandler (priority = EventPriority.LOWEST)
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerJoin(final PlayerJoinEvent event) {
         update(event.getPlayer());
         sendPlayersParts(event.getPlayer());
         updateAll(null);
@@ -158,6 +164,7 @@ public class TabList implements Listener {
     public void onTeamChange(PlayerChangeTeamEvent event) {
         renderAllTeamTitles();
         updateAll(event.getPlayer());
+        updatePlayerNames(event.getPlayer());
     }
 
     @EventHandler
@@ -165,10 +172,31 @@ public class TabList implements Listener {
         renderTeamTitle(event.getTeam());
     }
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerDamageEvent(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player && !ObserverModule.testObserver((Player) event.getEntity())) {
+            updatePlayerName((Player) event.getEntity());
+        }
+    }
+
+    @EventHandler
+    public void onHealthChange(EntityRegainHealthEvent event) {
+        if (event.getEntity() instanceof Player && !ObserverModule.testObserver((Player) event.getEntity())) {
+            updatePlayerName((Player) event.getEntity());
+        }
+    }
+
+    @EventHandler
+    public void onPlayerChangeSetting(PlayerSettingChangeEvent event) {
+        if (event.getSetting().equals(Settings.getSettingByName("Health")) && ObserverModule.testObserver(event.getPlayer())) {
+            updatePlayerNames(event.getPlayer());
+        }
+    }
+
     @EventHandler (priority = EventPriority.HIGHEST)
     public void onDisplayNameChange(PlayerNameUpdateEvent event) {
         if (!playerView.containsKey(event.getPlayer())) return;
-        broadcastTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, getPlayer(event.getPlayer()), event.getPlayer().getPlayerListName(), 0);
+        updatePlayerName(event.getPlayer());
     }
 
     @EventHandler
@@ -195,7 +223,7 @@ public class TabList implements Listener {
         }
         PacketPlayOutPlayerInfo listPacket = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER);
         for (Map.Entry<UUID, GameProfile> entry : fakePlayer.entrySet()) {
-            listPacket.add(getPlayerInfo(listPacket, entry.getValue(), Bukkit.getPlayer(entry.getKey()).getPlayerListName(), getPlayerPing(Bukkit.getPlayer(entry.getKey()))));
+            listPacket.add(getPlayerInfo(player, listPacket, Bukkit.getPlayer(entry.getKey())));
             sendTeamPacket(player, entry.getValue().getName(), 80, 3);
         }
         for (Map.Entry<String, GameProfile> entry : teamTitles.entrySet()) {
@@ -205,6 +233,23 @@ public class TabList implements Listener {
             listPacket.add(getPlayerInfo(listPacket, emptyPlayer, defaultName, 1000));
         }
         PacketUtils.sendPacket(player, listPacket);
+    }
+
+    private void updatePlayerName(final Player player) {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                broadcastPlayerTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, player);
+            }
+        }, 1L);
+    }
+
+    private void updatePlayerNames(Player view) {
+        PacketPlayOutPlayerInfo listPacket = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME);
+        for (UUID uuid : fakePlayer.keySet()) {
+            listPacket.add(getPlayerInfo(view, listPacket, Bukkit.getPlayer(uuid)));
+        }
+        PacketUtils.sendPacket(view, listPacket);
     }
 
     private void updateAll(final Player prioritized) {
@@ -225,6 +270,7 @@ public class TabList implements Listener {
     }
 
     private void update(Player player) {
+        if (!player.willBeOnline()) return;
         if (!playerView.containsKey(player)) setupPlayer(player);
         TeamModule prioritized = Teams.getTeamByPlayer(player).orNull();
         int col = prioritized != null && prioritized.isObserver() ? 0 : columnsPerTeam;
@@ -254,7 +300,7 @@ public class TabList implements Listener {
 
     public void renderTeamTitle(TeamModule team) {
         if (team.isObserver()) return;
-        broadcastTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, getTeam(team), getTeamTitle(team), 0);
+        PacketUtils.broadcastPacket(getTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, getTeam(team), getTeamTitle(team), 0));
     }
 
     private void renderTeam(Player player, TeamModule team, int col, int maxRows) {
@@ -318,12 +364,13 @@ public class TabList implements Listener {
         return team.size() + "" + ChatColor.DARK_GRAY + "/" + ChatColor.GRAY + team.getMax() + " " + team.getColor() + ChatColor.BOLD + team.getName();
     }
 
-    private GameProfile getPlayer(Player player) {
+    public GameProfile getPlayer(Player player) {
         if (!fakePlayer.containsKey(player.getUniqueId())) {
             GameProfile profile = getProfile(getPlayerSkin(player));
-            broadcastTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, profile, player.getPlayerListName(), getPlayerPing(player));
+            PacketUtils.broadcastPacket(getTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, profile, player.getPlayerListName(), getPlayerPing(player)));
             broadcastTeamPacket(profile.getName(), 80, 3);
             fakePlayer.put(player.getUniqueId(), profile);
+            broadcastPlayerTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, player);
         }
         return fakePlayer.get(player.getUniqueId());
     }
@@ -332,7 +379,7 @@ public class TabList implements Listener {
         if (!fakePlayer.containsKey(player.getUniqueId())) return;
         GameProfile profile = getPlayer(player);
         broadcastUpdateTabListSlot(profile, 80, 0);
-        broadcastTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, profile, "", 0);
+        PacketUtils.broadcastPacket(getTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, profile, "", 0));
         deletePlayerWithParts(profile);
         fakePlayer.remove(player.getUniqueId());
         entityIDs.remove(profile);
@@ -341,8 +388,7 @@ public class TabList implements Listener {
     private GameProfile getTeam(TeamModule team) {
         if (!teamTitles.containsKey(team.getId())) {
             GameProfile profile = getProfile(coloredSkins.size() > team.getColor().ordinal() ? coloredSkins.get(team.getColor().ordinal()) : defaultProperty);
-            broadcastTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, profile, getTeamTitle(team), 1000);
-            broadcastTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, profile, getTeamTitle(team), 1000);
+            PacketUtils.broadcastPacket(getTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, profile, getTeamTitle(team), 1000));
             broadcastTeamPacket(profile.getName(), 80, 3);
             teamTitles.put(team.getId(), profile);
         }
@@ -353,7 +399,7 @@ public class TabList implements Listener {
         if (teamTitles.isEmpty()) return;
         for (GameProfile profile : teamTitles.values()) {
             broadcastUpdateTabListSlot(profile, 80, 0);
-            broadcastTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, profile, "", 0);
+            PacketUtils.broadcastPacket(getTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, profile, "", 0));
         }
         teamTitles.clear();
     }
@@ -361,8 +407,7 @@ public class TabList implements Listener {
     private GameProfile getFakePlayer(Player viewer) {
         if (playerView.get(viewer).containsAll(emptyPlayers)) {
             GameProfile profile = getProfile(defaultProperty);
-            broadcastTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, profile, defaultName, 1000);
-            broadcastTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, profile, defaultName, 1000);
+            PacketUtils.broadcastPacket(getTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, profile, defaultName, 1000));
             broadcastTeamPacket(profile.getName(), 80, 3);
             emptyPlayers.add(profile);
             return profile;
@@ -409,17 +454,42 @@ public class TabList implements Listener {
 
     }
 
-    private void broadcastTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction action, GameProfile game, String displayName, int ping) {
+    private void broadcastPlayerTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction action, Player render) {
+        if (!render.isOnline()) return;
         for (Player player : Bukkit.getOnlinePlayers()) {
-            sendTabListPacket(player, action, game, displayName, ping);
+            PacketUtils.sendPacket(player, getPlayerTabListPacket(player, action, render));
         }
     }
 
-    private void sendTabListPacket(Player player, PacketPlayOutPlayerInfo.EnumPlayerInfoAction action, GameProfile game, String displayName, int ping) {
+    private Packet getPlayerTabListPacket(Player player, PacketPlayOutPlayerInfo.EnumPlayerInfoAction action, Player render) {
         PacketPlayOutPlayerInfo listPacket = new PacketPlayOutPlayerInfo(action);
-        if (displayName.equals(player.getPlayerListName())) displayName = displayName.replace(player.getName(), ChatColor.BOLD + player.getName());
+        listPacket.add(getPlayerInfo(player, listPacket, render));
+        return listPacket;
+    }
+
+    private Packet getTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction action, GameProfile game, String displayName, int ping) {
+        PacketPlayOutPlayerInfo listPacket = new PacketPlayOutPlayerInfo(action);
         listPacket.add(getPlayerInfo(listPacket, game, displayName, ping));
-        PacketUtils.sendPacket(player, listPacket);
+        return listPacket;
+    }
+
+    private PacketPlayOutPlayerInfo.PlayerInfoData getPlayerInfo(Player player, PacketPlayOutPlayerInfo listPacket, Player render) {
+        String displayName = render.getPlayerListName();
+        if (ObserverModule.testObserver(player) && !ObserverModule.testObserver(render)) {
+            String setting = Settings.getSettingByName("Health").getValueByPlayer(player).getValue().toLowerCase();
+            if (!setting.equals("off")) {
+                if (setting.equals("long")) {
+                    displayName += ChatColor.RESET + " | " + ChatColor.RED + (ObserverModule.testDead(render) ? ChatColor.DARK_GRAY + "0.0" : ChatColor.RED + "" + (double) Math.round(render.getHealth() * 10) / 10) + ChatColor.DARK_RED + "❤";
+                } else if (setting.equals("short")) {
+                    displayName += ChatColor.RESET + " | " + ChatColor.RED + (ObserverModule.testDead(render) ? ChatColor.DARK_GRAY + "0" : ChatColor.RED + "" + Math.round(render.getHealth())) + ChatColor.DARK_RED + "❤";
+                } else if (setting.equals("tiny")) {
+                    displayName += ChatColor.RESET + " " + ChatColor.RED + (ObserverModule.testDead(render) ? ChatColor.DARK_GRAY + "0" : ChatColor.RED + "" + Math.round(render.getHealth()));
+                }
+            }
+        }
+        if (player.equals(render)) displayName = displayName.replace(player.getName(), ChatColor.BOLD + player.getName());
+
+        return getPlayerInfo(listPacket, getPlayer(render), displayName, getPlayerPing(render));
     }
 
     private PacketPlayOutPlayerInfo.PlayerInfoData getPlayerInfo(PacketPlayOutPlayerInfo listPacket, GameProfile game, String displayName, int ping) {
@@ -440,7 +510,11 @@ public class TabList implements Listener {
     }
 
     private Property getPlayerSkin(Player player) {
-        return getPlayerSkin(((CraftPlayer) player).getProfile());
+        return getPlayerSkin(getGameProfile(player));
+    }
+
+    private GameProfile getGameProfile(Player player) {
+        return ((CraftPlayer) player).getProfile();
     }
 
     private Property getPlayerSkin(GameProfile profile) {
