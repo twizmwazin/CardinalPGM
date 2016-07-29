@@ -85,6 +85,7 @@ import in.twizmwaz.cardinal.module.modules.tutorial.TutorialBuilder;
 import in.twizmwaz.cardinal.module.modules.visibility.VisibilityBuilder;
 import in.twizmwaz.cardinal.module.modules.wildcard.WildCardBuilder;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjectiveBuilder;
+import in.twizmwaz.cardinal.module.modules.worldBorder.WorldBorderModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.worldFreeze.WorldFreezeBuilder;
 import org.bukkit.Bukkit;
 
@@ -189,7 +190,8 @@ public class ModuleFactory {
                 NetBuilder.class,
                 StatsBuilder.class,
                 FallingBlocksBuilder.class,
-                SpectatorToolsBuilder.class
+                SpectatorToolsBuilder.class,
+                WorldBorderModuleBuilder.class
         ));
     }
 

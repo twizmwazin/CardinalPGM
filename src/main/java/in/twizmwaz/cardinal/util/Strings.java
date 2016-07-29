@@ -162,4 +162,9 @@ public class Strings {
         }
         return color;
     }
+
+    public static String fallback(String string, String fallback) {
+        return string == null ? fallback : string;
+    }
+
 }
