@@ -8,6 +8,8 @@ import org.bukkit.entity.Arrow;
 
 public class ArrowRunnable implements Runnable {
 
+    private static final float ZERO = 0.00001f;
+
     private final Arrow arrow;
     private final float x;
     private final float y;
@@ -18,9 +20,16 @@ public class ArrowRunnable implements Runnable {
     protected ArrowRunnable(Arrow arrow, ChatColor chatColor) {
         this.arrow = arrow;
         Color rgb = MiscUtil.convertChatColorToColor(chatColor);
-        x = (float) rgb.getRed() / 255;
-        y = (float) rgb.getGreen() / 255;
-        z = (float) rgb.getBlue() / 255;
+        x = rgbToFloat(rgb.getRed());
+        y = rgbToFloat(rgb.getGreen());
+        z = rgbToFloat(rgb.getBlue());
+    }
+
+    private static float rgbToFloat(int i) {
+        if (i == 0) {
+            return ZERO;
+        }
+        return (float) i / 255;
     }
 
     public void setTask(int id) {
