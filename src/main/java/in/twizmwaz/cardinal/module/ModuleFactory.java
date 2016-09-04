@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.module;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.modules.appliedRegion.AppliedRegionBuilder;
 import in.twizmwaz.cardinal.module.modules.armorKeep.ArmorKeepBuilder;
+import in.twizmwaz.cardinal.module.modules.arrows.ArrowModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.attackSpeed.AttackSpeedBuilder;
 import in.twizmwaz.cardinal.module.modules.blitz.BlitzBuilder;
 import in.twizmwaz.cardinal.module.modules.blockdrops.BlockdropsBuilder;
@@ -189,7 +190,8 @@ public class ModuleFactory {
                 NetBuilder.class,
                 StatsBuilder.class,
                 FallingBlocksBuilder.class,
-                SpectatorToolsBuilder.class
+                SpectatorToolsBuilder.class,
+                ArrowModuleBuilder.class
         ));
     }
 

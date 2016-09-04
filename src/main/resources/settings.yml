@@ -1,4 +1,5 @@
 settings:
+- ArrowParticles
 - AttackSpeedometer
 - Blood
 - DamageNumbers
@@ -16,6 +17,14 @@ settings:
 - Speed
 - Stats
 setting:
+  ArrowParticles:
+    aliases:
+    - arrows
+    values:
+    - 'all'
+    - self[default]
+    - 'none'
+    description: Show team colored particles with arrows
   AttackSpeedometer:
     aliases:
     - cps
