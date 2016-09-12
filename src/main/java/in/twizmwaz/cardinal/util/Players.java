@@ -44,6 +44,7 @@ public class Players {
         player.setPotionParticles(false);
         player.setWalkSpeed(0.2F);
         player.setFlySpeed(0.1F);
+        player.setKnockbackReduction(0);
         player.setArrowsStuck(0);
 
         player.hideTitle();
