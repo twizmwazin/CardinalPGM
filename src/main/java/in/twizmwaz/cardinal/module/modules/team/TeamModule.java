@@ -1,7 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.team;
 
 import com.google.common.base.Optional;
-import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -10,6 +9,7 @@ import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
+import in.twizmwaz.cardinal.tabList.TabList;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,7 +20,7 @@ import org.bukkit.event.HandlerList;
 
 import java.util.ArrayList;
 
-public class TeamModule<P extends Player> extends ArrayList<Player> implements Module {
+public class TeamModule extends ArrayList<Player> implements Module {
 
     private final Match match;
     private final String id;
@@ -58,7 +58,7 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
             player.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.ERROR_TEAM_FULL, getCompleteName() + ChatColor.RED)).getMessage(player.getLocale()));
             return false;
         }
-        PlayerChangeTeamEvent event = new PlayerChangeTeamEvent(player, force, Optional.<TeamModule>of(this), Teams.getTeamByPlayer(player));
+        PlayerChangeTeamEvent event = new PlayerChangeTeamEvent(player, force, Optional.of(this), Teams.getTeamByPlayer(player));
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (message && event.getNewTeam().isPresent()) {
             event.getPlayer().sendMessage(ChatColor.WHITE + new LocalizedChatMessage(ChatConstant.GENERIC_JOINED, event.getNewTeam().get().getCompleteName()).getMessage(event.getPlayer().getLocale()));
@@ -121,7 +121,7 @@ public class TeamModule<P extends Player> extends ArrayList<Player> implements M
 
     public void setMax(int max) {
         this.max = max;
-        Cardinal.getInstance().getTabList().renderTeamTitle(this);
+        TabList.renderTeamTitle(this);
     }
 
     public int getMaxOverfill() {
