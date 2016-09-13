@@ -85,24 +85,18 @@ public class IntersectRegion extends RegionModule {
 
     @Override
     public Vector getMin() {
-        Vector min = regions.get(0).getMin();
+        Vector min = new Vector(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
         for (RegionModule region : regions) {
-            Vector min2 = region.getMin();
-            if (min2.getX() < min.getX()) min.setX(min2.getX());
-            if (min2.getY() < min.getY()) min.setY(min2.getY());
-            if (min2.getZ() < min.getZ()) min.setZ(min2.getZ());
+            min.minimize(region.getMin());
         }
         return min;
     }
 
     @Override
     public Vector getMax() {
-        Vector max = regions.get(0).getMax();
+        Vector max = new Vector(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
         for (RegionModule region : regions) {
-            Vector max2 = region.getMax();
-            if (max2.getX() > max.getX()) max.setX(max2.getX());
-            if (max2.getY() > max.getY()) max.setY(max2.getY());
-            if (max2.getZ() > max.getZ()) max.setZ(max2.getZ());
+            max.maximize(region.getMax());
         }
         return max;
     }
