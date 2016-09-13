@@ -90,12 +90,6 @@ public class ScoreboardModule implements Module {
         }
     }
 
-    public static void remove(TeamModule team, Player player) {
-        for (ScoreboardModule scoreboard : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreboardModule.class)) {
-            scoreboard.getScoreboard().getTeam(team.getId()).addEntry(player.getName());
-        }
-    }
-
     public TeamModule getTeam() {
         return team;
     }
@@ -130,9 +124,6 @@ public class ScoreboardModule implements Module {
         if (!event.isCancelled()) {
             if (event.getNewTeam().orNull() == this.team) {
                 event.getPlayer().setScoreboard(this.scoreboard);
-            }
-            for (TeamModule team : Teams.getTeams()) {
-                remove(team, event.getPlayer());
             }
             if (event.getNewTeam().isPresent()) {
                 add(event.getNewTeam().get(), event.getPlayer());
