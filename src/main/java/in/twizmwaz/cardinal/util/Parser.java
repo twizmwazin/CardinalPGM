@@ -18,6 +18,7 @@ import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.potion.CraftPotionEffectType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -25,15 +26,19 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.material.MaterialData;
 import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.bukkit.util.Vector;
 import org.jdom2.Element;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class Parser {
@@ -73,6 +78,7 @@ public class Parser {
         if (element.getName().equalsIgnoreCase("book")) {
             itemStack = new ItemStack(Material.BOOK, amount, damage);
         }
+        itemStack = CraftItemStack.asCraftCopy(itemStack);
         if (element.getAttributeValue("enchantment") != null) {
             for (String raw : element.getAttributeValue("enchantment").split(";")) {
                 String[] enchant = raw.split(":");
@@ -88,21 +94,7 @@ public class Parser {
             }
         }
         ItemMeta meta = itemStack.getItemMeta();
-        if (element.getAttributeValue("unbreakable") != null && Boolean.parseBoolean(element.getAttributeValue("unbreakable"))) {
-            meta.setUnbreakable(true);
-        }
-        if (element.getAttributeValue("name") != null) {
-            meta.setDisplayName(ChatColor.translateAlternateColorCodes('`', element.getAttributeValue("name")));
-        }
-        if (element.getAttributeValue("lore") != null) {
-            ArrayList<String> lore = new ArrayList<>();
-            for (String raw : element.getAttributeValue("lore").split("\\|")) {
-                String colored = ChatColor.translateAlternateColorCodes('`', raw);
-                lore.add(colored);
-            }
-            meta.setLore(lore);
-        }
-        if (element.getAttributeValue("potions") != null) {
+        if (meta instanceof PotionMeta && element.getAttributeValue("potions") != null) {
             for (PotionEffect effect : parseEffects(element.getAttributeValue("potions"))) {
                 ((PotionMeta) meta).addCustomEffect(effect, true);
             }
@@ -115,9 +107,8 @@ public class Parser {
         for (Element attribute : element.getChildren("attribute")) {
             meta.addAttributeModifier(attribute.getText(), getAttribute(attribute));
         }
-        itemStack.setItemMeta(meta);
-        if (element.getName().equalsIgnoreCase("book")) {
-            BookMeta bookMeta = (BookMeta) itemStack.getItemMeta();
+        if (meta instanceof BookMeta && element.getName().equalsIgnoreCase("book")) {
+            BookMeta bookMeta = (BookMeta) meta;
             bookMeta.setTitle(ChatColor.translateAlternateColorCodes('`',element.getChildText("author")));
             bookMeta.setAuthor(ChatColor.translateAlternateColorCodes('`',element.getChildText("author")));
             List<String> pages = new ArrayList<>();
@@ -125,18 +116,41 @@ public class Parser {
                 pages.add(ChatColor.translateAlternateColorCodes('`', page.getText()).replace("\u0009", ""));
             }
             bookMeta.setPages(pages);
-            itemStack.setItemMeta(bookMeta);
         }
-        if (element.getAttributeValue("color") != null) {
-            LeatherArmorMeta leatherMeta = (LeatherArmorMeta) itemStack.getItemMeta();
-            leatherMeta.setColor(MiscUtil.convertHexToRGB(element.getAttributeValue("color")));
-            itemStack.setItemMeta(leatherMeta);
-        }
-
+        itemStack.setItemMeta(meta);
         return GameHandler.getGameHandler().getMatch().getModules().getModule(ItemMods.class).applyRules(applyMeta(itemStack, element));
     }
 
     public static ItemStack applyMeta(ItemStack itemStack, Element element) {
+        ItemMeta meta = itemStack.getItemMeta();
+        if (element.getAttributeValue("name") != null) {
+            meta.setDisplayName(ChatColor.translateAlternateColorCodes('`', element.getAttributeValue("name")));
+        }
+        if (element.getAttributeValue("lore") != null) {
+            ArrayList<String> lore = new ArrayList<>();
+            for (String raw : element.getAttributeValue("lore").split("\\|")) {
+                String colored = ChatColor.translateAlternateColorCodes('`', raw);
+                lore.add(colored);
+            }
+            meta.setLore(lore);
+        }
+        meta.setUnbreakable(Numbers.parseBoolean(element.getAttributeValue("unbreakable"), false));
+        if (meta instanceof LeatherArmorMeta && element.getAttributeValue("color") != null) {
+            LeatherArmorMeta leatherMeta = (LeatherArmorMeta) meta;
+            leatherMeta.setColor(MiscUtil.convertHexToRGB(element.getAttributeValue("color")));
+            itemStack.setItemMeta(leatherMeta);
+        }
+        if (meta instanceof PotionMeta && element.getAttributeValue("potion") != null) {
+            PotionMeta potionMeta = (PotionMeta) meta;
+            PotionType type = PotionType.valueOf(Strings.getTechnicalName(element.getAttributeValue("potion")));
+            potionMeta.setBasePotionData(new PotionData(type));
+        }
+        setItemFlag(meta, ItemFlag.HIDE_ENCHANTS, element, "show-enchantments");
+        setItemFlag(meta, ItemFlag.HIDE_ATTRIBUTES, element, "show-attributes");
+        setItemFlag(meta, ItemFlag.HIDE_UNBREAKABLE, element, "show-unbreakable");
+        setItemFlag(meta, ItemFlag.HIDE_DESTROYS, element, "show-can-destroy");
+        setItemFlag(meta, ItemFlag.HIDE_PLACED_ON, element, "show-can-place-on");
+        setItemFlag(meta, ItemFlag.HIDE_POTION_EFFECTS, element, "show-other");
         for (Element enchant : element.getChildren("enchantment")) {
             String ench = enchant.getText();
             Enchantment enchantment = Enchantment.getByName(Strings.getTechnicalName(ench));
@@ -149,20 +163,46 @@ public class Parser {
                 itemStack.addUnsafeEnchantment(enchantment, lvl);
             }
         }
-        ItemMeta meta = itemStack.getItemMeta();
-        for (Element effect : element.getChildren("effect")) {
-            PotionEffect potionEffect = getPotion(effect);
-            if (!((PotionMeta) meta).getCustomEffects().contains(potionEffect)) ((PotionMeta) meta).addCustomEffect(potionEffect, true);
+        if (meta instanceof PotionMeta) {
+            for (Element effect : element.getChildren("effect")) {
+                PotionEffect potionEffect = getPotion(effect);
+                ((PotionMeta) meta).addCustomEffect(potionEffect, true);
+            }
         }
         for (Element attribute : element.getChildren("attribute")) {
             ItemAttributeModifier itemAttribute = getAttribute(attribute);
-            if (!meta.getModifiedAttributes().contains(attribute.getText())) meta.addAttributeModifier(attribute.getText(), itemAttribute);
+            meta.addAttributeModifier(attribute.getText(), itemAttribute);
         }
-        /* TODO: can-destroy & can-place-on, and all attributes
-         * @link https://docs.oc.tc/modules/item_mods#itemmeta
-         */
+        for (Element canDestroy : element.getChildren("can-destroy")) {
+            if (canDestroy.getChildren("all-blocks").size() > 0) {
+                meta.setCanDestroy(Material.values());
+            } else {
+                Set<Material> materials = new HashSet<>();
+                for (Element material : canDestroy.getChildren("material")) {
+                    materials.add(parseMaterial(material.getText()).getKey());
+                }
+                meta.setCanDestroy(materials);
+            }
+        }
+        for (Element canPlace : element.getChildren("can-place-on")) {
+            if (canPlace.getChildren("all-blocks").size() > 0) {
+               meta.setCanPlaceOn(Material.values());
+            } else {
+                Set<Material> materials = new HashSet<>();
+                for (Element material : canPlace.getChildren("material")) {
+                    materials.add(parseMaterial(material.getText()).getKey());
+                }
+                meta.setCanPlaceOn(materials);
+            }
+        }
         itemStack.setItemMeta(meta);
         return itemStack;
+    }
+
+    private static void setItemFlag(ItemMeta meta, ItemFlag flag, Element element, String attribute) {
+        if (element.getAttributeValue(attribute) == null) return;
+        if (Numbers.parseBoolean(element.getAttributeValue(attribute), true)) meta.removeItemFlags(flag);
+        else meta.addItemFlags(flag);
     }
 
     private static List<PotionEffect> parseEffects(String effects) {
