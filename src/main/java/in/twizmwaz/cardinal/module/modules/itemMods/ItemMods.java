@@ -15,7 +15,7 @@ import java.util.Set;
 
 public class ItemMods implements Module {
 
-    Set<ItemRule> rules;
+    private Set<ItemRule> rules;
 
     public ItemMods(Set<ItemRule> rules) {
         this.rules = rules;
