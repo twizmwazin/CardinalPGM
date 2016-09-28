@@ -4,33 +4,29 @@ import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.util.ChatUtil;
-import in.twizmwaz.cardinal.util.Players;
+import in.twizmwaz.cardinal.util.Protocols;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ListCommand {
 
-    @Command(aliases = {"list"}, desc = "Lists all online players.")
+    @Command(aliases = {"list"}, desc = "Lists all online players.", flags = "v")
     public static void list(final CommandContext args, CommandSender sender) {
-        StringBuilder result = new StringBuilder()
-                .append(ChatColor.GRAY)
-                .append(ChatConstant.UI_ONLINE.asMessage().getMessage(ChatUtil.getLocale(sender)))
-                .append(" (")
-                .append(Bukkit.getOnlinePlayers().size())
-                .append("/")
-                .append(Bukkit.getMaxPlayers())
-                .append(") ")
-                .append(ChatColor.RESET);
-        List<Player> onlinePlayers = new ArrayList<>(Bukkit.getOnlinePlayers());
-        for (int i = 0; i < onlinePlayers.size(); i++) {
-            result.append(Players.getName(onlinePlayers.get(i))).append(ChatColor.RESET);
-            if (i < onlinePlayers.size() - 1) result.append(", ");
+        boolean version = args.hasFlag('v');
+        String result = ChatColor.GRAY + ChatConstant.MISC_ONLINE.asMessage().getMessage(ChatUtil.getLocale(sender)) +
+                " (" + Bukkit.getOnlinePlayers().size() + "/" + Bukkit.getMaxPlayers() + "): " + ChatColor.RESET;
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            result += player.getDisplayName();
+            if (version) {
+                result += ChatColor.GRAY + " (" + Protocols.getName(player.getProtocolVersion()) + ")";
+            }
+            result += ChatColor.RESET + ", ";
         }
-        sender.sendMessage(result.toString());
+        if (result.endsWith(", ")) {
+            result = result.substring(0, result.length() - 2);
+        }
+        sender.sendMessage(result);
     }
 }
