@@ -65,7 +65,6 @@ public class ReadyCommand {
         team.get().setReady(false);
         ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", new LocalizedChatMessage(ChatConstant.GENERIC_TEAM_NO_LONGER_READY, team.get().getCompleteName() + ChatColor.YELLOW)));
         if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
-            GameHandler.getGameHandler().getMatch().setState(MatchState.WAITING);
             GameHandler.getGameHandler().getMatch().getModules().getModule(StartTimer.class).setCancelled(true);
             ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.GENERIC_UNREADY_CANCEL_COUNTDOWN, team.get().getCompleteName() + ChatColor.RED)));
         }
