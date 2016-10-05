@@ -115,7 +115,7 @@ public class UpdateHandler {
                         }
                     }
                     try {
-                        File to = new File(Bukkit.getServer().getUpdateFolderFile(), "CardinalPGM-1.0-SNAPSHOT.jar");
+                        File to = new File(Bukkit.getServer().getUpdateFolderFile(), Cardinal.getInstance().getPluginFileName());
                         File tmp = new File(to.getPath() + ".update");
                         if (!tmp.exists()) {
                             Bukkit.getServer().getUpdateFolderFile().mkdirs();

@@ -93,6 +93,10 @@ public class Cardinal extends JavaPlugin {
         return database;
     }
 
+    public String getPluginFileName() {
+        return this.getFile().getName();
+    }
+
     public TabList getTabList() {
         return tabList;
     }
