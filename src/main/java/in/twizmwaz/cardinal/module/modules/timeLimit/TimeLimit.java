@@ -97,7 +97,7 @@ public class TimeLimit implements Module {
                     List<Double> proximity1 = new ArrayList<Double>(){};
                     List<Double> proximity2 = new ArrayList<Double>(){};
                     for (GameObjective obj : GameHandler.getGameHandler().getMatch().getModules().getModules(GameObjective.class)) {
-                        if (obj.isRequired() && obj.isTouched()){
+                        if (obj.isRequired() && !obj.isComplete() && obj.isTouched()){
                             if (obj instanceof WoolObjective){
                                 if (obj.getTeam().equals(team1)) {
                                     closestCompletion1.add(50);
