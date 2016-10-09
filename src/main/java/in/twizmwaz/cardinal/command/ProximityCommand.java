@@ -81,7 +81,7 @@ public class ProximityCommand {
         if (objective instanceof FlagObjective) message += ((FlagObjective) objective).getChatColor();
         message += WordUtils.capitalizeFully(objective.getName().replaceAll("_", " ")) + " ";
         message += objective.isComplete() ? ChatColor.GREEN + "COMPLETE " : objective.isTouched() ? ChatColor.YELLOW + "TOUCHED " : ChatColor.RED + "UNTOUCHED ";
-        if (proximityHandler != null) {
+        if (proximityHandler != null && !objective.isComplete()) {
             message += ChatColor.GRAY + proximityHandler.getProximityName() + ": ";
             message += ChatColor.AQUA + proximityHandler.getProximityAsString();
         }
