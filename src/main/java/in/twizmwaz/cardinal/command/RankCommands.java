@@ -17,7 +17,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RankCommands {
@@ -107,17 +106,22 @@ public class RankCommands {
                         sender.sendMessage(ChatColor.RED + ChatConstant.ERROR_NO_PLAYER_MATCH.getMessage(ChatUtil.getLocale(sender)));
                         return;
                     }
+                    StringBuilder playerRanks = new StringBuilder()
+                            .append(ChatColor.GRAY)
+                            .append(" ")
+                            .append(Players.getName(player))
+                            .append(ChatColor.GRAY)
+                            .append(" - ");
+                    List<Rank> ranks = Rank.getRanks(player.getUniqueId());
+                    for (int i = 0; i < Rank.getRanks(player.getUniqueId()).size(); i++) {
+                        playerRanks.append(ranks.get(i).getFlair())
+                                .append(" ")
+                                .append(ChatColor.GRAY)
+                                .append(ranks.get(i).getName());
+                        if (i < ranks.size() - 1) playerRanks.append(", ");
+                    }
                     sender.sendMessage(ChatColor.GOLD + new LocalizedChatMessage(ChatConstant.GENERIC_RANKS).getMessage(ChatUtil.getLocale(sender)));
-                    List<Rank> playerRanks = new ArrayList<>();
-                    for (Rank rank : Rank.getRanks()) {
-                        if (rank.contains(player.getUniqueId())) playerRanks.add(rank);
-                    }
-                    StringBuilder resultPlayerRanks = new StringBuilder().append(ChatColor.GRAY + " " + Players.getName(player) + ChatColor.GRAY + " - ");
-                    for (int i = 0; i < playerRanks.size(); i++) {
-                        resultPlayerRanks.append(playerRanks.get(i).getFlair() + " " + ChatColor.GRAY).append(playerRanks.get(i).getName()).toString();
-                        if (i < playerRanks.size() - 1) resultPlayerRanks.append(", ");
-                    }
-                    sender.sendMessage(resultPlayerRanks.toString());
+                    sender.sendMessage(playerRanks.toString());
                 }
             });
         }
@@ -126,9 +130,8 @@ public class RankCommands {
     @Command(aliases = {"info"}, desc = "View info about a certain rank.", min = 1, usage = "[rank]", flags = "a")
     public static void info(final CommandContext args, CommandSender sender) throws CommandException {
         Rank rank = Rank.getRank(args.getString(0));
-        if (rank == null) {
+        if (rank == null)
             throw new CommandException(ChatConstant.ERROR_NO_RANK_MATCH.getMessage(ChatUtil.getLocale(sender)));
-        }
         sender.sendMessage(ChatColor.GOLD + ChatConstant.GENERIC_RANK_INFO.asMessage().getMessage(ChatUtil.getLocale(sender)) + ": ");
         sender.sendMessage(ChatColor.GRAY + " " + ChatConstant.MISC_NAME.asMessage().getMessage(ChatUtil.getLocale(sender)) + ": " + (rank.getFlair().equals("") ? "" : rank.getFlair() + " ") + ChatColor.GRAY + rank.getName());
         sender.sendMessage(ChatColor.GRAY + " " + ChatConstant.MISC_STAFF.asMessage().getMessage(ChatUtil.getLocale(sender)) + ": " + rank.isStaffRank());
@@ -136,26 +139,18 @@ public class RankCommands {
             sender.sendMessage(ChatColor.GRAY + " " + ChatConstant.MISC_DEFAULT.asMessage().getMessage(ChatUtil.getLocale(sender)) + ": " + rank.isDefaultRank());
         if (rank.getParent() != null)
             sender.sendMessage(ChatColor.GRAY + " " + ChatConstant.MISC_PARENT.asMessage().getMessage(ChatUtil.getLocale(sender)) + ": " + rank.getParent());
-        StringBuilder resultMembers = new StringBuilder().append(ChatColor.GRAY + " " + ChatConstant.UI_ONLINE.asMessage().getMessage(ChatUtil.getLocale(sender)) + " ");
-        List<Player> rankMembers = new ArrayList<>();
-        for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
-            if (rank.contains(player.getUniqueId())) rankMembers.add(player.getPlayer());
+        StringBuilder members = new StringBuilder();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (rank.contains(player.getUniqueId()))
+                members.append(Players.getName(player))
+                        .append(ChatColor.RESET)
+                        .append(", ");
         }
-        for (int i = 0; i < rankMembers.size(); i++) {
-            resultMembers.append(Players.getName(rankMembers.get(i))).append(ChatColor.RESET);
-            if (i < rankMembers.size() - 1) resultMembers.append(", ");
-        }
-        if (rankMembers.size() > 0) sender.sendMessage(resultMembers.toString());
-        if (args.hasFlag('a')) {
-            List<String> permissionList = new ArrayList<>();
+        if (members.length() > 2) sender.sendMessage(ChatColor.GRAY + " " + ChatConstant.UI_ONLINE.asMessage().getMessage(ChatUtil.getLocale(sender)) + " " + members.substring(0, members.length() - 2));
+        if (args.hasFlag('a') && rank.getPermissions().size() > 0) {
+            sender.sendMessage(ChatColor.GRAY + " " + ChatConstant.MISC_PERMISSIONS.asMessage().getMessage(ChatUtil.getLocale(sender)) + ":");
             for (String permission : rank.getPermissions()) {
-                permissionList.add(permission);
-            }
-            if (permissionList.size() > 0) {
-                sender.sendMessage(ChatColor.GRAY + " " + ChatConstant.MISC_PERMISSIONS.asMessage().getMessage(ChatUtil.getLocale(sender)) + ":");
-                for (int i = 0; i < permissionList.size(); i++) {
-                    sender.sendMessage(ChatColor.GRAY + "  - " + permissionList.get(i));
-                }
+                sender.sendMessage(ChatColor.GRAY + "  - " + permission);
             }
         }
     }
