@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.rotation;
 
 import in.twizmwaz.cardinal.util.Contributor;
+import org.bukkit.util.CachedServerIcon;
 
 import java.io.File;
 import java.util.List;
@@ -12,13 +13,14 @@ public class LoadedMap {
     private final List<String> rules;
     private final int maxPlayers;
     private final File folder;
+    private final CachedServerIcon icon;
 
     /**
      * @param name    The name of the map
      * @param authors The authors of the map
      * @param folder  The folder where the map can be found
      */
-    public LoadedMap(String name, String version, String objective, List<Contributor> authors, List<Contributor> contributors, List<String> rules, int maxPlayers, File folder) {
+    public LoadedMap(String name, String version, String objective, List<Contributor> authors, List<Contributor> contributors, List<String> rules, int maxPlayers, File folder, CachedServerIcon icon) {
         this.name = name;
         this.version = version;
         this.objective = objective;
@@ -27,6 +29,7 @@ public class LoadedMap {
         this.rules = rules;
         this.maxPlayers = maxPlayers;
         this.folder = folder;
+        this.icon = icon;
     }
 
     /**
@@ -83,5 +86,12 @@ public class LoadedMap {
      */
     public File getFolder() {
         return folder;
+    }
+
+    /**
+     * @return Returns server icon for the map.
+     */
+    public CachedServerIcon getIcon() {
+        return icon;
     }
 }

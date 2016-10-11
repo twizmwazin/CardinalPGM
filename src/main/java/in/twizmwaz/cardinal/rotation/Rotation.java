@@ -10,12 +10,16 @@ import in.twizmwaz.cardinal.util.Contributor;
 import in.twizmwaz.cardinal.util.DomUtil;
 import in.twizmwaz.cardinal.util.MojangUtil;
 import in.twizmwaz.cardinal.util.Numbers;
+import net.coobird.thumbnailator.Thumbnails;
 import org.apache.commons.io.Charsets;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.util.CachedServerIcon;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -123,7 +127,9 @@ public class Rotation {
                                 maxPlayers = maxPlayers + Numbers.parseInt(team.getAttributeValue("max"));
                             }
                         }
-                        loaded.add(new LoadedMap(name, version, objective, authors, contributors, rules, maxPlayers, map));
+                        File iconFile = new File(map, "map.png");
+                        CachedServerIcon icon = iconFile.exists() ? getIcon(iconFile) : null;
+                        loaded.add(new LoadedMap(name, version, objective, authors, contributors, rules, maxPlayers, map, icon));
                     } catch (Exception e) {
                         Bukkit.getLogger().log(Level.WARNING, "Failed to load map at " + map.getAbsolutePath());
                         if (Cardinal.getInstance().getConfig().getBoolean("displayMapLoadErrors")) {
@@ -308,6 +314,12 @@ public class Rotation {
                 }
             }
         });
+    }
+
+    private CachedServerIcon getIcon(File file) throws Exception {
+        BufferedImage originalImage = ImageIO.read(file);
+        BufferedImage thumbnail = Thumbnails.of(originalImage).forceSize(64, 64).asBufferedImage();
+        return Bukkit.getServer().loadServerIcon(thumbnail);
     }
 
 }

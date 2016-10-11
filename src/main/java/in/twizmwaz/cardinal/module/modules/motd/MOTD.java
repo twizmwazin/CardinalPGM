@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.motd;
 
 import in.twizmwaz.cardinal.Cardinal;
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.ChatColor;
@@ -46,6 +47,8 @@ public class MOTD implements Module {
         } else {
             event.setMotd(color + "\u00BB " + ChatColor.AQUA + name + color + " \u00AB");
         }
-
+        if (GameHandler.getGameHandler().getMatch().getLoadedMap().getIcon() != null) {
+            event.setServerIcon(GameHandler.getGameHandler().getMatch().getLoadedMap().getIcon());
+        }
     }
 }
