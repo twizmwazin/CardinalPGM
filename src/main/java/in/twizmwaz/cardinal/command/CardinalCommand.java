@@ -25,6 +25,10 @@ public class CardinalCommand {
     public static void cardinal(final CommandContext cmd, CommandSender sender) throws CommandPermissionsException {
         if (cmd.hasFlag('v')) {
             sender.sendMessage(ChatColor.GOLD + ChatConstant.UI_VERSION.asMessage(new UnlocalizedChatMessage(Cardinal.getInstance().getDescription().getVersion())).getMessage(ChatUtil.getLocale(sender)));
+            sender.sendMessage(ChatColor.GOLD + ChatConstant.UI_JAVA_VERSION.asMessage(new UnlocalizedChatMessage(System.getProperty("java.version"))).getMessage(ChatUtil.getLocale(sender)));
+            if (System.getProperty("java.version").startsWith("1.7")) {
+                sender.sendMessage(ChatColor.DARK_RED + ChatConstant.UI_JAVA_UPDATE.getMessage(ChatUtil.getLocale(sender)));
+            }
             Bukkit.getScheduler().runTaskAsynchronously(Cardinal.getInstance(), UpdateHandler.getUpdateHandler().getNotificationTask(sender));
         }
         if (cmd.hasFlag('r')) {

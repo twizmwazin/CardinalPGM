@@ -336,6 +336,8 @@
         <latestVersion>Cardinal is up-to-date!</latestVersion>
         <updateAvailable>A newer build of Cardinal is available!</updateAvailable>
         <version>This server is running Cardinal version {0}</version>
+        <java-version>This server is running Java version {0}</java-version>
+        <java-update>Sportbukkit &amp; Cardinal will stop working with java 7 shortly, you need to update java</java-update>
         <matchReportUpload>Uploading match report...</matchReportUpload>
         <matchReportSuccess>Match report successfully uploaded! You can view it at {0}</matchReportSuccess>
         <matchReportFailed>An error occurred while uploading the match report</matchReportFailed>

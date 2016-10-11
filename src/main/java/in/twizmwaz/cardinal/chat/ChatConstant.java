@@ -338,6 +338,8 @@ public enum ChatConstant {
     UI_LATEST_VERSION("userInterface.latestVersion"),
     UI_UPDATE_AVAILABLE("userInterface.updateAvailable"),
     UI_VERSION("userInterface.version"),
+    UI_JAVA_VERSION("userInterface.java-version"),
+    UI_JAVA_UPDATE("userInterface.java-update"),
     UI_MATCH_REPORT_UPLOAD("userInterface.matchReportUpload"),
     UI_MATCH_REPORT_SUCCESS("userInterface.matchReportSuccess"),
     UI_MATCH_REPORT_FAILED("userInterface.matchReportFailed"),
