@@ -54,4 +54,10 @@ public class Contributor {
     public UUID getUniqueId() {
         return uniqueId;
     }
+
+    public String toChatMessage() {
+        return getDisplayName() +
+                (contribution != null ? ChatColor.GRAY + " - " + ChatColor.ITALIC + getContribution() : "");
+    }
+
 }

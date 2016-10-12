@@ -34,6 +34,7 @@
         <cycle>Please wait for the server to cycle</cycle>
         <playerCommand>You must be a player to use this command.</playerCommand>
         <noMapMatch>No maps matched query.</noMapMatch>
+        <multipleMapMatch>Multiple maps matched query:{0}.</multipleMapMatch>
         <noTeamMatch>No teams matched query.</noTeamMatch>
         <multipleTeamMatch>Multiple teams matched query: {0}</multipleTeamMatch>
         <noRotMatch>No rotations matched query.</noRotMatch>
@@ -191,7 +192,7 @@
         <whitelistedPlayersOnline>There are currently {0} whitelisted players online.</whitelistedPlayersOnline>
         <whitelistedPlayerOutOfOnline>Of the online players, {0} player is whitelisted.</whitelistedPlayerOutOfOnline>
         <whitelistedPlayersOutOfOnline>Of the online players, {0} players are whitelisted.</whitelistedPlayersOutOfOnline>
-        <monumentModes>Monument Modes</monumentModes>
+        <monumentModes>Monument Modes {0}</monumentModes>
         <nextMode>Next mode: {0} ({1} left)</nextMode>
         <modesPushedForwards>All modes have been pushed forwards by {0}</modesPushedForwards>
         <modesPushedBackwards>All modes have been pushed backwards by {0}</modesPushedBackwards>
@@ -210,7 +211,7 @@
         <mutedBy>You were muted by {0}</mutedBy>
         <unmuted>You unmuted {0}</unmuted>
         <unmutedBy>You were unmuted by {0}</unmutedBy>
-        <createdBy>Created by</createdBy>
+        <createdBy>Created by {0}</createdBy>
         <frozenBy>You have been frozen by {0}</frozenBy>
         <unfrozenBy>You have been unfrozen by {0}</unfrozenBy>
         <froze>{0} froze {1}</froze>
@@ -232,8 +233,8 @@
         <others>others</others>
         <blocks>{0} blocks</blocks>
         <ownership>{0}'s {1}</ownership>
-        <and>and</and>
-        <by>by</by>
+        <and>{0} and {1}</and>
+        <by>{0} by {1}</by>
         <team>Team</team>
         <match>the match</match>
         <youHave>You have</youHave>
@@ -248,15 +249,15 @@
         <permissions>Permissions</permissions>
     </misc>
     <userInterface>
-        <mapLoaded>Loaded Maps</mapLoaded>
+        <mapLoaded>Loaded Maps {0}</mapLoaded>
+        <repoLoaded>Loaded Repositories {0}</repoLoaded>
         <mapObjective>Objective</mapObjective>
         <mapAuthor>Author</mapAuthor>
         <mapAuthors>Authors</mapAuthors>
         <mapContributors>Contributors</mapContributors>
         <mapRules>Rules</mapRules>
         <mapMax>Max players</mapMax>
-        <rotationCurrent>Current Rotation</rotationCurrent>
-        <rotationLoaded>Loaded Rotations</rotationLoaded>
+        <rotationCurrent>Current Rotation {0}</rotationCurrent>
         <matchInfo>Match Info</matchInfo>
         <match>Match #{0}</match>
         <time>Time</time>

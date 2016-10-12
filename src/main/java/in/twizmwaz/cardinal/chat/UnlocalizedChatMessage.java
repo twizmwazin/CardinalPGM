@@ -26,10 +26,10 @@ public class UnlocalizedChatMessage implements ChatMessage {
     public String getMessage(String locale) {
         String message = this.message;
         for (int i = 0; i < this.messages.length; i++) {
-            message = message.replaceAll("\\{" + i + "\\}", this.messages[i].getMessage(locale));
+            message = message.replace("{" + i + "}", this.messages[i].getMessage(locale));
         }
         for (int i = 0; i < this.strings.length; i++) {
-            message = message.replaceAll("\\{" + i + "\\}", this.strings[i]);
+            message = message.replace("{" + i + "}", this.strings[i]);
         }
         return message;
     }

@@ -1,8 +1,5 @@
-package in.twizmwaz.cardinal.rotation.exception;
+package in.twizmwaz.cardinal.repository.exception;
 
-/**
- * Created by kevin on 11/16/14.
- */
 public class RotationLoadException extends Exception {
 
     private final String message;
@@ -12,6 +9,7 @@ public class RotationLoadException extends Exception {
 
     }
 
+    @Override
     public String getMessage() {
         return message;
     }

@@ -177,7 +177,7 @@
         <whitelistedPlayersOnline>Il y a actuellement {0} joueurs connectés présent sur la whitelist.</whitelistedPlayersOnline>
         <whitelistedPlayerOutOfOnline>Sur les joueurs connectés, {0} est sur la whitelist.</whitelistedPlayerOutOfOnline>
         <whitelistedPlayersOutOfOnline>Sur les joueurs connectés, {0} sont sur la whitelist.</whitelistedPlayersOutOfOnline>
-        <monumentModes>Etats des monuments</monumentModes>
+        <monumentModes>Etats des monuments {0}</monumentModes>
         <nextMode>Prochain état: {0} ({1} restant)</nextMode>
         <modesPushedForwards>Tous les états ont été avancés de {0}</modesPushedForwards>
         <modesPushedBackwards>Tous les états ont été reculés de {0}</modesPushedBackwards>
@@ -203,8 +203,8 @@
         <others>les autres joueurs</others>
         <blocks>{0} blocs</blocks>
         <ownership>{1} de {0}</ownership>
-        <and>et</and>
-        <by>par</by>
+        <and>{0} et {1}</and>
+        <by>{0} par {1}</by>
         <team>Équipe</team>
         <match>la partie</match>
         <youHave>Vous avez</youHave>
@@ -214,15 +214,14 @@
         <score>Score</score>
     </misc>
     <userInterface>
-        <mapLoaded>Maps chargées</mapLoaded>
+        <mapLoaded>Maps chargées {0}</mapLoaded>
         <mapObjective>Objectif</mapObjective>
         <mapAuthor>Auteur</mapAuthor>
         <mapAuthors>Auteurs</mapAuthors>
         <mapContributors>Contributeurs</mapContributors>
         <mapRules>Règles</mapRules>
         <mapMax>Maximum de joueurs</mapMax>
-        <rotationCurrent>Rotation actuelle</rotationCurrent>
-        <rotationLoaded>Rotations chargées</rotationLoaded>
+        <rotationCurrent>Rotation actuelle {0}</rotationCurrent>
         <matchInfo>Informations sur le match</matchInfo>
         <time>Temps</time>
         <matchTime>Durée du match</matchTime>

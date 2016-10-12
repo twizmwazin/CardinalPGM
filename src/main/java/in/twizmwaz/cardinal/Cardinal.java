@@ -29,7 +29,7 @@ import in.twizmwaz.cardinal.command.ProximityCommand;
 import in.twizmwaz.cardinal.command.PunishmentCommands;
 import in.twizmwaz.cardinal.command.RankCommands;
 import in.twizmwaz.cardinal.command.ReadyCommand;
-import in.twizmwaz.cardinal.command.RotationCommands;
+import in.twizmwaz.cardinal.command.RepositoryCommands;
 import in.twizmwaz.cardinal.command.ScoreCommand;
 import in.twizmwaz.cardinal.command.SettingCommands;
 import in.twizmwaz.cardinal.command.SnowflakesCommand;
@@ -39,7 +39,8 @@ import in.twizmwaz.cardinal.command.TeleportCommands;
 import in.twizmwaz.cardinal.command.TimeLimitCommand;
 import in.twizmwaz.cardinal.command.WhitelistCommands;
 import in.twizmwaz.cardinal.rank.Rank;
-import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
+import in.twizmwaz.cardinal.repository.RepositoryManager;
+import in.twizmwaz.cardinal.repository.exception.RotationLoadException;
 import in.twizmwaz.cardinal.settings.Setting;
 import in.twizmwaz.cardinal.settings.SettingValue;
 import in.twizmwaz.cardinal.tabList.TabList;
@@ -108,21 +109,21 @@ public class Cardinal extends JavaPlugin {
         try {
             this.commands.execute(cmd.getName(), args, sender, sender);
         } catch (CommandPermissionsException e) {
-            sender.sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_NO_PERMISSION).getMessage(locale));
+            sender.sendMessage(ChatUtil.getWarningMessage(new LocalizedChatMessage(ChatConstant.ERROR_NO_PERMISSION).getMessage(locale)));
         } catch (MissingNestedCommandException e) {
-            sender.sendMessage(ChatColor.RED + e.getUsage().replace("{cmd}", cmd.getName()));
+            sender.sendMessage(ChatUtil.getWarningMessage(e.getUsage().replace("{cmd}", cmd.getName())));
         } catch (CommandUsageException e) {
-            sender.sendMessage(ChatColor.RED + e.getMessage());
-            sender.sendMessage(ChatColor.RED + e.getUsage());
+            sender.sendMessage(ChatUtil.getWarningMessage(e.getMessage()));
+            sender.sendMessage(ChatUtil.getWarningMessage(e.getUsage()));
         } catch (WrappedCommandException e) {
             if (e.getCause() instanceof NumberFormatException) {
-                sender.sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_NUMBER_STRING).getMessage(locale));
+                sender.sendMessage(ChatUtil.getWarningMessage(new LocalizedChatMessage(ChatConstant.ERROR_NUMBER_STRING).getMessage(locale)));
             } else {
-                sender.sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_UNKNOWN_ERROR).getMessage(locale));
+                sender.sendMessage(ChatUtil.getWarningMessage(new LocalizedChatMessage(ChatConstant.ERROR_UNKNOWN_ERROR).getMessage(locale)));
                 e.printStackTrace();
             }
         } catch (CommandException e) {
-            sender.sendMessage(ChatColor.RED + e.getMessage());
+            sender.sendMessage(ChatUtil.getWarningMessage(ChatColor.RED + e.getMessage()));
         }
         return true;
     }
@@ -146,13 +147,13 @@ public class Cardinal extends JavaPlugin {
         cmdRegister.register(ListCommand.class);
         cmdRegister.register(MapCommands.class);
         cmdRegister.register(MatchCommand.class);
-        cmdRegister.register(ModesCommand.class);
+        cmdRegister.register(ModesCommand.ModesParentCommand.class);
         cmdRegister.register(PrivateMessageCommands.class);
         cmdRegister.register(ProximityCommand.class);
         cmdRegister.register(PunishmentCommands.class);
         cmdRegister.register(RankCommands.RankParentCommand.class);
         cmdRegister.register(ReadyCommand.class);
-        cmdRegister.register(RotationCommands.class);
+        cmdRegister.register(RepositoryCommands.class);
         cmdRegister.register(ScoreCommand.class);
         cmdRegister.register(SettingCommands.class);
         cmdRegister.register(SnowflakesCommand.class);
@@ -345,7 +346,7 @@ public class Cardinal extends JavaPlugin {
             gameHandler.load();
         } catch (RotationLoadException e) {
             e.printStackTrace();
-            getLogger().severe(new LocalizedChatMessage(ChatConstant.GENERIC_REPO_RELOAD_FAIL, "" + GameHandler.getGameHandler().getRotation().getLoaded().size()).getMessage(Locale.getDefault().toString()));
+            getLogger().severe(new LocalizedChatMessage(ChatConstant.GENERIC_REPO_RELOAD_FAIL, "" + RepositoryManager.get().getMapSize()).getMessage(Locale.getDefault().toString()));
             setEnabled(false);
             return;
         }
@@ -367,6 +368,14 @@ public class Cardinal extends JavaPlugin {
 
     public JavaPlugin getPlugin() {
         return this;
+    }
+
+    public static String getNewRepoPath(String repoName) {
+        String reposPath = Cardinal.getInstance().getDataFolder().getAbsolutePath() +
+                File.separator + "repositories" + File.separator + repoName;
+        File repo = new File(reposPath);
+        if (!repo.exists()) repo.mkdirs();
+        return reposPath;
     }
 
 }

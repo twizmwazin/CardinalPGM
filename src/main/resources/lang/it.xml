@@ -118,20 +118,19 @@
         <others>Gli altri</others>
         <blocks>{0,number,integer} blocchi</blocks>
         <ownership>{0} di {1}</ownership>
-        <and>e</and>
-        <by>da</by>
+        <and>{0} e {1}</and>
+        <by>{0} da {1}</by>
         <team>Squadra</team>
     </misc>
     <userInterface>
-        <mapLoaded>Mappe caricate</mapLoaded>
+        <mapLoaded>Mappe caricate {0}</mapLoaded>
         <mapObjective>Obiettivo</mapObjective>
         <mapAuthor>Autore</mapAuthor>
         <mapAuthors>Autori</mapAuthors>
         <mapContributors>Collaboratori</mapContributors>
         <mapRules>Regole</mapRules>
         <mapMax>Massimo di giocatori</mapMax>
-        <rotationCurrent>Rotazione attuale</rotationCurrent>
-        <rotationLoaded>Rotazioni caricate</rotationLoaded>
+        <rotationCurrent>Rotazione attuale {0}</rotationCurrent>
         <matchInfo>Informazione sulla partita</matchInfo>
         <time>Tempo</time>
         <matchTime>Durazione della partita</matchTime>
