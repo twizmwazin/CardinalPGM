@@ -12,9 +12,9 @@ public class BelowParser extends RegionParser {
     public BelowParser(Element element) {
         super(element.getAttributeValue("name") != null ? element.getAttributeValue("name") : element.getAttributeValue("id"));
         Double
-                x = Numbers.parseDouble(element.getAttributeValue("x"), Double.MAX_VALUE),
-                y = Numbers.parseDouble(element.getAttributeValue("y"), Double.MAX_VALUE),
-                z = Numbers.parseDouble(element.getAttributeValue("z"), Double.MAX_VALUE);
+                x = Numbers.parseDouble(element.getAttributeValue("x"), Double.POSITIVE_INFINITY),
+                y = Numbers.parseDouble(element.getAttributeValue("y"), Double.POSITIVE_INFINITY),
+                z = Numbers.parseDouble(element.getAttributeValue("z"), Double.POSITIVE_INFINITY);
         vector = new Vector(x, y, z);
     }
 
