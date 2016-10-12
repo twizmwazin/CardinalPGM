@@ -5,84 +5,62 @@ import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
-import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
-import in.twizmwaz.cardinal.rotation.LoadedMap;
+import in.twizmwaz.cardinal.repository.LoadedMap;
+import in.twizmwaz.cardinal.repository.RepositoryManager;
+import in.twizmwaz.cardinal.repository.repositories.Repository;
+import in.twizmwaz.cardinal.util.Align;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Contributor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import java.util.List;
+
 public class MapCommands {
 
-    @Command(aliases = {"map", "mapinfo"}, desc = "Shows information about the currently playing map.", usage = "")
+    private static final String TITLE_FORM = "" + ChatColor.DARK_PURPLE + ChatColor.BOLD;
+    private static final String CONT_FORM = "" + ChatColor.RESET + ChatColor.GOLD;
+
+    @Command(aliases = {"map", "mapinfo"}, flags = "lm:", desc = "Shows information about the currently playing map.")
     public static void map(final CommandContext args, CommandSender sender) throws CommandException {
-        LoadedMap mapInfo;
-        if (args.argsLength() == 0) {
-            mapInfo = GameHandler.getGameHandler().getMatch().getLoadedMap();
-        } else {
-            String search = "";
-            for (int a = 0; a < args.argsLength(); a++) {
-                search = search + args.getString(a) + " ";
-            }
-            mapInfo = GameHandler.getGameHandler().getRotation().getMap(search.trim());
-            if (mapInfo == null) {
-                throw new CommandException(ChatConstant.ERROR_NO_MAP_MATCH.getMessage(ChatUtil.getLocale(sender)));
-            }
-        }
-        sender.sendMessage(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "----------" + ChatColor.DARK_AQUA + " " + mapInfo.getName() + " " + ChatColor.GRAY + mapInfo.getVersion() + ChatColor.RED + " " + ChatColor.STRIKETHROUGH + "----------");
-        sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + ChatConstant.UI_MAP_OBJECTIVE.getMessage(ChatUtil.getLocale(sender)) + ": " + ChatColor.RESET + "" + ChatColor.GOLD + mapInfo.getObjective());
-        if (mapInfo.getAuthors().size() > 1) {
-            sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + ChatConstant.UI_MAP_AUTHORS.getMessage(ChatUtil.getLocale(sender)) + ":");
-            for (Contributor contributor : mapInfo.getAuthors()) {
-                if (contributor.getContribution() != null) {
-                    sender.sendMessage("  " + contributor.getDisplayName() + ChatColor.GRAY + " - " + ChatColor.ITALIC + contributor.getContribution());
-                } else {
-                    sender.sendMessage("  " + contributor.getDisplayName());
-                }
-            }
-        } else {
-            if (mapInfo.getAuthors().get(0).getContribution() != null) {
-                sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + ChatConstant.UI_MAP_AUTHOR.getMessage(ChatUtil.getLocale(sender)) + ": " + mapInfo.getAuthors().get(0).getDisplayName() + ChatColor.GRAY + " - " + ChatColor.ITALIC + mapInfo.getAuthors().get(0).getContribution());
-            } else {
-                sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + ChatConstant.UI_MAP_AUTHOR.getMessage(ChatUtil.getLocale(sender)) + ": " + mapInfo.getAuthors().get(0).getDisplayName());
-            }
-        }
-        if (mapInfo.getContributors().size() > 0) {
-            sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + ChatConstant.UI_MAP_CONTRIBUTORS.getMessage(ChatUtil.getLocale(sender)) + ":");
-            for (Contributor contributor : mapInfo.getContributors()) {
-                if (contributor.getContribution() != null) {
-                    sender.sendMessage("  " + contributor.getDisplayName() + ChatColor.GRAY + " - " + ChatColor.ITALIC + contributor.getContribution());
-                } else {
-                    sender.sendMessage("  " + contributor.getDisplayName());
-                }
-            }
-        }
+        LoadedMap mapInfo = args.hasFlag('m') ? RepositoryManager.get().getMap(args.getFlagInteger('m')) :
+                        args.argsLength() == 0 ? GameHandler.getGameHandler().getMatch().getLoadedMap() :
+                                CycleCommand.getMap(sender, args.getJoinedStrings(0));
+        if (mapInfo == null) 
+            throw new CommandException(ChatConstant.ERROR_NO_MAP_MATCH.getMessage(ChatUtil.getLocale(sender)));
+        sender.sendMessage(Align.padMessage(mapInfo.toShortMessage(ChatColor.DARK_AQUA + "", args.hasFlag('l'), true), ChatColor.RED));
+        sender.sendMessage(TITLE_FORM + ChatConstant.UI_MAP_OBJECTIVE.getMessage(ChatUtil.getLocale(sender)) + ": "
+                + CONT_FORM + mapInfo.getObjective());
+        sendContributors(sender, ChatConstant.UI_MAP_AUTHOR, ChatConstant.UI_MAP_AUTHORS, mapInfo.getAuthors());
+        sendContributors(sender, ChatConstant.UI_MAP_CONTRIBUTORS, ChatConstant.UI_MAP_CONTRIBUTORS, mapInfo.getContributors());
         if (mapInfo.getRules().size() > 0) {
-            sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + ChatConstant.UI_MAP_RULES.getMessage(ChatUtil.getLocale(sender)) + ":");
-            for (int i = 1; i <= mapInfo.getRules().size(); i++) {
-                sender.sendMessage(ChatColor.WHITE + "" + i + ") " + ChatColor.GOLD + mapInfo.getRules().get(i - 1));
+            sender.sendMessage(TITLE_FORM + ChatConstant.UI_MAP_RULES.getMessage(ChatUtil.getLocale(sender)) + ":");
+            for (int i = 1; i <= mapInfo.getRules().size(); i++)
+                sender.sendMessage(ChatColor.WHITE + "" + i + ") " + CONT_FORM + mapInfo.getRules().get(i - 1));
+        }
+        sender.sendMessage(TITLE_FORM + ChatConstant.UI_MAP_MAX.getMessage(ChatUtil.getLocale(sender)) + ": "
+                + CONT_FORM + mapInfo.getMaxPlayers());
+        if (args.hasFlag('l')) {
+            Repository repo = GameHandler.getGameHandler().getRepositoryManager().getRepo(mapInfo);
+            if (repo != null) {
+                sender.sendMessage(TITLE_FORM + "Source: " + repo.toChatMessage(sender.isOp()));
+                sender.sendMessage(TITLE_FORM + "Folder: " + CONT_FORM +
+                        repo.getRoot().toURI().relativize(mapInfo.getFolder().toURI()).getPath());
+            } else {
+                sender.sendMessage(TITLE_FORM + "Source: " + CONT_FORM + "Unknown");
             }
         }
-        sender.sendMessage(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + ChatConstant.UI_MAP_MAX.getMessage(ChatUtil.getLocale(sender)) + ": " + ChatColor.RESET + "" + ChatColor.GOLD + mapInfo.getMaxPlayers());
     }
 
-    @Command(aliases = {"next", "nextmap", "nm", "mn", "mapnext"}, desc = "Shows next map.", usage = "")
-    public static void next(final CommandContext cmd, CommandSender sender) {
-        LoadedMap next = GameHandler.getGameHandler().getCycle().getMap();
-        if (next.getAuthors().size() == 1) {
-            sender.sendMessage(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.GENERIC_MAP_NEXT, ChatColor.GOLD + next.getName() + ChatColor.DARK_PURPLE + " " + ChatConstant.MISC_BY.getMessage(ChatUtil.getLocale(sender)) + " " + ChatColor.RED + next.getAuthors().get(0).getName()).getMessage(ChatUtil.getLocale(sender)));
-        } else if (next.getAuthors().size() > 1) {
-            String result = ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.GENERIC_MAP_NEXT, ChatColor.GOLD + next.getName() + ChatColor.DARK_PURPLE + " " + ChatConstant.MISC_BY.getMessage(ChatUtil.getLocale(sender)) + " ").getMessage(ChatUtil.getLocale(sender));
-            for (Contributor author : next.getAuthors()) {
-                if (next.getAuthors().indexOf(author) < next.getAuthors().size() - 2) {
-                    result = result + ChatColor.RED + author.getName() + ChatColor.DARK_PURPLE + ", ";
-                } else if (next.getAuthors().indexOf(author) == next.getAuthors().size() - 2) {
-                    result = result + ChatColor.RED + author.getName() + ChatColor.DARK_PURPLE + " " + ChatConstant.MISC_AND.getMessage(ChatUtil.getLocale(sender)) + " ";
-                } else if (next.getAuthors().indexOf(author) == next.getAuthors().size() - 1) {
-                    result = result + ChatColor.RED + author.getName();
-                }
-            }
-            sender.sendMessage(result);
+    private static void sendContributors(CommandSender sender, ChatConstant titleSing,
+                                         ChatConstant titlePlur, List<Contributor> contributors) {
+        if (contributors.size() == 0) return;
+        if (contributors.size() == 1) {
+            sender.sendMessage(TITLE_FORM + titleSing.getMessage(ChatUtil.getLocale(sender)) + ": " + contributors.get(0).toChatMessage());
+            return;
         }
+        sender.sendMessage(TITLE_FORM + titlePlur.getMessage(ChatUtil.getLocale(sender)) + ":");
+        contributors.forEach(author -> sender.sendMessage("  " + author.toChatMessage()));
     }
+
 }

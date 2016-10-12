@@ -12,6 +12,7 @@ import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjective;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.settings.Settings;
 import in.twizmwaz.cardinal.util.ChatUtil;
+import in.twizmwaz.cardinal.util.Strings;
 import in.twizmwaz.cardinal.util.bossBar.BossBars;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
@@ -119,12 +120,15 @@ public class MonumentModes implements TaskedModule {
         return name;
     }
 
-    public void setTimeAfter(int after) {
-        this.after = after;
-    }
-
     public void changeBlock(Block block) {
         block.setTypeIdAndData(this.material.getLeft().getId(), (byte) (int) this.material.getRight(), true);
+    }
+    
+    public String toChatMessage() {
+        String strike = hasRan() ? ChatColor.STRIKETHROUGH + "" : "";
+        return ChatColor.GOLD + strike + "${index}. " + ChatColor.LIGHT_PURPLE + strike + name + " - " + ChatColor.AQUA
+                + strike + Strings.formatTime(getTimeAfter()) + ChatColor.DARK_AQUA + strike +
+                (GameHandler.getGameHandler().getMatch().isRunning() ? " (" + Strings.formatTime(Math.max(getTimeAfter() - MatchTimer.getTimeInSeconds(), 0)) + " left)" : "");
     }
 
 }

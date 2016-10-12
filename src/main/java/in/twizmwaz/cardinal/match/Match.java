@@ -9,7 +9,8 @@ import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.startTimer.StartTimer;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
-import in.twizmwaz.cardinal.rotation.LoadedMap;
+import in.twizmwaz.cardinal.repository.LoadedMap;
+import in.twizmwaz.cardinal.repository.repositories.Repository;
 import in.twizmwaz.cardinal.util.DomUtil;
 import in.twizmwaz.cardinal.util.Proto;
 import org.bukkit.Bukkit;
@@ -35,11 +36,11 @@ public class Match {
     private Document document;
     private Proto proto;
 
-    public Match(UUID id, LoadedMap map) {
+    public Match(UUID id, LoadedMap map, Repository repo) {
         this.uuid = id;
         this.modules = new ModuleCollection<>();
         try {
-            this.document = DomUtil.parseMap(new File(map.getFolder() + "/map.xml"));
+            this.document = DomUtil.parseMap(repo, new File(map.getFolder() + "/map.xml"));
         } catch (JDOMException | IOException e) {
             e.printStackTrace();
         }

@@ -132,21 +132,20 @@
         <others>otros</others>
         <blocks>{0} bloques</blocks>
         <ownership>{1} de {0}</ownership>
-        <and>y</and>
-        <by>por</by>
+        <and>{0} y {1}</and>
+        <by>{0} por {1}</by>
         <team>Equipo</team>
         <name>Nombre</name>
     </misc>
     <userInterface>
-        <mapLoaded>Mapas cargados</mapLoaded>
+        <mapLoaded>Mapas cargados {0}</mapLoaded>
         <mapObjective>Objetivo</mapObjective>
         <mapAuthor>Autor</mapAuthor>
         <mapAuthors>Autores</mapAuthors>
         <mapContributors>Colaboradores</mapContributors>
         <mapRules>Reglas</mapRules>
         <mapMax>Máximo de jugadores</mapMax>
-        <rotationCurrent>Rotación actual</rotationCurrent>
-        <rotationLoaded>Rotaciones cargadas</rotationLoaded>
+        <rotationCurrent>Rotación actual {0}</rotationCurrent>
         <matchInfo>Información de la partida</matchInfo>
         <time>Tiempo</time>
         <matchTime>Tiempo de la partida</matchTime>

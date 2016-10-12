@@ -1,7 +1,7 @@
 package in.twizmwaz.cardinal.cycle;
 
 import in.twizmwaz.cardinal.GameHandler;
-import in.twizmwaz.cardinal.rotation.LoadedMap;
+import in.twizmwaz.cardinal.repository.LoadedMap;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 

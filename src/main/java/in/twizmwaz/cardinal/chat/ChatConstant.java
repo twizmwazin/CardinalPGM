@@ -37,6 +37,7 @@ public enum ChatConstant {
     ERROR_CYCLE("error.cycle"),
     ERROR_PLAYER_COMMAND("error.playerCommand"),
     ERROR_NO_MAP_MATCH("error.noMapMatch"),
+    ERROR_MULTIPLE_MAP_MATCH("error.multipleMapMatch"),
     ERROR_NO_TEAM_MATCH("error.noTeamMatch"),
     ERROR_MULTIPLE_TEAM_MATCH("error.multipleTeamMatch"),
     ERROR_NO_ROT_MATCH("error.noRotMatch"),
@@ -252,6 +253,7 @@ public enum ChatConstant {
     MISC_PERMISSIONS("misc.permissions"),
 
     UI_MAPLOADED("userInterface.mapLoaded"),
+    UI_REPOLOADED("userInterface.repoLoaded"),
     UI_MAP_OBJECTIVE("userInterface.mapObjective"),
     UI_MAP_AUTHOR("userInterface.mapAuthor"),
     UI_MAP_AUTHORS("userInterface.mapAuthors"),
@@ -259,7 +261,6 @@ public enum ChatConstant {
     UI_MAP_RULES("userInterface.mapRules"),
     UI_MAP_MAX("userInterface.mapMax"),
     UI_ROTATION_CURRENT("userInterface.rotationCurrent"),
-    UI_ROTATION_LOADED("userInterface.rotationLoaded"),
     UI_MATCH_INFO("userInterface.matchInfo"),
     UI_MATCH("userInterface.match"),
     UI_TIME("userInterface.time"),

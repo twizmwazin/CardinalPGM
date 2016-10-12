@@ -1,0 +1,33 @@
+<map proto="1.4.0">
+    <name>Default Map</name>
+    <version>1.0.0</version>
+    <objective>If you are seeing this, either your server couldn't load any map, your rotation is empty, or you cycled to it, either way this map's only purpose is to stop servers with no maps loaded from crashing</objective>
+    <authors>
+        <author uuid="e82603df-417d-4a95-bd1f-1720648be0b4"/> <!-- Pablete1234 -->
+    </authors>
+    <teams>
+        <team id="red-team" color="dark red" max="1" max-overfill="1">Red Player</team>
+        <team id="blue-team" color="blue" max="1" max-overfill="1">Blue Player</team>
+    </teams>
+    <blitz>
+        <lives>1</lives>
+        <map game="Default map"/>
+    </blitz>
+    <regions>
+        <point id="red-spawn">3,3,3</point>
+        <point id="blue-spawn">-2,3,-2</point>
+        <point id="obs-spawn">0.5,10,0.5</point>
+        <apply block="never"/>
+    </regions>
+    <spawns yaw="0" pitch="0">
+        <spawn team="red" kit="spawn" yaw="135">
+            <region id="red-spawn"/>
+        </spawn>
+        <spawn team="blue" kit="spawn" yaw="-45">
+            <region id="blue-spawn"/>
+        </spawn>
+        <default>
+            <region id="obs-spawn"/>
+        </default>
+    </spawns>
+</map>

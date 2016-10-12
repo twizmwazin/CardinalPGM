@@ -123,20 +123,19 @@
         <others>다른 사람들</others>
         <blocks>{0} 블록</blocks>
         <ownership>{0}의 {1}</ownership>
-        <and>와</and>
-        <by>의</by>
+        <and>{0} 와 {1}</and>
+        <by>{0} 의 {1}</by>
         <team>팀</team>
     </misc>
     <userInterface>
-        <mapLoaded>맵들</mapLoaded>
+        <mapLoaded>맵들 {0}</mapLoaded>
         <mapObjective>목표물</mapObjective>
         <mapAuthor>제작자</mapAuthor>
         <mapAuthors>제작자들</mapAuthors>
         <mapContributors>도와준 사람들</mapContributors>
         <mapRules>규칙</mapRules>
         <mapMax>최대 플레이어 수</mapMax>
-        <rotationCurrent>현재 로테이션</rotationCurrent>
-        <rotationLoaded>로드되있는 로테이션</rotationLoaded>
+        <rotationCurrent>현재 로테이션 {0}</rotationCurrent>
         <matchInfo>경기 정보</matchInfo>
         <time>시간</time>
         <matchTime>경기 시간</matchTime>

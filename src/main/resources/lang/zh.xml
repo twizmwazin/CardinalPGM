@@ -115,20 +115,19 @@
         <others>别人</others>
         <blocks>{0} 方块</blocks>
         <ownership>{0} 的 {1}</ownership>
-        <and>和</and>
-        <by>被</by>
+        <and>{0} 和 {1}</and>
+        <by>{0} 被 {1}</by>
         <team>队</team>
     </misc>
     <userInterface>
-        <mapLoaded>负载的游戏地图</mapLoaded>
+        <mapLoaded>负载的游戏地图 {0}</mapLoaded>
         <mapObjective>目标</mapObjective>
         <mapAuthor>作家</mapAuthor>
         <mapAuthors>作家们</mapAuthors>
         <mapContributors>贡献者们</mapContributors>
         <mapRules>规定</mapRules>
         <mapMax>最多玩着</mapMax>
-        <rotationCurrent>现在的游戏地图安排</rotationCurrent>
-        <rotationLoaded>负载的游戏地图安排</rotationLoaded>
+        <rotationCurrent>现在的游戏地图安排 {0}</rotationCurrent>
         <matchInfo>比赛报告</matchInfo>
         <time>时间</time>
         <matchTime>比赛时间</matchTime>
