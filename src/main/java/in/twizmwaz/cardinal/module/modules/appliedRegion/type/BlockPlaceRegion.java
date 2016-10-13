@@ -13,6 +13,7 @@ import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 
 public class BlockPlaceRegion extends AppliedRegion {
@@ -74,4 +75,12 @@ public class BlockPlaceRegion extends AppliedRegion {
             }
         }
     }
+
+    @EventHandler
+    public void onEntityChangeBlock(EntityChangeBlockEvent event) {
+        if (!event.isCancelled() && region.contains(new BlockRegion(null, event.getBlock().getLocation().toVector())) && filter.evaluate(event, event.getBlock()).equals(FilterState.DENY)) {
+            event.setCancelled(true);
+        }
+    }
+
 }

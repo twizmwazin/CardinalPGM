@@ -8,6 +8,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -50,7 +51,7 @@ public class CauseFilter extends FilterModule {
                 case MOB:
                     return event instanceof EntityEvent && ((EntityEvent) event).getEntity() instanceof Creature;
                 case PLAYER:
-                    return event instanceof PlayerEvent;
+                    return event instanceof PlayerEvent || event instanceof BlockPlaceEvent || event instanceof BlockBreakEvent;
 
                 case PUNCH:
                     return event instanceof PlayerInteractEvent
