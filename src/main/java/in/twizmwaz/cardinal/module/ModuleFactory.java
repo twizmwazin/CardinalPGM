@@ -60,6 +60,7 @@ import in.twizmwaz.cardinal.module.modules.proximityAlarm.ProximityAlarmBuilder;
 import in.twizmwaz.cardinal.module.modules.rage.RageBuilder;
 import in.twizmwaz.cardinal.module.modules.rank.RankModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.renewables.RenewablesBuilder;
 import in.twizmwaz.cardinal.module.modules.respawn.RespawnModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.scoreboard.ScoreboardModuleBuilder;
@@ -191,7 +192,8 @@ public class ModuleFactory {
                 StatsBuilder.class,
                 FallingBlocksBuilder.class,
                 SpectatorToolsBuilder.class,
-                ArrowModuleBuilder.class
+                ArrowModuleBuilder.class,
+                RenewablesBuilder.class
         ));
     }
 
