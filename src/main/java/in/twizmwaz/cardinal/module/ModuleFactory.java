@@ -26,6 +26,7 @@ import in.twizmwaz.cardinal.module.modules.destroyable.DestroyableObjectiveBuild
 import in.twizmwaz.cardinal.module.modules.difficulty.MapDifficultyBuilder;
 import in.twizmwaz.cardinal.module.modules.disableDamage.DisableDamageBuilder;
 import in.twizmwaz.cardinal.module.modules.fallingBlocks.FallingBlocksBuilder;
+import in.twizmwaz.cardinal.module.modules.feedback.FeedbackModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.freeze.FreezeModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.friendlyFire.FriendlyFireBuilder;
@@ -49,7 +50,6 @@ import in.twizmwaz.cardinal.module.modules.mob.MobModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.monumentModes.MonumentModesBuilder;
 import in.twizmwaz.cardinal.module.modules.motd.MOTDBuilder;
 import in.twizmwaz.cardinal.module.modules.multitrade.MultitradeBuilder;
-import in.twizmwaz.cardinal.module.modules.spectatorTools.SpectatorToolsBuilder;
 import in.twizmwaz.cardinal.module.modules.observers.ObserverModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.permissions.PermissionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.playable.PlayableBuilder;
@@ -67,6 +67,7 @@ import in.twizmwaz.cardinal.module.modules.scorebox.ScoreboxBuilder;
 import in.twizmwaz.cardinal.module.modules.snowflakes.SnowflakesBuilder;
 import in.twizmwaz.cardinal.module.modules.sound.SoundModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModuleBuilder;
+import in.twizmwaz.cardinal.module.modules.spectatorTools.SpectatorToolsBuilder;
 import in.twizmwaz.cardinal.module.modules.startTimer.StartTimerBuilder;
 import in.twizmwaz.cardinal.module.modules.stats.StatsBuilder;
 import in.twizmwaz.cardinal.module.modules.tasker.TaskerModuleBuilder;
@@ -191,7 +192,8 @@ public class ModuleFactory {
                 StatsBuilder.class,
                 FallingBlocksBuilder.class,
                 SpectatorToolsBuilder.class,
-                ArrowModuleBuilder.class
+                ArrowModuleBuilder.class,
+                FeedbackModuleBuilder.class
         ));
     }
 

@@ -30,7 +30,7 @@ public class MatchModule implements Module {
         HandlerList.unregisterAll(this);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onMatchEnd(MatchEndEvent event) {
         if (event.getTeam().isPresent()) {
             ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage("{0}", new LocalizedChatMessage(event.getTeam().get().isPlural() ? ChatConstant.UI_MATCH_WIN : ChatConstant.UI_MATCH_WINS, event.getTeam().get().getCompleteName() + ChatColor.WHITE)));
@@ -70,4 +70,5 @@ public class MatchModule implements Module {
             Teams.getTeamById("observers").get().add(player, true, false);
         }
     }
+
 }
