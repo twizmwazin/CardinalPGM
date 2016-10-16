@@ -1,24 +1,24 @@
-package in.twizmwaz.cardinal.module.modules.arrows;
+package in.twizmwaz.cardinal.module.modules.projectileParticles;
 
 import in.twizmwaz.cardinal.util.MiscUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
-import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Projectile;
 
-public class ArrowRunnable implements Runnable {
+public class ProjectileParticleRunnable implements Runnable {
 
     private static final float ZERO = 0.00001f;
 
-    private final Arrow arrow;
+    private final Projectile projectile;
     private final float x;
     private final float y;
     private final float z;
 
-    private Integer taskId = null;
+    private int taskId = -1;
 
-    protected ArrowRunnable(Arrow arrow, ChatColor chatColor) {
-        this.arrow = arrow;
+    protected ProjectileParticleRunnable(Projectile projectile, ChatColor chatColor) {
+        this.projectile = projectile;
         Color rgb = MiscUtil.convertChatColorToColor(chatColor);
         x = rgbToFloat(rgb.getRed());
         y = rgbToFloat(rgb.getGreen());
@@ -26,10 +26,7 @@ public class ArrowRunnable implements Runnable {
     }
 
     private static float rgbToFloat(int i) {
-        if (i == 0) {
-            return ZERO;
-        }
-        return (float) i / 255;
+        return Math.max((float) i / 255, ZERO);
     }
 
     public void setTask(int id) {
@@ -38,11 +35,11 @@ public class ArrowRunnable implements Runnable {
 
     @Override
     public void run() {
-        if (arrow.isOnGround() || arrow.isDead()) {
-            ArrowModule.arrowOnGround(arrow);
+        if (taskId == -1) return;
+        if (projectile.isOnGround() || projectile.isDead()) {
             Bukkit.getScheduler().cancelTask(taskId);
         } else {
-            ArrowModule.sendArrowParticle(arrow, x, y, z);
+            ProjectileParticlesModule.sendArrowParticle(projectile, x, y, z);
         }
     }
 

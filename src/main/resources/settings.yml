@@ -19,12 +19,13 @@ settings:
 setting:
   ArrowParticles:
     aliases:
-    - arrows
+    - particles
+    - projectileParticles
     values:
     - 'all'
     - self[default]
     - 'none'
-    description: Show team colored particles with arrows
+    description: Show team colored particles with projectiles
   AttackSpeedometer:
     aliases:
     - cps
