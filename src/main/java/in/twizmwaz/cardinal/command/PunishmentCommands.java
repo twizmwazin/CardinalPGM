@@ -24,6 +24,8 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.concurrent.Callable;
+
 public class PunishmentCommands {
 
     @Command(aliases = {"kick", "k"}, desc = "Kick a player.", usage = "<player> [reason]", min = 1)
@@ -64,7 +66,7 @@ public class PunishmentCommands {
         Bukkit.getScheduler().runTaskAsynchronously(Cardinal.getInstance(), new AsyncCommand(args, sender) {
             @Override
             public void run() {
-                OfflinePlayer banned = Bukkit.getOfflinePlayer(args.getString(0));
+                final OfflinePlayer banned = Bukkit.getOfflinePlayer(args.getString(0));
                 if (!sender.isOp() && banned.isOp()) {
                     sender.sendMessage(ChatColor.RED + ChatConstant.ERROR_PLAYER_NOT_AFFECTED.getMessage(ChatUtil.getLocale(sender)));
                     return;
@@ -73,15 +75,20 @@ public class PunishmentCommands {
                     sender.sendMessage(ChatColor.RED + ChatConstant.ERROR_PLAYER_ALREADY_BANNED.getMessage(ChatUtil.getLocale(sender)));
                     return;
                 }
-                String reason = args.argsLength() > 1 ? args.getJoinedStrings(1) : "You have been banned!";
-                if (banned.isOnline()) {
-                    banned.getPlayer().kickPlayer(ChatColor.RED + "Permanently Banned" + ChatColor.GOLD + "  \u00BB  " + ChatColor.AQUA + reason);
-                }
-                Bukkit.broadcastMessage(Players.getName(sender) + ChatColor.GOLD + " \u00BB Permanent Ban \u00BB " + Players.getName(banned) + ChatColor.GOLD + " \u00BB " + reason);
-                Bukkit.getBanList(BanList.Type.NAME).addBan(args.getString(0), ChatColor.RED + "Permanently Banned" + ChatColor.GOLD + "  \u00BB  " + reason, null, sender.getName());
+                Bukkit.getScheduler().callSyncMethod(Cardinal.getInstance(), new Callable<Void>() {
+                    @Override
+                    public Void call() throws Exception {
+                        String reason = args.argsLength() > 1 ? args.getJoinedStrings(1) : "You have been banned!";
+                        if (banned.isOnline()) {
+                            banned.getPlayer().kickPlayer(ChatColor.RED + "Permanently Banned" + ChatColor.GOLD + "  \u00BB  " + ChatColor.AQUA + reason);
+                        }
+                        Bukkit.broadcastMessage(Players.getName(sender) + ChatColor.GOLD + " \u00BB Permanent Ban \u00BB " + Players.getName(banned) + ChatColor.GOLD + " \u00BB " + reason);
+                        Bukkit.getBanList(BanList.Type.NAME).addBan(args.getString(0), ChatColor.RED + "Permanently Banned" + ChatColor.GOLD + "  \u00BB  " + reason, null, sender.getName());
+                        return null;
+                    }
+                });
             }
         });
-
     }
 
     @Command(aliases = {"mute"}, usage = "<player>", desc = "Prevents a player from talking.", min = 1)
