@@ -1,6 +1,5 @@
 package in.twizmwaz.cardinal.module.modules.cycleTimer;
 
-import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.ChatMessage;
@@ -11,6 +10,7 @@ import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.util.ChatUtil;
+import in.twizmwaz.cardinal.util.Config;
 import in.twizmwaz.cardinal.util.bossBar.BossBars;
 import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
@@ -64,11 +64,9 @@ public class CycleTimerModule implements TaskedModule, Cancellable {
 
     @EventHandler
     public void onMatchEnd(MatchEndEvent event) {
-        int time = Cardinal.getInstance().getConfig().getInt("cycle");
-        if (time < 0) {
-            return;
+        if (Config.cycleAuto >= 0) {
+            cycleTimer(Config.cycleAuto);
         }
-        cycleTimer(time);
     }
 
     public int getTime() {

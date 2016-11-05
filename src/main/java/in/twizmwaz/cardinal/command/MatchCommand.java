@@ -3,7 +3,6 @@ package in.twizmwaz.cardinal.command;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
-import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -13,6 +12,7 @@ import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.module.modules.score.ScoreModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ChatUtil;
+import in.twizmwaz.cardinal.util.Config;
 import in.twizmwaz.cardinal.util.Scoreboards;
 import in.twizmwaz.cardinal.util.Strings;
 import in.twizmwaz.cardinal.util.Teams;
@@ -29,7 +29,7 @@ public class MatchCommand {
         if (sender instanceof Player) senderTeam = Teams.getTeamByPlayer((Player) sender).or(senderTeam);
 
         sender.sendMessage(ChatColor.STRIKETHROUGH + "                              " + ChatColor.RESET + ChatColor.YELLOW + " " + new LocalizedChatMessage(ChatConstant.UI_MATCH, GameHandler.getGameHandler().getMatch().getNumber() + "").getMessage(ChatUtil.getLocale(sender)) + " " + ChatColor.RESET + ChatColor.STRIKETHROUGH + "                              ");
-        sender.sendMessage(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TIME).getMessage(ChatUtil.getLocale(sender)) + ": " + ChatColor.GOLD + (Cardinal.getInstance().getConfig().getBoolean("matchTimeMillis") ? Strings.formatTimeWithMillis(MatchTimer.getTimeInSeconds()) : Strings.formatTime(MatchTimer.getTimeInSeconds())));
+        sender.sendMessage(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TIME).getMessage(ChatUtil.getLocale(sender)) + ": " + ChatColor.GOLD + (Config.matchTimeMillis ? Strings.formatTimeWithMillis(MatchTimer.getTimeInSeconds()) : Strings.formatTime(MatchTimer.getTimeInSeconds())));
         String teams = "";
         boolean hasObjectives = false;
         for (TeamModule team : Teams.getTeams()) {

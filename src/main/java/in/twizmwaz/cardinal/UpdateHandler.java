@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.util.ChatUtil;
+import in.twizmwaz.cardinal.util.Config;
 import in.twizmwaz.cardinal.util.GitUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -35,8 +36,7 @@ public class UpdateHandler {
         Bukkit.getScheduler().runTaskTimerAsynchronously(Cardinal.getInstance(), new Runnable() {
             @Override
             public void run() {
-                if (Cardinal.getInstance().getConfig().getBoolean("auto-update")
-                        && System.currentTimeMillis() - lastUpdate > TimeUnit.HOURS.toMillis(24)) {
+                if (Config.autoUpdate && System.currentTimeMillis() - lastUpdate > TimeUnit.HOURS.toMillis(24)) {
                     Bukkit.getScheduler().runTaskAsynchronously(Cardinal.getInstance(), UpdateHandler.getUpdateHandler().getUpdateTask(Bukkit.getConsoleSender()));
                 }
             }

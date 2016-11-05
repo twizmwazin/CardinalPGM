@@ -6,6 +6,7 @@ import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.header.HeaderModule;
 import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
+import in.twizmwaz.cardinal.util.Config;
 import in.twizmwaz.cardinal.util.Contributor;
 import in.twizmwaz.cardinal.util.DomUtil;
 import in.twizmwaz.cardinal.util.MojangUtil;
@@ -50,7 +51,7 @@ public class Rotation {
     }
 
     public void setupRotation() throws RotationLoadException {
-        this.rotationFile = new File(Cardinal.getInstance().getConfig().getString("rotation"));
+        this.rotationFile = new File(Config.rotation);
         try {
             refreshRepo();
         } catch (IOException e) {
@@ -67,7 +68,7 @@ public class Rotation {
     public void refreshRepo() throws RotationLoadException, IOException {
         includes = new HashMap<>();
         loaded = new ArrayList<>();
-        this.repo = new File(Cardinal.getInstance().getConfig().getString("repo"));
+        this.repo = new File(Config.repo);
         if (!repo.exists()) repo.mkdir();
         loadIncludes(repo);
         loadMapsIn(repo);
@@ -126,7 +127,7 @@ public class Rotation {
                         loaded.add(new LoadedMap(name, version, objective, authors, contributors, rules, maxPlayers, map));
                     } catch (Exception e) {
                         Bukkit.getLogger().log(Level.WARNING, "Failed to load map at " + map.getAbsolutePath());
-                        if (Cardinal.getInstance().getConfig().getBoolean("displayMapLoadErrors")) {
+                        if (Config.displayMapLoadErrors) {
                             Bukkit.getLogger().log(Level.INFO, "Showing error, this can be disabled in the config: ");
                             e.printStackTrace();
                         }

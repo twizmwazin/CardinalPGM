@@ -4,7 +4,6 @@ import com.google.common.base.Optional;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
-import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -13,6 +12,7 @@ import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.modules.startTimer.StartTimer;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ChatUtil;
+import in.twizmwaz.cardinal.util.Config;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -33,12 +33,12 @@ public class ReadyCommand {
         if (!team.isPresent()) {
             throw new CommandException(ChatConstant.ERROR_TEAM_ABSENT.getMessage(ChatUtil.getLocale(sender)));
         }
-        if (team.get().isReady() || (!Cardinal.getInstance().getConfig().getBoolean("observers-ready") && team.get().isObserver())) {
+        if (team.get().isReady() || (!Config.observersReady && team.get().isObserver())) {
             throw new CommandException(ChatConstant.ERROR_TEAM_ALREADY_READY.getMessage(ChatUtil.getLocale(sender)));
         }
         team.get().setReady(true);
         ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", new LocalizedChatMessage(ChatConstant.GENERIC_TEAM_NOW_READY, team.get().getCompleteName() + ChatColor.YELLOW)));
-        if (Cardinal.getInstance().getConfig().getBoolean("observers-ready") ? Teams.teamsReady() : Teams.teamsNoObsReady()) {
+        if (Config.observersReady ? Teams.teamsReady() : Teams.teamsNoObsReady()) {
             GameHandler.getGameHandler().getMatch().start(600);
         }
     }
@@ -56,7 +56,7 @@ public class ReadyCommand {
         if (!team.isPresent()) {
             throw new CommandException(ChatConstant.ERROR_TEAM_ABSENT.getMessage(ChatUtil.getLocale(sender)));
         }
-        if (!Cardinal.getInstance().getConfig().getBoolean("observers-ready") && team.get().isObserver()) {
+        if (!Config.observersReady && team.get().isObserver()) {
             throw new CommandException(ChatConstant.ERROR_TEAM_CAN_NOT_UNREADY.getMessage(ChatUtil.getLocale(sender)));
         }
         if (!team.get().isReady()) {

@@ -23,7 +23,7 @@ public class DomUtil {
 
     static {
         try {
-            File globalFile = new File(Cardinal.getInstance().getConfig().getString("repo") + "/global.xml");
+            File globalFile = new File(Config.repo + "/global.xml");
             Files.copy(Cardinal.getInstance().getResource("global.xml"), globalFile.toPath(), (CopyOption) StandardCopyOption.REPLACE_EXISTING);
             global = parse(globalFile);
         } catch (JDOMException | IOException e) {
