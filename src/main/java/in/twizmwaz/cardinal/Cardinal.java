@@ -44,6 +44,7 @@ import in.twizmwaz.cardinal.settings.Setting;
 import in.twizmwaz.cardinal.settings.SettingValue;
 import in.twizmwaz.cardinal.tabList.TabList;
 import in.twizmwaz.cardinal.util.ChatUtil;
+import in.twizmwaz.cardinal.util.Config;
 import in.twizmwaz.cardinal.util.DomUtil;
 import in.twizmwaz.cardinal.util.Numbers;
 import in.twizmwaz.cardinal.util.bossBar.BossBars;
@@ -175,8 +176,7 @@ public class Cardinal extends JavaPlugin {
     }
 
     private void deleteMatches() {
-        FileConfiguration config = getConfig();
-        if (config.getBoolean("deleteMatches")) {
+        if (Config.deleteMatches) {
             getLogger().info("Deleting match files, this can be disabled via the configuration");
             File matches = new File("matches/");
             try {
@@ -185,6 +185,13 @@ public class Cardinal extends JavaPlugin {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void reloadConfig() {
+        super.reloadConfig();
+        Config.reload(getConfig());
+        saveConfig();
     }
 
     private void registerSettings() {
@@ -323,11 +330,7 @@ public class Cardinal extends JavaPlugin {
             database = Database.newInstance(databaseFile);
         }
 
-        FileConfiguration config = getConfig();
-        config.set("settings", null);
-        config.set("setting", null);
-        config.set("ranks", null);
-        config.options().copyDefaults(true);
+        Config.reload(getConfig());
         saveConfig();
 
         deleteMatches();
@@ -347,7 +350,7 @@ public class Cardinal extends JavaPlugin {
             return;
         }
 
-        if (config.getBoolean("resetSpawnProtection") && Bukkit.getServer().getSpawnRadius() != 0) {
+        if (Config.resetSpawnProtection && Bukkit.getServer().getSpawnRadius() != 0) {
             Bukkit.getServer().setSpawnRadius(0);
         }
     }

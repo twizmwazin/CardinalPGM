@@ -1,13 +1,13 @@
 package in.twizmwaz.cardinal.module.modules.permissions;
 
 import com.google.common.base.Optional;
-import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.util.Config;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -16,7 +16,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.Plugin;
@@ -74,7 +73,7 @@ public class PermissionModule implements Module {
 
     @EventHandler
     public void onPlayerChangeTeam(PlayerChangeTeamEvent event) {
-        if (Cardinal.getInstance().getConfig().getBoolean("worldEditPermissions")) {
+        if (Config.worldEditPermissions) {
             if ((event.getNewTeam().isPresent() && event.getNewTeam().get().isObserver()) || !GameHandler.getGameHandler().getMatch().isRunning()) {
                 setWorldeditPermissions(event.getPlayer(), true);
             } else {
@@ -85,7 +84,7 @@ public class PermissionModule implements Module {
 
     @EventHandler
     public void onMatchStart(MatchStartEvent event) {
-        if (Cardinal.getInstance().getConfig().getBoolean("worldEditPermissions")) {
+        if (Config.worldEditPermissions) {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 Optional<TeamModule> team = Teams.getTeamByPlayer(player);
                 if ((team.isPresent() && team.get().isObserver())) {
@@ -99,7 +98,7 @@ public class PermissionModule implements Module {
 
     @EventHandler
     public void onMatchEnd(MatchEndEvent event) {
-        if (Cardinal.getInstance().getConfig().getBoolean("worldEditPermissions")) {
+        if (Config.worldEditPermissions) {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 setWorldeditPermissions(player, true);
             }

@@ -1,6 +1,5 @@
 package in.twizmwaz.cardinal.module.modules.header;
 
-import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.ChatMessage;
@@ -13,6 +12,7 @@ import in.twizmwaz.cardinal.event.RankChangeEvent;
 import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
+import in.twizmwaz.cardinal.util.Config;
 import in.twizmwaz.cardinal.util.Contributor;
 import in.twizmwaz.cardinal.util.Strings;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -32,7 +32,7 @@ public class HeaderModule implements TaskedModule {
     private ChatMessage footer;
     private final String mapName;
     private final List<Contributor> authors;
-    private final String message = ChatColor.translateAlternateColorCodes('`', Cardinal.getInstance().getConfig().getString("server-message"));
+    private final String message = ChatColor.translateAlternateColorCodes('`', Config.serverMessage);
     private int last = 0;
 
     public HeaderModule(LoadedMap map) {
