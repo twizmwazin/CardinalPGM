@@ -4,7 +4,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.lang.reflect.Field;
 import java.util.List;
-import java.util.function.BiFunction;
 
 public class Config {
 
@@ -15,7 +14,7 @@ public class Config {
     public static boolean worldEditPermissions = true;
     public static String serverMessage = "Scrimmage Server";
     public static boolean customMotd = true;
-    public static String motdMessage = null;
+    public static String motdMessage = "";
     public static int cycleAuto = -1;
     public static boolean matchTimeMillis = true;
     public static boolean observersReady = true;
@@ -28,8 +27,7 @@ public class Config {
                 Class<?> t = field.getType();
                 for (Parser parser : Parser.values()) {
                     if (t == parser.clazz) {
-                        Object obj = parser.function.apply(config, toKey(field.getName()));
-                        if (obj != null) field.set(null, obj);
+                        field.set(null, parser.function.apply(config, toKey(field.getName()), field.get(null)));
                         break;
                     }
                 }
@@ -44,21 +42,25 @@ public class Config {
     }
 
     private enum Parser {
-        STRING(String.class, FileConfiguration::getString),
-        INT(int.class, FileConfiguration::getInt),
-        BOOLEAN(boolean.class, FileConfiguration::getBoolean),
-        DOUBLE(double.class, FileConfiguration::getDouble),
-        LONG(long.class, FileConfiguration::getLong),
-        LIST(List.class, FileConfiguration::getList);
+        STRING(String.class, (conf, key, o) -> conf.getString(key, (String) o)),
+        INT(int.class, (conf, key, o) -> conf.getInt(key, (int) o)),
+        BOOLEAN(boolean.class, (conf, key, o) -> conf.getBoolean(key, (boolean) o)),
+        DOUBLE(double.class, (conf, key, o) -> conf.getDouble(key, (double) o)),
+        LONG(long.class, (conf, key, o) -> conf.getLong(key, (long) o)),
+        LIST(List.class, (conf, key, o) -> conf.getList(key, (List) o));
 
         private Class<?> clazz;
-        private BiFunction<FileConfiguration, String, ?> function;
+        private ConfigFunction<Object> function;
 
-        Parser(Class<?> clazz, BiFunction<FileConfiguration, String, ?> function) {
+        Parser(Class<?> clazz, ConfigFunction<Object> function) {
             this.clazz = clazz;
             this.function = function;
         }
 
+    }
+
+    interface ConfigFunction<T>  {
+        T apply(FileConfiguration conf, String key, T t);
     }
 
 }

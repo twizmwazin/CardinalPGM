@@ -38,7 +38,7 @@ public class MOTD implements Module {
                 break;
         }
         event.setMotd(color + "\u00BB " + ChatColor.AQUA + name + color + " \u00AB" +
-                (Config.motdMessage != null ? "\n" + ChatColor.translateAlternateColorCodes('`', Config.serverMessage) : ""));
+                (!Config.motdMessage.equals("") ? "\n" + ChatColor.translateAlternateColorCodes('`', Config.motdMessage) : ""));
 
     }
 }
