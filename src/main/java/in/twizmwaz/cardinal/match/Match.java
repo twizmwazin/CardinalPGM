@@ -7,8 +7,8 @@ import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
-import in.twizmwaz.cardinal.module.modules.startTimer.StartTimer;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.timers.StartTimer;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
 import in.twizmwaz.cardinal.util.DomUtil;
 import in.twizmwaz.cardinal.util.Proto;
@@ -71,8 +71,24 @@ public class Match {
         return proto;
     }
 
+    public boolean isWaiting() {
+        return state == MatchState.WAITING;
+    }
+
+    public boolean isStarting() {
+        return state == MatchState.STARTING;
+    }
+
     public boolean isRunning() {
-        return getState() == MatchState.PLAYING;
+        return state == MatchState.PLAYING;
+    }
+
+    public boolean hasEnded() {
+        return state == MatchState.ENDED || state == MatchState.CYCLING;
+    }
+
+    public boolean isState(MatchState state) {
+        return this.state == state;
     }
 
     public MatchState getState() {
@@ -82,43 +98,30 @@ public class Match {
     public void setState(MatchState state) {
         if (state == null) throw new IllegalArgumentException("MatchState cannot be null!");
         this.state = state;
+        getModules().getModule(StartTimer.class).updateNeededPlayers();
     }
 
     public Document getDocument() {
         return document;
     }
 
-    public void start(int time) {
-        start(time, false);
-    }
-
-    public void start(int time, boolean forced) {
-        if (state == MatchState.WAITING) {
-            StartTimer startTimer = getModules().getModule(StartTimer.class);
-            startTimer.setTime(time);
-            startTimer.setForced(forced);
-            startTimer.setCancelled(false);
-            state = MatchState.STARTING;
-        }
-    }
-
     public void end(TeamModule team) {
-        if (getState() == MatchState.PLAYING) {
+        if (isRunning()) {
             state = MatchState.ENDED;
-            Event event = new MatchEndEvent(team == null ? Optional.<TeamModule>absent() : Optional.of(team));
+            Event event = new MatchEndEvent(team == null ? Optional.absent() : Optional.of(team));
             Bukkit.getServer().getPluginManager().callEvent(event);
         }
     }
 
     public void end(Player player) {
-        if (getState() == MatchState.PLAYING) {
+        if (isRunning()) {
             state = MatchState.ENDED;
             Bukkit.getServer().getPluginManager().callEvent(new MatchEndEvent(player));
         }
     }
 
     public void end() {
-        if (getState() == MatchState.PLAYING) {
+        if (isRunning()) {
             state = MatchState.ENDED;
             Bukkit.getServer().getPluginManager().callEvent(new MatchEndEvent(Optional.<TeamModule>absent()));
         }

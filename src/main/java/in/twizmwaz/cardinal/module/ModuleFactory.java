@@ -18,7 +18,6 @@ import in.twizmwaz.cardinal.module.modules.craftingModule.CraftingModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.ctf.FlagBuilder;
 import in.twizmwaz.cardinal.module.modules.ctf.net.NetBuilder;
 import in.twizmwaz.cardinal.module.modules.ctf.post.PostBuilder;
-import in.twizmwaz.cardinal.module.modules.cycleTimer.CycleTimerModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.damageIndicator.DamageIndicatorBuilder;
 import in.twizmwaz.cardinal.module.modules.deathMessages.DeathMessagesBuilder;
 import in.twizmwaz.cardinal.module.modules.deathTracker.DeathTrackerBuilder;
@@ -68,7 +67,6 @@ import in.twizmwaz.cardinal.module.modules.snowflakes.SnowflakesBuilder;
 import in.twizmwaz.cardinal.module.modules.sound.SoundModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.spectatorTools.SpectatorToolsBuilder;
-import in.twizmwaz.cardinal.module.modules.startTimer.StartTimerBuilder;
 import in.twizmwaz.cardinal.module.modules.stats.StatsBuilder;
 import in.twizmwaz.cardinal.module.modules.tasker.TaskerModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.team.TeamModuleBuilder;
@@ -77,6 +75,7 @@ import in.twizmwaz.cardinal.module.modules.teamPicker.TeamPickerBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimitBuilder;
 import in.twizmwaz.cardinal.module.modules.timeLock.TimeLockBuilder;
 import in.twizmwaz.cardinal.module.modules.timeNotifications.TimeNotificationsBuilder;
+import in.twizmwaz.cardinal.module.modules.timers.TimersBuilder;
 import in.twizmwaz.cardinal.module.modules.titleRespawn.TitleRespawnBuilder;
 import in.twizmwaz.cardinal.module.modules.tnt.TntBuilder;
 import in.twizmwaz.cardinal.module.modules.tntDefuse.TntDefuseBuilder;
@@ -167,9 +166,8 @@ public class ModuleFactory {
                 DeathTrackerBuilder.class,
                 SnowflakesBuilder.class,
                 SoundModuleBuilder.class,
-                StartTimerBuilder.class,
+                TimersBuilder.class,
                 HeaderModuleBuilder.class,
-                CycleTimerModuleBuilder.class,
                 TimeLimitBuilder.class,
                 PlayableBuilder.class,
                 TutorialBuilder.class,

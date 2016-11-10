@@ -15,6 +15,8 @@ public class Config {
     public static String serverMessage = "Scrimmage Server";
     public static boolean customMotd = true;
     public static String motdMessage = "";
+    public static int startDefault = 20;
+    public static int cycleDefault = 20;
     public static int cycleAuto = -1;
     public static boolean matchTimeMillis = true;
     public static boolean observersReady = true;

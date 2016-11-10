@@ -8,7 +8,6 @@ import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.event.PlayerSettingChangeEvent;
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.observers.ObserverModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
@@ -55,7 +54,7 @@ public class Visibility implements Module {
         if (viewer.equals(toSee)) return;
         try {
             boolean showObs = Settings.getSettingByName("Observers") == null || !Settings.getSettingByName("Observers").getValueByPlayer(viewer).getValue().equalsIgnoreCase("none");
-            if (match.getState().equals(MatchState.PLAYING)) {
+            if (match.isRunning()) {
                 if (ObserverModule.testDead(toSee)) {
                     setVisibility(viewer, toSee, false);
                 } else if (ObserverModule.testObserver(viewer)) {

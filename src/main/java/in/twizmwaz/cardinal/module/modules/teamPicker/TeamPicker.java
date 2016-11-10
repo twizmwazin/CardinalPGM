@@ -3,7 +3,7 @@ package in.twizmwaz.cardinal.module.modules.teamPicker;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
-import in.twizmwaz.cardinal.match.MatchState;
+import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
 import in.twizmwaz.cardinal.module.modules.classModule.ClassModule;
@@ -139,12 +139,10 @@ public class TeamPicker implements Module {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) &&
-                !GameHandler.getGameHandler().getMatch().getState().equals(MatchState.CYCLING) &&
-                !(Blitz.matchIsBlitz() && GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING)) &&
-                ObserverModule.testObserverOrDead(event.getPlayer()) &&
-                (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) &&
-                event.getItem() != null && event.getItem().equals(getTeamPicker(event.getPlayer().getLocale()))) {
+        Match match = GameHandler.getGameHandler().getMatch();
+        if (!match.hasEnded() && !(Blitz.matchIsBlitz() && match.isRunning()) && ObserverModule.testObserverOrDead(event.getPlayer())
+                && (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+                && event.getItem() != null && event.getItem().equals(getTeamPicker(event.getPlayer().getLocale()))) {
             event.setCancelled(true);
             event.getPlayer().openInventory(getTeamPicker(event.getPlayer()));
         }
