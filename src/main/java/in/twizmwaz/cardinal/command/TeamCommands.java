@@ -11,7 +11,6 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.TeamNameChangeEvent;
-import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Players;
@@ -62,7 +61,7 @@ public class TeamCommands {
     @Command(aliases = {"shuffle"}, desc = "Shuffles the teams.")
     @CommandPermissions("cardinal.team.shuffle")
     public static void shuffle(final CommandContext cmd, CommandSender sender) throws CommandException {
-        if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.WAITING) || GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
+        if (GameHandler.getGameHandler().getMatch().isWaiting() || GameHandler.getGameHandler().getMatch().isStarting()) {
             List<Player> playersToShuffle = new ArrayList<>();
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (Teams.getTeamByPlayer(player).isPresent()) {

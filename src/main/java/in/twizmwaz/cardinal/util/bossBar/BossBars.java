@@ -18,10 +18,10 @@ import java.util.UUID;
 
 public class BossBars implements Listener {
 
-    public static Map<String, LocalizedBossBar> broadcastedBossBars = new HashMap<>();
+    public static Map<UUID, LocalizedBossBar> broadcastedBossBars = new HashMap<>();
 
-    public static String addBroadcastedBossBar(ChatMessage bossBarTitle, BarColor color, BarStyle style, Boolean shown, BarFlag... flags) {
-        String id = UUID.randomUUID().toString();
+    public static UUID addBroadcastedBossBar(ChatMessage bossBarTitle, BarColor color, BarStyle style, Boolean shown, BarFlag... flags) {
+        UUID id = UUID.randomUUID();
         LocalizedBossBar bossBar = new LocalizedBossBar(bossBarTitle, color, style, flags);
         bossBar.setVisible(shown);
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -31,7 +31,7 @@ public class BossBars implements Listener {
         return id;
     }
 
-    public static void removeBroadcastedBossBar(String id) {
+    public static void removeBroadcastedBossBar(UUID id) {
         if (broadcastedBossBars.containsKey(id)) {
             broadcastedBossBars.get(id).setVisible(false);
             broadcastedBossBars.get(id).removeAll();
@@ -39,15 +39,15 @@ public class BossBars implements Listener {
         }
     }
 
-    public static void setTitle(String id, ChatMessage chat) {
+    public static void setTitle(UUID id, ChatMessage chat) {
         if (broadcastedBossBars.containsKey(id)) broadcastedBossBars.get(id).setTitle(chat);
     }
 
-    public static void setProgress(String id, Double progress) {
+    public static void setProgress(UUID id, Double progress) {
         if (broadcastedBossBars.containsKey(id)) broadcastedBossBars.get(id).setProgress(progress);
     }
 
-    public static void setVisible(String id, Boolean visible) {
+    public static void setVisible(UUID id, Boolean visible) {
         if (broadcastedBossBars.containsKey(id)) broadcastedBossBars.get(id).setVisible(visible);
     }
 

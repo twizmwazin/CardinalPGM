@@ -8,32 +8,23 @@ import com.sk89q.minecraft.util.commands.CommandPermissions;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
-import in.twizmwaz.cardinal.match.MatchState;
-import in.twizmwaz.cardinal.module.modules.startTimer.StartTimer;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
+import in.twizmwaz.cardinal.module.modules.timers.StartTimer;
 import in.twizmwaz.cardinal.util.ChatUtil;
+import in.twizmwaz.cardinal.util.Config;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.command.CommandSender;
 
 public class StartAndEndCommand {
-    private static int timer;
-    private static boolean waiting = false;
 
     @Command(aliases = {"start", "begin"}, desc = "Starts the match.", usage = "[time]", flags = "f")
     @CommandPermissions("cardinal.match.start")
     public static void start(CommandContext cmd, CommandSender sender) throws CommandException {
-        if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.WAITING)) {
-            int time = 600;
-            if (cmd.argsLength() > 0) time = cmd.getInteger(0) * 20;
-            GameHandler.getGameHandler().getMatch().start(time, cmd.hasFlag('f'));
-        } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
-            GameHandler.getGameHandler().getMatch().getModules().getModule(StartTimer.class).setTime(cmd.argsLength() > 0 ? cmd.getInteger(0) * 20 : 30 * 20);
-            GameHandler.getGameHandler().getMatch().getModules().getModule(StartTimer.class).setForced(cmd.hasFlag('f'));
-        } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED)) {
-            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_RESUME).getMessage(ChatUtil.getLocale(sender)));
-        } else {
-            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_START).getMessage(ChatUtil.getLocale(sender)));
+        StartTimer start = GameHandler.getGameHandler().getMatch().getModules().getModule(StartTimer.class);
+        if (!start.startTimer(cmd.getInteger(0, Config.startDefault), cmd.hasFlag('f'))) {
+            throw new CommandException(new LocalizedChatMessage(start.getMatch().hasEnded() ?
+                    ChatConstant.ERROR_NO_RESUME : ChatConstant.ERROR_NO_START).getMessage(ChatUtil.getLocale(sender)));
         }
 
     }

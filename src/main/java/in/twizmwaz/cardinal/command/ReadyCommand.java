@@ -8,8 +8,8 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
-import in.twizmwaz.cardinal.match.MatchState;
-import in.twizmwaz.cardinal.module.modules.startTimer.StartTimer;
+import in.twizmwaz.cardinal.match.Match;
+import in.twizmwaz.cardinal.module.modules.timers.StartTimer;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Config;
@@ -25,8 +25,8 @@ public class ReadyCommand {
         if (!(sender instanceof Player)) {
             throw new CommandException(ChatConstant.ERROR_CONSOLE_NO_USE.getMessage(ChatUtil.getLocale(sender)));
         }
-        MatchState state = GameHandler.getGameHandler().getMatch().getState();
-        if (state.equals(MatchState.PLAYING) || state.equals(MatchState.ENDED) || state.equals(MatchState.CYCLING)) {
+        Match match = GameHandler.getGameHandler().getMatch();
+        if (match.isRunning() || match.hasEnded()) {
             throw new CommandException(ChatConstant.ERROR_READY_BEFORE_MATCH.getMessage(ChatUtil.getLocale(sender)));
         }
         Optional<TeamModule> team = Teams.getTeamByPlayer((Player) sender);
@@ -39,7 +39,7 @@ public class ReadyCommand {
         team.get().setReady(true);
         ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", new LocalizedChatMessage(ChatConstant.GENERIC_TEAM_NOW_READY, team.get().getCompleteName() + ChatColor.YELLOW)));
         if (Config.observersReady ? Teams.teamsReady() : Teams.teamsNoObsReady()) {
-            GameHandler.getGameHandler().getMatch().start(600);
+            match.getModules().getModule(StartTimer.class).startTimer(Config.startDefault, false);
         }
     }
 
@@ -48,8 +48,8 @@ public class ReadyCommand {
         if (!(sender instanceof Player)) {
             throw new CommandException(ChatConstant.ERROR_CONSOLE_NO_USE.getMessage(ChatUtil.getLocale(sender)));
         }
-        MatchState state = GameHandler.getGameHandler().getMatch().getState();
-        if (state.equals(MatchState.PLAYING) || state.equals(MatchState.ENDED) || state.equals(MatchState.CYCLING)) {
+        Match match = GameHandler.getGameHandler().getMatch();
+        if (match.isRunning() || match.hasEnded()) {
             throw new CommandException(ChatConstant.ERROR_READY_BEFORE_MATCH.getMessage(ChatUtil.getLocale(sender)));
         }
         Optional<TeamModule> team = Teams.getTeamByPlayer((Player) sender);
@@ -64,8 +64,8 @@ public class ReadyCommand {
         }
         team.get().setReady(false);
         ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.YELLOW + "{0}", new LocalizedChatMessage(ChatConstant.GENERIC_TEAM_NO_LONGER_READY, team.get().getCompleteName() + ChatColor.YELLOW)));
-        if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
-            GameHandler.getGameHandler().getMatch().getModules().getModule(StartTimer.class).setCancelled(true);
+        if (match.isStarting()) {
+            match.getModules().getModule(StartTimer.class).setCancelled(true);
             ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.GENERIC_UNREADY_CANCEL_COUNTDOWN, team.get().getCompleteName() + ChatColor.RED)));
         }
     }

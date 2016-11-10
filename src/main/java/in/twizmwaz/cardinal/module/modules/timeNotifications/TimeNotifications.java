@@ -18,9 +18,11 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 
+import java.util.UUID;
+
 public class TimeNotifications implements TaskedModule {
 
-    public String bossBar;
+    public UUID bossBar;
     private int lastSecond = 0;
 
     protected TimeNotifications() {

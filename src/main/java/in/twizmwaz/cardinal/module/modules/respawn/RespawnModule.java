@@ -4,7 +4,6 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.event.CardinalSpawnEvent;
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.blitz.Blitz;
@@ -54,7 +53,7 @@ public class RespawnModule implements Module {
     @EventHandler(priority = EventPriority.LOW)
     public void onCardinalRespawn(CardinalSpawnEvent event) {
         if (event.getSpawn() == null) {
-            if (!match.getState().equals(MatchState.PLAYING)) event.setTeam(Teams.getTeamById("observers").get());
+            if (!match.isRunning()) event.setTeam(Teams.getTeamById("observers").get());
             ModuleCollection<SpawnModule> modules = new ModuleCollection<>();
             for (SpawnModule spawnModule : Teams.getSpawns(event.getTeam())) {
                 FilterModule filter = spawnModule.getFilter();
@@ -70,12 +69,11 @@ public class RespawnModule implements Module {
     }
 
     public static void giveObserversKit(Player player) {
-        if (GameHandler.getGameHandler().getMatch().getModules().getModule(TitleRespawn.class).isDeadUUID(player.getUniqueId())) return;
+        Match match = GameHandler.getGameHandler().getMatch();
+        if (match.getModules().getModule(TitleRespawn.class).isDeadUUID(player.getUniqueId())) return;
         player.getInventory().setItem(0, Items.createItem(Material.COMPASS, 1, (short) 0, ChatColor.BLUE + "" + ChatColor.BOLD + ChatConstant.UI_COMPASS.getMessage(player.getLocale())));
         player.getInventory().setItem(1, CardinalNotifications.book);
-        if (!GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) &&
-                !GameHandler.getGameHandler().getMatch().getState().equals(MatchState.CYCLING) &&
-                !(Blitz.matchIsBlitz() && GameHandler.getGameHandler().getMatch().getState().equals(MatchState.PLAYING))) {
+        if (!match.hasEnded() && !(Blitz.matchIsBlitz() && match.isRunning())) {
             player.getInventory().setItem(2, TeamPicker.getTeamPicker(player.getLocale()));
         }
         player.getInventory().setItem(3, Tutorial.getEmerald(player));

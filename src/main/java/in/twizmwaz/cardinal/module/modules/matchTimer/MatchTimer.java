@@ -4,7 +4,6 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -23,8 +22,8 @@ public class MatchTimer implements Module {
         if (match.isRunning()) {
             return ((double) System.currentTimeMillis() - (GameHandler.getGameHandler().getMatch().getModules().getModule(MatchTimer.class)).getTime()) / 1000.0;
         }
-        if (match.getState().equals(MatchState.ENDED) || match.getState().equals(MatchState.CYCLING)) {
-            return GameHandler.getGameHandler().getMatch().getModules().getModule(MatchTimer.class).getEndTime();
+        if (match.hasEnded()) {
+            return match.getModules().getModule(MatchTimer.class).getEndTime();
         }
         return 0;
     }

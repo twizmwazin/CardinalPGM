@@ -5,7 +5,6 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.modules.chatChannels.ChatChannel;
@@ -177,7 +176,7 @@ public class Teams {
     }
 
     public static void setPlayerTeam(Player player, String team) throws Exception {
-        if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.ENDED) || GameHandler.getGameHandler().getMatch().getState().equals(MatchState.CYCLING)) {
+        if (GameHandler.getGameHandler().getMatch().hasEnded()) {
             throw new Exception(ChatUtil.getWarningMessage(new LocalizedChatMessage(ChatConstant.ERROR_MATCH_OVER).getMessage(player.getLocale())));
         }
         Optional<TeamModule> originalTeam = Teams.getTeamByPlayer(player);
