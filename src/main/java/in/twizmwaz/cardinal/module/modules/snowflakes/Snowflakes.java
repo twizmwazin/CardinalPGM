@@ -228,7 +228,7 @@ public class Snowflakes implements Module {
         count = Math.min(12, Math.max(2, count));
         int[] entities = new int[count];
         List<Packet> packets = Lists.newArrayList();
-        Vector loc = player.getLocation().plus(0, 2, 0);
+        Vector loc = player.getLocation().position().plus(0, 2, 0);
         for (int i = 0; i < count; i++) {
             int id = Bukkit.allocateEntityId();
             entities[i] = id;

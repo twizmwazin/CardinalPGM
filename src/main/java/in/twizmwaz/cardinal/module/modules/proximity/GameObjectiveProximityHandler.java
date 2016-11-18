@@ -87,7 +87,7 @@ public class GameObjectiveProximityHandler implements Module {
         }
         double newProximity = proximity;
         for (Vector proxLoc : info.locations) {
-            double prox = proxLoc.distance(loc);
+            double prox = proxLoc.distance(loc.position());
             if (prox < newProximity) {
                 newProximity = prox;
             }
@@ -136,7 +136,7 @@ public class GameObjectiveProximityHandler implements Module {
 
     public void setLocation(Location location) {
         Set<Vector> locations = new HashSet<>();
-        locations.add(location);
+        locations.add(location.position());
         this.info.setLocations(locations);
     }
 

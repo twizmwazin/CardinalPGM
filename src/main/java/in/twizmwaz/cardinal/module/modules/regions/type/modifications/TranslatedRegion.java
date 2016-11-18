@@ -1,12 +1,10 @@
 package in.twizmwaz.cardinal.module.modules.regions.type.modifications;
 
 import com.google.common.collect.Lists;
-import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.modifiers.TranslateParser;
 import in.twizmwaz.cardinal.module.modules.regions.type.BlockRegion;
 import in.twizmwaz.cardinal.module.modules.regions.type.PointRegion;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
@@ -45,9 +43,8 @@ public class TranslatedRegion extends RegionModule {
     @Override
     public List<Block> getBlocks() {
         List<Block> result = Lists.newArrayList();
-        World world = GameHandler.getGameHandler().getMatchWorld();
         for (Block block : base.getBlocks()) {
-            result.add(block.getLocation().add(offset).toLocation(world).getBlock());
+            result.add(block.getLocation().add(offset).getBlock());
         }
         return result;
     }

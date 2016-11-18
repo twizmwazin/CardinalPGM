@@ -24,7 +24,7 @@ public class BelowRegion extends RegionModule {
 
     @Override
     public boolean contains(Vector vector) {
-        return this.vector.isGreater(vector);
+        return vector.isInAABB(getMin(), getMax());
     }
 
     @Override

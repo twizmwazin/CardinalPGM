@@ -49,7 +49,7 @@ public class MirroredRegion extends RegionModule {
         List<Block> result = Lists.newArrayList();
         World world = GameHandler.getGameHandler().getMatchWorld();
         for (Block block : base.getBlocks()) {
-            result.add(mirrorVector(block.getLocation(), origin, normal).toLocation(world).getBlock());
+            result.add(mirrorVector(block.getLocation().position(), origin, normal).toLocation(world).getBlock());
         }
         return result;
     }

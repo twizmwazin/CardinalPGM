@@ -190,7 +190,8 @@ public class FlagObjective implements TaskedModule, GameObjective {
         }
 
         for (Entity entity : GameHandler.getGameHandler().getMatchWorld().getEntities()) {
-            if (entity instanceof ArmorStand && entity.getName().equals(getDisplayName()) && entity.getLocation().distance(getCurrentFlagLocation().plus(0,0.6875,0)) < 0.1) {
+            if (entity instanceof ArmorStand && entity.getName().equals(getDisplayName())
+                    && entity.getLocation().position().distance(getCurrentFlagLocation().position().plus(0,0.6875,0)) < 0.1) {
                 entity.remove();
             }
         }
@@ -529,7 +530,7 @@ public class FlagObjective implements TaskedModule, GameObjective {
                 if (oldLoc == null) return true;
                 Location oldY0 = oldLoc.clone();
                 oldY0.setY(0);
-                double dist2 = flagY0.distance(oldY0);
+                double dist2 = flagY0.distance(oldY0.position());
                 return dist1 < dist2;
             }
         }

@@ -300,7 +300,7 @@ public class HillObjective implements TaskedModule, GameObjective {
             if(angle < 0) angle += 2 * Math.PI;
             byte color = angle < percent ? color1 : color2;
             if (color == -1) {
-                Pair<Material,Byte> oldBlock = oldProgress.getBlockAt(new BlockVector(block.getLocation()));
+                Pair<Material,Byte> oldBlock = oldProgress.getBlockAt(new BlockVector(block.getLocation().position()));
                 if (oldBlock.getLeft().equals(block.getType())) color = oldBlock.getRight();
             }
             if (color != -1) block.setData(color);
@@ -313,7 +313,7 @@ public class HillObjective implements TaskedModule, GameObjective {
             if (!visualMaterials.evaluate(block).equals(FilterState.ALLOW)) continue;
             byte color = team != null ? MiscUtil.convertChatColorToDyeColor(team.getColor()).getWoolData() : -1;
             if (color == -1) {
-                Pair<Material,Byte> oldBlock = oldCaptured.getBlockAt(new BlockVector(block.getLocation()));
+                Pair<Material,Byte> oldBlock = oldCaptured.getBlockAt(new BlockVector(block.getLocation().position()));
                 if (oldBlock.getLeft().equals(block.getType())) color = oldBlock.getRight();
             }
             if (color != -1) block.setData(color);

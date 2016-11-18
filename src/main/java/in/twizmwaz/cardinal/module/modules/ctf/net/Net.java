@@ -5,7 +5,6 @@ import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.event.ScoreUpdateEvent;
 import in.twizmwaz.cardinal.event.flag.FlagCaptureEvent;
-import in.twizmwaz.cardinal.event.flag.FlagDropEvent;
 import in.twizmwaz.cardinal.event.flag.NetEnterEvent;
 import in.twizmwaz.cardinal.event.flag.NetLeaveEvent;
 import in.twizmwaz.cardinal.module.Module;
@@ -130,12 +129,12 @@ public class Net implements Module {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        playerMove(event.getPlayer(), event.getFrom(), event.getTo());
+        playerMove(event.getPlayer(), event.getFrom().position(), event.getTo().position());
     }
 
     @EventHandler
     public void onPlayerMove(PlayerTeleportEvent event) {
-        playerMove(event.getPlayer(), event.getFrom(), event.getTo());
+        playerMove(event.getPlayer(), event.getFrom().position(), event.getTo().position());
     }
 
     private void playerMove(Player player, Vector from, Vector to) {

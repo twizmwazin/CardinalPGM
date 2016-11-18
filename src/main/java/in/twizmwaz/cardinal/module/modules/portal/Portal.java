@@ -60,7 +60,7 @@ public class Portal implements Module {
     private void tryTeleport(Player player, Location from, RegionModule destination, int dir) {
         if ((filter == null || filter.evaluate(player).equals(FilterState.ALLOW)) || ObserverModule.testObserver(player)) {
             if (destination != null) {
-                from.set(destination.getRandomPoint().getLocation().toVector());
+                from.setPosition(destination.getRandomPoint().getLocation().position());
             } else {
                 from.setX(x.getLeft() ? from.getX() + (x.getRight() * dir) : x.getRight());
                 from.setY(y.getLeft() ? from.getY() + (y.getRight() * dir) : y.getRight());

@@ -24,8 +24,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.util.Cuboid;
-import org.bukkit.util.Ray;
+import org.bukkit.geometry.Cuboid;
+import org.bukkit.geometry.Ray;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;

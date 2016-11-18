@@ -73,9 +73,9 @@ class PlayerBoundingBox implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerMove(PlayerTeleportEvent event) {
         if (event.getPlayer().getUniqueId().equals(this.player)) {
-            updateAndTeleport(event.getTo());
+            updateAndTeleport(event.getTo().position());
         } else {
-            sendOrRemoveZombies(event.getPlayer(), event.getTo(), Bukkit.getPlayer(player).getLocation());
+            sendOrRemoveZombies(event.getPlayer(), event.getTo().position(), Bukkit.getPlayer(player).getLocation().position());
         }
     }
 
@@ -83,13 +83,13 @@ class PlayerBoundingBox implements Listener {
     public void onPlayerMove(PlayerMoveEvent event) {
         if (event.getPlayer().getUniqueId().equals(this.player)) {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                sendOrRemoveZombies(player, player.getLocation(), event.getTo());
+                sendOrRemoveZombies(player, player.getLocation().position(), event.getTo().position());
             }
-            Vector diff = event.getTo().clone().subtract(event.getFrom());
+            Vector diff = event.getTo().position().clone().subtract(event.getFrom().position());
             relativeMoveBoundingBox(Math.round(4096 * (diff.getX())),
                     Math.round(4096 * (diff.getY())), Math.round(4096 * (diff.getZ())), event.getPlayer().isOnGround());
         } else {
-            sendOrRemoveZombies(event.getPlayer(), event.getTo(), Bukkit.getPlayer(player).getLocation());
+            sendOrRemoveZombies(event.getPlayer(), event.getTo().position(), Bukkit.getPlayer(player).getLocation().position());
         }
     }
 
@@ -116,9 +116,9 @@ class PlayerBoundingBox implements Listener {
     }
 
     public void updateAndTeleport(Vector loc) {
-        if (loc == null) loc = Bukkit.getPlayer(this.player).getLocation();
+        if (loc == null) loc = Bukkit.getPlayer(this.player).getLocation().position();
         for (Player player : Bukkit.getOnlinePlayers()) {
-            sendOrRemoveZombies(player, player.getLocation(), loc);
+            sendOrRemoveZombies(player, player.getLocation().position(), loc);
         }
         teleportBoundingBox(loc, Bukkit.getPlayer(this.player).isOnGround());
     }
