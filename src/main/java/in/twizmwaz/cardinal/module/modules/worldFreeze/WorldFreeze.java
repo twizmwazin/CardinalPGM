@@ -5,7 +5,6 @@ import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.MatchStartEvent;
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.match.MatchState;
 import in.twizmwaz.cardinal.module.Module;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -42,84 +41,84 @@ public class WorldFreeze implements Module {
 
     @EventHandler
     public void onLiquidFlow(BlockFromToEvent event) {
-        if (!match.getState().equals(MatchState.PLAYING)) {
+        if (!match.isRunning()) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockBurn(BlockBurnEvent event) {
-        if (!match.getState().equals(MatchState.PLAYING)) {
+        if (!match.isRunning()) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockDispense(BlockDispenseEvent event) {
-        if (!match.getState().equals(MatchState.PLAYING)) {
+        if (!match.isRunning()) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockDispense(BlockDispenseEntityEvent event) {
-        if (!match.getState().equals(MatchState.PLAYING)) {
+        if (!match.isRunning()) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockFade(BlockFadeEvent event) {
-        if (!match.getState().equals(MatchState.PLAYING)) {
+        if (!match.isRunning()) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockForm(BlockFormEvent event) {
-        if (!match.getState().equals(MatchState.PLAYING)) {
+        if (!match.isRunning()) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockGrow(BlockGrowEvent event) {
-        if (!match.getState().equals(MatchState.PLAYING)) {
+        if (!match.isRunning()) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockIgnite(BlockIgniteEvent event) {
-        if (!match.getState().equals(MatchState.PLAYING)) {
+        if (!match.isRunning()) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockPysics(BlockPhysicsEvent event) {
-        if (!match.getState().equals(MatchState.PLAYING)) {
+        if (!match.isRunning()) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent event) {
-        if (!match.getState().equals(MatchState.PLAYING)) {
+        if (!match.isRunning()) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockRedstone(BlockRedstoneEvent event) {
-        if (!match.getState().equals(MatchState.PLAYING)) {
+        if (!match.isRunning()) {
             event.setNewCurrent(event.getOldCurrent());
         }
     }
 
     @EventHandler
     public void onFurnaceBurn(FurnaceBurnEvent event) {
-        if (!match.getState().equals(MatchState.PLAYING)) {
+        if (!match.isRunning()) {
             event.setCancelled(true);
             event.setBurning(true);
         }

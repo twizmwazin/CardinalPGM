@@ -25,13 +25,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 
+import java.util.UUID;
+
 public class MonumentModes implements TaskedModule {
 
     private final Pair<Material, Integer> material;
     private final String name;
     private int after, showBefore;
     private boolean ran;
-    private String bossBar;
+    private UUID bossBar;
 
     public MonumentModes(int after, final Pair<Material, Integer> material, final String name, int showBefore) {
         this.after = after;

@@ -7,11 +7,13 @@ import com.sk89q.minecraft.util.commands.CommandPermissions;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
-import in.twizmwaz.cardinal.match.MatchState;
-import in.twizmwaz.cardinal.module.modules.cycleTimer.CycleTimerModule;
+import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
+import in.twizmwaz.cardinal.module.modules.timers.Countdown;
+import in.twizmwaz.cardinal.module.modules.timers.CycleTimer;
 import in.twizmwaz.cardinal.rotation.LoadedMap;
 import in.twizmwaz.cardinal.util.ChatUtil;
+import in.twizmwaz.cardinal.util.Config;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -20,9 +22,6 @@ public class CycleCommand {
     @Command(aliases = {"cycle"}, desc = "Cycles the world and loads a new world.", usage = "[time] [map]", flags = "fn")
     @CommandPermissions("cardinal.match.cycle")
     public static void cycle(final CommandContext cmd, CommandSender sender) throws CommandException {
-        if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
-            throw new CommandException(ChatConstant.ERROR_CYCLE_DURING_MATCH.getMessage(ChatUtil.getLocale(sender)));
-        }
         processCycle(cmd, sender);
         if (cmd.argsLength() > 1) {
             LoadedMap next = getMap(cmd.getJoinedStrings(1).replace(" -f", "").replace("-f ", ""));
@@ -32,10 +31,7 @@ public class CycleCommand {
                 setCycleMap(next);
             }
         }
-        CycleTimerModule timer = GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimerModule.class);
-        timer.setOriginalState(GameHandler.getGameHandler().getMatch().getState());
-        timer.setCancelled(true);
-        timer.cycleTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
+        GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimer.class).startCountdown(cmd.getInteger(0, Config.cycleDefault));
     }
 
     @Command(aliases = {"setnext", "sn"}, desc = "Sets the next map.", usage = "[map]", min = 1)
@@ -52,15 +48,9 @@ public class CycleCommand {
     @Command(aliases = {"recycle", "rc"}, desc = "Cycles to the current map.", usage = "[time]", flags = "f")
     @CommandPermissions("cardinal.match.cycle")
     public static void recycle(final CommandContext cmd, CommandSender sender) throws CommandException {
-        if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING)) {
-            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(ChatUtil.getLocale(sender)));
-        }
         processCycle(cmd, sender);
         setCycleMap(GameHandler.getGameHandler().getMatch().getLoadedMap());
-        CycleTimerModule timer = GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimerModule.class);
-        timer.setOriginalState(GameHandler.getGameHandler().getMatch().getState());
-        timer.setCancelled(true);
-        timer.cycleTimer(cmd.argsLength() > 0 ? cmd.getInteger(0) : 30);
+        GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimer.class).startCountdown(cmd.getInteger(0, Config.cycleDefault));
     }
 
     private static LoadedMap getMap(String input) {
@@ -86,15 +76,14 @@ public class CycleCommand {
     }
 
     private static void processCycle(CommandContext cmd, CommandSender sender) throws CommandException {
-        if (GameHandler.getGameHandler().getMatch().isRunning()) {
-            if (!cmd.hasFlag('f')) {
-                throw new CommandException(ChatConstant.ERROR_CYCLE_DURING_MATCH.getMessage(ChatUtil.getLocale(sender)));
-            }
-            if (cmd.hasFlag('n')) {
-                GameHandler.getGameHandler().getMatch().end();
-            } else {
-                GameHandler.getGameHandler().getMatch().end(TimeLimit.getMatchWinner());
-            }
+        Match match = GameHandler.getGameHandler().getMatch();
+        if ((match.isRunning() || match.isStarting()) && !cmd.hasFlag('f')) {
+            throw new CommandException(ChatConstant.ERROR_CYCLE_DURING_MATCH.getMessage(ChatUtil.getLocale(sender)));
+        } else if (match.isStarting()) {
+            Countdown.stopCountdowns(match);
+        } else if (match.isRunning()) {
+            if (cmd.hasFlag('n')) GameHandler.getGameHandler().getMatch().end();
+            else GameHandler.getGameHandler().getMatch().end(TimeLimit.getMatchWinner());
         }
     }
 }

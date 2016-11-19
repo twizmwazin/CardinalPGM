@@ -26,7 +26,7 @@ class Poll {
     private int time;
     private final int originalTime;
     private int taskId;
-    private String bossBar;
+    private UUID bossBar;
     private Set<UUID> votedYes = new HashSet<>();
     private Set<UUID> votedNo = new HashSet<>();
 
