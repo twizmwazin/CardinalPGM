@@ -10,7 +10,7 @@ import in.twizmwaz.cardinal.module.modules.kit.KitNode;
 import org.bukkit.Material;
 import org.jdom2.Element;
 
-@BuilderData(load = ModuleLoadTime.EARLIEST)
+@BuilderData(load = ModuleLoadTime.EARLIER)
 public class ClassModuleBuilder implements ModuleBuilder {
 
     @Override
