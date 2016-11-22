@@ -1,7 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.titleRespawn;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -26,26 +25,20 @@ import in.twizmwaz.cardinal.module.modules.visibility.Visibility;
 import in.twizmwaz.cardinal.util.PacketUtils;
 import in.twizmwaz.cardinal.util.Players;
 import in.twizmwaz.cardinal.util.Teams;
+import in.twizmwaz.cardinal.util.Watchers;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
-import net.minecraft.server.AttributeInstance;
-import net.minecraft.server.AttributeModifier;
-import net.minecraft.server.DataWatcher;
-import net.minecraft.server.DataWatcherRegistry;
-import net.minecraft.server.EntityArmorStand;
 import net.minecraft.server.EntityPlayer;
 import net.minecraft.server.EnumItemSlot;
 import net.minecraft.server.Packet;
 import net.minecraft.server.PacketPlayOutEntityDestroy;
 import net.minecraft.server.PacketPlayOutEntityEquipment;
-import net.minecraft.server.PacketPlayOutEntityMetadata;
 import net.minecraft.server.PacketPlayOutEntityStatus;
 import net.minecraft.server.PacketPlayOutMount;
 import net.minecraft.server.PacketPlayOutSpawnEntityLiving;
-import net.minecraft.server.PacketPlayOutUpdateAttributes;
 import net.minecraft.server.PacketPlayOutWorldBorder;
 import net.minecraft.server.WorldBorder;
 import org.bukkit.Bukkit;
@@ -246,14 +239,13 @@ public class TitleRespawn implements TaskedModule {
             @Override
             public void run() {
                 EntityPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
-                DataWatcher data = new DataWatcher(nmsPlayer);
-                data.register(DataWatcherRegistry.c.a(7), 0.0F); // Creates player health metadata with 0.0F
 
                 List<Packet> packets = new ArrayList<>();
                 for (EnumItemSlot slot : EnumItemSlot.values()) {
-                    packets.add(new PacketPlayOutEntityEquipment(nmsPlayer.getId(), slot, null));  // Removes armor, otherwise, a client-side glitch makes items
+                    packets.add(new PacketPlayOutEntityEquipment(nmsPlayer.getId(), slot,
+                            net.minecraft.server.ItemStack.a));  // Removes armor, otherwise, a client-side glitch makes items
                 }
-                packets.add(new PacketPlayOutEntityMetadata(nmsPlayer.getId(), nmsPlayer.getDataWatcher(), false));
+                packets.add(PacketUtils.createMetadataPacket(nmsPlayer.getId(), Watchers.getHealth(0)));
                 packets.add(new PacketPlayOutEntityStatus(nmsPlayer, (byte) 3));
 
                 for (Player online : Bukkit.getOnlinePlayers()) {
@@ -270,36 +262,17 @@ public class TitleRespawn implements TaskedModule {
     public void sendArmorStandPacket(Player player) {
         EntityPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
         Location loc = player.getLocation();
-
-        List<DataWatcher.Item<?>> dataItems = new ArrayList<>();
-        dataItems.add(new DataWatcher.Item<>(DataWatcherRegistry.a.a(0), (byte)32)); // Sets invisible
-        dataItems.add(new DataWatcher.Item<>(DataWatcherRegistry.c.a(7), 20.0F));    // Sets health
-
         PacketPlayOutSpawnEntityLiving spawnPacket = new PacketPlayOutSpawnEntityLiving(
                 Integer.MAX_VALUE, UUID.randomUUID(),     // Entity id and Entity UUID
                 30,                                       // Entity type id (ArmorStand)
                 loc.getX(), loc.getY() - 1.1D, loc.getZ(),// X, Y and Z Position
                 0, 0, 0,                                  // X, Y and Z Motion
                 (byte)2, (byte)0, (byte)2,                // Yaw, Pitch and Head Pitch
-                dataItems                                 // Metadata
+                Watchers.toList(Watchers.INVISIBLE)       // Metadata
         );
-
-        // Create a packet to send attributes for the Armor Stand (with no modifiers)
-        PacketPlayOutUpdateAttributes attributePacket = new PacketPlayOutUpdateAttributes(Integer.MAX_VALUE, new ArrayList<AttributeInstance>());
-
-        try {
-            Field field = attributePacket.getClass().getDeclaredField("b");
-            field.setAccessible(true);
-
-            // Add a max health attribute with 0, so that health doesn't display
-            ((List<PacketPlayOutUpdateAttributes.AttributeSnapshot>) field.get(attributePacket)).add(
-                    attributePacket.new AttributeSnapshot("generic.maxHealth", 0D, Lists.<AttributeModifier>newArrayList()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         PacketUtils.sendPacket(player, spawnPacket);
-        PacketUtils.sendPacket(player, attributePacket);
+        // Create a packet to send 0 max health attribute, so that health doesn't display
+        PacketUtils.sendPacket(player, PacketUtils.createHealthAttribute(Integer.MAX_VALUE));
         PacketUtils.sendPacket(player, new PacketPlayOutMount(Integer.MAX_VALUE, nmsPlayer.getId()));
         player.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""));
     }

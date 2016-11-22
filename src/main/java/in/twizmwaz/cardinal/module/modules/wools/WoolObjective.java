@@ -37,7 +37,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Wool;
 
 import java.util.HashSet;
@@ -144,7 +143,7 @@ public class WoolObjective implements GameObjective {
         Player player = (Player) event.getWhoClicked();
         if (!this.complete && GameHandler.getGameHandler().getMatch().isRunning()) {
             try {
-                if (event.getCurrentItem().getType() == Material.WOOL && event.getCurrentItem().getData().getData() == color.getData()) {
+                if (event.getCurrentItem().getType().equals(Material.WOOL) && ((Wool) event.getCurrentItem().getData()).getColor().equals(color)) {
                     if (Teams.getTeamByPlayer(player).orNull() == team) {
                         boolean touchMessage = false;
                         if (!this.playersTouched.contains(player.getUniqueId())) {
@@ -174,7 +173,7 @@ public class WoolObjective implements GameObjective {
         Player player = event.getPlayer();
         if (!this.complete && GameHandler.getGameHandler().getMatch().isRunning()) {
             try {
-                if (event.getItem().getItemStack().getType() == Material.WOOL && event.getItem().getItemStack().getData().getData() == color.getData()) {
+                if (event.getItem().getItemStack().getType() == Material.WOOL && ((Wool) event.getItem().getItemStack().getData()).getColor().equals(color)) {
                     if (Teams.getTeamByPlayer(player).orNull() == team) {
                         boolean touchMessage = false;
                         if (!this.playersTouched.contains(player.getUniqueId())) {
@@ -278,7 +277,8 @@ public class WoolObjective implements GameObjective {
 
     @EventHandler
     public void onCraftWool(CraftItemEvent event) {
-        if (event.getRecipe().getResult().equals(new ItemStack(Material.WOOL, 1, color.getData())) && !this.craftable) {
+        if (!this.craftable && event.getRecipe().getResult().getType().equals(Material.WOOL)
+                && ((Wool) event.getRecipe().getResult().getData()).getColor().equals(color)) {
             event.setCancelled(true);
         }
     }
