@@ -7,8 +7,7 @@ import in.twizmwaz.cardinal.module.modules.observers.ObserverModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.PacketUtils;
 import in.twizmwaz.cardinal.util.Teams;
-import net.minecraft.server.DataWatcher;
-import net.minecraft.server.DataWatcherRegistry;
+import in.twizmwaz.cardinal.util.Watchers;
 import net.minecraft.server.Packet;
 import net.minecraft.server.PacketPlayOutEntity;
 import net.minecraft.server.PacketPlayOutEntityDestroy;
@@ -146,23 +145,17 @@ class PlayerBoundingBox implements Listener {
         if (viewers.contains(viewer.getUniqueId())) return;
         Player player = Bukkit.getPlayer(this.player);
         Location loc = player.getLocation();
-
-        List<DataWatcher.Item<?>> dataItems = new ArrayList<>();
-        dataItems.add(new DataWatcher.Item<>(DataWatcherRegistry.a.a(0), (byte) 32)); // Sets invisible
-        dataItems.add(new DataWatcher.Item<>(DataWatcherRegistry.c.a(7), 20.0F));    // Sets health
-
         int i = 0;
         for (int x = -1; x < 2; x += 2) {
             for (int z = -1; z < 2; z += 2) {
                 Packet spawnPacket = new PacketPlayOutSpawnEntityLiving(
-                        zombieID.get(i), UUID.randomUUID(), 54,                 // Entity id, UUID, and type (Zombie)
-                        loc.getX() + (x * DamageIndicator.OFFSET), loc.getY() , // X, Y
-                        loc.getZ() + (z * DamageIndicator.OFFSET),              // and Z coords
-                        0, 0, 0,                                                // X, Y and Z Motion
-                        (byte)2, (byte)0, (byte)2,                              // Yaw, Pitch and Head Pitch
-                        dataItems);                                             // Metadata
+                        zombieID.get(i++), UUID.randomUUID(), 54,             // Entity id, UUID, and type (Zombie)
+                        loc.getX() + (x * DamageIndicator.OFFSET), loc.getY(),// X, Y
+                        loc.getZ() + (z * DamageIndicator.OFFSET),            // and Z coords
+                        0, 0, 0,                                              // X, Y and Z Motion
+                        (byte) 2, (byte) 0, (byte) 2,                         // Yaw, Pitch and Head Pitch
+                        Watchers.toList(Watchers.INVISIBLE));                 // Metadata
                 PacketUtils.sendPacket(viewer, spawnPacket);
-                i++;
             }
         }
         viewers.add(viewer.getUniqueId());

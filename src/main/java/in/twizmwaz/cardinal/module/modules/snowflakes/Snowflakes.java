@@ -1,13 +1,12 @@
 package in.twizmwaz.cardinal.module.modules.snowflakes;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import in.twizmwaz.cardinal.Cardinal;
+import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.event.SnowflakeChangeEvent;
-import in.twizmwaz.cardinal.module.GameObjective;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
@@ -16,19 +15,15 @@ import in.twizmwaz.cardinal.util.MiscUtil;
 import in.twizmwaz.cardinal.util.Numbers;
 import in.twizmwaz.cardinal.util.PacketUtils;
 import in.twizmwaz.cardinal.util.Teams;
-import net.minecraft.server.DataWatcher;
-import net.minecraft.server.DataWatcherRegistry;
-import net.minecraft.server.EntityItem;
+import in.twizmwaz.cardinal.util.Watchers;
 import net.minecraft.server.Packet;
 import net.minecraft.server.PacketPlayOutEntityDestroy;
-import net.minecraft.server.PacketPlayOutEntityMetadata;
 import net.minecraft.server.PacketPlayOutSpawnEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -38,135 +33,87 @@ import org.bukkit.event.entity.EntityDespawnInVoidEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.material.Wool;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Snowflakes implements Module {
 
-    private Map<Player, List<Item>> items;
-    private Map<Player, List<DyeColor>> destroyed;
+    private static String ITEM_THROWER_META = "item-thrower";
 
-    private static DataWatcher snowflakeMetadata;
-
-    static {
-        snowflakeMetadata = new DataWatcher(new EntityItem(((CraftWorld) Bukkit.getWorlds().get(0)).getHandle()));
-        snowflakeMetadata.register(DataWatcherRegistry.f.a(6), Optional.of(new net.minecraft.server.ItemStack(net.minecraft.server.Item.getById(332), 0)));
-    }
-
-    public Snowflakes() {
-        this.items = new HashMap<>();
-        this.destroyed = new HashMap<>();
-    }
+    private Map<Player, List<DyeColor>> destroyed = new HashMap<>();
 
     @Override
     public void unload() {
         HandlerList.unregisterAll(this);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerDropItem(PlayerDropItemEvent event) {
-        if (!event.isCancelled() && Teams.getTeamByPlayer(event.getPlayer()) != null && event.getItemDrop().getItemStack().getType().equals(Material.WOOL)) {
-            for (TeamModule team : Teams.getTeams()) {
-                if (!team.isObserver() && Teams.getTeamByPlayer(event.getPlayer()).orNull() != team) {
-                    for (GameObjective obj : Teams.getShownObjectives(team)) {
-                        if (obj instanceof WoolObjective && event.getItemDrop().getItemStack().getData().getData() == ((WoolObjective) obj).getColor().getData()) {
-                            if (!items.containsKey(event.getPlayer())) {
-                                items.put(event.getPlayer(), new ArrayList<Item>());
-                            }
-                            List<Item> list = items.get(event.getPlayer());
-                            list.add(event.getItemDrop());
-                            items.put(event.getPlayer(), list);
-                        }
-                    }
-                }
-            }
+        if (testDestroy(event.getPlayer(), event.getItemDrop().getItemStack())) {
+            event.getItemDrop().setMetadata(ITEM_THROWER_META,
+                    new FixedMetadataValue(Cardinal.getInstance(), event.getPlayer().getUniqueId()));
         }
-    }
-
-    private Player getThrower(Item thrownItem) {
-        for (Player player : items.keySet()) {
-            if (player != null && Teams.getTeamByPlayer(player) != null) {
-                for (Item item : items.get(player)) {
-                    if (item.equals(thrownItem)) {
-                        return player;
-                    }
-                }
-            }
-        }
-        return null;
     }
 
     @EventHandler
     public void onItemDespawnInVoid(EntityDespawnInVoidEvent event) {
-        if (!(event.getEntity() instanceof Item)) return;
+        if (!(event.getEntity() instanceof Item) || !event.getEntity().hasMetadata(ITEM_THROWER_META)) return;
+        Player player = Bukkit.getPlayer((UUID) event.getEntity().getMetadata(ITEM_THROWER_META).get(0).value());
         Item item = (Item) event.getEntity();
-        Player player = getThrower(item);
-        if (player != null) {
-            for (TeamModule team : Teams.getTeams()) {
-                if (!team.isObserver() && Teams.getTeamByPlayer(player).orNull() != team) {
-                    for (GameObjective obj : Teams.getShownObjectives(team)) {
-                        if (obj instanceof WoolObjective && item.getItemStack().getData().getData() == ((WoolObjective) obj).getColor().getData() && (!destroyed.containsKey(player) || !destroyed.get(player).contains(((WoolObjective) obj).getColor())) && !obj.isComplete()) {
-                            if (!destroyed.containsKey(player)) {
-                                destroyed.put(player, new ArrayList<DyeColor>());
-                            }
-                            List<DyeColor> list = destroyed.get(player);
-                            list.add(((WoolObjective) obj).getColor());
-                            destroyed.put(player, list);
-
-                            Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.DESTROY_WOOL, 8, MiscUtil.convertDyeColorToChatColor(((WoolObjective) obj).getColor()) + ((WoolObjective) obj).getColor().name().toUpperCase().replaceAll("_", " ") + " WOOL" + ChatColor.GRAY));
-                        }
-                    }
-                }
-            }
+        if (testDestroy(player, item.getItemStack())) {
+            addDestroyed(player, ((Wool) item.getItemStack().getData()).getColor());
         }
     }
 
     @EventHandler
     public void onPlayerCraft(CraftItemEvent event) {
-        Player player = ((Player)event.getWhoClicked());
-        List<ItemStack> destroyedWools = new ArrayList<>();
-        if (event.getRecipe() instanceof ShapedRecipe) {
-            for (ItemStack item : ((ShapedRecipe) event.getRecipe()).getIngredientMap().values()) {
-                if (item != null && item.getType() != Material.AIR && item.getType() == Material.WOOL && !destroyedWools.contains(item)) {
-                    destroyedWools.add(item);
-                }
-            }
-        } else if (event.getRecipe() instanceof ShapelessRecipe) {
-            for (ItemStack item : ((ShapelessRecipe) event.getRecipe()).getIngredientList()) {
-                if (item.getType().equals(Material.WOOL) && !destroyedWools.contains(item)) {
-                    destroyedWools.add(item);
-                }
-            }
-        }
-        if (!destroyedWools.isEmpty() && Teams.getTeamByPlayer(player) != null) {
-            for (ItemStack item : destroyedWools) {
-                for (TeamModule team : Teams.getTeams()) {
-                    if (!team.isObserver() && Teams.getTeamByPlayer(player).orNull() != team) {
-                        for (GameObjective obj : Teams.getShownObjectives(team)) {
-                            if (obj instanceof WoolObjective && item.getData().getData() == ((WoolObjective) obj).getColor().getData() && (!destroyed.containsKey(player) || !destroyed.get(player).contains(((WoolObjective) obj).getColor())) && !obj.isComplete()) {
-                                if (!destroyed.containsKey(player)) {
-                                    destroyed.put(player, new ArrayList<DyeColor>());
-                                }
-                                List<DyeColor> list = destroyed.get(player);
-                                list.add(((WoolObjective) obj).getColor());
-                                destroyed.put(player, list);
-
-                                Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.DESTROY_WOOL, 8, MiscUtil.convertDyeColorToChatColor(((WoolObjective) obj).getColor()) + ((WoolObjective) obj).getColor().name().toUpperCase().replaceAll("_", " ") + " WOOL" + ChatColor.GRAY));
-                            }
-                        }
-                    }
-                }
+        Player player = (Player) event.getWhoClicked();
+        for (DyeColor color : getColors(event.getRecipe())) {
+            if (testDestroy(player, color)) {
+                addDestroyed(player, color);
             }
         }
     }
 
+    private boolean testDestroy(Player player, ItemStack item) {
+        return item.getType().equals(Material.WOOL) && testDestroy(player, ((Wool) item.getData()).getColor());
+    }
+
+    private boolean testDestroy(Player player, DyeColor dye) {
+        TeamModule team = Teams.getTeamByPlayer(player).orNull();
+        return team != null && GameHandler.getGameHandler().getMatch().getModules().getModules(WoolObjective.class)
+                .stream().anyMatch(wool -> wool.getTeam() != team && !wool.isComplete() && wool.getColor().equals(dye)
+                        && !(destroyed.containsKey(player) && destroyed.get(player).contains(dye)));
+    }
+
+    private void addDestroyed(Player player, DyeColor dye) {
+        if (!destroyed.containsKey(player)) destroyed.put(player, Lists.newArrayList());
+        destroyed.get(player).add(dye);
+        Bukkit.getServer().getPluginManager().callEvent(new SnowflakeChangeEvent(player, ChangeReason.DESTROY_WOOL,
+                8, MiscUtil.convertDyeColorToChatColor(dye) + dye.name().toUpperCase().replaceAll("_", " ") + " WOOL" + ChatColor.GRAY));
+    }
+
+    private List<DyeColor> getColors(Recipe recipe) {
+        return recipe instanceof ShapedRecipe ? getColors(((ShapedRecipe) recipe).getIngredientMap().values())
+                : recipe instanceof ShapelessRecipe ? getColors(((ShapelessRecipe) recipe).getIngredientList())
+                : Lists.newArrayList();
+    }
+
+    private List<DyeColor> getColors(Collection<ItemStack> items) {
+        return items.stream().filter(item -> item != null && item.getType().equals(Material.WOOL))
+                .map(item -> ((Wool) item.getData()).getColor()).distinct().collect(Collectors.toList());
+    }
 
     @EventHandler
     public void onCardinalDeath(CardinalDeathEvent event) {
@@ -232,29 +179,25 @@ public class Snowflakes implements Module {
         for (int i = 0; i < count; i++) {
             int id = Bukkit.allocateEntityId();
             entities[i] = id;
-            int motX = (int) ((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 8000),
+            int motX = (int) ((float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 8000),
                     motY = (int) (0.2D * 8000),
-                    motZ = (int) ((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 8000);
+                    motZ = (int) ((float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 8000);
             packets.add(new PacketPlayOutSpawnEntity(
                     id, UUID.randomUUID(),             // Entity id and Entity UUID
                     loc.getX(), loc.getY(), loc.getZ(),// X, Y and Z Position
                     motX, motY, motZ,                  // X, Y and Z Motion
-                    (byte)2, (byte)0,                  // Pitch, Yaw
+                    (byte) 2, (byte) 0,                // Pitch, Yaw
                     2, 0                               // Type and data
             ));
-            packets.add(new PacketPlayOutEntityMetadata(id, snowflakeMetadata, true));
+            packets.add(PacketUtils.createMetadataPacket(id, Watchers.toList(Watchers.SNOWFLAKE)));
         }
         for (Packet packet : packets) PacketUtils.sendPacket(player, packet);
         scheduleSnowflakeRemove(player, entities);
     }
 
     private void scheduleSnowflakeRemove(final Player player, final int... id) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                PacketUtils.sendPacket(player, new PacketPlayOutEntityDestroy(id));
-            }
-        }, 100L);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(),
+                () -> PacketUtils.sendPacket(player, new PacketPlayOutEntityDestroy(id)), 100L);
     }
 
     public enum ChangeReason {
