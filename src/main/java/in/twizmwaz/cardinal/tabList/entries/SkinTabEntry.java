@@ -5,29 +5,22 @@ import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.tabList.TabList;
 import in.twizmwaz.cardinal.tabList.TabView;
 import in.twizmwaz.cardinal.util.PacketUtils;
+import in.twizmwaz.cardinal.util.Watchers;
 import net.minecraft.server.DataWatcher;
-import net.minecraft.server.DataWatcherRegistry;
 import net.minecraft.server.Packet;
 import net.minecraft.server.PacketPlayOutEntityDestroy;
-import net.minecraft.server.PacketPlayOutEntityMetadata;
 import net.minecraft.server.PacketPlayOutNamedEntitySpawn;
 import net.minecraft.server.PacketPlayOutPlayerInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.UUID;
 
 public abstract class SkinTabEntry extends TabEntry {
 
     private int id = Bukkit.allocateEntityId();
     private boolean hat = false;
-    private static DataWatcher hatOn = new DataWatcher(null);
-    private static DataWatcher hatOff = new DataWatcher(null);
-
-    static {
-        hatOn.register(DataWatcherRegistry.a.a(13), (byte) 64);
-        hatOff.register(DataWatcherRegistry.a.a(13), (byte) 0);
-    }
 
     public SkinTabEntry(GameProfile profile) {
         super(profile);
@@ -74,17 +67,17 @@ public abstract class SkinTabEntry extends TabEntry {
         updateSkinParts();
     }
 
-    private DataWatcher getDataWatcher() {
-        return hat ? hatOn : hatOff;
+    private List<DataWatcher.Item<?>> getDataList() {
+        return Watchers.toList(hat ? Watchers.HAT_ON : Watchers.HAT_OFF);
     }
 
     private void updateSkinParts() {
-        PacketUtils.broadcastPacket(new PacketPlayOutEntityMetadata(id, getDataWatcher(), true));
+        PacketUtils.broadcastPacket(PacketUtils.createMetadataPacket(id, getDataList()));
     }
 
     private Packet createSkinPartsPacket() {
         UUID uuid = getProfile().getId();
-        return new PacketPlayOutNamedEntitySpawn(id, uuid, 0, -1000, 0, (byte) 0, (byte) 0, getDataWatcher().c());
+        return new PacketPlayOutNamedEntitySpawn(id, uuid, 0, -1000, 0, (byte) 0, (byte) 0, getDataList());
     }
 
     private Packet deleteSkinParts() {

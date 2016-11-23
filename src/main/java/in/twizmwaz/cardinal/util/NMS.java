@@ -6,12 +6,12 @@ import org.bukkit.inventory.ItemStack;
 
 public class NMS {
 
-    public final static String TAG = "Cardinal";
+    public static final String TAG = "Cardinal";
 
     public static final String APPLY_ITEM_NBT = "item-mod-applied";
 
     public static NBTTagCompound getItemNBT(ItemStack item) {
-        return item instanceof CraftItemStack ? ((CraftItemStack) item).getHandle().a(TAG, true) : new NBTTagCompound();
+        return item instanceof CraftItemStack ? ((CraftItemStack) item).getHandle().c(TAG) : new NBTTagCompound();
     }
 
 }

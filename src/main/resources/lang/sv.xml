@@ -118,20 +118,19 @@
         <others>andra</others>
         <blocks>{0} block</blocks>
         <ownership>{0}s {1}</ownership>
-        <and>och</and>
-        <by>av</by>
+        <and>{0} och {1}</and>
+        <by>{0} av {1}</by>
         <team>Lag</team>
     </misc>
     <userInterface>
-        <mapLoaded>Laddade Kartor</mapLoaded>
+        <mapLoaded>Laddade Kartor {0}</mapLoaded>
         <mapObjective>Objektiv</mapObjective>
         <mapAuthor>Upphovsman</mapAuthor>
         <mapAuthors>Upphovsmän</mapAuthors>
         <mapContributors>Bidragsgivare</mapContributors>
         <mapRules>Regler</mapRules>
         <mapMax>Maximalt antal spelare</mapMax>
-        <rotationCurrent>Nuvarande Rotation</rotationCurrent>
-        <rotationLoaded>Laddade Rotationer</rotationLoaded>
+        <rotationCurrent>Nuvarande Rotation {0}</rotationCurrent>
         <matchInfo>Matchinformation</matchInfo>
         <time>Tid</time>
         <matchTime>Matchtid</matchTime>

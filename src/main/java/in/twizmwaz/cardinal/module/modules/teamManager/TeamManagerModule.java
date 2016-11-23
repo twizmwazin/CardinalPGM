@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.module.modules.teamManager;
 
+import com.google.common.collect.Lists;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
@@ -8,13 +9,15 @@ import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.PlayerChangeTeamEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.Module;
-import in.twizmwaz.cardinal.module.modules.respawn.RespawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.util.Align;
+import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Contributor;
 import in.twizmwaz.cardinal.util.Players;
 import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,6 +27,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class TeamManagerModule implements Module {
 
@@ -72,59 +76,20 @@ public class TeamManagerModule implements Module {
         for (Player player : Bukkit.getOnlinePlayers()) {
             sendMapMessage(player);
         }
+        sendMapMessage(Bukkit.getConsoleSender());
     }
 
-    private void sendMapMessage(Player player) {
-        player.sendMessage(ChatColor.STRIKETHROUGH + "--------" + ChatColor.AQUA + ChatColor.BOLD + " " + GameHandler.getGameHandler().getMatch().getLoadedMap().getName() + " " + ChatColor.RESET + ChatColor.STRIKETHROUGH + "--------");
-        String line = "";
-        if (GameHandler.getGameHandler().getMatch().getLoadedMap().getObjective().contains(" ")) {
-            for (String word : GameHandler.getGameHandler().getMatch().getLoadedMap().getObjective().split(" ")) {
-                line += word + " ";
-                if (line.trim().length() > 32) {
-                    line = ChatColor.BLUE + "" + ChatColor.ITALIC + line.trim();
-                    player.sendMessage(" " + line);
-                    line = "";
-                }
-            }
-            if (!line.trim().equals("")) {
-                line = ChatColor.BLUE + "" + ChatColor.ITALIC + line.trim();
-                player.sendMessage(" " + line);
-                line = "";
-            }
-        } else {
-            line = ChatColor.BLUE + "" + ChatColor.ITALIC + GameHandler.getGameHandler().getMatch().getLoadedMap().getObjective();
-            player.sendMessage(" " + line);
-        }
-        String locale = player.getLocale();
-        String result = ChatColor.DARK_GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_CREATED_BY).getMessage(locale) + " ";
-        List<Contributor> authors = GameHandler.getGameHandler().getMatch().getLoadedMap().getAuthors();
-        for (Contributor author : authors) {
-            if (authors.indexOf(author) < authors.size() - 2) {
-                result = result + author.getDisplayName() + ChatColor.DARK_GRAY + ", ";
-            } else if (authors.indexOf(author) == authors.size() - 2) {
-                result = result + author.getDisplayName() + ChatColor.DARK_GRAY + " " + new LocalizedChatMessage(ChatConstant.MISC_AND).getMessage(locale) + " ";
-            } else if (authors.indexOf(author) == authors.size() - 1) {
-                result = result + author.getDisplayName();
-            }
-        }
-        if (result.contains(" ")) {
-            for (String word : result.split(" ")) {
-                line += word + " ";
-                if (line.trim().length() > 32) {
-                    line = line.trim();
-                    player.sendMessage(ChatColor.DARK_GRAY + " " + line);
-                    line = "";
-                }
-            }
-            if (!line.trim().equals("")) {
-                line = line.trim();
-                player.sendMessage(ChatColor.DARK_GRAY + " " + line);
-            }
-        } else {
-            line = result;
-            player.sendMessage(ChatColor.DARK_GRAY + " " + line);
-        }
-        player.sendMessage(ChatColor.STRIKETHROUGH + "---------------------------");
+    private void sendMapMessage(CommandSender player) {
+        List<String> result = Lists.newArrayList();
+        result.addAll(Align.wordWrap("" + ChatColor.BLUE + ChatColor.ITALIC + match.getLoadedMap().getObjective(), 192));
+        result.addAll(Align.wordWrap(ChatColor.DARK_GRAY + new LocalizedChatMessage(ChatConstant.GENERIC_CREATED_BY,
+                ChatUtil.toChatMessage(match.getLoadedMap().getAuthors().stream().map(Contributor::getDisplayName)
+                        .collect(Collectors.toList()), ChatColor.DARK_AQUA, ChatColor.DARK_GRAY))
+                .getMessage(ChatUtil.getLocale(player)), 192));
+        player.sendMessage(Align.padMessage("" + ChatColor.AQUA + ChatColor.BOLD +
+                GameHandler.getGameHandler().getMatch().getLoadedMap().getName(), ChatColor.WHITE, 200));
+        for (String line : result) player.sendMessage(" " + line);
+        player.sendMessage(Align.getDash(ChatColor.WHITE, 200));
     }
 
     @EventHandler

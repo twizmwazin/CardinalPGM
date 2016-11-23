@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.module.modules.header;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.chat.ChatConstant;
 import in.twizmwaz.cardinal.chat.ChatMessage;
+import in.twizmwaz.cardinal.chat.LocalizedChatMessage;
 import in.twizmwaz.cardinal.chat.UnlocalizedChatMessage;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
@@ -11,7 +12,8 @@ import in.twizmwaz.cardinal.event.PlayerNameUpdateEvent;
 import in.twizmwaz.cardinal.event.RankChangeEvent;
 import in.twizmwaz.cardinal.module.TaskedModule;
 import in.twizmwaz.cardinal.module.modules.matchTimer.MatchTimer;
-import in.twizmwaz.cardinal.rotation.LoadedMap;
+import in.twizmwaz.cardinal.repository.LoadedMap;
+import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Config;
 import in.twizmwaz.cardinal.util.Contributor;
 import in.twizmwaz.cardinal.util.Strings;
@@ -25,6 +27,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLocaleChangeEvent;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class HeaderModule implements TaskedModule {
 
@@ -48,57 +51,53 @@ public class HeaderModule implements TaskedModule {
 
     @Override
     public void run() {
-        if (GameHandler.getGameHandler().getMatch().isRunning() && last != (int)MatchTimer.getTimeInSeconds()) {
-            last = (int)MatchTimer.getTimeInSeconds();
-            updateFooter();
-            updateAll();
+        if (GameHandler.getGameHandler().getMatch().isRunning() && last != (int) MatchTimer.getTimeInSeconds()) {
+            last = (int) MatchTimer.getTimeInSeconds();
+            updateAll(HeaderPart.FOOTER);
         }
     }
 
     @EventHandler
     public void onCycleComplete(CycleCompleteEvent event) {
-        updateAll();
+        updateAll(HeaderPart.BOTH);
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        updateHeader();
-        updateAll();
+        updateAll(HeaderPart.HEADER);
     }
 
     @EventHandler
     public void onPlayerNameChange(PlayerNameUpdateEvent event) {
-        updateHeader();
-        updateAll();
+        updateAll(HeaderPart.HEADER);
     }
 
     @EventHandler
     public void onRankChange(RankChangeEvent event) {
-        if (event.isOnline()) return;
-        updateHeader();
-        updateAll();
+        updateAll(HeaderPart.HEADER);
     }
 
     @EventHandler
-    public void onMatchStart (MatchStartEvent event) {
+    public void onMatchStart(MatchStartEvent event) {
         last = 0;
-        updateFooter();
-        updateAll();
+        updateAll(HeaderPart.FOOTER);
     }
 
     @EventHandler
     public void onMatchEnd(MatchEndEvent event) {
-        updateFooter();
-        updateAll();
+        updateAll(HeaderPart.FOOTER);
     }
 
     @EventHandler
     public void onLangChange(PlayerLocaleChangeEvent event) {
-        updatePlayer(event.getPlayer(), event.getNewLocale());
+        updatePlayer(event.getPlayer(), event.getNewLocale(), HeaderPart.NONE);
     }
 
     public void updateHeader() {
-        header = new UnlocalizedChatMessage(ChatColor.AQUA.toString() + ChatColor.BOLD + mapName + ChatColor.RESET.toString() + ChatColor.DARK_GRAY + " {0} {1}", ChatConstant.MISC_BY.asMessage(), assembleAuthors());
+        header = new LocalizedChatMessage(ChatConstant.MISC_BY,
+                new UnlocalizedChatMessage("" + ChatColor.AQUA + ChatColor.BOLD + mapName + ChatColor.DARK_GRAY),
+                ChatUtil.toChatMessage(authors.stream()
+                        .map(Contributor::getDisplayName).collect(Collectors.toList()), ChatColor.RESET, ChatColor.DARK_GRAY));
     }
 
     public void updateFooter() {
@@ -109,33 +108,23 @@ public class HeaderModule implements TaskedModule {
                 ChatColor.WHITE + ChatColor.BOLD + "Cardinal", ChatConstant.UI_TIME.asMessage());
     }
 
-    public void updateAll() {
+    public void updateAll(HeaderPart part) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            updatePlayer(player, player.getLocale());
+            updatePlayer(player, player.getLocale(), part);
         }
     }
 
-    private void updatePlayer(Player player, String locale) {
-        if (header == null) updateHeader();
-        if (footer == null) updateFooter();
+    private void updatePlayer(Player player, String locale, HeaderPart part) {
+        if (header == null || part.equals(HeaderPart.HEADER) || part.equals(HeaderPart.BOTH)) updateHeader();
+        if (footer == null || part.equals(HeaderPart.FOOTER) || part.equals(HeaderPart.BOTH)) updateFooter();
         player.setPlayerListHeaderFooter(new TextComponent(header.getMessage(locale)), new TextComponent(footer.getMessage(locale)));
     }
 
-    private ChatMessage assembleAuthors() {
-        StringBuilder builder = new StringBuilder();
-        if (authors.size() == 1) builder.append(authors.get(0).getDisplayName());
-        else if (authors.size() > 1) {
-            for (Contributor author : authors) {
-                if (authors.indexOf(author) < authors.size() - 2) {
-                    builder.append(author.getDisplayName()).append(ChatColor.DARK_GRAY).append(", ");
-                } else if (authors.indexOf(author) == authors.size() - 2) {
-                    builder.append(author.getDisplayName()).append(ChatColor.DARK_GRAY).append(" {0} ");
-                } else if (authors.indexOf(author) == authors.size() - 1) {
-                    builder.append(author.getDisplayName());
-                }
-            }
-        }
-        return new UnlocalizedChatMessage(builder.toString(), ChatConstant.MISC_AND.asMessage());
+    public enum HeaderPart {
+        NONE,
+        HEADER,
+        FOOTER,
+        BOTH;
     }
 
 }

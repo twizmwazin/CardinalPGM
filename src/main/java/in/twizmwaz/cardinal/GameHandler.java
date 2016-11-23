@@ -4,8 +4,8 @@ import in.twizmwaz.cardinal.cycle.Cycle;
 import in.twizmwaz.cardinal.event.CycleCompleteEvent;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.ModuleFactory;
-import in.twizmwaz.cardinal.rotation.Rotation;
-import in.twizmwaz.cardinal.rotation.exception.RotationLoadException;
+import in.twizmwaz.cardinal.repository.RepositoryManager;
+import in.twizmwaz.cardinal.repository.exception.RotationLoadException;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,7 +18,7 @@ public class GameHandler {
 
     private static GameHandler handler;
     private final ModuleFactory moduleFactory;
-    private Rotation rotation;
+    private RepositoryManager repositoryManager;
     private WeakReference<World> matchWorld;
     private Match match;
     private Cycle cycle;
@@ -31,9 +31,9 @@ public class GameHandler {
     }
 
     public void load() throws RotationLoadException {
-        rotation = new Rotation();
-        rotation.setupRotation();
-        cycle = new Cycle(rotation.getNext(), UUID.randomUUID(), this);
+        repositoryManager = new RepositoryManager();
+        repositoryManager.setupRotation();
+        cycle = new Cycle(repositoryManager.getRotation().getNext(), UUID.randomUUID(), this);
         Bukkit.getScheduler().scheduleSyncDelayedTask(Cardinal.getInstance(), new Runnable() {
             @Override
             public void run() {
@@ -47,22 +47,22 @@ public class GameHandler {
     }
 
     public void cycleAndMakeMatch() {
-        if (rotation.getNext().equals(cycle.getMap())) {
-            rotation.move();
+        if (repositoryManager.getRotation().getNext().equals(cycle.getMap())) {
+            repositoryManager.getRotation().move();
         }
         World oldMatchWorld = matchWorld == null ? null : matchWorld.get();
         cycle.run();
         if (match != null) match.unregisterModules();
-        this.match = new Match(cycle.getUuid(), cycle.getMap());
+        this.match = new Match(cycle.getUuid(), cycle.getMap(), repositoryManager.getRepo(cycle.getMap()));
         this.match.registerModules();
         Cardinal.getInstance().getLogger().info(this.match.getModules().size() + " modules loaded.");
         Bukkit.getServer().getPluginManager().callEvent(new CycleCompleteEvent(match));
-        cycle = new Cycle(rotation.getNext(), UUID.randomUUID(), this);
+        cycle = new Cycle(repositoryManager.getRotation().getNext(), UUID.randomUUID(), this);
         Bukkit.unloadWorld(oldMatchWorld, true);
     }
 
-    public Rotation getRotation() {
-        return rotation;
+    public RepositoryManager getRepositoryManager() {
+        return repositoryManager;
     }
 
     public World getMatchWorld() {

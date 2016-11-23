@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.util;
 
+import com.google.common.collect.Lists;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.lang.reflect.Field;
@@ -7,7 +8,7 @@ import java.util.List;
 
 public class Config {
 
-    public static String repo = "maps";
+    public static List<String> repos = Lists.newArrayList("maps");
     public static String rotation = "rotation.txt";
     public static boolean deleteMatches = true;
     public static boolean displayMapLoadErrors = false;

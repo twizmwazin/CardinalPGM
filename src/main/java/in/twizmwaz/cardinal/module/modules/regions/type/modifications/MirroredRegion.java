@@ -66,7 +66,7 @@ public class MirroredRegion extends RegionModule {
 
     public static Vector mirrorVector(Vector original, Vector origin, Vector normal) {
         Vector vector = original.minus(origin);
-        vector = vector.minus(normal.times(vector.dot(normal)).times(2)).add(origin);
+        vector = vector.minus(normal.times(vector.dot(normal)).times(2)).plus(origin);
         vector = new Vector(round(vector.getX()), round(vector.getY()), round(vector.getZ()));
         return vector;
     }
