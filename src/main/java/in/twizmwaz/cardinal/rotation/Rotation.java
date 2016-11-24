@@ -303,7 +303,7 @@ public class Rotation {
                     ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(Cardinal.getInstance().getDataFolder().getPath() + "/.names.ser")));
                     out.writeObject(names);
                     out.close();
-                    Bukkit.getLogger().log(Level.INFO, "Finnished updating map author names.");
+                    Bukkit.getLogger().log(Level.INFO, "Finished updating map author names.");
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
