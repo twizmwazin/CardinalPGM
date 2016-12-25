@@ -1,6 +1,7 @@
 package in.twizmwaz.cardinal.util;
 
 public enum Protocols {
+    VER_1_11_1("1.11.1", 316),
     VER_1_11("1.11.0", 315),
     VER_1_10("1.10.0-2", 210),
     VER_1_10_PRE2("1.10-pre2", 205),
@@ -31,6 +32,5 @@ public enum Protocols {
         }
         return ver > LATEST ? "Future" : "Unknown";
     }
-
 
 }
