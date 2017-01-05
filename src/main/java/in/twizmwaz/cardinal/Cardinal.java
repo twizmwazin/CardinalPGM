@@ -43,12 +43,11 @@ import in.twizmwaz.cardinal.repository.RepositoryManager;
 import in.twizmwaz.cardinal.repository.exception.RotationLoadException;
 import in.twizmwaz.cardinal.settings.Setting;
 import in.twizmwaz.cardinal.settings.SettingValue;
-import in.twizmwaz.cardinal.tabList.TabList;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Config;
 import in.twizmwaz.cardinal.util.DomUtil;
+import in.twizmwaz.cardinal.util.NonModuleFactory;
 import in.twizmwaz.cardinal.util.Numbers;
-import in.twizmwaz.cardinal.util.bossBar.BossBars;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
@@ -81,7 +80,8 @@ public class Cardinal extends JavaPlugin {
     private static Database database;
     private CommandsManager<CommandSender> commands;
     private File databaseFile;
-    private TabList tabList;
+    // Used to store objects that are not modules, like utils that need listeners, or the TabList
+    private NonModuleFactory nonModules;
 
     public static LocaleHandler getLocaleHandler() {
         return localeHandler;
@@ -95,12 +95,12 @@ public class Cardinal extends JavaPlugin {
         return database;
     }
 
-    public String getPluginFileName() {
-        return this.getFile().getName();
+    public static <T> T getNonModule(Class<T> clazz) {
+        return instance.nonModules.getNonModule(clazz);
     }
 
-    public TabList getTabList() {
-        return tabList;
+    public String getPluginFileName() {
+        return this.getFile().getName();
     }
 
     @Override
@@ -338,9 +338,7 @@ public class Cardinal extends JavaPlugin {
         registerSettings();
         registerRanks();
         setupCommands();
-        this.tabList = new TabList();
-        Bukkit.getPluginManager().registerEvents(tabList, this);
-        Bukkit.getPluginManager().registerEvents(new BossBars(), this);
+        nonModules = new NonModuleFactory();
         try {
             gameHandler = new GameHandler();
             gameHandler.load();
