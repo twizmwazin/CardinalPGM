@@ -1,5 +1,6 @@
 package in.twizmwaz.cardinal.util;
 
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import net.minecraft.server.EntityFireworks;
 import org.bukkit.Color;
@@ -7,10 +8,16 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.entity.CraftFirework;
 import org.bukkit.entity.Firework;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
-public class Fireworks {
+public class Fireworks implements Listener {
+
+    private static final String FIREWORK_METADATA = "cardinal-custom-firework";
 
     public static FireworkEffect getFireworkEffect(Color color) {
         return FireworkEffect.builder().with(FireworkEffect.Type.BURST).flicker(true).withColor(color).withFade(Color.BLACK).build();
@@ -33,6 +40,7 @@ public class Fireworks {
         fireworkMeta.addEffect(effect);
         fireworkMeta.setPower(power);
         firework.setFireworkMeta(fireworkMeta);
+        firework.setMetadata(FIREWORK_METADATA, new FixedMetadataValue(Cardinal.getInstance(), true));
         return firework;
     }
 
@@ -54,6 +62,11 @@ public class Fireworks {
             if (loc.getBlock() == null || loc.getY() == 256 || !loc.getBlock().getType().isOccluding()) return loc;
             loc.add(0, 1, 0);
         }
+    }
+
+    @EventHandler
+    public void onPlayerDamage(EntityDamageByEntityEvent event) {
+        if (event.getDamager().hasMetadata(FIREWORK_METADATA)) event.setCancelled(true);
     }
 
 }

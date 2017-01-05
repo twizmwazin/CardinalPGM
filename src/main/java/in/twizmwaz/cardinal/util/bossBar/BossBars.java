@@ -66,5 +66,4 @@ public class BossBars implements Listener {
         }
     }
 
-
 }
