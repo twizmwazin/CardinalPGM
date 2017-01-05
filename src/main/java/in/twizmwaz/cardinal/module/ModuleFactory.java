@@ -1,9 +1,9 @@
 package in.twizmwaz.cardinal.module;
 
+import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.match.Match;
 import in.twizmwaz.cardinal.module.modules.appliedRegion.AppliedRegionBuilder;
 import in.twizmwaz.cardinal.module.modules.armorKeep.ArmorKeepBuilder;
-import in.twizmwaz.cardinal.module.modules.projectileParticles.ProjectileParticlesModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.attackSpeed.AttackSpeedBuilder;
 import in.twizmwaz.cardinal.module.modules.blitz.BlitzBuilder;
 import in.twizmwaz.cardinal.module.modules.blockdrops.BlockdropsBuilder;
@@ -54,6 +54,7 @@ import in.twizmwaz.cardinal.module.modules.permissions.PermissionModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.playable.PlayableBuilder;
 import in.twizmwaz.cardinal.module.modules.portal.PortalBuilder;
 import in.twizmwaz.cardinal.module.modules.potionRemover.PotionRemoverBuilder;
+import in.twizmwaz.cardinal.module.modules.projectileParticles.ProjectileParticlesModuleBuilder;
 import in.twizmwaz.cardinal.module.modules.projectiles.ProjectilesBuilder;
 import in.twizmwaz.cardinal.module.modules.proximityAlarm.ProximityAlarmBuilder;
 import in.twizmwaz.cardinal.module.modules.rage.RageBuilder;
@@ -87,23 +88,24 @@ import in.twizmwaz.cardinal.module.modules.visibility.VisibilityBuilder;
 import in.twizmwaz.cardinal.module.modules.wildcard.WildCardBuilder;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjectiveBuilder;
 import in.twizmwaz.cardinal.module.modules.worldFreeze.WorldFreezeBuilder;
+import in.twizmwaz.cardinal.util.Config;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
+import java.util.Objects;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ModuleFactory {
 
-    private Set<Class<? extends ModuleBuilder>> builderClasses;
-    private final List<ModuleBuilder> builders;
+    private final List<? extends ModuleBuilder> builders;
 
-    private void addBuilders() {
-        this.builderClasses.addAll(Arrays.asList(
+    private Stream<Class<? extends ModuleBuilder>> getBuilders() {
+        return Stream.of(
                 BuildHeightBuilder.class,
                 WoolObjectiveBuilder.class,
                 CoreObjectiveBuilder.class,
@@ -192,54 +194,57 @@ public class ModuleFactory {
                 SpectatorToolsBuilder.class,
                 ProjectileParticlesModuleBuilder.class,
                 FeedbackModuleBuilder.class
-        ));
+        );
     }
 
     public ModuleFactory() {
-        this.builders = new ArrayList<>();
-        this.builderClasses = new HashSet<>();
-        this.addBuilders();
-        for (Class<? extends ModuleBuilder> clazz : builderClasses) {
+        this.builders = getBuilders().map(clazz -> {
             try {
-                builders.add(clazz.getConstructor().newInstance());
-            } catch (NoSuchMethodException e) {
-                Bukkit.getLogger().log(Level.SEVERE, clazz.getName() + " is an invalid ModuleBuilder.");
-                e.printStackTrace();
-            } catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
+                return clazz.getConstructor().newInstance();
+            } catch (Exception e) {
+                Bukkit.getLogger().log(Level.SEVERE, "Error enabling " + clazz.getSimpleName() + " as a ModuleBuilder.");
                 e.printStackTrace();
             }
-        }
+            return null;
+        }).filter(Objects::nonNull)
+                .sorted(Comparator.comparing(this::getLoadTime))
+                .collect(Collectors.toList());
     }
 
-    public ModuleCollection<Module> build(Match match, ModuleLoadTime time) {
+    private ModuleLoadTime getLoadTime(ModuleBuilder builder) {
+        LoadTime time = builder.getClass().getAnnotation(LoadTime.class);
+        return time == null ? ModuleLoadTime.NORMAL : time.value();
+    }
+
+    public void buildModules(Match match) {
+        builders.stream().flatMap(builder -> build(builder, match).stream())
+                .peek(this::registerEvents).forEach(match.getModules()::add);
+    }
+
+    private ModuleCollection<Module> build(ModuleBuilder builder, Match match) {
         ModuleCollection<Module> results = new ModuleCollection<>();
-        for (ModuleBuilder builder : builders) {
-            try {
-                if (builder.getClass().getAnnotation(BuilderData.class).load().equals(time)) {
-                    try {
-                        results.addAll(builder.load(match));
-                    } catch (Throwable t) {
-                        t.printStackTrace();
-                    }
-                }
-            } catch (NullPointerException e) {
-                if (time != ModuleLoadTime.NORMAL) ;
-                else try {
-                    results.addAll(builder.load(match));
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            }
+        try {
+            results.addAll(builder.load(match));
+            if (Config.debug_displayModuleLoadMessages)
+                Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + builder.getClass().getSimpleName() +
+                        " was successfully built for " + match.getLoadedMap().toShortMessage(ChatColor.DARK_AQUA, true, true));
+        } catch (Exception e) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + builder.getClass().getSimpleName() +
+                    " failed to load for " + match.getLoadedMap().toShortMessage(ChatColor.DARK_AQUA, true, true));
+            e.printStackTrace();
         }
         return results;
     }
 
-    public void registerBuilder(ModuleBuilder builder) {
-        builders.add(builder);
-    }
-
-    public void unregisterBuilder(ModuleBuilder builder) {
-        builders.remove(builder);
+    private void registerEvents(Module module) {
+        try {
+            Bukkit.getServer().getPluginManager().registerEvents(module, Cardinal.getInstance());
+        } catch (IllegalStateException e) { // Happens if you try to register a listener more than once
+        } catch (Exception e) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + this.getClass().getSimpleName() +
+                    " failed to get registered as Listener");
+            e.printStackTrace();
+        }
     }
 
 }

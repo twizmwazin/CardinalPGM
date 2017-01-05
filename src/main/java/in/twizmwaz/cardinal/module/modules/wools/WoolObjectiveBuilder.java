@@ -1,7 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.wools;
 
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.BuilderData;
+import in.twizmwaz.cardinal.module.LoadTime;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
@@ -18,7 +18,7 @@ import org.bukkit.DyeColor;
 import org.bukkit.util.Vector;
 import org.jdom2.Element;
 
-@BuilderData(load = ModuleLoadTime.EARLIER)
+@LoadTime(ModuleLoadTime.EARLIER)
 public class WoolObjectiveBuilder implements ModuleBuilder {
 
     @Override

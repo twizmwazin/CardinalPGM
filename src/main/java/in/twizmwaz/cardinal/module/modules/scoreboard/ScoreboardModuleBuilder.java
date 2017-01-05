@@ -1,14 +1,14 @@
 package in.twizmwaz.cardinal.module.modules.scoreboard;
 
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.BuilderData;
+import in.twizmwaz.cardinal.module.LoadTime;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.util.Teams;
 
-@BuilderData(load = ModuleLoadTime.LATER)
+@LoadTime(ModuleLoadTime.LATER)
 public class ScoreboardModuleBuilder implements ModuleBuilder {
 
     @Override

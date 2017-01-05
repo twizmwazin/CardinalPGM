@@ -28,7 +28,7 @@ public class MapCommands {
                                 CycleCommand.getMap(sender, args.getJoinedStrings(0));
         if (mapInfo == null) 
             throw new CommandException(ChatConstant.ERROR_NO_MAP_MATCH.getMessage(ChatUtil.getLocale(sender)));
-        sender.sendMessage(Align.padMessage(mapInfo.toShortMessage(ChatColor.DARK_AQUA + "", args.hasFlag('l'), true), ChatColor.RED));
+        sender.sendMessage(Align.padMessage(mapInfo.toShortMessage(ChatColor.DARK_AQUA, args.hasFlag('l'), true), ChatColor.RED));
         sender.sendMessage(TITLE_FORM + ChatConstant.UI_MAP_OBJECTIVE.getMessage(ChatUtil.getLocale(sender)) + ": "
                 + CONT_FORM + mapInfo.getObjective());
         sendContributors(sender, ChatConstant.UI_MAP_AUTHOR, ChatConstant.UI_MAP_AUTHORS, mapInfo.getAuthors());

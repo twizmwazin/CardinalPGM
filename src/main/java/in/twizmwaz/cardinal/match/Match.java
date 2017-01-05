@@ -1,16 +1,14 @@
 package in.twizmwaz.cardinal.match;
 
 import com.google.common.base.Optional;
-import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.event.MatchEndEvent;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleCollection;
-import in.twizmwaz.cardinal.module.ModuleLoadTime;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.module.modules.timers.StartTimer;
 import in.twizmwaz.cardinal.repository.LoadedMap;
 import in.twizmwaz.cardinal.repository.repositories.Repository;
-import in.twizmwaz.cardinal.module.modules.timers.StartTimer;
 import in.twizmwaz.cardinal.util.DomUtil;
 import in.twizmwaz.cardinal.util.Proto;
 import org.bukkit.Bukkit;
@@ -52,12 +50,7 @@ public class Match {
     }
 
     public void registerModules() {
-        for (ModuleLoadTime time : ModuleLoadTime.getOrdered()) {
-            for (Module module : GameHandler.getGameHandler().getModuleFactory().build(this, time)) {
-                modules.add(module);
-                Cardinal.getInstance().getServer().getPluginManager().registerEvents(module, Cardinal.getInstance());
-            }
-        }
+        GameHandler.getGameHandler().getModuleFactory().buildModules(this);
     }
 
     public void unregisterModules() {

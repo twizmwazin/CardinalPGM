@@ -2,7 +2,7 @@ package in.twizmwaz.cardinal.module.modules.kit;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.BuilderData;
+import in.twizmwaz.cardinal.module.LoadTime;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@BuilderData(load = ModuleLoadTime.EARLIER)
+@LoadTime(ModuleLoadTime.EARLIER)
 public class KitBuilder implements ModuleBuilder {
 
     public static KitNode getKit(Element element, Document document, boolean proceed) {

@@ -7,11 +7,11 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface BuilderData {
+public @interface LoadTime {
 
     /**
      * @return The position of when the module should be loaded
      */
-    public ModuleLoadTime load() default ModuleLoadTime.NORMAL;
+    public ModuleLoadTime value() default ModuleLoadTime.NORMAL;
 
 }

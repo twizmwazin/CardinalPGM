@@ -1,7 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.ctf;
 
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.BuilderData;
+import in.twizmwaz.cardinal.module.LoadTime;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
@@ -34,7 +34,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-@BuilderData(load = ModuleLoadTime.LATE)
+@LoadTime(ModuleLoadTime.LATE)
 public class FlagBuilder implements ModuleBuilder {
 
     @Override

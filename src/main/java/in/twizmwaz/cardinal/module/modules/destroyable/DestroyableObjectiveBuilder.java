@@ -1,7 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.destroyable;
 
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.BuilderData;
+import in.twizmwaz.cardinal.module.LoadTime;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@BuilderData(load = ModuleLoadTime.EARLIER)
+@LoadTime(ModuleLoadTime.EARLIER)
 public class DestroyableObjectiveBuilder implements ModuleBuilder {
 
     @Override

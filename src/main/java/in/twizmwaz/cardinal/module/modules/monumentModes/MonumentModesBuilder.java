@@ -1,7 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.monumentModes;
 
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.BuilderData;
+import in.twizmwaz.cardinal.module.LoadTime;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
@@ -14,7 +14,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.jdom2.Element;
 
-@BuilderData(load = ModuleLoadTime.LATEST)
+@LoadTime(ModuleLoadTime.LATEST)
 public class MonumentModesBuilder implements ModuleBuilder {
 
     @Override

@@ -2,12 +2,12 @@ package in.twizmwaz.cardinal.module.modules.permissions;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.BuilderData;
+import in.twizmwaz.cardinal.module.LoadTime;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
 
-@BuilderData(load = ModuleLoadTime.EARLIEST)
+@LoadTime(ModuleLoadTime.EARLIEST)
 public class PermissionModuleBuilder implements ModuleBuilder {
 
     @Override

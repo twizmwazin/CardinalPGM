@@ -1,7 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.ctf.net;
 
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.BuilderData;
+import in.twizmwaz.cardinal.module.LoadTime;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
@@ -23,7 +23,7 @@ import org.jdom2.Element;
 import java.util.HashSet;
 import java.util.Set;
 
-@BuilderData(load = ModuleLoadTime.LATER)
+@LoadTime(ModuleLoadTime.LATER)
 public class NetBuilder implements ModuleBuilder {
 
     @Override
