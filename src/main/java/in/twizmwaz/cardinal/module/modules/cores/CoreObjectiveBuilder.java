@@ -1,7 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.cores;
 
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.BuilderData;
+import in.twizmwaz.cardinal.module.LoadTime;
 import in.twizmwaz.cardinal.module.Module;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
@@ -22,7 +22,7 @@ import org.jdom2.Element;
 import java.util.HashMap;
 import java.util.Map;
 
-@BuilderData(load = ModuleLoadTime.EARLIER)
+@LoadTime(ModuleLoadTime.EARLIER)
 public class CoreObjectiveBuilder implements ModuleBuilder {
 
     @Override

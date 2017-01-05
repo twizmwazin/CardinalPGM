@@ -1,7 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.appliedRegion;
 
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.BuilderData;
+import in.twizmwaz.cardinal.module.LoadTime;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
@@ -26,7 +26,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.util.Vector;
 import org.jdom2.Element;
 
-@BuilderData(load = ModuleLoadTime.LATE)
+@LoadTime(ModuleLoadTime.LATE)
 public class AppliedRegionBuilder implements ModuleBuilder {
 
     @Override

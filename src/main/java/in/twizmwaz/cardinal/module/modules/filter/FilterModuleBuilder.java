@@ -2,7 +2,7 @@ package in.twizmwaz.cardinal.module.modules.filter;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.BuilderData;
+import in.twizmwaz.cardinal.module.LoadTime;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
@@ -64,7 +64,7 @@ import in.twizmwaz.cardinal.util.Parser;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
-@BuilderData(load = ModuleLoadTime.EARLY)
+@LoadTime(ModuleLoadTime.EARLY)
 public class FilterModuleBuilder implements ModuleBuilder {
 
     /**

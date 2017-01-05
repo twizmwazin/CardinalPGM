@@ -11,7 +11,8 @@ public class Config {
     public static List<String> repos = Lists.newArrayList("maps");
     public static String rotation = "rotation.txt";
     public static boolean deleteMatches = true;
-    public static boolean displayMapLoadErrors = false;
+    public static boolean debug_displayMapLoadErrors = false;
+    public static boolean debug_displayModuleLoadMessages = false;
     public static boolean worldEditPermissions = true;
     public static String serverMessage = "Scrimmage Server";
     public static boolean customMotd = true;

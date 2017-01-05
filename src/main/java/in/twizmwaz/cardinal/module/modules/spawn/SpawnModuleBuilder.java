@@ -2,7 +2,7 @@ package in.twizmwaz.cardinal.module.modules.spawn;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.BuilderData;
+import in.twizmwaz.cardinal.module.LoadTime;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
@@ -24,7 +24,7 @@ import org.jdom2.Element;
 import java.util.ArrayList;
 import java.util.List;
 
-@BuilderData(load = ModuleLoadTime.NORMAL)
+@LoadTime(ModuleLoadTime.NORMAL)
 public class SpawnModuleBuilder implements ModuleBuilder {
 
     @Override

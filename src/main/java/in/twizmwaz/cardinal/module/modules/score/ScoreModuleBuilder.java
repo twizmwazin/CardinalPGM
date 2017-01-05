@@ -1,7 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.score;
 
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.BuilderData;
+import in.twizmwaz.cardinal.module.LoadTime;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
@@ -11,7 +11,7 @@ import in.twizmwaz.cardinal.util.Proto;
 import in.twizmwaz.cardinal.util.Teams;
 import org.jdom2.Element;
 
-@BuilderData(load = ModuleLoadTime.LATE)
+@LoadTime(ModuleLoadTime.LATE)
 public class ScoreModuleBuilder implements ModuleBuilder {
 
     @Override

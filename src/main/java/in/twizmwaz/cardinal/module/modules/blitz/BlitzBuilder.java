@@ -1,7 +1,7 @@
 package in.twizmwaz.cardinal.module.modules.blitz;
 
 import in.twizmwaz.cardinal.match.Match;
-import in.twizmwaz.cardinal.module.BuilderData;
+import in.twizmwaz.cardinal.module.LoadTime;
 import in.twizmwaz.cardinal.module.ModuleBuilder;
 import in.twizmwaz.cardinal.module.ModuleCollection;
 import in.twizmwaz.cardinal.module.ModuleLoadTime;
@@ -9,7 +9,7 @@ import in.twizmwaz.cardinal.module.modules.rage.Rage;
 import in.twizmwaz.cardinal.util.Numbers;
 import org.jdom2.Element;
 
-@BuilderData(load = ModuleLoadTime.LATE)
+@LoadTime(ModuleLoadTime.LATE)
 public class BlitzBuilder implements ModuleBuilder {
 
     public ModuleCollection<Blitz> load(Match match) {

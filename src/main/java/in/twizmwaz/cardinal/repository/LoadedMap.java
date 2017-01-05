@@ -124,6 +124,10 @@ public class LoadedMap implements Consumer<LoadedMap> {
         return other instanceof LoadedMap && folder.equals(((LoadedMap) other).folder);
     }
 
+    public String toShortMessage(ChatColor color, boolean showId, boolean showVersion) {
+        return toShortMessage(color + "", showId, showVersion);
+    }
+
     public String toShortMessage(String color, boolean showId, boolean showVersion) {
         return (showId ? ChatColor.YELLOW + "#" + id + " " : "") +
                 color + getName() + (showVersion ? " " + ChatColor.GRAY + getVersion() : "");
@@ -131,7 +135,7 @@ public class LoadedMap implements Consumer<LoadedMap> {
 
     public ChatMessage toChatMessage(boolean showId) {
         return new LocalizedChatMessage(ChatConstant.MISC_BY,
-                new UnlocalizedChatMessage(toShortMessage(ChatColor.GOLD + "", showId, false) + ChatColor.DARK_PURPLE),
+                new UnlocalizedChatMessage(toShortMessage(ChatColor.GOLD, showId, false) + ChatColor.DARK_PURPLE),
                 ChatUtil.toChatMessage(getAuthors().stream()
                         .map(Contributor::getName).collect(Collectors.toList())));
     }

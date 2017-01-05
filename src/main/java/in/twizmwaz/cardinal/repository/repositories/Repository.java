@@ -104,7 +104,7 @@ public abstract class Repository {
                     result.add(loadMap(map));
                 } catch (Exception e) {
                     Bukkit.getLogger().log(Level.WARNING, "Failed to load map at " + map.getAbsolutePath());
-                    if (Config.displayMapLoadErrors) {
+                    if (Config.debug_displayMapLoadErrors) {
                         Bukkit.getLogger().log(Level.INFO, "Showing error, this can be disabled in the config: ");
                         e.printStackTrace();
                     }
