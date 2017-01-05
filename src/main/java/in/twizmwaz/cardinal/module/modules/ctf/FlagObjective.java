@@ -26,6 +26,7 @@ import in.twizmwaz.cardinal.module.modules.scoreboard.GameObjectiveScoreboardHan
 import in.twizmwaz.cardinal.module.modules.scoreboard.ScoreboardModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.timeLimit.TimeLimit;
+import in.twizmwaz.cardinal.util.ArmorType;
 import in.twizmwaz.cardinal.util.ChatUtil;
 import in.twizmwaz.cardinal.util.Fireworks;
 import in.twizmwaz.cardinal.util.Flags;
@@ -56,11 +57,13 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.material.MaterialData;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -167,7 +170,7 @@ public class FlagObjective implements TaskedModule, GameObjective {
             }
         }
         bannerItem = new ItemStack(Material.BANNER);
-        BannerMeta meta = (BannerMeta) bannerItem.getItemMeta();
+        BannerMeta meta = (BannerMeta) Bukkit.getItemFactory().getItemMeta(Material.BANNER);
         meta.setBaseColor(banner.getBaseColor());
         meta.setPatterns(banner.getPatterns());
         bannerItem.setItemMeta(meta);
@@ -275,6 +278,10 @@ public class FlagObjective implements TaskedModule, GameObjective {
 
     public Player getPicker() {
         return picker;
+    }
+
+    public boolean isPicker(Entity player) {
+        return getPicker() != null && player.equals(getPicker());
     }
 
     public void setPicker(Player picker) {
@@ -648,39 +655,37 @@ public class FlagObjective implements TaskedModule, GameObjective {
 
     @EventHandler
     public void onDead(PlayerDeathEvent event) {
-        if (getPicker() != null && event.getEntity().equals(getPicker())) {
+        if (isPicker(event.getEntity())) {
             spawnFlag();
         }
     }
 
     @EventHandler
     public void onTeamChange(PlayerChangeTeamEvent event) {
-        if (getPicker() != null && event.getPlayer().equals(getPicker())) {
+        if (isPicker(event.getPlayer())) {
             spawnFlag();
         }
     }
 
     @EventHandler
     public void onLeave(PlayerQuitEvent event) {
-        if (getPicker() != null && event.getPlayer().equals(getPicker())) {
+        if (isPicker(event.getPlayer())) {
             spawnFlag();
         }
     }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getWhoClicked() instanceof Player) {
-            Player p = (Player) event.getWhoClicked();
-            if (getPicker() != null && getPicker().equals(p) && event.getCurrentItem() != null && event.getCurrentItem().equals(bannerItem)) {
-                event.setCancelled(true);
-                spawnFlag();
-            }
+        if (isPicker(event.getWhoClicked()) && event.getSlot() == ArmorType.HELMET.getSlot()) {
+            event.setCancelled(true);
+            event.setCurrentItem(null);
+            spawnFlag();
         }
     }
 
     @EventHandler
     public void onItemDrop(PlayerDropItemEvent event) {
-        if (getPicker() != null && getPicker().equals(event.getPlayer()) && event.getItemDrop().getItemStack().equals(bannerItem)) {
+        if (isPicker(event.getPlayer()) && event.getItemDrop().getItemStack().isSimilar(bannerItem)) {
             event.getItemDrop().remove();
             spawnFlag();
         }

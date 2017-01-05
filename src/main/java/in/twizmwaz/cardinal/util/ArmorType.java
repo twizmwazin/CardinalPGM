@@ -2,10 +2,20 @@ package in.twizmwaz.cardinal.util;
 
 public enum ArmorType {
 
-    HELMET(),
-    CHESTPLATE(),
-    LEGGINGS(),
-    BOOTS();
+    HELMET(39),
+    CHESTPLATE(38),
+    LEGGINGS(37),
+    BOOTS(36);
+
+    private final int slot;
+
+    ArmorType(int slot) {
+        this.slot = slot;
+    }
+
+    public int getSlot() {
+        return slot;
+    }
 
     public static ArmorType getArmorType(String string) {
         switch (string.toLowerCase()) {
