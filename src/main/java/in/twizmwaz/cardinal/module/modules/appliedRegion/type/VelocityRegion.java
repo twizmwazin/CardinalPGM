@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
 
@@ -17,9 +18,10 @@ public class VelocityRegion extends AppliedRegion {
         this.velocity = velocity;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (region.contains(event.getTo().toVector()) && (filter == null || filter.evaluate(event.getPlayer(), event).equals(FilterState.ALLOW))) {
+        if (region.contains(event.getTo().toVector()) && !region.contains(event.getFrom().toVector())
+                && (filter == null || filter.evaluate(event.getPlayer(), event).equals(FilterState.ALLOW))) {
             event.getPlayer().setVelocity(velocity);
         }
     }

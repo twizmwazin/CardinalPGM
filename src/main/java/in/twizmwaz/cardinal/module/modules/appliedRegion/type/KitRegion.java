@@ -6,6 +6,7 @@ import in.twizmwaz.cardinal.module.modules.appliedRegion.AppliedRegion;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
 import in.twizmwaz.cardinal.module.modules.kit.KitNode;
+import in.twizmwaz.cardinal.module.modules.observers.ObserverModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.titleRespawn.TitleRespawn;
@@ -26,11 +27,9 @@ public class KitRegion extends AppliedRegion {
         this.lend = lend;
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (!GameHandler.getGameHandler().getMatch().isRunning()) return;
-        Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
-        if (event.isCancelled() || (team.isPresent() && team.get().isObserver()) || GameHandler.getGameHandler().getMatch().getModules().getModule(TitleRespawn.class).isDeadUUID(event.getPlayer().getUniqueId())) return;
+        if (ObserverModule.testObserverOrDead(event.getPlayer())) return;
         if (region.contains(event.getTo().toVector()) && !region.contains(event.getFrom().toVector()) && filter.evaluate(event.getPlayer(), event.getTo(), event).equals(FilterState.ALLOW)) {
             kit.apply(event.getPlayer(), null);
         } else if (lend && region.contains(event.getFrom().toVector()) && !region.contains(event.getTo().toVector())) {
@@ -38,11 +37,9 @@ public class KitRegion extends AppliedRegion {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerMove(PlayerTeleportEvent event) {
-        if (!GameHandler.getGameHandler().getMatch().isRunning()) return;
-        Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
-        if (event.isCancelled() || (team.isPresent() && team.get().isObserver()) || GameHandler.getGameHandler().getMatch().getModules().getModule(TitleRespawn.class).isDeadUUID(event.getPlayer().getUniqueId())) return;
+        if (ObserverModule.testObserverOrDead(event.getPlayer())) return;
         if (region.contains(event.getTo().toVector()) && !region.contains(event.getFrom().toVector()) && filter.evaluate(event.getPlayer(), event.getTo(), event).equals(FilterState.ALLOW)) {
             kit.apply(event.getPlayer(), null);
         } else if (lend && region.contains(event.getFrom().toVector()) && !region.contains(event.getTo().toVector())) {

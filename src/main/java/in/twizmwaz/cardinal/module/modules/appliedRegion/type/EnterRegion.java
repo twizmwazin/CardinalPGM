@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.appliedRegion.AppliedRegion;
 import in.twizmwaz.cardinal.module.modules.filter.FilterModule;
 import in.twizmwaz.cardinal.module.modules.filter.FilterState;
+import in.twizmwaz.cardinal.module.modules.observers.ObserverModule;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.titleRespawn.TitleRespawn;
@@ -21,13 +22,10 @@ public class EnterRegion extends AppliedRegion {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
+        if (ObserverModule.testObserverOrDead(event.getPlayer())) return;
         if (region.contains(event.getTo().toVector())
                 && !region.contains(event.getFrom().toVector())
-                && filter.evaluate(event.getPlayer(), event).equals(FilterState.DENY)
-                && (!team.isPresent() || (team.isPresent() && !team.get().isObserver()))
-                && GameHandler.getGameHandler().getMatch().isRunning()
-                && !GameHandler.getGameHandler().getMatch().getModules().getModule(TitleRespawn.class).isDeadUUID(event.getPlayer().getUniqueId())) {
+                && filter.evaluate(event.getPlayer(), event).equals(FilterState.DENY)) {
             event.setTo(event.getFrom());
             ChatUtil.sendWarningMessage(event.getPlayer(), message);
         }
