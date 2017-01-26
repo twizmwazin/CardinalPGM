@@ -1,5 +1,7 @@
 package in.twizmwaz.cardinal.util;
 
+import org.bukkit.util.Vector;
+
 import java.util.Random;
 
 public class Numbers {
@@ -55,6 +57,10 @@ public class Numbers {
         if (number == Double.POSITIVE_INFINITY) return "\u221E";
         if (number == Double.NEGATIVE_INFINITY) return "-\u221E";
         return (number + "").replaceAll("0", "\u2080").replaceAll("1", "\u2081").replaceAll("2", "\u2082").replaceAll("3", "\u2083").replaceAll("4", "\u2084").replaceAll("5", "\u2085").replaceAll("6", "\u2086").replaceAll("7", "\u2087").replaceAll("8", "\u2088").replaceAll("9", "\u2089");
+    }
+
+    public static Vector clone(Vector other) {
+        return new Vector(other.getX(), other.getY(), other.getZ());
     }
 
 }

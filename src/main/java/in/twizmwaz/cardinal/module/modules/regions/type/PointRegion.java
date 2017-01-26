@@ -2,6 +2,7 @@ package in.twizmwaz.cardinal.module.modules.regions.type;
 
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.PointParser;
+import in.twizmwaz.cardinal.util.Numbers;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
@@ -34,7 +35,7 @@ public class PointRegion extends BlockRegion {
 
     @Override
     public Vector getVector() {
-        return vector.clone();
+        return Numbers.clone(vector);
     }
 
     @Override

@@ -5,6 +5,7 @@ import in.twizmwaz.cardinal.Cardinal;
 import in.twizmwaz.cardinal.event.CardinalDeathEvent;
 import in.twizmwaz.cardinal.module.modules.observers.ObserverModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
+import in.twizmwaz.cardinal.util.Numbers;
 import in.twizmwaz.cardinal.util.PacketUtils;
 import in.twizmwaz.cardinal.util.Teams;
 import in.twizmwaz.cardinal.util.Watchers;
@@ -84,7 +85,7 @@ class PlayerBoundingBox implements Listener {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 sendOrRemoveZombies(player, player.getLocation().position(), event.getTo().position());
             }
-            Vector diff = event.getTo().position().clone().subtract(event.getFrom().position());
+            Vector diff = Numbers.clone(event.getTo().position()).subtract(event.getFrom().position());
             relativeMoveBoundingBox(Math.round(4096 * (diff.getX())),
                     Math.round(4096 * (diff.getY())), Math.round(4096 * (diff.getZ())), event.getPlayer().isOnGround());
         } else {

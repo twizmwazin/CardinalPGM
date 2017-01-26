@@ -3,6 +3,7 @@ package in.twizmwaz.cardinal.module.modules.regions.type;
 import in.twizmwaz.cardinal.GameHandler;
 import in.twizmwaz.cardinal.module.modules.regions.RegionModule;
 import in.twizmwaz.cardinal.module.modules.regions.parsers.BlockParser;
+import in.twizmwaz.cardinal.util.Numbers;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
@@ -41,11 +42,11 @@ public class BlockRegion extends RegionModule {
     }
 
     public Vector getVector() {
-        return vector.clone().add(new Vector(0.5, 0.5, 0.5));
+        return Numbers.clone(vector);
     }
 
     public Vector getAlignedVector() {
-        return vector.clone().minus(new Vector(0.5, 0.5, 0.5));
+        return getVector();
     }
 
     @Override

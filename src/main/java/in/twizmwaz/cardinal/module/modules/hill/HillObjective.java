@@ -31,6 +31,7 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.util.BlockVector;
+import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -289,8 +290,9 @@ public class HillObjective implements TaskedModule, GameObjective {
         if (progress == null) return;
         byte color1 = capturingTeam != null ? MiscUtil.convertChatColorToDyeColor(capturingTeam.getColor()).getWoolData() : -1;
         byte color2 = team != null ? MiscUtil.convertChatColorToDyeColor(team.getColor()).getWoolData() : -1;
-        double x = progress.getCenterBlock().getX() - 0.5;
-        double z = progress.getCenterBlock().getZ() - 0.5;
+        Vector center = progress.getCenterBlock().getVector();
+        double x = center.getX();
+        double z = center.getZ();
         double percent = Math.toRadians(getPercent() * 3.6);
         for(Block block : progress.getBlocks()) {
             if (!visualMaterials.evaluate(block).equals(FilterState.ALLOW)) continue;
