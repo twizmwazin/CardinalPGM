@@ -14,8 +14,6 @@ import in.twizmwaz.cardinal.util.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 
 import java.util.ArrayList;
@@ -29,19 +27,17 @@ public class TeamModule extends ArrayList<Player> implements Module {
     private int min;
     private int max;
     private int maxOverfill;
-    private int respawnLimit;
     private ChatColor color;
     private boolean plural;
     private boolean ready;
 
-    protected TeamModule(Match match, String name, String id, int min, int max, int maxOverfill, int respawnLimit, ChatColor color, boolean plural, boolean observer) {
+    protected TeamModule(Match match, String name, String id, int min, int max, int maxOverfill, ChatColor color, boolean plural, boolean observer) {
         this.match = match;
         this.name = name;
         this.id = id;
         this.min = min;
         this.max = max;
         this.maxOverfill = maxOverfill;
-        this.respawnLimit = respawnLimit;
         this.color = color;
         this.plural = plural;
         this.observer = observer;
@@ -50,20 +46,17 @@ public class TeamModule extends ArrayList<Player> implements Module {
 
     public boolean add(Player player, boolean force, boolean message) {
         if (Blitz.matchIsBlitz() && GameHandler.getGameHandler().getMatch().isRunning() && !this.isObserver() && !force) {
-            String title = GameHandler.getGameHandler().getMatch().getModules().getModule(Blitz.class).getTitle();
-            player.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.ERROR_MAY_NOT_JOIN, ChatColor.ITALIC + "" + ChatColor.AQUA + title + ChatColor.RESET + ChatColor.RED)).getMessage(player.getLocale()));
+            player.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.ERROR_MAY_NOT_JOIN, ChatColor.ITALIC + "" + ChatColor.AQUA + "Blitz" + ChatColor.RESET + ChatColor.RED)).getMessage(player.getLocale()));
             return false;
         }
         if (!force && size() >= max) {
             player.sendMessage(new UnlocalizedChatMessage(ChatColor.RED + "{0}", new LocalizedChatMessage(ChatConstant.ERROR_TEAM_FULL, getCompleteName() + ChatColor.RED)).getMessage(player.getLocale()));
             return false;
         }
-        PlayerChangeTeamEvent event = new PlayerChangeTeamEvent(player, force, Optional.of(this), Teams.getTeamByPlayer(player));
+        PlayerChangeTeamEvent event = new PlayerChangeTeamEvent(player, force, Optional.<TeamModule>of(this), Teams.getTeamOrPlayerManagerByPlayer(player));
         Bukkit.getServer().getPluginManager().callEvent(event);
-        if (message && event.getNewTeam().isPresent()) {
+        if (message) {
             event.getPlayer().sendMessage(ChatColor.WHITE + new LocalizedChatMessage(ChatConstant.GENERIC_JOINED, event.getNewTeam().get().getCompleteName()).getMessage(event.getPlayer().getLocale()));
-        } else if (message) {
-            event.getPlayer().sendMessage(ChatColor.WHITE + new LocalizedChatMessage(ChatConstant.GENERIC_JOINED, ChatConstant.MISC_MATCH.asMessage()).getMessage(event.getPlayer().getLocale()));
         }
         return !event.isCancelled() || force;
     }
@@ -76,23 +69,17 @@ public class TeamModule extends ArrayList<Player> implements Module {
         return this.add(player, false);
     }
 
-    @EventHandler(priority = EventPriority.LOW)
-    public void onTeamSwitch(PlayerChangeTeamEvent event) {
-        if (!event.isCancelled()) {
-            this.remove(event.getPlayer());
-        }
-        if (event.getNewTeam().orNull() == this) {
-            super.add(event.getPlayer());
-        }
+    public void join(Player player) {
+        super.add(player);
+    }
+
+    public void leave(Player player) {
+        super.remove(player);
     }
 
     @Override
     public void unload() {
         HandlerList.unregisterAll(this);
-    }
-
-    public String getCompleteName() {
-        return this.color + this.name;
     }
 
     public Match getMatch() {
@@ -101,6 +88,18 @@ public class TeamModule extends ArrayList<Player> implements Module {
 
     public String getName() {
         return name;
+    }
+
+    public String getCompleteName() {
+        return this.color + this.name;
+    }
+
+    public String getName(String locale) {
+        return getName();
+    }
+
+    public String getCompleteName(String locale) {
+        return getCompleteName();
     }
 
     public void setName(String name) {
@@ -119,25 +118,21 @@ public class TeamModule extends ArrayList<Player> implements Module {
         return max;
     }
 
+    public int getMaxOverfill() {
+        return maxOverfill;
+    }
+
+    public void setMin(int min) {
+        this.min = min;
+    }
+
     public void setMax(int max) {
         this.max = max;
         TabList.renderTeamTitle(this);
     }
 
-    public int getMaxOverfill() {
-        return maxOverfill;
-    }
-
     public void setMaxOverfill(int maxOverfill) {
         this.maxOverfill = maxOverfill;
-    }
-
-    public int getRespawnLimit() {
-        return respawnLimit;
-    }
-
-    public void setRespawnLimit(int respawnLimit) {
-        this.respawnLimit = respawnLimit;
     }
 
     public ChatColor getColor() {

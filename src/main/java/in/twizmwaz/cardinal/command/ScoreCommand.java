@@ -27,7 +27,7 @@ public class ScoreCommand {
     @Command(aliases = {"score"}, desc = "Shows the score of the current match.", usage = "")
     public static void score(final CommandContext args, CommandSender sender) throws CommandException {
         if (!sender.hasPermission("cardinal.score") && sender instanceof Player) {
-            Optional<TeamModule> team = Teams.getTeamByPlayer((Player) sender);
+            Optional<TeamModule> team = Teams.getTeamOrPlayerManagerByPlayer((Player) sender);
             if (GameHandler.getGameHandler().getMatch().isRunning() && (!team.isPresent() || !team.get().isObserver())) {
                 throw new CommandPermissionsException();
             }
@@ -35,7 +35,7 @@ public class ScoreCommand {
         TimeLimit.Result result = GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getResult();
         if (result.equals(TimeLimit.Result.HIGHEST_SCORE)) {
             int score = 0;
-            for (TeamModule team : Teams.getTeams()) {
+            for (TeamModule team : Teams.getTeamsAndPlayers()) {
                 if (!team.isObserver()) {
                     sender.sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.GENERIC_CALCULATING_SCORES_FOR, team.getCompleteName() + ChatColor.RED).getMessage(ChatUtil.getLocale(sender)));
                     for (ScoreModule scoreModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ScoreModule.class)) {
@@ -51,14 +51,14 @@ public class ScoreCommand {
                 sender.sendMessage(ChatColor.GOLD + new LocalizedChatMessage(ChatConstant.GENERIC_TEAM_IS_WINNING_WITH_POINTS, TimeLimit.getMatchWinner().getCompleteName() + ChatColor.GOLD, "" + score).getMessage(ChatUtil.getLocale(sender)));
             }
         } else if (result.equals(TimeLimit.Result.TIE)) {
-            for (TeamModule team : Teams.getTeams()) {
+            for (TeamModule team : Teams.getTeamsAndPlayers()) {
                 if (!team.isObserver()) {
                     sender.sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.GENERIC_CALCULATING_SCORES_FOR, team.getCompleteName() + ChatColor.RED).getMessage(ChatUtil.getLocale(sender)));
                 }
             }
             sender.sendMessage(ChatColor.GOLD + ChatConstant.GENERIC_TEAMS_ARE_TIED.getMessage(ChatUtil.getLocale(sender)));
         } else if (result.equals(TimeLimit.Result.TEAM)) {
-            for (TeamModule team : Teams.getTeams()) {
+            for (TeamModule team : Teams.getTeamsAndPlayers()) {
                 if (!team.isObserver()) {
                     sender.sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.GENERIC_CALCULATING_SCORES_FOR, team.getCompleteName() + ChatColor.RED).getMessage(ChatUtil.getLocale(sender)));
                 }
@@ -66,7 +66,7 @@ public class ScoreCommand {
             sender.sendMessage(ChatColor.GOLD + new LocalizedChatMessage(ChatConstant.GENERIC_TEAM_IS_WINNING, GameHandler.getGameHandler().getMatch().getModules().getModule(TimeLimit.class).getTeam().getCompleteName() + ChatColor.GOLD).getMessage(ChatUtil.getLocale(sender)));
         } else if (result.equals(TimeLimit.Result.MOST_PLAYERS)) {
             int players = 0;
-            for (TeamModule team : Teams.getTeams()) {
+            for (TeamModule team : Teams.getTeamsAndPlayers()) {
                 if (!team.isObserver()) {
                     sender.sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.GENERIC_CALCULATING_SCORES_FOR, team.getCompleteName() + ChatColor.RED).getMessage(ChatUtil.getLocale(sender)));
                     if (team.size() > players) {
@@ -80,7 +80,7 @@ public class ScoreCommand {
                 sender.sendMessage(ChatColor.GOLD + new LocalizedChatMessage(ChatConstant.GENERIC_TEAM_IS_WINNING_WITH_PLAYERS, TimeLimit.getMatchWinner().getCompleteName() + ChatColor.GOLD, "" + players).getMessage(ChatUtil.getLocale(sender)));
             }
         } else if (result.equals(TimeLimit.Result.MOST_OBJECTIVES)) {
-            for (TeamModule team : Teams.getTeams()) {
+            for (TeamModule team : Teams.getTeamsAndPlayers()) {
                 if (!team.isObserver()) {
                     sender.sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.GENERIC_CALCULATING_SCORES_FOR, team.getCompleteName() + ChatColor.RED).getMessage(ChatUtil.getLocale(sender)));
                     for (GameObjective obj : Teams.getShownObjectives(team)) {

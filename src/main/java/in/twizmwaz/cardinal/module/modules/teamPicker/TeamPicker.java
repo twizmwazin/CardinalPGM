@@ -41,6 +41,10 @@ public class TeamPicker implements Module {
         HandlerList.unregisterAll(this);
     }
 
+    public static ItemStack getTeamPickerItem(Player player) {
+        return Teams.isFFA() && !Teams.getObserverTeam().contains(player) ? getTeamLeaver(player.getLocale()) : getTeamPicker(player.getLocale());
+    }
+
     public static ItemStack getTeamPicker(String locale) {
         return Items.createItem(Material.LEATHER_HELMET, 1, (short) 0,
                 ChatColor.GREEN + "" + ChatColor.BOLD + (GameHandler.getGameHandler().getMatch().getModules().getModule(ClassModule.class) != null ? new LocalizedChatMessage(ChatConstant.UI_TEAM_CLASS_SELECTION).getMessage(locale) : new LocalizedChatMessage(ChatConstant.UI_TEAM_SELECTION).getMessage(locale)),
@@ -49,6 +53,12 @@ public class TeamPicker implements Module {
 
     public static String getTeamPickerTitle(String locale) {
         return ChatColor.DARK_RED + new LocalizedChatMessage(ChatConstant.UI_TEAM_PICK).getMessage(locale);
+    }
+
+    public static ItemStack getTeamLeaver(String locale) {
+        return Items.createItem(Material.LEATHER_BOOTS, 1, (short) 0,
+                ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_LEAVE).getMessage(locale),
+                Arrays.asList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_LEAVE_LORE).getMessage(locale)));
     }
 
     public Inventory getTeamPicker(Player player) {
@@ -78,8 +88,7 @@ public class TeamPicker implements Module {
         }
         item = size;
         if (!(Teams.getTeamByPlayer(player).isPresent() && Teams.getTeamByPlayer(player).get().isObserver()) || GameHandler.getGameHandler().getMatch().getModules().getModule(TitleRespawn.class).isDeadUUID(player.getUniqueId())){
-            ItemStack leave = Items.createItem(Material.LEATHER_BOOTS, 1, (short) 0, ChatColor.GREEN + "" + ChatColor.BOLD + new LocalizedChatMessage(ChatConstant.UI_TEAM_LEAVE).getMessage(player.getLocale()), Arrays.asList(ChatColor.DARK_PURPLE + new LocalizedChatMessage(ChatConstant.UI_TEAM_LEAVE_LORE).getMessage(player.getLocale())));
-            picker.setItem(item - 1, leave);
+            picker.setItem(item - 1, getTeamLeaver(player.getLocale()));
         }
         for (ClassModule classModule : GameHandler.getGameHandler().getMatch().getModules().getModules(ClassModule.class)) {
             ItemStack classStack = Items.createItem(classModule.getIcon(), 1, (short) 0, ChatColor.GREEN + classModule.getName(), Arrays.asList(ChatColor.GOLD + classModule.getLongDescription()));
@@ -142,10 +151,31 @@ public class TeamPicker implements Module {
         Match match = GameHandler.getGameHandler().getMatch();
         if (!match.hasEnded() && !(Blitz.matchIsBlitz() && match.isRunning()) && ObserverModule.testObserverOrDead(event.getPlayer())
                 && (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
-                && event.getItem() != null && event.getItem().equals(getTeamPicker(event.getPlayer().getLocale()))) {
-            event.setCancelled(true);
-            event.getPlayer().openInventory(getTeamPicker(event.getPlayer()));
+                && event.getItem() != null) {
+            if (event.getItem().equals(getTeamPicker(event.getPlayer().getLocale()))) {
+                event.setCancelled(true);
+                if (!Teams.isFFA()) {
+                    event.getPlayer().openInventory(getTeamPicker(event.getPlayer()));
+                } else {
+                    try {
+                        Bukkit.getConsoleSender().sendMessage(event.getPlayer().getName() + " joined");
+                        Teams.setPlayerTeam(event.getPlayer(), Teams.getPlayerManager());
+                        if (ObserverModule.testObserver(event.getPlayer())) event.getPlayer().getInventory().setItem(event.getHand(), getTeamPickerItem(event.getPlayer()));
+                    } catch (Exception e) {
+                        event.getPlayer().sendMessage(com.sk89q.minecraft.util.commands.ChatColor.RED + e.getMessage());
+                    }
+                }
+            } else if (event.getItem().equals(getTeamLeaver(event.getPlayer().getLocale()))) {
+                try {
+                    Bukkit.getConsoleSender().sendMessage(event.getPlayer().getName() + " left");
+                    Teams.setPlayerTeam(event.getPlayer(), Teams.getObserverTeam());
+                    if (ObserverModule.testObserver(event.getPlayer())) event.getPlayer().getInventory().setItem(event.getHand(), getTeamPickerItem(event.getPlayer()));
+                } catch (Exception e) {
+                    event.getPlayer().sendMessage(com.sk89q.minecraft.util.commands.ChatColor.RED + e.getMessage());
+                }
+            }
         }
+
     }
 
     @EventHandler

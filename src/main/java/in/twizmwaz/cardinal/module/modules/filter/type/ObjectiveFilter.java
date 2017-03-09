@@ -42,7 +42,7 @@ public class ObjectiveFilter extends FilterModule {
                 if (object instanceof TeamModule) {
                     return objective.getTeam() != null && objective.getTeam().equals(object) ? ALLOW : DENY;
                 } else if (object instanceof Player) {
-                    Optional<TeamModule> team = Teams.getTeamByPlayer((Player)object);
+                    Optional<TeamModule> team = Teams.getTeamOrPlayerByPlayer((Player)object);
                     return objective.getTeam() != null && team.isPresent() && objective.getTeam().equals(team.get()) ? ALLOW : DENY;
                 }
             }

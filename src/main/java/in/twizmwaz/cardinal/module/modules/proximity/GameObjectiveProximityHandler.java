@@ -100,7 +100,7 @@ public class GameObjectiveProximityHandler implements Module {
     }
 
     private void tryUpdate(Player player, Block block) {
-        if (!teamAllowsUpdate(Teams.getTeamByPlayer(player))) return;
+        if (!teamAllowsUpdate(Teams.getTeamOrPlayerByPlayer(player))) return;
         boolean update = true;
         if (objective instanceof WoolObjective) {
             update = !info.needsTouch;
@@ -170,7 +170,7 @@ public class GameObjectiveProximityHandler implements Module {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onKill(CardinalDeathEvent event) {
         if (!active || !info.metric.equals(ProximityMetric.CLOSEST_KILL) || event.getKiller() == null
-                || Teams.getTeamByPlayer(event.getKiller()).orNull() == Teams.getTeamByPlayer(event.getPlayer()).orNull()) return;
+                || Teams.getTeamOrPlayerByPlayer(event.getKiller()).orNull() == Teams.getTeamOrPlayerByPlayer(event.getPlayer()).orNull()) return;
         tryUpdate(event.getKiller(), null);
     }
 

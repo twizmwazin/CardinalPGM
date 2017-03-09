@@ -31,9 +31,10 @@ public class SoundModule implements Module {
 
     @EventHandler
     public void onObjectiveComplete(ObjectiveCompleteEvent event) {
+        if (!event.getObjective().showOnScoreboard()) return;
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (Settings.getSettingByName("Sounds") != null && Settings.getSettingByName("Sounds").getValueByPlayer(player).getValue().equalsIgnoreCase("on")) {
-                TeamModule team = Teams.getTeamByPlayer(player).get();
+                TeamModule team = Teams.getTeamOrPlayerByPlayer(player).get();
                 if (team.isObserver() ||
                         ((event.getObjective() instanceof WoolObjective || event.getObjective() instanceof HillObjective) && team.equals(event.getObjective().getTeam())) ||
                         ((event.getObjective() instanceof CoreObjective || event.getObjective() instanceof DestroyableObjective) && !team.equals(event.getObjective().getTeam()))) {
@@ -47,9 +48,10 @@ public class SoundModule implements Module {
 
     @EventHandler
     public void onObjectiveUncomplete(ObjectiveUncompleteEvent event) {
+        if (!event.getObjective().showOnScoreboard()) return;
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (Settings.getSettingByName("Sounds") != null && Settings.getSettingByName("Sounds").getValueByPlayer(player).getValue().equalsIgnoreCase("on")) {
-                TeamModule team = Teams.getTeamByPlayer(player).get();
+                TeamModule team = Teams.getTeamOrPlayerByPlayer(player).get();
                 if (team.isObserver() || !team.equals(event.getOldTeam())) {
                     player.playSound(player.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 0.7f, 2f);
                 } else {
@@ -61,10 +63,11 @@ public class SoundModule implements Module {
 
     @EventHandler
     public void onFlagComplete(FlagCaptureEvent event) {
-        TeamModule team = Teams.getTeamByPlayer(event.getPlayer()).get();
+        if (!event.getFlag().showOnScoreboard()) return;
+        TeamModule team = Teams.getTeamOrPlayerByPlayer(event.getPlayer()).get();
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (Settings.getSettingByName("Sounds") != null && Settings.getSettingByName("Sounds").getValueByPlayer(player).getValue().equalsIgnoreCase("on")) {
-                if (Teams.getTeamByPlayer(player).get().isObserver() || Teams.getTeamByPlayer(player).get().equals(team)) {
+                if (Teams.getTeamOrPlayerByPlayer(player).get().isObserver() || Teams.getTeamOrPlayerByPlayer(player).get().equals(team)) {
                     player.playSound(player.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 0.7f, 2f);
                 } else {
                     player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_DEATH, 0.8f, 0.8f);

@@ -70,8 +70,8 @@ public class ClassModule implements Module {
     @EventHandler
     public void onClassChange(ClassChangeEvent event) {
         if (event.getClassModule().equals(this)) {
-            Optional<TeamModule> team = Teams.getTeamByPlayer(event.getPlayer());
-            if (sticky && team.isPresent() && !Teams.getTeamByPlayer(event.getPlayer()).get().isObserver()) {
+            Optional<TeamModule> team = Teams.getTeamOrPlayerByPlayer(event.getPlayer());
+            if (sticky && team.isPresent() && !team.get().isObserver()) {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_NO_CLASS_CHANGE).getMessage(event.getPlayer().getLocale()));
             }

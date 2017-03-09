@@ -40,7 +40,7 @@ public class TeamTabEntry extends SkinTabEntry {
 
     @Override
     public String getDisplayName(Player viewer) {
-        return team.size() + "" + ChatColor.DARK_GRAY + "/" + ChatColor.GRAY + team.getMax() + " " + team.getColor() + ChatColor.BOLD + team.getName();
+        return team.size() + "" + ChatColor.DARK_GRAY + "/" + ChatColor.GRAY + team.getMax() + " " + team.getColor() + ChatColor.BOLD + team.getName(viewer.getLocale());
     }
 
 }

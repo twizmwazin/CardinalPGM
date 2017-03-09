@@ -16,7 +16,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -40,30 +39,6 @@ public class TabView {
 
     public Set<TabEntry> getEmptyPlayers() {
         return emptyPlayers;
-    }
-
-    public void destroy(TabEntry entry, int newSlot, boolean update) {
-        for (TabSlot slot : slots) slot.removeEntry(entry, newSlot);
-        if (update) updateSlots();
-    }
-
-    private void updateSlots() {
-        for (TabSlot slot : slots) slot.update();
-        Set<String> names = new HashSet<>();
-        for (TabEntry entry : hideEntries) names.add(entry.getName());
-        PacketUtils.sendPacket(viewer, TabList.getTeamPacket(names, 80, 3));
-        hideEntries.clear();
-    }
-
-    public void hideEntry(TabEntry entry) {
-        if (entry instanceof EmptyTabEntry) emptyPlayers.remove(entry);
-        hideEntries.add(entry);
-    }
-
-    public void setSlot(TabEntry entry, int slot) {
-        if (entry instanceof EmptyTabEntry) emptyPlayers.add(entry);
-        hideEntries.remove(entry);
-        entry.setSlot(viewer, slot);
     }
 
     private void setupPlayer() {
@@ -92,7 +67,7 @@ public class TabView {
     }
 
     public void update() {
-        List<TeamModule> prioritized = getPrioritizedTeams(Teams.getTeamByPlayer(viewer).orNull());
+        List<TeamModule> prioritized = getPrioritizedTeams(Teams.getTeamOrPlayerManagerByPlayer(viewer).orNull());
         int obsSize = obsRows(prioritized);
         int biggestTeamCol = TabList.columnsPerTeam > 1 ? 18 - obsSize : -1;
         renderObs(20 - obsSize);
@@ -111,12 +86,8 @@ public class TabView {
     }
 
     private static List<TeamModule> getPrioritizedTeams(TeamModule prioritized) {
-        List<TeamModule> teams = Teams.getTeams();
-        Iterator<TeamModule> teamIterator = teams.iterator();
-        while (teamIterator.hasNext()) {
-            TeamModule next = teamIterator.next();
-            if (next.isObserver() || (prioritized != null && next.equals(prioritized))) teamIterator.remove();
-        }
+        List<TeamModule> teams = Teams.getTeamsAndPlayerManager();
+        teams.removeIf(team -> team.isObserver() || (prioritized != null && team.equals(prioritized)));
         if (prioritized != null && !prioritized.isObserver()) teams.add(0, prioritized);
         return teams;
     }
@@ -187,11 +158,36 @@ public class TabView {
         return  row + col * 20;
     }
 
+    // Object managing
     private void updateTabListSlot(TabEntry entry, int row, int col) {
         int i = rowAndCol(row, col);
-        destroy(entry, i, false);
+        destroy(entry, i);
         if (i < 80) slots[i].setNewEntry(entry);
         else hideEntry(entry);
+    }
+
+    public void destroy(TabEntry entry, int newSlot) {
+        for (TabSlot slot : slots) slot.removeEntry(entry, newSlot);
+    }
+
+    public void hideEntry(TabEntry entry) {
+        if (entry instanceof EmptyTabEntry) emptyPlayers.remove(entry);
+        hideEntries.add(entry);
+    }
+
+    // Packet managing
+    private void updateSlots() {
+        for (TabSlot slot : slots) slot.update();
+        Set<String> names = new HashSet<>();
+        for (TabEntry entry : hideEntries) names.add(entry.getName());
+        PacketUtils.sendPacket(viewer, TabList.getTeamPacket(names, 80, 3));
+        hideEntries.clear();
+    }
+
+    public void setSlot(TabEntry entry, int slot) {
+        if (entry instanceof EmptyTabEntry) emptyPlayers.add(entry);
+        hideEntries.remove(entry);
+        entry.setSlot(viewer, slot);
     }
 
     public static List<Player> getSortedPlayerList(TeamModule team) {

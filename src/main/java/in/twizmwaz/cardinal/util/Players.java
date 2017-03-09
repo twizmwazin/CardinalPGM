@@ -71,7 +71,6 @@ public class Players {
     public static void setObserver(Player player) {
         player.setGameMode(GameMode.CREATIVE);
         player.setAllowFlight(true);
-        player.setFlying(true);
         canInteract(player, false);
         resetPlayer(player, false);
         player.closeInventory();

@@ -23,7 +23,7 @@ public class SameTeamFilter extends FilterModule {
     public FilterState evaluate(Object... objects) {
         for (Object object : objects) {
             if (object instanceof Player) {
-                Optional<TeamModule> team = Teams.getTeamByPlayer((Player) object);
+                Optional<TeamModule> team = Teams.getTeamOrPlayerByPlayer((Player) object);
                 if (!team.isPresent()) continue;
                 for (Player player : (List<Player>) team.get()) {
                     if (child.evaluate(player).equals(FilterState.ALLOW)) return FilterState.ALLOW;

@@ -113,6 +113,8 @@
         <pollAlreadyVoted>You already voted.</pollAlreadyVoted>
         <breakFlag>You can not break flags.</breakFlag>
         <breakBlockUnderFlag>You can not break the block under the flag.</breakBlockUnderFlag>
+        <noTeams>Teams are not in use in this match</noTeams>
+        <noPlayer>Players are not in use in this match</noPlayer>
     </error>
     <generic>
         <mapSet>Next map set to {0}</mapSet>
@@ -247,6 +249,7 @@
         <staff>Staff</staff>
         <default>Default</default>
         <permissions>Permissions</permissions>
+        <players>Players</players>
     </misc>
     <userInterface>
         <mapLoaded>Loaded Maps {0}</mapLoaded>
@@ -311,7 +314,8 @@
         <objectivePickedFor>{0} picked up {1} for {2}</objectivePickedFor>
         <objectivePicked>{0} picked up {1}</objectivePicked>
         <scoredFor>{0} scored {1} for {2}</scoredFor>
-        <onePoint>1 point</onePoint>
+        <scored>{0} scored {1}</scored>
+        <onePoint>{0} point</onePoint>
         <points>{0} points</points>
         <amountRemaining>You have {0} remaining.</amountRemaining>
         <oneLife>1 life</oneLife>

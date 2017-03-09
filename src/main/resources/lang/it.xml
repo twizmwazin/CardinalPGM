@@ -178,7 +178,7 @@
         <objectivePickedFor>{0} ha preso {1} per la {2}</objectivePickedFor>
         <objectivePicked>{0} ha preso {1}</objectivePicked>
         <scoredFor>{0} ha fatto {1} punti per {2}</scoredFor>
-        <onePoint>1 punto</onePoint>
+        <onePoint>{0} punto</onePoint>
         <points>{0} punti</points>
         <amountRemaining>Hai {0} rimaste.</amountRemaining>
         <oneLife>1 vita</oneLife>

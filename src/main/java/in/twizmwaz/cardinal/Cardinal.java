@@ -23,6 +23,7 @@ import in.twizmwaz.cardinal.command.ListCommand;
 import in.twizmwaz.cardinal.command.MapCommands;
 import in.twizmwaz.cardinal.command.MatchCommand;
 import in.twizmwaz.cardinal.command.ModesCommand;
+import in.twizmwaz.cardinal.command.PlayerCommands;
 import in.twizmwaz.cardinal.command.PollCommands;
 import in.twizmwaz.cardinal.command.PrivateMessageCommands;
 import in.twizmwaz.cardinal.command.ProximityCommand;
@@ -159,7 +160,7 @@ public class Cardinal extends JavaPlugin {
         cmdRegister.register(SnowflakesCommand.class);
         cmdRegister.register(StartAndEndCommand.class);
         cmdRegister.register(TeamCommands.TeamParentCommand.class);
-        cmdRegister.register(TeamCommands.class);
+        cmdRegister.register(PlayerCommands.PlayersParentCommand.class);
         cmdRegister.register(TeleportCommands.class);
         cmdRegister.register(TimeLimitCommand.class);
         cmdRegister.register(WhitelistCommands.WhitelistParentCommand.class);

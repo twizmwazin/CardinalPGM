@@ -76,7 +76,7 @@ public class ChatCommands {
             if (GameHandler.getGameHandler().getGlobalMute() && !sender.hasPermission("cardinal.globalmute.override")) {
                 throw new CommandException(ChatConstant.ERROR_GLOBAL_MUTE_ENABLED.getMessage(ChatUtil.getLocale(sender)));
             }
-            Optional<TeamModule> team = Teams.getTeamByPlayer((Player) sender);
+            Optional<TeamModule> team = Teams.getTeamOrPlayerManagerByPlayer((Player) sender);
             String message = cmd.getJoinedStrings(0);
             if (team.isPresent()) {
                 ChatChannel channel = Teams.getTeamChannel(team);

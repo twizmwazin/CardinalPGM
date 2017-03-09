@@ -552,8 +552,8 @@ public class FlagObjective implements TaskedModule, GameObjective {
         Players.playSoundEffect(event.getPlayer(), Sound.ENTITY_FIREWORK_BLAST, 1, 1f);
         Players.playSoundEffect(event.getPlayer(), Sound.ENTITY_FIREWORK_TWINKLE, 1, 1f);
 
-        TeamModule pickerTeam = Teams.getTeamByPlayer(event.getPlayer()).orNull();
-        for (TeamModule team : Teams.getTeams()) {
+        TeamModule pickerTeam = Teams.getTeamOrPlayerByPlayer(event.getPlayer()).orNull();
+        for (TeamModule team : Teams.getTeamsAndPlayers()) {
             if (team.isObserver() || team == pickerTeam) {
                 Players.broadcastSoundEffect(team, Sound.ENTITY_FIREWORK_BLAST, 1, 0.7f);
             } else {
@@ -568,7 +568,7 @@ public class FlagObjective implements TaskedModule, GameObjective {
         currentFlagBlock.setType(Material.AIR);
         if (state.equals(FlagState.DROPPED_ON_WATER)) currentFlagBlock.getRelative(BlockFace.DOWN).setType(Material.STATIONARY_WATER);
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.sendMessage(new LocalizedChatMessage(ChatConstant.UI_FLAG_PICKED_UP, getDisplayName() + ChatColor.RESET, Teams.getTeamByPlayer(event.getPlayer()).get().getColor() + event.getPlayer().getName()).getMessage(p.getLocale()));
+            p.sendMessage(new LocalizedChatMessage(ChatConstant.UI_FLAG_PICKED_UP, getDisplayName() + ChatColor.RESET, Teams.getTeamOrPlayerByPlayer(event.getPlayer()).get().getColor() + event.getPlayer().getName()).getMessage(p.getLocale()));
         }
         setPicker(event.getPlayer());
         state = FlagState.CARRIED;
@@ -582,8 +582,8 @@ public class FlagObjective implements TaskedModule, GameObjective {
     public void onDropFlag(FlagDropEvent event) {
         if (!event.getFlag().equals(this)) return;
         Fireworks.spawnFlagFirework(getCurrentFlagLocation(), MiscUtil.convertChatColorToColor(chatColor));
-        TeamModule pickerTeam = Teams.getTeamByPlayer(event.getPlayer()).orNull();
-        for (TeamModule team : Teams.getTeams()) {
+        TeamModule pickerTeam = Teams.getTeamOrPlayerByPlayer(event.getPlayer()).orNull();
+        for (TeamModule team : Teams.getTeamsAndPlayers()) {
             if (team.isObserver() || team == pickerTeam) {
                 Players.broadcastSoundEffect(team, Sound.ENTITY_FIREWORK_TWINKLE_FAR, 1, 1f);
             } else {
@@ -602,7 +602,7 @@ public class FlagObjective implements TaskedModule, GameObjective {
     public void onFlagRespawn(FlagRespawnEvent event) {
         if (!event.getFlag().equals(this)) return;
         Fireworks.spawnFlagFirework(getCurrentFlagLocation(), MiscUtil.convertChatColorToColor(chatColor));
-        for (TeamModule team : Teams.getTeams()) {
+        for (TeamModule team : Teams.getTeamsAndPlayers()) {
             if (team.isObserver() || team != owner) {
                 Players.broadcastSoundEffect(team, Sound.ENTITY_FIREWORK_TWINKLE_FAR, 1f, 1f);
             } else {
@@ -735,7 +735,7 @@ public class FlagObjective implements TaskedModule, GameObjective {
         }
 
         if (isCarried() && pointsRate != 0) {
-            addPoints(owner != null ? owner : Teams.getTeamByPlayer(picker).get(), (double) pointsRate * diff);
+            addPoints(owner != null ? owner : Teams.getTeamOrPlayerByPlayer(picker).get(), (double) pointsRate * diff);
         }
 
         if (isCarried() && lastNet != null) {

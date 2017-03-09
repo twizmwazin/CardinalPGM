@@ -2,8 +2,6 @@ package in.twizmwaz.cardinal.tabList.entries;
 
 import com.mojang.authlib.GameProfile;
 import in.twizmwaz.cardinal.Cardinal;
-import in.twizmwaz.cardinal.tabList.TabList;
-import in.twizmwaz.cardinal.tabList.TabView;
 import in.twizmwaz.cardinal.util.PacketUtils;
 import in.twizmwaz.cardinal.util.Watchers;
 import net.minecraft.server.DataWatcher;
@@ -26,19 +24,20 @@ public abstract class SkinTabEntry extends TabEntry {
         super(profile);
     }
 
+    @Override
     protected void load() {
         this.hide();
         broadcastTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER);
         broadcastCreateSkinParts();
     }
 
-    public void destroy() {
-        this.hide();
-        broadcastTabListPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER);
-        PacketUtils.broadcastPacket(deleteSkinParts());
-        for (TabView view : TabList.getTabViews()) {
-            view.destroy(this, -1, true);
+    @Override
+    public boolean delete(Player viewer) {
+        if (super.delete(viewer)) {
+            PacketUtils.sendPacket(viewer, deleteSkinParts());
+            return true;
         }
+        return false;
     }
 
     public void broadcastCreateSkinParts() {

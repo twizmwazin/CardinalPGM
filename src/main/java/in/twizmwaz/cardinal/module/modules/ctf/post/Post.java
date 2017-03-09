@@ -127,7 +127,7 @@ public class Post implements Module {
     public void tryPickupFlag(Player player, Location to, Location from, FlagObjective flag) {
         if (!GameHandler.getGameHandler().getMatch().isRunning() || permanent || flag == null || flag.isCarried() || flag.isRespawning() || Flags.getFlag(player) != null) return;
 
-        TeamModule team = Teams.getTeamByPlayer(player).orNull();
+        TeamModule team = Teams.getTeamOrPlayerByPlayer(player).orNull();
         if (team == null || team.isObserver()) return;
         if ((flag.isShared() || (flag.getTeam() != null && !flag.getTeam().equals(team))) && flag.inRange(to, from)) {
             FilterModule pickupFilt = null;

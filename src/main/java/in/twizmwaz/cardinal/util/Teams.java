@@ -12,6 +12,8 @@ import in.twizmwaz.cardinal.module.modules.chatChannels.GlobalChannel;
 import in.twizmwaz.cardinal.module.modules.chatChannels.TeamChannel;
 import in.twizmwaz.cardinal.module.modules.ctf.FlagObjective;
 import in.twizmwaz.cardinal.module.modules.hill.HillObjective;
+import in.twizmwaz.cardinal.module.modules.team.PlayerModule;
+import in.twizmwaz.cardinal.module.modules.team.PlayerModuleManager;
 import in.twizmwaz.cardinal.module.modules.spawn.SpawnModule;
 import in.twizmwaz.cardinal.module.modules.team.TeamModule;
 import in.twizmwaz.cardinal.module.modules.wools.WoolObjective;
@@ -21,10 +23,11 @@ import org.bukkit.entity.Player;
 
 public class Teams {
 
-    public static Optional<TeamModule> getTeamWithFewestPlayers(Match match) {
+    public static Optional<TeamModule> getTeamWithFewestPlayers() {
+        if (isFFA()) return Optional.of(getPlayerManager());
         TeamModule result = null;
         double percent = Double.POSITIVE_INFINITY;
-        for (TeamModule team : getTeams()) {
+        for (TeamModule team : getTeamsAndPlayerManager()) {
             if (!team.isObserver() && (team.size() / (double) team.getMax()) < percent) {
                 result = team;
                 percent = team.size() / (double) team.getMax();
@@ -45,6 +48,7 @@ public class Teams {
     }
 
     public static Optional<TeamModule> getTeamById(String id) {
+        if (id == null) return Optional.absent();
         for (TeamModule team : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
             if (team.getId().replaceAll(" ", "").equalsIgnoreCase(id.replaceAll(" ", ""))) {
                 return Optional.of(team);
@@ -68,6 +72,19 @@ public class Teams {
         return Optional.absent();
     }
 
+    public static TeamModule getPlayerManager() {
+        return GameHandler.getGameHandler().getMatch().getModules().getModule(PlayerModuleManager.class);
+    }
+
+
+    public static TeamModule getObserverTeam() {
+        for (TeamModule team : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
+            if (team.isObserver()) return team;
+        }
+        return GameHandler.getGameHandler().getMatch().getModules().getModule(TeamModule.class);
+    }
+
+
     public static Optional<TeamModule> getTeamByPlayer(Player player) {
         for (TeamModule team : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
             if (team.contains(player)) {
@@ -77,8 +94,42 @@ public class Teams {
         return Optional.absent();
     }
 
+    public static Optional<TeamModule> getTeamOrPlayerManagerByPlayer(Player player) {
+        for (TeamModule team : getTeamsAndPlayerManager()) {
+            if (team.contains(player)) return Optional.of(team);
+        }
+        return Optional.absent();
+    }
+
+    public static Optional<TeamModule> getTeamOrPlayerByPlayer(Player player) {
+        for (TeamModule team : getTeamsAndPlayers()) {
+            if (team.contains(player)) return Optional.of(team);
+        }
+        return Optional.absent();
+    }
+
     public static ModuleCollection<TeamModule> getTeams() {
-        return GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class);
+        ModuleCollection<TeamModule> teams = new ModuleCollection<>();
+        for (TeamModule team : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
+            if (!(team instanceof PlayerModule) && !(team instanceof PlayerModuleManager)) teams.add(team);
+        }
+        return teams;
+    }
+
+    public static ModuleCollection<TeamModule> getTeamsAndPlayerManager() {
+        ModuleCollection<TeamModule> teams = new ModuleCollection<>();
+        for (TeamModule team : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
+            if (!(team instanceof PlayerModule)) teams.add(team);
+        }
+        return teams;
+    }
+
+    public static ModuleCollection<TeamModule> getTeamsAndPlayers() {
+        ModuleCollection<TeamModule> teams = new ModuleCollection<>();
+        for (TeamModule team : GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class)) {
+            if (!(team instanceof PlayerModuleManager)) teams.add(team);
+        }
+        return teams;
     }
 
     public static ModuleCollection<GameObjective> getObjectives(TeamModule team) {
@@ -136,14 +187,14 @@ public class Teams {
 
     public static ChatColor getTeamColorByPlayer(OfflinePlayer player) {
         if (player.isOnline()) {
-            Optional<TeamModule> team = getTeamByPlayer(player.getPlayer());
+            Optional<TeamModule> team = getTeamOrPlayerByPlayer(player.getPlayer());
             if (team.isPresent()) return team.get().getColor();
             else return ChatColor.YELLOW;
         } else return ChatColor.DARK_AQUA;
     }
 
     public static boolean teamsReady() {
-        for (TeamModule team : getTeams()) {
+        for (TeamModule team : getTeamsAndPlayers()) {
             if (!team.isReady()) return false;
         }
         return true;
@@ -168,39 +219,42 @@ public class Teams {
         return spawns;
     }
 
-    public static boolean isFFA(Match match) {
-        for (TeamModule team : match.getModules().getModules(TeamModule.class)) {
-            if (!team.isObserver()) return false;
-        }
-        return true;
+    public static boolean isFFA() {
+        return GameHandler.getGameHandler().getMatch().getModules().getModule(PlayerModuleManager.class) != null;
     }
 
     public static void setPlayerTeam(Player player, String team) throws Exception {
+        if (!team.equals("")) {
+            TeamModule destinationTeam = getTeamByName(team).orNull();
+            if (destinationTeam == null && "observers".startsWith(team.toLowerCase())) {
+                destinationTeam = getObserverTeam();
+            }
+            if (destinationTeam == null) {
+                throw new Exception(ChatConstant.ERROR_NO_TEAM_MATCH.getMessage(ChatUtil.getLocale(player)));
+            }
+            setPlayerTeam(player, !destinationTeam.isObserver() && isFFA() ? getPlayerManager() : destinationTeam);
+        } else {
+            setPlayerTeam(player, (TeamModule) null);
+        }
+    }
+
+    public static void setPlayerTeam(Player player, TeamModule team) throws Exception {
         if (GameHandler.getGameHandler().getMatch().hasEnded()) {
             throw new Exception(ChatUtil.getWarningMessage(new LocalizedChatMessage(ChatConstant.ERROR_MATCH_OVER).getMessage(player.getLocale())));
         }
-        Optional<TeamModule> originalTeam = Teams.getTeamByPlayer(player);
-        if (team.equals("") && originalTeam.isPresent() && !originalTeam.get().isObserver()) {
-            throw new Exception(ChatUtil.getWarningMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_JOINED, Teams.getTeamByPlayer(player).get().getCompleteName() + ChatColor.RED).getMessage(player.getLocale())));
+        Optional<TeamModule> originalTeam = Teams.getTeamOrPlayerManagerByPlayer(player);
+        if (team == null && originalTeam.isPresent() && !originalTeam.get().isObserver()) {
+            throw new Exception(ChatUtil.getWarningMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_JOINED, Teams.getTeamOrPlayerManagerByPlayer(player).get().getCompleteName() + ChatColor.RED).getMessage(player.getLocale())));
         }
-        Optional<TeamModule> destinationTeam;
-        if (!team.equals("")) {
-            destinationTeam = getTeamByName(team);
-            if (!destinationTeam.isPresent()) {
-                if ("observers".startsWith(team.toLowerCase())) {
-                    setPlayerTeam(player, getTeamById("observers").get().getName());
-                    return;
-                }
-                throw new Exception(ChatConstant.ERROR_NO_TEAM_MATCH.getMessage(ChatUtil.getLocale(player)));
+        if (team != null) {
+            if (team.contains(player)) {
+                throw new Exception(ChatUtil.getWarningMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_JOINED, team.getCompleteName() + ChatColor.RED).getMessage(ChatUtil.getLocale(player))));
             }
-            if (destinationTeam.get().contains(player)) {
-                throw new Exception(ChatUtil.getWarningMessage(ChatColor.RED + new LocalizedChatMessage(ChatConstant.ERROR_ALREADY_JOINED, destinationTeam.get().getCompleteName() + ChatColor.RED).getMessage(ChatUtil.getLocale(player))));
-            }
-            destinationTeam.get().add(player, false);
+            team.add(player, false);
         } else {
-            destinationTeam = Teams.getTeamWithFewestPlayers(GameHandler.getGameHandler().getMatch());
-            if (destinationTeam.isPresent()) {
-                destinationTeam.get().add(player, false);
+            team = Teams.getTeamWithFewestPlayers().orNull();
+            if (team != null) {
+                team.add(player, false);
             } else {
                 throw new Exception(ChatConstant.ERROR_TEAMS_FULL.getMessage(ChatUtil.getLocale(player)));
             }

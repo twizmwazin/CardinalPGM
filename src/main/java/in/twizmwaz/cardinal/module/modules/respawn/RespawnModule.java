@@ -43,7 +43,7 @@ public class RespawnModule implements Module {
 
     @EventHandler
     public void onMinecraftRespawn(PlayerRespawnEvent event) {
-        CardinalSpawnEvent spawnEvent = new CardinalSpawnEvent(event.getPlayer(), Teams.getTeamByPlayer(event.getPlayer()).orNull());
+        CardinalSpawnEvent spawnEvent = new CardinalSpawnEvent(event.getPlayer(), Teams.getTeamOrPlayerByPlayer(event.getPlayer()).orNull());
         Bukkit.getServer().getPluginManager().callEvent(spawnEvent);
         if (!spawnEvent.isCancelled()) {
             event.setRespawnLocation(spawnEvent.getSpawn().getLocation());
@@ -74,7 +74,7 @@ public class RespawnModule implements Module {
         player.getInventory().setItem(0, Items.createItem(Material.COMPASS, 1, (short) 0, ChatColor.BLUE + "" + ChatColor.BOLD + ChatConstant.UI_COMPASS.getMessage(player.getLocale())));
         player.getInventory().setItem(1, CardinalNotifications.book);
         if (!match.hasEnded() && !(Blitz.matchIsBlitz() && match.isRunning())) {
-            player.getInventory().setItem(2, TeamPicker.getTeamPicker(player.getLocale()));
+            player.getInventory().setItem(2, TeamPicker.getTeamPickerItem(player));
         }
         player.getInventory().setItem(3, Tutorial.getEmerald(player));
         if (player.hasPermission("tnt.defuse")) {

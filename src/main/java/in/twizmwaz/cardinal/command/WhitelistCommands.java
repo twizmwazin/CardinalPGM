@@ -178,10 +178,11 @@ public class WhitelistCommands {
     @Command(aliases = {"team"}, desc = "Adds everyone on a team to the whitelist.", min = 1)
     @CommandPermissions("cardinal.whitelist.team")
     public static void team(final CommandContext args, final CommandSender sender) throws CommandException {
+        if (Teams.isFFA()) throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_NO_TEAMS).getMessage(ChatUtil.getLocale(sender)));
         int count = 0;
         List<String> teams = new ArrayList<>();
         String msg = args.getJoinedStrings(0).toLowerCase().replace(" ","");
-        for (TeamModule team : Teams.getTeams()) {
+        for (TeamModule team : Teams.getTeamsAndPlayerManager()) {
             if (team.getName().toLowerCase().replace(" ","").startsWith(msg)) {
                 teams.add(team.getCompleteName());
             }

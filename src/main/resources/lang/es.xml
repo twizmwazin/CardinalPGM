@@ -195,7 +195,7 @@
         <objectivePickedFor>{0} recogió {1} para {2}</objectivePickedFor>
         <objectivePicked>{0} recogió {1}</objectivePicked>
         <scoredFor>{0} ha puntuado {1} para {2}</scoredFor>
-        <onePoint>1 punto</onePoint>
+        <onePoint>{0} punto</onePoint>
         <points>{0} puntos</points>
         <amountRemaining>Tienes {0} restantes.</amountRemaining>
         <oneLife>1 vida</oneLife>

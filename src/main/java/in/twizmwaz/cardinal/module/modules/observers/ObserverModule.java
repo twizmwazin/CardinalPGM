@@ -560,7 +560,7 @@ public class ObserverModule implements Module {
     }
 
     public static boolean testObserver(Player player) {
-        Optional<TeamModule> team = Teams.getTeamByPlayer(player);
+        Optional<TeamModule> team = Teams.getTeamOrPlayerManagerByPlayer(player);
         return (team.isPresent() && team.get().isObserver() || !GameHandler.getGameHandler().getMatch().isRunning());
     }
 

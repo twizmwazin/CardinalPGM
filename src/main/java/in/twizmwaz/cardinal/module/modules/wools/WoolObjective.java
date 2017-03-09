@@ -151,7 +151,7 @@ public class WoolObjective implements GameObjective {
                             if (this.show && !this.complete) {
                                 Teams.getTeamChannel(Optional.of(team)).sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED_FOR, team.getColor() + player.getName() + ChatColor.WHITE, MiscUtil.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.WHITE, team.getCompleteName() + ChatColor.WHITE)));
                                 for (Player player1 : Bukkit.getOnlinePlayers()) {
-                                    if (Teams.getTeamByPlayer(player1).isPresent() && Teams.getTeamByPlayer(player1).get().isObserver()) {
+                                    if (Teams.getTeamOrPlayerByPlayer(player1).get().isObserver()) {
                                         player1.sendMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED_FOR, team.getColor() + player.getName() + ChatColor.GRAY, MiscUtil.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.GRAY, team.getCompleteName() + ChatColor.GRAY)).getMessage(player1.getLocale()));
                                     }
                                 }
@@ -181,7 +181,7 @@ public class WoolObjective implements GameObjective {
                             if (this.show && !this.complete) {
                                 Teams.getTeamChannel(Optional.of(team)).sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED, team.getColor() + player.getName() + ChatColor.WHITE, MiscUtil.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.WHITE, team.getCompleteName() + ChatColor.WHITE)));
                                 for (Player player1 : Bukkit.getOnlinePlayers()) {
-                                    if (Teams.getTeamByPlayer(player1).isPresent() && Teams.getTeamByPlayer(player1).get().isObserver()) {
+                                    if (Teams.getTeamOrPlayerByPlayer(player1).get().isObserver()) {
                                         player1.sendMessage(new UnlocalizedChatMessage(ChatColor.GRAY + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PICKED_FOR, team.getColor() + player.getName() + ChatColor.GRAY, MiscUtil.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.GRAY, team.getCompleteName() + ChatColor.GRAY)).getMessage(player1.getLocale()));
                                     }
                                 }
@@ -210,7 +210,7 @@ public class WoolObjective implements GameObjective {
         if (event.getBlock().equals(place.getBlock())) {
             if (event.getBlock().getType().equals(Material.WOOL)) {
                 if (((Wool) event.getBlock().getState().getData()).getColor().equals(color)) {
-                    if (Teams.getTeamByPlayer(event.getPlayer()).orNull() == team) {
+                    if (Teams.getTeamOrPlayerByPlayer(event.getPlayer()).orNull() == team) {
                         this.complete = true;
                         if (this.show)
                             ChatUtil.getGlobalChannel().sendLocalizedMessage(new UnlocalizedChatMessage(ChatColor.WHITE + "{0}", new LocalizedChatMessage(ChatConstant.UI_OBJECTIVE_PLACED, team.getColor() + event.getPlayer().getName() + ChatColor.WHITE, team.getCompleteName() + ChatColor.WHITE, MiscUtil.convertDyeColorToChatColor(color) + name.toUpperCase().replaceAll("_", " ") + ChatColor.WHITE)));

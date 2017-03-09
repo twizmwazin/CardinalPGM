@@ -101,7 +101,7 @@ public class TabList implements Listener {
 
     @EventHandler (priority = EventPriority.HIGHEST)
     public void onCycleComplete(CycleCompleteEvent event) {
-        columnsPerTeam = Math.max(4 / (Teams.getTeams().size() - 1), 1);
+        columnsPerTeam = Math.max(4 / (Teams.getTeamsAndPlayerManager().size() - 1), 1);
         resetTeams();
         updateAll();
         for (PlayerTabEntry entry : fakePlayer.values()) {
@@ -116,14 +116,13 @@ public class TabList implements Listener {
 
     @EventHandler (priority = EventPriority.HIGHEST)
     public void onPlayerLeave(PlayerQuitEvent event) {
-        playerView.remove(event.getPlayer());
         removePlayer(event.getPlayer());
         updateAll();
     }
 
     @EventHandler (priority = EventPriority.HIGHEST)
     public void onTeamChange(PlayerChangeTeamEvent event) {
-        addUpdateTeam(event.getNewTeam());
+        addUpdateTeam(event.getNewTeam().orNull());
         renderAllTeamTitles();
         updateAll();
     }
@@ -142,7 +141,7 @@ public class TabList implements Listener {
     @EventHandler
     public void onRankChange(RankChangeEvent event) {
         if (!event.isOnline()) return;
-        addUpdateTeam(Teams.getTeamByPlayer(event.getPlayer()));
+        addUpdateTeam(Teams.getTeamOrPlayerManagerByPlayer(event.getPlayer()).orNull());
         updateAll();
     }
 
@@ -176,19 +175,10 @@ public class TabList implements Listener {
                     try {
                         Set<TabEntry> entries = new HashSet<>(updateEntries);
                         updateEntries.clear();
-                        PacketPlayOutPlayerInfo listPacket = new PacketPlayOutPlayerInfo(
-                                PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME);
-                        boolean compact = false;
                         for (TabEntry entry : entries) {
-                            if (entry instanceof PlayerTabEntry) {
-                                entry.broadcastTabListPacket(
-                                        PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME);
-                            } else {
-                                compact = true;
-                                listPacket.add(entry.getPlayerInfo(null, listPacket));
-                            }
+                            entry.broadcastTabListPacket(
+                                    PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME);
                         }
-                        if (compact) PacketUtils.broadcastPacket(listPacket);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -198,13 +188,12 @@ public class TabList implements Listener {
         updateEntries.add(entry);
     }
 
-    private static void addUpdateTeam(Optional<TeamModule> team) {
-        if (team != null && team.isPresent()) {
-            teamNeedUpdate.add(team.get());
-        }
+    private static void addUpdateTeam(TeamModule team) {
+        if (team != null)
+            teamNeedUpdate.add(team);
     }
 
-    public static boolean updateTeam(TeamModule team) {
+    static boolean updateTeam(TeamModule team) {
         if (teamNeedUpdate.contains(team)) {
             teamNeedUpdate.remove(team);
             return true;
@@ -212,7 +201,7 @@ public class TabList implements Listener {
         return false;
     }
 
-    public static void renderAllTeamTitles() {
+    private static void renderAllTeamTitles() {
         for (TabEntry entry : teamTitles.values()) {
             addUpdateName(entry);
         }

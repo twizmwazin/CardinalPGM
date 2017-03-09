@@ -120,6 +120,8 @@ public enum ChatConstant {
     ERROR_POLL_USAGE("error.pollUsage"),
     ERROR_BREAK_FLAG("error.breakFlag"),
     ERROR_BREAK_BLOCK_UNDER_FLAG("error.breakBlockUnderFlag"),
+    ERROR_NO_TEAMS("error.noTeams"),
+    ERROR_NO_PLAYERS("error.noPlayers"),
 
     GENERIC_MAP_SET("generic.mapSet"),
     GENERIC_MARKED_FOR_RELOADING("generic.markedForReloading"),
@@ -251,6 +253,7 @@ public enum ChatConstant {
     MISC_STAFF("misc.staff"),
     MISC_DEFAULT("misc.default"),
     MISC_PERMISSIONS("misc.permissions"),
+    MISC_PLAYERS("misc.players"),
 
     UI_MAPLOADED("userInterface.mapLoaded"),
     UI_REPOLOADED("userInterface.repoLoaded"),
@@ -314,6 +317,7 @@ public enum ChatConstant {
     UI_OBJECTIVE_PICKED_FOR("userInterface.objectivePickedFor"),
     UI_OBJECTIVE_PICKED("userInterface.objectivePicked"),
     UI_SCORED_FOR("userInterface.scoredFor"),
+    UI_SCORED("userInterface.scored"),
     UI_ONE_POINT("userInterface.onePoint"),
     UI_POINTS("userInterface.points"),
     UI_AMOUNT_REMAINING("userInterface.amountRemaining"),

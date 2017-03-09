@@ -29,7 +29,7 @@ public class ReadyCommand {
         if (match.isRunning() || match.hasEnded()) {
             throw new CommandException(ChatConstant.ERROR_READY_BEFORE_MATCH.getMessage(ChatUtil.getLocale(sender)));
         }
-        Optional<TeamModule> team = Teams.getTeamByPlayer((Player) sender);
+        Optional<TeamModule> team = Teams.getTeamOrPlayerByPlayer((Player) sender);
         if (!team.isPresent()) {
             throw new CommandException(ChatConstant.ERROR_TEAM_ABSENT.getMessage(ChatUtil.getLocale(sender)));
         }
@@ -52,7 +52,7 @@ public class ReadyCommand {
         if (match.isRunning() || match.hasEnded()) {
             throw new CommandException(ChatConstant.ERROR_READY_BEFORE_MATCH.getMessage(ChatUtil.getLocale(sender)));
         }
-        Optional<TeamModule> team = Teams.getTeamByPlayer((Player) sender);
+        Optional<TeamModule> team = Teams.getTeamOrPlayerByPlayer((Player) sender);
         if (!team.isPresent()) {
             throw new CommandException(ChatConstant.ERROR_TEAM_ABSENT.getMessage(ChatUtil.getLocale(sender)));
         }

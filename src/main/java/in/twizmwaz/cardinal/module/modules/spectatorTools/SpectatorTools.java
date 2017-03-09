@@ -129,6 +129,7 @@ public class SpectatorTools implements Module {
     }
 
     public Inventory getTeamsMenu(Player player) {
+        if (Teams.isFFA()) return getTeleportMenu(player, Teams.getPlayerManager());
         int size = ((GameHandler.getGameHandler().getMatch().getModules().getModules(TeamModule.class).size() + 8) / 9) * 9;
         Inventory inventory = Bukkit.createInventory(null, size, getTeamsMenuTitle(player.getLocale()));
         int item = 0;
@@ -208,7 +209,7 @@ public class SpectatorTools implements Module {
             }
         } else if (event.getInventory().getName().equals(getTeleportMenuTitle(locale))) {
             if (item.isSimilar(getGoBackItem(locale))) {
-                player.openInventory(getTeamsMenu(player));
+                player.openInventory(Teams.isFFA() ? getSpectatorMenu(player) : getTeamsMenu(player));
             } else if (item.getType().equals(Material.SKULL_ITEM) && item.getItemMeta().hasDisplayName()) {
                 Player teleport = Bukkit.getPlayer(((SkullMeta) item.getItemMeta()).getOwner());
                 if (teleport != null) {

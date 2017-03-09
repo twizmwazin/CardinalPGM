@@ -50,7 +50,7 @@ public class ProjectileParticlesModule implements Module {
     }
 
     private void createParticlesFor(Projectile projectile, Player player) {
-        TeamModule team = Teams.getTeamByPlayer(player).orNull();
+        TeamModule team = Teams.getTeamOrPlayerByPlayer(player).orNull();
         if (team != null) {
             ProjectileParticleRunnable runnable = new ProjectileParticleRunnable(projectile, team.getColor());
             int newTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(Cardinal.getInstance(), runnable, 1L, 1L);

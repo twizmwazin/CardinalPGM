@@ -29,7 +29,7 @@ public class DeathMessages implements Module {
     @EventHandler
     public void onCardinalDeath(CardinalDeathEvent event) {
         try {
-            if (Teams.getTeamByPlayer(event.getPlayer()) != null) {
+            if (Teams.getTeamOrPlayerByPlayer(event.getPlayer()).orNull() != null) {
                 String name = Teams.getTeamColorByPlayer(event.getPlayer()) + event.getPlayer().getName(), deathMessage;
                 DamageCause cause = event.getPlayer().getLastDamageCause().getCause();
                 int fallDistance = Math.round(event.getPlayer().isInsideVehicle() ? event.getPlayer().getVehicle().getFallDistance() : event.getPlayer().getFallDistance());

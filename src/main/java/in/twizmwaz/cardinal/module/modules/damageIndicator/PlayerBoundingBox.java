@@ -37,12 +37,12 @@ class PlayerBoundingBox implements Listener {
    private static double MAX_DISTANCE = 10;
 
     private UUID player;
-    private Optional<TeamModule> team;
+    private TeamModule team;
     private List<UUID> viewers = new ArrayList<>();
     private List<Integer> zombieID = new ArrayList<>();
     private int mainTask;
 
-    protected PlayerBoundingBox(UUID player, Optional<TeamModule> team) {
+    protected PlayerBoundingBox(UUID player, TeamModule team) {
         this.player = player;
         this.team = team;
         for (int i = 0; i < 4; i++) {
@@ -103,8 +103,8 @@ class PlayerBoundingBox implements Listener {
     }
 
     private boolean shouldShow(Player player) {
-        Optional<TeamModule> team = Teams.getTeamByPlayer(player);
-        return !ObserverModule.testObserverOrDead(player) && (team.isPresent() && !team.get().equals(this.team.get()));
+        Optional<TeamModule> team = Teams.getTeamOrPlayerByPlayer(player);
+        return !ObserverModule.testObserverOrDead(player) && team.orNull() != this.team;
     }
 
     public void sendOrRemoveZombies(Player player, Vector playerPos, Vector bbPos) {

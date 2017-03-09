@@ -272,7 +272,7 @@
         <objectivePickedFor>{0} a ramassé {2} pour {1}</objectivePickedFor>
         <objectivePicked>{0} a ramassé {1}</objectivePicked>
         <scoredFor>{0} a marqué {1} pour {2}</scoredFor>
-        <onePoint>1 point</onePoint>
+        <onePoint>{0} point</onePoint>
         <points>{0} points</points>
         <amountRemaining>Vous avez {0} restantes.</amountRemaining>
         <oneLife>1 vie</oneLife>
