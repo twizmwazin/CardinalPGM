@@ -47,6 +47,11 @@ public class TeamManagerModule implements Module {
         Player player = event.getPlayer();
         Players.resetPlayer(player);
         Teams.getTeamById("observers").get().add(player, true, false);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerJoin2(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
         event.setJoinMessage(null);
         for (Player player1 : Bukkit.getOnlinePlayers()) {
             if (!player1.equals(player)) {

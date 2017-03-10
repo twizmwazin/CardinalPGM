@@ -516,7 +516,7 @@ public class ObserverModule implements Module {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerConnect(PlayerLoginEvent event) {
         if (Bukkit.getBanList(BanList.Type.NAME).isBanned(event.getPlayer().getName())) {
             event.disallow(PlayerLoginEvent.Result.KICK_BANNED, Bukkit.getBanList(BanList.Type.NAME).getBanEntry(event.getPlayer().getName()).getReason());

@@ -34,4 +34,5 @@ public class JoinCommand {
             throw new CommandException(e.getMessage());
         }
     }
+
 }

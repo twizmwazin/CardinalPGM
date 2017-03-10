@@ -14,6 +14,8 @@ import in.twizmwaz.cardinal.tabList.entries.PlayerTabEntry;
 import in.twizmwaz.cardinal.tabList.entries.SkinTabEntry;
 import in.twizmwaz.cardinal.tabList.entries.TabEntry;
 import in.twizmwaz.cardinal.tabList.entries.TeamTabEntry;
+import in.twizmwaz.cardinal.module.modules.teamRegister.TeamRegisterModule;
+import in.twizmwaz.cardinal.rank.Rank;
 import in.twizmwaz.cardinal.util.PacketUtils;
 import in.twizmwaz.cardinal.util.Teams;
 import net.minecraft.server.Packet;

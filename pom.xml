@@ -69,6 +69,11 @@
             <artifactId>org.eclipse.jgit</artifactId>
             <version>4.5.0.201609210915-r</version>
         </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.8.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -128,6 +133,7 @@
                                     <include>org.eclipse.jgit:org.eclipse.jgit</include>
                                     <include>org.slf4j:slf4j-api</include>
                                     <include>com.jcraft:jsch</include>
+                                    <include>org.jsoup:jsoup</include>
                                 </includes>
                             </artifactSet>
                         </configuration>

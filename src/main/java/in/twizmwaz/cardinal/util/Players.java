@@ -128,6 +128,14 @@ public class Players {
         }
     }
 
+    public static OfflinePlayer matchSinglePlayer(String rawUsername) {
+        if (rawUsername.startsWith("@")) {
+            return Bukkit.getOfflinePlayer(rawUsername.substring(1));
+        } else {
+            return null;
+        }
+    }
+
     public static String getName(ServerOperator who) {
         return getName(who, true);
     }
