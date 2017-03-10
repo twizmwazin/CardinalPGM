@@ -2,6 +2,7 @@
     <rank name="Default" default="true">
         <permission>cardinal.chat.team</permission>
         <permission>cardinal.chat.global</permission>
+        <permission>cardinal.me</permission>
     </rank>
     <rank name="Moderator" staff="true" flair="`c❖" parent="Default">
         <permission>cardinal.say</permission>

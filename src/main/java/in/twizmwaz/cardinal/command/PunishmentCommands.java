@@ -127,7 +127,7 @@ public class PunishmentCommands {
         GameHandler.getGameHandler().getMatch().getModules().getModule(PermissionModule.class).unmute(player);
     }
 
-    @Command(aliases = {"gmute"}, desc = "Enable/disable global mute.")
+    @Command(aliases = {"gmute", "globalmute", "muteglobal"}, desc = "Enable/disable global mute.")
     @CommandPermissions("cardinal.punish.mute")
     public static void gmute(CommandContext cmd, CommandSender sender) {
         boolean state = GameHandler.getGameHandler().toggleGlobalMute();
