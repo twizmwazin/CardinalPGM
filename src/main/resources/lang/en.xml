@@ -188,6 +188,14 @@
         <whitelistedPlayers>Whitelisted Players:</whitelistedPlayers>
         <playerOnline>There is currently {0} player online.</playerOnline>
         <playersOnline>There are currently {0} players online.</playersOnline>
+        <whitelistStatus1Sing>Of the {0} online player,</whitelistStatus1Sing>
+        <whitelistStatus1Plur>Of the {0} online players,</whitelistStatus1Plur>
+        <whitelistStatus2Sing>{0} is whitelisted</whitelistStatus2Sing>
+        <whitelistStatus2Plur>{0} are whitelisted</whitelistStatus2Plur>
+        <whitelistStatus3Sing>Of the {0} whitelisted player,</whitelistStatus3Sing>
+        <whitelistStatus3Plur>Of the {0} whitelisted players,</whitelistStatus3Plur>
+        <whitelistStatus4Sing> {0} is online</whitelistStatus4Sing>
+        <whitelistStatus4Plur> {0} are online</whitelistStatus4Plur>
         <whitelistedPlayerOnline>There is currently {0} whitelisted player online.</whitelistedPlayerOnline>
         <whitelistedPlayersOnline>There are currently {0} whitelisted players online.</whitelistedPlayersOnline>
         <whitelistedPlayerOutOfOnline>Of the online players, {0} player is whitelisted.</whitelistedPlayerOutOfOnline>
