@@ -38,7 +38,7 @@ public class PermissionModule implements Module {
             UUID.fromString("33a703d0-3237-4337-9ddd-3dbf33b3d8a6") /* iEli2tyree011 */,
             UUID.fromString("208c84af-790a-41da-bf7e-eb184f17bdf8") /* Elly */,
             UUID.fromString("260004f0-996b-4539-ba21-df4ee6336b63") /* Elliott_ */,
-            UUID.fromString("e82603df-417d-4a95-bd1f-1720648be0b4") /* Pablete1234 */);
+            UUID.fromString("f5506f7b-765a-4d9f-b132-3cf801188d99") /* Zenzoh */);
     private static List<OfflinePlayer> muted = new ArrayList<>();
 
     public PermissionModule(Plugin plugin) {
