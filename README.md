@@ -18,7 +18,7 @@ Before creating an issue:
 
 When creating an issue, be careful to follow the following guidelines:
 - Have a demonstration of the bug or clear instructions to produce it.
-- Include the version of the plugin the issue is found on. The version can be found by typing `/cardinal -v`.
+- Include the version of the plugin the issue is found on. The version can be found by typing `/cardinal -v`, or you can use the commit version.
 - Make sure the report uses clear and concise English.
 By following these guidelines, it will help developers to quickly and accurately resolve the issue.
 
