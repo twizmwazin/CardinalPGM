@@ -34,6 +34,35 @@ public class CycleCommand {
         else setCycleMap(map);
         GameHandler.getGameHandler().getMatch().getModules().getModule(CycleTimer.class).startCountdown(cmd.getInteger(0, Config.cycleDefault));
     }
+    
+    @Command(aliases = {"recycle"}, desc = "Recycles to the same map", usage = "[time]", flags = "f")
+    @CommandPermissions("cardinal.match.cycle")
+    public static void cycle(final CommandContext cmd, CommandSender sender) throws CommandException {
+        if (GameHandler.getGameHandler().getMatch().isRunning()) {
+            if(cmd.hasFlag('f')){
+                try {
+                    Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "sn " + mapInfo = GameHandler.getGameHandler().getRotation().getCurrent().getName());
+                    TeamModule team = TeamUtils.getTeamByName(cmd.getString(0));
+                    GameHandler.getGameHandler().getMatch().end(team);
+                } catch (IndexOutOfBoundsException ex) {
+                    GameHandler.getGameHandler().getMatch().end(null);
+                }
+            } else {
+                throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+            }
+        } else if (GameHandler.getGameHandler().getMatch().getState().equals(MatchState.STARTING))
+            throw new CommandException(new LocalizedChatMessage(ChatConstant.ERROR_CYCLE_DURING_MATCH).getMessage(sender instanceof Player ? ((Player) sender).getLocale() : Locale.getDefault().toString()));
+        if (GameHandler.getGameHandler().getCycleTimer() != null)
+            GameHandler.getGameHandler().getCycleTimer().setCancelled(true);
+        try {
+            
+            Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "sn " + mapInfo = GameHandler.getGameHandler().getRotation().getCurrent().getName());
+            GameHandler.getGameHandler().startCycleTimer(cmd.getInteger(0));
+        } catch (IndexOutOfBoundsException e) {
+            Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "sn " + mapInfo = GameHandler.getGameHandler().getRotation().getCurrent().getName());
+            GameHandler.getGameHandler().startCycleTimer(30);
+        }
+    }
 
     @Command(aliases = {"setnext", "sn"}, desc = "Sets the next map.", usage = "[map]", flags = "m:")
     @CommandPermissions("cardinal.match.setnext")
